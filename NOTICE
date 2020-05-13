@@ -1,0 +1,252 @@
+Copyright (C) 2020 Université de Lorraine http://www.univ-lorraine.fr
+Copyright (C) 2020 Esup Portail http://www.esup-portail.org
+
+Licensed under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at:
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on
+an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+
+This project includes:
+  @vaadin/vaadin-mobile-drag-drop under Apache-2.0
+  Animal Sniffer Annotations under MIT license
+  AntLR Parser Generator under BSD License
+  Apache Commons Codec under Apache License, Version 2.0
+  Apache Commons Compress under Apache License, Version 2.0
+  Apache Commons Exec under Apache License, Version 2.0
+  Apache Commons FileUpload under Apache License, Version 2.0
+  Apache Commons IO under Apache License, Version 2.0
+  Apache Commons Lang under Apache License, Version 2.0
+  Apache HttpClient under Apache License, Version 2.0
+  Apache HttpCore under Apache License, Version 2.0
+  Apache Log4j API under Apache License, Version 2.0
+  Apache Log4j to SLF4J Adapter under Apache License, Version 2.0
+  AspectJ weaver under Eclipse Public License - v 1.0
+  AssertJ fluent assertions under Apache License, Version 2.0
+  atmosphere-runtime under CDDL or Apache License 2.0
+  Bean Validation API under Apache License 2.0
+  Byte Buddy (without dependencies) under Apache License, Version 2.0
+  Byte Buddy agent under Apache License, Version 2.0
+  Checker Qual under GNU General Public License, version 2 (GPL2), with the classpath exception or The MIT License
+  ClassMate under Apache License, Version 2.0
+  dom4j under BSD 3-clause New License
+  error-prone annotations under Apache 2.0
+  Extended StAX API under Eclipse Distribution License - v 1.0
+  fastinfoset under Apache License, Version 2.0 or Eclipse Distribution License - v 1.0
+  FindBugs-jsr305 under The Apache Software License, Version 2.0
+  Flow Client under Apache License Version 2.0
+  Flow Data under Apache License Version 2.0
+  Flow HTML Components under Apache License Version 2.0
+  Flow Push under Apache License Version 2.0
+  Flow Server under Apache License Version 2.0
+  flyway-core under Apache License, Version 2.0
+  Generic HTML 5 Drag and Drop support for Flow under Apache License Version 2.0
+  GenTyRef under The Apache Software License, Version 2.0
+  Gson under Apache 2.0
+  Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
+  Hamcrest under BSD Licence 3
+  Hibernate Commons Annotations under GNU Library General Public License v2.1 or later
+  Hibernate ORM - hibernate-core under GNU Library General Public License v2.1 or later
+  Hibernate Validator Engine under Apache License 2.0
+  HikariCP under The Apache Software License, Version 2.0
+  iron-a11y-announcer under BSD 3-Clause
+  iron-a11y-keys-behavior under BSD 3-Clause
+  iron-fit-behavior under BSD 3-Clause
+  iron-flex-layout under BSD 3-Clause
+  iron-icon under BSD 3-Clause
+  iron-iconset-svg under BSD 3-Clause
+  iron-list under BSD 3-Clause
+  iron-media-query under BSD 3-Clause
+  iron-meta under BSD 3-Clause
+  iron-overlay-behavior under BSD 3-Clause
+  iron-resizable-behavior under BSD 3-Clause
+  iron-scroll-target-behavior under BSD 3-Clause
+  istack common utility code runtime under Eclipse Distribution License - v 1.0
+  J2ObjC Annotations under The Apache Software License, Version 2.0
+  Jackson datatype: jdk8 under The Apache Software License, Version 2.0
+  Jackson datatype: JSR310 under The Apache Software License, Version 2.0
+  Jackson-annotations under The Apache Software License, Version 2.0
+  Jackson-core under The Apache Software License, Version 2.0
+  jackson-databind under The Apache Software License, Version 2.0
+  Jackson-module-parameter-names under The Apache Software License, Version 2.0
+  Jakarta Activation under EDL 1.0
+  Jakarta Activation API jar under EDL 1.0
+  Jakarta Annotations API under EPL 2.0 or GPL2 w/ CPE
+  Jakarta Bean Validation API under Apache License 2.0
+  Jakarta Mail API under EPL 2.0 or GPL2 w/ CPE or EDL 1.0
+  Jakarta Persistence API under Eclipse Public License v. 2.0 or Eclipse Distribution License v. 1.0
+  Jakarta XML Binding API under Eclipse Distribution License - v 1.0
+  Jasig CAS Client for Java - Core under Apache License Version 2.0
+  Java Annotation Indexer under Apache License, Version 2.0
+  Java archiving library under Apache 2
+  Javassist under MPL 1.1 or LGPL 2.1 or Apache License 2.0
+  javax.transaction API under EPL 2.0 or GPL2 w/ CPE
+  JAXB Runtime under Eclipse Distribution License - v 1.0
+  JBoss Logging 3 under Apache License, version 2.0
+  JSON library from Android SDK under Apache License 2.0
+  JSON Small and Fast Parser under The Apache Software License, Version 2.0
+  JSONassert under The Apache Software License, Version 2.0
+  jsoup Java HTML Parser under The MIT License
+  JUL to SLF4J bridge under MIT License
+  JUnit Jupiter (Aggregator) under Eclipse Public License v2.0
+  JUnit Jupiter API under Eclipse Public License v2.0
+  JUnit Jupiter Engine under Eclipse Public License v2.0
+  JUnit Jupiter Params under Eclipse Public License v2.0
+  JUnit Platform Commons under Eclipse Public License v2.0
+  JUnit Platform Engine API under Eclipse Public License v2.0
+  Logback Classic Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
+  Logback Core Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
+  Lumo theme for Flow under Apache License Version 2.0
+  Material theme for Flow under Apache License Version 2.0
+  mobile-drag-drop under MIT
+  mockito-core under The MIT License
+  mockito-junit-jupiter under The MIT License
+  mondossierweb under Apache License, Version 2.0
+  MySQL Connector/J under The GNU General Public License, v2 with FOSS exception
+  Non-Blocking Reactive Foundation for the JVM under Apache License, Version 2.0
+  Objenesis under Apache 2
+  OkHttp under Apache 2.0
+  Okio under Apache 2.0
+  org.apiguardian:apiguardian-api under The Apache License, Version 2.0
+  org.opentest4j:opentest4j under The Apache License, Version 2.0
+  org.xmlunit:xmlunit-core under The Apache Software License, Version 2.0
+  ph-commons under Apache 2
+  ph-css under Apache 2
+  polymer under BSD 3-Clause
+  project ':json-path' under The Apache Software License, Version 2.0
+  Project Lombok under The MIT License
+  reactive-streams under CC0
+  selenium-api under The Apache Software License, Version 2.0
+  selenium-chrome-driver under The Apache Software License, Version 2.0
+  selenium-edge-driver under The Apache Software License, Version 2.0
+  selenium-firefox-driver under The Apache Software License, Version 2.0
+  selenium-ie-driver under The Apache Software License, Version 2.0
+  selenium-java under The Apache Software License, Version 2.0
+  selenium-opera-driver under The Apache Software License, Version 2.0
+  selenium-remote-driver under The Apache Software License, Version 2.0
+  selenium-safari-driver under The Apache Software License, Version 2.0
+  selenium-support under The Apache Software License, Version 2.0
+  shadycss under BSD 3-Clause
+  SLF4J API Module under MIT License
+  SnakeYAML under Apache License, Version 2.0
+  Spring AOP under Apache License, Version 2.0
+  Spring Aspects under Apache License, Version 2.0
+  Spring Beans under Apache License, Version 2.0
+  Spring Boot under Apache License, Version 2.0
+  Spring Boot AOP Starter under Apache License, Version 2.0
+  Spring Boot AutoConfigure under Apache License, Version 2.0
+  Spring Boot Data JPA Starter under Apache License, Version 2.0
+  Spring Boot Data LDAP Starter under Apache License, Version 2.0
+  Spring Boot Developer Tools under Apache License, Version 2.0
+  Spring Boot JDBC Starter under Apache License, Version 2.0
+  Spring Boot Json Starter under Apache License, Version 2.0
+  Spring Boot Logging Starter under Apache License, Version 2.0
+  Spring Boot Mail Starter under Apache License, Version 2.0
+  Spring Boot Starter under Apache License, Version 2.0
+  Spring Boot Test under Apache License, Version 2.0
+  Spring Boot Test Auto-Configure under Apache License, Version 2.0
+  Spring Boot Test Starter under Apache License, Version 2.0
+  Spring Boot Tomcat Starter under Apache License, Version 2.0
+  Spring Boot Validation Starter under Apache License, Version 2.0
+  Spring Boot Web Starter under Apache License, Version 2.0
+  Spring Commons Logging Bridge under Apache License, Version 2.0
+  Spring Context under Apache License, Version 2.0
+  Spring Context Support under Apache License, Version 2.0
+  Spring Core under Apache License, Version 2.0
+  Spring Data Core under Apache License, Version 2.0
+  Spring Data JPA under Apache License, Version 2.0
+  Spring Data LDAP under Apache License, Version 2.0
+  Spring Expression Language (SpEL) under Apache License, Version 2.0
+  Spring JDBC under Apache License, Version 2.0
+  Spring Object/Relational Mapping under Apache License, Version 2.0
+  Spring TestContext Framework under Apache License, Version 2.0
+  Spring Transaction under Apache License, Version 2.0
+  Spring Web under Apache License, Version 2.0
+  Spring Web MVC under Apache License, Version 2.0
+  Spring WebSocket under Apache License, Version 2.0
+  spring-ldap-core under The Apache Software License, Version 2.0
+  spring-security-cas under The Apache Software License, Version 2.0
+  spring-security-config under The Apache Software License, Version 2.0
+  spring-security-core under The Apache Software License, Version 2.0
+  spring-security-test under The Apache Software License, Version 2.0
+  spring-security-web under The Apache Software License, Version 2.0
+  tomcat-embed-core under Apache License, Version 2.0
+  tomcat-embed-el under Apache License, Version 2.0
+  tomcat-embed-websocket under Apache License, Version 2.0
+  TXW2 Runtime under Eclipse Distribution License - v 1.0
+  Vaadin Accordion under Apache License Version 2.0
+  Vaadin App Layout under Apache License Version 2.0
+  Vaadin Button under Apache License Version 2.0
+  Vaadin Checkbox under Apache License Version 2.0
+  Vaadin Combo Box under Apache License Version 2.0
+  Vaadin Context Menu under Apache License Version 2.0
+  Vaadin CustomField under Apache License Version 2.0
+  Vaadin Customized GWT Elemental Library under Apache License Version 2.0
+  Vaadin DatePicker under Apache License Version 2.0
+  Vaadin Details under Apache License Version 2.0
+  Vaadin Dialog Flow under Apache License Version 2.0
+  Vaadin Form Layout under Apache License Version 2.0
+  Vaadin Grid Flow under Apache License Version 2.0
+  Vaadin Icons under Apache License Version 2.0
+  Vaadin IronList under Apache License Version 2.0
+  Vaadin List Box under Apache License Version 2.0
+  Vaadin Login under Apache License Version 2.0
+  Vaadin MenuBar under Apache License Version 2.0
+  Vaadin Notification under Apache License Version 2.0
+  Vaadin Ordered Layouts under Apache License Version 2.0
+  Vaadin Platform (vaadin-core) under Apache License Version 2.0
+  Vaadin ProgressBar under Apache License Version 2.0
+  Vaadin Radio Button Flow under Apache License Version 2.0
+  Vaadin Select under Apache License Version 2.0
+  Vaadin Split Layout under Apache License Version 2.0
+  Vaadin Tabs Flow under Apache License Version 2.0
+  Vaadin TextField under Apache License Version 2.0
+  Vaadin TimePicker under Apache License Version 2.0
+  Vaadin Upload under Apache License Version 2.0
+  vaadin-accordion under Apache-2.0
+  vaadin-app-layout under Apache-2.0
+  vaadin-button under Apache-2.0
+  vaadin-checkbox under Apache-2.0
+  vaadin-combo-box under Apache-2.0
+  vaadin-context-menu under Apache-2.0
+  vaadin-control-state-mixin under Apache-2.0
+  vaadin-custom-field under Apache-2.0
+  vaadin-date-picker under Apache-2.0
+  vaadin-details under Apache-2.0
+  vaadin-development-mode-detector under Apache-2.0
+  vaadin-dialog under Apache-2.0
+  vaadin-element-mixin under Apache-2.0
+  vaadin-form-layout under Apache-2.0
+  vaadin-grid under Apache-2.0
+  vaadin-icons under Apache-2.0
+  vaadin-item under Apache-2.0
+  vaadin-list-box under Apache-2.0
+  vaadin-list-mixin under Apache-2.0
+  vaadin-login under Apache-2.0
+  vaadin-lumo-styles under Apache-2.0
+  vaadin-material-styles under Apache-2.0
+  vaadin-menu-bar under Apache-2.0
+  vaadin-notification under Apache-2.0
+  vaadin-ordered-layout under Apache-2.0
+  vaadin-overlay under Apache-2.0
+  vaadin-progress-bar under Apache-2.0
+  vaadin-radio-button under Apache-2.0
+  vaadin-select under Apache-2.0
+  vaadin-split-layout under Apache-2.0
+  vaadin-spring under Apache License 2.0
+  vaadin-tabs under Apache-2.0
+  vaadin-text-field under Apache-2.0
+  vaadin-themable-mixin under Apache-2.0
+  vaadin-time-picker under Apache-2.0
+  vaadin-upload under Apache-2.0
+  vaadin-usage-statistics under Apache-2.0
+  webcomponentsjs under BSD 3-Clause
+  WebDriverManager under Apache 2.0
+

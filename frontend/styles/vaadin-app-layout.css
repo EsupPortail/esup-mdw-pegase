@@ -1,0 +1,4 @@
+[part="navbar"] {
+	padding: var(--lumo-space-s);
+	align-items: baseline;
+}

@@ -1,0 +1,3 @@
+
+    ${build.name} v${build.version}
+        Université de Lorraine

@@ -1,0 +1,3 @@
+::slotted(vaadin-context-menu-item) {
+	cursor: pointer !important;
+}
