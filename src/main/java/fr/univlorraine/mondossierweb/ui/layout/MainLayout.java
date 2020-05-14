@@ -65,6 +65,7 @@ import fr.univlorraine.mondossierweb.ui.view.coordonnees.CoordonneesView;
 import fr.univlorraine.mondossierweb.ui.view.etatcivil.EtatCivilView;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.InscriptionsView;
 import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
+import fr.univlorraine.mondossierweb.ui.view.parcours.ParcoursView;
 import fr.univlorraine.mondossierweb.ui.view.recherche.RechercheView;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
@@ -139,6 +140,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		});
 		addDrawerRouterLink(VaadinIcon.SEARCH, "recherche.title", RechercheView.class);
 		addDrawerRouterLink(VaadinIcon.USER, "etatcivil.title", EtatCivilView.class);
+		addDrawerRouterLink(VaadinIcon.USER, "parcours.title", ParcoursView.class);
 		addDrawerRouterLink(VaadinIcon.HOME, "coordonnees.title", CoordonneesView.class);
 		addDrawerRouterLink(VaadinIcon.ACADEMY_CAP, "inscriptions.title", InscriptionsView.class);
 		//addDrawerRouterLink(VaadinIcon.ACADEMY_CAP, "notes.title", NotesView.class);
