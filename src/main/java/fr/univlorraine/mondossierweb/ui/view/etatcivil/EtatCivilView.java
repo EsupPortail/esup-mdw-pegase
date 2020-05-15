@@ -95,6 +95,7 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 		initIdentite();
 		initNaissance();
 		etatcivilLayout.setWidthFull();
+		etatcivilLayout.setWrapMode(WrapMode.WRAP);
 		add(etatcivilLayout);
 	}
 
@@ -195,7 +196,6 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 
 	@Override
 	protected void adaptSize(final Boolean isMobile) {
-		etatcivilLayout.setWrapMode(WrapMode.WRAP);
 		identiteLayout.updateStyle(isMobile);
 		naissanceLayout.updateStyle(isMobile);
 	}

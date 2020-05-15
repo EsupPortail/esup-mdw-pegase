@@ -96,6 +96,7 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 		initAdresseFixe();
 		initAdresseAnnuelle();
 		coordLayout.setWidthFull();
+		coordLayout.setWrapMode(WrapMode.WRAP);
 		add(coordLayout);
 
 	}
@@ -241,7 +242,6 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 
 	@Override
 	protected void adaptSize(final Boolean isMobile) {
-		coordLayout.setWrapMode(WrapMode.WRAP);
 		telLayout.updateStyle(isMobile);
 		mailLayout.updateStyle(isMobile);
 		telSecoursLayout.updateStyle(isMobile);

@@ -92,6 +92,7 @@ public class ParcoursView extends AdaptSizeLayout implements HasDynamicTitle, Ha
 		initBac();
 		initAnnees();
 		parcoursLayout.setWidthFull();
+		parcoursLayout.setWrapMode(WrapMode.WRAP);
 		add(parcoursLayout);
 	}
 
@@ -194,7 +195,6 @@ private void initAnnees() {
 
 	@Override
 	protected void adaptSize(final Boolean isMobile) {
-		parcoursLayout.setWrapMode(WrapMode.WRAP);
 		bacLayout.updateStyle(isMobile);
 		anneesLayout.updateStyle(isMobile);
 	}
