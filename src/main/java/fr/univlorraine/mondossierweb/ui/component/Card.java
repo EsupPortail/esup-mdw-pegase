@@ -81,6 +81,7 @@ public class Card extends VerticalLayout {
 			this.getStyle().set("border", "0.1em solid");
 			this.getStyle().set("border-color", "var(--lumo-contrast-5pct)");
 			this.setWidth(isMobile ? "100%" :"46%");
+			this.setHeight("fit-content");
 	}
 
 }

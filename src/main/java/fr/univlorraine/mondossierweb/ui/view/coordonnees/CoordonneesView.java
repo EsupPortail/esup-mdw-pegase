@@ -80,6 +80,11 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 	private final TextField codePostalAdFixe=new TextField();
 	
 	private final TextField paysAdAnu=new TextField();
+	private final TextField compl1AdAnu=new TextField();
+	private final TextField compl2AdAnu=new TextField();
+	private final TextField numVoieAdAnu=new TextField();
+	private final TextField lieuServAdAnu=new TextField();
+	private final TextField codePostalAdAnu=new TextField();
 	
 	@PostConstruct
 	private void init() {
@@ -161,6 +166,26 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 		paysAdAnu.setReadOnly(true);
 		adresseAnnuelleLayout.addAlt(paysAdAnu);
 		CmpUtils.setLongTextField(paysAdAnu);
+		
+		compl1AdAnu.setReadOnly(true);
+		adresseAnnuelleLayout.addAlt(compl1AdAnu);
+		CmpUtils.setLongTextField(compl1AdAnu);
+		
+		compl2AdAnu.setReadOnly(true);
+		adresseAnnuelleLayout.addAlt(compl2AdAnu);
+		CmpUtils.setLongTextField(compl2AdAnu);
+		
+		numVoieAdAnu.setReadOnly(true);
+		adresseAnnuelleLayout.addAlt(numVoieAdAnu);
+		CmpUtils.setLongTextField(numVoieAdAnu);
+		
+		lieuServAdAnu.setReadOnly(true);
+		adresseAnnuelleLayout.addAlt(lieuServAdAnu);
+		CmpUtils.setLongTextField(lieuServAdAnu);
+		
+		codePostalAdAnu.setReadOnly(true);
+		adresseAnnuelleLayout.addAlt(codePostalAdAnu);
+		CmpUtils.setLongTextField(codePostalAdAnu);
 	}
 
 
@@ -199,6 +224,11 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 		
 		adresseAnnuelleLayout.getTitre().setText(getTranslation("adresse.annuelle.titre"));
 		paysAdAnu.setLabel(getTranslation("adresse.annuelle.pays"));
+		compl1AdAnu.setLabel(getTranslation("adresse.annuelle.compl1"));
+		compl2AdAnu.setLabel(getTranslation("adresse.annuelle.compl2"));
+		numVoieAdAnu.setLabel(getTranslation("adresse.annuelle.numvoie"));
+		lieuServAdAnu.setLabel(getTranslation("adresse.annuelle.lieuservice"));
+		codePostalAdAnu.setLabel(getTranslation("adresse.annuelle.codepostal"));
 		
 	}
 
