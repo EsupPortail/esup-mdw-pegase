@@ -47,6 +47,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -65,14 +66,9 @@ public class ParcoursView extends AdaptSizeLayout implements HasDynamicTitle, Ha
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final VerticalLayout bacLayout = new VerticalLayout();
-	private final VerticalLayout anneesLayout = new VerticalLayout();
+	private final Card bacLayout = new Card("", false);
+	private final Card anneesLayout = new Card("", false);
 	private final FlexLayout parcoursLayout = new FlexLayout(bacLayout, anneesLayout);
-	
-
-	private final TextHeader titreBac = new TextHeader();
-	private final TextHeader titreAnnees = new TextHeader();
-	
 	
 	private final TextField titreAccesBac=new TextField();
 	private final TextField anneeBac=new TextField();
@@ -101,10 +97,6 @@ public class ParcoursView extends AdaptSizeLayout implements HasDynamicTitle, Ha
 
 	private void initBac() {
 		
-		//formatCard(identiteLayout);
-
-		bacLayout.add(titreBac);
-		
 		codeIneBac.setReadOnly(true);
 		bacLayout.add(codeIneBac);
 		
@@ -129,32 +121,25 @@ public class ParcoursView extends AdaptSizeLayout implements HasDynamicTitle, Ha
 		etablissementBac.setReadOnly(true);
 		bacLayout.add(etablissementBac);
 		
+		CmpUtils.setLongTextField(titreAccesBac);
 		
-
-		//identiteLayout.addClassName("mdw-card");
-		setLongTextField(titreAccesBac);
+		CmpUtils.formatTextField(anneeBac);
 		
-		formatTextField(anneeBac);
+		CmpUtils.setModerateTextField(typeBac);
 		
-		setModerateTextField(typeBac);
+		CmpUtils.formatTextField(mentionBac);
 		
-		formatTextField(mentionBac);
+		CmpUtils.setLongTextField(paysEtbBac);
 		
-		setLongTextField(paysEtbBac);
+		CmpUtils.setLongTextField(departementEtbBac);
 		
-		setLongTextField(departementEtbBac);
+		CmpUtils.setLongTextField(etablissementBac);
 		
-		setLongTextField(etablissementBac);
-		
-		setModerateTextField(codeIneBac);
+		CmpUtils.setModerateTextField(codeIneBac);
 		
 	}
 	
 private void initAnnees() {
-		
-		//formatCard(identiteLayout);
-
-		anneesLayout.add(titreAnnees);
 		
 		anneeSupFr.setReadOnly(true);
 		anneesLayout.add(anneeSupFr);
@@ -165,45 +150,16 @@ private void initAnnees() {
 		anneeEtablissement.setReadOnly(true);
 		anneesLayout.add(anneeEtablissement);
 
-		//identiteLayout.addClassName("mdw-card");
-
-		setModerateTextField(anneeSupFr);
+		CmpUtils.setModerateTextField(anneeSupFr);
 		
-		formatTextField(anneeUnivFr);
+		CmpUtils.formatTextField(anneeUnivFr);
 		
-		formatTextField(anneeEtablissement);
+		CmpUtils.formatTextField(anneeEtablissement);
 		
 	}
 	
 	
-	private void formatTextField(TextField tf) {
-		tf.getStyle().set("margin", "0em");
-	}
 	
-	private void setLongTextField(TextField tf) {
-		formatTextField(tf);
-		tf.setWidthFull();
-		tf.setMaxWidth("25em");
-	}
-	
-	private void setModerateTextField(TextField tf) {
-		formatTextField(tf);
-		tf.setWidthFull();
-		tf.setMaxWidth("20em");
-	}
-
-	private void formatCard(VerticalLayout card, boolean isMobile) {
-		//card.getStyle().set("box-shadow", "0 5px 15px rgba(101,101,102,.15)");
-		card.getStyle().set("margin", "1em");
-		card.getStyle().set("border-radius", "4px");
-		card.getStyle().set("border", "0.1em solid");
-		card.getStyle().set("border-color", "var(--lumo-contrast-5pct)");
-		
-		card.setWidth(isMobile ? "100%" :"100%");
-		//card.setMaxWidth(isMobile ? "100%" :"40em");
-		
-		
-	}
 
 	/**
 	 * @see com.vaadin.flow.i18n.LocaleChangeObserver#localeChange(com.vaadin.flow.i18n.LocaleChangeEvent)
@@ -212,7 +168,7 @@ private void initAnnees() {
 	public void localeChange(final LocaleChangeEvent event) {
 		setViewTitle(getTranslation("parcours.title"));
 
-		titreBac.setText(getTranslation("bac.titre"));
+		bacLayout.getTitre().setText(getTranslation("bac.titre"));
 		titreAccesBac.setLabel(getTranslation("bac.titreacces"));
 		anneeBac.setLabel(getTranslation("bac.annee"));
 		typeBac.setLabel(getTranslation("bac.type"));
@@ -222,7 +178,7 @@ private void initAnnees() {
 		etablissementBac.setLabel(getTranslation("bac.etablissement"));
 		codeIneBac.setLabel(getTranslation("bac.codeine"));
 		
-		titreAnnees.setText(getTranslation("annees.titre"));
+		anneesLayout.getTitre().setText(getTranslation("annees.titre"));
 		anneeSupFr.setLabel(getTranslation("annees.anneesupfr"));
 		anneeUnivFr.setLabel(getTranslation("annees.anneeunivfr"));
 		anneeEtablissement.setLabel(getTranslation("annee.anneetablissement"));
@@ -238,10 +194,9 @@ private void initAnnees() {
 
 	@Override
 	protected void adaptSize(final Boolean isMobile) {
-		parcoursLayout.setWrapMode(isMobile? WrapMode.WRAP : WrapMode.NOWRAP);
-		formatCard(bacLayout, isMobile);
-		formatCard(anneesLayout, isMobile);
-
+		parcoursLayout.setWrapMode(WrapMode.WRAP);
+		bacLayout.updateStyle(isMobile);
+		anneesLayout.updateStyle(isMobile);
 	}
 	
 

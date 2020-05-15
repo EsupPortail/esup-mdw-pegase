@@ -47,6 +47,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -68,13 +69,9 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final VerticalLayout identiteLayout = new VerticalLayout();
-	private final VerticalLayout naissanceLayout = new VerticalLayout();
+	private final Card identiteLayout = new Card("", false);
+	private final Card naissanceLayout = new Card("", false);
 	private final FlexLayout etatcivilLayout = new FlexLayout(identiteLayout, naissanceLayout);
-	
-
-	private final TextHeader titreIdentite = new TextHeader();
-	private final TextHeader titreNaissance = new TextHeader();
 	
 	private final TextField sexe=new TextField();
 	private final TextField nomFamille=new TextField();
@@ -103,10 +100,6 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 
 	private void initIdentite() {
 		
-		//formatCard(identiteLayout);
-
-		identiteLayout.add(titreIdentite);
-		
 		sexe.setReadOnly(true);
 		identiteLayout.add(sexe);
 		
@@ -125,26 +118,21 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 		prenom3.setReadOnly(true);
 		identiteLayout.add(prenom3);
 
-		//identiteLayout.addClassName("mdw-card");
-		formatTextField(sexe);
+		CmpUtils.formatTextField(sexe);
 		
-		setLongTextField(nomFamille);
+		CmpUtils.setLongTextField(nomFamille);
 		
-		setLongTextField(nomUsage);
+		CmpUtils.setLongTextField(nomUsage);
 		
-		setModerateTextField(prenom);
+		CmpUtils.setModerateTextField(prenom);
 		
-		setModerateTextField(prenom2);
+		CmpUtils.setModerateTextField(prenom2);
 		
-		setModerateTextField(prenom3);
+		CmpUtils.setModerateTextField(prenom3);
 		
 	}
 	
 	private void initNaissance() {
-		
-		//formatCard(naissanceLayout);
-
-		naissanceLayout.add(titreNaissance);
 		
 		dateNaissance.setReadOnly(true);
 		naissanceLayout.add(dateNaissance);
@@ -161,46 +149,18 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 		nationaliteNaissance2.setReadOnly(true);
 		naissanceLayout.add(nationaliteNaissance2);
 		
-		//naissanceLayout.addClassName("mdw-card");
+		CmpUtils.formatTextField(dateNaissance);
 		
-		formatTextField(dateNaissance);
+		CmpUtils.setLongTextField(paysNaissance);
 		
-		setLongTextField(paysNaissance);
+		CmpUtils.setLongTextField(communeNaissance);
 		
-		setLongTextField(communeNaissance);
+		CmpUtils.setModerateTextField(nationaliteNaissance);
 		
-		setModerateTextField(nationaliteNaissance);
-		
-		setModerateTextField(nationaliteNaissance2);
+		CmpUtils.setModerateTextField(nationaliteNaissance2);
 		
 	}
 	
-	private void formatTextField(TextField tf) {
-		tf.getStyle().set("margin", "0em");
-	}
-	
-	private void setLongTextField(TextField tf) {
-		formatTextField(tf);
-		tf.setWidthFull();
-		tf.setMaxWidth("25em");
-	}
-	
-	private void setModerateTextField(TextField tf) {
-		formatTextField(tf);
-		tf.setWidthFull();
-		tf.setMaxWidth("20em");
-	}
-
-	private void formatCard(VerticalLayout card, boolean isMobile) {
-		//card.getStyle().set("box-shadow", "0 5px 15px rgba(101,101,102,.15)");
-		card.getStyle().set("margin", "1em");
-		card.getStyle().set("border-radius", "4px");
-		card.getStyle().set("border", "0.1em solid");
-		card.getStyle().set("border-color", "var(--lumo-contrast-5pct)");
-		
-		card.setWidth(isMobile ? "100%" :"50%");
-		
-	}
 
 	/**
 	 * @see com.vaadin.flow.i18n.LocaleChangeObserver#localeChange(com.vaadin.flow.i18n.LocaleChangeEvent)
@@ -209,7 +169,7 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 	public void localeChange(final LocaleChangeEvent event) {
 		setViewTitle(getTranslation("etatcivil.title"));
 
-		titreIdentite.setText(getTranslation("identite.titre"));
+		identiteLayout.getTitre().setText(getTranslation("identite.titre"));
 		sexe.setLabel(getTranslation("identite.sexe"));
 		nomFamille.setLabel(getTranslation("identite.nomfamille"));
 		nomUsage.setLabel(getTranslation("identite.nomusage"));
@@ -217,7 +177,7 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 		prenom2.setLabel(getTranslation("identite.prenom2"));
 		prenom3.setLabel(getTranslation("identite.prenom3"));
 		
-		titreNaissance.setText(getTranslation("naissance.titre"));
+		naissanceLayout.getTitre().setText(getTranslation("naissance.titre"));
 		dateNaissance.setLabel(getTranslation("naissance.date"));
 		paysNaissance.setLabel(getTranslation("naissance.pays"));
 		communeNaissance.setLabel(getTranslation("naissance.commune"));
@@ -235,9 +195,9 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 
 	@Override
 	protected void adaptSize(final Boolean isMobile) {
-		etatcivilLayout.setWrapMode(isMobile? WrapMode.WRAP : WrapMode.NOWRAP);
-		formatCard(identiteLayout, isMobile);
-		formatCard(naissanceLayout, isMobile);
+		etatcivilLayout.setWrapMode(WrapMode.WRAP);
+		identiteLayout.updateStyle(isMobile);
+		naissanceLayout.updateStyle(isMobile);
 	}
 	
 	@Override
