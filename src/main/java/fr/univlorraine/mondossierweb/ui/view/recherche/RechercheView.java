@@ -143,6 +143,7 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 
 		GridContextMenu<LdapPerson> gridMenu = etuGrid.addContextMenu();
 
+		gridMenu.setOpenOnClick(true);
 		gridMenu.addItem(getTranslation("go.etudiant.etatcivil"), e -> {
 			if(e!=null && e.getItem().isPresent()) {
 				log.info("acces dossier {}", e.getItem().get().getCodetu());
