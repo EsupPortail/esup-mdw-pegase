@@ -16,15 +16,17 @@
  *  limitations under the License.
  *
  */
-package fr.univlorraine.mondossierweb.model.ldap.entity;
+package fr.univlorraine.mondossierweb.model.app.repository;
 
-import lombok.Data;
+import java.util.List;
 
-@Data
-public class LdapPerson {
+import org.springframework.data.jpa.repository.JpaRepository;
 
-	private String login;
-	private String displayName;
-	private String codeApprenant;
-	private String mail;
+import fr.univlorraine.mondossierweb.model.app.entity.HistoriqueRecherche;
+import fr.univlorraine.mondossierweb.model.app.entity.HistoriqueRecherchePK;
+
+public interface HistoriqueRechercheRepository extends JpaRepository<HistoriqueRecherche, HistoriqueRecherchePK> {
+
+	List<HistoriqueRecherche> findByIdUsernameOrderByIdDateCreateAsc(String uid);
+
 }

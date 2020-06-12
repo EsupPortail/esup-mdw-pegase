@@ -15,4 +15,14 @@ CREATE TABLE preferences_utilisateur (
   PRIMARY KEY (username, pref_id)
 ) ENGINE = INNODB COMMENT "Preferences utilisateurs";
 
+CREATE TABLE historique_recherche (
+  username varchar(20) NOT NULL COMMENT "Uid utilisateur",
+  date_create datetime(6) NOT NULL COMMENT "Date et heure de la recherche",
+  code_apprenant varchar(20) NOT NULL COMMENT "Code apprenant",
+  display_name varchar(200) COMMENT "DisplayName",
+  mail varchar(200) COMMENT "Mail",
+  PRIMARY KEY (username, date_create)
+) ENGINE = INNODB COMMENT "Historique d'accès depuis la recherche";
+
+
 ALTER TABLE preferences_utilisateur ADD CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES utilisateur (username);

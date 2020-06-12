@@ -79,8 +79,8 @@ public class AppUserDetailsService implements UserDetailsService {
 			if(accesEtudiantActif && student != null) {
 				utilisateur.getAuthorities().add(new SimpleGrantedAuthority(SecurityUtils.ROLE_ETUDIANT));
 				utilisateur.setDisplayName(student.getDisplayName());
-				utilisateur.setCodeEtudiant(student.getCodetu());
-				utilisateur.setCodEtuDossier(student.getCodetu());
+				utilisateur.setCodeEtudiant(student.getCodeApprenant());
+				utilisateur.setCodEtuDossier(student.getCodeApprenant());
 				utilisateur.setMail(student.getMail());
 			} else {
 				// 3- Si l'accès enseignant est activé

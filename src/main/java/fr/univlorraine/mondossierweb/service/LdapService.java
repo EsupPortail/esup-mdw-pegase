@@ -69,7 +69,7 @@ public class LdapService implements Serializable {
 			LdapPerson person = new LdapPerson();
 			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
 			person.setDisplayName((String)attrs.get(ldapDisplayNameAttribute).get());
-			person.setCodetu((String)attrs.get(ldapCodEtuAttribute).get());
+			person.setCodeApprenant((String)attrs.get(ldapCodEtuAttribute).get());
 			person.setMail(attrs.get(ldapMailAttribute)!=null?(String)attrs.get(ldapMailAttribute).get():null);
 			return person;
 		}

@@ -44,9 +44,9 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
-import fr.univlorraine.mondossierweb.model.services.dataprovider.RechercheEtudiantProviderService;
-import fr.univlorraine.mondossierweb.model.services.dataprovider.RechercheEtudiantProviderService.RechercheEtudiantFilter;
+import fr.univlorraine.mondossierweb.service.RechercheEtudiantService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
+import fr.univlorraine.mondossierweb.service.RechercheEtudiantService.RechercheEtudiantFilter;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
@@ -66,7 +66,7 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
-	private transient RechercheEtudiantProviderService rechercheEtudiantProviderService;
+	private transient RechercheEtudiantService rechercheEtudiantService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
@@ -78,7 +78,7 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 	private final Grid<LdapPerson> etuGrid = new Grid<LdapPerson>();
 
 	/* Colonne nom */
-	private final Column<LdapPerson> codeColumn = etuGrid.addColumn(LdapPerson::getCodetu)
+	private final Column<LdapPerson> codeColumn = etuGrid.addColumn(LdapPerson::getCodeApprenant)
 			.setSortProperty("codetu")
 			.setFlexGrow(1)
 			.setAutoWidth(true)
@@ -146,8 +146,8 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 		gridMenu.setOpenOnClick(true);
 		gridMenu.addItem(getTranslation("go.etudiant.etatcivil"), e -> {
 			if(e!=null && e.getItem().isPresent()) {
-				log.info("acces dossier {}", e.getItem().get().getCodetu());
-				UI.getCurrent().navigate("etatcivil/" + e.getItem().get().getCodetu());
+				log.info("acces dossier {}", e.getItem().get().getCodeApprenant());
+				rechercheEtudiantService.accesDossier(e.getItem().get());
 			} else {
 				Notification.show(getTranslation("go.etudiant.error"));
 			}
@@ -167,7 +167,7 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 		} else {
 			filterTf.setInvalid(false);
 		}
-		personDataProvider = rechercheEtudiantProviderService.createLdapPersonDataProvider(getFilter());
+		personDataProvider = rechercheEtudiantService.createLdapPersonDataProvider(getFilter());
 		etuGrid.setDataProvider(personDataProvider);
 		securityService.setResultatRecherche(personDataProvider.getItems());
 	}
