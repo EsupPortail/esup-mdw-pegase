@@ -4,10 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Embeddable;
-
-import fr.univlorraine.mondossierweb.model.app.converter.LocalDateTimePersistenceConverter;
 
 /**
  * The primary key class for the historique_recherche database table.
@@ -20,7 +17,6 @@ public class HistoriqueRecherchePK implements Serializable {
 
 	private String username;
 
-	@Convert(converter = LocalDateTimePersistenceConverter.class)
 	@Column(name="date_create")
 	private LocalDateTime dateCreate;
 

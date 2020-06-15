@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -83,9 +84,7 @@ public class RechercheEtudiantService  implements Serializable {
 			// Récupération de la liste des acces depuis la recherche
 			LinkedList<HistoriqueRecherche> lhr = getHistoriqueRecherche(uid); 
 			
-			// Si ce n'est pas le même dossier que le dernier éléments accédé
-			if(lhr.isEmpty() || !lhr.getLast().getCodeApprenant().equals(etudiant.getCodeApprenant())) {
-				// Sauvegarder dans l'historique si optiona activée
+				// Sauvegarder dans l'historique si option activée
 				HistoriqueRecherche hr = new HistoriqueRecherche();
 				HistoriqueRecherchePK hrpk =new HistoriqueRecherchePK();
 				hrpk.setDateCreate(LocalDateTime.now());
@@ -95,15 +94,24 @@ public class RechercheEtudiantService  implements Serializable {
 				hr.setMail(etudiant.getMail());
 				hr.setId(hrpk);
 				hr = historiqueRechercheRepository.save(hr);
-				lhr.addLast(hr);
 				
+				// Si le même dossier est déjà dans la liste
+				if(lhr != null) {
+					lhr.stream().forEach(h -> {
+						if(h.getCodeApprenant().equals(etudiant.getCodeApprenant())) {
+							historiqueRechercheRepository.delete(h);
+						}
+					});
+				}
+				
+				//Récupération de la nouvelle liste en base
+				lhr = getHistoriqueRecherche(uid); 
+	
 				// Suppression des historiques supérieurs à nbHistorique
-
 				while (lhr.size() > nbHistorique) {
 					historiqueRechercheRepository.deleteById(lhr.getFirst().getId());
 					lhr.removeFirst();
 				}
-			}
 
 		}
 		UI.getCurrent().navigate("etatcivil/" + etudiant.getCodeApprenant());
