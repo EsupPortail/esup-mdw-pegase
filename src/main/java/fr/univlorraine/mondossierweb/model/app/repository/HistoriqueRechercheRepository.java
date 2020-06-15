@@ -29,4 +29,6 @@ public interface HistoriqueRechercheRepository extends JpaRepository<HistoriqueR
 
 	List<HistoriqueRecherche> findByIdUsernameOrderByIdDateCreateAsc(String uid);
 
+	List<HistoriqueRecherche> findByIdUsernameOrderByIdDateCreateDesc(String uid);
+
 }

@@ -20,6 +20,7 @@ package fr.univlorraine.mondossierweb.service;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,26 +49,26 @@ public class RechercheEtudiantService  implements Serializable {
 	protected transient LdapService ldapService;
 	@Autowired
 	private transient SecurityService securityService;
-	
+
 	@Autowired
 	private transient HistoriqueRechercheRepository historiqueRechercheRepository;
-	
+
 	@Value("${recherche.historique.actif}")
 	private transient boolean historique;	
 	@Value("${recherche.historique.nb}")
 	private transient int nbHistorique;	
-	
+
 	@Data
 	@AllArgsConstructor
 	public static class RechercheEtudiantFilter implements Serializable {
 		private String name;
 	}
-	
+
 	/**
 	 * @return le dataProvider
 	 */
 	public ListDataProvider<LdapPerson> createLdapPersonDataProvider(RechercheEtudiantFilter filter) {
-	/*return DataProvider.fromFilteringCallbacks(query -> {
+		/*return DataProvider.fromFilteringCallbacks(query -> {
 			String filter = query.getFilter().orElse("");
 			return ldapService.searchStudentFromString(filter).stream();
 		}, query  -> {
@@ -76,47 +77,48 @@ public class RechercheEtudiantService  implements Serializable {
 		});*/
 		return DataProvider.fromStream(ldapService.searchStudentFromString(filter.name).stream());		
 	}
-	
+
 	public void accesDossier(LdapPerson etudiant) {
 		// Si l'historique des acces est activé
 		if(historique) {
 			String uid = securityService.getUsername().orElse(null);
 			// Récupération de la liste des acces depuis la recherche
 			LinkedList<HistoriqueRecherche> lhr = getHistoriqueRecherche(uid); 
-			
-				// Sauvegarder dans l'historique si option activée
-				HistoriqueRecherche hr = new HistoriqueRecherche();
-				HistoriqueRecherchePK hrpk =new HistoriqueRecherchePK();
-				hrpk.setDateCreate(LocalDateTime.now());
-				hrpk.setUsername(uid);
-				hr.setCodeApprenant(etudiant.getCodeApprenant());
-				hr.setDisplayName(etudiant.getDisplayName());
-				hr.setMail(etudiant.getMail());
-				hr.setId(hrpk);
-				hr = historiqueRechercheRepository.save(hr);
-				
-				// Si le même dossier est déjà dans la liste
-				if(lhr != null) {
-					lhr.stream().forEach(h -> {
-						if(h.getCodeApprenant().equals(etudiant.getCodeApprenant())) {
-							historiqueRechercheRepository.delete(h);
-						}
-					});
-				}
-				
-				//Récupération de la nouvelle liste en base
-				lhr = getHistoriqueRecherche(uid); 
-	
-				// Suppression des historiques supérieurs à nbHistorique
-				while (lhr.size() > nbHistorique) {
-					historiqueRechercheRepository.deleteById(lhr.getFirst().getId());
-					lhr.removeFirst();
-				}
+
+			// Sauvegarder dans l'historique si option activée
+			HistoriqueRecherche hr = new HistoriqueRecherche();
+			HistoriqueRecherchePK hrpk =new HistoriqueRecherchePK();
+			hrpk.setDateCreate(LocalDateTime.now());
+			hrpk.setUsername(uid);
+			hr.setUidApprenant(etudiant.getLogin());
+			hr.setCodeApprenant(etudiant.getCodeApprenant());
+			hr.setDisplayName(etudiant.getDisplayName());
+			hr.setMail(etudiant.getMail());
+			hr.setId(hrpk);
+			hr = historiqueRechercheRepository.save(hr);
+
+			// Si le même dossier est déjà dans la liste
+			if(lhr != null) {
+				lhr.stream().forEach(h -> {
+					if(h.getCodeApprenant().equals(etudiant.getCodeApprenant())) {
+						historiqueRechercheRepository.delete(h);
+					}
+				});
+			}
+
+			//Récupération de la nouvelle liste en base
+			lhr = getHistoriqueRecherche(uid); 
+
+			// Suppression des historiques supérieurs à nbHistorique
+			while (lhr.size() > nbHistorique) {
+				historiqueRechercheRepository.deleteById(lhr.getFirst().getId());
+				lhr.removeFirst();
+			}
 
 		}
 		UI.getCurrent().navigate("etatcivil/" + etudiant.getCodeApprenant());
 	}
-	
+
 	private LinkedList<HistoriqueRecherche> getHistoriqueRecherche(String uid) {
 		List<HistoriqueRecherche> lhr = historiqueRechercheRepository.findByIdUsernameOrderByIdDateCreateAsc(uid);
 		LinkedList<HistoriqueRecherche> llhr = new LinkedList<HistoriqueRecherche> ();
@@ -124,4 +126,24 @@ public class RechercheEtudiantService  implements Serializable {
 		return llhr;
 	}
 	
+
+	private LinkedList<HistoriqueRecherche> getHistoriqueRechercheByDateDesc(String uid) {
+		List<HistoriqueRecherche> lhr = historiqueRechercheRepository.findByIdUsernameOrderByIdDateCreateDesc(uid);
+		LinkedList<HistoriqueRecherche> llhr = new LinkedList<HistoriqueRecherche> ();
+		llhr.addAll(lhr);
+		return llhr;
+	}
+
+	public Collection<LdapPerson> getHistorique() {
+		if(!historique) {
+			return new LinkedList<LdapPerson>();
+		}
+		String uid = securityService.getUsername().orElse(null);
+		// Récupération de la liste des acces depuis la recherche
+		 LinkedList<HistoriqueRecherche> lhr = getHistoriqueRechercheByDateDesc(uid);
+		 LinkedList<LdapPerson> llp = new LinkedList<LdapPerson>();
+		 lhr.stream().forEach(hr -> llp.add(new LdapPerson(hr)));
+		return llp;
+	}
+
 }

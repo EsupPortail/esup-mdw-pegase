@@ -22,6 +22,9 @@ public class HistoriqueRecherche implements Serializable {
 	@EmbeddedId
 	private HistoriqueRecherchePK id;
 
+	@Column(name="uid_apprenant")
+	private String uidApprenant;
+	
 	@Column(name="code_apprenant")
 	private String codeApprenant;
 
@@ -39,6 +42,15 @@ public class HistoriqueRecherche implements Serializable {
 
 	public void setId(HistoriqueRecherchePK id) {
 		this.id = id;
+	}
+	
+	
+	public String getUidApprenant() {
+		return uidApprenant;
+	}
+
+	public void setUidApprenant(String uidApprenant) {
+		this.uidApprenant = uidApprenant;
 	}
 
 	public String getCodeApprenant() {

@@ -18,6 +18,8 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.recherche;
 
+import java.util.Collection;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +32,9 @@ import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -79,24 +84,24 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 
 	/* Colonne nom */
 	private final Column<LdapPerson> codeColumn = etuGrid.addColumn(LdapPerson::getCodeApprenant)
-			.setSortProperty("codetu")
-			.setFlexGrow(1)
-			.setAutoWidth(true)
-			.setFrozen(true);
+		.setSortProperty("codetu")
+		.setFlexGrow(1)
+		.setAutoWidth(true)
+		.setFrozen(true);
 
 	/* Colonne nom */
 	private final Column<LdapPerson> nomColumn = etuGrid.addColumn(LdapPerson::getDisplayName)
-			.setSortProperty("displayName")
-			.setFlexGrow(1)
-			.setAutoWidth(true)
-			.setFrozen(true);
+		.setSortProperty("displayName")
+		.setFlexGrow(1)
+		.setAutoWidth(true)
+		.setFrozen(true);
 
 	/* Colonne mail */
 	private final Column<LdapPerson> mailColumn = etuGrid.addColumn(LdapPerson::getMail)
-			.setSortProperty("mail")
-			.setFlexGrow(1)
-			.setAutoWidth(true)
-			.setFrozen(true);
+		.setSortProperty("mail")
+		.setFlexGrow(1)
+		.setAutoWidth(true)
+		.setFrozen(true);
 
 	// Layout contenant les critères de sélection
 	private final HorizontalLayout selectorLayout = new HorizontalLayout();
@@ -139,6 +144,8 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 		//Si on a une recherche enregistrée
 		if(securityService.getResultatRecherche()!=null) {
 			etuGrid.setItems(securityService.getResultatRecherche());
+		} else {
+			etuGrid.setItems(rechercheEtudiantService.getHistorique());
 		}
 
 		GridContextMenu<LdapPerson> gridMenu = etuGrid.addContextMenu();
@@ -156,20 +163,27 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 		add(etuGrid);
 	}
 
+
 	/**
 	 * Rafraichi les user
 	 */
 	private void refresh() {
-		if (!StringUtils.isBlank(filterTf.getValue()) && filterTf.getValue().length() < MIN_SEARCH) {
-			filterTf.setInvalid(true);
-			filterTf.setErrorMessage(getTranslation("recherche.search.error", new Object[] { MIN_SEARCH }));
-			return;
+		securityService.setResultatRecherche(null);
+		if(StringUtils.isBlank(filterTf.getValue())) {
+			securityService.saveSearch(null);
+			etuGrid.setItems(rechercheEtudiantService.getHistorique());
 		} else {
-			filterTf.setInvalid(false);
+			if (filterTf.getValue().length() < MIN_SEARCH) {
+				filterTf.setInvalid(true);
+				filterTf.setErrorMessage(getTranslation("recherche.search.error", new Object[] { MIN_SEARCH }));
+				return;
+			} else {
+				filterTf.setInvalid(false);
+			}
+			personDataProvider = rechercheEtudiantService.createLdapPersonDataProvider(getFilter());
+			etuGrid.setDataProvider(personDataProvider);
+			securityService.setResultatRecherche(personDataProvider.getItems());
 		}
-		personDataProvider = rechercheEtudiantService.createLdapPersonDataProvider(getFilter());
-		etuGrid.setDataProvider(personDataProvider);
-		securityService.setResultatRecherche(personDataProvider.getItems());
 	}
 
 	private RechercheEtudiantFilter getFilter() {
