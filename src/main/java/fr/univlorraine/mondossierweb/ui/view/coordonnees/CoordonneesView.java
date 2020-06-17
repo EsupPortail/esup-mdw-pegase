@@ -55,6 +55,7 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 	@Getter
 	private final TextHeader header = new TextHeader();
 
+	
 	private final Card mailLayout = new Card("", false);
 	private final Card telLayout = new Card("", false);
 	private final Card mailSecoursLayout = new Card("", true);
@@ -62,8 +63,9 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 	private final Card adresseFixeLayout = new Card("", true);
 	private final Card adresseAnnuelleLayout = new Card("", true);
 	
-	private final FlexLayout coordLayout = new FlexLayout(mailLayout, telLayout,mailSecoursLayout,telSecoursLayout, adresseFixeLayout, adresseAnnuelleLayout);
+	private final FlexLayout coordPersoLayout = new FlexLayout(mailLayout, telLayout,mailSecoursLayout,telSecoursLayout, adresseFixeLayout, adresseAnnuelleLayout);
 	
+	private final TextField mailEtab=new TextField();
 	private final TextField mail=new TextField();
 	private final TextField tel=new TextField();
 	private final TextField mailSecours=new TextField();
@@ -95,16 +97,20 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 		initTelSecours();
 		initAdresseFixe();
 		initAdresseAnnuelle();
-		coordLayout.setWidthFull();
-		coordLayout.setWrapMode(WrapMode.WRAP);
-		add(coordLayout);
+		coordPersoLayout.setWidthFull();
+		coordPersoLayout.setWrapMode(WrapMode.WRAP);
+		coordPersoLayout.getStyle().set("margin-top", "0");
+		add(coordPersoLayout);
 
 	}
-
+	
 	private void initMail() {
+		mailEtab.setReadOnly(true);
+		mailLayout.add(mailEtab);
 		mail.setReadOnly(true);
 		mailLayout.add(mail);
 		CmpUtils.setLongTextField(mail);
+		CmpUtils.setLongTextField(mailEtab);
 	}
 	
 	private void initTel() {
@@ -201,6 +207,7 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 		tel.setLabel(getTranslation("tel.libelle"));
 		
 		mailLayout.getTitre().setText(getTranslation("mail.titre"));
+		mailEtab.setLabel(getTranslation("mailetab.libelle"));
 		mail.setLabel(getTranslation("mail.libelle"));
 		
 		telSecoursLayout.getTitre().setText(getTranslation("telsecours.titre"));
@@ -242,12 +249,12 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 
 	@Override
 	protected void adaptSize(final Boolean isMobile) {
-		telLayout.updateStyle(isMobile);
-		mailLayout.updateStyle(isMobile);
-		telSecoursLayout.updateStyle(isMobile);
-		mailSecoursLayout.updateStyle(isMobile);
-		adresseFixeLayout.updateStyle(isMobile);
-		adresseAnnuelleLayout.updateStyle(isMobile);
+		telLayout.updateStyle(isMobile, false);
+		mailLayout.updateStyle(isMobile, false);
+		telSecoursLayout.updateStyle(isMobile, false);
+		mailSecoursLayout.updateStyle(isMobile, false);
+		adresseFixeLayout.updateStyle(isMobile, false);
+		adresseAnnuelleLayout.updateStyle(isMobile, false);
 	}
 	
 

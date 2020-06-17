@@ -73,7 +73,6 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 	private final Card naissanceLayout = new Card("", false);
 	private final FlexLayout etatcivilLayout = new FlexLayout(identiteLayout, naissanceLayout);
 	
-	private final TextField sexe=new TextField();
 	private final TextField nomFamille=new TextField();
 	private final TextField nomUsage=new TextField();
 	private final TextField prenom=new TextField();
@@ -101,9 +100,6 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 
 	private void initIdentite() {
 		
-		sexe.setReadOnly(true);
-		identiteLayout.add(sexe);
-		
 		nomFamille.setReadOnly(true);
 		identiteLayout.add(nomFamille);
 		
@@ -118,8 +114,6 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 		
 		prenom3.setReadOnly(true);
 		identiteLayout.add(prenom3);
-
-		CmpUtils.formatTextField(sexe);
 		
 		CmpUtils.setLongTextField(nomFamille);
 		
@@ -171,7 +165,6 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 		setViewTitle(getTranslation("etatcivil.title"));
 
 		identiteLayout.getTitre().setText(getTranslation("identite.titre"));
-		sexe.setLabel(getTranslation("identite.sexe"));
 		nomFamille.setLabel(getTranslation("identite.nomfamille"));
 		nomUsage.setLabel(getTranslation("identite.nomusage"));
 		prenom.setLabel(getTranslation("identite.prenom"));
@@ -196,8 +189,8 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 
 	@Override
 	protected void adaptSize(final Boolean isMobile) {
-		identiteLayout.updateStyle(isMobile);
-		naissanceLayout.updateStyle(isMobile);
+		identiteLayout.updateStyle(isMobile, false);
+		naissanceLayout.updateStyle(isMobile, false);
 	}
 	
 	@Override

@@ -195,8 +195,8 @@ private void initAnnees() {
 
 	@Override
 	protected void adaptSize(final Boolean isMobile) {
-		bacLayout.updateStyle(isMobile);
-		anneesLayout.updateStyle(isMobile);
+		bacLayout.updateStyle(isMobile, false);
+		anneesLayout.updateStyle(isMobile, false);
 	}
 	
 

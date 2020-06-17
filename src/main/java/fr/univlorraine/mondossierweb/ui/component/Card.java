@@ -75,13 +75,13 @@ public class Card extends VerticalLayout {
 			alt.add(components);
 	}
 	 
-	public void updateStyle(boolean isMobile) {
+	public void updateStyle(boolean isMobile, boolean princ) {
 			this.getStyle().set("margin", "1em");
 			this.getStyle().set("border-radius", "4px");
 			this.getStyle().set("border", "0.1em solid");
 			this.getStyle().set("border-color", "var(--lumo-contrast-5pct)");
 			this.setHeight("fit-content");
-			this.setWidth(isMobile ? "100%" :"46%");
+			this.setWidth(!isMobile && !princ ? "46%" :"100%");
 	}
 
 }
