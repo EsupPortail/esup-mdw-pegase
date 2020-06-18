@@ -21,6 +21,7 @@ package fr.univlorraine.mondossierweb.ui.view.coordonnees;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
@@ -50,21 +51,23 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
+	@Value("${etudiant.mail.ldap}")
+	private transient Boolean afficherMailLdap;
 	@Getter
 	private String pageTitle = "";
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	
+
 	private final Card mailLayout = new Card("", false);
 	private final Card telLayout = new Card("", false);
 	private final Card mailSecoursLayout = new Card("", true);
 	private final Card telSecoursLayout = new Card("", true);
 	private final Card adresseFixeLayout = new Card("", true);
 	private final Card adresseAnnuelleLayout = new Card("", true);
-	
+
 	private final FlexLayout coordPersoLayout = new FlexLayout(mailLayout, telLayout,mailSecoursLayout,telSecoursLayout, adresseFixeLayout, adresseAnnuelleLayout);
-	
+
 	private final TextField mailEtab=new TextField();
 	private final TextField mail=new TextField();
 	private final TextField tel=new TextField();
@@ -72,7 +75,7 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 	private final TextField nomMailSecours=new TextField();
 	private final TextField telSecours=new TextField();
 	private final TextField nomTelSecours=new TextField();
-	
+
 	private final TextField nomAdFixe=new TextField();
 	private final TextField paysAdFixe=new TextField();
 	private final TextField compl1AdFixe=new TextField();
@@ -80,14 +83,14 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 	private final TextField numVoieAdFixe=new TextField();
 	private final TextField lieuServAdFixe=new TextField();
 	private final TextField codePostalAdFixe=new TextField();
-	
+
 	private final TextField paysAdAnu=new TextField();
 	private final TextField compl1AdAnu=new TextField();
 	private final TextField compl2AdAnu=new TextField();
 	private final TextField numVoieAdAnu=new TextField();
 	private final TextField lieuServAdAnu=new TextField();
 	private final TextField codePostalAdAnu=new TextField();
-	
+
 	@PostConstruct
 	private void init() {
 		setSizeFull();
@@ -103,93 +106,96 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 		add(coordPersoLayout);
 
 	}
-	
+
 	private void initMail() {
-		mailEtab.setReadOnly(true);
-		mailLayout.add(mailEtab);
+		// Si on affiche le mail issu du LDAP
+		if(afficherMailLdap) {
+			mailEtab.setReadOnly(true);
+			mailLayout.add(mailEtab);
+			CmpUtils.setLongTextField(mailEtab);
+		}
 		mail.setReadOnly(true);
 		mailLayout.add(mail);
 		CmpUtils.setLongTextField(mail);
-		CmpUtils.setLongTextField(mailEtab);
 	}
-	
+
 	private void initTel() {
 		tel.setReadOnly(true);
 		telLayout.add(tel);
 		CmpUtils.setModerateTextField(tel);
 	}
-	
+
 	private void initMailSecours() {
 		nomMailSecours.setReadOnly(true);
 		mailSecoursLayout.addAlt(nomMailSecours);
 		CmpUtils.setLongTextField(nomMailSecours);
-		
+
 		mailSecours.setReadOnly(true);
 		mailSecoursLayout.addAlt(mailSecours);
 		CmpUtils.setLongTextField(mailSecours);
 	}
-	
+
 	private void initTelSecours() {
 		nomTelSecours.setReadOnly(true);
 		telSecoursLayout.addAlt(nomTelSecours);
 		CmpUtils.setLongTextField(nomTelSecours);
-		
+
 		telSecours.setReadOnly(true);
 		telSecoursLayout.addAlt(telSecours);
 		CmpUtils.setModerateTextField(telSecours);
 	}
-	
+
 	private void initAdresseFixe() {
 		nomAdFixe.setReadOnly(true);
 		adresseFixeLayout.addAlt(nomAdFixe);
 		CmpUtils.setLongTextField(nomAdFixe);
-		
+
 		paysAdFixe.setReadOnly(true);
 		adresseFixeLayout.addAlt(paysAdFixe);
 		CmpUtils.setLongTextField(paysAdFixe);
-		
+
 		compl1AdFixe.setReadOnly(true);
 		adresseFixeLayout.addAlt(compl1AdFixe);
 		CmpUtils.setLongTextField(compl1AdFixe);
-		
+
 		compl2AdFixe.setReadOnly(true);
 		adresseFixeLayout.addAlt(compl2AdFixe);
 		CmpUtils.setLongTextField(compl2AdFixe);
-		
+
 		numVoieAdFixe.setReadOnly(true);
 		adresseFixeLayout.addAlt(numVoieAdFixe);
 		CmpUtils.setLongTextField(numVoieAdFixe);
-		
+
 		lieuServAdFixe.setReadOnly(true);
 		adresseFixeLayout.addAlt(lieuServAdFixe);
 		CmpUtils.setLongTextField(lieuServAdFixe);
-		
+
 		codePostalAdFixe.setReadOnly(true);
 		adresseFixeLayout.addAlt(codePostalAdFixe);
 		CmpUtils.setLongTextField(codePostalAdFixe);
 	}
-	
+
 	private void initAdresseAnnuelle() {
 		paysAdAnu.setReadOnly(true);
 		adresseAnnuelleLayout.addAlt(paysAdAnu);
 		CmpUtils.setLongTextField(paysAdAnu);
-		
+
 		compl1AdAnu.setReadOnly(true);
 		adresseAnnuelleLayout.addAlt(compl1AdAnu);
 		CmpUtils.setLongTextField(compl1AdAnu);
-		
+
 		compl2AdAnu.setReadOnly(true);
 		adresseAnnuelleLayout.addAlt(compl2AdAnu);
 		CmpUtils.setLongTextField(compl2AdAnu);
-		
+
 		numVoieAdAnu.setReadOnly(true);
 		adresseAnnuelleLayout.addAlt(numVoieAdAnu);
 		CmpUtils.setLongTextField(numVoieAdAnu);
-		
+
 		lieuServAdAnu.setReadOnly(true);
 		adresseAnnuelleLayout.addAlt(lieuServAdAnu);
 		CmpUtils.setLongTextField(lieuServAdAnu);
-		
+
 		codePostalAdAnu.setReadOnly(true);
 		adresseAnnuelleLayout.addAlt(codePostalAdAnu);
 		CmpUtils.setLongTextField(codePostalAdAnu);
@@ -205,19 +211,19 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 
 		telLayout.getTitre().setText(getTranslation("tel.titre"));
 		tel.setLabel(getTranslation("tel.libelle"));
-		
+
 		mailLayout.getTitre().setText(getTranslation("mail.titre"));
 		mailEtab.setLabel(getTranslation("mailetab.libelle"));
 		mail.setLabel(getTranslation("mail.libelle"));
-		
+
 		telSecoursLayout.getTitre().setText(getTranslation("telsecours.titre"));
 		telSecours.setLabel(getTranslation("tel.secours.libelle"));
 		nomTelSecours.setLabel(getTranslation("tel.secours.nom"));
-		
+
 		mailSecoursLayout.getTitre().setText(getTranslation("mailsecours.titre"));
 		mailSecours.setLabel(getTranslation("mail.secours.libelle"));
 		nomMailSecours.setLabel(getTranslation("mail.secours.nom"));
-		
+
 		adresseFixeLayout.getTitre().setText(getTranslation("adresse.fixe.titre"));
 		nomAdFixe.setLabel(getTranslation("adresse.fixe.nom"));
 		paysAdFixe.setLabel(getTranslation("adresse.fixe.pays"));
@@ -226,10 +232,10 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 		numVoieAdFixe.setLabel(getTranslation("adresse.fixe.numvoie"));
 		lieuServAdFixe.setLabel(getTranslation("adresse.fixe.lieuservice"));
 		codePostalAdFixe.setLabel(getTranslation("adresse.fixe.codepostal"));
-		
-		
-		
-		
+
+
+
+
 		adresseAnnuelleLayout.getTitre().setText(getTranslation("adresse.annuelle.titre"));
 		paysAdAnu.setLabel(getTranslation("adresse.annuelle.pays"));
 		compl1AdAnu.setLabel(getTranslation("adresse.annuelle.compl1"));
@@ -237,7 +243,7 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 		numVoieAdAnu.setLabel(getTranslation("adresse.annuelle.numvoie"));
 		lieuServAdAnu.setLabel(getTranslation("adresse.annuelle.lieuservice"));
 		codePostalAdAnu.setLabel(getTranslation("adresse.annuelle.codepostal"));
-		
+
 	}
 
 	private void setViewTitle(final String viewTitle) {
@@ -256,6 +262,6 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 		adresseFixeLayout.updateStyle(isMobile, false);
 		adresseAnnuelleLayout.updateStyle(isMobile, false);
 	}
-	
+
 
 }
