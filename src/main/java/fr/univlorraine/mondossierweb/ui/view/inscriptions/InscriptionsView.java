@@ -29,6 +29,8 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 
+import fr.univlorraine.agatte.services.security.UserService;
+import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.ui.layout.HasCodeEtuUrlParameterView;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
@@ -44,6 +46,8 @@ public class InscriptionsView extends HasCodeEtuUrlParameterView implements HasD
 
 
 	@Autowired
+	private transient PegaseService pegaseService;
+	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
 	private String pageTitle = "";
@@ -52,7 +56,7 @@ public class InscriptionsView extends HasCodeEtuUrlParameterView implements HasD
 
 	@PostConstruct
 	public void init() {
-	
+		pegaseService.listerInscriptionsValidees();
 	}
 
 
