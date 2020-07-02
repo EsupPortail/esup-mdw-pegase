@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -51,18 +53,25 @@ public class PegaseService implements Serializable {
 	private transient String etablissement;	
 	@Value("${pegase.api.ins.url}")
 	private transient String apiInsUrl;	
-
+	
+	
+	private ApiClient apiClientIns = new ApiClient();
+	private ApprenantsApi appApi = new ApprenantsApi();
+	private InscriptionsApi insApi = new InscriptionsApi();
+	
+	@PostConstruct
+	public void init() {
+		apiClientIns.setBasePath(apiInsUrl);
+		insApi.setApiClient(apiClientIns);
+		appApi.setApiClient(apiClientIns);
+	}
+	
 	/**
 	 * méthode de test qui liste les inscription validée dans Pégase
 	 */
 	public void listerInscriptionsValidees() {
 		
-		ApiClient apiClient = new ApiClient();
-		apiClient.setAccessToken(accessTokenService.getToken());
-		apiClient.setBasePath(apiInsUrl);
-		
-		InscriptionsApi insApi = new InscriptionsApi();
-		insApi.setApiClient(apiClient);
+		insApi.getApiClient().setAccessToken(accessTokenService.getToken());
 		
 		List<StatutInscriptionVoeu> statutsInscription = new LinkedList<StatutInscriptionVoeu> ();
 		statutsInscription.add(StatutInscriptionVoeu.VALIDE);
@@ -91,12 +100,7 @@ public class PegaseService implements Serializable {
 	@Deprecated
 	public void lireApprenant() {
 		
-		ApiClient apiClient = new ApiClient();
-		apiClient.setAccessToken(accessTokenService.getToken());
-		apiClient.setBasePath(apiInsUrl);
-		
-		ApprenantsApi appApi = new ApprenantsApi();
-		appApi.setApiClient(apiClient);
+		appApi.getApiClient().setAccessToken(accessTokenService.getToken());
 		
 		try {
 			Apprenant response = appApi.lireApprenant(etablissement, "000000001");
