@@ -44,8 +44,7 @@ import lombok.Getter;
 public class InscriptionsView extends HasCodeEtuUrlParameterView implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
 
 
-	@Autowired
-	private transient PegaseService pegaseService;
+	
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
@@ -55,7 +54,6 @@ public class InscriptionsView extends HasCodeEtuUrlParameterView implements HasD
 
 	@PostConstruct
 	public void init() {
-		pegaseService.listerInscriptionsValidees();
 	}
 
 

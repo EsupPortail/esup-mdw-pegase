@@ -37,6 +37,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.vaadin.flow.data.provider.ListDataProvider;
 
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
+import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -74,6 +75,10 @@ public class Utilisateur implements Serializable, UserDetails {
 	/* identifiant de l'étudiant dont le dossier est consulté */
 	@Transient
 	private String codEtuDossier;
+	
+	/* Dossier de l'étudiant consulté */
+	@Transient
+	private ApprenantEtInscriptions dossier;
 	
 	/* Dernière Chaîne recherchée dans la vue Recherche */
 	@Transient

@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ import fr.univlorraine.pegase.api.ApiException;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
 import fr.univlorraine.pegase.api.insgestion.InscriptionsApi;
 import fr.univlorraine.pegase.model.insgestion.Apprenant;
+import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.Inscriptions;
 import fr.univlorraine.pegase.model.insgestion.StatutInscriptionVoeu;
 import fr.univlorraine.pegase.model.insgestion.StatutPaiementVoeu;
@@ -53,35 +55,36 @@ public class PegaseService implements Serializable {
 	private transient String etablissement;	
 	@Value("${pegase.api.ins.url}")
 	private transient String apiInsUrl;	
-	
-	
+
+
 	private ApiClient apiClientIns = new ApiClient();
 	private ApprenantsApi appApiIns = new ApprenantsApi();
 	private InscriptionsApi insApiIns = new InscriptionsApi();
-	
+
 	@PostConstruct
 	public void init() {
 		apiClientIns.setBasePath(apiInsUrl);
 		insApiIns.setApiClient(apiClientIns);
 		appApiIns.setApiClient(apiClientIns);
 	}
-	
+
 	/**
 	 * méthode de test qui liste les inscription validée dans Pégase
 	 */
 	public void listerInscriptionsValidees() {
-		
+		// Maj du token pour récupérer le dernier token valide
 		insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
-		
+
+		// Préparation des paramètres
 		List<StatutInscriptionVoeu> statutsInscription = new LinkedList<StatutInscriptionVoeu> ();
 		statutsInscription.add(StatutInscriptionVoeu.VALIDE);
-		
 		List<StatutPiecesVoeu> statutsPieces = null;
 		List<StatutPaiementVoeu> statutsPaiement = null;
 		List<TriInscription> tri = null;
 		String recherche = null;
-		
+
 		try {
+			// Appel de l'API Pégase
 			Inscriptions response = insApiIns.listerInscriptionsValidees(etablissement, statutsInscription, statutsPieces, statutsPaiement, tri, recherche);
 			if(response != null) {
 				log.info("{} listerInscriptionsValidees", response.getNombre());
@@ -93,16 +96,38 @@ public class PegaseService implements Serializable {
 		}
 
 	}
-	
+
+	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
+		// Si les paramètres nécessaires sont valués
+		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
+			// Maj du token pour récupérer le dernier token valide
+			insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
+			try {
+				// Appel de l'API Pégase
+				ApprenantEtInscriptions dossier = insApiIns.lireInscriptions(etablissement, codeApprenant);
+				if(dossier != null) {
+					log.info("Dossier de {} {} recupere", dossier.getApprenant().getEtatCivil().getPrenom(), dossier.getApprenant().getEtatCivil().getNomUsuel());
+				} else {
+					log.info("Anomalie lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
+				}
+				return dossier;
+			} catch (ApiException e) {
+				log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement, e);
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * méthode de test qui lit un apprenant
 	 */
 	@Deprecated
 	public void lireApprenant() {
-		
+		// Maj du token pour récupérer le dernier token valide
 		appApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
-		
+
 		try {
+			// Appel de l'API Pégase
 			Apprenant response = appApiIns.lireApprenant(etablissement, "000000001");
 			if(response != null) {
 				log.info("{} lireApprenant", response.getEtatCivil().getNomUsuel());

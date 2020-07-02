@@ -28,7 +28,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.WrapMode;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
@@ -39,16 +38,18 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
+import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.AdaptSizeLayout;
 import fr.univlorraine.mondossierweb.ui.component.Card;
-import fr.univlorraine.mondossierweb.ui.layout.HasCodeEtuUrlParameterView;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import fr.univlorraine.pegase.model.insgestion.Apprenant;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,7 +62,7 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 
 	@Autowired
 	private transient SecurityService securityService;
-	
+
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
@@ -72,14 +73,14 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 	private final Card identiteLayout = new Card("", false);
 	private final Card naissanceLayout = new Card("", false);
 	private final FlexLayout etatcivilLayout = new FlexLayout(identiteLayout, naissanceLayout);
-	
+
 	private final TextField nomFamille=new TextField();
 	private final TextField nomUsage=new TextField();
 	private final TextField prenom=new TextField();
 	private final TextField prenom2=new TextField();
 	private final TextField prenom3=new TextField();
-	
-	
+
+
 	private final TextField dateNaissance=new TextField();
 	private final TextField paysNaissance=new TextField();
 	private final TextField communeNaissance=new TextField();
@@ -87,7 +88,7 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 	private final TextField nationaliteNaissance2=new TextField();
 
 
-	
+
 	@PostConstruct
 	private void init() {
 		setSizeFull();
@@ -99,63 +100,63 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 	}
 
 	private void initIdentite() {
-		
+
 		nomFamille.setReadOnly(true);
 		identiteLayout.add(nomFamille);
-		
+
 		nomUsage.setReadOnly(true);
 		identiteLayout.add(nomUsage);
-		
+
 		prenom.setReadOnly(true);
 		identiteLayout.add(prenom);
-		
+
 		prenom2.setReadOnly(true);
 		identiteLayout.add(prenom2);
-		
+
 		prenom3.setReadOnly(true);
 		identiteLayout.add(prenom3);
-		
+
 		CmpUtils.setLongTextField(nomFamille);
-		
+
 		CmpUtils.setLongTextField(nomUsage);
-		
+
 		CmpUtils.setModerateTextField(prenom);
-		
+
 		CmpUtils.setModerateTextField(prenom2);
-		
+
 		CmpUtils.setModerateTextField(prenom3);
-		
+
 	}
-	
+
 	private void initNaissance() {
-		
+
 		dateNaissance.setReadOnly(true);
 		naissanceLayout.add(dateNaissance);
-		
+
 		paysNaissance.setReadOnly(true);
 		naissanceLayout.add(paysNaissance);
-		
+
 		communeNaissance.setReadOnly(true);
 		naissanceLayout.add(communeNaissance);
-		
+
 		nationaliteNaissance.setReadOnly(true);
 		naissanceLayout.add(nationaliteNaissance);
-		
+
 		nationaliteNaissance2.setReadOnly(true);
 		naissanceLayout.add(nationaliteNaissance2);
-		
+
 		CmpUtils.formatTextField(dateNaissance);
-		
+
 		CmpUtils.setLongTextField(paysNaissance);
-		
+
 		CmpUtils.setLongTextField(communeNaissance);
-		
+
 		CmpUtils.setModerateTextField(nationaliteNaissance);
-		
+
 		CmpUtils.setModerateTextField(nationaliteNaissance2);
-		
+
 	}
-	
+
 
 	/**
 	 * @see com.vaadin.flow.i18n.LocaleChangeObserver#localeChange(com.vaadin.flow.i18n.LocaleChangeEvent)
@@ -170,7 +171,7 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 		prenom.setLabel(getTranslation("identite.prenom"));
 		prenom2.setLabel(getTranslation("identite.prenom2"));
 		prenom3.setLabel(getTranslation("identite.prenom3"));
-		
+
 		naissanceLayout.getTitre().setText(getTranslation("naissance.titre"));
 		dateNaissance.setLabel(getTranslation("naissance.date"));
 		paysNaissance.setLabel(getTranslation("naissance.pays"));
@@ -192,17 +193,60 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 		identiteLayout.updateStyle(isMobile, false);
 		naissanceLayout.updateStyle(isMobile, false);
 	}
-	
+
 	@Override
-	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String codetu) {
-		if(StringUtils.hasText(codetu)) {
-			// Si l'utilisateur est autorisé à accéder au dossier en paramètre
-			if(securityService.isAccessGrantedForStudent(codetu)) {
-				securityService.setDossierConsulte(codetu);
-				log.info(getTranslation("action.acces.dossier", codetu));
+	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String codeApprenant) {
+		// Sécurisation de l'accès au dossier en paramètre
+		if(!securityService.secureAccess(codeApprenant)) {
+			Notification.show(getTranslation("error.accesdossierrefuse"));
+		}
+		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
+		securityService.checkDossier();
+		// Mise à jour de l'affichage
+		updateData(securityService.getDossier()!=null ? securityService.getDossier().getApprenant() : null);
+	}
+
+	/**
+	 * Reset toutes les données affichées
+	 * @param apprenant
+	 */
+	private void resetData() {
+		nomFamille.setValue("");
+		nomUsage.setValue("");
+		prenom.setValue("");
+		prenom2.setValue("");
+		prenom3.setValue("");
+
+		dateNaissance.setValue("");
+		paysNaissance.setValue("");
+		communeNaissance.setValue("");
+		nationaliteNaissance.setValue("");
+		nationaliteNaissance2.setValue("");
+	}
+	/**
+	 * Mise à jour des données affichées
+	 * @param apprenant
+	 */
+	private void updateData(Apprenant apprenant) {
+		resetData();
+		if(apprenant != null) {
+			// Mise à jour de l'état-civil
+			nomFamille.setValue(apprenant.getEtatCivil().getNomDeNaissance());
+			nomUsage.setValue(apprenant.getEtatCivil().getNomUsuel());
+			prenom.setValue(apprenant.getEtatCivil().getPrenom());
+			prenom2.setValue(apprenant.getEtatCivil().getDeuxiemePrenom());
+			prenom3.setValue(apprenant.getEtatCivil().getTroisiemePrenom());
+
+			// Mise à jour des données de naissance
+			dateNaissance.setValue(apprenant.getNaissance().getDateDeNaissance());
+			paysNaissance.setValue(apprenant.getNaissance().getPaysDeNaissance());
+			if(apprenant.getNaissance().getPaysDeNaissance().equals(Utils.FRANCE)) {
+				communeNaissance.setValue(apprenant.getNaissance().getCommuneDeNaissance());
 			} else {
-				Notification.show(getTranslation("error.accesdossierrefuse"));
+				communeNaissance.setValue(apprenant.getNaissance().getCommuneDeNaissanceEtranger());
 			}
+			nationaliteNaissance.setValue(apprenant.getNaissance().getNationalite());
+			nationaliteNaissance2.setValue(apprenant.getNaissance().getDeuxiemeNationalite());
 		}
 	}
 

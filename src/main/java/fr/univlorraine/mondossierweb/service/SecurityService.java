@@ -48,7 +48,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
@@ -57,6 +59,7 @@ import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.ui.view.error.AccessDeniedView;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -66,6 +69,8 @@ public class SecurityService implements VaadinServiceInitListener {
 
 	@Autowired
 	private transient BeanFactory beanFactory;
+	@Autowired
+	private transient PegaseService pegaseService;
 
 	private final SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
 	private final StandardEvaluationContext evaluationContext = new StandardEvaluationContext();
@@ -105,34 +110,54 @@ public class SecurityService implements VaadinServiceInitListener {
 
 	public Optional<Utilisateur> getPrincipal() {
 		return getAuthentication().map(Authentication::getPrincipal)
-				.map(Utilisateur.class::cast);
+			.map(Utilisateur.class::cast);
 	}
 
 	public Optional<String> getSearch() {
 		return getPrincipal().map(Utilisateur :: getRecherche);
 	}
-	
+
 	public Collection<LdapPerson> getResultatRecherche() {
 		return getPrincipal().map(Utilisateur :: getResultatRecherche).orElse(null);
 	}
-	
+
 	public void setResultatRecherche(Collection<LdapPerson> collection) {
 		getPrincipal().ifPresent(u -> u.setResultatRecherche(collection));
 	}
-	
+
 	public void saveSearch(String recherche) {
 		getPrincipal().ifPresent(u -> u.setRecherche(recherche));
 	}
-	
+
 	public void setDossierConsulte(String codetu) {
 		getPrincipal().ifPresent(u -> u.setCodEtuDossier(codetu));
 	}
-	
+
+	public String getDossierConsulte() {
+		if(getPrincipal().isPresent()) {
+			return getPrincipal().get().getCodEtuDossier();
+		}
+		return null;
+	}
+
+	public void setDossier(ApprenantEtInscriptions dossier) {
+		if(getPrincipal().isPresent()) {
+			getPrincipal().get().setDossier(dossier);
+		}
+	}
+
+	public ApprenantEtInscriptions getDossier() {
+		if(getPrincipal().isPresent()) {
+			return getPrincipal().get().getDossier();
+		}
+		return null;
+	}
+
 	public boolean isUserLoggedIn() {
 		return getAuthentication()
-				.filter(Predicate.not(AnonymousAuthenticationToken.class::isInstance))
-				.map(Authentication::isAuthenticated)
-				.orElse(false);
+			.filter(Predicate.not(AnonymousAuthenticationToken.class::isInstance))
+			.map(Authentication::isAuthenticated)
+			.orElse(false);
 	}
 
 	public boolean isStudent() {
@@ -141,40 +166,40 @@ public class SecurityService implements VaadinServiceInitListener {
 		if (authentication == null) {
 			return false;
 		}
-		
+
 		return authentication
-				.getAuthorities()
-				.stream()
-				.map(GrantedAuthority::getAuthority)
-				.anyMatch(SecurityUtils.ROLE_ETUDIANT::contains);
+			.getAuthorities()
+			.stream()
+			.map(GrantedAuthority::getAuthority)
+			.anyMatch(SecurityUtils.ROLE_ETUDIANT::contains);
 	}
-	
+
 	public boolean isAdmin() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		if (authentication == null) {
 			return false;
 		}
-		
+
 		return authentication
-				.getAuthorities()
-				.stream()
-				.map(GrantedAuthority::getAuthority)
-				.anyMatch(SecurityUtils.ROLE_SUPERADMIN::contains);
+			.getAuthorities()
+			.stream()
+			.map(GrantedAuthority::getAuthority)
+			.anyMatch(SecurityUtils.ROLE_SUPERADMIN::contains);
 	}
-	
+
 	public boolean isEnseignant() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		if (authentication == null) {
 			return false;
 		}
-		
+
 		return authentication
-				.getAuthorities()
-				.stream()
-				.map(GrantedAuthority::getAuthority)
-				.anyMatch(SecurityUtils.ROLE_ENSEIGNANT::contains);
+			.getAuthorities()
+			.stream()
+			.map(GrantedAuthority::getAuthority)
+			.anyMatch(SecurityUtils.ROLE_ENSEIGNANT::contains);
 	}
 
 	public boolean isAccessGrantedForStudent(String codetu) {
@@ -187,8 +212,8 @@ public class SecurityService implements VaadinServiceInitListener {
 
 	public boolean isAccessGranted(final Class<?> securedClass) {
 		return (AccessDeniedView.class.equals(securedClass) || isUserLoggedIn())
-				&& isAccessGrantedForPreAuthorize(securedClass)
-				&& isAccessGrantedForRoleAnnotations(securedClass);
+			&& isAccessGrantedForPreAuthorize(securedClass)
+			&& isAccessGrantedForRoleAnnotations(securedClass);
 	}
 
 	private boolean isAccessGrantedForPreAuthorize(final Class<?> securedClass) {
@@ -215,14 +240,14 @@ public class SecurityService implements VaadinServiceInitListener {
 
 	private boolean isAccessGrantedForRoleAnnotations(final Class<?> securedClass) {
 		final Set<String> allowedRoles = Stream.of(
-				Optional.ofNullable(AnnotationUtils.findAnnotation(securedClass, Secured.class))
-				.map(Secured::value),
-				Optional.ofNullable(AnnotationUtils.findAnnotation(securedClass, RolesAllowed.class))
-				.map(RolesAllowed::value))
-				.filter(Predicate.not(Optional::isEmpty))
-				.map(Optional::get)
-				.flatMap(Arrays::stream)
-				.collect(Collectors.toSet());
+			Optional.ofNullable(AnnotationUtils.findAnnotation(securedClass, Secured.class))
+			.map(Secured::value),
+			Optional.ofNullable(AnnotationUtils.findAnnotation(securedClass, RolesAllowed.class))
+			.map(RolesAllowed::value))
+			.filter(Predicate.not(Optional::isEmpty))
+			.map(Optional::get)
+			.flatMap(Arrays::stream)
+			.collect(Collectors.toSet());
 
 		if (allowedRoles.isEmpty()) {
 			return true;
@@ -234,16 +259,47 @@ public class SecurityService implements VaadinServiceInitListener {
 		}
 
 		return authentication
-				.getAuthorities()
-				.stream()
-				.map(GrantedAuthority::getAuthority)
-				.anyMatch(allowedRoles::contains);
+			.getAuthorities()
+			.stream()
+			.map(GrantedAuthority::getAuthority)
+			.anyMatch(allowedRoles::contains);
+	}
+
+	/**
+	 * Met à jour les informations sur le dossier si nécessaire
+	 */
+	public void checkDossier() {
+		// Si on n'a pas les informations sur l'étudiant consulté
+		if(getDossier() == null || !getDossier().getApprenant().getCode().equals(getDossierConsulte())) {
+			log.info("Mise à jour des données du dossier en session pour : {}", getDossierConsulte());
+			// Met à jour les données du dossier en session
+			setDossier(pegaseService.recupererDossierApprenant(getDossierConsulte()));
+		}
+	}
+
+	/**
+	 * Permet ou non l'accès au dossier en paramètre
+	 * @param codeApprenant
+	 * @return
+	 */
+	public boolean secureAccess(String codeApprenant) {
+		if(StringUtils.hasText(codeApprenant)) {
+			// Si l'utilisateur est autorisé à accéder au dossier en paramètre
+			if(isAccessGrantedForStudent(codeApprenant)) {
+				setDossierConsulte(codeApprenant);
+				log.info("Accès au dossier {}", codeApprenant);
+			} else {
+				return false;
+			}
+		}
+		return true;
 	}
 
 
-	
 
-	
+
+
+
 
 
 

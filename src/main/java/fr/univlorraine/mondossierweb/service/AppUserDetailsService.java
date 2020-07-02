@@ -50,6 +50,9 @@ public class AppUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	protected transient LdapService ldapService;
+	
+	@Autowired
+	private transient PegaseService pegaseService;
 
 	@Value("${app.superadmins:}")
 	private transient List<String> superAdmins;
@@ -82,6 +85,8 @@ public class AppUserDetailsService implements UserDetailsService {
 				utilisateur.setCodeEtudiant(student.getCodeApprenant());
 				utilisateur.setCodEtuDossier(student.getCodeApprenant());
 				utilisateur.setMail(student.getMail());
+				// Nécessaire de le faire à cet endroit?
+				// utilisateur.setDossier(pegaseService.recupererDossierApprenant(utilisateur.getCodEtuDossier()));
 			} else {
 				// 3- Si l'accès enseignant est activé
 				if(accesEnseignantActif) {
