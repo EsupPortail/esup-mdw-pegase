@@ -48,7 +48,9 @@ import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import fr.univlorraine.pegase.model.insgestion.Apprenant;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,9 +58,10 @@ import lombok.extern.slf4j.Slf4j;
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
-public class ParcoursView extends AdaptSizeLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
+public class ParcoursView extends AdaptSizeLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
 
-	
+	@Autowired
+	private transient SecurityService securityService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
@@ -197,6 +200,63 @@ private void initAnnees() {
 	protected void adaptSize(final Boolean isMobile) {
 		bacLayout.updateStyle(isMobile, false);
 		anneesLayout.updateStyle(isMobile, false);
+	}
+	
+	@Override
+	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String codeApprenant) {
+		// Sécurisation de l'accès au dossier en paramètre
+		if(!securityService.secureAccess(codeApprenant)) {
+			Notification.show(getTranslation("error.accesdossierrefuse"));
+		}
+		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
+		securityService.checkDossier();
+		// Mise à jour de l'affichage
+		updateData(securityService.getDossier()!=null ? securityService.getDossier().getApprenant() : null);
+	}
+
+	/**
+	 * Reset toutes les données affichées
+	 * @param apprenant
+	 */
+	private void resetData() {
+		titreAccesBac.setValue("");
+		anneeBac.setValue("");
+		typeBac.setValue("");
+		mentionBac.setValue("");
+		paysEtbBac.setValue("");
+		departementEtbBac.setValue("");
+		etablissementBac.setValue("");
+		
+		codeIneBac.setValue("");
+		anneeSupFr.setValue("");
+		anneeUnivFr.setValue("");
+		anneeEtablissement.setValue("");
+	}
+	/**
+	 * Mise à jour des données affichées
+	 * @param apprenant
+	 */
+	private void updateData(Apprenant apprenant) {
+		resetData();
+		if(apprenant != null) {
+			// Mise à jour de l'état-civil
+			titreAccesBac.setValue(apprenant.getBac().getTitreAcces());
+			anneeBac.setValue(apprenant.getBac().getAnneeObtention());
+			typeBac.setValue(apprenant.getBac().getSerie());
+			mentionBac.setValue(apprenant.getBac().getMention());
+			paysEtbBac.setValue(apprenant.getBac().getPays());
+			if(apprenant.getBac().getPays().equals(Utils.FRANCE)) {
+				departementEtbBac.setValue(apprenant.getBac().getDepartement());
+				etablissementBac.setValue(apprenant.getBac().getEtablissement());
+			} else {
+				etablissementBac.setValue(apprenant.getBac().getEtablissementLibre());
+			}
+			codeIneBac.setValue(apprenant.getBac().getIne());
+			
+			anneeSupFr.setValue(apprenant.getPremieresInscriptions().getAnneeEnseignementSuperieur());
+			anneeUnivFr.setValue(apprenant.getPremieresInscriptions().getAnneeUniversite());
+			anneeEtablissement.setValue(apprenant.getPremieresInscriptions().getAnneeEtablissement());
+		}
 	}
 	
 
