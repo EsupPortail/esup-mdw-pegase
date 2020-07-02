@@ -56,14 +56,14 @@ public class PegaseService implements Serializable {
 	
 	
 	private ApiClient apiClientIns = new ApiClient();
-	private ApprenantsApi appApi = new ApprenantsApi();
-	private InscriptionsApi insApi = new InscriptionsApi();
+	private ApprenantsApi appApiIns = new ApprenantsApi();
+	private InscriptionsApi insApiIns = new InscriptionsApi();
 	
 	@PostConstruct
 	public void init() {
 		apiClientIns.setBasePath(apiInsUrl);
-		insApi.setApiClient(apiClientIns);
-		appApi.setApiClient(apiClientIns);
+		insApiIns.setApiClient(apiClientIns);
+		appApiIns.setApiClient(apiClientIns);
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class PegaseService implements Serializable {
 	 */
 	public void listerInscriptionsValidees() {
 		
-		insApi.getApiClient().setAccessToken(accessTokenService.getToken());
+		insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
 		
 		List<StatutInscriptionVoeu> statutsInscription = new LinkedList<StatutInscriptionVoeu> ();
 		statutsInscription.add(StatutInscriptionVoeu.VALIDE);
@@ -82,7 +82,7 @@ public class PegaseService implements Serializable {
 		String recherche = null;
 		
 		try {
-			Inscriptions response = insApi.listerInscriptionsValidees(etablissement, statutsInscription, statutsPieces, statutsPaiement, tri, recherche);
+			Inscriptions response = insApiIns.listerInscriptionsValidees(etablissement, statutsInscription, statutsPieces, statutsPaiement, tri, recherche);
 			if(response != null) {
 				log.info("{} listerInscriptionsValidees", response.getNombre());
 			} else {
@@ -100,10 +100,10 @@ public class PegaseService implements Serializable {
 	@Deprecated
 	public void lireApprenant() {
 		
-		appApi.getApiClient().setAccessToken(accessTokenService.getToken());
+		appApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
 		
 		try {
-			Apprenant response = appApi.lireApprenant(etablissement, "000000001");
+			Apprenant response = appApiIns.lireApprenant(etablissement, "000000001");
 			if(response != null) {
 				log.info("{} lireApprenant", response.getEtatCivil().getNomUsuel());
 			} else {
