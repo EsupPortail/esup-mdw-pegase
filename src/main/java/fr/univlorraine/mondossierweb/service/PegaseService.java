@@ -98,6 +98,7 @@ public class PegaseService implements Serializable {
 	}
 
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
+		codeApprenant = "000000001";
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide

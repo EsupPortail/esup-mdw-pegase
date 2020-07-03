@@ -126,7 +126,7 @@ public class JSON {
     private static String getDiscriminatorValue(JsonElement readElement, String discriminatorField) {
         JsonElement element = readElement.getAsJsonObject().get(discriminatorField);
         if (null == element) {
-            throw new IllegalArgumentException("missing discriminator field: <" + discriminatorField + ">");
+            throw new IllegalArgumentException("missing discriminator field: <" + discriminatorField + "> for "+readElement);
         }
         return element.getAsString();
     }

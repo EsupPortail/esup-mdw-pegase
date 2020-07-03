@@ -35,7 +35,6 @@ import com.vaadin.flow.router.Route;
 
 import fr.univlorraine.mondossierweb.ui.component.AdaptSizeLayout;
 import fr.univlorraine.mondossierweb.ui.component.Card;
-import fr.univlorraine.mondossierweb.ui.layout.HasCodeEtuUrlParameterView;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;

@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -39,21 +40,23 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
 import fr.univlorraine.mondossierweb.service.SecurityService;
+import fr.univlorraine.mondossierweb.ui.component.AdaptSizeLayout;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasCodeEtuUrlParameterView;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
-import fr.univlorraine.pegase.model.insgestion.OccurrenceNomenclature;
 import lombok.Getter;
 
 @Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_ENSEIGNANT})
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
-public class InscriptionsView extends HasCodeEtuUrlParameterView implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
+public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
 
 	@Autowired
 	private transient SecurityService securityService;
@@ -63,14 +66,17 @@ public class InscriptionsView extends HasCodeEtuUrlParameterView implements HasD
 	private String pageTitle = "";
 	@Getter
 	private final TextHeader header = new TextHeader();
-	
+
 	private final VerticalLayout inscriptionsLayout = new VerticalLayout();
 
 	List<TextField> textFieldPeriode = new LinkedList<TextField> ();
 	List<TextField> textFieldRegime = new LinkedList<TextField> ();
 	List<TextField> textFieldStatut = new LinkedList<TextField> ();
+	List<Button> buttonCertificat = new LinkedList<Button> ();
 	@PostConstruct
 	public void init() {
+		setSizeFull();
+		add(inscriptionsLayout);
 	}
 
 
@@ -90,6 +96,9 @@ public class InscriptionsView extends HasCodeEtuUrlParameterView implements HasD
 		for(TextField tf : textFieldStatut) {
 			tf.setLabel(getTranslation("inscription.statut"));
 		}
+		for(Button b : buttonCertificat) {
+			b.setText(getTranslation("inscription.certificat"));
+		}
 	}
 
 	private void setViewTitle(final String viewTitle) {
@@ -98,7 +107,7 @@ public class InscriptionsView extends HasCodeEtuUrlParameterView implements HasD
 
 		header.setText(viewTitle);
 	}
-	
+
 	@Override
 	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String codeApprenant) {
 		// Sécurisation de l'accès au dossier en paramètre
@@ -120,6 +129,7 @@ public class InscriptionsView extends HasCodeEtuUrlParameterView implements HasD
 		textFieldPeriode.clear();
 		textFieldRegime.clear();
 		textFieldStatut.clear();
+		buttonCertificat.clear();
 	}
 	/**
 	 * Mise à jour des données affichées
@@ -129,35 +139,66 @@ public class InscriptionsView extends HasCodeEtuUrlParameterView implements HasD
 		resetData();
 		if(inscriptions != null && !inscriptions.isEmpty()) {
 			for(InscriptionComplete inscription : inscriptions) {
-				Card insCard = new Card(inscription.getCible().getLibelleLong(), true);
-				
+				CibleInscription cible = inscription.getCible();
+				Card insCard = new Card(cible.getLibelleLong(), true);
+
 				TextField periode = new TextField();
-				periode.setValue(inscription.getCible().getPeriode().getLibelleAffichage());
+				if(cible.getPeriode()!=null) {
+					periode.setValue(cible.getPeriode().getLibelleAffichage());
+				}
+				periode.setReadOnly(true);
+				CmpUtils.setLongTextField(periode);
 				textFieldPeriode.add(periode);
-				
+
 				TextField regime = new TextField();
-				regime.setValue(inscription.getRegimeInscription().getLibelle());
+				if(inscription.getRegimeInscription()!=null) {
+					regime.setValue(inscription.getRegimeInscription().getLibelle());
+				}
+				regime.setReadOnly(true);
+				CmpUtils.setLongTextField(regime);
 				textFieldRegime.add(regime);
-				
+
 				TextField statut = new TextField();
-				statut.setValue(inscription.getStatutInscription().getValue());
+				if(inscription.getStatutInscription()!=null) {
+					statut.setValue(inscription.getStatutInscription().getValue());
+				}
+				statut.setReadOnly(true);
+				CmpUtils.setLongTextField(statut);
 				textFieldStatut.add(statut);
-				
+
 				/* AJout de la liste des bourses et aides ?
 				for( OccurrenceNomenclature occ : inscription.getBoursesEtAides()) {
 					occ.getLibelle()
 				} */
-				
-				// TODO ajout bouton certificat de scolarité
-				
-				insCard.add(periode);
-				insCard.add(regime);
-				insCard.add(statut);
-				
-				insCard.hideAlt();
+
+				// Ajout bouton certificat de scolarité
+				Button certButton = new Button();
+				buttonCertificat.add(certButton);
+
+				insCard.addAlt(periode);
+				insCard.addAlt(regime);
+				insCard.addAlt(statut);
+				insCard.addAlt(certButton);
+
+				// Si on doit afficher plus de 2 inscriptions, on replie la carte
+				if(inscriptions.size()>2) {
+					insCard.hideAlt();
+				}else {
+					insCard.displayAlt();
+				}
+				insCard.updateStyle(false, true);
 				inscriptionsLayout.add(insCard);
 			}
 		}
+	}
+	
+	@Override
+	protected void adaptSize(final Boolean isMobile) {
+		inscriptionsLayout.getChildren().forEach(c -> {
+			Card insCard = (Card) c; 
+			insCard.updateStyle(isMobile, true);
+		});
+		
 	}
 
 }
