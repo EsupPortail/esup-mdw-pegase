@@ -193,7 +193,7 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 					statut.setValue(inscription.getStatutInscription().getValue());
 				}
 				statut.setReadOnly(true);
-				CmpUtils.setLongTextField(statut);
+				CmpUtils.setModerateTextField(statut);
 				listTextFieldStatut.add(statut);
 				
 				
@@ -202,7 +202,7 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 					paiement.setValue(inscription.getStatutPaiement().getValue());
 				}
 				paiement.setReadOnly(true);
-				CmpUtils.setLongTextField(paiement);
+				CmpUtils.setModerateTextField(paiement);
 				listTextFieldPaiement.add(paiement);
 				
 				
@@ -211,7 +211,7 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 					pieces.setValue(inscription.getStatutPieces().getValue());
 				}
 				pieces.setReadOnly(true);
-				CmpUtils.setLongTextField(pieces);
+				CmpUtils.setModerateTextField(pieces);
 				listTextFieldPieces.add(pieces);
 
 				/* AJout de la liste des bourses et aides ?
