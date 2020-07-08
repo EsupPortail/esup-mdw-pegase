@@ -1,0 +1,4 @@
+[part="value"] {
+	font-weight: bold !important;
+	color: var(--lumo-body-text-color);
+}
