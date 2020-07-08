@@ -18,6 +18,7 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +29,8 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -38,7 +41,9 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 
+import fr.univlorraine.mondossierweb.service.ExportService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.AdaptSizeLayout;
 import fr.univlorraine.mondossierweb.ui.component.Card;
@@ -58,8 +63,13 @@ import lombok.Getter;
 @SuppressWarnings("serial")
 public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
 
+	private static final String CERT_FILE_EXT = ".pdf";
+	private static final String CERT_FILE_NAME = "certificat";
+	
 	@Autowired
 	private transient SecurityService securityService;
+	@Autowired
+	private transient ExportService exportService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
@@ -69,10 +79,11 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 
 	private final VerticalLayout inscriptionsLayout = new VerticalLayout();
 
-	List<TextField> textFieldPeriode = new LinkedList<TextField> ();
-	List<TextField> textFieldRegime = new LinkedList<TextField> ();
-	List<TextField> textFieldStatut = new LinkedList<TextField> ();
-	List<Button> buttonCertificat = new LinkedList<Button> ();
+	List<TextField> listTextFieldPeriode = new LinkedList<TextField> ();
+	List<TextField> listTextFieldRegime = new LinkedList<TextField> ();
+	List<TextField> listTextFieldStatut = new LinkedList<TextField> ();
+	List<Button> listButtonCertificat = new LinkedList<Button> ();
+	
 	@PostConstruct
 	public void init() {
 		setSizeFull();
@@ -87,16 +98,16 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 	public void localeChange(final LocaleChangeEvent event) {
 		setViewTitle(getTranslation("inscriptions.title"));
 
-		for(TextField tf : textFieldPeriode) {
+		for(TextField tf : listTextFieldPeriode) {
 			tf.setLabel(getTranslation("inscription.periode"));
 		}
-		for(TextField tf : textFieldRegime) {
+		for(TextField tf : listTextFieldRegime) {
 			tf.setLabel(getTranslation("inscription.regime"));
 		}
-		for(TextField tf : textFieldStatut) {
+		for(TextField tf : listTextFieldStatut) {
 			tf.setLabel(getTranslation("inscription.statut"));
 		}
-		for(Button b : buttonCertificat) {
+		for(Button b : listButtonCertificat) {
 			b.setText(getTranslation("inscription.certificat"));
 		}
 	}
@@ -126,10 +137,10 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 	 */
 	private void resetData() {
 		inscriptionsLayout.removeAll();
-		textFieldPeriode.clear();
-		textFieldRegime.clear();
-		textFieldStatut.clear();
-		buttonCertificat.clear();
+		listTextFieldPeriode.clear();
+		listTextFieldRegime.clear();
+		listTextFieldStatut.clear();
+		listButtonCertificat.clear();
 	}
 	/**
 	 * Mise à jour des données affichées
@@ -148,7 +159,7 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				}
 				periode.setReadOnly(true);
 				CmpUtils.setLongTextField(periode);
-				textFieldPeriode.add(periode);
+				listTextFieldPeriode.add(periode);
 
 				TextField regime = new TextField();
 				if(inscription.getRegimeInscription()!=null) {
@@ -156,7 +167,7 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				}
 				regime.setReadOnly(true);
 				CmpUtils.setLongTextField(regime);
-				textFieldRegime.add(regime);
+				listTextFieldRegime.add(regime);
 
 				TextField statut = new TextField();
 				if(inscription.getStatutInscription()!=null) {
@@ -164,21 +175,29 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				}
 				statut.setReadOnly(true);
 				CmpUtils.setLongTextField(statut);
-				textFieldStatut.add(statut);
+				listTextFieldStatut.add(statut);
 
 				/* AJout de la liste des bourses et aides ?
 				for( OccurrenceNomenclature occ : inscription.getBoursesEtAides()) {
 					occ.getLibelle()
 				} */
 
+				
 				// Ajout bouton certificat de scolarité
-				Button certButton = new Button();
-				buttonCertificat.add(certButton);
+				Button certButton = new Button("", VaadinIcon.TABLE.create());
+				Anchor exportAnchor = new Anchor();
+				exportAnchor.add(certButton);
+				exportAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
+					() -> exportService.getCertificat(securityService.getDossierConsulte(), inscription.getCible().getCode())));
+				exportAnchor.getElement().getStyle().set("margin-left", "1em");
+				
+				// Ajout à la liste des boutons
+				listButtonCertificat.add(certButton);
 
 				insCard.addAlt(periode);
 				insCard.addAlt(regime);
 				insCard.addAlt(statut);
-				insCard.addAlt(certButton);
+				insCard.addAlt(exportAnchor);
 
 				// Si on doit afficher plus de 2 inscriptions, on replie la carte
 				if(inscriptions.size()>2) {
@@ -191,14 +210,14 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 			}
 		}
 	}
-	
+
 	@Override
 	protected void adaptSize(final Boolean isMobile) {
 		inscriptionsLayout.getChildren().forEach(c -> {
 			Card insCard = (Card) c; 
 			insCard.updateStyle(isMobile, true);
 		});
-		
+
 	}
 
 }

@@ -18,6 +18,7 @@
  */
 package fr.univlorraine.mondossierweb.service;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class PegaseService implements Serializable {
 	}
 
 	/**
-	 * méthode de test qui liste les inscription validée dans Pégase
+	 * méthode de test qui liste les inscriptions validées dans Pégase
 	 */
 	public void listerInscriptionsValidees() {
 		// Maj du token pour récupérer le dernier token valide
@@ -98,7 +99,9 @@ public class PegaseService implements Serializable {
 	}
 
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
+		
 		codeApprenant = "000000001";
+		
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
@@ -118,6 +121,32 @@ public class PegaseService implements Serializable {
 		}
 		return null;
 	}
+
+
+	public File certificatDeScolarite(String codeApprenant, String codeVoeu) {
+		
+		codeApprenant="000000001";
+		codeVoeu="F-ING-BIOSC→FING-BIOSC-A3@PER-2019";
+		
+		// Maj du token pour récupérer le dernier token valide
+		insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
+
+		try {
+			// Appel de l'API Pégase
+			File certificat = insApiIns.imprimerCertificatDeScolarite(etablissement, codeApprenant, codeVoeu);
+			if(certificat != null) {
+				log.info("{} certificatDeScolarite OK");
+			} else {
+				log.info("Anomalie lors de l'appel à la methode API : certificatDeScolarite");
+			}
+			return certificat;
+		} catch (ApiException e) {
+			log.error("Erreur lors de l'appel à la methode API : certificatDeScolarite ",e);
+		}
+		return null;
+	}
+	
+	
 
 	/**
 	 * méthode de test qui lit un apprenant
