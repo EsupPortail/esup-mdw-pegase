@@ -99,9 +99,9 @@ public class PegaseService implements Serializable {
 	}
 
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
-		
+
 		codeApprenant = "000000001";
-		
+
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
@@ -124,10 +124,10 @@ public class PegaseService implements Serializable {
 
 
 	public File certificatDeScolarite(String codeApprenant, String codeVoeu) {
-		
+
 		codeApprenant="000000001";
 		codeVoeu="F-ING-BIOSC→FING-BIOSC-A3@PER-2019";
-		
+
 		// Maj du token pour récupérer le dernier token valide
 		insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
 
@@ -145,8 +145,31 @@ public class PegaseService implements Serializable {
 		}
 		return null;
 	}
-	
-	
+
+	public File attestationDePaiement(String codeApprenant, String codeVoeu) {
+
+		codeApprenant="000000001";
+		codeVoeu="F-ING-BIOSC→FING-BIOSC-A3@PER-2019";
+
+		// Maj du token pour récupérer le dernier token valide
+		insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
+
+		try {
+			// Appel de l'API Pégase
+			File certificat = insApiIns.imprimerAttestationDePaiement(etablissement, codeApprenant, codeVoeu);
+			if(certificat != null) {
+				log.info("{} attestationDePaiement OK");
+			} else {
+				log.info("Anomalie lors de l'appel à la methode API : attestationDePaiement");
+			}
+			return certificat;
+		} catch (ApiException e) {
+			log.error("Erreur lors de l'appel à la methode API : attestationDePaiement ",e);
+		}
+		return null;
+	}
+
+
 
 	/**
 	 * méthode de test qui lit un apprenant
