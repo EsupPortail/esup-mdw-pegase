@@ -32,9 +32,9 @@ import java.io.IOException;
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-06-30T15:25:34.956+02:00[Europe/Paris]")
 public class Periode extends ObjetAvecLibelle {
-  public static final String SERIALIZED_NAME_EST1 = "est1";
+ /* public static final String SERIALIZED_NAME_EST1 = "est1";
   @SerializedName(SERIALIZED_NAME_EST1)
-  private String est1;
+  private String est1;*/
 
   public static final String SERIALIZED_NAME_DATE_DEBUT = "dateDebut";
   @SerializedName(SERIALIZED_NAME_DATE_DEBUT)

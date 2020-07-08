@@ -151,7 +151,7 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 		if(inscriptions != null && !inscriptions.isEmpty()) {
 			for(InscriptionComplete inscription : inscriptions) {
 				CibleInscription cible = inscription.getCible();
-				Card insCard = new Card(cible.getLibelleLong(), true);
+				Card insCard = new Card(cible.getFormation().getLibelleLong(), true);
 
 				TextField periode = new TextField();
 				if(cible.getPeriode()!=null) {
