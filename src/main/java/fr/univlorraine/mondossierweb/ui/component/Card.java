@@ -52,6 +52,7 @@ public class Card extends VerticalLayout {
 			titre.addClickListener(e->{
 				changeAlt();
 			});
+			titre.getStyle().set("cursor", "pointer");
 		}
 	}
 	
