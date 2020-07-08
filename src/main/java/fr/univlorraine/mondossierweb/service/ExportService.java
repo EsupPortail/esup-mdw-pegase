@@ -32,13 +32,32 @@ public class ExportService implements Serializable {
 	 */
 	public ByteArrayInputStream  getCertificat(String codeApprenant, String codeFormation) {
 		
-		File cert = pegaseService.certificatDeScolarite(codeApprenant, codeFormation);
+		File file = pegaseService.certificatDeScolarite(codeApprenant, codeFormation);
 
-		if(cert!=null) {
+		return getStream(file,codeApprenant, codeFormation, "certificat de scolarité");
+
+	}
+	
+	/**
+	 * Génération d'un pdf
+	 * @param codeApprenant
+	 * @param codeFormation
+	 * @return
+	 */
+	public ByteArrayInputStream  getAttestation(String codeApprenant, String codeFormation) {
+		
+		File file = pegaseService.attestationDePaiement(codeApprenant, codeFormation);
+
+		return getStream(file,codeApprenant, codeFormation, "attestation de paiement");
+
+	}
+
+	private ByteArrayInputStream getStream(File file, String codeApprenant, String codeFormation, String document) {
+		if(file!=null) {
 			try {
 
-				FileInputStream fileInputStream=new FileInputStream(cert);
-				byte[] data=new byte[(int) cert.length()];
+				FileInputStream fileInputStream=new FileInputStream(file);
+				byte[] data=new byte[(int) file.length()];
 				BufferedInputStream bufferedInputStream=new BufferedInputStream(fileInputStream);
 
 				bufferedInputStream.read(data,0,data.length);
@@ -46,13 +65,12 @@ public class ExportService implements Serializable {
 				log.info("PDF generated.");
 				return new ByteArrayInputStream(data);
 			} catch (IOException e) {
-				log.info("Erreur à la génération du certificat de scolarité pour : {} {}", codeApprenant, codeFormation, e);
+				log.info("Erreur à la génération du {} pour : {} {}",document, codeApprenant, codeFormation, e);
 			}
 		} else {
-			log.info("Erreur à la génération du certificat de scolarité pour : {} {}", codeApprenant, codeFormation);
+			log.info("Erreur à la génération du {} pour : {} {}", document, codeApprenant, codeFormation);
 		}
 		return null;
-
 	}
 
 }
