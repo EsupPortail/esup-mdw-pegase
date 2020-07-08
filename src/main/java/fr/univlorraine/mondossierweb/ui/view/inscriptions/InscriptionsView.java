@@ -65,6 +65,8 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 
 	private static final String CERT_FILE_EXT = ".pdf";
 	private static final String CERT_FILE_NAME = "certificat";
+	private static final String ATTEST_FILE_NAME = "attestation";
+	private static final String ATTEST_FILE_EXT = ".pdf";
 	
 	@Autowired
 	private transient SecurityService securityService;
@@ -85,6 +87,8 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 	List<TextField> listTextFieldPaiement = new LinkedList<TextField> ();
 	List<TextField> listTextFieldPieces = new LinkedList<TextField> ();
 	List<Button> listButtonCertificat = new LinkedList<Button> ();
+	List<Button> listButtonAttestation = new LinkedList<Button> ();
+	
 	
 	@PostConstruct
 	public void init() {
@@ -118,6 +122,10 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 		for(Button b : listButtonCertificat) {
 			b.setText(getTranslation("inscription.certificat"));
 		}
+		for(Button b : listButtonAttestation) {
+			b.setText(getTranslation("inscription.attestation"));
+		}
+		
 	}
 
 	private void setViewTitle(final String viewTitle) {
@@ -151,6 +159,7 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 		listTextFieldPaiement.clear();
 		listTextFieldPieces.clear();
 		listButtonCertificat.clear();
+		listButtonAttestation.clear();
 	}
 	/**
 	 * Mise à jour des données affichées
@@ -213,22 +222,37 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				
 				// Ajout bouton certificat de scolarité
 				Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
-				Anchor exportAnchor = new Anchor();
-				exportAnchor.add(certButton);
-				exportAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
+				Anchor exportCertificatAnchor = new Anchor();
+				exportCertificatAnchor.add(certButton);
+				exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
 					() -> exportService.getCertificat(securityService.getDossierConsulte(), inscription.getCible().getCode())));
-				exportAnchor.getElement().getStyle().set("margin-left", "1em");
-				exportAnchor.setTarget("_blank");
+				exportCertificatAnchor.getElement().getStyle().set("margin-left", "1em");
+				exportCertificatAnchor.setTarget("_blank");
 				
 				// Ajout à la liste des boutons
 				listButtonCertificat.add(certButton);
+				
+				
+				
+				// Ajout bouton attestation de paiement
+				Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
+				Anchor exportAttestationAnchor = new Anchor();
+				exportAttestationAnchor.add(attestationButton);
+				exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
+					() -> exportService.getAttestation(securityService.getDossierConsulte(), inscription.getCible().getCode())));
+				exportAttestationAnchor.getElement().getStyle().set("margin-left", "1em");
+				exportAttestationAnchor.setTarget("_blank");
+				
+				// Ajout à la liste des boutons
+				listButtonAttestation.add(attestationButton);
 
 				insCard.addAlt(periode);
 				insCard.addAlt(regime);
 				insCard.addAlt(statut);
 				insCard.addAlt(paiement);
 				insCard.addAlt(pieces);
-				insCard.addAlt(exportAnchor);
+				insCard.addAlt(exportCertificatAnchor);
+				insCard.addAlt(exportAttestationAnchor);
 
 				// Si on doit afficher plus de 2 inscriptions, on replie la carte
 				if(inscriptions.size()>2) {
