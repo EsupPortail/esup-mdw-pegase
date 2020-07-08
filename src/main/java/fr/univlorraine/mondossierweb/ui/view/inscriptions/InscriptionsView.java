@@ -184,12 +184,13 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 
 				
 				// Ajout bouton certificat de scolarité
-				Button certButton = new Button("", VaadinIcon.TABLE.create());
+				Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
 				Anchor exportAnchor = new Anchor();
 				exportAnchor.add(certButton);
 				exportAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
 					() -> exportService.getCertificat(securityService.getDossierConsulte(), inscription.getCible().getCode())));
 				exportAnchor.getElement().getStyle().set("margin-left", "1em");
+				exportAnchor.setTarget("_blank");
 				
 				// Ajout à la liste des boutons
 				listButtonCertificat.add(certButton);

@@ -49,6 +49,9 @@ public class Card extends VerticalLayout {
 			altButton.addClickListener(e->{
 				changeAlt();
 			});
+			titre.addClickListener(e->{
+				changeAlt();
+			});
 		}
 	}
 	
