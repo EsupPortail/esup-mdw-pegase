@@ -82,6 +82,8 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 	List<TextField> listTextFieldPeriode = new LinkedList<TextField> ();
 	List<TextField> listTextFieldRegime = new LinkedList<TextField> ();
 	List<TextField> listTextFieldStatut = new LinkedList<TextField> ();
+	List<TextField> listTextFieldPaiement = new LinkedList<TextField> ();
+	List<TextField> listTextFieldPieces = new LinkedList<TextField> ();
 	List<Button> listButtonCertificat = new LinkedList<Button> ();
 	
 	@PostConstruct
@@ -106,6 +108,12 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 		}
 		for(TextField tf : listTextFieldStatut) {
 			tf.setLabel(getTranslation("inscription.statut"));
+		}
+		for(TextField tf : listTextFieldPaiement) {
+			tf.setLabel(getTranslation("inscription.paiement"));
+		}
+		for(TextField tf : listTextFieldPieces) {
+			tf.setLabel(getTranslation("inscription.pieces"));
 		}
 		for(Button b : listButtonCertificat) {
 			b.setText(getTranslation("inscription.certificat"));
@@ -140,6 +148,8 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 		listTextFieldPeriode.clear();
 		listTextFieldRegime.clear();
 		listTextFieldStatut.clear();
+		listTextFieldPaiement.clear();
+		listTextFieldPieces.clear();
 		listButtonCertificat.clear();
 	}
 	/**
@@ -176,6 +186,24 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				statut.setReadOnly(true);
 				CmpUtils.setLongTextField(statut);
 				listTextFieldStatut.add(statut);
+				
+				
+				TextField paiement = new TextField();
+				if(inscription.getStatutPaiement()!=null) {
+					paiement.setValue(inscription.getStatutPaiement().getValue());
+				}
+				paiement.setReadOnly(true);
+				CmpUtils.setLongTextField(paiement);
+				listTextFieldPaiement.add(paiement);
+				
+				
+				TextField pieces = new TextField();
+				if(inscription.getStatutPieces()!=null) {
+					pieces.setValue(inscription.getStatutPieces().getValue());
+				}
+				pieces.setReadOnly(true);
+				CmpUtils.setLongTextField(pieces);
+				listTextFieldPieces.add(pieces);
 
 				/* AJout de la liste des bourses et aides ?
 				for( OccurrenceNomenclature occ : inscription.getBoursesEtAides()) {
@@ -198,6 +226,8 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				insCard.addAlt(periode);
 				insCard.addAlt(regime);
 				insCard.addAlt(statut);
+				insCard.addAlt(paiement);
+				insCard.addAlt(pieces);
 				insCard.addAlt(exportAnchor);
 
 				// Si on doit afficher plus de 2 inscriptions, on replie la carte
