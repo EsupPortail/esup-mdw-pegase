@@ -65,7 +65,7 @@ import lombok.Getter;
 @Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_ENSEIGNANT})
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
-public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
+public class InscriptionsView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
 
 	private static final String CERT_FILE_EXT = ".pdf";
 	private static final String CERT_FILE_NAME = "certificat";
@@ -303,17 +303,18 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				}else {
 					insCard.displayAlt();
 				}
-				insCard.updateStyle(false, true);
+				insCard.updateStyle();
 				inscriptionsLayout.add(insCard);
 			}
 		}
+		updateStyle();
 	}
 
-	@Override
-	protected void adaptSize(final Boolean isMobile) {
+	//@Override
+	protected void updateStyle() {
 		inscriptionsLayout.getChildren().forEach(c -> {
 			Card insCard = (Card) c; 
-			insCard.updateStyle(isMobile, true);
+			insCard.updateStyle();
 		});
 
 	}

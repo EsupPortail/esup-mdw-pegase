@@ -25,15 +25,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.WrapMode;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 
-import fr.univlorraine.mondossierweb.ui.component.AdaptSizeLayout;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
@@ -46,7 +47,7 @@ import lombok.Getter;
 @Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_ENSEIGNANT})
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
-public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
+public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
 
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
@@ -99,11 +100,15 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 		initTelSecours();
 		initAdresseFixe();
 		initAdresseAnnuelle();
-		coordPersoLayout.setWidthFull();
-		coordPersoLayout.setWrapMode(WrapMode.WRAP);
-		coordPersoLayout.getStyle().set("margin-top", "0");
-		add(coordPersoLayout);
 
+		coordPersoLayout.getStyle().set("margin-top", "0");
+		coordPersoLayout.setWidthFull();
+		coordPersoLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
+		coordPersoLayout.setFlexWrap(FlexWrap.WRAP);
+		coordPersoLayout.setFlexBasis("28em", mailLayout, telLayout,mailSecoursLayout,telSecoursLayout, adresseFixeLayout, adresseAnnuelleLayout);
+		
+		add(coordPersoLayout);
+		updateStyle();
 	}
 
 	private void initMail() {
@@ -256,14 +261,14 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 		header.setText(viewTitle);
 	}
 
-	@Override
-	protected void adaptSize(final Boolean isMobile) {
-		telLayout.updateStyle(isMobile, false);
-		mailLayout.updateStyle(isMobile, false);
-		telSecoursLayout.updateStyle(isMobile, false);
-		mailSecoursLayout.updateStyle(isMobile, false);
-		adresseFixeLayout.updateStyle(isMobile, false);
-		adresseAnnuelleLayout.updateStyle(isMobile, false);
+	//@Override
+	protected void updateStyle() {
+		telLayout.updateStyle();
+		mailLayout.updateStyle();
+		telSecoursLayout.updateStyle();
+		mailSecoursLayout.updateStyle();
+		adresseFixeLayout.updateStyle();
+		adresseAnnuelleLayout.updateStyle();
 	}
 
 

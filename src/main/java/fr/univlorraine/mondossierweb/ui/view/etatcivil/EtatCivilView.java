@@ -26,7 +26,10 @@ import org.springframework.security.access.annotation.Secured;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.WrapMode;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
@@ -56,7 +59,7 @@ import lombok.extern.slf4j.Slf4j;
 @RouteAlias(value = "", layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
-public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
+public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
 
 	@Autowired
 	private transient SecurityService securityService;
@@ -93,8 +96,11 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 		initIdentite();
 		initNaissance();
 		etatcivilLayout.setWidthFull();
-		etatcivilLayout.setWrapMode(WrapMode.WRAP);
+		etatcivilLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
+		etatcivilLayout.setFlexWrap(FlexWrap.WRAP);
+		etatcivilLayout.setFlexBasis("28em", identiteLayout, naissanceLayout);
 		add(etatcivilLayout);
+		updateStyle();
 	}
 
 	private void initIdentite() {
@@ -186,10 +192,10 @@ public class EtatCivilView extends AdaptSizeLayout implements HasDynamicTitle, H
 		header.setText(viewTitle);
 	}
 
-	@Override
-	protected void adaptSize(final Boolean isMobile) {
-		identiteLayout.updateStyle(isMobile, false);
-		naissanceLayout.updateStyle(isMobile, false);
+	//@Override
+	protected void updateStyle() {
+		identiteLayout.updateStyle();
+		naissanceLayout.updateStyle();
 	}
 
 	@Override

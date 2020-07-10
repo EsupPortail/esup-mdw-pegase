@@ -27,8 +27,10 @@ import org.springframework.util.StringUtils;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.WrapMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
@@ -58,7 +60,7 @@ import lombok.extern.slf4j.Slf4j;
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
-public class ParcoursView extends AdaptSizeLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
+public class ParcoursView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
 
 	@Autowired
 	private transient SecurityService securityService;
@@ -95,8 +97,11 @@ public class ParcoursView extends AdaptSizeLayout implements HasDynamicTitle, Ha
 		initBac();
 		initAnnees();
 		parcoursLayout.setWidthFull();
-		parcoursLayout.setWrapMode(WrapMode.WRAP);
+		parcoursLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
+		parcoursLayout.setFlexWrap(FlexWrap.WRAP);
+		parcoursLayout.setFlexBasis("28em", bacLayout, anneesLayout);
 		add(parcoursLayout);
+		updateStyle();
 	}
 
 	private void initBac() {
@@ -196,10 +201,10 @@ private void initAnnees() {
 		header.setText(viewTitle);
 	}
 
-	@Override
-	protected void adaptSize(final Boolean isMobile) {
-		bacLayout.updateStyle(isMobile, false);
-		anneesLayout.updateStyle(isMobile, false);
+	//@Override
+	protected void updateStyle() {
+		bacLayout.updateStyle();
+		anneesLayout.updateStyle();
 	}
 	
 	@Override
