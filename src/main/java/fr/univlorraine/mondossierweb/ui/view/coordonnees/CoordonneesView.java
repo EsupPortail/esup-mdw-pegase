@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
@@ -32,23 +33,32 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
+import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasDynamicTitle;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
+import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import fr.univlorraine.pegase.model.insgestion.Apprenant;
+import fr.univlorraine.pegase.model.insgestion.VueContact;
 import lombok.Getter;
 
 @Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_ENSEIGNANT})
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
-public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
+public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
 
+	@Autowired
+	private transient SecurityService securityService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Value("${etudiant.mail.ldap}")
@@ -106,7 +116,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		coordPersoLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
 		coordPersoLayout.setFlexWrap(FlexWrap.WRAP);
 		coordPersoLayout.setFlexBasis("28em", mailLayout, telLayout,mailSecoursLayout,telSecoursLayout, adresseFixeLayout, adresseAnnuelleLayout);
-		
+
 		add(coordPersoLayout);
 		updateStyle();
 	}
@@ -130,7 +140,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	}
 
 	private void initMailSecours() {
-		
+
 		nomMailSecours.setReadOnly(true);
 		mailSecoursLayout.addAlt(nomMailSecours);
 		CmpUtils.setLongTextField(nomMailSecours);
@@ -141,7 +151,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	}
 
 	private void initTelSecours() {
-		
+
 		nomTelSecours.setReadOnly(true);
 		telSecoursLayout.addAlt(nomTelSecours);
 		CmpUtils.setLongTextField(nomTelSecours);
@@ -152,7 +162,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	}
 
 	private void initAdresseFixe() {
-		
+
 		nomAdFixe.setReadOnly(true);
 		adresseFixeLayout.addAlt(nomAdFixe);
 		CmpUtils.setLongTextField(nomAdFixe);
@@ -183,7 +193,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	}
 
 	private void initAdresseAnnuelle() {
-		
+
 		paysAdAnu.setReadOnly(true);
 		adresseAnnuelleLayout.addAlt(paysAdAnu);
 		CmpUtils.setLongTextField(paysAdAnu);
@@ -261,6 +271,49 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		header.setText(viewTitle);
 	}
 
+	/**
+	 * Reset toutes les données affichées
+	 * @param apprenant
+	 */
+	private void resetData() {
+		mailEtab.setValue("");
+		mail.setValue("");
+		tel.setValue("");
+		mailSecours.setValue("");
+		nomMailSecours.setValue("");
+		telSecours.setValue("");
+		nomTelSecours.setValue("");
+
+		nomAdFixe.setValue("");
+		paysAdFixe.setValue("");
+		compl1AdFixe.setValue("");
+		compl2AdFixe.setValue("");
+		numVoieAdFixe.setValue("");
+		lieuServAdFixe.setValue("");
+		codePostalAdFixe.setValue("");
+
+		paysAdAnu.setValue("");
+		compl1AdAnu.setValue("");
+		compl2AdAnu.setValue("");
+		numVoieAdAnu.setValue("");
+		lieuServAdAnu.setValue("");
+		codePostalAdAnu.setValue("");
+	}
+
+	/**
+	 * Mise à jour des données affichées
+	 * @param apprenant
+	 */
+	private void updateData(Apprenant apprenant) {
+		resetData();
+		if(apprenant != null && apprenant.getContacts()!=null && !apprenant.getContacts().isEmpty()) {
+			for(VueContact c : apprenant.getContacts()) {
+				// TODO Mise à jour des infos
+				
+			}
+		}
+	}
+
 	//@Override
 	protected void updateStyle() {
 		telLayout.updateStyle();
@@ -271,5 +324,16 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		adresseAnnuelleLayout.updateStyle();
 	}
 
-
+	@Override
+	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String codeApprenant) {
+		// Sécurisation de l'accès au dossier en paramètre
+		if(!securityService.secureAccess(codeApprenant)) {
+			Notification.show(getTranslation("error.accesdossierrefuse"));
+		}
+		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
+		securityService.checkDossier();
+		// Mise à jour de l'affichage
+		updateData(securityService.getDossier()!=null ? securityService.getDossier().getApprenant() : null);
+	}
+	
 }
