@@ -99,7 +99,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		setSizeFull();
 
 		inscriptionsLayout.setWidthFull();
-		inscriptionsLayout.setWrapMode(WrapMode.WRAP);
+		inscriptionsLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
+		inscriptionsLayout.setFlexWrap(FlexWrap.WRAP);
 		inscriptionsLayout.getStyle().set("margin-top", "0");
 		add(inscriptionsLayout);
 	}
@@ -258,44 +259,41 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				// Ajout à la liste des boutons
 				listButtonAttestation.add(attestationButton);
 
-				FlexLayout flexLayout = new FlexLayout();
-				flexLayout.getStyle().set("padding", "0");
-				flexLayout.setSizeFull();
-				flexLayout.setFlexWrap(FlexWrap.WRAP);
-				
-				//flexLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
-			
-				//flexLayout.setFlexWrap(FlexWrap.WRAP);
-				//flexLayout.setWidthFull();
-				
-				
+				VerticalLayout verticalLayout = new VerticalLayout();
+				verticalLayout.getStyle().set("padding", "0");
+				verticalLayout.setSizeFull();
 				
 				VerticalLayout infoLayout = new VerticalLayout();
 				infoLayout.getStyle().set("padding", "0");
-				//infoLayout.setSizeUndefined();
-				//infoLayout.setMinWidth("28em");
 				infoLayout.add(periode);
 				infoLayout.add(regime);
-				infoLayout.add(statut);
-				infoLayout.add(paiement);
-				infoLayout.add(pieces);
-				flexLayout.add(infoLayout);
+				verticalLayout.add(infoLayout);
+				
+				FlexLayout flexLayout = new FlexLayout();
+				VerticalLayout statutLayout = new VerticalLayout();
+				statutLayout.getStyle().set("padding", "0");
+				statutLayout.add(statut);
+				statutLayout.add(paiement);
+				statutLayout.add(pieces);
 				
 				VerticalLayout buttonLayout = new VerticalLayout();
 				buttonLayout.setSizeUndefined();
 				buttonLayout.getStyle().set("padding", "0");
 				buttonLayout.getStyle().set("margin", "auto");
-				exportCertificatAnchor.setMaxWidth("10em");
 				buttonLayout.add(exportCertificatAnchor);
 				exportAttestationAnchor.setMinWidth("10em");
 				buttonLayout.add(exportAttestationAnchor);
 				
-				
+				flexLayout.add(statutLayout);
 				flexLayout.add(buttonLayout);
-				flexLayout.setFlexBasis("28em", infoLayout);
-				flexLayout.setFlexBasis("15em", buttonLayout);
+				flexLayout.setWidthFull();
+				flexLayout.setJustifyContentMode(JustifyContentMode.START);
+				flexLayout.setFlexWrap(FlexWrap.WRAP);
+				flexLayout.setFlexBasis("18em", statutLayout);
+				flexLayout.setFlexBasis("10em", buttonLayout);
+				verticalLayout.add(flexLayout);
 				
-				insCard.addAlt(flexLayout);
+				insCard.addAlt(verticalLayout);
 
 				// Si on doit afficher plus de 2 inscriptions, on replie la carte
 				if(inscriptions.size()>2) {
@@ -305,6 +303,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				}
 				insCard.updateStyle();
 				inscriptionsLayout.add(insCard);
+				inscriptionsLayout.setFlexBasis("38em", insCard);
 			}
 		}
 		updateStyle();
