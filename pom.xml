@@ -43,7 +43,9 @@
 		<changelist>-SNAPSHOT</changelist>
 
 		<java.version>11</java.version>
-		<vaadin.version>14.1.25</vaadin.version>
+
+		<vaadin.version>14.2.1</vaadin.version>
+		<!-- <vaadin.version>14.1.25</vaadin.version>  -->
 		
 		<gson-fire-version>1.8.4</gson-fire-version>
         <swagger-core-version>1.5.24</swagger-core-version>

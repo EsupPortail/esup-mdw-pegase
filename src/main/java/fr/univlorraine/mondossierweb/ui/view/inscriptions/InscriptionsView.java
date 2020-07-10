@@ -33,8 +33,10 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.WrapMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
@@ -259,7 +261,15 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				FlexLayout flexLayout = new FlexLayout();
 				flexLayout.getStyle().set("padding", "0");
 				flexLayout.setSizeFull();
-				flexLayout.setWrapMode(WrapMode.WRAP);
+				flexLayout.setFlexWrap(FlexWrap.WRAP);
+				
+				//flexLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+			
+				//flexLayout.setFlexWrap(FlexWrap.WRAP);
+				//flexLayout.setWidthFull();
+				
+				
+				
 				VerticalLayout infoLayout = new VerticalLayout();
 				infoLayout.getStyle().set("padding", "0");
 				//infoLayout.setSizeUndefined();
@@ -274,14 +284,16 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				VerticalLayout buttonLayout = new VerticalLayout();
 				buttonLayout.setSizeUndefined();
 				buttonLayout.getStyle().set("padding", "0");
-				//buttonLayout.setMinWidth("20em");
 				buttonLayout.getStyle().set("margin", "auto");
-				
 				exportCertificatAnchor.setMaxWidth("10em");
 				buttonLayout.add(exportCertificatAnchor);
 				exportAttestationAnchor.setMinWidth("10em");
 				buttonLayout.add(exportAttestationAnchor);
+				
+				
 				flexLayout.add(buttonLayout);
+				flexLayout.setFlexBasis("28em", infoLayout);
+				flexLayout.setFlexBasis("15em", buttonLayout);
 				
 				insCard.addAlt(flexLayout);
 
