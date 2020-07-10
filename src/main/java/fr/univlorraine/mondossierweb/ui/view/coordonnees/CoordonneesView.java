@@ -125,6 +125,7 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 	}
 
 	private void initMailSecours() {
+		
 		nomMailSecours.setReadOnly(true);
 		mailSecoursLayout.addAlt(nomMailSecours);
 		CmpUtils.setLongTextField(nomMailSecours);
@@ -135,6 +136,7 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 	}
 
 	private void initTelSecours() {
+		
 		nomTelSecours.setReadOnly(true);
 		telSecoursLayout.addAlt(nomTelSecours);
 		CmpUtils.setLongTextField(nomTelSecours);
@@ -145,6 +147,7 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 	}
 
 	private void initAdresseFixe() {
+		
 		nomAdFixe.setReadOnly(true);
 		adresseFixeLayout.addAlt(nomAdFixe);
 		CmpUtils.setLongTextField(nomAdFixe);
@@ -175,6 +178,7 @@ public class CoordonneesView extends AdaptSizeLayout implements HasDynamicTitle,
 	}
 
 	private void initAdresseAnnuelle() {
+		
 		paysAdAnu.setReadOnly(true);
 		adresseAnnuelleLayout.addAlt(paysAdAnu);
 		CmpUtils.setLongTextField(paysAdAnu);

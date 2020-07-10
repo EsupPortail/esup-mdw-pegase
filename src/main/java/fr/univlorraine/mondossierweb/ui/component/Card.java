@@ -45,6 +45,7 @@ public class Card extends VerticalLayout {
 			this.add(titreLayout);
 			
 			this.add(alt);
+			alt.getStyle().set("padding", "0");
 			alt.setVisible(false);
 			altButton.addClickListener(e->{
 				changeAlt();
@@ -86,6 +87,7 @@ public class Card extends VerticalLayout {
 			this.getStyle().set("border-color", "var(--lumo-contrast-5pct)");
 			this.setHeight("fit-content");
 			this.setWidth(!isMobile && !princ ? "46%" :"100%");
+			
 	}
 
 }

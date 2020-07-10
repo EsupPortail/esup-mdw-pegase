@@ -41,5 +41,11 @@ public final class CmpUtils {
 		tf.setWidthFull();
 		tf.setMaxWidth("20em");
 	}
+	
+	public static void setShortTextField(TextField tf) {
+		formatTextField(tf);
+		tf.setWidthFull();
+		tf.setMaxWidth("15em");
+	}
 
 }

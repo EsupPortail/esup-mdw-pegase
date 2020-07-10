@@ -32,6 +32,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.WrapMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
@@ -79,7 +81,7 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final VerticalLayout inscriptionsLayout = new VerticalLayout();
+	private final FlexLayout inscriptionsLayout = new FlexLayout();
 
 	List<TextField> listTextFieldPeriode = new LinkedList<TextField> ();
 	List<TextField> listTextFieldRegime = new LinkedList<TextField> ();
@@ -93,6 +95,10 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 	@PostConstruct
 	public void init() {
 		setSizeFull();
+
+		inscriptionsLayout.setWidthFull();
+		inscriptionsLayout.setWrapMode(WrapMode.WRAP);
+		inscriptionsLayout.getStyle().set("margin-top", "0");
 		add(inscriptionsLayout);
 	}
 
@@ -193,7 +199,7 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 					statut.setValue(inscription.getStatutInscription().getValue());
 				}
 				statut.setReadOnly(true);
-				CmpUtils.setModerateTextField(statut);
+				CmpUtils.setShortTextField(statut);
 				listTextFieldStatut.add(statut);
 				
 				
@@ -202,7 +208,7 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 					paiement.setValue(inscription.getStatutPaiement().getValue());
 				}
 				paiement.setReadOnly(true);
-				CmpUtils.setModerateTextField(paiement);
+				CmpUtils.setShortTextField(paiement);
 				listTextFieldPaiement.add(paiement);
 				
 				
@@ -211,7 +217,7 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 					pieces.setValue(inscription.getStatutPieces().getValue());
 				}
 				pieces.setReadOnly(true);
-				CmpUtils.setModerateTextField(pieces);
+				CmpUtils.setShortTextField(pieces);
 				listTextFieldPieces.add(pieces);
 
 				/* AJout de la liste des bourses et aides ?
@@ -222,7 +228,9 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				
 				// Ajout bouton certificat de scolarité
 				Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
+				certButton.setWidth("15em");
 				Anchor exportCertificatAnchor = new Anchor();
+				exportCertificatAnchor.getStyle().set("margin-left", "0");
 				exportCertificatAnchor.add(certButton);
 				exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
 					() -> exportService.getCertificat(securityService.getDossierConsulte(), inscription.getCible().getCode())));
@@ -236,7 +244,9 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				
 				// Ajout bouton attestation de paiement
 				Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
+				attestationButton.setWidth("15em");
 				Anchor exportAttestationAnchor = new Anchor();
+				exportAttestationAnchor.getStyle().set("margin-left", "0");
 				exportAttestationAnchor.add(attestationButton);
 				exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
 					() -> exportService.getAttestation(securityService.getDossierConsulte(), inscription.getCible().getCode())));
@@ -246,13 +256,34 @@ public class InscriptionsView extends AdaptSizeLayout implements HasDynamicTitle
 				// Ajout à la liste des boutons
 				listButtonAttestation.add(attestationButton);
 
-				insCard.addAlt(periode);
-				insCard.addAlt(regime);
-				insCard.addAlt(statut);
-				insCard.addAlt(paiement);
-				insCard.addAlt(pieces);
-				insCard.addAlt(exportCertificatAnchor);
-				insCard.addAlt(exportAttestationAnchor);
+				FlexLayout flexLayout = new FlexLayout();
+				flexLayout.getStyle().set("padding", "0");
+				flexLayout.setSizeFull();
+				flexLayout.setWrapMode(WrapMode.WRAP);
+				VerticalLayout infoLayout = new VerticalLayout();
+				infoLayout.getStyle().set("padding", "0");
+				//infoLayout.setSizeUndefined();
+				//infoLayout.setMinWidth("28em");
+				infoLayout.add(periode);
+				infoLayout.add(regime);
+				infoLayout.add(statut);
+				infoLayout.add(paiement);
+				infoLayout.add(pieces);
+				flexLayout.add(infoLayout);
+				
+				VerticalLayout buttonLayout = new VerticalLayout();
+				buttonLayout.setSizeUndefined();
+				buttonLayout.getStyle().set("padding", "0");
+				//buttonLayout.setMinWidth("20em");
+				buttonLayout.getStyle().set("margin", "auto");
+				
+				exportCertificatAnchor.setMaxWidth("10em");
+				buttonLayout.add(exportCertificatAnchor);
+				exportAttestationAnchor.setMinWidth("10em");
+				buttonLayout.add(exportAttestationAnchor);
+				flexLayout.add(buttonLayout);
+				
+				insCard.addAlt(flexLayout);
 
 				// Si on doit afficher plus de 2 inscriptions, on replie la carte
 				if(inscriptions.size()>2) {
