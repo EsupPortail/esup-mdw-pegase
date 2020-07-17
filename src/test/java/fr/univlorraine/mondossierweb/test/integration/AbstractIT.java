@@ -42,7 +42,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = "spring.config.location = src/test/resources/application.properties")
-@Import({ RequestParameterUserFilter.class, FlywayCleanMigrateStrategy.class })
+@Import({ RequestParameterUserFilter.class })
 @Slf4j
 public abstract class AbstractIT {
 
