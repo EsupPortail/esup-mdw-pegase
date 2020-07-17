@@ -190,7 +190,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				listTextFieldPeriode.add(periode);
 
 				TextField regime = new TextField();
-				if(inscription.getRegimeInscription()!=null) {
+				if(inscription.getRegimeInscription()!=null &&
+					inscription.getRegimeInscription().getLibelle()!=null) {
 					regime.setValue(inscription.getRegimeInscription().getLibelle());
 				}
 				regime.setReadOnly(true);
