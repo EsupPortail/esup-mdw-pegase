@@ -20,40 +20,41 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * Cvec
+ * VoeuInscriptionAllOf
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
-public class Cvec {
-  public static final String SERIALIZED_NAME_NUMERO = "numero";
-  @SerializedName(SERIALIZED_NAME_NUMERO)
-  private String numero;
+public class VoeuInscriptionAllOf {
+  public static final String SERIALIZED_NAME_CIBLE = "cible";
+  @SerializedName(SERIALIZED_NAME_CIBLE)
+  private CibleInscription cible = null;
 
 
-  public Cvec numero(String numero) {
+  public VoeuInscriptionAllOf cible(CibleInscription cible) {
     
-    this.numero = numero;
+    this.cible = cible;
     return this;
   }
 
    /**
-   * Le numéro de la Contribution Vie Etudiante et de Campus
-   * @return numero
+   * Get cible
+   * @return cible
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le numéro de la Contribution Vie Etudiante et de Campus")
+  @ApiModelProperty(value = "")
 
-  public String getNumero() {
-    return numero;
+  public CibleInscription getCible() {
+    return cible;
   }
 
 
-  public void setNumero(String numero) {
-    this.numero = numero;
+  public void setCible(CibleInscription cible) {
+    this.cible = cible;
   }
 
 
@@ -65,21 +66,21 @@ public class Cvec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Cvec cvec = (Cvec) o;
-    return Objects.equals(this.numero, cvec.numero);
+    VoeuInscriptionAllOf voeuInscriptionAllOf = (VoeuInscriptionAllOf) o;
+    return Objects.equals(this.cible, voeuInscriptionAllOf.cible);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(numero);
+    return Objects.hash(cible);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Cvec {\n");
-    sb.append("    numero: ").append(toIndentedString(numero)).append("\n");
+    sb.append("class VoeuInscriptionAllOf {\n");
+    sb.append("    cible: ").append(toIndentedString(cible)).append("\n");
     sb.append("}");
     return sb.toString();
   }

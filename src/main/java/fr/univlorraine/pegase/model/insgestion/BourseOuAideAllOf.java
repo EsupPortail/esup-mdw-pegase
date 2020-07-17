@@ -28,7 +28,7 @@ import java.io.IOException;
  * Bourse ou aide sur laquelle à ajouter potentiellement à une inscription sur une formation
  */
 @ApiModel(description = "Bourse ou aide sur laquelle à ajouter potentiellement à une inscription sur une formation")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-06-30T15:25:34.956+02:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
 public class BourseOuAideAllOf {
   public static final String SERIALIZED_NAME_TYPE_BOURSE = "typeBourse";
   @SerializedName(SERIALIZED_NAME_TYPE_BOURSE)

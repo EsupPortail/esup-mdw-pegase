@@ -28,7 +28,7 @@ import java.io.IOException;
  * Objet avec dates de début et de fin
  */
 @ApiModel(description = "Objet avec dates de début et de fin")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-06-30T15:25:34.956+02:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
 
 public class ObjetAvecDates {
   public static final String SERIALIZED_NAME_EST1 = "est1";

@@ -32,7 +32,7 @@ import java.io.IOException;
  * décrit la formation ou l&#39;objet de formation d&#39;une inscription
  */
 @ApiModel(description = "décrit la formation ou l'objet de formation d'une inscription")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-06-30T15:25:34.956+02:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
 public class CibleInscription extends ObjetAvecLibelle {
   public static final String SERIALIZED_NAME_CODE_CHEMIN = "codeChemin";
   @SerializedName(SERIALIZED_NAME_CODE_CHEMIN)

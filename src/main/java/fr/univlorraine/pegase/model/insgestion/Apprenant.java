@@ -21,12 +21,12 @@ import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import fr.univlorraine.pegase.model.insgestion.Bac;
+import fr.univlorraine.pegase.model.insgestion.ContactComplet;
 import fr.univlorraine.pegase.model.insgestion.EtatCivil;
 import fr.univlorraine.pegase.model.insgestion.Naissance;
 import fr.univlorraine.pegase.model.insgestion.PremieresInscriptions;
 import fr.univlorraine.pegase.model.insgestion.Profession;
 import fr.univlorraine.pegase.model.insgestion.SituationPersonnelleApprenant;
-import fr.univlorraine.pegase.model.insgestion.VueContact;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.util.List;
  * l&#39;apprenant
  */
 @ApiModel(description = "l'apprenant")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-06-30T15:25:34.956+02:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
 public class Apprenant {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
@@ -61,7 +61,7 @@ public class Apprenant {
 
   public static final String SERIALIZED_NAME_CONTACTS = "contacts";
   @SerializedName(SERIALIZED_NAME_CONTACTS)
-  private List<VueContact> contacts = null;
+  private List<ContactComplet> contacts = null;
 
   public static final String SERIALIZED_NAME_BAC = "bac";
   @SerializedName(SERIALIZED_NAME_BAC)
@@ -187,13 +187,13 @@ public class Apprenant {
   }
 
 
-  public Apprenant contacts(List<VueContact> contacts) {
+  public Apprenant contacts(List<ContactComplet> contacts) {
     
     this.contacts = contacts;
     return this;
   }
 
-  public Apprenant addContactsItem(VueContact contactsItem) {
+  public Apprenant addContactsItem(ContactComplet contactsItem) {
     if (this.contacts == null) {
       this.contacts = new ArrayList<>();
     }
@@ -208,12 +208,12 @@ public class Apprenant {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "Liste des contacts sous forme d'objet, avec le code du contact pour clé principale")
 
-  public List<VueContact> getContacts() {
+  public List<ContactComplet> getContacts() {
     return contacts;
   }
 
 
-  public void setContacts(List<VueContact> contacts) {
+  public void setContacts(List<ContactComplet> contacts) {
     this.contacts = contacts;
   }
 

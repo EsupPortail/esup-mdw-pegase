@@ -20,26 +20,27 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insgestion.DemandeDeContactSimple;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * VueContact
+ * ContactComplet
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
 
-public class VueContact {
+public class ContactComplet {
   /**
    * type de contact
    */
   @JsonAdapter(CanalCommunicationEnum.Adapter.class)
   public enum CanalCommunicationEnum {
-    VUECONTACTADRESSE("VueContactAdresse"),
+    CONTACTADRESSECOMPLET("ContactAdresseComplet"),
     
-    VUECONTACTMEL("VueContactMel"),
+    CONTACTMELCOMPLET("ContactMelComplet"),
     
-    VUECONTACTTELEPHONE("VueContactTelephone");
+    CONTACTTELEPHONECOMPLET("ContactTelephoneComplet");
 
     private String value;
 
@@ -83,23 +84,20 @@ public class VueContact {
   @SerializedName(SERIALIZED_NAME_CANAL_COMMUNICATION)
   protected CanalCommunicationEnum canalCommunication;
 
-  public static final String SERIALIZED_NAME_CODE = "code";
-  @SerializedName(SERIALIZED_NAME_CODE)
-  private String code;
-
-  public static final String SERIALIZED_NAME_LIBELLE = "libelle";
-  @SerializedName(SERIALIZED_NAME_LIBELLE)
-  private String libelle;
+  public static final String SERIALIZED_NAME_DEMANDE_DE_CONTACT = "demandeDeContact";
+  @SerializedName(SERIALIZED_NAME_DEMANDE_DE_CONTACT)
+  private DemandeDeContactSimple demandeDeContact;
 
   public static final String SERIALIZED_NAME_PROPRIETAIRE = "proprietaire";
   @SerializedName(SERIALIZED_NAME_PROPRIETAIRE)
   private String proprietaire;
 
-  public VueContact() {
-    this.canalCommunication = CanalCommunicationEnum.fromValue(this.getClass().getSimpleName());
+  public ContactComplet() {
+    //this.canalCommunication = this.getClass().getSimpleName();
+	  this.canalCommunication = CanalCommunicationEnum.fromValue(this.getClass().getSimpleName());
   }
 
-  public VueContact canalCommunication(CanalCommunicationEnum canalCommunication) {
+  public ContactComplet canalCommunication(CanalCommunicationEnum canalCommunication) {
     
     this.canalCommunication = canalCommunication;
     return this;
@@ -121,51 +119,29 @@ public class VueContact {
   }
 
 
-  public VueContact code(String code) {
+  public ContactComplet demandeDeContact(DemandeDeContactSimple demandeDeContact) {
     
-    this.code = code;
+    this.demandeDeContact = demandeDeContact;
     return this;
   }
 
    /**
-   * Code de la demande de contact
-   * @return code
+   * Get demandeDeContact
+   * @return demandeDeContact
   **/
-  @ApiModelProperty(required = true, value = "Code de la demande de contact")
+  @ApiModelProperty(required = true, value = "")
 
-  public String getCode() {
-    return code;
+  public DemandeDeContactSimple getDemandeDeContact() {
+    return demandeDeContact;
   }
 
 
-  public void setCode(String code) {
-    this.code = code;
+  public void setDemandeDeContact(DemandeDeContactSimple demandeDeContact) {
+    this.demandeDeContact = demandeDeContact;
   }
 
 
-  public VueContact libelle(String libelle) {
-    
-    this.libelle = libelle;
-    return this;
-  }
-
-   /**
-   * Libellé d&#39;affichage de la demande de contact
-   * @return libelle
-  **/
-  @ApiModelProperty(required = true, value = "Libellé d'affichage de la demande de contact")
-
-  public String getLibelle() {
-    return libelle;
-  }
-
-
-  public void setLibelle(String libelle) {
-    this.libelle = libelle;
-  }
-
-
-  public VueContact proprietaire(String proprietaire) {
+  public ContactComplet proprietaire(String proprietaire) {
     
     this.proprietaire = proprietaire;
     return this;
@@ -196,26 +172,24 @@ public class VueContact {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    VueContact vueContact = (VueContact) o;
-    return Objects.equals(this.canalCommunication, vueContact.canalCommunication) &&
-        Objects.equals(this.code, vueContact.code) &&
-        Objects.equals(this.libelle, vueContact.libelle) &&
-        Objects.equals(this.proprietaire, vueContact.proprietaire);
+    ContactComplet contactComplet = (ContactComplet) o;
+    return Objects.equals(this.canalCommunication, contactComplet.canalCommunication) &&
+        Objects.equals(this.demandeDeContact, contactComplet.demandeDeContact) &&
+        Objects.equals(this.proprietaire, contactComplet.proprietaire);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(canalCommunication, code, libelle, proprietaire);
+    return Objects.hash(canalCommunication, demandeDeContact, proprietaire);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class VueContact {\n");
+    sb.append("class ContactComplet {\n");
     sb.append("    canalCommunication: ").append(toIndentedString(canalCommunication)).append("\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    libelle: ").append(toIndentedString(libelle)).append("\n");
+    sb.append("    demandeDeContact: ").append(toIndentedString(demandeDeContact)).append("\n");
     sb.append("    proprietaire: ").append(toIndentedString(proprietaire)).append("\n");
     sb.append("}");
     return sb.toString();

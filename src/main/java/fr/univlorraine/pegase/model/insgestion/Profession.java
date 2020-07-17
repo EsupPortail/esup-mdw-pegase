@@ -28,7 +28,7 @@ import java.io.IOException;
  * Le code profession contenant la profession des parents et de l&#39;étudiant ainsi que la quotité de l&#39;étudiant
  */
 @ApiModel(description = "Le code profession contenant la profession des parents et de l'étudiant ainsi que la quotité de l'étudiant")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-06-30T15:25:34.956+02:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
 public class Profession {
   public static final String SERIALIZED_NAME_ETUDIANT = "etudiant";
   @SerializedName(SERIALIZED_NAME_ETUDIANT)

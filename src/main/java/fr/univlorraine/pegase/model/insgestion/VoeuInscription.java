@@ -20,40 +20,50 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insgestion.CibleInscription;
+import fr.univlorraine.pegase.model.insgestion.Origine;
+import fr.univlorraine.pegase.model.insgestion.StatutInscriptionVoeu;
+import fr.univlorraine.pegase.model.insgestion.StatutPaiementVoeu;
+import fr.univlorraine.pegase.model.insgestion.StatutPiecesVoeu;
+import fr.univlorraine.pegase.model.insgestion.VoeuBase;
+import fr.univlorraine.pegase.model.insgestion.VoeuInscriptionAllOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Cvec
+ * un voeu d&#39;inscription
  */
+@ApiModel(description = "un voeu d'inscription")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
-public class Cvec {
-  public static final String SERIALIZED_NAME_NUMERO = "numero";
-  @SerializedName(SERIALIZED_NAME_NUMERO)
-  private String numero;
+public class VoeuInscription extends VoeuBase {
+  public static final String SERIALIZED_NAME_CIBLE = "cible";
+  @SerializedName(SERIALIZED_NAME_CIBLE)
+  private CibleInscription cible = null;
 
 
-  public Cvec numero(String numero) {
+  public VoeuInscription cible(CibleInscription cible) {
     
-    this.numero = numero;
+    this.cible = cible;
     return this;
   }
 
    /**
-   * Le numéro de la Contribution Vie Etudiante et de Campus
-   * @return numero
+   * Get cible
+   * @return cible
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le numéro de la Contribution Vie Etudiante et de Campus")
+  @ApiModelProperty(value = "")
 
-  public String getNumero() {
-    return numero;
+  public CibleInscription getCible() {
+    return cible;
   }
 
 
-  public void setNumero(String numero) {
-    this.numero = numero;
+  public void setCible(CibleInscription cible) {
+    this.cible = cible;
   }
 
 
@@ -65,21 +75,23 @@ public class Cvec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Cvec cvec = (Cvec) o;
-    return Objects.equals(this.numero, cvec.numero);
+    VoeuInscription voeuInscription = (VoeuInscription) o;
+    return Objects.equals(this.cible, voeuInscription.cible) &&
+        super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(numero);
+    return Objects.hash(cible, super.hashCode());
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Cvec {\n");
-    sb.append("    numero: ").append(toIndentedString(numero)).append("\n");
+    sb.append("class VoeuInscription {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    cible: ").append(toIndentedString(cible)).append("\n");
     sb.append("}");
     return sb.toString();
   }

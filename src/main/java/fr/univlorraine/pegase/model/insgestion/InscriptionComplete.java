@@ -20,11 +20,13 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insgestion.AccordComplet;
 import fr.univlorraine.pegase.model.insgestion.Admission;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.Cvec;
 import fr.univlorraine.pegase.model.insgestion.OccurrenceNomenclature;
 import fr.univlorraine.pegase.model.insgestion.Origine;
+import fr.univlorraine.pegase.model.insgestion.PieceComplete;
 import fr.univlorraine.pegase.model.insgestion.SituationPersonnelleInscription;
 import fr.univlorraine.pegase.model.insgestion.SituationPrecedente;
 import fr.univlorraine.pegase.model.insgestion.SituationUniversitaire;
@@ -40,8 +42,12 @@ import java.util.List;
 /**
  * InscriptionComplete
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-06-30T15:25:34.956+02:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
 public class InscriptionComplete {
+  public static final String SERIALIZED_NAME_CODE_ETABLISSEMENT = "codeEtablissement";
+  @SerializedName(SERIALIZED_NAME_CODE_ETABLISSEMENT)
+  private String codeEtablissement;
+
   public static final String SERIALIZED_NAME_CIBLE = "cible";
   @SerializedName(SERIALIZED_NAME_CIBLE)
   private CibleInscription cible = null;
@@ -68,7 +74,7 @@ public class InscriptionComplete {
 
   public static final String SERIALIZED_NAME_BOURSES_ET_AIDES = "boursesEtAides";
   @SerializedName(SERIALIZED_NAME_BOURSES_ET_AIDES)
-  private List<OccurrenceNomenclature> boursesEtAides = null;
+  private List<OccurrenceNomenclature> boursesEtAides = new ArrayList<>();
 
   public static final String SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION = "situationPersonnelleInscription";
   @SerializedName(SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION)
@@ -90,6 +96,44 @@ public class InscriptionComplete {
   @SerializedName(SERIALIZED_NAME_SITUATION_PRECEDENTE)
   private SituationPrecedente situationPrecedente;
 
+  public static final String SERIALIZED_NAME_ACCORDS = "accords";
+  @SerializedName(SERIALIZED_NAME_ACCORDS)
+  private List<AccordComplet> accords = new ArrayList<>();
+
+  public static final String SERIALIZED_NAME_PIECES = "pieces";
+  @SerializedName(SERIALIZED_NAME_PIECES)
+  private List<PieceComplete> pieces = new ArrayList<>();
+
+  public static final String SERIALIZED_NAME_DATE_INSCRIPTION = "dateInscription";
+  @SerializedName(SERIALIZED_NAME_DATE_INSCRIPTION)
+  private String dateInscription;
+
+  public static final String SERIALIZED_NAME_DATE_DERNIERE_MODIFICATION = "dateDerniereModification";
+  @SerializedName(SERIALIZED_NAME_DATE_DERNIERE_MODIFICATION)
+  private String dateDerniereModification;
+
+
+  public InscriptionComplete codeEtablissement(String codeEtablissement) {
+    
+    this.codeEtablissement = codeEtablissement;
+    return this;
+  }
+
+   /**
+   * l&#39;établissement dans lequel a été réalisée l&#39;inscription
+   * @return codeEtablissement
+  **/
+  @ApiModelProperty(required = true, value = "l'établissement dans lequel a été réalisée l'inscription")
+
+  public String getCodeEtablissement() {
+    return codeEtablissement;
+  }
+
+
+  public void setCodeEtablissement(String codeEtablissement) {
+    this.codeEtablissement = codeEtablissement;
+  }
+
 
   public InscriptionComplete cible(CibleInscription cible) {
     
@@ -101,8 +145,7 @@ public class InscriptionComplete {
    * Get cible
    * @return cible
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
 
   public CibleInscription getCible() {
     return cible;
@@ -124,8 +167,7 @@ public class InscriptionComplete {
    * Get origine
    * @return origine
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
 
   public Origine getOrigine() {
     return origine;
@@ -147,8 +189,7 @@ public class InscriptionComplete {
    * Get statutInscription
    * @return statutInscription
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
 
   public StatutInscriptionVoeu getStatutInscription() {
     return statutInscription;
@@ -170,8 +211,7 @@ public class InscriptionComplete {
    * Get statutPaiement
    * @return statutPaiement
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
 
   public StatutPaiementVoeu getStatutPaiement() {
     return statutPaiement;
@@ -193,8 +233,7 @@ public class InscriptionComplete {
    * Get statutPieces
    * @return statutPieces
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
 
   public StatutPiecesVoeu getStatutPieces() {
     return statutPieces;
@@ -216,8 +255,7 @@ public class InscriptionComplete {
    * Get regimeInscription
    * @return regimeInscription
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
 
   public OccurrenceNomenclature getRegimeInscription() {
     return regimeInscription;
@@ -236,9 +274,6 @@ public class InscriptionComplete {
   }
 
   public InscriptionComplete addBoursesEtAidesItem(OccurrenceNomenclature boursesEtAidesItem) {
-    if (this.boursesEtAides == null) {
-      this.boursesEtAides = new ArrayList<>();
-    }
     this.boursesEtAides.add(boursesEtAidesItem);
     return this;
   }
@@ -247,8 +282,7 @@ public class InscriptionComplete {
    * Les bourses et aides financières
    * @return boursesEtAides
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "Les bourses et aides financières")
+  @ApiModelProperty(required = true, value = "Les bourses et aides financières")
 
   public List<OccurrenceNomenclature> getBoursesEtAides() {
     return boursesEtAides;
@@ -270,8 +304,7 @@ public class InscriptionComplete {
    * Get situationPersonnelleInscription
    * @return situationPersonnelleInscription
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
 
   public SituationPersonnelleInscription getSituationPersonnelleInscription() {
     return situationPersonnelleInscription;
@@ -293,8 +326,7 @@ public class InscriptionComplete {
    * Get cvec
    * @return cvec
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
 
   public Cvec getCvec() {
     return cvec;
@@ -339,8 +371,7 @@ public class InscriptionComplete {
    * Get situationUniversitaire
    * @return situationUniversitaire
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
 
   public SituationUniversitaire getSituationUniversitaire() {
     return situationUniversitaire;
@@ -362,8 +393,7 @@ public class InscriptionComplete {
    * Get situationPrecedente
    * @return situationPrecedente
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
 
   public SituationPrecedente getSituationPrecedente() {
     return situationPrecedente;
@@ -372,6 +402,104 @@ public class InscriptionComplete {
 
   public void setSituationPrecedente(SituationPrecedente situationPrecedente) {
     this.situationPrecedente = situationPrecedente;
+  }
+
+
+  public InscriptionComplete accords(List<AccordComplet> accords) {
+    
+    this.accords = accords;
+    return this;
+  }
+
+  public InscriptionComplete addAccordsItem(AccordComplet accordsItem) {
+    this.accords.add(accordsItem);
+    return this;
+  }
+
+   /**
+   * les documents soumis à approbation lors de l&#39;inscription
+   * @return accords
+  **/
+  @ApiModelProperty(required = true, value = "les documents soumis à approbation lors de l'inscription")
+
+  public List<AccordComplet> getAccords() {
+    return accords;
+  }
+
+
+  public void setAccords(List<AccordComplet> accords) {
+    this.accords = accords;
+  }
+
+
+  public InscriptionComplete pieces(List<PieceComplete> pieces) {
+    
+    this.pieces = pieces;
+    return this;
+  }
+
+  public InscriptionComplete addPiecesItem(PieceComplete piecesItem) {
+    this.pieces.add(piecesItem);
+    return this;
+  }
+
+   /**
+   * Get pieces
+   * @return pieces
+  **/
+  @ApiModelProperty(required = true, value = "")
+
+  public List<PieceComplete> getPieces() {
+    return pieces;
+  }
+
+
+  public void setPieces(List<PieceComplete> pieces) {
+    this.pieces = pieces;
+  }
+
+
+  public InscriptionComplete dateInscription(String dateInscription) {
+    
+    this.dateInscription = dateInscription;
+    return this;
+  }
+
+   /**
+   * la date de l&#39;inscription
+   * @return dateInscription
+  **/
+  @ApiModelProperty(required = true, value = "la date de l'inscription")
+
+  public String getDateInscription() {
+    return dateInscription;
+  }
+
+
+  public void setDateInscription(String dateInscription) {
+    this.dateInscription = dateInscription;
+  }
+
+
+  public InscriptionComplete dateDerniereModification(String dateDerniereModification) {
+    
+    this.dateDerniereModification = dateDerniereModification;
+    return this;
+  }
+
+   /**
+   * la date de dernière modification de l&#39;inscription
+   * @return dateDerniereModification
+  **/
+  @ApiModelProperty(required = true, value = "la date de dernière modification de l'inscription")
+
+  public String getDateDerniereModification() {
+    return dateDerniereModification;
+  }
+
+
+  public void setDateDerniereModification(String dateDerniereModification) {
+    this.dateDerniereModification = dateDerniereModification;
   }
 
 
@@ -384,7 +512,8 @@ public class InscriptionComplete {
       return false;
     }
     InscriptionComplete inscriptionComplete = (InscriptionComplete) o;
-    return Objects.equals(this.cible, inscriptionComplete.cible) &&
+    return Objects.equals(this.codeEtablissement, inscriptionComplete.codeEtablissement) &&
+        Objects.equals(this.cible, inscriptionComplete.cible) &&
         Objects.equals(this.origine, inscriptionComplete.origine) &&
         Objects.equals(this.statutInscription, inscriptionComplete.statutInscription) &&
         Objects.equals(this.statutPaiement, inscriptionComplete.statutPaiement) &&
@@ -395,12 +524,16 @@ public class InscriptionComplete {
         Objects.equals(this.cvec, inscriptionComplete.cvec) &&
         Objects.equals(this.admission, inscriptionComplete.admission) &&
         Objects.equals(this.situationUniversitaire, inscriptionComplete.situationUniversitaire) &&
-        Objects.equals(this.situationPrecedente, inscriptionComplete.situationPrecedente);
+        Objects.equals(this.situationPrecedente, inscriptionComplete.situationPrecedente) &&
+        Objects.equals(this.accords, inscriptionComplete.accords) &&
+        Objects.equals(this.pieces, inscriptionComplete.pieces) &&
+        Objects.equals(this.dateInscription, inscriptionComplete.dateInscription) &&
+        Objects.equals(this.dateDerniereModification, inscriptionComplete.dateDerniereModification);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(cible, origine, statutInscription, statutPaiement, statutPieces, regimeInscription, boursesEtAides, situationPersonnelleInscription, cvec, admission, situationUniversitaire, situationPrecedente);
+    return Objects.hash(codeEtablissement, cible, origine, statutInscription, statutPaiement, statutPieces, regimeInscription, boursesEtAides, situationPersonnelleInscription, cvec, admission, situationUniversitaire, situationPrecedente, accords, pieces, dateInscription, dateDerniereModification);
   }
 
 
@@ -408,6 +541,7 @@ public class InscriptionComplete {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class InscriptionComplete {\n");
+    sb.append("    codeEtablissement: ").append(toIndentedString(codeEtablissement)).append("\n");
     sb.append("    cible: ").append(toIndentedString(cible)).append("\n");
     sb.append("    origine: ").append(toIndentedString(origine)).append("\n");
     sb.append("    statutInscription: ").append(toIndentedString(statutInscription)).append("\n");
@@ -420,6 +554,10 @@ public class InscriptionComplete {
     sb.append("    admission: ").append(toIndentedString(admission)).append("\n");
     sb.append("    situationUniversitaire: ").append(toIndentedString(situationUniversitaire)).append("\n");
     sb.append("    situationPrecedente: ").append(toIndentedString(situationPrecedente)).append("\n");
+    sb.append("    accords: ").append(toIndentedString(accords)).append("\n");
+    sb.append("    pieces: ").append(toIndentedString(pieces)).append("\n");
+    sb.append("    dateInscription: ").append(toIndentedString(dateInscription)).append("\n");
+    sb.append("    dateDerniereModification: ").append(toIndentedString(dateDerniereModification)).append("\n");
     sb.append("}");
     return sb.toString();
   }

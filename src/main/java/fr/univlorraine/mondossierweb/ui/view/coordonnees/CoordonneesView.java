@@ -26,7 +26,6 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -46,10 +45,9 @@ import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
-import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.model.insgestion.Apprenant;
-import fr.univlorraine.pegase.model.insgestion.VueContact;
+import fr.univlorraine.pegase.model.insgestion.ContactComplet;
 import lombok.Getter;
 
 @Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_ENSEIGNANT})
@@ -307,7 +305,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	private void updateData(Apprenant apprenant) {
 		resetData();
 		if(apprenant != null && apprenant.getContacts()!=null && !apprenant.getContacts().isEmpty()) {
-			for(VueContact c : apprenant.getContacts()) {
+			for(ContactComplet c : apprenant.getContacts()) {
 				// TODO Mise à jour des infos
 				
 			}

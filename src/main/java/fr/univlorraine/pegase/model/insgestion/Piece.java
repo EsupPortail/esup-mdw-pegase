@@ -20,40 +20,69 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insgestion.StatutPiece;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * Cvec
+ * L&#39;état d&#39;une piece dans le formulaire
  */
+@ApiModel(description = "L'état d'une piece dans le formulaire")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
-public class Cvec {
-  public static final String SERIALIZED_NAME_NUMERO = "numero";
-  @SerializedName(SERIALIZED_NAME_NUMERO)
-  private String numero;
+public class Piece {
+  public static final String SERIALIZED_NAME_STATUT = "statut";
+  @SerializedName(SERIALIZED_NAME_STATUT)
+  private StatutPiece statut;
+
+  public static final String SERIALIZED_NAME_MOTIF_DU_REJET = "motifDuRejet";
+  @SerializedName(SERIALIZED_NAME_MOTIF_DU_REJET)
+  private String motifDuRejet;
 
 
-  public Cvec numero(String numero) {
+  public Piece statut(StatutPiece statut) {
     
-    this.numero = numero;
+    this.statut = statut;
     return this;
   }
 
    /**
-   * Le numéro de la Contribution Vie Etudiante et de Campus
-   * @return numero
+   * Get statut
+   * @return statut
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le numéro de la Contribution Vie Etudiante et de Campus")
+  @ApiModelProperty(value = "")
 
-  public String getNumero() {
-    return numero;
+  public StatutPiece getStatut() {
+    return statut;
   }
 
 
-  public void setNumero(String numero) {
-    this.numero = numero;
+  public void setStatut(StatutPiece statut) {
+    this.statut = statut;
+  }
+
+
+  public Piece motifDuRejet(String motifDuRejet) {
+    
+    this.motifDuRejet = motifDuRejet;
+    return this;
+  }
+
+   /**
+   * Motif du rejet si statut est rejete
+   * @return motifDuRejet
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "Motif du rejet si statut est rejete")
+
+  public String getMotifDuRejet() {
+    return motifDuRejet;
+  }
+
+
+  public void setMotifDuRejet(String motifDuRejet) {
+    this.motifDuRejet = motifDuRejet;
   }
 
 
@@ -65,21 +94,23 @@ public class Cvec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Cvec cvec = (Cvec) o;
-    return Objects.equals(this.numero, cvec.numero);
+    Piece piece = (Piece) o;
+    return Objects.equals(this.statut, piece.statut) &&
+        Objects.equals(this.motifDuRejet, piece.motifDuRejet);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(numero);
+    return Objects.hash(statut, motifDuRejet);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Cvec {\n");
-    sb.append("    numero: ").append(toIndentedString(numero)).append("\n");
+    sb.append("class Piece {\n");
+    sb.append("    statut: ").append(toIndentedString(statut)).append("\n");
+    sb.append("    motifDuRejet: ").append(toIndentedString(motifDuRejet)).append("\n");
     sb.append("}");
     return sb.toString();
   }

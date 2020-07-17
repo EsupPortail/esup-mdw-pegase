@@ -31,10 +31,13 @@ import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import java.io.File;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
 import fr.univlorraine.pegase.model.insgestion.Inscriptions;
+import fr.univlorraine.pegase.model.insgestion.Piece;
 import fr.univlorraine.pegase.model.insgestion.StatutInscriptionVoeu;
 import fr.univlorraine.pegase.model.insgestion.StatutPaiementVoeu;
 import fr.univlorraine.pegase.model.insgestion.StatutPiecesVoeu;
 import fr.univlorraine.pegase.model.insgestion.TriInscription;
+import fr.univlorraine.pegase.model.insgestion.Voeu;
+import fr.univlorraine.pegase.model.insgestion.VoeuInscription;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -61,6 +64,296 @@ public class InscriptionsApi {
         this.localVarApiClient = apiClient;
     }
 
+    /**
+     * Build call for annulerPiece
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la demande de pièce (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> une pièce réinitialisée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce à annuler introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call annulerPieceCall(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/gestion/inscriptions/{codeStructure}/{codeApprenant}/{codeCible}/{codePiece}/annuler"
+            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()))
+            .replaceAll("\\{" + "codeApprenant" + "\\}", localVarApiClient.escapeString(codeApprenant.toString()))
+            .replaceAll("\\{" + "codeCible" + "\\}", localVarApiClient.escapeString(codeCible.toString()))
+            .replaceAll("\\{" + "codePiece" + "\\}", localVarApiClient.escapeString(codePiece.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] { "idTokenAuth" };
+        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call annulerPieceValidateBeforeCall(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'codeStructure' is set
+        if (codeStructure == null) {
+            throw new ApiException("Missing the required parameter 'codeStructure' when calling annulerPiece(Async)");
+        }
+        
+        // verify the required parameter 'codeApprenant' is set
+        if (codeApprenant == null) {
+            throw new ApiException("Missing the required parameter 'codeApprenant' when calling annulerPiece(Async)");
+        }
+        
+        // verify the required parameter 'codeCible' is set
+        if (codeCible == null) {
+            throw new ApiException("Missing the required parameter 'codeCible' when calling annulerPiece(Async)");
+        }
+        
+        // verify the required parameter 'codePiece' is set
+        if (codePiece == null) {
+            throw new ApiException("Missing the required parameter 'codePiece' when calling annulerPiece(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = annulerPieceCall(codeStructure, codeApprenant, codeCible, codePiece, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * annuler une pièce
+     * annuler une pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la demande de pièce (required)
+     * @return Piece
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> une pièce réinitialisée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce à annuler introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public Piece annulerPiece(String codeStructure, String codeApprenant, String codeCible, String codePiece) throws ApiException {
+        ApiResponse<Piece> localVarResp = annulerPieceWithHttpInfo(codeStructure, codeApprenant, codeCible, codePiece);
+        return localVarResp.getData();
+    }
+
+    /**
+     * annuler une pièce
+     * annuler une pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la demande de pièce (required)
+     * @return ApiResponse&lt;Piece&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> une pièce réinitialisée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce à annuler introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Piece> annulerPieceWithHttpInfo(String codeStructure, String codeApprenant, String codeCible, String codePiece) throws ApiException {
+        okhttp3.Call localVarCall = annulerPieceValidateBeforeCall(codeStructure, codeApprenant, codeCible, codePiece, null);
+        Type localVarReturnType = new TypeToken<Piece>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * annuler une pièce (asynchronously)
+     * annuler une pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la demande de pièce (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> une pièce réinitialisée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce à annuler introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call annulerPieceAsync(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback<Piece> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = annulerPieceValidateBeforeCall(codeStructure, codeApprenant, codeCible, codePiece, _callback);
+        Type localVarReturnType = new TypeToken<Piece>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for contenuPiece
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la demande de pièce (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> fichier </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call contenuPieceCall(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/gestion/inscriptions/{codeStructure}/{codeApprenant}/{codeCible}/{codePiece}/contenu"
+            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()))
+            .replaceAll("\\{" + "codeApprenant" + "\\}", localVarApiClient.escapeString(codeApprenant.toString()))
+            .replaceAll("\\{" + "codeCible" + "\\}", localVarApiClient.escapeString(codeCible.toString()))
+            .replaceAll("\\{" + "codePiece" + "\\}", localVarApiClient.escapeString(codePiece.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        final String[] localVarAccepts = {
+            "image/png", "image/jpg"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] { "idTokenAuth" };
+        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call contenuPieceValidateBeforeCall(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'codeStructure' is set
+        if (codeStructure == null) {
+            throw new ApiException("Missing the required parameter 'codeStructure' when calling contenuPiece(Async)");
+        }
+        
+        // verify the required parameter 'codeApprenant' is set
+        if (codeApprenant == null) {
+            throw new ApiException("Missing the required parameter 'codeApprenant' when calling contenuPiece(Async)");
+        }
+        
+        // verify the required parameter 'codeCible' is set
+        if (codeCible == null) {
+            throw new ApiException("Missing the required parameter 'codeCible' when calling contenuPiece(Async)");
+        }
+        
+        // verify the required parameter 'codePiece' is set
+        if (codePiece == null) {
+            throw new ApiException("Missing the required parameter 'codePiece' when calling contenuPiece(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = contenuPieceCall(codeStructure, codeApprenant, codeCible, codePiece, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * contenu de la pièce
+     * contenu de la pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la demande de pièce (required)
+     * @return File
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> fichier </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public File contenuPiece(String codeStructure, String codeApprenant, String codeCible, String codePiece) throws ApiException {
+        ApiResponse<File> localVarResp = contenuPieceWithHttpInfo(codeStructure, codeApprenant, codeCible, codePiece);
+        return localVarResp.getData();
+    }
+
+    /**
+     * contenu de la pièce
+     * contenu de la pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la demande de pièce (required)
+     * @return ApiResponse&lt;File&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> fichier </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<File> contenuPieceWithHttpInfo(String codeStructure, String codeApprenant, String codeCible, String codePiece) throws ApiException {
+        okhttp3.Call localVarCall = contenuPieceValidateBeforeCall(codeStructure, codeApprenant, codeCible, codePiece, null);
+        Type localVarReturnType = new TypeToken<File>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * contenu de la pièce (asynchronously)
+     * contenu de la pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la demande de pièce (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> fichier </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call contenuPieceAsync(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback<File> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = contenuPieceValidateBeforeCall(codeStructure, codeApprenant, codeCible, codePiece, _callback);
+        Type localVarReturnType = new TypeToken<File>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
     /**
      * Build call for imprimerAttestationDePaiement
      * @param codeStructure Le code de l&#39;établissement (required)
@@ -600,6 +893,141 @@ public class InscriptionsApi {
         return localVarCall;
     }
     /**
+     * Build call for lirePieces
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Pièces récupérées </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièces introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call lirePiecesCall(String codeStructure, String codeApprenant, String codeCible, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/gestion/inscriptions/{codeStructure}/{codeApprenant}/{codeCible}/pieces"
+            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()))
+            .replaceAll("\\{" + "codeApprenant" + "\\}", localVarApiClient.escapeString(codeApprenant.toString()))
+            .replaceAll("\\{" + "codeCible" + "\\}", localVarApiClient.escapeString(codeCible.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] { "idTokenAuth" };
+        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call lirePiecesValidateBeforeCall(String codeStructure, String codeApprenant, String codeCible, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'codeStructure' is set
+        if (codeStructure == null) {
+            throw new ApiException("Missing the required parameter 'codeStructure' when calling lirePieces(Async)");
+        }
+        
+        // verify the required parameter 'codeApprenant' is set
+        if (codeApprenant == null) {
+            throw new ApiException("Missing the required parameter 'codeApprenant' when calling lirePieces(Async)");
+        }
+        
+        // verify the required parameter 'codeCible' is set
+        if (codeCible == null) {
+            throw new ApiException("Missing the required parameter 'codeCible' when calling lirePieces(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = lirePiecesCall(codeStructure, codeApprenant, codeCible, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * récupération des données des pièces
+     * récupération des données des pièces
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @return Map&lt;String, Piece&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Pièces récupérées </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièces introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public Map<String, Piece> lirePieces(String codeStructure, String codeApprenant, String codeCible) throws ApiException {
+        ApiResponse<Map<String, Piece>> localVarResp = lirePiecesWithHttpInfo(codeStructure, codeApprenant, codeCible);
+        return localVarResp.getData();
+    }
+
+    /**
+     * récupération des données des pièces
+     * récupération des données des pièces
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @return ApiResponse&lt;Map&lt;String, Piece&gt;&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Pièces récupérées </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièces introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Map<String, Piece>> lirePiecesWithHttpInfo(String codeStructure, String codeApprenant, String codeCible) throws ApiException {
+        okhttp3.Call localVarCall = lirePiecesValidateBeforeCall(codeStructure, codeApprenant, codeCible, null);
+        Type localVarReturnType = new TypeToken<Map<String, Piece>>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * récupération des données des pièces (asynchronously)
+     * récupération des données des pièces
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Pièces récupérées </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièces introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call lirePiecesAsync(String codeStructure, String codeApprenant, String codeCible, final ApiCallback<Map<String, Piece>> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = lirePiecesValidateBeforeCall(codeStructure, codeApprenant, codeCible, _callback);
+        Type localVarReturnType = new TypeToken<Map<String, Piece>>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
      * Build call for listerInscriptionsValidees
      * @param codeStructure Code de la Structure (required)
      * @param statutsInscription liste des statusInscription à filtrer (optional)
@@ -755,6 +1183,295 @@ public class InscriptionsApi {
         return localVarCall;
     }
     /**
+     * Build call for rejeterPiece
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la pièce (required)
+     * @param body le motif du rejet de la pièce (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> pièce rejetée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call rejeterPieceCall(String codeStructure, String codeApprenant, String codeCible, String codePiece, String body, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = body;
+
+        // create path and map variables
+        String localVarPath = "/gestion/inscriptions/{codeStructure}/{codeApprenant}/{codeCible}/{codePiece}/rejeter"
+            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()))
+            .replaceAll("\\{" + "codeApprenant" + "\\}", localVarApiClient.escapeString(codeApprenant.toString()))
+            .replaceAll("\\{" + "codeCible" + "\\}", localVarApiClient.escapeString(codeCible.toString()))
+            .replaceAll("\\{" + "codePiece" + "\\}", localVarApiClient.escapeString(codePiece.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            "application/json"
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] { "idTokenAuth" };
+        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call rejeterPieceValidateBeforeCall(String codeStructure, String codeApprenant, String codeCible, String codePiece, String body, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'codeStructure' is set
+        if (codeStructure == null) {
+            throw new ApiException("Missing the required parameter 'codeStructure' when calling rejeterPiece(Async)");
+        }
+        
+        // verify the required parameter 'codeApprenant' is set
+        if (codeApprenant == null) {
+            throw new ApiException("Missing the required parameter 'codeApprenant' when calling rejeterPiece(Async)");
+        }
+        
+        // verify the required parameter 'codeCible' is set
+        if (codeCible == null) {
+            throw new ApiException("Missing the required parameter 'codeCible' when calling rejeterPiece(Async)");
+        }
+        
+        // verify the required parameter 'codePiece' is set
+        if (codePiece == null) {
+            throw new ApiException("Missing the required parameter 'codePiece' when calling rejeterPiece(Async)");
+        }
+        
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new ApiException("Missing the required parameter 'body' when calling rejeterPiece(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = rejeterPieceCall(codeStructure, codeApprenant, codeCible, codePiece, body, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * rejeter une pièce
+     * rejeter une pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la pièce (required)
+     * @param body le motif du rejet de la pièce (required)
+     * @return Piece
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> pièce rejetée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public Piece rejeterPiece(String codeStructure, String codeApprenant, String codeCible, String codePiece, String body) throws ApiException {
+        ApiResponse<Piece> localVarResp = rejeterPieceWithHttpInfo(codeStructure, codeApprenant, codeCible, codePiece, body);
+        return localVarResp.getData();
+    }
+
+    /**
+     * rejeter une pièce
+     * rejeter une pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la pièce (required)
+     * @param body le motif du rejet de la pièce (required)
+     * @return ApiResponse&lt;Piece&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> pièce rejetée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Piece> rejeterPieceWithHttpInfo(String codeStructure, String codeApprenant, String codeCible, String codePiece, String body) throws ApiException {
+        okhttp3.Call localVarCall = rejeterPieceValidateBeforeCall(codeStructure, codeApprenant, codeCible, codePiece, body, null);
+        Type localVarReturnType = new TypeToken<Piece>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * rejeter une pièce (asynchronously)
+     * rejeter une pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la pièce (required)
+     * @param body le motif du rejet de la pièce (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> pièce rejetée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call rejeterPieceAsync(String codeStructure, String codeApprenant, String codeCible, String codePiece, String body, final ApiCallback<Piece> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = rejeterPieceValidateBeforeCall(codeStructure, codeApprenant, codeCible, codePiece, body, _callback);
+        Type localVarReturnType = new TypeToken<Piece>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for validerLesPieces
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> liste des pièces validées </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Listes des pièces introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call validerLesPiecesCall(String codeStructure, String codeApprenant, String codeCible, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/gestion/inscriptions/{codeStructure}/{codeApprenant}/{codeCible}/validerPieces"
+            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()))
+            .replaceAll("\\{" + "codeApprenant" + "\\}", localVarApiClient.escapeString(codeApprenant.toString()))
+            .replaceAll("\\{" + "codeCible" + "\\}", localVarApiClient.escapeString(codeCible.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] { "idTokenAuth" };
+        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call validerLesPiecesValidateBeforeCall(String codeStructure, String codeApprenant, String codeCible, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'codeStructure' is set
+        if (codeStructure == null) {
+            throw new ApiException("Missing the required parameter 'codeStructure' when calling validerLesPieces(Async)");
+        }
+        
+        // verify the required parameter 'codeApprenant' is set
+        if (codeApprenant == null) {
+            throw new ApiException("Missing the required parameter 'codeApprenant' when calling validerLesPieces(Async)");
+        }
+        
+        // verify the required parameter 'codeCible' is set
+        if (codeCible == null) {
+            throw new ApiException("Missing the required parameter 'codeCible' when calling validerLesPieces(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = validerLesPiecesCall(codeStructure, codeApprenant, codeCible, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * valider les pièces
+     * Valider les pièces
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @return Voeu
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> liste des pièces validées </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Listes des pièces introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public Voeu validerLesPieces(String codeStructure, String codeApprenant, String codeCible) throws ApiException {
+        ApiResponse<Voeu> localVarResp = validerLesPiecesWithHttpInfo(codeStructure, codeApprenant, codeCible);
+        return localVarResp.getData();
+    }
+
+    /**
+     * valider les pièces
+     * Valider les pièces
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @return ApiResponse&lt;Voeu&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> liste des pièces validées </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Listes des pièces introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Voeu> validerLesPiecesWithHttpInfo(String codeStructure, String codeApprenant, String codeCible) throws ApiException {
+        okhttp3.Call localVarCall = validerLesPiecesValidateBeforeCall(codeStructure, codeApprenant, codeCible, null);
+        Type localVarReturnType = new TypeToken<Voeu>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * valider les pièces (asynchronously)
+     * Valider les pièces
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> liste des pièces validées </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Listes des pièces introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call validerLesPiecesAsync(String codeStructure, String codeApprenant, String codeCible, final ApiCallback<Voeu> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = validerLesPiecesValidateBeforeCall(codeStructure, codeApprenant, codeCible, _callback);
+        Type localVarReturnType = new TypeToken<Voeu>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
      * Build call for validerPaiementVoeu
      * @param codeStructure Le code de l&#39;établissement (required)
      * @param codeApprenant Le code apprenant (required)
@@ -832,7 +1549,7 @@ public class InscriptionsApi {
      * @param codeStructure Le code de l&#39;établissement (required)
      * @param codeApprenant Le code apprenant (required)
      * @param codeVoeu Le code du voeu (required)
-     * @return Object
+     * @return VoeuInscription
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -842,8 +1559,8 @@ public class InscriptionsApi {
         <tr><td> 404 </td><td> Voeu introuvable </td><td>  -  </td></tr>
      </table>
      */
-    public Object validerPaiementVoeu(String codeStructure, String codeApprenant, String codeVoeu) throws ApiException {
-        ApiResponse<Object> localVarResp = validerPaiementVoeuWithHttpInfo(codeStructure, codeApprenant, codeVoeu);
+    public VoeuInscription validerPaiementVoeu(String codeStructure, String codeApprenant, String codeVoeu) throws ApiException {
+        ApiResponse<VoeuInscription> localVarResp = validerPaiementVoeuWithHttpInfo(codeStructure, codeApprenant, codeVoeu);
         return localVarResp.getData();
     }
 
@@ -853,7 +1570,7 @@ public class InscriptionsApi {
      * @param codeStructure Le code de l&#39;établissement (required)
      * @param codeApprenant Le code apprenant (required)
      * @param codeVoeu Le code du voeu (required)
-     * @return ApiResponse&lt;Object&gt;
+     * @return ApiResponse&lt;VoeuInscription&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -863,9 +1580,9 @@ public class InscriptionsApi {
         <tr><td> 404 </td><td> Voeu introuvable </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Object> validerPaiementVoeuWithHttpInfo(String codeStructure, String codeApprenant, String codeVoeu) throws ApiException {
+    public ApiResponse<VoeuInscription> validerPaiementVoeuWithHttpInfo(String codeStructure, String codeApprenant, String codeVoeu) throws ApiException {
         okhttp3.Call localVarCall = validerPaiementVoeuValidateBeforeCall(codeStructure, codeApprenant, codeVoeu, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        Type localVarReturnType = new TypeToken<VoeuInscription>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -886,10 +1603,155 @@ public class InscriptionsApi {
         <tr><td> 404 </td><td> Voeu introuvable </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call validerPaiementVoeuAsync(String codeStructure, String codeApprenant, String codeVoeu, final ApiCallback<Object> _callback) throws ApiException {
+    public okhttp3.Call validerPaiementVoeuAsync(String codeStructure, String codeApprenant, String codeVoeu, final ApiCallback<VoeuInscription> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = validerPaiementVoeuValidateBeforeCall(codeStructure, codeApprenant, codeVoeu, _callback);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        Type localVarReturnType = new TypeToken<VoeuInscription>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for validerUnePiece
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la pièce (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> une pièce validée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call validerUnePieceCall(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/gestion/inscriptions/{codeStructure}/{codeApprenant}/{codeCible}/{codePiece}/valider"
+            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()))
+            .replaceAll("\\{" + "codeApprenant" + "\\}", localVarApiClient.escapeString(codeApprenant.toString()))
+            .replaceAll("\\{" + "codeCible" + "\\}", localVarApiClient.escapeString(codeCible.toString()))
+            .replaceAll("\\{" + "codePiece" + "\\}", localVarApiClient.escapeString(codePiece.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] { "idTokenAuth" };
+        return localVarApiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call validerUnePieceValidateBeforeCall(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'codeStructure' is set
+        if (codeStructure == null) {
+            throw new ApiException("Missing the required parameter 'codeStructure' when calling validerUnePiece(Async)");
+        }
+        
+        // verify the required parameter 'codeApprenant' is set
+        if (codeApprenant == null) {
+            throw new ApiException("Missing the required parameter 'codeApprenant' when calling validerUnePiece(Async)");
+        }
+        
+        // verify the required parameter 'codeCible' is set
+        if (codeCible == null) {
+            throw new ApiException("Missing the required parameter 'codeCible' when calling validerUnePiece(Async)");
+        }
+        
+        // verify the required parameter 'codePiece' is set
+        if (codePiece == null) {
+            throw new ApiException("Missing the required parameter 'codePiece' when calling validerUnePiece(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = validerUnePieceCall(codeStructure, codeApprenant, codeCible, codePiece, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * valider une pièce
+     * Valider une pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la pièce (required)
+     * @return Piece
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> une pièce validée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public Piece validerUnePiece(String codeStructure, String codeApprenant, String codeCible, String codePiece) throws ApiException {
+        ApiResponse<Piece> localVarResp = validerUnePieceWithHttpInfo(codeStructure, codeApprenant, codeCible, codePiece);
+        return localVarResp.getData();
+    }
+
+    /**
+     * valider une pièce
+     * Valider une pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la pièce (required)
+     * @return ApiResponse&lt;Piece&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> une pièce validée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Piece> validerUnePieceWithHttpInfo(String codeStructure, String codeApprenant, String codeCible, String codePiece) throws ApiException {
+        okhttp3.Call localVarCall = validerUnePieceValidateBeforeCall(codeStructure, codeApprenant, codeCible, codePiece, null);
+        Type localVarReturnType = new TypeToken<Piece>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * valider une pièce (asynchronously)
+     * Valider une pièce
+     * @param codeStructure Le code de l&#39;établissement (required)
+     * @param codeApprenant Le code apprenant (required)
+     * @param codeCible Le code cible (required)
+     * @param codePiece Le code de la pièce (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> une pièce validée </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> pièce introuvable </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call validerUnePieceAsync(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback<Piece> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = validerUnePieceValidateBeforeCall(codeStructure, codeApprenant, codeCible, codePiece, _callback);
+        Type localVarReturnType = new TypeToken<Piece>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

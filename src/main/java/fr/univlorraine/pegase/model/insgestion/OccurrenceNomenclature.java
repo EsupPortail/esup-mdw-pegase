@@ -20,6 +20,7 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insgestion.OccurrenceNomenclatureType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
@@ -28,12 +29,11 @@ import java.io.IOException;
  * une occurrence de nomenclature
  */
 @ApiModel(description = "une occurrence de nomenclature")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-06-30T15:25:34.956+02:00[Europe/Paris]")
-
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
 public class OccurrenceNomenclature {
   public static final String SERIALIZED_NAME_NOMENCLATURE = "nomenclature";
   @SerializedName(SERIALIZED_NAME_NOMENCLATURE)
-  protected String nomenclature;
+  private OccurrenceNomenclatureType nomenclature;
 
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
@@ -47,11 +47,8 @@ public class OccurrenceNomenclature {
   @SerializedName(SERIALIZED_NAME_CONTEXTE_CONSOMMATION)
   private String contexteConsommation;
 
-  public OccurrenceNomenclature() {
-    this.nomenclature = this.getClass().getSimpleName();
-  }
 
-  public OccurrenceNomenclature nomenclature(String nomenclature) {
+  public OccurrenceNomenclature nomenclature(OccurrenceNomenclatureType nomenclature) {
     
     this.nomenclature = nomenclature;
     return this;
@@ -63,12 +60,12 @@ public class OccurrenceNomenclature {
   **/
   @ApiModelProperty(required = true, value = "")
 
-  public String getNomenclature() {
+  public OccurrenceNomenclatureType getNomenclature() {
     return nomenclature;
   }
 
 
-  public void setNomenclature(String nomenclature) {
+  public void setNomenclature(OccurrenceNomenclatureType nomenclature) {
     this.nomenclature = nomenclature;
   }
 
@@ -83,8 +80,7 @@ public class OccurrenceNomenclature {
    * le code de l&#39;occurrence de nomenclature
    * @return code
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "le code de l'occurrence de nomenclature")
+  @ApiModelProperty(required = true, value = "le code de l'occurrence de nomenclature")
 
   public String getCode() {
     return code;
@@ -106,8 +102,7 @@ public class OccurrenceNomenclature {
    * le libellé d&#39;affichage de l&#39;occurrence de nomenclature
    * @return libelle
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "le libellé d'affichage de l'occurrence de nomenclature")
+  @ApiModelProperty(required = true, value = "le libellé d'affichage de l'occurrence de nomenclature")
 
   public String getLibelle() {
     return libelle;
@@ -129,8 +124,7 @@ public class OccurrenceNomenclature {
    * la date de consommation de l&#39;occurrence de nomenclature
    * @return contexteConsommation
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "la date de consommation de l'occurrence de nomenclature")
+  @ApiModelProperty(required = true, value = "la date de consommation de l'occurrence de nomenclature")
 
   public String getContexteConsommation() {
     return contexteConsommation;

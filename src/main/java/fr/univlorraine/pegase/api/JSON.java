@@ -52,6 +52,28 @@ public class JSON {
 
     public static GsonBuilder createGson() {
         GsonFireBuilder fireBuilder = new GsonFireBuilder()
+                .registerTypeSelector(ContactComplet.class, new TypeSelector() {
+                    @Override
+                    public Class getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("ContactMelComplet", ContactMelComplet.class);
+                        classByDiscriminatorValue.put("ContactTelephoneComplet", ContactTelephoneComplet.class);
+                        classByDiscriminatorValue.put("ContactAdresseComplet", ContactAdresseComplet.class);
+                        classByDiscriminatorValue.put("ContactComplet", ContactComplet.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "canalCommunication"));
+                    }
+          })
+                .registerTypeSelector(DemandeDeContactSimple.class, new TypeSelector() {
+                    @Override
+                    public Class getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("DemandeDeContact", DemandeDeContact.class);
+                        classByDiscriminatorValue.put("DemandeDeContactSimple", DemandeDeContactSimple.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "est1"));
+                    }
+          })
                 .registerTypeSelector(Nomenclature.class, new TypeSelector() {
                     @Override
                     public Class getClassForElement(JsonElement readElement) {
@@ -87,19 +109,11 @@ public class JSON {
                                 getDiscriminatorValue(readElement, "est1"));
                     }
           })
-                .registerTypeSelector(OccurrenceNomenclature.class, new TypeSelector() {
-                    @Override
-                    public Class getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("OccurrenceNomenclature", OccurrenceNomenclature.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "nomenclature"));
-                    }
-          })
                 .registerTypeSelector(VoeuBase.class, new TypeSelector() {
                     @Override
                     public Class getClassForElement(JsonElement readElement) {
                         Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("VoeuInscription", VoeuInscription.class);
                         classByDiscriminatorValue.put("Voeu", Voeu.class);
                         classByDiscriminatorValue.put("VoeuBase", VoeuBase.class);
                         return getClassByDiscriminator(classByDiscriminatorValue,
@@ -126,7 +140,7 @@ public class JSON {
     private static String getDiscriminatorValue(JsonElement readElement, String discriminatorField) {
         JsonElement element = readElement.getAsJsonObject().get(discriminatorField);
         if (null == element) {
-            throw new IllegalArgumentException("missing discriminator field: <" + discriminatorField + "> for "+readElement);
+            throw new IllegalArgumentException("missing discriminator field: <" + discriminatorField + ">");
         }
         return element.getAsString();
     }

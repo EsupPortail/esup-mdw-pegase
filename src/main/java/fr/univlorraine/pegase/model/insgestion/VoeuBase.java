@@ -34,7 +34,7 @@ import java.util.List;
  * Représentation basique d&#39;un voeu
  */
 @ApiModel(description = "Représentation basique d'un voeu")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-06-30T15:25:34.956+02:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
 
 public class VoeuBase {
   public static final String SERIALIZED_NAME_EST1 = "est1";

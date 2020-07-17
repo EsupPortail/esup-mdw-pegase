@@ -24,7 +24,7 @@ package fr.univlorraine.mondossierweb.utils;
  */
 public final class Utils {
 
-	public static final String FRANCE = "FRANCE";
+	public static final String FRANCE = "100";
 
 
 }

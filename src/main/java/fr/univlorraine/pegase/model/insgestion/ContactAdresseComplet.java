@@ -20,15 +20,18 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insgestion.ContactComplet;
+import fr.univlorraine.pegase.model.insgestion.DemandeDeContactSimple;
+import fr.univlorraine.pegase.model.insgestion.VueContactAdresseAllOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * VueContactAdresseAllOf
+ * ContactAdresseComplet
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
-public class VueContactAdresseAllOf {
+public class ContactAdresseComplet extends ContactComplet {
   public static final String SERIALIZED_NAME_PAYS = "pays";
   @SerializedName(SERIALIZED_NAME_PAYS)
   private String pays;
@@ -62,7 +65,7 @@ public class VueContactAdresseAllOf {
   private String commune;
 
 
-  public VueContactAdresseAllOf pays(String pays) {
+  public ContactAdresseComplet pays(String pays) {
     
     this.pays = pays;
     return this;
@@ -84,7 +87,7 @@ public class VueContactAdresseAllOf {
   }
 
 
-  public VueContactAdresseAllOf ligne1OuEtage(String ligne1OuEtage) {
+  public ContactAdresseComplet ligne1OuEtage(String ligne1OuEtage) {
     
     this.ligne1OuEtage = ligne1OuEtage;
     return this;
@@ -107,7 +110,7 @@ public class VueContactAdresseAllOf {
   }
 
 
-  public VueContactAdresseAllOf ligne2OuBatiment(String ligne2OuBatiment) {
+  public ContactAdresseComplet ligne2OuBatiment(String ligne2OuBatiment) {
     
     this.ligne2OuBatiment = ligne2OuBatiment;
     return this;
@@ -130,7 +133,7 @@ public class VueContactAdresseAllOf {
   }
 
 
-  public VueContactAdresseAllOf ligne3OuVoie(String ligne3OuVoie) {
+  public ContactAdresseComplet ligne3OuVoie(String ligne3OuVoie) {
     
     this.ligne3OuVoie = ligne3OuVoie;
     return this;
@@ -153,7 +156,7 @@ public class VueContactAdresseAllOf {
   }
 
 
-  public VueContactAdresseAllOf ligne4OuComplement(String ligne4OuComplement) {
+  public ContactAdresseComplet ligne4OuComplement(String ligne4OuComplement) {
     
     this.ligne4OuComplement = ligne4OuComplement;
     return this;
@@ -176,7 +179,7 @@ public class VueContactAdresseAllOf {
   }
 
 
-  public VueContactAdresseAllOf ligne5Etranger(String ligne5Etranger) {
+  public ContactAdresseComplet ligne5Etranger(String ligne5Etranger) {
     
     this.ligne5Etranger = ligne5Etranger;
     return this;
@@ -199,7 +202,7 @@ public class VueContactAdresseAllOf {
   }
 
 
-  public VueContactAdresseAllOf codePostal(String codePostal) {
+  public ContactAdresseComplet codePostal(String codePostal) {
     
     this.codePostal = codePostal;
     return this;
@@ -222,7 +225,7 @@ public class VueContactAdresseAllOf {
   }
 
 
-  public VueContactAdresseAllOf commune(String commune) {
+  public ContactAdresseComplet commune(String commune) {
     
     this.commune = commune;
     return this;
@@ -253,27 +256,29 @@ public class VueContactAdresseAllOf {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    VueContactAdresseAllOf vueContactAdresseAllOf = (VueContactAdresseAllOf) o;
-    return Objects.equals(this.pays, vueContactAdresseAllOf.pays) &&
-        Objects.equals(this.ligne1OuEtage, vueContactAdresseAllOf.ligne1OuEtage) &&
-        Objects.equals(this.ligne2OuBatiment, vueContactAdresseAllOf.ligne2OuBatiment) &&
-        Objects.equals(this.ligne3OuVoie, vueContactAdresseAllOf.ligne3OuVoie) &&
-        Objects.equals(this.ligne4OuComplement, vueContactAdresseAllOf.ligne4OuComplement) &&
-        Objects.equals(this.ligne5Etranger, vueContactAdresseAllOf.ligne5Etranger) &&
-        Objects.equals(this.codePostal, vueContactAdresseAllOf.codePostal) &&
-        Objects.equals(this.commune, vueContactAdresseAllOf.commune);
+    ContactAdresseComplet contactAdresseComplet = (ContactAdresseComplet) o;
+    return Objects.equals(this.pays, contactAdresseComplet.pays) &&
+        Objects.equals(this.ligne1OuEtage, contactAdresseComplet.ligne1OuEtage) &&
+        Objects.equals(this.ligne2OuBatiment, contactAdresseComplet.ligne2OuBatiment) &&
+        Objects.equals(this.ligne3OuVoie, contactAdresseComplet.ligne3OuVoie) &&
+        Objects.equals(this.ligne4OuComplement, contactAdresseComplet.ligne4OuComplement) &&
+        Objects.equals(this.ligne5Etranger, contactAdresseComplet.ligne5Etranger) &&
+        Objects.equals(this.codePostal, contactAdresseComplet.codePostal) &&
+        Objects.equals(this.commune, contactAdresseComplet.commune) &&
+        super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pays, ligne1OuEtage, ligne2OuBatiment, ligne3OuVoie, ligne4OuComplement, ligne5Etranger, codePostal, commune);
+    return Objects.hash(pays, ligne1OuEtage, ligne2OuBatiment, ligne3OuVoie, ligne4OuComplement, ligne5Etranger, codePostal, commune, super.hashCode());
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class VueContactAdresseAllOf {\n");
+    sb.append("class ContactAdresseComplet {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    pays: ").append(toIndentedString(pays)).append("\n");
     sb.append("    ligne1OuEtage: ").append(toIndentedString(ligne1OuEtage)).append("\n");
     sb.append("    ligne2OuBatiment: ").append(toIndentedString(ligne2OuBatiment)).append("\n");

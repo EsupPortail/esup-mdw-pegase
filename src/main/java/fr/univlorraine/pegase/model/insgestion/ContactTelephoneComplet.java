@@ -20,40 +20,42 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insgestion.ContactComplet;
+import fr.univlorraine.pegase.model.insgestion.DemandeDeContactSimple;
+import fr.univlorraine.pegase.model.insgestion.VueContactTelephoneAllOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * Cvec
+ * ContactTelephoneComplet
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
-public class Cvec {
-  public static final String SERIALIZED_NAME_NUMERO = "numero";
-  @SerializedName(SERIALIZED_NAME_NUMERO)
-  private String numero;
+public class ContactTelephoneComplet extends ContactComplet {
+  public static final String SERIALIZED_NAME_TELEPHONE = "telephone";
+  @SerializedName(SERIALIZED_NAME_TELEPHONE)
+  private String telephone;
 
 
-  public Cvec numero(String numero) {
+  public ContactTelephoneComplet telephone(String telephone) {
     
-    this.numero = numero;
+    this.telephone = telephone;
     return this;
   }
 
    /**
-   * Le numéro de la Contribution Vie Etudiante et de Campus
-   * @return numero
+   * Numéro de téléphone
+   * @return telephone
   **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le numéro de la Contribution Vie Etudiante et de Campus")
+  @ApiModelProperty(required = true, value = "Numéro de téléphone")
 
-  public String getNumero() {
-    return numero;
+  public String getTelephone() {
+    return telephone;
   }
 
 
-  public void setNumero(String numero) {
-    this.numero = numero;
+  public void setTelephone(String telephone) {
+    this.telephone = telephone;
   }
 
 
@@ -65,21 +67,23 @@ public class Cvec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Cvec cvec = (Cvec) o;
-    return Objects.equals(this.numero, cvec.numero);
+    ContactTelephoneComplet contactTelephoneComplet = (ContactTelephoneComplet) o;
+    return Objects.equals(this.telephone, contactTelephoneComplet.telephone) &&
+        super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(numero);
+    return Objects.hash(telephone, super.hashCode());
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Cvec {\n");
-    sb.append("    numero: ").append(toIndentedString(numero)).append("\n");
+    sb.append("class ContactTelephoneComplet {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    telephone: ").append(toIndentedString(telephone)).append("\n");
     sb.append("}");
     return sb.toString();
   }

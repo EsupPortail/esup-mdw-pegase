@@ -36,7 +36,7 @@ import java.util.List;
  * Décrit une Formation ou un chemin depuis une Formation vers un ObjetFormation sur lequel on peut s&#39;inscrire
  */
 @ApiModel(description = "Décrit une Formation ou un chemin depuis une Formation vers un ObjetFormation sur lequel on peut s'inscrire")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-06-30T15:25:34.956+02:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
 public class CiblePourInscription {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)

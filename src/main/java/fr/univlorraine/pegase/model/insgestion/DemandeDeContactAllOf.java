@@ -20,18 +20,15 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.DemandeDeContactAllOf;
-import fr.univlorraine.pegase.model.insgestion.DemandeDeContactSimple;
-import fr.univlorraine.pegase.model.insgestion.TemoinSaisie;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * DemandeDeContact
+ * DemandeDeContactAllOf
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-07-17T14:31:10.718+02:00[Europe/Paris]")
-public class DemandeDeContact extends DemandeDeContactSimple {
+public class DemandeDeContactAllOf {
   public static final String SERIALIZED_NAME_DATE_DEBUT_VALIDITE = "dateDebutValidite";
   @SerializedName(SERIALIZED_NAME_DATE_DEBUT_VALIDITE)
   private String dateDebutValidite;
@@ -49,7 +46,7 @@ public class DemandeDeContact extends DemandeDeContactSimple {
   private Boolean temoinLivre;
 
 
-  public DemandeDeContact dateDebutValidite(String dateDebutValidite) {
+  public DemandeDeContactAllOf dateDebutValidite(String dateDebutValidite) {
     
     this.dateDebutValidite = dateDebutValidite;
     return this;
@@ -71,7 +68,7 @@ public class DemandeDeContact extends DemandeDeContactSimple {
   }
 
 
-  public DemandeDeContact dateFinValidite(String dateFinValidite) {
+  public DemandeDeContactAllOf dateFinValidite(String dateFinValidite) {
     
     this.dateFinValidite = dateFinValidite;
     return this;
@@ -94,7 +91,7 @@ public class DemandeDeContact extends DemandeDeContactSimple {
   }
 
 
-  public DemandeDeContact prioriteAffichage(Integer prioriteAffichage) {
+  public DemandeDeContactAllOf prioriteAffichage(Integer prioriteAffichage) {
     
     this.prioriteAffichage = prioriteAffichage;
     return this;
@@ -116,7 +113,7 @@ public class DemandeDeContact extends DemandeDeContactSimple {
   }
 
 
-  public DemandeDeContact temoinLivre(Boolean temoinLivre) {
+  public DemandeDeContactAllOf temoinLivre(Boolean temoinLivre) {
     
     this.temoinLivre = temoinLivre;
     return this;
@@ -146,25 +143,23 @@ public class DemandeDeContact extends DemandeDeContactSimple {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DemandeDeContact demandeDeContact = (DemandeDeContact) o;
-    return Objects.equals(this.dateDebutValidite, demandeDeContact.dateDebutValidite) &&
-        Objects.equals(this.dateFinValidite, demandeDeContact.dateFinValidite) &&
-        Objects.equals(this.prioriteAffichage, demandeDeContact.prioriteAffichage) &&
-        Objects.equals(this.temoinLivre, demandeDeContact.temoinLivre) &&
-        super.equals(o);
+    DemandeDeContactAllOf demandeDeContactAllOf = (DemandeDeContactAllOf) o;
+    return Objects.equals(this.dateDebutValidite, demandeDeContactAllOf.dateDebutValidite) &&
+        Objects.equals(this.dateFinValidite, demandeDeContactAllOf.dateFinValidite) &&
+        Objects.equals(this.prioriteAffichage, demandeDeContactAllOf.prioriteAffichage) &&
+        Objects.equals(this.temoinLivre, demandeDeContactAllOf.temoinLivre);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dateDebutValidite, dateFinValidite, prioriteAffichage, temoinLivre, super.hashCode());
+    return Objects.hash(dateDebutValidite, dateFinValidite, prioriteAffichage, temoinLivre);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DemandeDeContact {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("class DemandeDeContactAllOf {\n");
     sb.append("    dateDebutValidite: ").append(toIndentedString(dateDebutValidite)).append("\n");
     sb.append("    dateFinValidite: ").append(toIndentedString(dateFinValidite)).append("\n");
     sb.append("    prioriteAffichage: ").append(toIndentedString(prioriteAffichage)).append("\n");
