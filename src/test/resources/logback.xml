@@ -32,7 +32,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="fr.univlorraine.blank.test" level="INFO" />
+	<logger name="fr.univlorraine.mondossierweb.test" level="INFO" />
 
 	<root level="WARN">
 		<appender-ref ref="CONSOLE" />

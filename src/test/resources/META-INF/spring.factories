@@ -1,1 +1,1 @@
-org.springframework.boot.env.EnvironmentPostProcessor=fr.univlorraine.blank.DefaultPropertiesEnvironmentPostProcessor, fr.univlorraine.blank.test.integration.TestEnvironmentPostProcessor
+org.springframework.boot.env.EnvironmentPostProcessor=fr.univlorraine.mondossierweb.DefaultPropertiesEnvironmentPostProcessor, fr.univlorraine.mondossierweb.test.integration.TestEnvironmentPostProcessor

@@ -14,7 +14,7 @@
 
 ## Configurer et lancer le projet dans Eclipse
 - Importer le projet Maven dans eclipse.
-- Démarrer l'application en faisant un clic droit sur `fr.univlorraine.blank.Application.java` et en choisissant 'Run As / Java Application'.
+- Démarrer l'application en faisant un clic droit sur `fr.univlorraine.mondosssierweb.Application.java` et en choisissant 'Run As / Java Application'.
 
 ## Tâches Maven
 - Lancer l'application (hors d'un IDE) :
