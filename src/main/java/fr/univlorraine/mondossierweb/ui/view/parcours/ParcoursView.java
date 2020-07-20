@@ -244,13 +244,13 @@ private void initAnnees() {
 	private void updateData(Apprenant apprenant) {
 		resetData();
 		if(apprenant != null) {
-			// Mise à jour de l'état-civil
+			// Mise à jour des infos sur le bac
 			titreAccesBac.setValue(apprenant.getBac().getTitreAcces());
 			anneeBac.setValue(apprenant.getBac().getAnneeObtention());
 			typeBac.setValue(apprenant.getBac().getSerie());
 			mentionBac.setValue(apprenant.getBac().getMention());
 			paysEtbBac.setValue(apprenant.getBac().getPays());
-			if(apprenant.getBac().getPays().equals(Utils.FRANCE)) {
+			if(apprenant.getBac().getPays().equals(Utils.CODE_PAYS_FRANCE)) {
 				departementEtbBac.setValue(apprenant.getBac().getDepartement());
 				etablissementBac.setValue(apprenant.getBac().getEtablissement());
 			} else {
