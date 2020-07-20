@@ -265,6 +265,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		coordPersoLayout.addComponentAsFirst(mailCard);
 		coordPersoLayout.setFlexBasis("28em", mailCard);
 		mailCard.updateStyle();
+		//mailCard.displayAlt();
 	}
 
 	private void ajouterTel(ContactComplet c,int n) {
@@ -292,6 +293,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		coordPersoLayout.addComponentAsFirst(telCard);
 		coordPersoLayout.setFlexBasis("28em", telCard);
 		telCard.updateStyle();
+		//telCard.displayAlt();
 	}
 
 	private void ajouterAdresse(ContactComplet c,int n) {
