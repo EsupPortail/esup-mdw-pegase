@@ -27,8 +27,10 @@ import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -98,7 +100,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final FlexLayout coordPersoLayout = new FlexLayout();
+	private final VerticalLayout coordPersoLayout = new VerticalLayout();
 
 	@PostConstruct
 	private void init() {
@@ -107,8 +109,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		coordPersoLayout.getStyle().set("margin-top", "0");
 		coordPersoLayout.setWidthFull();
 		coordPersoLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
-		coordPersoLayout.setFlexWrap(FlexWrap.WRAP);
-		//coordPersoLayout.setFlexBasis("28em", mailLayout, telLayout,mailSecoursLayout,telSecoursLayout, adresseFixeLayout, adresseAnnuelleLayout);
+		//coordPersoLayout.setFlexWrap(FlexWrap.WRAP);
 
 		add(coordPersoLayout);
 	}
@@ -132,6 +133,11 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 	private void updateLayoutLocale(Component c) {
 		log.info("Traitement des layout de la card : {}", c);
+		c.getChildren().forEach(fl -> updateFormLayoutLocale(fl));
+	}
+	
+	private void updateFormLayoutLocale(Component c) {
+		log.info("Traitement des formlayout de la card : {}", c);
 		c.getChildren().forEach(tf -> updateTextFieldLocale(tf));
 	}
 
@@ -247,11 +253,14 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		Card mailCard = new Card("", true);
 		mailCard.getTitre().setText(cmc.getDemandeDeContact().getLibelleAffichage());
 
+		FormLayout mailLayout = new FormLayout();
+		mailLayout.getStyle().set("margin", "0");
+		mailCard.addAlt(mailLayout);
 
 		TextField nomMail=new TextField();
 		nomMail.setId(NOM_MAIL + n);
 		nomMail.setReadOnly(true);
-		mailCard.addAlt(nomMail);
+		mailLayout.add(nomMail);
 		CmpUtils.valueAndVisibleIfNotNull(nomMail, cmc.getProprietaire());
 		CmpUtils.setLongTextField(nomMail);
 
@@ -259,12 +268,12 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		TextField mail=new TextField();
 		mail.setId(MAIL + n);
 		mail.setReadOnly(true);
-		mailCard.addAlt(mail);
+		mailLayout.add(mail);
 		CmpUtils.valueAndVisibleIfNotNull(mail,cmc.getMail());
 		CmpUtils.setLongTextField(mail);
 
 		coordPersoLayout.addComponentAsFirst(mailCard);
-		coordPersoLayout.setFlexBasis("28em", mailCard);
+		//coordPersoLayout.setFlexBasis("50em", mailCard);
 		mailCard.updateStyle();
 		mailCard.displayAlt();
 	}
@@ -275,22 +284,27 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		Card telCard = new Card("", true);
 		telCard.getTitre().setText(ctc.getDemandeDeContact().getLibelleAffichage());
 
+		FormLayout telLayout = new FormLayout();
+		telLayout.getStyle().set("margin", "0");
+		telCard.addAlt(telLayout);
+
+		
 		TextField nomTel=new TextField();
 		nomTel.setId(NOM_TEL + n);
 		nomTel.setReadOnly(true);
-		telCard.addAlt(nomTel);
+		telLayout.add(nomTel);
 		CmpUtils.valueAndVisibleIfNotNull(nomTel,ctc.getProprietaire());
 		CmpUtils.setLongTextField(nomTel);
 
 		TextField tel=new TextField();
 		tel.setId(TEL + n);
 		tel.setReadOnly(true);
-		telCard.addAlt(tel);
+		telLayout.add(tel);
 		CmpUtils.valueAndVisibleIfNotNull(tel,ctc.getTelephone());
 		CmpUtils.setModerateTextField(tel);
 
 		coordPersoLayout.addComponentAsFirst(telCard);
-		coordPersoLayout.setFlexBasis("28em", telCard);
+		//coordPersoLayout.setFlexBasis("50em", telCard);
 		telCard.updateStyle();
 		telCard.displayAlt();
 	}
@@ -301,11 +315,14 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		Card adresseCard = new Card("", true);
 		adresseCard.getTitre().setText(cac.getDemandeDeContact().getLibelleAffichage());
 
-
+		FormLayout adresseLayout = new FormLayout();
+		adresseLayout.getStyle().set("margin", "0");
+		adresseCard.addAlt(adresseLayout);
+		
 		TextField nomAdresse=new TextField();
 		nomAdresse.setId(NOM_ADRESSE + n);
 		nomAdresse.setReadOnly(true);
-		adresseCard.addAlt(nomAdresse);
+		adresseLayout.add(nomAdresse);
 		CmpUtils.valueAndVisibleIfNotNull(nomAdresse,cac.getProprietaire());
 		CmpUtils.setLongTextField(nomAdresse);
 
@@ -313,7 +330,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		TextField paysAdresse=new TextField();
 		paysAdresse.setId(PAYS_ADRESSE + n);
 		paysAdresse.setReadOnly(true);
-		adresseCard.addAlt(paysAdresse);
+		adresseLayout.add(paysAdresse);
 		CmpUtils.valueAndVisibleIfNotNull(paysAdresse,cac.getPays());
 		CmpUtils.setLongTextField(paysAdresse);
 
@@ -321,7 +338,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		TextField compl1Adresse=new TextField();
 		compl1Adresse.setId(COMP1_ADRESSE + n);
 		compl1Adresse.setReadOnly(true);
-		adresseCard.addAlt(compl1Adresse);
+		adresseLayout.add(compl1Adresse);
 		CmpUtils.valueAndVisibleIfNotNull(compl1Adresse,cac.getLigne3OuVoie());
 		CmpUtils.setLongTextField(compl1Adresse);
 
@@ -329,7 +346,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		TextField compl2Adresse=new TextField();
 		compl2Adresse.setId(COMP2_ADRESSE + n);
 		compl2Adresse.setReadOnly(true);
-		adresseCard.addAlt(compl2Adresse);
+		adresseLayout.add(compl2Adresse);
 		CmpUtils.valueAndVisibleIfNotNull(compl2Adresse,cac.getLigne4OuComplement());
 		CmpUtils.setLongTextField(compl2Adresse);
 
@@ -338,7 +355,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		TextField numVoieAdresse=new TextField();
 		numVoieAdresse.setId(NUM_VOIE_ADRESSE + n);
 		numVoieAdresse.setReadOnly(true);
-		adresseCard.addAlt(numVoieAdresse);
+		adresseLayout.add(numVoieAdresse);
 		CmpUtils.valueAndVisibleIfNotNull(numVoieAdresse,cac.getLigne1OuEtage());
 		CmpUtils.setLongTextField(numVoieAdresse);
 
@@ -347,7 +364,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		TextField lieuServAdresse=new TextField();
 		lieuServAdresse.setId(LIEU_SERV_ADRESSE + n);
 		lieuServAdresse.setReadOnly(true);
-		adresseCard.addAlt(lieuServAdresse);
+		adresseLayout.add(lieuServAdresse);
 		CmpUtils.valueAndVisibleIfNotNull(lieuServAdresse,cac.getLigne2OuBatiment());
 		CmpUtils.setLongTextField(lieuServAdresse);
 
@@ -355,13 +372,13 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		TextField codePostalAdresse=new TextField();
 		codePostalAdresse.setId(CODE_POSTAL_ADRESSE + n);
 		codePostalAdresse.setReadOnly(true);
-		adresseCard.addAlt(codePostalAdresse);
+		adresseLayout.add(codePostalAdresse);
 		CmpUtils.setLongTextField(codePostalAdresse);
 
 		TextField communeAdresse=new TextField();
 		communeAdresse.setId(COMMUNE_ADRESSE + n);
 		communeAdresse.setReadOnly(true);
-		adresseCard.addAlt(communeAdresse);
+		adresseLayout.add(communeAdresse);
 		CmpUtils.setLongTextField(communeAdresse);
 
 
@@ -374,7 +391,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		}
 
 		coordPersoLayout.add(adresseCard);
-		coordPersoLayout.setFlexBasis("28em", adresseCard);
+		//coordPersoLayout.setFlexBasis("50em", adresseCard);
 		adresseCard.updateStyle();
 		adresseCard.displayAlt();
 	}

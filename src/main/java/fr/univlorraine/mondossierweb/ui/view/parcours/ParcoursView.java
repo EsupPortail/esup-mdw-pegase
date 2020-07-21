@@ -25,6 +25,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
@@ -71,9 +72,9 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final Card bacLayout = new Card("", false);
-	private final Card anneesLayout = new Card("", false);
-	private final FlexLayout parcoursLayout = new FlexLayout(bacLayout, anneesLayout);
+	private final Card bacCard = new Card("", false);
+	private final Card anneesCard = new Card("", false);
+	private final VerticalLayout parcoursLayout = new VerticalLayout(bacCard, anneesCard);
 
 	private final TextField titreAccesBac=new TextField();
 	private final TextField anneeBac=new TextField();
@@ -98,13 +99,16 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 		initAnnees();
 		parcoursLayout.setWidthFull();
 		parcoursLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
-		parcoursLayout.setFlexWrap(FlexWrap.WRAP);
-		parcoursLayout.setFlexBasis("28em", bacLayout, anneesLayout);
+		//parcoursLayout.setFlexWrap(FlexWrap.WRAP);
+		//parcoursLayout.setFlexBasis("28em", bacLayout, anneesLayout);
 		add(parcoursLayout);
 		updateStyle();
 	}
 
 	private void initBac() {
+		FormLayout bacLayout = new FormLayout();
+		bacLayout.getStyle().set("margin", "0");
+		bacCard.add(bacLayout);
 
 		codeIneBac.setReadOnly(true);
 		bacLayout.add(codeIneBac);
@@ -150,6 +154,10 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 
 	private void initAnnees() {
 
+		FormLayout anneesLayout = new FormLayout();
+		anneesLayout.getStyle().set("margin", "0");
+		anneesCard.add(anneesLayout);
+		
 		anneeSupFr.setReadOnly(true);
 		anneesLayout.add(anneeSupFr);
 
@@ -177,7 +185,7 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 	public void localeChange(final LocaleChangeEvent event) {
 		setViewTitle(getTranslation("parcours.title"));
 
-		bacLayout.getTitre().setText(getTranslation("bac.titre"));
+		bacCard.getTitre().setText(getTranslation("bac.titre"));
 		titreAccesBac.setLabel(getTranslation("bac.titreacces"));
 		anneeBac.setLabel(getTranslation("bac.annee"));
 		typeBac.setLabel(getTranslation("bac.type"));
@@ -187,7 +195,7 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 		etablissementBac.setLabel(getTranslation("bac.etablissement"));
 		codeIneBac.setLabel(getTranslation("bac.codeine"));
 
-		anneesLayout.getTitre().setText(getTranslation("annees.titre"));
+		anneesCard.getTitre().setText(getTranslation("annees.titre"));
 		anneeSupFr.setLabel(getTranslation("annees.anneesupfr"));
 		anneeUnivFr.setLabel(getTranslation("annees.anneeunivfr"));
 		anneeEtablissement.setLabel(getTranslation("annee.anneetablissement"));
@@ -203,8 +211,8 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 
 	//@Override
 	protected void updateStyle() {
-		bacLayout.updateStyle();
-		anneesLayout.updateStyle();
+		bacCard.updateStyle();
+		anneesCard.updateStyle();
 	}
 
 	@Override

@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
@@ -72,9 +73,9 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final Card identiteLayout = new Card("", false);
-	private final Card naissanceLayout = new Card("", false);
-	private final FlexLayout etatcivilLayout = new FlexLayout(identiteLayout, naissanceLayout);
+	private final Card identiteCard = new Card("", false);
+	private final Card naissanceCard = new Card("", false);
+	private final VerticalLayout etatcivilLayout = new VerticalLayout(identiteCard, naissanceCard);
 
 	private final TextField nomFamille=new TextField();
 	private final TextField nomUsage=new TextField();
@@ -98,14 +99,17 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 		initNaissance();
 		etatcivilLayout.setWidthFull();
 		etatcivilLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
-		etatcivilLayout.setFlexWrap(FlexWrap.WRAP);
-		etatcivilLayout.setFlexBasis("28em", identiteLayout, naissanceLayout);
+		//etatcivilLayout.setFlexWrap(FlexWrap.WRAP);
+		//etatcivilLayout.setFlexBasis("28em", identiteLayout, naissanceLayout);
 		add(etatcivilLayout);
 		updateStyle();
 	}
 
 	private void initIdentite() {
 
+		FormLayout identiteLayout = new FormLayout();
+		identiteLayout.getStyle().set("margin", "0");
+		
 		nomFamille.setReadOnly(true);
 		identiteLayout.add(nomFamille);
 
@@ -120,6 +124,8 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 
 		prenom3.setReadOnly(true);
 		identiteLayout.add(prenom3);
+		
+		identiteCard.add(identiteLayout);
 
 		CmpUtils.setLongTextField(nomFamille);
 
@@ -134,6 +140,8 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	}
 
 	private void initNaissance() {
+		FormLayout naissanceLayout = new FormLayout();
+		naissanceLayout.getStyle().set("margin", "0");
 
 		dateNaissance.setReadOnly(true);
 		naissanceLayout.add(dateNaissance);
@@ -149,6 +157,8 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 
 		nationaliteNaissance2.setReadOnly(true);
 		naissanceLayout.add(nationaliteNaissance2);
+		
+		naissanceCard.add(naissanceLayout);
 
 		CmpUtils.formatTextField(dateNaissance);
 
@@ -170,14 +180,14 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	public void localeChange(final LocaleChangeEvent event) {
 		setViewTitle(getTranslation("etatcivil.title"));
 
-		identiteLayout.getTitre().setText(getTranslation("identite.titre"));
+		identiteCard.getTitre().setText(getTranslation("identite.titre"));
 		nomFamille.setLabel(getTranslation("identite.nomfamille"));
 		nomUsage.setLabel(getTranslation("identite.nomusage"));
 		prenom.setLabel(getTranslation("identite.prenom"));
 		prenom2.setLabel(getTranslation("identite.prenom2"));
 		prenom3.setLabel(getTranslation("identite.prenom3"));
 
-		naissanceLayout.getTitre().setText(getTranslation("naissance.titre"));
+		naissanceCard.getTitre().setText(getTranslation("naissance.titre"));
 		dateNaissance.setLabel(getTranslation("naissance.date"));
 		paysNaissance.setLabel(getTranslation("naissance.pays"));
 		communeNaissance.setLabel(getTranslation("naissance.commune"));
@@ -195,8 +205,8 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 
 	//@Override
 	protected void updateStyle() {
-		identiteLayout.updateStyle();
-		naissanceLayout.updateStyle();
+		identiteCard.updateStyle();
+		naissanceCard.updateStyle();
 	}
 
 	@Override

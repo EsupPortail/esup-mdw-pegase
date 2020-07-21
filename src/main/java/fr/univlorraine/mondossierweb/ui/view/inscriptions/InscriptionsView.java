@@ -89,7 +89,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final FlexLayout inscriptionsLayout = new FlexLayout();
+	private final VerticalLayout inscriptionsLayout = new VerticalLayout();
 
 	List<TextField> listTextFieldPeriode = new LinkedList<TextField> ();
 	List<TextField> listTextFieldRegime = new LinkedList<TextField> ();
@@ -107,7 +107,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 		inscriptionsLayout.setWidthFull();
 		inscriptionsLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
-		inscriptionsLayout.setFlexWrap(FlexWrap.WRAP);
+		//inscriptionsLayout.setFlexWrap(FlexWrap.WRAP);
 		inscriptionsLayout.getStyle().set("margin-top", "0");
 		add(inscriptionsLayout);
 	}
@@ -355,7 +355,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				insCard.displayAlt();
 				insCard.updateStyle();
 				inscriptionsLayout.add(insCard);
-				inscriptionsLayout.setFlexBasis("50em", insCard);
+				//inscriptionsLayout.setFlexBasis("50em", insCard);
 			}
 		}
 		updateStyle();
