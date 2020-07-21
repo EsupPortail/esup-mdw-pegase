@@ -56,6 +56,8 @@ public class PegaseService implements Serializable {
 	private transient String etablissement;	
 	@Value("${pegase.api.ins.url}")
 	private transient String apiInsUrl;	
+	@Value("${pegase.photo.code}")
+	private transient String codePhoto;	
 
 
 	private ApiClient apiClientIns = new ApiClient();
@@ -96,6 +98,31 @@ public class PegaseService implements Serializable {
 			log.error("Erreur lors de l'appel à la methode API : listerInscriptionsValidees ",e);
 		}
 
+	}
+
+	public File recuperePhoto(String codeApprenant, String cible) {
+		codeApprenant = "000000001";
+		cible="F-ING-BIOSC→FING-BIOSC-A3@PER-2019";
+		
+		// Si les paramètres nécessaires sont valués
+		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)
+			&& StringUtils.hasText(cible)) {
+			// Maj du token pour récupérer le dernier token valide
+			insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
+			try {
+				// Appel de l'API Pégase
+				File photo = insApiIns.contenuPiece(etablissement, codeApprenant, cible, codePhoto);
+				if(photo != null) {
+					log.info("Photo de {} recupere", codeApprenant);
+				} else {
+					log.info("Anomalie lors de l'appel à la methode API : contenuPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {}", codeApprenant, etablissement, codePhoto,cible);
+				}
+				return photo;
+			} catch (ApiException e) {
+				log.error("Erreur lors de l'appel à la methode API : contenuPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {}", codeApprenant, etablissement, cible, codePhoto, e);
+			}
+		}
+		return null;
 	}
 
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {

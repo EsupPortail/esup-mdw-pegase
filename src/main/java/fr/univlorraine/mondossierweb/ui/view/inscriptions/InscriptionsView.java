@@ -18,6 +18,12 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,13 +36,12 @@ import org.springframework.security.access.annotation.Secured;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.WrapMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
@@ -48,10 +53,9 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
 import fr.univlorraine.mondossierweb.service.ExportService;
+import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
-import fr.univlorraine.mondossierweb.ui.component.AdaptSizeLayout;
 import fr.univlorraine.mondossierweb.ui.component.Card;
-import fr.univlorraine.mondossierweb.ui.layout.HasCodeEtuUrlParameterView;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
@@ -61,17 +65,19 @@ import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_ENSEIGNANT})
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
+@Slf4j
 public class InscriptionsView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
 
 	private static final String CERT_FILE_EXT = ".pdf";
 	private static final String CERT_FILE_NAME = "certificat";
 	private static final String ATTEST_FILE_NAME = "attestation";
 	private static final String ATTEST_FILE_EXT = ".pdf";
-	
+
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
@@ -92,8 +98,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	List<TextField> listTextFieldPieces = new LinkedList<TextField> ();
 	List<Button> listButtonCertificat = new LinkedList<Button> ();
 	List<Button> listButtonAttestation = new LinkedList<Button> ();
-	
-	
+	List<Button> listButtonPhoto = new LinkedList<Button> ();
+
+
 	@PostConstruct
 	public void init() {
 		setSizeFull();
@@ -134,7 +141,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		for(Button b : listButtonAttestation) {
 			b.setText(getTranslation("inscription.attestation"));
 		}
-		
+		for(Button b : listButtonPhoto ) {
+			b.setText(getTranslation("inscription.photo"));
+		}
+
 	}
 
 	private void setViewTitle(final String viewTitle) {
@@ -169,6 +179,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		listTextFieldPieces.clear();
 		listButtonCertificat.clear();
 		listButtonAttestation.clear();
+		listButtonPhoto.clear();
 	}
 	/**
 	 * Mise à jour des données affichées
@@ -205,8 +216,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				statut.setReadOnly(true);
 				CmpUtils.setShortTextField(statut);
 				listTextFieldStatut.add(statut);
-				
-				
+
+
 				TextField paiement = new TextField();
 				if(inscription.getStatutPaiement()!=null) {
 					paiement.setValue(inscription.getStatutPaiement().getValue());
@@ -214,8 +225,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				paiement.setReadOnly(true);
 				CmpUtils.setShortTextField(paiement);
 				listTextFieldPaiement.add(paiement);
-				
-				
+
+
 				TextField pieces = new TextField();
 				if(inscription.getStatutPieces()!=null) {
 					pieces.setValue(inscription.getStatutPieces().getValue());
@@ -229,7 +240,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					occ.getLibelle()
 				} */
 
-				
+
 				// Ajout bouton certificat de scolarité
 				Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
 				certButton.setWidth("15em");
@@ -240,12 +251,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					() -> exportService.getCertificat(securityService.getDossierConsulte(), inscription.getCible().getCode())));
 				exportCertificatAnchor.getElement().getStyle().set("margin-left", "1em");
 				exportCertificatAnchor.setTarget("_blank");
-				
+
 				// Ajout à la liste des boutons
 				listButtonCertificat.add(certButton);
-				
-				
-				
+
+
+
 				// Ajout bouton attestation de paiement
 				Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
 				attestationButton.setWidth("15em");
@@ -256,35 +267,64 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					() -> exportService.getAttestation(securityService.getDossierConsulte(), inscription.getCible().getCode())));
 				exportAttestationAnchor.getElement().getStyle().set("margin-left", "1em");
 				exportAttestationAnchor.setTarget("_blank");
-				
+
 				// Ajout à la liste des boutons
 				listButtonAttestation.add(attestationButton);
+
+				//Layout des boutons
+				VerticalLayout buttonLayout = new VerticalLayout();
+				
+				// Ajout bouton photo
+				Button photoButton = new Button("", VaadinIcon.USER.create());
+				photoButton.setWidth("15em");
+				VerticalLayout photoLayout=new VerticalLayout();
+				photoButton.addClickListener(c-> {
+					ByteArrayInputStream photo = exportService.getPhoto(securityService.getDossierConsulte(), inscription.getCible().getCode());
+					if(photo != null) {
+							StreamResource resource = new StreamResource("photo_"+securityService.getDossierConsulte()+".jpg", () -> photo);
+							Image image = new Image(resource, "photographie");
+							photoLayout.removeAll();
+							photoLayout.add(image);
+							photoLayout.setSizeUndefined();
+							photoLayout.getStyle().set("margin", "auto");
+							photoLayout.getStyle().set("padding", "0");
+							photoButton.setVisible(false);
+							buttonLayout.addComponentAsFirst(photoLayout);
+					}
+				});
+
+				// Ajout à la liste des boutons
+				listButtonPhoto.add(photoButton);
+
+
 
 				VerticalLayout verticalLayout = new VerticalLayout();
 				verticalLayout.getStyle().set("padding", "0");
 				verticalLayout.setSizeFull();
-				
+
 				VerticalLayout infoLayout = new VerticalLayout();
 				infoLayout.getStyle().set("padding", "0");
 				infoLayout.add(periode);
 				infoLayout.add(regime);
 				verticalLayout.add(infoLayout);
-				
+
 				FlexLayout flexLayout = new FlexLayout();
 				VerticalLayout statutLayout = new VerticalLayout();
 				statutLayout.getStyle().set("padding", "0");
 				statutLayout.add(statut);
 				statutLayout.add(paiement);
 				statutLayout.add(pieces);
+
 				
-				VerticalLayout buttonLayout = new VerticalLayout();
 				buttonLayout.setSizeUndefined();
 				buttonLayout.getStyle().set("padding", "0");
 				buttonLayout.getStyle().set("margin", "auto");
 				buttonLayout.add(exportCertificatAnchor);
 				exportAttestationAnchor.setMinWidth("10em");
 				buttonLayout.add(exportAttestationAnchor);
-				
+				photoButton.getStyle().set("margin-left", "1em");
+				buttonLayout.addComponentAsFirst(photoButton);
+
 				flexLayout.add(statutLayout);
 				flexLayout.add(buttonLayout);
 				flexLayout.setWidthFull();
@@ -293,7 +333,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				flexLayout.setFlexBasis("18em", statutLayout);
 				flexLayout.setFlexBasis("10em", buttonLayout);
 				verticalLayout.add(flexLayout);
-				
+
 				insCard.addAlt(verticalLayout);
 
 				// Si on doit afficher plus de 2 inscriptions, on replie la carte

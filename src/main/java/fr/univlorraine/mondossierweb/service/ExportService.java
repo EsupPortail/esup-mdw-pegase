@@ -62,7 +62,7 @@ public class ExportService implements Serializable {
 
 				bufferedInputStream.read(data,0,data.length);
 				bufferedInputStream.close();
-				log.info("PDF generated.");
+				log.info("PDF generated {} {} ", codeApprenant, codeFormation);
 				return new ByteArrayInputStream(data);
 			} catch (IOException e) {
 				log.info("Erreur à la génération du {} pour : {} {}",document, codeApprenant, codeFormation, e);
@@ -71,6 +71,12 @@ public class ExportService implements Serializable {
 			log.info("Erreur à la génération du {} pour : {} {}", document, codeApprenant, codeFormation);
 		}
 		return null;
+	}
+
+	public ByteArrayInputStream getPhoto(String codeApprenant, String codeFormation) {
+		File file = pegaseService.recuperePhoto(codeApprenant, codeFormation);
+
+		return getStream(file,codeApprenant, codeFormation, "Photo");
 	}
 
 }
