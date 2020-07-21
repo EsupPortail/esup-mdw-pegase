@@ -208,12 +208,12 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 	private Component createUserImage(final Utilisateur utilisateur) {
 		String displayName = utilisateur.getDisplayName();
-		if (displayName == null || displayName.isBlank()) {
+		//if (displayName == null || displayName.isBlank()) {
 			Icon icon = new Icon(VaadinIcon.USER);
 			icon.addClassName("user-image");
 			icon.getStyle().set("padding-top", "5px");
 			return icon;
-		} else {
+		/*} else {
 			Div div = new Div();
 			div.addClassName("user-image");
 
@@ -229,7 +229,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 				div.getStyle().set("font-size", "x-small");
 			}
 			return div;
-		}
+		}*/
 	}
 
 	private void addDrawerRouterLink(final VaadinIcon icon, final String textKey, final Class<? extends Component> navigationTarget) {
