@@ -275,13 +275,16 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				// Ajout à la liste des boutons
 				listButtonAttestation.add(attestationButton);
 
-				//Layout des boutons
-				VerticalLayout buttonLayout = new VerticalLayout();
+				
 				
 				// Ajout bouton photo
 				Button photoButton = new Button("", VaadinIcon.USER.create());
-				photoButton.setWidth("15em");
+				photoButton.setWidth("7em");
+				photoButton.setHeight("8em");
 				VerticalLayout photoLayout=new VerticalLayout();
+				photoLayout.setSizeUndefined();
+				photoLayout.getStyle().set("margin", "auto");
+				photoLayout.getStyle().set("padding", "0");
 				photoButton.addClickListener(c-> {
 					ByteArrayInputStream photo = exportService.getPhoto(securityService.getDossierConsulte(), inscription.getCible().getCode());
 					if(photo != null) {
@@ -289,11 +292,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							Image image = new Image(resource, "photographie");
 							photoLayout.removeAll();
 							photoLayout.add(image);
-							photoLayout.setSizeUndefined();
-							photoLayout.getStyle().set("margin", "auto");
-							photoLayout.getStyle().set("padding", "0");
 							photoButton.setVisible(false);
-							buttonLayout.addComponentAsFirst(photoLayout);
+							
 					}
 				});
 
@@ -319,23 +319,35 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				statutLayout.add(paiement);
 				statutLayout.add(pieces);
 
+				// Layout photo
+				photoButton.getStyle().set("margin-left", "1em");
+				photoLayout.addComponentAsFirst(photoButton);
 				
+				//Layout des boutons
+				FlexLayout buttonLayout = new FlexLayout();
 				buttonLayout.setSizeUndefined();
 				buttonLayout.getStyle().set("padding", "0");
 				buttonLayout.getStyle().set("margin", "auto");
+				exportCertificatAnchor.setMinWidth("15em");
+				exportCertificatAnchor.getStyle().set("margin", "auto");
+				exportCertificatAnchor.getStyle().set("padding", "1em");
 				buttonLayout.add(exportCertificatAnchor);
-				exportAttestationAnchor.setMinWidth("10em");
+				exportAttestationAnchor.setMinWidth("15em");
+				exportAttestationAnchor.getStyle().set("margin", "auto");
+				exportAttestationAnchor.getStyle().set("padding", "1em");
 				buttonLayout.add(exportAttestationAnchor);
-				photoButton.getStyle().set("margin-left", "1em");
-				buttonLayout.addComponentAsFirst(photoButton);
+				buttonLayout.setFlexWrap(FlexWrap.WRAP);
+				buttonLayout.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
+				
 
 				flexLayout.add(statutLayout);
+				flexLayout.add(photoLayout);
 				flexLayout.add(buttonLayout);
 				flexLayout.setWidthFull();
 				flexLayout.setJustifyContentMode(JustifyContentMode.START);
 				flexLayout.setFlexWrap(FlexWrap.WRAP);
 				flexLayout.setFlexBasis("18em", statutLayout);
-				flexLayout.setFlexBasis("10em", buttonLayout);
+				//flexLayout.setFlexBasis("10em", buttonLayout);
 				verticalLayout.add(flexLayout);
 
 				insCard.addAlt(verticalLayout);
@@ -343,7 +355,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				insCard.displayAlt();
 				insCard.updateStyle();
 				inscriptionsLayout.add(insCard);
-				inscriptionsLayout.setFlexBasis("38em", insCard);
+				inscriptionsLayout.setFlexBasis("50em", insCard);
 			}
 		}
 		updateStyle();
