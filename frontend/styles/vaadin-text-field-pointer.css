@@ -1,0 +1,15 @@
+
+:host label {
+				font-weight : 100 !important;
+}
+
+:host input {
+	font-weight: 700;
+    padding: 0;
+}
+
+:host([readonly]) [part="input-field"] {
+	padding: 0;
+	position: initial;
+}
+

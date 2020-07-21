@@ -73,6 +73,7 @@ import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 @Push(transport = Transport.WEBSOCKET_XHR)
 @JsModule("./src/set-dark-mode.js")
 @JsModule("./src/font-open-sans.js")
+//@CssImport(value = "./styles/mdw.css")
 @CssImport(value = "./styles/lumo-font-family.css")
 @CssImport(value = "./styles/vaadin-app-layout.css", themeFor = "vaadin-app-layout")
 @CssImport(value = "./styles/vaadin-button-pointer.css", themeFor = "vaadin-button")
@@ -81,8 +82,8 @@ import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 @CssImport(value = "./styles/vaadin-menu-bar-user.css", themeFor = "vaadin-menu-bar")
 @CssImport(value = "./styles/vaadin-context-menu-list-box-pointer.css", themeFor = "vaadin-context-menu-list-box")
 @CssImport(value = "./styles/vaadin-checkbox-pointer.css", themeFor = "vaadin-checkbox")
+@CssImport(value = "./styles/vaadin-text-field-pointer.css", themeFor = "vaadin-text-field")
 @CssImport(value = "./styles/vaadin-grid.css", themeFor = "vaadin-grid")
-@CssImport(value = "./styles/mdw.css")
 @SuppressWarnings("serial")
 public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnterObserver, LocaleChangeObserver {
 
@@ -173,7 +174,9 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private MenuBar createUserMenu(final Utilisateur utilisateur) {
 		
 		// Maj du darkMode en fonction des préférences de l'utilisateur
-		currentUiService.setDarkMode(prefService.getBooleanPref(utilisateur.getUsername(), PrefUtils.DARK_MODE));
+		//currentUiService.setDarkMode(prefService.getBooleanPref(utilisateur.getUsername(), PrefUtils.DARK_MODE));
+		// Dark mode par défaut
+		currentUiService.setDarkMode(false);
 		
 		MenuBar topMenu = new MenuBar();
 		topMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY);

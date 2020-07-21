@@ -30,6 +30,8 @@ public final class CmpUtils {
 
 	public static void formatTextField(TextField tf) {
 		tf.getStyle().set("margin", "0em");
+		//tf.addClassName("card-textfield");
+		tf.addThemeName("nice-label");
 	}
 	
 	public static void setLongTextField(TextField tf) {

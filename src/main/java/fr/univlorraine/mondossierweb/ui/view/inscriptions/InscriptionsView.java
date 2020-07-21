@@ -248,6 +248,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				// Ajout bouton certificat de scolarité
 				Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
 				certButton.setWidth("15em");
+				certButton.getStyle().set("background-color", "#f95151");
+				certButton.getStyle().set("color", "rgba(40, 45, 51, 0.95)");
 				Anchor exportCertificatAnchor = new Anchor();
 				exportCertificatAnchor.getStyle().set("margin-left", "0");
 				exportCertificatAnchor.add(certButton);
@@ -264,6 +266,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				// Ajout bouton attestation de paiement
 				Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
 				attestationButton.setWidth("15em");
+				attestationButton.getStyle().set("background-color", "#f95151");
+				attestationButton.getStyle().set("color", "rgba(40, 45, 51, 0.95)");
 				Anchor exportAttestationAnchor = new Anchor();
 				exportAttestationAnchor.getStyle().set("margin-left", "0");
 				exportAttestationAnchor.add(attestationButton);
