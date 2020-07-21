@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -302,12 +303,14 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		Card adresseCard = new Card("", true);
 		adresseCard.getTitre().setText(cac.getDemandeDeContact().getLibelleAffichage());
 
-		TextField nomAdresse=new TextField();
-		nomAdresse.setId(NOM_ADRESSE + n);
-		nomAdresse.setReadOnly(true);
-		adresseCard.addAlt(nomAdresse);
-		nomAdresse.setValue(cac.getProprietaire());
-		CmpUtils.setLongTextField(nomAdresse);
+		if(StringUtils.hasText(cac.getProprietaire())) {
+			TextField nomAdresse=new TextField();
+			nomAdresse.setId(NOM_ADRESSE + n);
+			nomAdresse.setReadOnly(true);
+			adresseCard.addAlt(nomAdresse);
+			nomAdresse.setValue(cac.getProprietaire());
+			CmpUtils.setLongTextField(nomAdresse);
+		}
 
 		TextField paysAdresse=new TextField();
 		paysAdresse.setId(PAYS_ADRESSE + n);
@@ -316,7 +319,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		paysAdresse.setValue(cac.getPays());
 		CmpUtils.setLongTextField(paysAdresse);
 
-		if(cac.getLigne3OuVoie() != null) {
+		if(StringUtils.hasText(cac.getLigne3OuVoie())) {
 			TextField compl1Adresse=new TextField();
 			compl1Adresse.setId(COMP1_ADRESSE + n);
 			compl1Adresse.setReadOnly(true);
@@ -325,7 +328,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 			CmpUtils.setLongTextField(compl1Adresse);
 		}
 
-		if(cac.getLigne4OuComplement()!=null) {
+		if(StringUtils.hasText(cac.getLigne4OuComplement())) {
 			TextField compl2Adresse=new TextField();
 			compl2Adresse.setId(COMP2_ADRESSE + n);
 			compl2Adresse.setReadOnly(true);
@@ -334,7 +337,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 			CmpUtils.setLongTextField(compl2Adresse);
 		}
 
-		if(cac.getLigne1OuEtage()!=null) {
+		if(StringUtils.hasText(cac.getLigne1OuEtage())) {
 			TextField numVoieAdresse=new TextField();
 			numVoieAdresse.setId(NUM_VOIE_ADRESSE + n);
 			numVoieAdresse.setReadOnly(true);
@@ -343,7 +346,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 			CmpUtils.setLongTextField(numVoieAdresse);
 		}
 
-		if(cac.getLigne2OuBatiment()!=null) {
+		if(StringUtils.hasText(cac.getLigne2OuBatiment())) {
 			TextField lieuServAdresse=new TextField();
 			lieuServAdresse.setId(LIEU_SERV_ADRESSE + n);
 			lieuServAdresse.setReadOnly(true);

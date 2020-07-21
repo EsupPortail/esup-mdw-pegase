@@ -74,7 +74,7 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 	private final Card bacLayout = new Card("", false);
 	private final Card anneesLayout = new Card("", false);
 	private final FlexLayout parcoursLayout = new FlexLayout(bacLayout, anneesLayout);
-	
+
 	private final TextField titreAccesBac=new TextField();
 	private final TextField anneeBac=new TextField();
 	private final TextField typeBac=new TextField();
@@ -83,14 +83,14 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 	private final TextField departementEtbBac=new TextField();
 	private final TextField etablissementBac=new TextField();
 	private final TextField codeIneBac=new TextField();
-	
-	
+
+
 	private final TextField anneeSupFr=new TextField();
 	private final TextField anneeUnivFr=new TextField();
 	private final TextField anneeEtablissement=new TextField();
 
 
-	
+
 	@PostConstruct
 	private void init() {
 		setSizeFull();
@@ -105,70 +105,70 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 	}
 
 	private void initBac() {
-		
+
 		codeIneBac.setReadOnly(true);
 		bacLayout.add(codeIneBac);
-		
+
 		titreAccesBac.setReadOnly(true);
 		bacLayout.add(titreAccesBac);
-		
+
 		anneeBac.setReadOnly(true);
 		bacLayout.add(anneeBac);
-		
+
 		typeBac.setReadOnly(true);
 		bacLayout.add(typeBac);
-		
+
 		mentionBac.setReadOnly(true);
 		bacLayout.add(mentionBac);
-		
+
 		paysEtbBac.setReadOnly(true);
 		bacLayout.add(paysEtbBac);
-		
+
 		departementEtbBac.setReadOnly(true);
 		bacLayout.add(departementEtbBac);
-		
+
 		etablissementBac.setReadOnly(true);
 		bacLayout.add(etablissementBac);
-		
+
 		CmpUtils.setLongTextField(titreAccesBac);
-		
+
 		CmpUtils.formatTextField(anneeBac);
-		
+
 		CmpUtils.setModerateTextField(typeBac);
-		
+
 		CmpUtils.formatTextField(mentionBac);
-		
+
 		CmpUtils.setLongTextField(paysEtbBac);
-		
+
 		CmpUtils.setLongTextField(departementEtbBac);
-		
+
 		CmpUtils.setLongTextField(etablissementBac);
-		
+
 		CmpUtils.setModerateTextField(codeIneBac);
-		
+
 	}
-	
-private void initAnnees() {
-		
+
+	private void initAnnees() {
+
 		anneeSupFr.setReadOnly(true);
 		anneesLayout.add(anneeSupFr);
-		
+
 		anneeUnivFr.setReadOnly(true);
 		anneesLayout.add(anneeUnivFr);
-		
+
 		anneeEtablissement.setReadOnly(true);
 		anneesLayout.add(anneeEtablissement);
 
 		CmpUtils.setModerateTextField(anneeSupFr);
-		
+
 		CmpUtils.formatTextField(anneeUnivFr);
-		
+
 		CmpUtils.formatTextField(anneeEtablissement);
-		
+
 	}
-	
-	
-	
+
+
+
 
 	/**
 	 * @see com.vaadin.flow.i18n.LocaleChangeObserver#localeChange(com.vaadin.flow.i18n.LocaleChangeEvent)
@@ -186,7 +186,7 @@ private void initAnnees() {
 		departementEtbBac.setLabel(getTranslation("bac.departement"));
 		etablissementBac.setLabel(getTranslation("bac.etablissement"));
 		codeIneBac.setLabel(getTranslation("bac.codeine"));
-		
+
 		anneesLayout.getTitre().setText(getTranslation("annees.titre"));
 		anneeSupFr.setLabel(getTranslation("annees.anneesupfr"));
 		anneeUnivFr.setLabel(getTranslation("annees.anneeunivfr"));
@@ -206,7 +206,7 @@ private void initAnnees() {
 		bacLayout.updateStyle();
 		anneesLayout.updateStyle();
 	}
-	
+
 	@Override
 	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String codeApprenant) {
 		// Sécurisation de l'accès au dossier en paramètre
@@ -231,7 +231,7 @@ private void initAnnees() {
 		paysEtbBac.setValue("");
 		departementEtbBac.setValue("");
 		etablissementBac.setValue("");
-		
+
 		codeIneBac.setValue("");
 		anneeSupFr.setValue("");
 		anneeUnivFr.setValue("");
@@ -248,21 +248,31 @@ private void initAnnees() {
 			titreAccesBac.setValue(apprenant.getBac().getTitreAcces());
 			anneeBac.setValue(apprenant.getBac().getAnneeObtention());
 			typeBac.setValue(apprenant.getBac().getSerie());
-			mentionBac.setValue(apprenant.getBac().getMention());
-			paysEtbBac.setValue(apprenant.getBac().getPays());
+			if(StringUtils.hasText(apprenant.getBac().getMention())) {
+				mentionBac.setValue(apprenant.getBac().getMention());
+			}
+			if(StringUtils.hasText(apprenant.getBac().getPays())) {
+				paysEtbBac.setValue(apprenant.getBac().getPays());
+			}
 			if(apprenant.getBac().getPays().equals(Utils.CODE_PAYS_FRANCE)) {
 				departementEtbBac.setValue(apprenant.getBac().getDepartement());
 				etablissementBac.setValue(apprenant.getBac().getEtablissement());
 			} else {
-				etablissementBac.setValue(apprenant.getBac().getEtablissementLibre());
+				if(StringUtils.hasText(apprenant.getBac().getEtablissementLibre())) {
+					etablissementBac.setValue(apprenant.getBac().getEtablissementLibre());
+				}
 			}
 			codeIneBac.setValue(apprenant.getBac().getIne());
-			
+
 			anneeSupFr.setValue(apprenant.getPremieresInscriptions().getAnneeEnseignementSuperieur());
-			anneeUnivFr.setValue(apprenant.getPremieresInscriptions().getAnneeUniversite());
-			anneeEtablissement.setValue(apprenant.getPremieresInscriptions().getAnneeEtablissement());
+			if(StringUtils.hasText(apprenant.getPremieresInscriptions().getAnneeUniversite())) {
+				anneeUnivFr.setValue(apprenant.getPremieresInscriptions().getAnneeUniversite());
+			}
+			if(StringUtils.hasText(apprenant.getPremieresInscriptions().getAnneeEtablissement())) {
+				anneeEtablissement.setValue(apprenant.getPremieresInscriptions().getAnneeEtablissement());
+			}
 		}
 	}
-	
+
 
 }

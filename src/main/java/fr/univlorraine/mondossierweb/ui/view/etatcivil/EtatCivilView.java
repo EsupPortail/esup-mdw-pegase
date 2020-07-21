@@ -250,7 +250,9 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 				communeNaissance.setValue(apprenant.getNaissance().getCommuneDeNaissanceEtranger());
 			}
 			nationaliteNaissance.setValue(apprenant.getNaissance().getNationalite());
-			nationaliteNaissance2.setValue(apprenant.getNaissance().getDeuxiemeNationalite());
+			if(apprenant.getNaissance().getDeuxiemeNationalite()!=null) {
+				nationaliteNaissance2.setValue(apprenant.getNaissance().getDeuxiemeNationalite());
+			}
 		}
 	}
 
