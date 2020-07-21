@@ -336,12 +336,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 				insCard.addAlt(verticalLayout);
 
-				// Si on doit afficher plus de 2 inscriptions, on replie la carte
-				if(inscriptions.size()>2) {
-					insCard.hideAlt();
-				}else {
-					insCard.displayAlt();
-				}
+				insCard.displayAlt();
 				insCard.updateStyle();
 				inscriptionsLayout.add(insCard);
 				inscriptionsLayout.setFlexBasis("38em", insCard);
