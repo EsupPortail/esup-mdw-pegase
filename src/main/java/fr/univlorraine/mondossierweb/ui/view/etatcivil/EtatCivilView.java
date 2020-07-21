@@ -20,6 +20,7 @@ package fr.univlorraine.mondossierweb.ui.view.etatcivil;
 
 import javax.annotation.PostConstruct;
 
+import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
@@ -235,24 +236,23 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 		resetData();
 		if(apprenant != null) {
 			// Mise à jour de l'état-civil
-			nomFamille.setValue(apprenant.getEtatCivil().getNomDeNaissance());
-			nomUsage.setValue(apprenant.getEtatCivil().getNomUsuel());
-			prenom.setValue(apprenant.getEtatCivil().getPrenom());
-			prenom2.setValue(apprenant.getEtatCivil().getDeuxiemePrenom());
-			prenom3.setValue(apprenant.getEtatCivil().getTroisiemePrenom());
+			CmpUtils.valueAndVisibleIfNotNull(nomFamille,apprenant.getEtatCivil().getNomDeNaissance());
+			CmpUtils.valueAndVisibleIfNotNull(nomUsage,apprenant.getEtatCivil().getNomUsuel());
+			CmpUtils.valueAndVisibleIfNotNull(prenom,apprenant.getEtatCivil().getPrenom());
+			CmpUtils.valueAndVisibleIfNotNull(prenom2,apprenant.getEtatCivil().getDeuxiemePrenom());
+			CmpUtils.valueAndVisibleIfNotNull(prenom3,apprenant.getEtatCivil().getTroisiemePrenom());
 
 			// Mise à jour des données de naissance
 			dateNaissance.setValue(Utils.formatStringDateToDisplay(apprenant.getNaissance().getDateDeNaissance()));
 			paysNaissance.setValue(apprenant.getNaissance().getPaysDeNaissance());
 			if(apprenant.getNaissance().getPaysDeNaissance().equals(Utils.CODE_PAYS_FRANCE)) {
-				communeNaissance.setValue(apprenant.getNaissance().getCommuneDeNaissance());
+				CmpUtils.valueAndVisibleIfNotNull(communeNaissance,apprenant.getNaissance().getCommuneDeNaissance());
 			} else {
-				communeNaissance.setValue(apprenant.getNaissance().getCommuneDeNaissanceEtranger());
+				CmpUtils.valueAndVisibleIfNotNull(communeNaissance,apprenant.getNaissance().getCommuneDeNaissanceEtranger());
 			}
-			nationaliteNaissance.setValue(apprenant.getNaissance().getNationalite());
-			if(apprenant.getNaissance().getDeuxiemeNationalite()!=null) {
-				nationaliteNaissance2.setValue(apprenant.getNaissance().getDeuxiemeNationalite());
-			}
+			CmpUtils.valueAndVisibleIfNotNull(nationaliteNaissance,apprenant.getNaissance().getNationalite());
+			CmpUtils.valueAndVisibleIfNotNull(nationaliteNaissance2,apprenant.getNaissance().getDeuxiemeNationalite());
+
 		}
 	}
 

@@ -193,34 +193,37 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				Card insCard = new Card(cible.getFormation().getLibelleLong(), true);
 
 				TextField periode = new TextField();
+				periode.setVisible(false);
 				if(cible.getPeriode()!=null) {
-					periode.setValue(cible.getPeriode().getLibelleAffichage());
+					CmpUtils.valueAndVisibleIfNotNull(periode,cible.getPeriode().getLibelleAffichage());
 				}
 				periode.setReadOnly(true);
 				CmpUtils.setLongTextField(periode);
 				listTextFieldPeriode.add(periode);
 
 				TextField regime = new TextField();
-				if(inscription.getRegimeInscription()!=null &&
-					inscription.getRegimeInscription().getLibelle()!=null) {
-					regime.setValue(inscription.getRegimeInscription().getLibelle());
+				regime.setVisible(false);
+				if(inscription.getRegimeInscription()!=null ) {
+					CmpUtils.valueAndVisibleIfNotNull(regime,inscription.getRegimeInscription().getLibelle());
 				}
 				regime.setReadOnly(true);
 				CmpUtils.setLongTextField(regime);
 				listTextFieldRegime.add(regime);
 
 				TextField statut = new TextField();
+				statut.setVisible(false);
 				if(inscription.getStatutInscription()!=null) {
-					statut.setValue(inscription.getStatutInscription().getValue());
+				CmpUtils.valueAndVisibleIfNotNull(statut,inscription.getStatutInscription().getValue());
 				}
+			
 				statut.setReadOnly(true);
 				CmpUtils.setShortTextField(statut);
 				listTextFieldStatut.add(statut);
 
-
 				TextField paiement = new TextField();
+				paiement.setVisible(false);
 				if(inscription.getStatutPaiement()!=null) {
-					paiement.setValue(inscription.getStatutPaiement().getValue());
+					CmpUtils.valueAndVisibleIfNotNull(paiement,inscription.getStatutPaiement().getValue());
 				}
 				paiement.setReadOnly(true);
 				CmpUtils.setShortTextField(paiement);
@@ -228,8 +231,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 
 				TextField pieces = new TextField();
+				pieces.setVisible(false);
 				if(inscription.getStatutPieces()!=null) {
-					pieces.setValue(inscription.getStatutPieces().getValue());
+					CmpUtils.valueAndVisibleIfNotNull(pieces,inscription.getStatutPieces().getValue());
 				}
 				pieces.setReadOnly(true);
 				CmpUtils.setShortTextField(pieces);

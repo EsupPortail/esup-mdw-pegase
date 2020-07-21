@@ -245,32 +245,23 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 		resetData();
 		if(apprenant != null) {
 			// Mise à jour des infos sur le bac
-			titreAccesBac.setValue(apprenant.getBac().getTitreAcces());
-			anneeBac.setValue(apprenant.getBac().getAnneeObtention());
-			typeBac.setValue(apprenant.getBac().getSerie());
-			if(StringUtils.hasText(apprenant.getBac().getMention())) {
-				mentionBac.setValue(apprenant.getBac().getMention());
-			}
-			if(StringUtils.hasText(apprenant.getBac().getPays())) {
-				paysEtbBac.setValue(apprenant.getBac().getPays());
-			}
+			CmpUtils.valueAndVisibleIfNotNull(titreAccesBac,apprenant.getBac().getTitreAcces());
+			CmpUtils.valueAndVisibleIfNotNull(anneeBac,apprenant.getBac().getAnneeObtention());
+			CmpUtils.valueAndVisibleIfNotNull(typeBac,apprenant.getBac().getSerie());
+			CmpUtils.valueAndVisibleIfNotNull(mentionBac,apprenant.getBac().getMention());
+			CmpUtils.valueAndVisibleIfNotNull(paysEtbBac,apprenant.getBac().getPays());
 			if(apprenant.getBac().getPays().equals(Utils.CODE_PAYS_FRANCE)) {
-				departementEtbBac.setValue(apprenant.getBac().getDepartement());
-				etablissementBac.setValue(apprenant.getBac().getEtablissement());
+				CmpUtils.valueAndVisibleIfNotNull(departementEtbBac,apprenant.getBac().getDepartement());
+				CmpUtils.valueAndVisibleIfNotNull(etablissementBac,apprenant.getBac().getEtablissement());
 			} else {
-				if(StringUtils.hasText(apprenant.getBac().getEtablissementLibre())) {
-					etablissementBac.setValue(apprenant.getBac().getEtablissementLibre());
-				}
+				CmpUtils.valueAndVisibleIfNotNull(departementEtbBac,null);
+				CmpUtils.valueAndVisibleIfNotNull(etablissementBac,apprenant.getBac().getEtablissementLibre());
 			}
-			codeIneBac.setValue(apprenant.getBac().getIne());
-
-			anneeSupFr.setValue(apprenant.getPremieresInscriptions().getAnneeEnseignementSuperieur());
-			if(StringUtils.hasText(apprenant.getPremieresInscriptions().getAnneeUniversite())) {
-				anneeUnivFr.setValue(apprenant.getPremieresInscriptions().getAnneeUniversite());
-			}
-			if(StringUtils.hasText(apprenant.getPremieresInscriptions().getAnneeEtablissement())) {
-				anneeEtablissement.setValue(apprenant.getPremieresInscriptions().getAnneeEtablissement());
-			}
+			CmpUtils.valueAndVisibleIfNotNull(codeIneBac,apprenant.getBac().getIne());
+			CmpUtils.valueAndVisibleIfNotNull(anneeSupFr,apprenant.getPremieresInscriptions().getAnneeEnseignementSuperieur());
+			CmpUtils.valueAndVisibleIfNotNull(anneeUnivFr,apprenant.getPremieresInscriptions().getAnneeUniversite());
+			CmpUtils.valueAndVisibleIfNotNull(anneeEtablissement,apprenant.getPremieresInscriptions().getAnneeEtablissement());
+			
 		}
 	}
 

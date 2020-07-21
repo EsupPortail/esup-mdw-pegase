@@ -18,6 +18,8 @@
  */
 package fr.univlorraine.mondossierweb.utils;
 
+import org.flywaydb.core.internal.util.StringUtils;
+
 import com.vaadin.flow.component.textfield.TextField;
 
 /**
@@ -46,6 +48,15 @@ public final class CmpUtils {
 		formatTextField(tf);
 		tf.setWidthFull();
 		tf.setMaxWidth("15em");
+	}
+	
+	public static void valueAndVisibleIfNotNull(TextField cmp, String value) {
+		if(StringUtils.hasText(value)) {
+			cmp.setValue(value);
+			cmp.setVisible(true);
+		}	else {
+			cmp.setVisible(false);
+		}
 	}
 
 }

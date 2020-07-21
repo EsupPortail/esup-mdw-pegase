@@ -247,20 +247,20 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		Card mailCard = new Card("", true);
 		mailCard.getTitre().setText(cmc.getDemandeDeContact().getLibelleAffichage());
 
-		if(cmc.getProprietaire()!=null) {
-			TextField nomMail=new TextField();
-			nomMail.setId(NOM_MAIL + n);
-			nomMail.setReadOnly(true);
-			mailCard.addAlt(nomMail);
-			nomMail.setValue(cmc.getProprietaire());
-			CmpUtils.setLongTextField(nomMail);
-		}
+
+		TextField nomMail=new TextField();
+		nomMail.setId(NOM_MAIL + n);
+		nomMail.setReadOnly(true);
+		mailCard.addAlt(nomMail);
+		CmpUtils.valueAndVisibleIfNotNull(nomMail, cmc.getProprietaire());
+		CmpUtils.setLongTextField(nomMail);
+
 
 		TextField mail=new TextField();
 		mail.setId(MAIL + n);
 		mail.setReadOnly(true);
 		mailCard.addAlt(mail);
-		mail.setValue(cmc.getMail());
+		CmpUtils.valueAndVisibleIfNotNull(mail,cmc.getMail());
 		CmpUtils.setLongTextField(mail);
 
 		coordPersoLayout.addComponentAsFirst(mailCard);
@@ -275,20 +275,18 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		Card telCard = new Card("", true);
 		telCard.getTitre().setText(ctc.getDemandeDeContact().getLibelleAffichage());
 
-		if(ctc.getProprietaire()!=null) {
-			TextField nomTel=new TextField();
-			nomTel.setId(NOM_TEL + n);
-			nomTel.setReadOnly(true);
-			telCard.addAlt(nomTel);
-			nomTel.setValue(ctc.getProprietaire());
-			CmpUtils.setLongTextField(nomTel);
-		}
+		TextField nomTel=new TextField();
+		nomTel.setId(NOM_TEL + n);
+		nomTel.setReadOnly(true);
+		telCard.addAlt(nomTel);
+		CmpUtils.valueAndVisibleIfNotNull(nomTel,ctc.getProprietaire());
+		CmpUtils.setLongTextField(nomTel);
 
 		TextField tel=new TextField();
 		tel.setId(TEL + n);
 		tel.setReadOnly(true);
 		telCard.addAlt(tel);
-		tel.setValue(ctc.getTelephone());
+		CmpUtils.valueAndVisibleIfNotNull(tel,ctc.getTelephone());
 		CmpUtils.setModerateTextField(tel);
 
 		coordPersoLayout.addComponentAsFirst(telCard);
@@ -303,57 +301,56 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		Card adresseCard = new Card("", true);
 		adresseCard.getTitre().setText(cac.getDemandeDeContact().getLibelleAffichage());
 
-		if(StringUtils.hasText(cac.getProprietaire())) {
-			TextField nomAdresse=new TextField();
-			nomAdresse.setId(NOM_ADRESSE + n);
-			nomAdresse.setReadOnly(true);
-			adresseCard.addAlt(nomAdresse);
-			nomAdresse.setValue(cac.getProprietaire());
-			CmpUtils.setLongTextField(nomAdresse);
-		}
+
+		TextField nomAdresse=new TextField();
+		nomAdresse.setId(NOM_ADRESSE + n);
+		nomAdresse.setReadOnly(true);
+		adresseCard.addAlt(nomAdresse);
+		CmpUtils.valueAndVisibleIfNotNull(nomAdresse,cac.getProprietaire());
+		CmpUtils.setLongTextField(nomAdresse);
+
 
 		TextField paysAdresse=new TextField();
 		paysAdresse.setId(PAYS_ADRESSE + n);
 		paysAdresse.setReadOnly(true);
 		adresseCard.addAlt(paysAdresse);
-		paysAdresse.setValue(cac.getPays());
+		CmpUtils.valueAndVisibleIfNotNull(paysAdresse,cac.getPays());
 		CmpUtils.setLongTextField(paysAdresse);
 
-		if(StringUtils.hasText(cac.getLigne3OuVoie())) {
-			TextField compl1Adresse=new TextField();
-			compl1Adresse.setId(COMP1_ADRESSE + n);
-			compl1Adresse.setReadOnly(true);
-			adresseCard.addAlt(compl1Adresse);
-			compl1Adresse.setValue(cac.getLigne3OuVoie());
-			CmpUtils.setLongTextField(compl1Adresse);
-		}
 
-		if(StringUtils.hasText(cac.getLigne4OuComplement())) {
-			TextField compl2Adresse=new TextField();
-			compl2Adresse.setId(COMP2_ADRESSE + n);
-			compl2Adresse.setReadOnly(true);
-			adresseCard.addAlt(compl2Adresse);
-			compl2Adresse.setValue(cac.getLigne4OuComplement());
-			CmpUtils.setLongTextField(compl2Adresse);
-		}
+		TextField compl1Adresse=new TextField();
+		compl1Adresse.setId(COMP1_ADRESSE + n);
+		compl1Adresse.setReadOnly(true);
+		adresseCard.addAlt(compl1Adresse);
+		CmpUtils.valueAndVisibleIfNotNull(compl1Adresse,cac.getLigne3OuVoie());
+		CmpUtils.setLongTextField(compl1Adresse);
 
-		if(StringUtils.hasText(cac.getLigne1OuEtage())) {
-			TextField numVoieAdresse=new TextField();
-			numVoieAdresse.setId(NUM_VOIE_ADRESSE + n);
-			numVoieAdresse.setReadOnly(true);
-			adresseCard.addAlt(numVoieAdresse);
-			numVoieAdresse.setValue(cac.getLigne1OuEtage());
-			CmpUtils.setLongTextField(numVoieAdresse);
-		}
 
-		if(StringUtils.hasText(cac.getLigne2OuBatiment())) {
-			TextField lieuServAdresse=new TextField();
-			lieuServAdresse.setId(LIEU_SERV_ADRESSE + n);
-			lieuServAdresse.setReadOnly(true);
-			adresseCard.addAlt(lieuServAdresse);
-			lieuServAdresse.setValue(cac.getLigne2OuBatiment());
-			CmpUtils.setLongTextField(lieuServAdresse);
-		}
+		TextField compl2Adresse=new TextField();
+		compl2Adresse.setId(COMP2_ADRESSE + n);
+		compl2Adresse.setReadOnly(true);
+		adresseCard.addAlt(compl2Adresse);
+		CmpUtils.valueAndVisibleIfNotNull(compl2Adresse,cac.getLigne4OuComplement());
+		CmpUtils.setLongTextField(compl2Adresse);
+
+
+
+		TextField numVoieAdresse=new TextField();
+		numVoieAdresse.setId(NUM_VOIE_ADRESSE + n);
+		numVoieAdresse.setReadOnly(true);
+		adresseCard.addAlt(numVoieAdresse);
+		CmpUtils.valueAndVisibleIfNotNull(numVoieAdresse,cac.getLigne1OuEtage());
+		CmpUtils.setLongTextField(numVoieAdresse);
+
+
+
+		TextField lieuServAdresse=new TextField();
+		lieuServAdresse.setId(LIEU_SERV_ADRESSE + n);
+		lieuServAdresse.setReadOnly(true);
+		adresseCard.addAlt(lieuServAdresse);
+		CmpUtils.valueAndVisibleIfNotNull(lieuServAdresse,cac.getLigne2OuBatiment());
+		CmpUtils.setLongTextField(lieuServAdresse);
+
 
 		TextField codePostalAdresse=new TextField();
 		codePostalAdresse.setId(CODE_POSTAL_ADRESSE + n);
@@ -369,11 +366,11 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 
 		if(cac.getPays()!=null && cac.getPays().equals(Utils.CODE_PAYS_FRANCE)) {
-			codePostalAdresse.setValue(cac.getCodePostal());
-			communeAdresse.setValue(cac.getCommune());
+			CmpUtils.valueAndVisibleIfNotNull(codePostalAdresse,cac.getCodePostal());
+			CmpUtils.valueAndVisibleIfNotNull(communeAdresse,cac.getCommune());
 		} else {
-			codePostalAdresse.setValue(cac.getCodePostal());
-			communeAdresse.setValue(cac.getLigne5Etranger());
+			CmpUtils.valueAndVisibleIfNotNull(codePostalAdresse,cac.getCodePostal());
+			CmpUtils.valueAndVisibleIfNotNull(communeAdresse,cac.getLigne5Etranger());
 		}
 
 		coordPersoLayout.add(adresseCard);
