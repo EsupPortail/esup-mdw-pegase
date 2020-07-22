@@ -54,6 +54,7 @@ import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.Transport;
 
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
+import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.service.CurrentUiService;
 import fr.univlorraine.mondossierweb.service.PreferencesService;
@@ -174,9 +175,15 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private MenuBar createUserMenu(final Utilisateur utilisateur) {
 		
 		// Maj du darkMode en fonction des préférences de l'utilisateur
-		//currentUiService.setDarkMode(prefService.getBooleanPref(utilisateur.getUsername(), PrefUtils.DARK_MODE));
-		// Dark mode par défaut
-		currentUiService.setDarkMode(true);
+		Optional<PreferencesUtilisateur> prefDarkMode =prefService.getPreference(utilisateur.getUsername(), PrefUtils.DARK_MODE);
+		// Si on a une préférence pour l'utilisateur
+		if(prefDarkMode.isPresent()) {
+			// Maj du skin en fonction de la préférence de l'utilisateur
+			currentUiService.setDarkMode(prefService.getBooleanPref(prefDarkMode.get()));
+		}else {
+			// Dark mode par défaut
+			currentUiService.setDarkMode(true);
+		}
 		
 		MenuBar topMenu = new MenuBar();
 		topMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY);

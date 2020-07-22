@@ -35,17 +35,17 @@ public class PreferencesService {
 	@Autowired
 	private transient PreferencesUtilisateurRepository prefUtilRepository;
 	
-	public boolean getBooleanPref(String username, String pref) {
+	
+	public boolean getBooleanPref(PreferencesUtilisateur p) {
+		return PrefUtils.getBooleanValue(p.getValeur());
+	}
+
+	public Optional<PreferencesUtilisateur> getPreference(String username, String pref) {
 		PreferencesUtilisateurPK ppk = new PreferencesUtilisateurPK();
 		ppk.setUsername(username);
 		ppk.setPrefId(pref);
-		Optional<PreferencesUtilisateur> p = prefUtilRepository.findById(ppk);
-		if(p.isPresent()) {
-			return PrefUtils.getBooleanValue(p.get().getValeur());
-		}
-		return false;
+		return prefUtilRepository.findById(ppk);
 	}
-
 
 	public void saveUserPref(String username, String pref, String value) {
 		PreferencesUtilisateurPK ppk = new PreferencesUtilisateurPK();
