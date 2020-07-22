@@ -176,7 +176,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		// Maj du darkMode en fonction des préférences de l'utilisateur
 		//currentUiService.setDarkMode(prefService.getBooleanPref(utilisateur.getUsername(), PrefUtils.DARK_MODE));
 		// Dark mode par défaut
-		currentUiService.setDarkMode(false);
+		currentUiService.setDarkMode(true);
 		
 		MenuBar topMenu = new MenuBar();
 		topMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY);
@@ -199,7 +199,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 		//userMenuEtatCivilItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(EtatCivilView.class)));
 		//userMenuCoordonneesItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(CoordonneesView.class)));
-		userMenuParametresItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(ParametresView.class)));
+		//userMenuParametresItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(ParametresView.class)));
 		userMenuAproposItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(AProposView.class)));
 
 		userMenuLogoutItem =

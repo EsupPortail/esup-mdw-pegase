@@ -84,12 +84,14 @@ public class Card extends VerticalLayout {
 			/*this.getStyle().set("margin", "1em auto 1em auto");
 			this.getStyle().set("border-radius", "4px");
 			this.getStyle().set("border", "0.1em solid");*/
-
-			this.getStyle().set("border-color", "var(--lumo-contrast-5pct)");
+ 
+			this.getStyle().set("border-color", "var(--lumo-base-color)");
 			this.getStyle().set("margin", "0em auto 0em auto");
 			this.getStyle().set("border-radius", "0");
+			
 			//this.getStyle().set("border-bottom-width", "0.1em");
 			//this.getStyle().set("border-bottom-style", "solid");
+			this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
 			
 			/*this.getStyle().set("background-color", "rgba(40, 45, 51, 0.95)");
 			this.getStyle().set("color", "white");*/

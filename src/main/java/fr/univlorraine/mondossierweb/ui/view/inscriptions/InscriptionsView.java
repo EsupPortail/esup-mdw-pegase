@@ -109,7 +109,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		inscriptionsLayout.setWidthFull();
 		inscriptionsLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
 		//inscriptionsLayout.setFlexWrap(FlexWrap.WRAP);
-		inscriptionsLayout.getStyle().set("margin-top", "0");
+		//inscriptionsLayout.getStyle().set("margin-top", "0");
 		add(inscriptionsLayout);
 	}
 
