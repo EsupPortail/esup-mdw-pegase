@@ -8,7 +8,17 @@
     padding: 0;
 }
 
+	
 :host([readonly]) [part="input-field"] {
 	padding: 0;
 }
 
+:host([readonly]) [part="input-field"]::after {
+	border-style: none;    
+}
+
+/*
+:host(.nice-textfield) [part="input-field"]::after {
+	border-style: none;    
+	 border-width: 0px;     
+}*/
