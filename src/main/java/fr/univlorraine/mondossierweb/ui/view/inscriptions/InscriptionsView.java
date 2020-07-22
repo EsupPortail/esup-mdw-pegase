@@ -119,6 +119,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	 */
 	@Override
 	public void localeChange(final LocaleChangeEvent event) {
+		log.info("localeChange");
 		setViewTitle(getTranslation("inscriptions.title"));
 
 		for(TextField tf : listTextFieldPeriode) {
@@ -165,6 +166,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		securityService.checkDossier();
 		// Mise à jour de l'affichage
 		updateData(securityService.getDossier()!=null ? securityService.getDossier().getInscriptions() : null);
+		//Force la maj des label
+		localeChange(null);
 	}
 
 	/**
@@ -250,7 +253,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
 				certButton.setWidth("15em");
 				certButton.getStyle().set("background-color", "#f95151");
-				certButton.getStyle().set("color", "rgba(40, 45, 51, 0.95)");
+				certButton.getStyle().set("color", "white");
 				Anchor exportCertificatAnchor = new Anchor();
 				exportCertificatAnchor.getStyle().set("margin-left", "0");
 				exportCertificatAnchor.add(certButton);
@@ -268,7 +271,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
 				attestationButton.setWidth("15em");
 				attestationButton.getStyle().set("background-color", "#f95151");
-				attestationButton.getStyle().set("color", "rgba(40, 45, 51, 0.95)");
+				attestationButton.getStyle().set("color", "white");
 				Anchor exportAttestationAnchor = new Anchor();
 				exportAttestationAnchor.getStyle().set("margin-left", "0");
 				exportAttestationAnchor.add(attestationButton);

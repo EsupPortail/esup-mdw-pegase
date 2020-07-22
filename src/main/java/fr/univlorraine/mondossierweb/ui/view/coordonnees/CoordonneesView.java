@@ -123,6 +123,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	 */
 	@Override
 	public void localeChange(final LocaleChangeEvent event) {
+		log.info("localeChange");
 		setViewTitle(getTranslation("coordonnees.title"));
 
 		coordPersoLayout.getChildren().forEach(c -> updateCardLocale(c) );
@@ -130,22 +131,22 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	}
 
 	private void updateCardLocale(Component c) {
-		log.info("Traitement des messages de la card : {}", c);
+		//log.info("Traitement des messages de la card : {}", c);
 		c.getChildren().forEach(l -> updateLayoutLocale(l));
 	}
 
 	private void updateLayoutLocale(Component c) {
-		log.info("Traitement des layout de la card : {}", c);
+		//log.info("Traitement des layout de la card : {}", c);
 		c.getChildren().forEach(fl -> updateFormLayoutLocale(fl));
 	}
 	
 	private void updateFormLayoutLocale(Component c) {
-		log.info("Traitement des formlayout de la card : {}", c);
+		//log.info("Traitement des formlayout de la card : {}", c);
 		c.getChildren().forEach(tf -> updateTextFieldLocale(tf));
 	}
 
 	private void updateTextFieldLocale(Component c) {
-		log.info("Traitement des messages du composant : {}", c);
+		//log.info("Traitement des messages du composant : {}", c);
 		TextField t = null;
 
 		try {
@@ -157,7 +158,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		if(t!=null && t.getId().isPresent()) {
 			String id = t.getId().orElse("");
 			String type = id.split("_")[0] + "_";
-			log.info("Recherche du message pour : {}", type);
+			//log.info("Recherche du message pour : {}", type);
 			switch(type) {
 			case NOM_TEL :
 				t.setLabel(getTranslation("tel.nom"));
@@ -223,7 +224,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	 */
 	private void updateData(Apprenant apprenant) {
 		resetData();
-
+		log.info("updateDate CoordonneesView...");
 		if(afficherMailLdap) {
 			// TODO ajouter mail ldap
 		}
@@ -248,6 +249,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 			}
 			updateStyle();
 		}
+		log.info("updateDate CoordonneesView DONE");
 	}
 
 	private void ajouterMail(ContactComplet c, int n) {
@@ -422,6 +424,8 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		securityService.checkDossier();
 		// Mise à jour de l'affichage
 		updateData(securityService.getDossier()!=null ? securityService.getDossier().getApprenant() : null);
-	}
+		//Force la maj des label
+		localeChange(null);
+	}	
 
 }
