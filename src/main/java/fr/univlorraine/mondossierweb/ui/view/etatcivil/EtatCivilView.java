@@ -206,6 +206,7 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	//@Override
 	protected void updateStyle() {
 		identiteCard.updateStyle();
+		identiteCard.addClassName("card-with-separator");
 		naissanceCard.updateStyle();
 	}
 

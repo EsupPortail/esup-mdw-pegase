@@ -18,6 +18,9 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.coordonnees;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +91,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	private static final String CODE_POSTAL_ADRESSE = "codePostalAdresse_";
 
 	private static final String COMMUNE_ADRESSE = "communeAdresse_";
-
+	
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
@@ -243,6 +246,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 				}
 
 			}
+			updateStyle();
 		}
 	}
 
@@ -273,8 +277,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		CmpUtils.setLongTextField(mail);
 
 		coordPersoLayout.addComponentAsFirst(mailCard);
-		//coordPersoLayout.setFlexBasis("50em", mailCard);
-		mailCard.updateStyle();
+	
 		mailCard.displayAlt();
 	}
 
@@ -304,8 +307,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		CmpUtils.setModerateTextField(tel);
 
 		coordPersoLayout.addComponentAsFirst(telCard);
-		//coordPersoLayout.setFlexBasis("50em", telCard);
-		telCard.updateStyle();
+
 		telCard.displayAlt();
 	}
 
@@ -391,12 +393,25 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		}
 
 		coordPersoLayout.add(adresseCard);
-		//coordPersoLayout.setFlexBasis("50em", adresseCard);
-		adresseCard.updateStyle();
+
 		adresseCard.displayAlt();
 	}
 
 
+	protected void updateStyle() {
+		List<Component> listComp = coordPersoLayout.getChildren().collect(Collectors.toList());
+		
+		int cpt=0;
+		for(Component c : listComp) {
+			cpt++;
+			Card coordCard = (Card) c; 
+			coordCard.updateStyle();
+			if(cpt<listComp.size()) {
+				coordCard.addClassName("card-with-separator");
+			}
+		}
+	}
+	
 	@Override
 	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String codeApprenant) {
 		// Sécurisation de l'accès au dossier en paramètre

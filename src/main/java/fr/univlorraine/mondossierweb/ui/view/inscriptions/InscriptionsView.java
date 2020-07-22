@@ -27,12 +27,14 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
@@ -99,7 +101,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	List<Button> listButtonCertificat = new LinkedList<Button> ();
 	List<Button> listButtonAttestation = new LinkedList<Button> ();
 	List<Button> listButtonPhoto = new LinkedList<Button> ();
-
 
 	@PostConstruct
 	public void init() {
@@ -213,9 +214,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				TextField statut = new TextField();
 				statut.setVisible(false);
 				if(inscription.getStatutInscription()!=null) {
-				CmpUtils.valueAndVisibleIfNotNull(statut,inscription.getStatutInscription().getValue());
+					CmpUtils.valueAndVisibleIfNotNull(statut,inscription.getStatutInscription().getValue());
 				}
-			
+
 				statut.setReadOnly(true);
 				CmpUtils.setShortTextField(statut);
 				listTextFieldStatut.add(statut);
@@ -279,8 +280,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				// Ajout à la liste des boutons
 				listButtonAttestation.add(attestationButton);
 
-				
-				
+
+
 				// Ajout bouton photo
 				Button photoButton = new Button("", VaadinIcon.USER.create());
 				photoButton.setWidth("7em");
@@ -292,12 +293,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				photoButton.addClickListener(c-> {
 					ByteArrayInputStream photo = exportService.getPhoto(securityService.getDossierConsulte(), inscription.getCible().getCode());
 					if(photo != null) {
-							StreamResource resource = new StreamResource("photo_"+securityService.getDossierConsulte()+".jpg", () -> photo);
-							Image image = new Image(resource, "photographie");
-							photoLayout.removeAll();
-							photoLayout.add(image);
-							photoButton.setVisible(false);
-							
+						StreamResource resource = new StreamResource("photo_"+securityService.getDossierConsulte()+".jpg", () -> photo);
+						Image image = new Image(resource, "photographie");
+						photoLayout.removeAll();
+						photoLayout.add(image);
+						photoButton.setVisible(false);
+
 					}
 				});
 
@@ -326,7 +327,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				// Layout photo
 				photoButton.getStyle().set("margin-left", "1em");
 				photoLayout.addComponentAsFirst(photoButton);
-				
+
 				//Layout des boutons
 				FlexLayout buttonLayout = new FlexLayout();
 				buttonLayout.setSizeUndefined();
@@ -342,7 +343,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				buttonLayout.add(exportAttestationAnchor);
 				buttonLayout.setFlexWrap(FlexWrap.WRAP);
 				buttonLayout.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
-				
+
 
 				flexLayout.add(statutLayout);
 				flexLayout.add(photoLayout);
@@ -357,20 +358,27 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				insCard.addAlt(verticalLayout);
 
 				insCard.displayAlt();
-				insCard.updateStyle();
 				inscriptionsLayout.add(insCard);
-				//inscriptionsLayout.setFlexBasis("50em", insCard);
+
 			}
 		}
 		updateStyle();
 	}
 
-	//@Override
+
 	protected void updateStyle() {
-		inscriptionsLayout.getChildren().forEach(c -> {
+
+		List<Component> listComp = inscriptionsLayout.getChildren().collect(Collectors.toList());
+
+		int cpt=0;
+		for(Component c : listComp) {
+			cpt++;
 			Card insCard = (Card) c; 
 			insCard.updateStyle();
-		});
+			if(cpt<listComp.size()) {
+				insCard.addClassName("card-with-separator");
+			}
+		}
 
 	}
 

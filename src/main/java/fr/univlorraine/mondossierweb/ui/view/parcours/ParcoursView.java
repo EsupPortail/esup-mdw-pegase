@@ -212,6 +212,7 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 	//@Override
 	protected void updateStyle() {
 		bacCard.updateStyle();
+		bacCard.addClassName("card-with-separator");
 		anneesCard.updateStyle();
 	}
 
