@@ -300,6 +300,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					}
 				});
 
+				//Récupération de la photo automatiquement
+				photoButton.click();
+				
 				// Ajout à la liste des boutons
 				listButtonPhoto.add(photoButton);
 
