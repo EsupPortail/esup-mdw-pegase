@@ -24,6 +24,14 @@ public class ExportService implements Serializable {
 	@Autowired
 	private transient PegaseService pegaseService;
 
+	
+	public ByteArrayInputStream getPhoto(String codeApprenant, String codeFormation) {
+		File file = pegaseService.recuperePhoto(codeApprenant, codeFormation);
+
+		return getStream(file,codeApprenant, codeFormation, "Photo");
+	}
+	
+	
 	/**
 	 * Génération d'un pdf
 	 * @param codeApprenant
@@ -71,12 +79,6 @@ public class ExportService implements Serializable {
 			log.info("Erreur à la génération du {} pour : {} {}", document, codeApprenant, codeFormation);
 		}
 		return null;
-	}
-
-	public ByteArrayInputStream getPhoto(String codeApprenant, String codeFormation) {
-		File file = pegaseService.recuperePhoto(codeApprenant, codeFormation);
-
-		return getStream(file,codeApprenant, codeFormation, "Photo");
 	}
 
 }

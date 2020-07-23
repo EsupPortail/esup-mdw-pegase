@@ -259,7 +259,7 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 			CmpUtils.valueAndVisibleIfNotNull(typeBac,apprenant.getBac().getSerie());
 			CmpUtils.valueAndVisibleIfNotNull(mentionBac,apprenant.getBac().getMention());
 			CmpUtils.valueAndVisibleIfNotNull(paysEtbBac,apprenant.getBac().getPays());
-			if(apprenant.getBac().getPays().equals(Utils.CODE_PAYS_FRANCE)) {
+			if(apprenant.getBac()!=null && apprenant.getBac().getPays()!=null && apprenant.getBac().getPays().equals(Utils.CODE_PAYS_FRANCE)) {
 				CmpUtils.valueAndVisibleIfNotNull(departementEtbBac,apprenant.getBac().getDepartement());
 				CmpUtils.valueAndVisibleIfNotNull(etablissementBac,apprenant.getBac().getEtablissement());
 			} else {

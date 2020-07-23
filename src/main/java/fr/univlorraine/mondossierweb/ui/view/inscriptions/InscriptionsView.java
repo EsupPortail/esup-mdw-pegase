@@ -18,12 +18,7 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,7 +50,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
 import fr.univlorraine.mondossierweb.service.ExportService;
-import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
@@ -64,6 +58,7 @@ import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
 import lombok.Getter;
@@ -165,7 +160,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
 		securityService.checkDossier();
 		// Mise à jour de l'affichage
-		updateData(securityService.getDossier()!=null ? securityService.getDossier().getInscriptions() : null);
+		updateData(securityService.getDossier()!=null ? securityService.getDossier() : null);
 		//Force la maj des label
 		localeChange(null);
 	}
@@ -189,10 +184,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	 * Mise à jour des données affichées
 	 * @param apprenant
 	 */
-	private void updateData(List<InscriptionComplete> inscriptions) {
+	private void updateData(ApprenantEtInscriptions dossier) {
 		resetData();
-		if(inscriptions != null && !inscriptions.isEmpty()) {
-			for(InscriptionComplete inscription : inscriptions) {
+		if(dossier!=null && dossier.getInscriptions() != null && !dossier.getInscriptions() .isEmpty()) {
+			for(InscriptionComplete inscription : dossier.getInscriptions() ) {
 				CibleInscription cible = inscription.getCible();
 				Card insCard = new Card(cible.getFormation().getLibelleLong(), true);
 
@@ -258,7 +253,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				exportCertificatAnchor.getStyle().set("margin-left", "0");
 				exportCertificatAnchor.add(certButton);
 				exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
-					() -> exportService.getCertificat(securityService.getDossierConsulte(), inscription.getCible().getCode())));
+					() -> exportService.getCertificat(dossier.getApprenant().getCode(), getCodeVoeu(inscription))));
 				exportCertificatAnchor.getElement().getStyle().set("margin-left", "1em");
 				exportCertificatAnchor.setTarget("_blank");
 
@@ -276,7 +271,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				exportAttestationAnchor.getStyle().set("margin-left", "0");
 				exportAttestationAnchor.add(attestationButton);
 				exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
-					() -> exportService.getAttestation(securityService.getDossierConsulte(), inscription.getCible().getCode())));
+					() -> exportService.getAttestation(dossier.getApprenant().getCode(),  getCodeVoeu(inscription))));
 				exportAttestationAnchor.getElement().getStyle().set("margin-left", "1em");
 				exportAttestationAnchor.setTarget("_blank");
 
@@ -294,7 +289,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				photoLayout.getStyle().set("margin", "auto");
 				photoLayout.getStyle().set("padding", "0");
 				photoButton.addClickListener(c-> {
-					ByteArrayInputStream photo = exportService.getPhoto(securityService.getDossierConsulte(), inscription.getCible().getCode());
+					ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  getCodeVoeu(inscription));
 					if(photo != null) {
 						StreamResource resource = new StreamResource("photo_"+securityService.getDossierConsulte()+".jpg", () -> photo);
 						Image image = new Image(resource, "photographie");
@@ -366,6 +361,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			}
 		}
 		updateStyle();
+	}
+
+
+	private String getCodeVoeu(InscriptionComplete inscription) {
+		return inscription.getCible().getFormation().getCode()+"→"+inscription.getCible().getCode()+"@"+inscription.getCible().getPeriode().getCode();
 	}
 
 
