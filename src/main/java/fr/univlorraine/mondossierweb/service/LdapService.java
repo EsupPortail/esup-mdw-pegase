@@ -128,4 +128,18 @@ public class LdapService implements Serializable {
 		return peoples;
 
 	}
+
+	public String getStudentMailByCodeApprenant(String code) {
+		log.info("findStudentByCodeApprenant : {}", code);
+
+		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+ldapFiltreEtudiant+"("+ldapCodEtuAttribute+"=" + code + "))", new StudentAttributesMapper());
+
+		//Si on a récupéré qu'une seule entrée
+		if(peoples != null && peoples.size()==1) {
+			// récupération du mail de la personne
+			LdapPerson people = peoples.get(0);
+			return people.getMail();
+		}
+		return null;
+	}
 }

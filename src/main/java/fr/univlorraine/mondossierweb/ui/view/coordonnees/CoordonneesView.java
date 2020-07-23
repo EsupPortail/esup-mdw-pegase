@@ -45,6 +45,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
+import fr.univlorraine.mondossierweb.service.LdapService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
@@ -59,6 +60,7 @@ import fr.univlorraine.pegase.model.insgestion.ContactAdresseComplet;
 import fr.univlorraine.pegase.model.insgestion.ContactComplet;
 import fr.univlorraine.pegase.model.insgestion.ContactMelComplet;
 import fr.univlorraine.pegase.model.insgestion.ContactTelephoneComplet;
+import fr.univlorraine.pegase.model.insgestion.DemandeDeContactSimple;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -91,9 +93,11 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	private static final String CODE_POSTAL_ADRESSE = "codePostalAdresse_";
 
 	private static final String COMMUNE_ADRESSE = "communeAdresse_";
-	
+
 	@Autowired
 	private transient SecurityService securityService;
+	@Autowired
+	protected transient LdapService ldapService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Value("${etudiant.mail.ldap}")
@@ -139,7 +143,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		//log.info("Traitement des layout de la card : {}", c);
 		c.getChildren().forEach(fl -> updateFormLayoutLocale(fl));
 	}
-	
+
 	private void updateFormLayoutLocale(Component c) {
 		//log.info("Traitement des formlayout de la card : {}", c);
 		c.getChildren().forEach(tf -> updateTextFieldLocale(tf));
@@ -225,9 +229,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	private void updateData(Apprenant apprenant) {
 		resetData();
 		log.info("updateDate CoordonneesView...");
-		if(afficherMailLdap) {
-			// TODO ajouter mail ldap
-		}
 		if(apprenant != null && apprenant.getContacts()!=null && !apprenant.getContacts().isEmpty()) {
 			int cpt=0;
 			// Pour chaque contact
@@ -246,6 +247,22 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 					break;
 				}
 
+			}
+			if(afficherMailLdap) {
+				// récupération du mail dans le ldap
+				String mail = ldapService.getStudentMailByCodeApprenant(apprenant.getCode());
+				// Si on a récupéré un mail
+				if(StringUtils.hasText(mail)) {
+					cpt++;
+					// Création d'un contact correspondant au mail établissement
+					ContactMelComplet c = new ContactMelComplet();
+					DemandeDeContactSimple dmc = new DemandeDeContactSimple();
+					dmc.setLibelleAffichage(getTranslation("coordonnees.mail.etablissement"));
+					c.setDemandeDeContact(dmc);
+					c.setMail(mail);
+					// Ajout du mail dans la vue
+					ajouterMail(c, cpt);
+				}
 			}
 			updateStyle();
 		}
@@ -279,7 +296,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		CmpUtils.setLongTextField(mail);
 
 		coordPersoLayout.addComponentAsFirst(mailCard);
-	
+
 		mailCard.displayAlt();
 	}
 
@@ -293,7 +310,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		telLayout.getStyle().set("margin", "0");
 		telCard.addAlt(telLayout);
 
-		
+
 		TextField nomTel=new TextField();
 		nomTel.setId(NOM_TEL + n);
 		nomTel.setReadOnly(true);
@@ -322,7 +339,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		FormLayout adresseLayout = new FormLayout();
 		adresseLayout.getStyle().set("margin", "0");
 		adresseCard.addAlt(adresseLayout);
-		
+
 		TextField nomAdresse=new TextField();
 		nomAdresse.setId(NOM_ADRESSE + n);
 		nomAdresse.setReadOnly(true);
@@ -402,7 +419,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 	protected void updateStyle() {
 		List<Component> listComp = coordPersoLayout.getChildren().collect(Collectors.toList());
-		
+
 		int cpt=0;
 		for(Component c : listComp) {
 			cpt++;
@@ -413,7 +430,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 			}
 		}
 	}
-	
+
 	@Override
 	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String codeApprenant) {
 		// Sécurisation de l'accès au dossier en paramètre
