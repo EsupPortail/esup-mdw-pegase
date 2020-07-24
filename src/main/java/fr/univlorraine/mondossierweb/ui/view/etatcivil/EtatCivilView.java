@@ -102,6 +102,10 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 		//etatcivilLayout.setFlexWrap(FlexWrap.WRAP);
 		//etatcivilLayout.setFlexBasis("28em", identiteLayout, naissanceLayout);
 		add(etatcivilLayout);
+		
+		getStyle().set("background-image", "url(./images/logo-back.png)");
+		getStyle().set("background-repeat", "no-repeat");
+		getStyle().set("background-position", "bottom right");
 		updateStyle();
 	}
 
