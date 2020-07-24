@@ -287,6 +287,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				VerticalLayout photoLayout=new VerticalLayout();
 				photoLayout.setSizeUndefined();
 				photoLayout.getStyle().set("margin", "auto");
+				photoLayout.getStyle().set("margin-top", "0");
 				photoLayout.getStyle().set("padding", "0");
 				photoButton.addClickListener(c-> {
 					ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  getCodeVoeu(inscription));
