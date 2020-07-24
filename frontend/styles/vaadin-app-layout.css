@@ -1,9 +1,13 @@
 [part="navbar"] {
 	padding: var(--lumo-space-s);
 	align-items: baseline;
-	background: none;
+	color: white;
 }
 
+[part="navbar"]::before {
+	background-color: var(--lumo-secondary-text-color);
+}
+	
 [part="drawer"] {
 	background-color : var(--lumo-contrast-5pct);
 }
