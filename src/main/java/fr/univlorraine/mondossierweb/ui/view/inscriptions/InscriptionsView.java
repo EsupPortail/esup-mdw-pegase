@@ -107,6 +107,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		//inscriptionsLayout.setFlexWrap(FlexWrap.WRAP);
 		//inscriptionsLayout.getStyle().set("margin-top", "0");
 		add(inscriptionsLayout);
+		CmpUtils.setBackgroundLogo(this);
 	}
 
 

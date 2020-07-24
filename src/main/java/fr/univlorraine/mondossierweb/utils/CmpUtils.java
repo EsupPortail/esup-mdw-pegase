@@ -20,7 +20,11 @@ package fr.univlorraine.mondossierweb.utils;
 
 import org.flywaydb.core.internal.util.StringUtils;
 
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+
+import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
 
 /**
  * Outils pour la gestion des préférences de l'application
@@ -59,6 +63,13 @@ public final class CmpUtils {
 		}	else {
 			cmp.setVisible(false);
 		}
+	}
+
+	public static void setBackgroundLogo(VerticalLayout view) {
+		view.getStyle().set("background-image", "url(./images/logo-back.png)");
+		view.getStyle().set("background-repeat", "no-repeat");
+		view.getStyle().set("background-position", "bottom right");
+		
 	}
 
 }

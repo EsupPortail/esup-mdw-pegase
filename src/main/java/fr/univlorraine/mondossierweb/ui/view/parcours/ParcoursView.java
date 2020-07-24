@@ -103,6 +103,7 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 		//parcoursLayout.setFlexBasis("28em", bacLayout, anneesLayout);
 		add(parcoursLayout);
 		updateStyle();
+		CmpUtils.setBackgroundLogo(this);
 	}
 
 	private void initBac() {

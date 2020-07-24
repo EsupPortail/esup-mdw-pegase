@@ -50,6 +50,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.Getter;
 

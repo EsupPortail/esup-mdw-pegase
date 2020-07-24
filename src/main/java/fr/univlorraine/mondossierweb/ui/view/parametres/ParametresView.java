@@ -45,6 +45,7 @@ import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 import lombok.Getter;
