@@ -11,6 +11,7 @@
 
 ## Configurer le projet
 - Créer et compléter un fichier `application.properties` sur le modèle de `/src/main/resources/application.sample.properties`
+- Ecraser les images logo*.png dans src/main/resources/static/images avec les logos de l'université cible.
 
 ## Configurer et lancer le projet dans Eclipse
 - Importer le projet Maven dans eclipse.
