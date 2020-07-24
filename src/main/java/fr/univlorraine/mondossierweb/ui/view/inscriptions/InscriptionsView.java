@@ -75,6 +75,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private static final String ATTEST_FILE_NAME = "attestation";
 	private static final String ATTEST_FILE_EXT = ".pdf";
 
+
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
