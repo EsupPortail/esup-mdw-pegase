@@ -65,11 +65,13 @@ public final class CmpUtils {
 		}
 	}
 
-	public static void setBackgroundLogo(VerticalLayout view) {
+	/*public static void setBackgroundLogo(VerticalLayout view) {
 		view.getStyle().set("background-image", "url(./images/logo-back.png)");
 		view.getStyle().set("background-repeat", "no-repeat");
 		view.getStyle().set("background-position", "bottom right");
+		view.getStyle().set("background-size", "20%");
+
 		
-	}
+	}*/
 
 }

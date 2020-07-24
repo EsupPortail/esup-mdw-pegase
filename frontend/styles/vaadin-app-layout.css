@@ -11,3 +11,10 @@
 [part="drawer"] {
 	background-color : var(--lumo-contrast-5pct);
 }
+
+content {
+	background-repeat: no-repeat;
+    background-size: 20%;
+    background-image: url(./images/logo-back.png);
+    background-position: right bottom;
+}

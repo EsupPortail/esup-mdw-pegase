@@ -119,7 +119,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		//coordPersoLayout.setFlexWrap(FlexWrap.WRAP);
 
 		add(coordPersoLayout);
-		CmpUtils.setBackgroundLogo(this);
 	}
 
 
