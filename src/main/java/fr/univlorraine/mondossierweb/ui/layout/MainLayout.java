@@ -206,7 +206,8 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 		//userMenuEtatCivilItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(EtatCivilView.class)));
 		//userMenuCoordonneesItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(CoordonneesView.class)));
-		userMenuParametresItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(ParametresView.class)));
+		// Entrée 'Paramètres' dans le menu en haut à droite :
+		//userMenuParametresItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(ParametresView.class)));
 		userMenuAproposItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(AProposView.class)));
 
 		userMenuLogoutItem =

@@ -156,7 +156,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		try {
 			t = (TextField) c;
 		} catch (ClassCastException e) {
-			log.info("Le composant n'est pas un TextField");
+			log.debug("Le composant n'est pas un TextField");
 		}
 
 		if(t!=null && t.getId().isPresent()) {
