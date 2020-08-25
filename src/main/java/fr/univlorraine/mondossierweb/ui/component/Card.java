@@ -86,7 +86,7 @@ public class Card extends VerticalLayout {
 			this.getStyle().set("border", "0.1em solid");*/
  
 			this.getStyle().set("border-color", "var(--lumo-base-color)");
-			this.getStyle().set("margin", "0em auto 0em auto");
+			this.getStyle().set("margin", "0.5em auto 0.5em auto");
 			this.getStyle().set("border-radius", "0");
 			
 			//this.getStyle().set("border-bottom-width", "0.1em");
