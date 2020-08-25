@@ -93,6 +93,7 @@ public class Card extends VerticalLayout {
 			//this.getStyle().set("border-bottom-style", "solid");
 			this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
 			
+			
 			/*this.getStyle().set("background-color", "rgba(40, 45, 51, 0.95)");
 			this.getStyle().set("color", "white");*/
 			
