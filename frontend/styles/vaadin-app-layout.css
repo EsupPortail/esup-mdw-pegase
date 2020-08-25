@@ -5,7 +5,9 @@
 }
 
 [part="navbar"]::before {
-	background-color: var(--lumo-secondary-text-color);
+	/*background-color: var(--lumo-secondary-text-color);*/
+	background-color: #343a40!important;
+	opacity: 0.9;
 }
 	
 [part="drawer"] {
