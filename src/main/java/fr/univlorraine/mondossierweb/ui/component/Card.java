@@ -34,6 +34,7 @@ public class Card extends VerticalLayout {
 	
 	public Card(String libelle, boolean hasAltVisibleComponent) {
 		super();
+		addClassName("flip");
 		titre.setText(libelle);
 		if(!hasAltVisibleComponent) {
 			useAlt = false;

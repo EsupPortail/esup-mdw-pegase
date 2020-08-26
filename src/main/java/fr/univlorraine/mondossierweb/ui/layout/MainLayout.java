@@ -186,7 +186,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			// Dark mode par défaut
 			currentUiService.setDarkMode(false);
 		}
-		
+	
 		MenuBar topMenu = new MenuBar();
 		topMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY);
 		topMenu.addClassName("user-menu");
