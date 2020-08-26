@@ -66,6 +66,7 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 
 		Div appNameTitle = new Div(new Text(buildProperties.getName()));
 		appNameTitle.getElement().getStyle().set("font-size", "var(--lumo-font-size-xl)");
+		appNameTitle.addClassName("tracking-in-expand");
 		add(appNameTitle);
 	}
 
