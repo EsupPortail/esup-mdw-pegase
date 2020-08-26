@@ -262,7 +262,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				listButtonCertificat.add(certButton);
 
 
-
 				// Ajout bouton attestation de paiement
 				Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
 				attestationButton.setWidth("15em");

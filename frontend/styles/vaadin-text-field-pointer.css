@@ -4,11 +4,13 @@
     font-size: .7rem;
     letter-spacing: .08em;
     text-transform: uppercase;
+    color: #343a40;
 }
 
 :host input {
 	font-weight: 700;
     padding: 0;
+    color: 	#343a40;
 }
 
 	

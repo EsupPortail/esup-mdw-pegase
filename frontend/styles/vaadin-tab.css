@@ -1,0 +1,14 @@
+
+:host([selected]) {
+	color: #343a40;
+    background-color: #7b7b7b4a;
+}
+
+:host([focused]) {
+	color: #343a40;
+    background-color: #7b7b7b4a;
+}
+
+:host([selected])::before, :host([selected])::after {
+   /* background-color: #343a40; */
+}

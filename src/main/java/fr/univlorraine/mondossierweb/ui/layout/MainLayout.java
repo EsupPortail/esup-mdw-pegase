@@ -85,6 +85,8 @@ import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 @CssImport(value = "./styles/vaadin-checkbox-pointer.css", themeFor = "vaadin-checkbox")
 @CssImport(value = "./styles/vaadin-text-field-pointer.css", themeFor = "vaadin-text-field")
 @CssImport(value = "./styles/vaadin-grid.css", themeFor = "vaadin-grid")
+@CssImport(value = "./styles/vaadin-tab.css", themeFor = "vaadin-tab")
+@CssImport(value = "./styles/vaadin-drawer-toggle.css", themeFor = "vaadin-drawer-toggle")
 @SuppressWarnings("serial")
 public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnterObserver, LocaleChangeObserver {
 

@@ -41,6 +41,7 @@ public class Card extends VerticalLayout {
 		}else {
 			useAlt = true;
 			titreLayout.addAndExpand(titre);
+			altButton.getStyle().set("color","#343a40");
 			titreLayout.add(altButton);
 			this.add(titreLayout);
 			
@@ -91,7 +92,9 @@ public class Card extends VerticalLayout {
 			
 			//this.getStyle().set("border-bottom-width", "0.1em");
 			//this.getStyle().set("border-bottom-style", "solid");
-			this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
+			/*this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");*/
+			this.getStyle().set("background-color", "hsl(214deg 79% 42% / 24%)");
+			this.getStyle().set("color", "#343a40");
 			
 			
 			/*this.getStyle().set("background-color", "rgba(40, 45, 51, 0.95)");
