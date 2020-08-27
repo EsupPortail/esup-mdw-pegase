@@ -20,7 +20,6 @@ package fr.univlorraine.mondossierweb.service;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -32,6 +31,7 @@ import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.expression.EvaluationException;
@@ -50,14 +50,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 
 import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.ui.view.error.AccessDeniedView;
+import fr.univlorraine.mondossierweb.ui.view.recherche.RechercheView;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +70,10 @@ public class SecurityService implements VaadinServiceInitListener {
 	private transient BeanFactory beanFactory;
 	@Autowired
 	private transient PegaseService pegaseService;
+	
+	
+	@Value("${recherche.actif}")
+	private transient boolean rechercheActive;	
 
 	private final SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
 	private final StandardEvaluationContext evaluationContext = new StandardEvaluationContext();
@@ -211,6 +214,9 @@ public class SecurityService implements VaadinServiceInitListener {
 	}
 
 	public boolean isAccessGranted(final Class<?> securedClass) {
+		if(!rechercheActive && RechercheView.class.equals(securedClass) ) {
+			return false;
+		}
 		return (AccessDeniedView.class.equals(securedClass) || isUserLoggedIn())
 			&& isAccessGrantedForPreAuthorize(securedClass)
 			&& isAccessGrantedForRoleAnnotations(securedClass);
