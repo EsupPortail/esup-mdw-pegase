@@ -43,7 +43,7 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 
 	@Value("${logo.light.src}")
 	private transient String srcLogo;
-	@Value("${logo.dark.src}")
+	@Value("${logo.light.src}")
 	private transient String srcLogoDark;
 
 	@Autowired
