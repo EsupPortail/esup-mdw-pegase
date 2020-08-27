@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -72,13 +73,15 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 
 	private final H4 userDivTitle = new H4();
 	private final TextField username = new TextField();
+	private final Paragraph message = new Paragraph();
 	private final TextField roles = new TextField();
-
+	
 	@PostConstruct
 	private void init() {
 		getStyle().set("padding", "1em");
 
 		initAppInfo();
+		initMessageInfo();
 		initUserInfo();
 	}
 
@@ -99,6 +102,13 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 		descriptionComp.getStyle().set("font-style", "italic");
 		add(descriptionComp);
 	}
+	
+	private void initMessageInfo() {
+		add(message);
+		message.getStyle().set("padding", "1em");
+		message.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
+		message.getStyle().set("border-radius", "1em");
+	}
 
 	private void initUserInfo() {
 		userDivTitle.getStyle().set("margin-bottom", "0");
@@ -115,7 +125,7 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 
 		FormLayout userForm = new FormLayout(username);
 		//Si l'utilisateur n'est pas étudiant
-		if(!roles.getValue().contains(SecurityUtils.ROLE_ETUDIANT)) {
+		if(StringUtils.hasText(roles.getValue()) && !roles.getValue().contains(SecurityUtils.ROLE_ETUDIANT) ) {
 			//On affiche également ses rôles
 			userForm.add(roles);
 		}
@@ -132,6 +142,7 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 		userDivTitle.setText(getTranslation("apropos.usertitle"));
 		username.setLabel(getTranslation("apropos.field.username"));
 		roles.setLabel(getTranslation("apropos.field.roles"));
+		message.setText(getTranslation("apropos.message"));
 	}
 
 	private void setViewTitle(final String viewTitle) {
