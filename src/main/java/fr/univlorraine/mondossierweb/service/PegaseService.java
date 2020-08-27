@@ -105,7 +105,8 @@ public class PegaseService implements Serializable {
 
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
 
-		if(!StringUtils.hasText(codeApprenant)) {
+		// Si on a aucun codeApprenant en paramètre et qu'on a paramétré un code démo.
+		if(!StringUtils.hasText(codeApprenant) && StringUtils.hasText(codeApprenantDemo)) {
 			codeApprenant = codeApprenantDemo;
 		}
 
@@ -130,9 +131,6 @@ public class PegaseService implements Serializable {
 	}
 	
 	public File recuperePhoto(String codeApprenant, String cible) {
-		/*if(!StringUtils.hasText(codeApprenant)) {
-			codeApprenant = codeApprenantDemo;
-		}*/
 
 		log.info("recuperePhoto codeApprenant : {} - cible : {}", codeApprenant, cible);
 		
@@ -160,9 +158,6 @@ public class PegaseService implements Serializable {
 
 	public File certificatDeScolarite(String codeApprenant, String cible) {
 
-		/*if(!StringUtils.hasText(codeApprenant)) {
-			codeApprenant = codeApprenantDemo;
-		}*/
 		log.info("certificatDeScolarite codeApprenant : {} - cible : {}", codeApprenant, cible);
 
 		// Maj du token pour récupérer le dernier token valide
@@ -185,9 +180,6 @@ public class PegaseService implements Serializable {
 
 	public File attestationDePaiement(String codeApprenant, String cible) {
 
-		/*if(!StringUtils.hasText(codeApprenant)) {
-			codeApprenant = codeApprenantDemo;
-		}*/
 		log.info("attestationDePaiement codeApprenant : {} - cible : {}", codeApprenant, cible);
 
 		// Maj du token pour récupérer le dernier token valide
