@@ -84,6 +84,7 @@ public class PegaseService implements Serializable {
 		// Préparation des paramètres
 		List<StatutInscriptionVoeu> statutsInscription = new LinkedList<StatutInscriptionVoeu> ();
 		statutsInscription.add(StatutInscriptionVoeu.VALIDE);
+		//List<StatutInscriptionVoeu> statutsInscription = null;
 		List<StatutPiecesVoeu> statutsPieces = null;
 		List<StatutPaiementVoeu> statutsPaiement = null;
 		List<TriInscription> tri = null;
