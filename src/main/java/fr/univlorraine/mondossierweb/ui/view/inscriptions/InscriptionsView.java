@@ -79,7 +79,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 
 	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
-	private transient List<String> listeStatutsInscriptionAffiches;	
+	private transient List<String> listeStatutsInscriptionAffichees;	
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
@@ -224,7 +224,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					if(inscription.getStatutInscription().getValue().equals(Utils.TEM_INS_VALIDE)) {
 						inscriptionValide =  true;
 					}
-					if(listeStatutsInscriptionAffiches.contains(inscription.getStatutInscription().getValue())) {
+					if(listeStatutsInscriptionAffichees != null && listeStatutsInscriptionAffichees.contains(inscription.getStatutInscription().getValue())) {
 						inscriptionAffichee = true;
 					}
 				}
