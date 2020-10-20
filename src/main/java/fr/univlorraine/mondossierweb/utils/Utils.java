@@ -38,6 +38,8 @@ public final class Utils {
 	public static final String CANAL_CONTACT_ADRESSE = "ContactAdresseComplet";
 	public static final String CANAL_CONTACT_MAIL = "ContactMelComplet";
 	public static final String CANAL_CONTACT_TEL = "ContactTelephoneComplet";
+	public static final String TEM_INS_VALIDE = "valide";
+	public static final Object TEM_INS_PAYEE = "valide";
 
 
 	/** formatage d'une date en chaine pour un affichage européen */

@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.Component;
@@ -57,6 +58,7 @@ import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
@@ -76,6 +78,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private static final String ATTEST_FILE_EXT = ".pdf";
 
 
+	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
+	private transient List<String> listeStatutsInscriptionAffiches;	
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
@@ -189,6 +193,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		resetData();
 		if(dossier!=null && dossier.getInscriptions() != null && !dossier.getInscriptions() .isEmpty()) {
 			for(InscriptionComplete inscription : dossier.getInscriptions() ) {
+				boolean inscriptionValide = false;
+				boolean inscriptionPayee = false;
+				boolean inscriptionAffichee = false;
 				CibleInscription cible = inscription.getCible();
 				Card insCard = new Card(cible.getFormation().getLibelleLong(), true);
 
@@ -214,154 +221,170 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				statut.setVisible(false);
 				if(inscription.getStatutInscription()!=null) {
 					CmpUtils.valueAndVisibleIfNotNull(statut,inscription.getStatutInscription().getValue());
+					if(inscription.getStatutInscription().getValue().equals(Utils.TEM_INS_VALIDE)) {
+						inscriptionValide =  true;
+					}
+					if(listeStatutsInscriptionAffiches.contains(inscription.getStatutInscription().getValue())) {
+						inscriptionAffichee = true;
+					}
 				}
+				if(inscriptionAffichee) {
 
-				statut.setReadOnly(true);
-				CmpUtils.setShortTextField(statut);
-				listTextFieldStatut.add(statut);
+					statut.setReadOnly(true);
+					CmpUtils.setShortTextField(statut);
+					listTextFieldStatut.add(statut);
 
-				TextField paiement = new TextField();
-				paiement.setVisible(false);
-				if(inscription.getStatutPaiement()!=null) {
-					CmpUtils.valueAndVisibleIfNotNull(paiement,inscription.getStatutPaiement().getValue());
-				}
-				paiement.setReadOnly(true);
-				CmpUtils.setShortTextField(paiement);
-				listTextFieldPaiement.add(paiement);
+					TextField paiement = new TextField();
+					paiement.setVisible(false);
+					if(inscription.getStatutPaiement()!=null) {
+						CmpUtils.valueAndVisibleIfNotNull(paiement,inscription.getStatutPaiement().getValue());
+						if(inscription.getStatutPaiement().getValue().equals(Utils.TEM_INS_PAYEE)) {
+							inscriptionPayee =  true;
+						}
+					}
+					paiement.setReadOnly(true);
+					CmpUtils.setShortTextField(paiement);
+					listTextFieldPaiement.add(paiement);
 
 
-				TextField pieces = new TextField();
-				pieces.setVisible(false);
-				if(inscription.getStatutPieces()!=null) {
-					CmpUtils.valueAndVisibleIfNotNull(pieces,inscription.getStatutPieces().getValue());
-				}
-				pieces.setReadOnly(true);
-				CmpUtils.setShortTextField(pieces);
-				listTextFieldPieces.add(pieces);
+					TextField pieces = new TextField();
+					pieces.setVisible(false);
+					if(inscription.getStatutPieces()!=null) {
+						CmpUtils.valueAndVisibleIfNotNull(pieces,inscription.getStatutPieces().getValue());
+					}
+					pieces.setReadOnly(true);
+					CmpUtils.setShortTextField(pieces);
+					listTextFieldPieces.add(pieces);
 
-				/* AJout de la liste des bourses et aides ?
+					/* AJout de la liste des bourses et aides ?
 				for( OccurrenceNomenclature occ : inscription.getBoursesEtAides()) {
 					occ.getLibelle()
 				} */
 
 
-				// Ajout bouton certificat de scolarité
-				Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
-				certButton.setWidth("15em");
-				certButton.getStyle().set("background-color", "#343a40");
-				certButton.getStyle().set("color", "white");
-				Anchor exportCertificatAnchor = new Anchor();
-				exportCertificatAnchor.getStyle().set("margin-left", "0");
-				exportCertificatAnchor.add(certButton);
-				exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
-					() -> exportService.getCertificat(dossier.getApprenant().getCode(), getCodeVoeu(inscription))));
-				exportCertificatAnchor.getElement().getStyle().set("margin-left", "1em");
-				exportCertificatAnchor.setTarget("_blank");
+					// Ajout bouton certificat de scolarité
+					Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
+					certButton.setWidth("15em");
+					certButton.getStyle().set("background-color", "#343a40");
+					certButton.getStyle().set("color", "white");
+					Anchor exportCertificatAnchor = new Anchor();
+					exportCertificatAnchor.getStyle().set("margin-left", "0");
+					exportCertificatAnchor.add(certButton);
+					exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
+						() -> exportService.getCertificat(dossier.getApprenant().getCode(), getCodeVoeu(inscription))));
+					exportCertificatAnchor.getElement().getStyle().set("margin-left", "1em");
+					exportCertificatAnchor.setTarget("_blank");
 
-				// Ajout à la liste des boutons
-				listButtonCertificat.add(certButton);
-
-
-				// Ajout bouton attestation de paiement
-				Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
-				attestationButton.setWidth("15em");
-				attestationButton.getStyle().set("background-color", "#343a40");
-				attestationButton.getStyle().set("color", "white");
-				Anchor exportAttestationAnchor = new Anchor();
-				exportAttestationAnchor.getStyle().set("margin-left", "0");
-				exportAttestationAnchor.add(attestationButton);
-				exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
-					() -> exportService.getAttestation(dossier.getApprenant().getCode(),  getCodeVoeu(inscription))));
-				exportAttestationAnchor.getElement().getStyle().set("margin-left", "1em");
-				exportAttestationAnchor.setTarget("_blank");
-
-				// Ajout à la liste des boutons
-				listButtonAttestation.add(attestationButton);
+					// Ajout à la liste des boutons
+					listButtonCertificat.add(certButton);
 
 
+					// Ajout bouton attestation de paiement
+					Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
+					attestationButton.setWidth("15em");
+					attestationButton.getStyle().set("background-color", "#343a40");
+					attestationButton.getStyle().set("color", "white");
+					Anchor exportAttestationAnchor = new Anchor();
+					exportAttestationAnchor.getStyle().set("margin-left", "0");
+					exportAttestationAnchor.add(attestationButton);
+					exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
+						() -> exportService.getAttestation(dossier.getApprenant().getCode(),  getCodeVoeu(inscription))));
+					exportAttestationAnchor.getElement().getStyle().set("margin-left", "1em");
+					exportAttestationAnchor.setTarget("_blank");
 
-				// Ajout bouton photo
-				Button photoButton = new Button("", VaadinIcon.USER.create());
-				photoButton.setWidth("7em");
-				photoButton.setHeight("8em");
-				VerticalLayout photoLayout=new VerticalLayout();
-				photoLayout.setSizeUndefined();
-				photoLayout.getStyle().set("margin", "auto");
-				photoLayout.getStyle().set("margin-top", "0");
-				photoLayout.getStyle().set("padding", "0");
-				photoButton.addClickListener(c-> {
-					ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  getCodeVoeu(inscription));
-					if(photo != null) {
-						StreamResource resource = new StreamResource("photo_"+securityService.getDossierConsulte()+".jpg", () -> photo);
-						Image image = new Image(resource, "photographie");
-						photoLayout.removeAll();
-						photoLayout.add(image);
-						photoButton.setVisible(false);
+					// Ajout à la liste des boutons
+					listButtonAttestation.add(attestationButton);
 
+
+					// Ajout bouton photo
+					Button photoButton = new Button("", VaadinIcon.USER.create());
+					photoButton.setWidth("7em");
+					photoButton.setHeight("8em");
+					VerticalLayout photoLayout=new VerticalLayout();
+					photoLayout.setSizeUndefined();
+					photoLayout.getStyle().set("margin", "auto");
+					photoLayout.getStyle().set("margin-top", "0");
+					photoLayout.getStyle().set("padding", "0");
+					photoButton.addClickListener(c-> {
+						ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  getCodeVoeu(inscription));
+						if(photo != null) {
+							StreamResource resource = new StreamResource("photo_"+securityService.getDossierConsulte()+".jpg", () -> photo);
+							Image image = new Image(resource, "photographie");
+							photoLayout.removeAll();
+							photoLayout.add(image);
+							photoButton.setVisible(false);
+
+						}
+					});
+
+					//Récupération de la photo automatiquement
+					photoButton.click();
+
+					// Ajout à la liste des boutons
+					listButtonPhoto.add(photoButton);
+
+
+
+					VerticalLayout verticalLayout = new VerticalLayout();
+					verticalLayout.getStyle().set("padding", "0");
+					verticalLayout.setSizeFull();
+
+					VerticalLayout infoLayout = new VerticalLayout();
+					infoLayout.getStyle().set("padding", "0");
+					infoLayout.add(periode);
+					infoLayout.add(regime);
+					verticalLayout.add(infoLayout);
+
+					FlexLayout flexLayout = new FlexLayout();
+					VerticalLayout statutLayout = new VerticalLayout();
+					statutLayout.getStyle().set("padding", "0");
+					statutLayout.add(statut);
+					statutLayout.add(paiement);
+					statutLayout.add(pieces);
+
+					// Layout photo
+					photoButton.getStyle().set("margin-left", "1em");
+					photoLayout.addComponentAsFirst(photoButton);
+
+					//Layout des boutons
+					FlexLayout buttonLayout = new FlexLayout();
+					buttonLayout.setSizeUndefined();
+					buttonLayout.getStyle().set("padding", "0");
+					buttonLayout.getStyle().set("margin", "auto");
+					exportCertificatAnchor.setMinWidth("15em");
+					exportCertificatAnchor.getStyle().set("margin", "auto");
+					exportCertificatAnchor.getStyle().set("padding", "1em");
+					buttonLayout.add(exportCertificatAnchor);
+					exportAttestationAnchor.setMinWidth("15em");
+					exportAttestationAnchor.getStyle().set("margin", "auto");
+					exportAttestationAnchor.getStyle().set("padding", "1em");
+					buttonLayout.add(exportAttestationAnchor);
+					buttonLayout.setFlexWrap(FlexWrap.WRAP);
+					buttonLayout.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
+					if(!inscriptionValide) {
+						exportCertificatAnchor.setVisible(false);
 					}
-				});
-
-				//Récupération de la photo automatiquement
-				photoButton.click();
-				
-				// Ajout à la liste des boutons
-				listButtonPhoto.add(photoButton);
+					if(!inscriptionPayee) {
+						exportAttestationAnchor.setVisible(false);
+					}
 
 
+					flexLayout.add(statutLayout);
+					flexLayout.add(photoLayout);
+					//flexLayout.add(buttonLayout);
+					flexLayout.setWidthFull();
+					flexLayout.setJustifyContentMode(JustifyContentMode.START);
+					flexLayout.setFlexWrap(FlexWrap.WRAP);
+					flexLayout.setFlexBasis("18em", statutLayout);
+					//flexLayout.setFlexBasis("10em", buttonLayout);
+					verticalLayout.add(flexLayout);
+					verticalLayout.add(buttonLayout);
 
-				VerticalLayout verticalLayout = new VerticalLayout();
-				verticalLayout.getStyle().set("padding", "0");
-				verticalLayout.setSizeFull();
+					insCard.addAlt(verticalLayout);
 
-				VerticalLayout infoLayout = new VerticalLayout();
-				infoLayout.getStyle().set("padding", "0");
-				infoLayout.add(periode);
-				infoLayout.add(regime);
-				verticalLayout.add(infoLayout);
-
-				FlexLayout flexLayout = new FlexLayout();
-				VerticalLayout statutLayout = new VerticalLayout();
-				statutLayout.getStyle().set("padding", "0");
-				statutLayout.add(statut);
-				statutLayout.add(paiement);
-				statutLayout.add(pieces);
-
-				// Layout photo
-				photoButton.getStyle().set("margin-left", "1em");
-				photoLayout.addComponentAsFirst(photoButton);
-
-				//Layout des boutons
-				FlexLayout buttonLayout = new FlexLayout();
-				buttonLayout.setSizeUndefined();
-				buttonLayout.getStyle().set("padding", "0");
-				buttonLayout.getStyle().set("margin", "auto");
-				exportCertificatAnchor.setMinWidth("15em");
-				exportCertificatAnchor.getStyle().set("margin", "auto");
-				exportCertificatAnchor.getStyle().set("padding", "1em");
-				buttonLayout.add(exportCertificatAnchor);
-				exportAttestationAnchor.setMinWidth("15em");
-				exportAttestationAnchor.getStyle().set("margin", "auto");
-				exportAttestationAnchor.getStyle().set("padding", "1em");
-				buttonLayout.add(exportAttestationAnchor);
-				buttonLayout.setFlexWrap(FlexWrap.WRAP);
-				buttonLayout.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
-
-
-				flexLayout.add(statutLayout);
-				flexLayout.add(photoLayout);
-				flexLayout.add(buttonLayout);
-				flexLayout.setWidthFull();
-				flexLayout.setJustifyContentMode(JustifyContentMode.START);
-				flexLayout.setFlexWrap(FlexWrap.WRAP);
-				flexLayout.setFlexBasis("18em", statutLayout);
-				//flexLayout.setFlexBasis("10em", buttonLayout);
-				verticalLayout.add(flexLayout);
-
-				insCard.addAlt(verticalLayout);
-
-				insCard.displayAlt();
-				inscriptionsLayout.add(insCard);
-
+					insCard.displayAlt();
+					inscriptionsLayout.add(insCard);
+				}
 			}
 		}
 		updateStyle();
