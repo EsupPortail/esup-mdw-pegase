@@ -20,17 +20,34 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.ObjetAvecLibelle;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * La formation
+ * Nomenclature utilisée à l&#39;inscription, pour préciser la provenance d&#39;un apprenant, elle est également utilisée dans le cadre de l&#39;enquête SISE pour la variable SITUPRE
  */
-@ApiModel(description = "La formation")
+@ApiModel(description = "Nomenclature utilisée à l'inscription, pour préciser la provenance d'un apprenant, elle est également utilisée dans le cadre de l'enquête SISE pour la variable SITUPRE")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-01-11T16:15:29.973+01:00[Europe/Paris]")
-public class Formation extends ObjetAvecLibelle {
+public class SituationAnneePrecedenteAllOf {
+  public static final String SERIALIZED_NAME_CODE_BCN = "codeBcn";
+  @SerializedName(SERIALIZED_NAME_CODE_BCN)
+  private String codeBcn;
+
+
+   /**
+   * Le code BCN. Codes BCN de la nomenclature sur 1 caractères. Exemple: \&quot;P\&quot; 
+   * @return codeBcn
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "Le code BCN. Codes BCN de la nomenclature sur 1 caractères. Exemple: \"P\" ")
+
+  public String getCodeBcn() {
+    return codeBcn;
+  }
+
+
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -40,20 +57,21 @@ public class Formation extends ObjetAvecLibelle {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return super.equals(o);
+    SituationAnneePrecedenteAllOf situationAnneePrecedenteAllOf = (SituationAnneePrecedenteAllOf) o;
+    return Objects.equals(this.codeBcn, situationAnneePrecedenteAllOf.codeBcn);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode());
+    return Objects.hash(codeBcn);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Formation {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("class SituationAnneePrecedenteAllOf {\n");
+    sb.append("    codeBcn: ").append(toIndentedString(codeBcn)).append("\n");
     sb.append("}");
     return sb.toString();
   }

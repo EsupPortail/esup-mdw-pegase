@@ -25,22 +25,16 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * L&#39;origine de la candidature de l&#39;étudiant.
+ * type de texte saisissable
  */
-@JsonAdapter(Origine.Adapter.class)
-public enum Origine {
+@JsonAdapter(TypeTexte.Adapter.class)
+public enum TypeTexte {
   
-  CONCOURS("concours"),
-  
-  PARCOURSUP("parcoursup"),
-  
-  MANUEL("manuel"),
-  
-  REINSCRIPTION("reinscription");
+  AIDE("Aide");
 
   private String value;
 
-  Origine(String value) {
+  TypeTexte(String value) {
     this.value = value;
   }
 
@@ -53,8 +47,8 @@ public enum Origine {
     return String.valueOf(value);
   }
 
-  public static Origine fromValue(String value) {
-    for (Origine b : Origine.values()) {
+  public static TypeTexte fromValue(String value) {
+    for (TypeTexte b : TypeTexte.values()) {
       if (b.value.equals(value)) {
         return b;
       }
@@ -62,16 +56,16 @@ public enum Origine {
     throw new IllegalArgumentException("Unexpected value '" + value + "'");
   }
 
-  public static class Adapter extends TypeAdapter<Origine> {
+  public static class Adapter extends TypeAdapter<TypeTexte> {
     @Override
-    public void write(final JsonWriter jsonWriter, final Origine enumeration) throws IOException {
+    public void write(final JsonWriter jsonWriter, final TypeTexte enumeration) throws IOException {
       jsonWriter.value(enumeration.getValue());
     }
 
     @Override
-    public Origine read(final JsonReader jsonReader) throws IOException {
+    public TypeTexte read(final JsonReader jsonReader) throws IOException {
       String value = jsonReader.nextString();
-      return Origine.fromValue(value);
+      return TypeTexte.fromValue(value);
     }
   }
 }

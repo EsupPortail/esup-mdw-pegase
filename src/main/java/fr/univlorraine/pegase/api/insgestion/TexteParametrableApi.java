@@ -27,7 +27,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import fr.univlorraine.pegase.model.insgestion.DocumentAApprouver;
+import fr.univlorraine.pegase.model.insgestion.TexteParametrable;
+import fr.univlorraine.pegase.model.insgestion.TypeTexte;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -35,14 +36,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DocumentAApprouverApi {
+public class TexteParametrableApi {
     private ApiClient localVarApiClient;
 
-    public DocumentAApprouverApi() {
+    public TexteParametrableApi() {
         this(Configuration.getDefaultApiClient());
     }
 
-    public DocumentAApprouverApi(ApiClient apiClient) {
+    public TexteParametrableApi(ApiClient apiClient) {
         this.localVarApiClient = apiClient;
     }
 
@@ -55,26 +56,28 @@ public class DocumentAApprouverApi {
     }
 
     /**
-     * Build call for creerDocumentAApprouver
+     * Build call for modifierTexteParametrable
      * @param codeStructure Le code de l&#39;établissement (required)
-     * @param documentAApprouver L&#39;accord (document à approuver) à ajouter (required)
+     * @param typeTexte Le type de texte saisissable (required)
+     * @param texteParametrable Le contenu HTML du texte saisie (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 201 </td><td> Accord (document à approuver) créé </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Structure introuvable </td><td>  -  </td></tr>
+        <tr><td> 201 </td><td> Texte paramétrable enregistré </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Texte type introuvable </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> données non valides </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call creerDocumentAApprouverCall(String codeStructure, DocumentAApprouver documentAApprouver, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = documentAApprouver;
+    public okhttp3.Call modifierTexteParametrableCall(String codeStructure, TypeTexte typeTexte, TexteParametrable texteParametrable, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = texteParametrable;
 
         // create path and map variables
-        String localVarPath = "/gestion/documents-a-approuver/{codeStructure}/"
-            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()));
+        String localVarPath = "/gestion/texte-parametrable/{codeStructure}/{typeTexte}"
+            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()))
+            .replaceAll("\\{" + "typeTexte" + "\\}", localVarApiClient.escapeString(typeTexte.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -100,107 +103,117 @@ public class DocumentAApprouverApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call creerDocumentAApprouverValidateBeforeCall(String codeStructure, DocumentAApprouver documentAApprouver, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call modifierTexteParametrableValidateBeforeCall(String codeStructure, TypeTexte typeTexte, TexteParametrable texteParametrable, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'codeStructure' is set
         if (codeStructure == null) {
-            throw new ApiException("Missing the required parameter 'codeStructure' when calling creerDocumentAApprouver(Async)");
+            throw new ApiException("Missing the required parameter 'codeStructure' when calling modifierTexteParametrable(Async)");
         }
         
-        // verify the required parameter 'documentAApprouver' is set
-        if (documentAApprouver == null) {
-            throw new ApiException("Missing the required parameter 'documentAApprouver' when calling creerDocumentAApprouver(Async)");
+        // verify the required parameter 'typeTexte' is set
+        if (typeTexte == null) {
+            throw new ApiException("Missing the required parameter 'typeTexte' when calling modifierTexteParametrable(Async)");
+        }
+        
+        // verify the required parameter 'texteParametrable' is set
+        if (texteParametrable == null) {
+            throw new ApiException("Missing the required parameter 'texteParametrable' when calling modifierTexteParametrable(Async)");
         }
         
 
-        okhttp3.Call localVarCall = creerDocumentAApprouverCall(codeStructure, documentAApprouver, _callback);
+        okhttp3.Call localVarCall = modifierTexteParametrableCall(codeStructure, typeTexte, texteParametrable, _callback);
         return localVarCall;
 
     }
 
     /**
-     * Ajout d&#39;un accord (document à approuver) pour un établissement
-     * Ajout d&#39;un accord (document à approuver) pour un établissement
+     * Mise à jour ou ajout d&#39;un texte paramétrable saisie
+     * Mise à jour ou ajout d&#39;un texte paramétrable saisie
      * @param codeStructure Le code de l&#39;établissement (required)
-     * @param documentAApprouver L&#39;accord (document à approuver) à ajouter (required)
-     * @return DocumentAApprouver
+     * @param typeTexte Le type de texte saisissable (required)
+     * @param texteParametrable Le contenu HTML du texte saisie (required)
+     * @return TexteParametrable
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 201 </td><td> Accord (document à approuver) créé </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Structure introuvable </td><td>  -  </td></tr>
+        <tr><td> 201 </td><td> Texte paramétrable enregistré </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Texte type introuvable </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> données non valides </td><td>  -  </td></tr>
      </table>
      */
-    public DocumentAApprouver creerDocumentAApprouver(String codeStructure, DocumentAApprouver documentAApprouver) throws ApiException {
-        ApiResponse<DocumentAApprouver> localVarResp = creerDocumentAApprouverWithHttpInfo(codeStructure, documentAApprouver);
+    public TexteParametrable modifierTexteParametrable(String codeStructure, TypeTexte typeTexte, TexteParametrable texteParametrable) throws ApiException {
+        ApiResponse<TexteParametrable> localVarResp = modifierTexteParametrableWithHttpInfo(codeStructure, typeTexte, texteParametrable);
         return localVarResp.getData();
     }
 
     /**
-     * Ajout d&#39;un accord (document à approuver) pour un établissement
-     * Ajout d&#39;un accord (document à approuver) pour un établissement
+     * Mise à jour ou ajout d&#39;un texte paramétrable saisie
+     * Mise à jour ou ajout d&#39;un texte paramétrable saisie
      * @param codeStructure Le code de l&#39;établissement (required)
-     * @param documentAApprouver L&#39;accord (document à approuver) à ajouter (required)
-     * @return ApiResponse&lt;DocumentAApprouver&gt;
+     * @param typeTexte Le type de texte saisissable (required)
+     * @param texteParametrable Le contenu HTML du texte saisie (required)
+     * @return ApiResponse&lt;TexteParametrable&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 201 </td><td> Accord (document à approuver) créé </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Structure introuvable </td><td>  -  </td></tr>
+        <tr><td> 201 </td><td> Texte paramétrable enregistré </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Texte type introuvable </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> données non valides </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<DocumentAApprouver> creerDocumentAApprouverWithHttpInfo(String codeStructure, DocumentAApprouver documentAApprouver) throws ApiException {
-        okhttp3.Call localVarCall = creerDocumentAApprouverValidateBeforeCall(codeStructure, documentAApprouver, null);
-        Type localVarReturnType = new TypeToken<DocumentAApprouver>(){}.getType();
+    public ApiResponse<TexteParametrable> modifierTexteParametrableWithHttpInfo(String codeStructure, TypeTexte typeTexte, TexteParametrable texteParametrable) throws ApiException {
+        okhttp3.Call localVarCall = modifierTexteParametrableValidateBeforeCall(codeStructure, typeTexte, texteParametrable, null);
+        Type localVarReturnType = new TypeToken<TexteParametrable>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
-     * Ajout d&#39;un accord (document à approuver) pour un établissement (asynchronously)
-     * Ajout d&#39;un accord (document à approuver) pour un établissement
+     * Mise à jour ou ajout d&#39;un texte paramétrable saisie (asynchronously)
+     * Mise à jour ou ajout d&#39;un texte paramétrable saisie
      * @param codeStructure Le code de l&#39;établissement (required)
-     * @param documentAApprouver L&#39;accord (document à approuver) à ajouter (required)
+     * @param typeTexte Le type de texte saisissable (required)
+     * @param texteParametrable Le contenu HTML du texte saisie (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 201 </td><td> Accord (document à approuver) créé </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Structure introuvable </td><td>  -  </td></tr>
+        <tr><td> 201 </td><td> Texte paramétrable enregistré </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Texte type introuvable </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> données non valides </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call creerDocumentAApprouverAsync(String codeStructure, DocumentAApprouver documentAApprouver, final ApiCallback<DocumentAApprouver> _callback) throws ApiException {
+    public okhttp3.Call modifierTexteParametrableAsync(String codeStructure, TypeTexte typeTexte, TexteParametrable texteParametrable, final ApiCallback<TexteParametrable> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = creerDocumentAApprouverValidateBeforeCall(codeStructure, documentAApprouver, _callback);
-        Type localVarReturnType = new TypeToken<DocumentAApprouver>(){}.getType();
+        okhttp3.Call localVarCall = modifierTexteParametrableValidateBeforeCall(codeStructure, typeTexte, texteParametrable, _callback);
+        Type localVarReturnType = new TypeToken<TexteParametrable>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
     /**
-     * Build call for listerDocumentsAApprouver
+     * Build call for recupererTexteParametrable
      * @param codeStructure Le code de l&#39;établissement (required)
+     * @param typeTexte Le type de texte saisissable (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Paramétrage des accords (documents à approuver) récupéré </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Structure introuvable </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Texte paramétrable récupéré </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Texte introuvable </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call listerDocumentsAApprouverCall(String codeStructure, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call recupererTexteParametrableCall(String codeStructure, TypeTexte typeTexte, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
-        String localVarPath = "/gestion/documents-a-approuver/{codeStructure}/"
-            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()));
+        String localVarPath = "/gestion/texte-parametrable/{codeStructure}/{typeTexte}"
+            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()))
+            .replaceAll("\\{" + "typeTexte" + "\\}", localVarApiClient.escapeString(typeTexte.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -221,79 +234,87 @@ public class DocumentAApprouverApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] { "idTokenAuth" };
+        String[] localVarAuthNames = new String[] {  };
         return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call listerDocumentsAApprouverValidateBeforeCall(String codeStructure, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call recupererTexteParametrableValidateBeforeCall(String codeStructure, TypeTexte typeTexte, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'codeStructure' is set
         if (codeStructure == null) {
-            throw new ApiException("Missing the required parameter 'codeStructure' when calling listerDocumentsAApprouver(Async)");
+            throw new ApiException("Missing the required parameter 'codeStructure' when calling recupererTexteParametrable(Async)");
+        }
+        
+        // verify the required parameter 'typeTexte' is set
+        if (typeTexte == null) {
+            throw new ApiException("Missing the required parameter 'typeTexte' when calling recupererTexteParametrable(Async)");
         }
         
 
-        okhttp3.Call localVarCall = listerDocumentsAApprouverCall(codeStructure, _callback);
+        okhttp3.Call localVarCall = recupererTexteParametrableCall(codeStructure, typeTexte, _callback);
         return localVarCall;
 
     }
 
     /**
-     * Paramétrage des accords (documents à approuver) pour un établissement
-     * Paramétrage des accords (documents à approuver) pour un établissement
+     * Récupération du texte paramétrable pour un type donnée et pour un établissement
+     * Récupération du texte paramétrable pour un type donnée et pour un établissement
      * @param codeStructure Le code de l&#39;établissement (required)
-     * @return List&lt;DocumentAApprouver&gt;
+     * @param typeTexte Le type de texte saisissable (required)
+     * @return TexteParametrable
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Paramétrage des accords (documents à approuver) récupéré </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Structure introuvable </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Texte paramétrable récupéré </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Texte introuvable </td><td>  -  </td></tr>
      </table>
      */
-    public List<DocumentAApprouver> listerDocumentsAApprouver(String codeStructure) throws ApiException {
-        ApiResponse<List<DocumentAApprouver>> localVarResp = listerDocumentsAApprouverWithHttpInfo(codeStructure);
+    public TexteParametrable recupererTexteParametrable(String codeStructure, TypeTexte typeTexte) throws ApiException {
+        ApiResponse<TexteParametrable> localVarResp = recupererTexteParametrableWithHttpInfo(codeStructure, typeTexte);
         return localVarResp.getData();
     }
 
     /**
-     * Paramétrage des accords (documents à approuver) pour un établissement
-     * Paramétrage des accords (documents à approuver) pour un établissement
+     * Récupération du texte paramétrable pour un type donnée et pour un établissement
+     * Récupération du texte paramétrable pour un type donnée et pour un établissement
      * @param codeStructure Le code de l&#39;établissement (required)
-     * @return ApiResponse&lt;List&lt;DocumentAApprouver&gt;&gt;
+     * @param typeTexte Le type de texte saisissable (required)
+     * @return ApiResponse&lt;TexteParametrable&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Paramétrage des accords (documents à approuver) récupéré </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Structure introuvable </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Texte paramétrable récupéré </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Texte introuvable </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<List<DocumentAApprouver>> listerDocumentsAApprouverWithHttpInfo(String codeStructure) throws ApiException {
-        okhttp3.Call localVarCall = listerDocumentsAApprouverValidateBeforeCall(codeStructure, null);
-        Type localVarReturnType = new TypeToken<List<DocumentAApprouver>>(){}.getType();
+    public ApiResponse<TexteParametrable> recupererTexteParametrableWithHttpInfo(String codeStructure, TypeTexte typeTexte) throws ApiException {
+        okhttp3.Call localVarCall = recupererTexteParametrableValidateBeforeCall(codeStructure, typeTexte, null);
+        Type localVarReturnType = new TypeToken<TexteParametrable>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
-     * Paramétrage des accords (documents à approuver) pour un établissement (asynchronously)
-     * Paramétrage des accords (documents à approuver) pour un établissement
+     * Récupération du texte paramétrable pour un type donnée et pour un établissement (asynchronously)
+     * Récupération du texte paramétrable pour un type donnée et pour un établissement
      * @param codeStructure Le code de l&#39;établissement (required)
+     * @param typeTexte Le type de texte saisissable (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Paramétrage des accords (documents à approuver) récupéré </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Structure introuvable </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Texte paramétrable récupéré </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Texte introuvable </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call listerDocumentsAApprouverAsync(String codeStructure, final ApiCallback<List<DocumentAApprouver>> _callback) throws ApiException {
+    public okhttp3.Call recupererTexteParametrableAsync(String codeStructure, TypeTexte typeTexte, final ApiCallback<TexteParametrable> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = listerDocumentsAApprouverValidateBeforeCall(codeStructure, _callback);
-        Type localVarReturnType = new TypeToken<List<DocumentAApprouver>>(){}.getType();
+        okhttp3.Call localVarCall = recupererTexteParametrableValidateBeforeCall(codeStructure, typeTexte, _callback);
+        Type localVarReturnType = new TypeToken<TexteParametrable>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

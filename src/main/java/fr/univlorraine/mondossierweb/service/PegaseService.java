@@ -115,6 +115,7 @@ public class PegaseService implements Serializable {
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
 			insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
+			//insApiIns.getApiClient().updateParamsForAuth(authNames, queryParams, headerParams, cookieParams);
 			try {
 				// Appel de l'API Pégase
 				ApprenantEtInscriptions dossier = insApiIns.lireInscriptions(etablissement, codeApprenant);

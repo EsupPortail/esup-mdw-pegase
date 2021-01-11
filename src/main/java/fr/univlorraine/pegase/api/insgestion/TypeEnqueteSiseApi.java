@@ -27,7 +27,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import fr.univlorraine.pegase.model.insgestion.Piece;
+import java.io.File;
+import fr.univlorraine.pegase.model.insgestion.TypeEnqueteSise;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -35,14 +36,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PiecesApi {
+public class TypeEnqueteSiseApi {
     private ApiClient localVarApiClient;
 
-    public PiecesApi() {
+    public TypeEnqueteSiseApi() {
         this(Configuration.getDefaultApiClient());
     }
 
-    public PiecesApi(ApiClient apiClient) {
+    public TypeEnqueteSiseApi(ApiClient apiClient) {
         this.localVarApiClient = apiClient;
     }
 
@@ -55,36 +56,39 @@ public class PiecesApi {
     }
 
     /**
-     * Build call for lirePieces
-     * @param codeStructure Le code de l&#39;établissement (required)
-     * @param codeApprenant Le code apprenant (required)
-     * @param codeCible Le code cible (required)
+     * Build call for lireEnqueteSise
+     * @param codeStructure Code de la Structure (required)
+     * @param codePeriode Code de la Periode (required)
+     * @param typeEnqueteSise liste des types d&#39;enquetes sise (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Pièces récupérées </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> pièces introuvable </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Formulaire enquete Sise </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Formulaire enquete Sise introuvable </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call lirePiecesCall(String codeStructure, String codeApprenant, String codeCible, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call lireEnqueteSiseCall(String codeStructure, String codePeriode, TypeEnqueteSise typeEnqueteSise, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
-        String localVarPath = "/gestion/inscriptions/{codeStructure}/{codeApprenant}/{codeCible}/pieces"
+        String localVarPath = "/gestion/enqueteSise/{codeStructure}/{codePeriode}"
             .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()))
-            .replaceAll("\\{" + "codeApprenant" + "\\}", localVarApiClient.escapeString(codeApprenant.toString()))
-            .replaceAll("\\{" + "codeCible" + "\\}", localVarApiClient.escapeString(codeCible.toString()));
+            .replaceAll("\\{" + "codePeriode" + "\\}", localVarApiClient.escapeString(codePeriode.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        if (typeEnqueteSise != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("typeEnqueteSise", typeEnqueteSise));
+        }
+
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
         Map<String, String> localVarCookieParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
         final String[] localVarAccepts = {
-            "application/json"
+            "text/plain"
         };
         final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) {
@@ -102,90 +106,90 @@ public class PiecesApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call lirePiecesValidateBeforeCall(String codeStructure, String codeApprenant, String codeCible, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call lireEnqueteSiseValidateBeforeCall(String codeStructure, String codePeriode, TypeEnqueteSise typeEnqueteSise, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'codeStructure' is set
         if (codeStructure == null) {
-            throw new ApiException("Missing the required parameter 'codeStructure' when calling lirePieces(Async)");
+            throw new ApiException("Missing the required parameter 'codeStructure' when calling lireEnqueteSise(Async)");
         }
         
-        // verify the required parameter 'codeApprenant' is set
-        if (codeApprenant == null) {
-            throw new ApiException("Missing the required parameter 'codeApprenant' when calling lirePieces(Async)");
+        // verify the required parameter 'codePeriode' is set
+        if (codePeriode == null) {
+            throw new ApiException("Missing the required parameter 'codePeriode' when calling lireEnqueteSise(Async)");
         }
         
-        // verify the required parameter 'codeCible' is set
-        if (codeCible == null) {
-            throw new ApiException("Missing the required parameter 'codeCible' when calling lirePieces(Async)");
+        // verify the required parameter 'typeEnqueteSise' is set
+        if (typeEnqueteSise == null) {
+            throw new ApiException("Missing the required parameter 'typeEnqueteSise' when calling lireEnqueteSise(Async)");
         }
         
 
-        okhttp3.Call localVarCall = lirePiecesCall(codeStructure, codeApprenant, codeCible, _callback);
+        okhttp3.Call localVarCall = lireEnqueteSiseCall(codeStructure, codePeriode, typeEnqueteSise, _callback);
         return localVarCall;
 
     }
 
     /**
-     * récupération des données des pièces
-     * récupération des données des pièces
-     * @param codeStructure Le code de l&#39;établissement (required)
-     * @param codeApprenant Le code apprenant (required)
-     * @param codeCible Le code cible (required)
-     * @return Map&lt;String, Piece&gt;
+     * Récupération de l&#39;enquete Sise
+     * Récupération de l&#39;enquete Sise
+     * @param codeStructure Code de la Structure (required)
+     * @param codePeriode Code de la Periode (required)
+     * @param typeEnqueteSise liste des types d&#39;enquetes sise (required)
+     * @return File
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Pièces récupérées </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> pièces introuvable </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Formulaire enquete Sise </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Formulaire enquete Sise introuvable </td><td>  -  </td></tr>
      </table>
      */
-    public Map<String, Piece> lirePieces(String codeStructure, String codeApprenant, String codeCible) throws ApiException {
-        ApiResponse<Map<String, Piece>> localVarResp = lirePiecesWithHttpInfo(codeStructure, codeApprenant, codeCible);
+    public File lireEnqueteSise(String codeStructure, String codePeriode, TypeEnqueteSise typeEnqueteSise) throws ApiException {
+        ApiResponse<File> localVarResp = lireEnqueteSiseWithHttpInfo(codeStructure, codePeriode, typeEnqueteSise);
         return localVarResp.getData();
     }
 
     /**
-     * récupération des données des pièces
-     * récupération des données des pièces
-     * @param codeStructure Le code de l&#39;établissement (required)
-     * @param codeApprenant Le code apprenant (required)
-     * @param codeCible Le code cible (required)
-     * @return ApiResponse&lt;Map&lt;String, Piece&gt;&gt;
+     * Récupération de l&#39;enquete Sise
+     * Récupération de l&#39;enquete Sise
+     * @param codeStructure Code de la Structure (required)
+     * @param codePeriode Code de la Periode (required)
+     * @param typeEnqueteSise liste des types d&#39;enquetes sise (required)
+     * @return ApiResponse&lt;File&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Pièces récupérées </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> pièces introuvable </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Formulaire enquete Sise </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Formulaire enquete Sise introuvable </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Map<String, Piece>> lirePiecesWithHttpInfo(String codeStructure, String codeApprenant, String codeCible) throws ApiException {
-        okhttp3.Call localVarCall = lirePiecesValidateBeforeCall(codeStructure, codeApprenant, codeCible, null);
-        Type localVarReturnType = new TypeToken<Map<String, Piece>>(){}.getType();
+    public ApiResponse<File> lireEnqueteSiseWithHttpInfo(String codeStructure, String codePeriode, TypeEnqueteSise typeEnqueteSise) throws ApiException {
+        okhttp3.Call localVarCall = lireEnqueteSiseValidateBeforeCall(codeStructure, codePeriode, typeEnqueteSise, null);
+        Type localVarReturnType = new TypeToken<File>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
-     * récupération des données des pièces (asynchronously)
-     * récupération des données des pièces
-     * @param codeStructure Le code de l&#39;établissement (required)
-     * @param codeApprenant Le code apprenant (required)
-     * @param codeCible Le code cible (required)
+     * Récupération de l&#39;enquete Sise (asynchronously)
+     * Récupération de l&#39;enquete Sise
+     * @param codeStructure Code de la Structure (required)
+     * @param codePeriode Code de la Periode (required)
+     * @param typeEnqueteSise liste des types d&#39;enquetes sise (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Pièces récupérées </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> pièces introuvable </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Formulaire enquete Sise </td><td>  -  </td></tr>
+        <tr><td> 404 </td><td> Formulaire enquete Sise introuvable </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call lirePiecesAsync(String codeStructure, String codeApprenant, String codeCible, final ApiCallback<Map<String, Piece>> _callback) throws ApiException {
+    public okhttp3.Call lireEnqueteSiseAsync(String codeStructure, String codePeriode, TypeEnqueteSise typeEnqueteSise, final ApiCallback<File> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = lirePiecesValidateBeforeCall(codeStructure, codeApprenant, codeCible, _callback);
-        Type localVarReturnType = new TypeToken<Map<String, Piece>>(){}.getType();
+        okhttp3.Call localVarCall = lireEnqueteSiseValidateBeforeCall(codeStructure, codePeriode, typeEnqueteSise, _callback);
+        Type localVarReturnType = new TypeToken<File>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
