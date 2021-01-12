@@ -31,10 +31,9 @@ import java.io.IOException;
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-01-11T16:15:29.973+01:00[Europe/Paris]")
 
 public class ObjetAvecLibelle {
-  
-	/*public static final String SERIALIZED_NAME_EST1 = "est1";
+  public static final String SERIALIZED_NAME_EST1 = "est1";
   @SerializedName(SERIALIZED_NAME_EST1)
-  protected String est1;*/
+  protected String est1;
 
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
@@ -49,29 +48,29 @@ public class ObjetAvecLibelle {
   private String libelleLong;
 
   public ObjetAvecLibelle() {
-   // this.est1 = this.getClass().getSimpleName();
+    this.est1 = this.getClass().getSimpleName();
   }
 
- /* public ObjetAvecLibelle est1(String est1) {
+  public ObjetAvecLibelle est1(String est1) {
     
     this.est1 = est1;
     return this;
-  }*/
+  }
 
    /**
    * Get est1
    * @return est1
   **/
   @ApiModelProperty(required = true, value = "")
-
- /* public String getEst1() {
+  
+  public String getEst1() {
     return est1;
-  }*/
+  }
 
 
-  /*public void setEst1(String est1) {
+  public void setEst1(String est1) {
     this.est1 = est1;
-  }*/
+  }
 
 
   public ObjetAvecLibelle code(String code) {
@@ -152,7 +151,8 @@ public class ObjetAvecLibelle {
       return false;
     }
     ObjetAvecLibelle objetAvecLibelle = (ObjetAvecLibelle) o;
-    return  Objects.equals(this.code, objetAvecLibelle.code) &&
+    return  Objects.equals(this.est1, objetAvecLibelle.est1) &&
+    	Objects.equals(this.code, objetAvecLibelle.code) &&
         Objects.equals(this.libelleCourt, objetAvecLibelle.libelleCourt) &&
         Objects.equals(this.libelleLong, objetAvecLibelle.libelleLong);
   }
@@ -167,7 +167,7 @@ public class ObjetAvecLibelle {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ObjetAvecLibelle {\n");
-    //sb.append("    est1: ").append(toIndentedString(est1)).append("\n");
+    sb.append("    est1: ").append(toIndentedString(est1)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    libelleCourt: ").append(toIndentedString(libelleCourt)).append("\n");
     sb.append("    libelleLong: ").append(toIndentedString(libelleLong)).append("\n");

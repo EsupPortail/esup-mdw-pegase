@@ -33,9 +33,9 @@ import java.io.IOException;
 @ApiModel(description = "La période de mise en œuvre associée à la formation")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-01-11T16:15:29.973+01:00[Europe/Paris]")
 public class Periode extends ObjetAvecLibelle {
-  public static final String SERIALIZED_NAME_EST1 = "est1";
+ /* public static final String SERIALIZED_NAME_EST1 = "est1";
   @SerializedName(SERIALIZED_NAME_EST1)
-  private String est1;
+  private String est1;*/
 
   public static final String SERIALIZED_NAME_DATE_DEBUT = "dateDebut";
   @SerializedName(SERIALIZED_NAME_DATE_DEBUT)
