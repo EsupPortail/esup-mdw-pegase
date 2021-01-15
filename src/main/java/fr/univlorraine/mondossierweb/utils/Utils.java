@@ -21,6 +21,8 @@ package fr.univlorraine.mondossierweb.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.flywaydb.core.internal.util.StringUtils;
@@ -64,6 +66,19 @@ public final class Utils {
 			return dateFormat.format(d);
 		} 
 		return "";
+	}
+
+	/** retourne vrai si la date en parametre est passée */
+	public static boolean estPassee(String date) {
+		LocalDate jour = LocalDate.now();
+		return jour.isAfter(getLocalDateFromJsonDate(date));
+	}
+
+	/** Convertit la date JSON en LocalDate */
+	private static LocalDate getLocalDateFromJsonDate(String date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        return localDate;
 	}
 
 }

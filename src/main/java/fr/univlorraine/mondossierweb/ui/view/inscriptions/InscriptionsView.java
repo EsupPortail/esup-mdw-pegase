@@ -196,6 +196,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				boolean inscriptionValide = false;
 				boolean inscriptionPayee = false;
 				boolean inscriptionAffichee = false;
+				boolean inscriptionEnCours = false;
 				CibleInscription cible = inscription.getCible();
 				Card insCard = new Card(cible.getFormation().getLibelleLong(), true);
 
@@ -203,6 +204,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				periode.setVisible(false);
 				if(cible.getPeriode()!=null) {
 					CmpUtils.valueAndVisibleIfNotNull(periode,cible.getPeriode().getLibelleAffichage());
+					if(!Utils.estPassee(cible.getPeriode().getDateFin())) {
+						inscriptionEnCours = true;
+					}
 				}
 				periode.setReadOnly(true);
 				CmpUtils.setLongTextField(periode);
@@ -361,10 +365,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					buttonLayout.add(exportAttestationAnchor);
 					buttonLayout.setFlexWrap(FlexWrap.WRAP);
 					buttonLayout.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
-					if(!inscriptionValide) {
+					if(inscriptionEnCours && !inscriptionValide) {
 						exportCertificatAnchor.setVisible(false);
 					}
-					if(!inscriptionPayee) {
+					if(inscriptionEnCours && !inscriptionPayee) {
 						exportAttestationAnchor.setVisible(false);
 					}
 
