@@ -397,7 +397,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	private String getCodeVoeu(InscriptionComplete inscription) {
 		log.info("code chemin :"+inscription.getCible().getCodeChemin());
-		//return inscription.getCible().getFormation().getCode()+"→"+inscription.getCible().getCode()+"@"+inscription.getCible().getPeriode().getCode();
 		return inscription.getCible().getCodeChemin()+"@"+inscription.getCible().getPeriode().getCode();
 	}
 
