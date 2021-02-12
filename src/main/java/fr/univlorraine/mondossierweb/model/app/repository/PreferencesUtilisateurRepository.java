@@ -19,19 +19,11 @@
 package fr.univlorraine.mondossierweb.model.app.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateurPK;
 
 public interface PreferencesUtilisateurRepository extends JpaRepository<PreferencesUtilisateur, PreferencesUtilisateurPK> {
-
-	/* nativeQuery permet de ne pas modifier une preference. */
-	@Modifying
-	@Transactional
-	@Query(nativeQuery = true, value = "update preferences_utilisateur set last_update = now(), valeur = :valeur where username = :username and pref_id:pref")
-	void updatePreference(String username, String pref, String valeur);
+	
 
 }

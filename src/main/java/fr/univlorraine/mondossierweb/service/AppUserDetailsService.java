@@ -20,6 +20,7 @@ package fr.univlorraine.mondossierweb.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,8 +105,14 @@ public class AppUserDetailsService implements UserDetailsService {
 		utilisateur.setLastRole(utilisateur.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", ")));
 
 		// Si l'utilisateur existe, on met à jour la date de dernière connexion et le role
-		if(utilisateurRepository.findById(username).isPresent()) {
-			utilisateurRepository.updateInfo(username, utilisateur.getDisplayName(), utilisateur.getLastRole());
+		Optional<Utilisateur> u = utilisateurRepository.findById(username);
+		if(u.isPresent()) {
+			Utilisateur util = u.get();
+			util.setDisplayName(utilisateur.getDisplayName());
+			util.setLastRole(utilisateur.getLastRole());
+			util.setLastLogin(LocalDateTime.now());
+			utilisateurRepository.save(util);
+			//utilisateurRepository.updateInfo(username, utilisateur.getDisplayName(), utilisateur.getLastRole());
 		} else {
 			// sinon on crée l'utilisateur
 			utilisateurRepository.save(utilisateur);
