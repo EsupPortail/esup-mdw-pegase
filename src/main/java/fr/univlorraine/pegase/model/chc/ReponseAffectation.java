@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * ReponseAffectation
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-01-11T17:44:47.769+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-03-22T10:55:46.355+01:00[Europe/Paris]")
 public class ReponseAffectation {
   public static final String SERIALIZED_NAME_CURSUS = "cursus";
   @SerializedName(SERIALIZED_NAME_CURSUS)
@@ -213,7 +213,7 @@ public class ReponseAffectation {
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -234,7 +234,6 @@ public class ReponseAffectation {
     return Objects.hash(cursus, resultatAcquis, resultatAffectation, resultatDesaffectation, resultatErreur, resultatNonAcquis);
   }
 
-
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
@@ -253,7 +252,7 @@ public class ReponseAffectation {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

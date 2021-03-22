@@ -28,7 +28,7 @@ import java.time.LocalDate;
 /**
  * Apprenant
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-01-11T17:44:47.769+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-03-22T10:55:46.355+01:00[Europe/Paris]")
 public class Apprenant {
   public static final String SERIALIZED_NAME_CODE_APPRENANT = "codeApprenant";
   @SerializedName(SERIALIZED_NAME_CODE_APPRENANT)
@@ -167,7 +167,7 @@ public class Apprenant {
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -187,7 +187,6 @@ public class Apprenant {
     return Objects.hash(codeApprenant, dateNaissance, ine, nomFamille, prenom);
   }
 
-
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
@@ -205,7 +204,7 @@ public class Apprenant {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

@@ -20,8 +20,10 @@ package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 
 import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -41,6 +43,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.BeforeEvent;
@@ -51,6 +54,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
 import fr.univlorraine.mondossierweb.service.ExportService;
+import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
@@ -85,6 +89,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	@Autowired
 	private transient ExportService exportService;
 	@Autowired
+	private transient PegaseService pegaseService;
+	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
 	private String pageTitle = "";
@@ -101,6 +107,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	List<Button> listButtonCertificat = new LinkedList<Button> ();
 	List<Button> listButtonAttestation = new LinkedList<Button> ();
 	List<Button> listButtonPhoto = new LinkedList<Button> ();
+	List<Button> listButtonCursus = new LinkedList<Button> ();
+	
+	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<String,List<ObjetMaquetteDTO>>();
 
 	@PostConstruct
 	public void init() {
@@ -146,6 +155,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		for(Button b : listButtonPhoto ) {
 			b.setText(getTranslation("inscription.photo"));
 		}
+		for(Button b : listButtonCursus ) {
+			b.setText(getTranslation("inscription.cursus"));
+		}
 
 	}
 
@@ -183,6 +195,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		listTextFieldPieces.clear();
 		listButtonCertificat.clear();
 		listButtonAttestation.clear();
+		listButtonCursus.clear();
 		listButtonPhoto.clear();
 	}
 	/**
@@ -275,7 +288,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					exportCertificatAnchor.getStyle().set("margin-left", "0");
 					exportCertificatAnchor.add(certButton);
 					exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
-						() -> exportService.getCertificat(dossier.getApprenant().getCode(), getCodeVoeu(inscription))));
+						() -> exportService.getCertificat(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription))));
 					exportCertificatAnchor.getElement().getStyle().set("margin-left", "1em");
 					exportCertificatAnchor.setTarget("_blank");
 
@@ -292,7 +305,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					exportAttestationAnchor.getStyle().set("margin-left", "0");
 					exportAttestationAnchor.add(attestationButton);
 					exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
-						() -> exportService.getAttestation(dossier.getApprenant().getCode(),  getCodeVoeu(inscription))));
+						() -> exportService.getAttestation(dossier.getApprenant().getCode(),  Utils.getCodeVoeu(inscription))));
 					exportAttestationAnchor.getElement().getStyle().set("margin-left", "1em");
 					exportAttestationAnchor.setTarget("_blank");
 
@@ -310,7 +323,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					photoLayout.getStyle().set("margin-top", "0");
 					photoLayout.getStyle().set("padding", "0");
 					photoButton.addClickListener(c-> {
-						ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  getCodeVoeu(inscription));
+						ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  Utils.getCodeVoeu(inscription));
 						if(photo != null) {
 							StreamResource resource = new StreamResource("photo_"+securityService.getDossierConsulte()+".jpg", () -> photo);
 							Image image = new Image(resource, "photographie");
@@ -384,6 +397,28 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.add(flexLayout);
 					verticalLayout.add(buttonLayout);
 
+					VerticalLayout cursusLayout = new VerticalLayout();
+					cursusLayout.setVisible(false);
+					cursusLayout.setPadding(false);
+					Button cursusButton = new Button("", VaadinIcon.CHEVRON_DOWN_SMALL.create());
+					cursusButton.getStyle().set("margin", "auto");
+					cursusButton.addClickListener(c-> {
+						// Si le cursus n'est pas visible
+						if(!cursusLayout.isVisible()) {
+							// Mise à jour de l'affichage du cursus
+							displayCursus(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),cursusLayout);
+							cursusButton.setIcon(VaadinIcon.CHEVRON_UP_SMALL.create());
+						} else {
+							// On masque le cursus
+							cursusLayout.setVisible(false);
+							cursusButton.setIcon(VaadinIcon.CHEVRON_DOWN_SMALL.create());
+						}
+					});
+					// Ajout à la liste des boutons
+					listButtonCursus.add(cursusButton);
+					verticalLayout.add(cursusButton);
+					verticalLayout.add(cursusLayout);
+
 					insCard.addAlt(verticalLayout);
 
 					insCard.displayAlt();
@@ -395,9 +430,50 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	}
 
 
-	private String getCodeVoeu(InscriptionComplete inscription) {
-		log.info("code chemin :"+inscription.getCible().getCodeChemin());
-		return inscription.getCible().getCodeChemin()+"@"+inscription.getCible().getPeriode().getCode();
+	private void displayCursus(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout cursusLayout) {
+		log.info("Récupération du cursus pour {} sur {}", codeApprenant, codeChemin);
+		
+		List<ObjetMaquetteDTO> listObj=new LinkedList<ObjetMaquetteDTO> ();
+		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
+		// Gestion du cache des cursus en session
+		if(cursusMap.containsKey(insKey)) {
+			log.info("Récupération de la liste cursus dans la map");
+			//Récupération de l'arborescence dans la map
+			listObj = cursusMap.get(insKey);
+		}else {
+			log.info("Récupération de la liste cursus dans Pégase");
+			// Récupération du cursus
+			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeChemin);
+			log.info("sauvegarde de la liste cursus dans la map");
+			// On stocke l'arborescence dans la map
+			cursusMap.put(insKey, listObj);
+		}
+		cursusLayout.removeAll();
+		
+		TreeGrid<ObjetMaquetteDTO> arbo = new TreeGrid<ObjetMaquetteDTO>();
+		arbo.setItems(listObj, ObjetMaquetteDTO::getChildObjects);
+		arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle);
+		arbo.expandRecursively(listObj, 10);
+		arbo.setHeightByRows(true);
+		cursusLayout.add(arbo);
+		/*if(listObj != null) {
+			for(ObjetMaquetteExtension obj : listObj) {
+				// On teste si l'objet est lié au codeVoeu
+				if(obj.getCodeChemin().startsWith(codeChemin)) {
+					HorizontalLayout objLayout = new HorizontalLayout();
+					//Label objCodeLabel = new Label(obj.getCodeChemin());
+					//objLayout.add(objCodeLabel);
+					if(obj.getObjetFormation()!=null) {
+						Label objLabel = new Label(obj.getObjetFormation().getLibelleCourt());
+						objLayout.add(objLabel);
+					}
+					cursusLayout.add(objLayout);
+				}
+			}
+		}*/
+
+		// Affichage du cursus
+		cursusLayout.setVisible(true);
 	}
 
 

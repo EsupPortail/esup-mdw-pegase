@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * ApprenantExtention
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-01-11T17:44:47.769+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-03-22T10:55:46.355+01:00[Europe/Paris]")
 public class ApprenantExtention {
   public static final String SERIALIZED_NAME_CODE_APPRENANT = "codeApprenant";
   @SerializedName(SERIALIZED_NAME_CODE_APPRENANT)
@@ -287,7 +287,7 @@ public class ApprenantExtention {
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -311,7 +311,6 @@ public class ApprenantExtention {
     return Objects.hash(codeApprenant, dateNaissance, ine, nomFamille, plageChoix, prenom, temoinAcquis, temoinAffecte, typeAmenagementLst);
   }
 
-
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
@@ -333,7 +332,7 @@ public class ApprenantExtention {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

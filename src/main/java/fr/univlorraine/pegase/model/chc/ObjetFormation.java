@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * ObjetFormation
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-01-11T17:44:47.769+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-03-22T10:55:46.355+01:00[Europe/Paris]")
 public class ObjetFormation {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
@@ -220,7 +220,7 @@ public class ObjetFormation {
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -242,7 +242,6 @@ public class ObjetFormation {
     return Objects.hash(code, codeNature, idDefinition, idImmuable, libelleCourt, libelleLong, mutualisable);
   }
 
-
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
@@ -262,7 +261,7 @@ public class ObjetFormation {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

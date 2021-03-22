@@ -32,8 +32,12 @@ import org.springframework.stereotype.Service;
 
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
+import fr.univlorraine.pegase.api.chc.CursusApi;
+import fr.univlorraine.pegase.api.chc.InscriptionApi;
+import fr.univlorraine.pegase.api.chc.ObjetmaquetteApi;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
 import fr.univlorraine.pegase.api.insgestion.InscriptionsApi;
+import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
 import fr.univlorraine.pegase.model.insgestion.Apprenant;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.Inscriptions;
@@ -56,22 +60,31 @@ public class PegaseService implements Serializable {
 	private transient String etablissement;	
 	@Value("${pegase.api.ins.url}")
 	private transient String apiInsUrl;	
+	@Value("${pegase.api.chc.url}")
+	private transient String apiChcUrl;	
 	@Value("${pegase.photo.code}")
 	private transient String codePhoto;	
 	@Value("${pegase.demo.codeapprenant}")
 	private transient String codeApprenantDemo;	
 	//private transient String codeCibleDemo="F-ING-BIOSC→FING-BIOSC@PER-2019";	
 
-
+	// INS API
 	private ApiClient apiClientIns = new ApiClient();
 	private ApprenantsApi appApiIns = new ApprenantsApi();
 	private InscriptionsApi insApiIns = new InscriptionsApi();
+	
+	// CHC API
+	private ApiClient apiClientChc = new ApiClient();
+	private InscriptionApi insApiChc = new InscriptionApi();
 
 	@PostConstruct
 	public void init() {
 		apiClientIns.setBasePath(apiInsUrl);
 		insApiIns.setApiClient(apiClientIns);
 		appApiIns.setApiClient(apiClientIns);
+		
+		apiClientChc.setBasePath(apiChcUrl);
+		insApiChc.setApiClient(apiClientChc);
 	}
 
 	/**
@@ -104,6 +117,33 @@ public class PegaseService implements Serializable {
 
 	}
 
+	public List<ObjetMaquetteExtension> getCursus(String codeApprenant, String codePeriode) {
+		// Maj du token pour récupérer le dernier token valide
+		insApiChc.getApiClient().setAccessToken(accessTokenService.getToken());
+				
+		// Si les paramètres nécessaires sont valués
+		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
+			// Maj du token pour récupérer le dernier token valide
+			insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
+			try {
+				// Appel de l'API Pégase
+				List<ObjetMaquetteExtension> listObj = insApiChc.lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode2(codeApprenant, codePeriode, etablissement);
+				if(listObj != null) {
+					log.info("Cursus de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
+					log.debug("Cursus de : {}", listObj);
+				} else {
+					log.info("Anomalie lors de l'appel à la methode API : lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode2 pour le code apprenant : {}, periode {} et etablissement : {}", codeApprenant, codePeriode, etablissement);
+				}
+				return listObj;
+			} catch (ApiException e) {
+				log.error("Erreur lors de l'appel à la methode API : lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode2 pour le code apprenant : {}, periode {} et etablissement : {}", codeApprenant,codePeriode, etablissement, e);
+			}
+		}
+		return null;
+
+	}
+
+
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
 
 		// Si on a aucun codeApprenant en paramètre et qu'on a paramétré un code démo.
@@ -131,11 +171,11 @@ public class PegaseService implements Serializable {
 		}
 		return null;
 	}
-	
+
 	public File recuperePhoto(String codeApprenant, String cible) {
 
 		log.info("recuperePhoto codeApprenant : {} - cible : {}", codeApprenant, cible);
-		
+
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)
 			&& StringUtils.hasText(cible)) {
@@ -225,5 +265,6 @@ public class PegaseService implements Serializable {
 		}
 
 	}
+
 
 }
