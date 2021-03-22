@@ -450,27 +450,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		}
 		cursusLayout.removeAll();
 		
+		// Création de la TreeGrid contenant l'arborescence des objets de formation
 		TreeGrid<ObjetMaquetteDTO> arbo = new TreeGrid<ObjetMaquetteDTO>();
 		arbo.setItems(listObj, ObjetMaquetteDTO::getChildObjects);
 		arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle);
 		arbo.expandRecursively(listObj, 10);
 		arbo.setHeightByRows(true);
 		cursusLayout.add(arbo);
-		/*if(listObj != null) {
-			for(ObjetMaquetteExtension obj : listObj) {
-				// On teste si l'objet est lié au codeVoeu
-				if(obj.getCodeChemin().startsWith(codeChemin)) {
-					HorizontalLayout objLayout = new HorizontalLayout();
-					//Label objCodeLabel = new Label(obj.getCodeChemin());
-					//objLayout.add(objCodeLabel);
-					if(obj.getObjetFormation()!=null) {
-						Label objLabel = new Label(obj.getObjetFormation().getLibelleCourt());
-						objLayout.add(objLabel);
-					}
-					cursusLayout.add(objLayout);
-				}
-			}
-		}*/
 
 		// Affichage du cursus
 		cursusLayout.setVisible(true);

@@ -110,13 +110,25 @@ public final class Utils {
 					// S'il s'agit de la racine
 					if(obj.getCodeChemin().equals(codeCheminRacine)) {
 						list.add(o);
+						log.info("Racine {} insérée", codeCheminRacine);
 					} else {
-						// On recherche l'élément parent de la liste.
-						for(ObjetMaquetteDTO parent : list) {
-							// Si c'est le parent de l'objet en cours
-							if(parent != null && (parent.getCodeChemin() + SEPARATEUR_CHEMIN + o.getCode()).equals(o.getCodeChemin())) {
-								//Ajout au parent
-								parent.getChildObjects().add(o);
+						boolean insere = false;
+						String cheminParent = o.getCodeChemin();
+						log.info("Insertion de {} dans l'arborescence...", cheminParent);
+						// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
+						while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
+							// TODO On supprime le dernier élément du chemin
+							cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
+							log.info("Recherche du parent : {}...", cheminParent);
+							// On recherche l'élément parent de la liste.
+							for(ObjetMaquetteDTO parent : list) {
+								// Si c'est le parent de l'objet en cours
+								if(parent != null && parent.getCodeChemin().equals(cheminParent)) {
+									//Ajout au parent
+									parent.getChildObjects().add(o);
+									insere = true;
+									log.info("Element inséré.");
+								}
 							}
 						}
 					}
