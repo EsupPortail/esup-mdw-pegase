@@ -117,7 +117,7 @@ public final class Utils {
 						log.info("Insertion de {} dans l'arborescence...", cheminParent);
 						// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
 						while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
-							// TODO On supprime le dernier élément du chemin
+							// On supprime le dernier élément du chemin
 							cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
 							log.info("Recherche du parent : {}...", cheminParent);
 							// On recherche l'élément parent de la liste.
