@@ -150,7 +150,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		addDrawerRouterLink(VaadinIcon.USER, "etatcivil.title", EtatCivilView.class);
 		addDrawerRouterLink(VaadinIcon.HOME, "coordonnees.title", CoordonneesView.class);
 		//addDrawerRouterLink(VaadinIcon.ROAD_BRANCHES, "parcours.title", ParcoursView.class);
-				addDrawerRouterLink(VaadinIcon.PACKAGE, "parcours.title", ParcoursView.class);
+				addDrawerRouterLink(VaadinIcon.FOLDER_OPEN, "parcours.title", ParcoursView.class);
 		addDrawerRouterLink(VaadinIcon.EDIT, "inscriptions.title", InscriptionsView.class);
 		//addDrawerRouterLink(VaadinIcon.ACADEMY_CAP, "notes.title", NotesView.class);
 		addDrawerRouterLink(VaadinIcon.BAR_CHART_H, "connexions.title", ConnexionsView.class);

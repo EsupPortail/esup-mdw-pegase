@@ -28,6 +28,9 @@ public class CardHeader extends HorizontalLayout {
 	
 	public CardHeader() {
 		libDiv.getStyle().set("font-size", "var(--lumo-font-size-xl)");
+		libDiv.getStyle().set("margin-top", "auto");
+		libDiv.getStyle().set("margin-bottom", "auto");
+		getStyle().set("min-height", "2.5em");
 	}
 
 	public void setText(String libelle) {

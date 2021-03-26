@@ -275,7 +275,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 		ContactMelComplet cmc= (ContactMelComplet) c;
 
-		Card mailCard = new Card(VaadinIcon.MAILBOX.create(),"", true);
+		Card mailCard = new Card(VaadinIcon.ENVELOPE_O.create(),"", true);
 		mailCard.getTitre().setText(cmc.getDemandeDeContact().getLibelleAffichage());
 
 		FormLayout mailLayout = new FormLayout();
