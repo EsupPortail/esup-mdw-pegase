@@ -5,9 +5,9 @@
 
 .card-title-bordered {
 	border-bottom:1px solid;
-	/*border-color:#0096EA;*/
 	border-image : linear-gradient(45deg,#0096ea,#ffffff) 1;
 	width: 100%;
+	/*border-color:#0096EA;*/
 }
 
 .flip {

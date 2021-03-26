@@ -26,6 +26,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
@@ -72,8 +73,8 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final Card identiteCard = new Card("", false);
-	private final Card naissanceCard = new Card("", false);
+	private final Card identiteCard = new Card(VaadinIcon.INFO_CIRCLE.create(),"", false);
+	private final Card naissanceCard = new Card(VaadinIcon.GLOBE.create(),"", false);
 	private final VerticalLayout etatcivilLayout = new VerticalLayout(identiteCard, naissanceCard);
 
 	private final TextField nomFamille=new TextField();

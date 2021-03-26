@@ -2,11 +2,12 @@ package fr.univlorraine.mondossierweb.ui.component;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.ui.layout.CardHeader;
 import lombok.Getter;
 
 
@@ -14,7 +15,7 @@ import lombok.Getter;
 public class Card extends VerticalLayout {
 
 	@Getter
-	private final TextHeader titre = new TextHeader();
+	private final CardHeader titre = new CardHeader();
 	
 	@Getter
 	private boolean useAlt = false;
@@ -32,10 +33,12 @@ public class Card extends VerticalLayout {
 		super();
 	}
 	
-	public Card(String libelle, boolean hasAltVisibleComponent) {
+	public Card(Icon titleIcon, String libelle, boolean hasAltVisibleComponent) {
 		super();
 		addClassName("flip");
-		titre.add(VaadinIcon.INFO.create());
+		if(titleIcon != null) {
+			titre.setIcon(titleIcon);
+		}
 		titre.setText(libelle);
 		titre.getStyle().set("color", "#0096ea");
 		titre.addClassName("card-title-bordered");

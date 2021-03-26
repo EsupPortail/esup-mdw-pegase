@@ -31,6 +31,7 @@ import org.springframework.util.StringUtils;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
@@ -274,7 +275,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 		ContactMelComplet cmc= (ContactMelComplet) c;
 
-		Card mailCard = new Card("", true);
+		Card mailCard = new Card(VaadinIcon.MAILBOX.create(),"", true);
 		mailCard.getTitre().setText(cmc.getDemandeDeContact().getLibelleAffichage());
 
 		FormLayout mailLayout = new FormLayout();
@@ -304,7 +305,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	private void ajouterTel(ContactComplet c,int n) {
 		ContactTelephoneComplet ctc= (ContactTelephoneComplet) c;
 
-		Card telCard = new Card("", true);
+		Card telCard = new Card(VaadinIcon.PHONE.create(),"", true);
 		telCard.getTitre().setText(ctc.getDemandeDeContact().getLibelleAffichage());
 
 		FormLayout telLayout = new FormLayout();
@@ -334,7 +335,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	private void ajouterAdresse(ContactComplet c,int n) {
 		ContactAdresseComplet cac= (ContactAdresseComplet) c;
 
-		Card adresseCard = new Card("", true);
+		Card adresseCard = new Card(VaadinIcon.LOCATION_ARROW_CIRCLE.create(),"", true);
 		adresseCard.getTitre().setText(cac.getDemandeDeContact().getLibelleAffichage());
 
 		FormLayout adresseLayout = new FormLayout();

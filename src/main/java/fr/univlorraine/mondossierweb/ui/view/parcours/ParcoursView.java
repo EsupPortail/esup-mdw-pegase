@@ -25,6 +25,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -64,8 +65,8 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final Card bacCard = new Card("", false);
-	private final Card anneesCard = new Card("", false);
+	private final Card bacCard = new Card(VaadinIcon.ACADEMY_CAP.create(),"", false);
+	private final Card anneesCard = new Card(VaadinIcon.INSTITUTION.create(),"", false);
 	private final VerticalLayout parcoursLayout = new VerticalLayout(bacCard, anneesCard);
 
 	private final TextField titreAccesBac=new TextField();

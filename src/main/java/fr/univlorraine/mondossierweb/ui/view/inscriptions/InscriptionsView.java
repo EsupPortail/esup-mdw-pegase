@@ -212,7 +212,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				boolean inscriptionAffichee = false;
 				boolean inscriptionEnCours = false;
 				CibleInscription cible = inscription.getCible();
-				Card insCard = new Card(cible.getFormation().getLibelleLong(), true);
+				Card insCard = new Card(VaadinIcon.ACADEMY_CAP.create(),cible.getFormation().getLibelleLong(), true);
 
 				TextField periode = new TextField();
 				periode.setVisible(false);
