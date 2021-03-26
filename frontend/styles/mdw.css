@@ -3,10 +3,11 @@
 	border-bottom-style:solid;
 }
 
-.card-layout {
-	border-top:1px solid;
+.card-title-bordered {
+	border-bottom:1px solid;
 	/*border-color:#0096EA;*/
-	border-image : linear-gradient(45deg,#0096ea,white) 1;
+	border-image : linear-gradient(45deg,#0096ea,#ffffff) 1;
+	width: 100%;
 }
 
 .flip {

@@ -35,8 +35,10 @@ public class Card extends VerticalLayout {
 	public Card(String libelle, boolean hasAltVisibleComponent) {
 		super();
 		addClassName("flip");
+		titre.add(VaadinIcon.INFO.create());
 		titre.setText(libelle);
 		titre.getStyle().set("color", "#0096ea");
+		titre.addClassName("card-title-bordered");
 		if(!hasAltVisibleComponent) {
 			useAlt = false;
 			this.add(titre);

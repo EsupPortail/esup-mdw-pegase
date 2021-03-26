@@ -108,7 +108,6 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	private void initIdentite() {
 
 		FormLayout identiteLayout = new FormLayout();
-		identiteLayout.addClassName("card-layout");
 		identiteLayout.getStyle().set("margin", "0");
 		
 		nomFamille.setReadOnly(true);
