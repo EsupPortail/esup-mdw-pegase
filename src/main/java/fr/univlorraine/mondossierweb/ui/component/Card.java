@@ -99,7 +99,7 @@ public class Card extends VerticalLayout {
 			//this.getStyle().set("background-color", "hsl(214deg 79% 42% / 24%)");
 			this.getStyle().set("color", "#343a40");
 			
-			this.getStyle().set("padding", "2em");
+			this.getStyle().set("padding", "1em 2em");
 			
 			/*this.getStyle().set("background-color", "rgba(40, 45, 51, 0.95)");
 			this.getStyle().set("color", "white");*/
