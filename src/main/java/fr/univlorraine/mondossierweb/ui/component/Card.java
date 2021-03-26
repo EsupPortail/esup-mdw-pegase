@@ -36,13 +36,14 @@ public class Card extends VerticalLayout {
 		super();
 		addClassName("flip");
 		titre.setText(libelle);
+		titre.getStyle().set("color", "#0096ea");
 		if(!hasAltVisibleComponent) {
 			useAlt = false;
 			this.add(titre);
 		}else {
 			useAlt = true;
 			titreLayout.addAndExpand(titre);
-			altButton.getStyle().set("color","#343a40");
+			altButton.getStyle().set("color","#0096ea");
 			titreLayout.add(altButton);
 			this.add(titreLayout);
 			
@@ -84,20 +85,21 @@ public class Card extends VerticalLayout {
 	
 	public void updateStyle() {
 			/*this.getStyle().set("margin", "1em auto 1em auto");
-			this.getStyle().set("border-radius", "4px");
-			this.getStyle().set("border", "0.1em solid");*/
+			this.getStyle().set("border-radius", "4px");*/
+			this.getStyle().set("border", "0.1em solid");
  
-			this.getStyle().set("border-color", "var(--lumo-base-color)");
+			//this.getStyle().set("border-color", "var(--lumo-base-color)");
+			this.getStyle().set("border-color", "lightgray");
 			this.getStyle().set("margin", "0.5em auto 0.5em auto");
-			this.getStyle().set("border-radius", "0");
+			this.getStyle().set("border-radius", "0.5em");
 			
 			//this.getStyle().set("border-bottom-width", "0.1em");
 			//this.getStyle().set("border-bottom-style", "solid");
 			/*this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");*/
 			//this.getStyle().set("background-color", "hsl(214deg 79% 42% / 24%)");
-			this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
 			this.getStyle().set("color", "#343a40");
 			
+			this.getStyle().set("padding", "2em");
 			
 			/*this.getStyle().set("background-color", "rgba(40, 45, 51, 0.95)");
 			this.getStyle().set("color", "white");*/

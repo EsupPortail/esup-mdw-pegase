@@ -404,6 +404,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					cursusLayout.setPadding(false);
 					Button cursusButton = new Button("", VaadinIcon.CHEVRON_DOWN_SMALL.create());
 					cursusButton.getStyle().set("margin", "auto");
+					cursusButton.getStyle().set("color", "#0096ea");
 					cursusButton.addClickListener(c-> {
 						// Si le cursus n'est pas visible
 						if(!cursusLayout.isVisible()) {

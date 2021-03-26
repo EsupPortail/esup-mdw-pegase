@@ -58,9 +58,10 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 	@PostConstruct
 	private void init() {
 		setAlignItems(Alignment.END);
-		getStyle().set("margin-bottom", "0.75rem");
-		getStyle().set("margin-top", "0.75rem");
+		getStyle().set("padding-bottom", "0.75rem");
+		getStyle().set("padding-top", "0.8rem");
 		getStyle().set("margin-left", "auto");
+		
 
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getDarkModeFlux()
@@ -78,7 +79,12 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 		titleLayout.getStyle().set("max-width", "16em");
 		titleLayout.getStyle().set("padding-left", "1em");
 		
+		getStyle().set("background-color", "#343a40");
+		getStyle().set("color", "white");
+		
 		add(titleLayout);
+		
+		
 	}
 
 	/**
