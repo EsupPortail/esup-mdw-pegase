@@ -115,6 +115,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 		//coordPersoLayout.getStyle().set("margin-top", "0");
 		coordPersoLayout.setWidthFull();
+		coordPersoLayout.getStyle().set("max-width", "52em");
 		coordPersoLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
 		//coordPersoLayout.setFlexWrap(FlexWrap.WRAP);
 

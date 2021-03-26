@@ -90,6 +90,7 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 		initBac();
 		initAnnees();
 		parcoursLayout.setWidthFull();
+		parcoursLayout.getStyle().set("max-width", "52em");
 		parcoursLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
 		//parcoursLayout.setFlexWrap(FlexWrap.WRAP);
 		//parcoursLayout.setFlexBasis("28em", bacLayout, anneesLayout);

@@ -136,6 +136,9 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		addToDrawer(appTitle);
 
 		/* Menu */
+		tabs.getStyle().set("max-width", "16em");
+		tabs.getStyle().set("margin-left", "auto");
+		tabs.getStyle().set("box-shadow", "none");
 		tabs.setOrientation(Tabs.Orientation.VERTICAL);
 		tabs.addSelectedChangeListener(event -> {
 			/* Seules les actions de navigation doivent pouvoir changer la tab sélectionnée. */

@@ -97,6 +97,7 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 		initIdentite();
 		initNaissance();
 		etatcivilLayout.setWidthFull();
+		etatcivilLayout.getStyle().set("max-width", "52em");
 		etatcivilLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
 		//etatcivilLayout.setFlexWrap(FlexWrap.WRAP);
 		//etatcivilLayout.setFlexBasis("28em", identiteLayout, naissanceLayout);

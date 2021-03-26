@@ -12,6 +12,8 @@
 	
 [part="drawer"] {
 	background-color : var(--lumo-contrast-5pct);
+	min-width: 28%;
+	border: none !important;
 }
 
 div[content] {

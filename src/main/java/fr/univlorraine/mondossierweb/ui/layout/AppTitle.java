@@ -50,24 +50,35 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 	private transient CurrentUiService currentUiService;
 	@Autowired
 	private transient BuildProperties buildProperties;
+	
+	private HorizontalLayout titleLayout = new HorizontalLayout();
 
 	private final Image logo = new Image();
 
 	@PostConstruct
 	private void init() {
 		setAlignItems(Alignment.END);
-		getStyle().set("margin", "0.75rem 0.75rem 0.75rem 1.5rem");
+		getStyle().set("margin-bottom", "0.75rem");
+		getStyle().set("margin-top", "0.75rem");
+		getStyle().set("margin-left", "auto");
 
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getDarkModeFlux()
 				.map(darkMode -> darkMode ? srcLogoDark : srcLogo)
 				.map(logoSrc -> () -> logo.setSrc(logoSrc)));
-		add(logo);
+		titleLayout.add(logo);
 
 		Div appNameTitle = new Div(new Text(buildProperties.getName()));
 		appNameTitle.getElement().getStyle().set("font-size", "var(--lumo-font-size-xl)");
 		appNameTitle.addClassName("tracking-in-expand");
-		add(appNameTitle);
+		titleLayout.add(appNameTitle);
+		
+		titleLayout.getStyle().set("margin-left", "auto");
+		titleLayout.setWidthFull();
+		titleLayout.getStyle().set("max-width", "16em");
+		titleLayout.getStyle().set("padding-left", "1em");
+		
+		add(titleLayout);
 	}
 
 	/**
