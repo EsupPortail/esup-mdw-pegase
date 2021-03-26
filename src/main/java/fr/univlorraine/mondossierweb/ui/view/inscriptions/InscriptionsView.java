@@ -328,6 +328,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						if(photo != null) {
 							StreamResource resource = new StreamResource("photo_"+securityService.getDossierConsulte()+".jpg", () -> photo);
 							Image image = new Image(resource, "photographie");
+							image.setHeight("10em");
 							photoLayout.removeAll();
 							photoLayout.add(image);
 							photoButton.setVisible(false);
