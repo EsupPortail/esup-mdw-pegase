@@ -5,7 +5,8 @@
 
 .card-layout {
 	border-top:1px solid;
-	border-color:#0096EA;
+	/*border-color:#0096EA;*/
+	border-image : linear-gradient(45deg,#0096ea,white) 1;
 }
 
 .flip {
