@@ -99,6 +99,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	private final VerticalLayout inscriptionsLayout = new VerticalLayout();
 
+	
+	List<TextField> listTextFieldFormation = new LinkedList<TextField> ();
 	List<TextField> listTextFieldPeriode = new LinkedList<TextField> ();
 	List<TextField> listTextFieldRegime = new LinkedList<TextField> ();
 	List<TextField> listTextFieldStatut = new LinkedList<TextField> ();
@@ -132,6 +134,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		log.info("localeChange");
 		setViewTitle(getTranslation("inscriptions.title"));
 
+		
+		for(TextField tf : listTextFieldFormation) {
+			tf.setLabel(getTranslation("inscription.formation"));
+		}
 		for(TextField tf : listTextFieldPeriode) {
 			tf.setLabel(getTranslation("inscription.periode"));
 		}
@@ -189,6 +195,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	 */
 	private void resetData() {
 		inscriptionsLayout.removeAll();
+		listTextFieldFormation.clear();
 		listTextFieldPeriode.clear();
 		listTextFieldRegime.clear();
 		listTextFieldStatut.clear();
@@ -212,8 +219,23 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				boolean inscriptionAffichee = false;
 				boolean inscriptionEnCours = false;
 				CibleInscription cible = inscription.getCible();
-				Card insCard = new Card(VaadinIcon.ACADEMY_CAP.create(),cible.getFormation().getLibelleLong(), true);
+				
+				// Libellé de la carte
+				String libelleInscription = cible.getLibelleCourt() != null ? cible.getLibelleCourt() : cible.getFormation().getLibelleLong() ;
+				Card insCard = new Card(VaadinIcon.ACADEMY_CAP.create(),libelleInscription, true);
 
+				// FORMATION
+				TextField formation = new TextField();
+				formation.setVisible(false);
+				if(cible.getFormation()!=null) {
+					CmpUtils.valueAndVisibleIfNotNull(formation,cible.getFormation().getLibelleLong());
+				}
+				formation.setReadOnly(true);
+				CmpUtils.setLongTextField(formation);
+				listTextFieldFormation.add(formation);
+
+				
+				// PERIODE
 				TextField periode = new TextField();
 				periode.setVisible(false);
 				if(cible.getPeriode()!=null) {
@@ -225,7 +247,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				periode.setReadOnly(true);
 				CmpUtils.setLongTextField(periode);
 				listTextFieldPeriode.add(periode);
-
+				
+				// REGIME
 				TextField regime = new TextField();
 				regime.setVisible(false);
 				if(inscription.getRegimeInscription()!=null ) {
@@ -350,6 +373,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 					VerticalLayout infoLayout = new VerticalLayout();
 					infoLayout.getStyle().set("padding", "0");
+					infoLayout.add(formation);
 					infoLayout.add(periode);
 					infoLayout.add(regime);
 					verticalLayout.add(infoLayout);
@@ -445,9 +469,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			listObj = cursusMap.get(insKey);
 		}else {
 			log.info("Récupération de la liste cursus dans Pégase");
+			// Correction du chemin pour en replaçant le séparateur
+			String codeCheminChc = codeChemin.replaceAll("→", ">");
 			// Récupération du cursus
-			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeChemin);
-			log.info("sauvegarde de la liste cursus dans la map");
+			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
+			log.info("sauvegarde de la liste cursus dans la map ({} elements)", listObj.size());
 			// On stocke l'arborescence dans la map
 			cursusMap.put(insKey, listObj);
 		}

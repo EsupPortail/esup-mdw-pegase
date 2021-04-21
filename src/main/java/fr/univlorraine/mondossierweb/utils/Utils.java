@@ -47,7 +47,7 @@ public final class Utils {
 	public static final String CANAL_CONTACT_TEL = "ContactTelephoneComplet";
 	public static final String TEM_INS_VALIDE = "valide";
 	public static final Object TEM_INS_PAYEE = "valide";
-	private static final String SEPARATEUR_CHEMIN = "→";
+	private static final String SEPARATEUR_CHEMIN = ">";
 
 
 	/** formatage d'une date en chaine pour un affichage européen */
@@ -120,16 +120,8 @@ public final class Utils {
 							// On supprime le dernier élément du chemin
 							cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
 							log.info("Recherche du parent : {}...", cheminParent);
-							// On recherche l'élément parent de la liste.
-							for(ObjetMaquetteDTO parent : list) {
-								// Si c'est le parent de l'objet en cours
-								if(parent != null && parent.getCodeChemin().equals(cheminParent)) {
-									//Ajout au parent
-									parent.getChildObjects().add(o);
-									insere = true;
-									log.info("Element inséré.");
-								}
-							}
+							insere = insertInList(list, cheminParent, o);
+
 						}
 					}
 				}
@@ -138,11 +130,41 @@ public final class Utils {
 		return list;
 	}
 
+	private static boolean insertInList(List<ObjetMaquetteDTO> list, String cheminParent, ObjetMaquetteDTO o) {
+		// On recherche l'élément parent de la liste.
+		for(ObjetMaquetteDTO parent : list) {
+			// Si c'est le parent de l'objet en cours
+			if(parent != null && parent.getCodeChemin().equals(cheminParent)) {
+				//Ajout au parent
+				parent.getChildObjects().add(o);
+				log.info("Element inséré.");
+				return true;
+			}
+			// Si l'élément a des enfants et que son chemin est moins profond que celui ce l'élément à insérer
+			if(!parent.getChildObjects().isEmpty() && parent.getCodeChemin().length() < cheminParent.length()) {
+				boolean insertInChild = insertInList(parent.getChildObjects(),cheminParent,o);
+				// Si l'élément a été inséré dans les enfants
+				if(insertInChild) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	private static ObjetMaquetteDTO createObjetMaquetteDTO(ObjetMaquetteExtension obj) {
 		ObjetMaquetteDTO o = new ObjetMaquetteDTO();
 		o.setCode(obj.getObjetFormation() != null ? obj.getObjetFormation().getCode() : obj.getCodeChemin());
 		o.setCodeChemin(obj.getCodeChemin());
-		o.setLibelle(obj.getObjetFormation() != null ? obj.getObjetFormation().getLibelleCourt() : null);
+		// Si c'est un objet de formation
+		if(obj.getObjetFormation() != null) {
+			// Récupération du libellé court de l'objet de formation
+			o.setLibelle(obj.getObjetFormation().getLibelleCourt());
+		} else {
+			// Si c'est un groupement, récupération du libellé court du groupement
+			o.setLibelle(obj.getGroupement() != null ? obj.getGroupement().getLibelleCourt() : null);
+		}
+
 		o.setObjet(obj);
 		o.setChildObjects(new LinkedList<ObjetMaquetteDTO>());
 		return o;
