@@ -167,6 +167,16 @@ public final class Utils {
 
 		o.setObjet(obj);
 		o.setChildObjects(new LinkedList<ObjetMaquetteDTO>());
+		
+		if(obj.getTemoinAcquis()) {
+			o.setAcquis(true);
+		}
+		if(obj.getTemoinAffecte()) {
+			o.setAffecte(true);
+		}
+		if(obj.getTemoinIAValide()) {
+			o.setIaValide(true);
+		}
 		return o;
 	}
 
