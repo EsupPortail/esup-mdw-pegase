@@ -62,6 +62,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
@@ -429,7 +430,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					cursusLayout.setPadding(false);
 					Button cursusButton = new Button("", VaadinIcon.CHEVRON_DOWN_SMALL.create());
 					cursusButton.getStyle().set("margin", "auto");
-					cursusButton.getStyle().set("color", "#0096ea");
+					cursusButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 					cursusButton.addClickListener(c-> {
 						// Si le cursus n'est pas visible
 						if(!cursusLayout.isVisible()) {

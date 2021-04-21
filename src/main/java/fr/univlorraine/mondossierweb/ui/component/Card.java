@@ -8,6 +8,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import fr.univlorraine.mondossierweb.ui.layout.CardHeader;
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import lombok.Getter;
 
 
@@ -40,7 +41,7 @@ public class Card extends VerticalLayout {
 			titre.setIcon(titleIcon);
 		}
 		titre.setText(libelle);
-		titre.getStyle().set("color", "#0096ea");
+		titre.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 		titre.addClassName("card-title-bordered");
 		if(!hasAltVisibleComponent) {
 			useAlt = false;
@@ -48,7 +49,7 @@ public class Card extends VerticalLayout {
 		}else {
 			useAlt = true;
 			titreLayout.addAndExpand(titre);
-			altButton.getStyle().set("color","#0096ea");
+			altButton.getStyle().set("color",CSSColorUtils.MAIN_HEADER_COLOR);
 			titreLayout.add(altButton);
 			this.add(titreLayout);
 			

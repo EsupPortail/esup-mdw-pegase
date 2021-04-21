@@ -18,6 +18,7 @@
  */
 package fr.univlorraine.mondossierweb.ui.layout;
 
+import java.awt.Dialog.ModalityType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -26,9 +27,11 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -36,8 +39,10 @@ import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -68,8 +73,10 @@ import fr.univlorraine.mondossierweb.ui.view.inscriptions.InscriptionsView;
 import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
 import fr.univlorraine.mondossierweb.ui.view.parcours.ParcoursView;
 import fr.univlorraine.mondossierweb.ui.view.recherche.RechercheView;
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Push(transport = Transport.WEBSOCKET_XHR)
 @JsModule("./src/set-dark-mode.js")
@@ -88,6 +95,7 @@ import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 @CssImport(value = "./styles/vaadin-tab.css", themeFor = "vaadin-tab")
 @CssImport(value = "./styles/vaadin-drawer-toggle.css", themeFor = "vaadin-drawer-toggle")
 @SuppressWarnings("serial")
+@Slf4j
 public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnterObserver, LocaleChangeObserver {
 
 	@Autowired
@@ -103,6 +111,9 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private transient String docUrl;
 	@Value("${help.url:}")
 	private transient String helpUrl;
+	
+	@Value("${connexion.info.actif}")
+	private transient boolean affichagePopupInfo;
 
 	private final Tabs tabs = new Tabs();
 	private final Map<Class<? extends Component>, Tab> navigationTargetToTab = new HashMap<>();
@@ -174,6 +185,20 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			securityService.getPrincipal()
 				.map(this::createUserMenu)
 				.ifPresent(this::addToNavbar);
+		}
+		
+		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
+		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
+			log.info("Affichage popup info");
+			Dialog infoDialog = new Dialog();
+			Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
+			infoIcon.getStyle().set("margin-right", "1em");
+			infoIcon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
+			infoDialog.add(infoIcon);
+			Span info = new Span();
+			info.getElement().setProperty("innerHTML", getTranslation("connexion.info"));
+			infoDialog.add(info);
+			infoDialog.open();
 		}
 	}
 

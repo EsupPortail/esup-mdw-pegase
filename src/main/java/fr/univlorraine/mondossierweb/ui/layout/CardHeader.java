@@ -22,6 +22,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+
 @SuppressWarnings("serial")
 public class CardHeader extends HorizontalLayout {
 	Div libDiv = new Div();
@@ -39,7 +41,7 @@ public class CardHeader extends HorizontalLayout {
 	}
 
 	public void setIcon(Icon icon) {
-		icon.setColor("#0096EA");
+		icon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
 		icon.getStyle().set("margin-top", "auto");
 		icon.getStyle().set("margin-bottom", "auto");
 		add(icon);
