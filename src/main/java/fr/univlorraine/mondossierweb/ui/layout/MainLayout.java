@@ -27,6 +27,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
@@ -41,6 +42,7 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -186,14 +188,15 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		}
 		
 		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
-		if(affichagePopupInfo) {
+		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
 			log.info("Affichage popup info");
 			Dialog infoDialog = new Dialog();
 			Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
 			infoIcon.getStyle().set("margin-right", "1em");
 			infoIcon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
 			infoDialog.add(infoIcon);
-			Text info = new Text(getTranslation("connexion.info"));
+			Span info = new Span();
+			info.getElement().setProperty("innerHTML", getTranslation("connexion.info"));
 			infoDialog.add(info);
 			infoDialog.open();
 		}
