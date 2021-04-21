@@ -39,6 +39,7 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -99,6 +100,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	private final VerticalLayout inscriptionsLayout = new VerticalLayout();
 
+
+	List<TextField> listTextFieldFormation = new LinkedList<TextField> ();
 	List<TextField> listTextFieldPeriode = new LinkedList<TextField> ();
 	List<TextField> listTextFieldRegime = new LinkedList<TextField> ();
 	List<TextField> listTextFieldStatut = new LinkedList<TextField> ();
@@ -108,7 +111,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	List<Button> listButtonAttestation = new LinkedList<Button> ();
 	List<Button> listButtonPhoto = new LinkedList<Button> ();
 	List<Button> listButtonCursus = new LinkedList<Button> ();
-	
+
 	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<String,List<ObjetMaquetteDTO>>();
 
 	@PostConstruct
@@ -132,6 +135,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		log.info("localeChange");
 		setViewTitle(getTranslation("inscriptions.title"));
 
+
+		for(TextField tf : listTextFieldFormation) {
+			tf.setLabel(getTranslation("inscription.formation"));
+		}
 		for(TextField tf : listTextFieldPeriode) {
 			tf.setLabel(getTranslation("inscription.periode"));
 		}
@@ -189,6 +196,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	 */
 	private void resetData() {
 		inscriptionsLayout.removeAll();
+		listTextFieldFormation.clear();
 		listTextFieldPeriode.clear();
 		listTextFieldRegime.clear();
 		listTextFieldStatut.clear();
@@ -212,8 +220,23 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				boolean inscriptionAffichee = false;
 				boolean inscriptionEnCours = false;
 				CibleInscription cible = inscription.getCible();
-				Card insCard = new Card(VaadinIcon.ACADEMY_CAP.create(),cible.getFormation().getLibelleLong(), true);
 
+				// Libellé de la carte
+				String libelleInscription = cible.getLibelleCourt() != null ? cible.getLibelleCourt() : cible.getFormation().getLibelleLong() ;
+				Card insCard = new Card(VaadinIcon.ACADEMY_CAP.create(),libelleInscription, true);
+
+				// FORMATION
+				TextField formation = new TextField();
+				formation.setVisible(false);
+				if(cible.getFormation()!=null) {
+					CmpUtils.valueAndVisibleIfNotNull(formation,cible.getFormation().getLibelleLong());
+				}
+				formation.setReadOnly(true);
+				CmpUtils.setLongTextField(formation);
+				listTextFieldFormation.add(formation);
+
+
+				// PERIODE
 				TextField periode = new TextField();
 				periode.setVisible(false);
 				if(cible.getPeriode()!=null) {
@@ -226,6 +249,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				CmpUtils.setLongTextField(periode);
 				listTextFieldPeriode.add(periode);
 
+				// REGIME
 				TextField regime = new TextField();
 				regime.setVisible(false);
 				if(inscription.getRegimeInscription()!=null ) {
@@ -350,6 +374,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 					VerticalLayout infoLayout = new VerticalLayout();
 					infoLayout.getStyle().set("padding", "0");
+					infoLayout.add(formation);
 					infoLayout.add(periode);
 					infoLayout.add(regime);
 					verticalLayout.add(infoLayout);
@@ -435,7 +460,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	private void displayCursus(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout cursusLayout) {
 		log.info("Récupération du cursus pour {} sur {}", codeApprenant, codeChemin);
-		
+
 		List<ObjetMaquetteDTO> listObj=new LinkedList<ObjetMaquetteDTO> ();
 		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
 		// Gestion du cache des cursus en session
@@ -445,18 +470,21 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			listObj = cursusMap.get(insKey);
 		}else {
 			log.info("Récupération de la liste cursus dans Pégase");
+			// Correction du chemin pour en replaçant le séparateur
+			String codeCheminChc = codeChemin.replaceAll("→", ">");
 			// Récupération du cursus
-			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeChemin);
-			log.info("sauvegarde de la liste cursus dans la map");
+			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
+			log.info("sauvegarde de la liste cursus dans la map ({} elements)", listObj.size());
 			// On stocke l'arborescence dans la map
 			cursusMap.put(insKey, listObj);
 		}
 		cursusLayout.removeAll();
-		
+
 		// Création de la TreeGrid contenant l'arborescence des objets de formation
 		TreeGrid<ObjetMaquetteDTO> arbo = new TreeGrid<ObjetMaquetteDTO>();
 		arbo.setItems(listObj, ObjetMaquetteDTO::getChildObjects);
-		arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle);
+		arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
+		arbo.addComponentColumn(o -> getObjetDetails(o)).setFlexGrow(0);
 		arbo.expandRecursively(listObj, 10);
 		arbo.setHeightByRows(true);
 		cursusLayout.add(arbo);
@@ -466,6 +494,26 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	}
 
 
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne "Acquis" du cursus
+	 */
+	private Component getObjetDetails(ObjetMaquetteDTO o) {
+		FlexLayout l = new FlexLayout();
+		//l.setPadding(false);
+		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
+			Button bAcquis = new Button(VaadinIcon.CHECK.create());
+			bAcquis.setHeight("1.5em");
+			bAcquis.addClickListener(e -> Notification.show(getTranslation("inscription.element.acquis"),2000, Position.MIDDLE));
+			l.add(bAcquis);
+		}
+		return l;
+	}
+	
+	/**
+	 * met à jour le style de la carte
+	 */
 	protected void updateStyle() {
 
 		List<Component> listComp = inscriptionsLayout.getChildren().collect(Collectors.toList());

@@ -13,6 +13,9 @@ public class ObjetMaquetteDTO {
 	private String codeChemin;
 	private String libelle;
 	private List<ObjetMaquetteDTO> childObjects;
+	private Boolean acquis;
+	private Boolean affecte;
+	private Boolean iaValide;
 	
 	/*public List<ObjetMaquetteDTO> getChildObjects(ObjetMaquetteDTO o) {
 		return childObjects;
