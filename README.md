@@ -22,8 +22,8 @@
 - Dézipper le war dans le répertoire webapps de Tomcat
 - Configurer l'application (cf "Configurer le projet")
 - Configurer server.xml de Tomcat : 
--    > Host avec unpackWARs=false 
--    > Ajout du context de l'application dans le Host
+  - Host avec unpackWARs=false 
+  - Ajout du context de l'application dans le Host
 - Démarrer Tomcat
 
 ## Tâches Maven
