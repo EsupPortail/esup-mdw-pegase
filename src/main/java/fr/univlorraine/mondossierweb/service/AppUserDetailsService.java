@@ -86,9 +86,9 @@ public class AppUserDetailsService implements UserDetailsService {
 				utilisateur.getAuthorities().add(new SimpleGrantedAuthority(SecurityUtils.ROLE_ETUDIANT));
 				utilisateur.setDisplayName(student.getDisplayName());
 				utilisateur.setCodeEtudiant(student.getCodeApprenant());
+				utilisateur.setMail(student.getMail());
 				//utilisateur.setCodEtuDossier(student.getCodeApprenant());
 				VaadinSession.getCurrent().setAttribute("codeApprenant", student.getCodeApprenant());
-				utilisateur.setMail(student.getMail());
 				// Nécessaire de le faire à cet endroit?
 				// utilisateur.setDossier(pegaseService.recupererDossierApprenant(utilisateur.getCodEtuDossier()));
 			} else {
