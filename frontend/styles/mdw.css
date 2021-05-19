@@ -10,6 +10,12 @@
 	/*border-color:#0096EA;*/
 }
 
+.card-title-bordered-closed {
+	border-bottom:1px solid;
+	border-image : linear-gradient(45deg,#0096ea,#ffffff) 0;
+	width: 100%;
+}
+
 .flip {
     -webkit-animation: flip-in-ver-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 	        animation: flip-in-ver-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
