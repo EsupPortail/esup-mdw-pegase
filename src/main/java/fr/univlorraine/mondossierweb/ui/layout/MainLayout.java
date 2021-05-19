@@ -158,7 +158,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			}
 		});
 		addDrawerRouterLink(VaadinIcon.SEARCH, "recherche.title", RechercheView.class);
-		addDrawerRouterLink(VaadinIcon.USER, "etatcivil.title", EtatCivilView.class);
+		addDrawerRouterLink(VaadinIcon.USER_CARD, "etatcivil.title", EtatCivilView.class);
 		addDrawerRouterLink(VaadinIcon.HOME, "coordonnees.title", CoordonneesView.class);
 		//addDrawerRouterLink(VaadinIcon.ROAD_BRANCHES, "parcours.title", ParcoursView.class);
 				addDrawerRouterLink(VaadinIcon.FOLDER_OPEN, "parcours.title", ParcoursView.class);

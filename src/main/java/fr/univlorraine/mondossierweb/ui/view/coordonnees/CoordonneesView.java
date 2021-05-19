@@ -300,7 +300,8 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 					c.setDemandeDeContact(dmc);
 					c.setMail(mail);
 					// Ajout du mail dans la vue
-					ajouterMailContact(c, cpt);
+					//ajouterMailContact(c, cpt);
+					ajouterInfoContactPerso(c, cpt);
 				}
 			}
 			updateStyle();
@@ -335,7 +336,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		contacts.addAlt(contactLayout);
 
 		TextField contact=new TextField();
-		//contact.setId(CONTACT + n);
 		contact.setReadOnly(true);
 		contactLayout.add(contact);
 		contact.setLabel(c.getDemandeDeContact().getLibelleAffichage());
@@ -357,7 +357,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		contactsUrgence.addAlt(contactLayout);
 
 		TextField contact=new TextField();
-		//contact.setId(CONTACT + n);
 		contact.setReadOnly(true);
 		contactLayout.add(contact);
 		contact.setLabel(libelle+ " ("+c.getProprietaire()+")");
@@ -381,6 +380,11 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	}
 
 
+	/**
+	 * Ancienne méthode d'ajout d'un mail de contact dans une carte dédiée
+	 * @param c
+	 * @param n
+	 */
 	private void ajouterMailContact(ContactComplet c, int n) {
 
 		ContactMelComplet cmc= (ContactMelComplet) c;
@@ -412,6 +416,11 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		mailCard.displayAlt();
 	}
 
+	/**
+	 * Ancienne méthode d'ajout d'une tel de contact dans une carte dédiée
+	 * @param c
+	 * @param n
+	 */
 	private void ajouterTelContact(ContactComplet c,int n) {
 		ContactTelephoneComplet ctc= (ContactTelephoneComplet) c;
 
