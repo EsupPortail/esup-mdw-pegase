@@ -38,6 +38,7 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
+import fr.univlorraine.mondossierweb.controllers.EtudiantController;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
@@ -60,6 +61,8 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 
 	@Autowired
 	private transient SecurityService securityService;
+	@Autowired
+	private transient EtudiantController etudiantController;
 
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
@@ -214,9 +217,9 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 			Notification.show(getTranslation("error.accesdossierrefuse"));
 		}
 		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-		securityService.checkDossier();
+		etudiantController.checkDossier();
 		// Mise à jour de l'affichage
-		updateData(securityService.getDossier()!=null ? securityService.getDossier().getApprenant() : null);
+		updateData(etudiantController.getDossier()!=null ? etudiantController.getDossier().getApprenant() : null);
 	}
 
 	/**

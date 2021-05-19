@@ -73,12 +73,12 @@ public class Utilisateur implements Serializable, UserDetails {
 	private String mail;
 	
 	/* identifiant de l'étudiant dont le dossier est consulté */
-	@Transient
-	private String codEtuDossier;
+/*	@Transient
+	private String codEtuDossier;*/
 	
 	/* Dossier de l'étudiant consulté */
-	@Transient
-	private ApprenantEtInscriptions dossier;
+	/*@Transient
+	private ApprenantEtInscriptions dossier;*/
 	
 	/* Dernière Chaîne recherchée dans la vue Recherche */
 	@Transient

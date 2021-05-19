@@ -34,6 +34,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.vaadin.flow.server.VaadinSession;
+
 import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesUtilisateurRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.UtilisateurRepository;
@@ -84,7 +86,8 @@ public class AppUserDetailsService implements UserDetailsService {
 				utilisateur.getAuthorities().add(new SimpleGrantedAuthority(SecurityUtils.ROLE_ETUDIANT));
 				utilisateur.setDisplayName(student.getDisplayName());
 				utilisateur.setCodeEtudiant(student.getCodeApprenant());
-				utilisateur.setCodEtuDossier(student.getCodeApprenant());
+				//utilisateur.setCodEtuDossier(student.getCodeApprenant());
+				VaadinSession.getCurrent().setAttribute("codeApprenant", student.getCodeApprenant());
 				utilisateur.setMail(student.getMail());
 				// Nécessaire de le faire à cet endroit?
 				// utilisateur.setDossier(pegaseService.recupererDossierApprenant(utilisateur.getCodEtuDossier()));

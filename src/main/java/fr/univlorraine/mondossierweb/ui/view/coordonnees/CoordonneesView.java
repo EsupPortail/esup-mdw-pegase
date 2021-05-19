@@ -43,6 +43,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
+import fr.univlorraine.mondossierweb.controllers.EtudiantController;
 import fr.univlorraine.mondossierweb.service.LdapService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
@@ -96,6 +97,8 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 	@Autowired
 	private transient SecurityService securityService;
+	@Autowired
+	private transient EtudiantController etudiantController;
 	@Autowired
 	protected transient LdapService ldapService;
 	@Autowired
@@ -570,9 +573,9 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 			Notification.show(getTranslation("error.accesdossierrefuse"));
 		}
 		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-		securityService.checkDossier();
+		etudiantController.checkDossier();
 		// Mise à jour de l'affichage
-		updateData(securityService.getDossier()!=null ? securityService.getDossier().getApprenant() : null);
+		updateData(etudiantController.getDossier()!=null ? etudiantController.getDossier().getApprenant() : null);
 		//Force la maj des label
 		localeChange(null);
 	}	

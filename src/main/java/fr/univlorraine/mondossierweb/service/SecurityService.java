@@ -52,13 +52,13 @@ import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
+import com.vaadin.flow.server.VaadinSession;
 
 import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.ui.view.error.AccessDeniedView;
 import fr.univlorraine.mondossierweb.ui.view.recherche.RechercheView;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
-import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -68,9 +68,7 @@ public class SecurityService implements VaadinServiceInitListener {
 
 	@Autowired
 	private transient BeanFactory beanFactory;
-	@Autowired
-	private transient PegaseService pegaseService;
-	
+
 	
 	@Value("${recherche.actif}")
 	private transient boolean rechercheActive;	
@@ -130,30 +128,6 @@ public class SecurityService implements VaadinServiceInitListener {
 
 	public void saveSearch(String recherche) {
 		getPrincipal().ifPresent(u -> u.setRecherche(recherche));
-	}
-
-	public void setDossierConsulte(String codetu) {
-		getPrincipal().ifPresent(u -> u.setCodEtuDossier(codetu));
-	}
-
-	public String getDossierConsulte() {
-		if(getPrincipal().isPresent()) {
-			return getPrincipal().get().getCodEtuDossier();
-		}
-		return null;
-	}
-
-	public void setDossier(ApprenantEtInscriptions dossier) {
-		if(getPrincipal().isPresent()) {
-			getPrincipal().get().setDossier(dossier);
-		}
-	}
-
-	public ApprenantEtInscriptions getDossier() {
-		if(getPrincipal().isPresent()) {
-			return getPrincipal().get().getDossier();
-		}
-		return null;
 	}
 
 	public boolean isUserLoggedIn() {
@@ -271,17 +245,6 @@ public class SecurityService implements VaadinServiceInitListener {
 			.anyMatch(allowedRoles::contains);
 	}
 
-	/**
-	 * Met à jour les informations sur le dossier si nécessaire
-	 */
-	public void checkDossier() {
-		// Si on n'a pas les informations sur l'étudiant consulté
-		if(getDossier() == null || !getDossier().getApprenant().getCode().equals(getDossierConsulte())) {
-			log.info("Mise à jour des données du dossier en session pour : {}", getDossierConsulte());
-			// Met à jour les données du dossier en session
-			setDossier(pegaseService.recupererDossierApprenant(getDossierConsulte()));
-		}
-	}
 
 	/**
 	 * Permet ou non l'accès au dossier en paramètre
@@ -300,13 +263,10 @@ public class SecurityService implements VaadinServiceInitListener {
 		}
 		return true;
 	}
-
-
-
-
-
-
-
-
+	
+	public void setDossierConsulte(String codeApprenant) {
+		//getPrincipal().ifPresent(u -> u.setCodEtuDossier(codetu));
+		VaadinSession.getCurrent().setAttribute("codeApprenant", codeApprenant);
+	}
 
 }
