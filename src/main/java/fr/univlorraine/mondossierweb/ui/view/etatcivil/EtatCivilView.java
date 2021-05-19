@@ -38,7 +38,8 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
-import fr.univlorraine.mondossierweb.controllers.EtudiantController;
+import ch.qos.logback.core.Layout;
+import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
@@ -62,7 +63,7 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
-	private transient EtudiantController etudiantController;
+	private transient MainController etudiantController;
 
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;

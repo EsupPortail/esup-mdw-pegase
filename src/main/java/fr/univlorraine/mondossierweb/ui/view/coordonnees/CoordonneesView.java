@@ -43,7 +43,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
-import fr.univlorraine.mondossierweb.controllers.EtudiantController;
+import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.service.LdapService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
@@ -98,7 +98,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
-	private transient EtudiantController etudiantController;
+	private transient MainController etudiantController;
 	@Autowired
 	protected transient LdapService ldapService;
 	@Autowired

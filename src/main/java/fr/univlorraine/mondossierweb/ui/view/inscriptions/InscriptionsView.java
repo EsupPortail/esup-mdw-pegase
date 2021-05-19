@@ -54,7 +54,7 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
-import fr.univlorraine.mondossierweb.controllers.EtudiantController;
+import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.service.ExportService;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
@@ -90,7 +90,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
-	private transient EtudiantController etudiantController;
+	private transient MainController etudiantController;
 	@Autowired
 	private transient ExportService exportService;
 	@Autowired

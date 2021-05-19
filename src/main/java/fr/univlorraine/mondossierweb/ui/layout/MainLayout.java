@@ -59,6 +59,7 @@ import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.Transport;
 
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
+import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.service.CurrentUiService;
@@ -106,6 +107,8 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private transient SecurityService securityService;
 	@Autowired
 	private transient PreferencesService prefService;
+	@Autowired
+	private transient MainController etudiantController;
 
 	@Value("${doc.url:}")
 	private transient String docUrl;
@@ -197,6 +200,9 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			.ifPresent(this::addToNavbar);
 		}
 
+		// On attache la mainLayout au component afin d'être notifié des changements de dossier
+		etudiantController.setMainLayout(this);
+		
 		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
 		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
 			log.info("Affichage popup info");
