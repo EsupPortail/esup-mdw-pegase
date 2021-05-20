@@ -35,13 +35,16 @@ import org.springframework.security.access.annotation.Secured;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.treegrid.TreeGrid;
@@ -429,27 +432,43 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.add(buttonLayout);
 
 					VerticalLayout cursusLayout = new VerticalLayout();
-					cursusLayout.setVisible(false);
+					//cursusLayout.setVisible(false);
 					cursusLayout.setPadding(false);
-					Button cursusButton = new Button("", VaadinIcon.CHEVRON_DOWN_SMALL.create());
+					Button cursusButton = new Button("", VaadinIcon.SEARCH.create());
 					cursusButton.getStyle().set("margin", "auto");
 					cursusButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+					Dialog cursusDialog = new Dialog();
+					cursusDialog.setWidthFull();
+					cursusDialog.setMaxWidth("50em");
+					HorizontalLayout bandeauDialog= new HorizontalLayout();
+					Label titreDialog = new Label(libelleInscription);
+					titreDialog.getStyle().set("margin", "auto");
+					titreDialog.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+					Button closeButton = new Button("Fermer");
+					closeButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+					bandeauDialog.add(titreDialog);
+					bandeauDialog.add(closeButton);
+					cursusDialog.add(bandeauDialog);
+					cursusDialog.add(cursusLayout);
 					cursusButton.addClickListener(c-> {
 						// Si le cursus n'est pas visible
-						if(!cursusLayout.isVisible()) {
+						if(!cursusDialog.isOpened()) {
 							// Mise à jour de l'affichage du cursus
 							displayCursus(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),cursusLayout);
-							cursusButton.setIcon(VaadinIcon.CHEVRON_UP_SMALL.create());
+							//cursusButton.setIcon(VaadinIcon.SEARCH_MINUS.create());
+							cursusDialog.open();
 						} else {
 							// On masque le cursus
-							cursusLayout.setVisible(false);
-							cursusButton.setIcon(VaadinIcon.CHEVRON_DOWN_SMALL.create());
+							//cursusLayout.setVisible(false);
+							//cursusButton.setIcon(VaadinIcon.SEARCH.create());
+							cursusDialog.close();
 						}
 					});
+					closeButton.addClickListener(c -> { cursusDialog.close(); });
 					// Ajout à la liste des boutons
 					listButtonCursus.add(cursusButton);
 					verticalLayout.add(cursusButton);
-					verticalLayout.add(cursusLayout);
+					//verticalLayout.add(cursusLayout);
 
 					insCard.addAlt(verticalLayout);
 
@@ -478,6 +497,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			String codeCheminChc = codeChemin.replaceAll("→", ">");
 			// Récupération du cursus
 			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
+			// suppression de la racine
+			listObj = listObj.get(0).getChildObjects();
 			log.info("sauvegarde de la liste cursus dans la map ({} elements)", listObj.size());
 			// On stocke l'arborescence dans la map
 			cursusMap.put(insKey, listObj);
