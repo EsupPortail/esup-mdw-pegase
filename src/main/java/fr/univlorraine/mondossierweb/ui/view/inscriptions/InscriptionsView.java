@@ -440,43 +440,50 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.add(flexLayout);
 					verticalLayout.add(buttonLayout);
 
-					FlexLayout dialogLayout = new FlexLayout();
-					dialogLayout.setFlexDirection(FlexDirection.COLUMN);
-					dialogLayout.setHeightFull();
-					VerticalLayout cursusLayout = new VerticalLayout();
-					//cursusLayout.setVisible(false);
-					cursusLayout.setPadding(false);
-					Button cursusButton = new Button("", VaadinIcon.SEARCH.create());
-					cursusButton.getStyle().set("margin", "auto");
-					cursusButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 					Dialog cursusDialog = new Dialog();
 					cursusDialog.setWidthFull();
 					cursusDialog.setMaxWidth("50em");
-					HorizontalLayout headerDialog= new HorizontalLayout();
-					Label titreDialog = new Label(libelleInscription);
-					titreDialog.getStyle().set("margin", "auto");
-					titreDialog.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
-					Button closeButton = new Button("Fermer");
-					closeButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
-					headerDialog.add(titreDialog);
-					dialogLayout.add(headerDialog);
-					dialogLayout.add(cursusLayout);
-					cursusDialog.add(dialogLayout);
-					// si écran de petite taille
-					if( windowWidth<=800) {
-						HorizontalLayout footerDialog= new HorizontalLayout();
-						footerDialog.add(closeButton);
-						closeButton.getStyle().set("margin", "auto");
-						closeButton.getStyle().set("margin-top", "0.5em");
-						titreDialog.getStyle().set("margin-bottom", "0.5em");
-						dialogLayout.add(footerDialog);
-						cursusDialog.setSizeFull();
-					} else {
-						headerDialog.add(closeButton);
-					}
+					Button cursusButton = new Button("", VaadinIcon.SEARCH.create());
+					cursusButton.getStyle().set("margin", "auto");
+					cursusButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+					
 					cursusButton.addClickListener(c-> {
 						// Si le cursus n'est pas visible
 						if(!cursusDialog.isOpened()) {
+							
+							//INIT dialog
+							cursusDialog.removeAll();
+							FlexLayout dialogLayout = new FlexLayout();
+							dialogLayout.setFlexDirection(FlexDirection.COLUMN);
+							dialogLayout.setHeightFull();
+							VerticalLayout cursusLayout = new VerticalLayout();
+							//cursusLayout.setVisible(false);
+							cursusLayout.setPadding(false);
+							HorizontalLayout headerDialog= new HorizontalLayout();
+							Label titreDialog = new Label(libelleInscription);
+							titreDialog.getStyle().set("margin", "auto");
+							titreDialog.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+							Button closeButton = new Button("Fermer");
+							closeButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+							headerDialog.add(titreDialog);
+							dialogLayout.add(headerDialog);
+							dialogLayout.add(cursusLayout);
+							cursusDialog.add(dialogLayout);
+							// si écran de petite taille
+							if( windowWidth<=800) {
+								HorizontalLayout footerDialog= new HorizontalLayout();
+								footerDialog.add(closeButton);
+								closeButton.getStyle().set("margin", "auto");
+								closeButton.getStyle().set("margin-top", "0.5em");
+								titreDialog.getStyle().set("margin-bottom", "0.5em");
+								dialogLayout.add(footerDialog);
+								cursusDialog.setSizeFull();
+							} else {
+								headerDialog.add(closeButton);
+							}
+							
+							closeButton.addClickListener(cb -> { cursusDialog.close(); });
+							
 							// Mise à jour de l'affichage du cursus
 							displayCursus(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),cursusLayout);
 							//cursusButton.setIcon(VaadinIcon.SEARCH_MINUS.create());
@@ -486,9 +493,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							//cursusLayout.setVisible(false);
 							//cursusButton.setIcon(VaadinIcon.SEARCH.create());
 							cursusDialog.close();
+							cursusDialog.removeAll();
 						}
 					});
-					closeButton.addClickListener(c -> { cursusDialog.close(); });
+					
 					// Ajout à la liste des boutons
 					listButtonCursus.add(cursusButton);
 					verticalLayout.add(cursusButton);
@@ -503,6 +511,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		}
 		updateStyle();
 	}
+
 
 
 	private void displayCursus(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout cursusLayout) {
@@ -545,9 +554,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			arbo.setHeightByRows(false);
 		}
 		cursusLayout.add(arbo);
-
-		// Affichage du cursus
-		cursusLayout.setVisible(true);
 	}
 
 
