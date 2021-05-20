@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
 
-import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
@@ -26,16 +25,11 @@ public class MainController {
 	
 	private MainLayout mainLayout;
 	
-	/*private String codeApprenant;
-	
-	private ApprenantEtInscriptions dossier;*/
-	
 	public ApprenantEtInscriptions getDossier() {
 		if(VaadinSession.getCurrent().getAttribute("dossierApprenant")!=null) {
 			return (ApprenantEtInscriptions) VaadinSession.getCurrent().getAttribute("dossierApprenant");
 		}
 		return null;
-		//return dossier;
 	}
 	
 	public String getDossierConsulte() {
@@ -43,17 +37,14 @@ public class MainController {
 			return (String) VaadinSession.getCurrent().getAttribute("codeApprenant");
 		}
 		return null;
-		//return codeApprenant;
 	}
 	
 	public void setDossierConsulte(String codeApprenant) {
 		VaadinSession.getCurrent().setAttribute("codeApprenant", codeApprenant);
-		//this.codeApprenant = codeApprenant;
 	}
 
 	public void setDossier(ApprenantEtInscriptions dossier) {
 		VaadinSession.getCurrent().setAttribute("dossierApprenant", dossier);
-		//this.dossier = dossier;
 	}
 	
 	/**
@@ -85,24 +76,21 @@ public class MainController {
 			return Optional.of((String) VaadinSession.getCurrent().getAttribute("recherche"));
 		}
 		return Optional.empty();
-		//return getPrincipal().map(Utilisateur :: getRecherche);
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<LdapPerson> getResultatRecherche() {
 		if(VaadinSession.getCurrent().getAttribute("resultatRecherche")!=null) {
 			return (Collection<LdapPerson>) VaadinSession.getCurrent().getAttribute("resultatRecherche");
 		}
 		return null;
-		//return getPrincipal().map(Utilisateur :: getResultatRecherche).orElse(null);
 	}
 
 	public void setResultatRecherche(Collection<LdapPerson> collection) {
-		//getPrincipal().ifPresent(u -> u.setResultatRecherche(collection));
 		VaadinSession.getCurrent().setAttribute("resultatRecherche", collection);
 	}
 
 	public void saveSearch(String recherche) {
-		//getPrincipal().ifPresent(u -> u.setRecherche(recherche));
 		VaadinSession.getCurrent().setAttribute("recherche", recherche);
 	}
 	

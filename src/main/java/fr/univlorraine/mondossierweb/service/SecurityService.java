@@ -19,7 +19,6 @@
 package fr.univlorraine.mondossierweb.service;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -55,7 +54,6 @@ import com.vaadin.flow.server.VaadinServiceInitListener;
 import com.vaadin.flow.server.VaadinSession;
 
 import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
-import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.ui.view.error.AccessDeniedView;
 import fr.univlorraine.mondossierweb.ui.view.recherche.RechercheView;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
@@ -249,7 +247,6 @@ public class SecurityService implements VaadinServiceInitListener {
 	}
 	
 	public void setDossierConsulte(String codeApprenant) {
-		//getPrincipal().ifPresent(u -> u.setCodEtuDossier(codetu));
 		VaadinSession.getCurrent().setAttribute("codeApprenant", codeApprenant);
 	}
 
