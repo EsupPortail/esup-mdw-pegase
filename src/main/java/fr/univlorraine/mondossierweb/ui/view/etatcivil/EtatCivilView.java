@@ -38,7 +38,6 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
-import ch.qos.logback.core.Layout;
 import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;

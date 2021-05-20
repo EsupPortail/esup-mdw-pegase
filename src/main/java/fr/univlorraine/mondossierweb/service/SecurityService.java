@@ -114,22 +114,6 @@ public class SecurityService implements VaadinServiceInitListener {
 			.map(Utilisateur.class::cast);
 	}
 
-	public Optional<String> getSearch() {
-		return getPrincipal().map(Utilisateur :: getRecherche);
-	}
-
-	public Collection<LdapPerson> getResultatRecherche() {
-		return getPrincipal().map(Utilisateur :: getResultatRecherche).orElse(null);
-	}
-
-	public void setResultatRecherche(Collection<LdapPerson> collection) {
-		getPrincipal().ifPresent(u -> u.setResultatRecherche(collection));
-	}
-
-	public void saveSearch(String recherche) {
-		getPrincipal().ifPresent(u -> u.setRecherche(recherche));
-	}
-
 	public boolean isUserLoggedIn() {
 		return getAuthentication()
 			.filter(Predicate.not(AnonymousAuthenticationToken.class::isInstance))

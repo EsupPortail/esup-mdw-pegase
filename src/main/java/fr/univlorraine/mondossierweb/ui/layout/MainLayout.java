@@ -108,7 +108,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	@Autowired
 	private transient PreferencesService prefService;
 	@Autowired
-	private transient MainController etudiantController;
+	private transient MainController mainController;
 
 	@Value("${doc.url:}")
 	private transient String docUrl;
@@ -201,7 +201,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		}
 
 		// On attache la mainLayout au component afin d'être notifié des changements de dossier
-		etudiantController.setMainLayout(this);
+		mainController.setMainLayout(this);
 		
 		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
 		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
@@ -253,8 +253,14 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	 * @param apprenant
 	 */
 	public void updateData(Apprenant apprenant) {
-		nomPrenom.setText(getInfoNomPrenom(apprenant));
-		numeroDossier.setText(apprenant.getCode());
+		if(apprenant!=null) {
+			nomPrenom.setText(getInfoNomPrenom(apprenant));
+			numeroDossier.setText(apprenant.getCode());
+		} else {
+			nomPrenom.setText("");
+			numeroDossier.setText("");
+		}
+		
 	}
 
 

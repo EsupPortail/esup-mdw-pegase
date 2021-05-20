@@ -21,23 +21,17 @@ package fr.univlorraine.mondossierweb.model.app.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.vaadin.flow.data.provider.ListDataProvider;
-
-import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
-import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -71,22 +65,6 @@ public class Utilisateur implements Serializable, UserDetails {
 	/* Mail */
 	@Transient
 	private String mail;
-	
-	/* identifiant de l'étudiant dont le dossier est consulté */
-/*	@Transient
-	private String codEtuDossier;*/
-	
-	/* Dossier de l'étudiant consulté */
-	/*@Transient
-	private ApprenantEtInscriptions dossier;*/
-	
-	/* Dernière Chaîne recherchée dans la vue Recherche */
-	@Transient
-	private String recherche;
-	
-	/* Dernier résultat de la recherche */
-	@Transient
-	private Collection<LdapPerson> resultatRecherche;
 
 	/* Implémentation de UserDetails */
 	@Transient

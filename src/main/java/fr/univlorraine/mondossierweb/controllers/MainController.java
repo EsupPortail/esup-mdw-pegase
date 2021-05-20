@@ -1,11 +1,16 @@
 package fr.univlorraine.mondossierweb.controllers;
 
+import java.util.Collection;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
 
+import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
+import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
@@ -63,7 +68,7 @@ public class MainController {
 		}
 		// Maj du nom/prenom dans le menu latéral
 		if(mainLayout!=null) {
-			mainLayout.updateData(getDossier().getApprenant());
+			mainLayout.updateData(getDossier()!=null ? getDossier().getApprenant() : null);
 		}
 	}
 
@@ -75,7 +80,31 @@ public class MainController {
 		this.mainLayout = mainLayout;
 	}
 	
-	
+	public Optional<String> getSearch() {
+		if(VaadinSession.getCurrent().getAttribute("recherche")!=null) {
+			return Optional.of((String) VaadinSession.getCurrent().getAttribute("recherche"));
+		}
+		return Optional.empty();
+		//return getPrincipal().map(Utilisateur :: getRecherche);
+	}
+
+	public Collection<LdapPerson> getResultatRecherche() {
+		if(VaadinSession.getCurrent().getAttribute("resultatRecherche")!=null) {
+			return (Collection<LdapPerson>) VaadinSession.getCurrent().getAttribute("resultatRecherche");
+		}
+		return null;
+		//return getPrincipal().map(Utilisateur :: getResultatRecherche).orElse(null);
+	}
+
+	public void setResultatRecherche(Collection<LdapPerson> collection) {
+		//getPrincipal().ifPresent(u -> u.setResultatRecherche(collection));
+		VaadinSession.getCurrent().setAttribute("resultatRecherche", collection);
+	}
+
+	public void saveSearch(String recherche) {
+		//getPrincipal().ifPresent(u -> u.setRecherche(recherche));
+		VaadinSession.getCurrent().setAttribute("recherche", recherche);
+	}
 	
 
 }
