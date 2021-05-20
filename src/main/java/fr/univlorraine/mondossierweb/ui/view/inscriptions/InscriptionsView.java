@@ -43,6 +43,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -105,6 +106,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	@Getter
 	private final TextHeader header = new TextHeader();
 
+	private int windowWidth;
 	private final VerticalLayout inscriptionsLayout = new VerticalLayout();
 
 
@@ -131,6 +133,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		//inscriptionsLayout.setFlexWrap(FlexWrap.WRAP);
 		//inscriptionsLayout.getStyle().set("margin-top", "0");
 		add(inscriptionsLayout);
+		
+		UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> { 
+            windowWidth = details.getWindowInnerWidth();
+            });
+        UI.getCurrent().getPage().addBrowserWindowResizeListener(event -> {
+            windowWidth = event.getWidth();
+        });
 	}
 
 
@@ -431,6 +440,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.add(flexLayout);
 					verticalLayout.add(buttonLayout);
 
+					FlexLayout dialogLayout = new FlexLayout();
+					dialogLayout.setFlexDirection(FlexDirection.COLUMN);
+					dialogLayout.setHeightFull();
 					VerticalLayout cursusLayout = new VerticalLayout();
 					//cursusLayout.setVisible(false);
 					cursusLayout.setPadding(false);
@@ -440,16 +452,28 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					Dialog cursusDialog = new Dialog();
 					cursusDialog.setWidthFull();
 					cursusDialog.setMaxWidth("50em");
-					HorizontalLayout bandeauDialog= new HorizontalLayout();
+					HorizontalLayout headerDialog= new HorizontalLayout();
 					Label titreDialog = new Label(libelleInscription);
 					titreDialog.getStyle().set("margin", "auto");
 					titreDialog.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 					Button closeButton = new Button("Fermer");
 					closeButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
-					bandeauDialog.add(titreDialog);
-					bandeauDialog.add(closeButton);
-					cursusDialog.add(bandeauDialog);
-					cursusDialog.add(cursusLayout);
+					headerDialog.add(titreDialog);
+					dialogLayout.add(headerDialog);
+					dialogLayout.add(cursusLayout);
+					cursusDialog.add(dialogLayout);
+					// si écran de petite taille
+					if( windowWidth<=800) {
+						HorizontalLayout footerDialog= new HorizontalLayout();
+						footerDialog.add(closeButton);
+						closeButton.getStyle().set("margin", "auto");
+						closeButton.getStyle().set("margin-top", "0.5em");
+						titreDialog.getStyle().set("margin-bottom", "0.5em");
+						dialogLayout.add(footerDialog);
+						cursusDialog.setSizeFull();
+					} else {
+						headerDialog.add(closeButton);
+					}
 					cursusButton.addClickListener(c-> {
 						// Si le cursus n'est pas visible
 						if(!cursusDialog.isOpened()) {
@@ -511,7 +535,15 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
 		arbo.addComponentColumn(o -> getObjetDetails(o)).setFlexGrow(0);
 		arbo.expandRecursively(listObj, 10);
-		arbo.setHeightByRows(true);
+		// si écran de petite taille
+		if( windowWidth<=800) {
+			arbo.setHeightByRows(false);
+			//arbo.setWidthFull();
+			//arbo.setHeightFull();
+			cursusLayout.setSizeFull();
+		}else {
+			arbo.setHeightByRows(false);
+		}
 		cursusLayout.add(arbo);
 
 		// Affichage du cursus
