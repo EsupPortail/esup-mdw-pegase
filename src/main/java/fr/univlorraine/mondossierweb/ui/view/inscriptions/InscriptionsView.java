@@ -541,7 +541,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// Création de la TreeGrid contenant l'arborescence des objets de formation
 		TreeGrid<ObjetMaquetteDTO> arbo = new TreeGrid<ObjetMaquetteDTO>();
 		arbo.setItems(listObj, ObjetMaquetteDTO::getChildObjects);
-		arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
+		//arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
+		arbo.addComponentHierarchyColumn(o -> getObjetLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
 		arbo.addComponentColumn(o -> getObjetDetails(o)).setFlexGrow(0);
 		arbo.expandRecursively(listObj, 10);
 		// si écran de petite taille
@@ -553,6 +554,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		}else {
 			arbo.setHeightByRows(false);
 		}
+		arbo.setWidthFull();
 		cursusLayout.add(arbo);
 	}
 
@@ -562,8 +564,27 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	 * @param o
 	 * @return Element de la colonne "Acquis" du cursus
 	 */
+	private Component getObjetLibelle(ObjetMaquetteDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+		
+			Label libLabel = new Label(o.getLibelle());
+			libLabel.getStyle().set("white-space", "normal");
+			l.add(libLabel);
+			l.setFlexGrow(1, libLabel);
+		
+		return l;
+	}
+	
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne "Acquis" du cursus
+	 */
 	private Component getObjetDetails(ObjetMaquetteDTO o) {
 		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+		
 		//l.setPadding(false);
 		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 			Button bAcquis = new Button(VaadinIcon.CHECK.create());
