@@ -249,7 +249,16 @@ public final class Utils {
 	}
 
 	public static String displayNote(BigDecimal note, int bareme, Boolean avecBareme) {
-		String n = ""+note;
+		String n = displayBigDecimal(note);
+		
+		if(StringUtils.hasText(n) && avecBareme!=null && avecBareme.booleanValue()) {
+			n += "/" + bareme;
+		}
+		return n;
+	}
+
+	public static String displayBigDecimal(BigDecimal bg) {
+		String n = ""+bg;
 		
 		//Formatage de la note pour supprimer les zéros ou les points inutiles
 		while(n.endsWith("0")) {
@@ -258,9 +267,7 @@ public final class Utils {
 		if(n.endsWith(".")) {
 			n = n.substring(0, n.length()-1);
 		}
-		if(StringUtils.hasText(n) && avecBareme!=null && avecBareme.booleanValue()) {
-			n += "/" + bareme;
-		}
+
 		return n;
 	}
 

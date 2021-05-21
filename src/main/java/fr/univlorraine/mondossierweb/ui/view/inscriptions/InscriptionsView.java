@@ -37,6 +37,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
@@ -92,10 +93,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	@Value("${notes.bareme}")
 	private transient Boolean avecBareme;
-	
+
 	@Value("${notes.coeff}")
 	private transient Boolean avecCoeff;
-	
+
 	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
 	private transient List<String> listeStatutsInscriptionAffichees;	
 	@Autowired
@@ -128,13 +129,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	List<Button> listButtonPhoto = new LinkedList<Button> ();
 	List<Button> listButtonCursus = new LinkedList<Button> ();
 	List<Button> listButtonNotes = new LinkedList<Button> ();
-	
+
 
 	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<String,List<ObjetMaquetteDTO>>();
-	
+
 	Map<String,List<CheminDTO>> notesMap = new HashMap<String,List<CheminDTO>>();
-	
-	
+
+
 
 	@PostConstruct
 	public void init() {
@@ -146,13 +147,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		//inscriptionsLayout.setFlexWrap(FlexWrap.WRAP);
 		//inscriptionsLayout.getStyle().set("margin-top", "0");
 		add(inscriptionsLayout);
-		
+
 		UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> { 
-            windowWidth = details.getWindowInnerWidth();
-            });
-        UI.getCurrent().getPage().addBrowserWindowResizeListener(event -> {
-            windowWidth = event.getWidth();
-        });
+			windowWidth = details.getWindowInnerWidth();
+		});
+		UI.getCurrent().getPage().addBrowserWindowResizeListener(event -> {
+			windowWidth = event.getWidth();
+		});
 	}
 
 
@@ -198,7 +199,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		for(Button b : listButtonNotes ) {
 			b.setText(getTranslation("inscription.notes"));
 		}
-		
+
 
 	}
 
@@ -496,9 +497,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							} else {
 								headerDialog.add(closeButton);
 							}
-							
+
 							closeButton.addClickListener(cb -> { cursusDialog.close(); });
-							
+
 							// Mise à jour de l'affichage du cursus
 							displayCursus(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),cursusLayout);
 							cursusDialog.open();
@@ -511,12 +512,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					// Ajout à la liste des boutons
 					listButtonCursus.add(cursusButton);
 					verticalLayout.add(cursusButton);
-					
-					
-					
-					
-					
-		
+
+
+
+
+
+
 					// Notes et résultats
 					Dialog notesDialog = new Dialog();
 					notesDialog.setWidthFull();
@@ -556,9 +557,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							} else {
 								headerDialog.add(closeButton);
 							}
-							
+
 							closeButton.addClickListener(cb -> { notesDialog.close(); });
-							
+
 							// Mise à jour de l'affichage des notes
 							displayNotes(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),notesLayout);
 							notesDialog.open();
@@ -571,9 +572,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					// Ajout à la liste des boutons
 					listButtonNotes.add(notesButton);
 					verticalLayout.add(notesButton);
-					
-					
-					
+
+
+
 
 					insCard.addAlt(verticalLayout);
 
@@ -630,8 +631,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		arbo.setWidthFull();
 		cursusLayout.add(arbo);
 	}
-	
-	
+
+
 	private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout) {
 		log.info("Récupération des notes pour {} sur {}", codeApprenant, codeChemin);
 
@@ -659,9 +660,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		arbo.setItems(listObj, CheminDTO::getChildObjects);
 		//arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
 		arbo.addComponentHierarchyColumn(o -> getObjetLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
-		arbo.addComponentColumn(o -> getSession1Details(o)).setFlexGrow(1);
-		arbo.addComponentColumn(o -> getSession2Details(o)).setFlexGrow(1);
-		arbo.addComponentColumn(o -> getSessionFinaleDetails(o)).setFlexGrow(1);
+		arbo.addComponentColumn(o -> getSessionsDetails(o)).setFlexGrow(1);
+		//arbo.addComponentColumn(o -> getSession1Details(o)).setFlexGrow(1);
+		//arbo.addComponentColumn(o -> getSession2Details(o)).setFlexGrow(1);
+		//arbo.addComponentColumn(o -> getSessionFinaleDetails(o)).setFlexGrow(1);
 		arbo.expandRecursively(listObj, 10);
 		// si écran de petite taille
 		if( windowWidth<=800) {
@@ -685,15 +687,15 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private Component getObjetLibelle(ObjetMaquetteDTO o) {
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
-		
-			Label libLabel = new Label(o.getLibelle());
-			libLabel.getStyle().set("white-space", "normal");
-			l.add(libLabel);
-			l.setFlexGrow(1, libLabel);
-		
+
+		Label libLabel = new Label(o.getLibelle());
+		libLabel.getStyle().set("white-space", "normal");
+		l.add(libLabel);
+		l.setFlexGrow(1, libLabel);
+
 		return l;
 	}
-	
+
 	/**
 	 * 
 	 * @param o
@@ -702,7 +704,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private Component getObjetDetails(ObjetMaquetteDTO o) {
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
-		
+
 		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 			Button bAcquis = new Button(VaadinIcon.CHECK.create());
 			bAcquis.setHeight("1.5em");
@@ -711,9 +713,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		}
 		return l;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @param o
@@ -722,69 +724,103 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private Component getObjetLibelle(CheminDTO o) {
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
-		
-			Label libLabel = new Label(o.getLibelle());
-			libLabel.getStyle().set("white-space", "normal");
-			l.add(libLabel);
-			l.setFlexGrow(1, libLabel);
-		
+
+		Label libLabel = new Label(o.getLibelle());
+		libLabel.getStyle().set("white-space", "normal");
+		l.add(libLabel);
+		l.setFlexGrow(1, libLabel);
+
 		return l;
 	}
-	
+
 	/**
 	 * 
 	 * @param o
 	 * @return Element de la colonne "Notes" du chemin
 	 */
-	private Component getSession1Details(CheminDTO o) {
+	private Component getSessionsDetails(CheminDTO o) {
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
-		
+
 		if(o!=null && o.getObjet()!=null) {
+			// Ajout du résultat de session finale en tête
+			FlexLayout sessionfinalelayout = getSessionFinaleDetails(o);
+			if(sessionfinalelayout.getComponentCount()>0) {
+				l.add(sessionfinalelayout);
+			}
+			// Ajout du résultat de session 2 ensuite
+			FlexLayout session2layout = getSession2Details(o);
+			if(session2layout.getComponentCount()>0) {
+				l.add(session2layout);
+			}
+			// Ajout du résultat de session 1
+			FlexLayout session1layout = getSession1Details(o);
+			if(session1layout.getComponentCount()>0) {
+				l.add(session1layout);
+			}
+
+		}
+		return l;
+	}
+
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne "Notes" du chemin
+	 */
+	private FlexLayout getSession1Details(CheminDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+
+		if(o!=null && o.getObjet()!=null && 
+			(o.getObjet().getNoteSession1()!=null || o.getObjet().getAbsenceSession1()!=null)) {
 			l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteSession1(), o.getObjet().getAbsenceSession1(), o.getObjet().getCoefficientSession1()));
 		}
 		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession1()!=null) {
-			l.add(createBtnResult(o.getObjet().getResultatSession1().getLibelleCourt(), o.getObjet().getResultatSession1().getLibelleAffichage(), o.getObjet().getCoefficientSession1()));
+			l.add(createBtnResult(o.getObjet().getResultatSession1().getLibelleCourt(), o.getObjet().getResultatSession1().getLibelleAffichage(), o.getObjet().getCoefficientSession1(), o.getLibelle()));
 		}
 		return l;
 	}
-	
+
 	/**
 	 * 
 	 * @param o
 	 * @return Element de la colonne "Notes" du chemin
 	 */
-	private Component getSession2Details(CheminDTO o) {
+	private FlexLayout getSession2Details(CheminDTO o) {
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
-		
-		if(o!=null && o.getObjet()!=null) {
+
+		if(o!=null && o.getObjet()!=null&& 
+			(o.getObjet().getNoteSession2()!=null || o.getObjet().getAbsenceSession2()!=null)) {
 			l.add(createLabelNote(o.getObjet().getBareme(),o.getObjet().getNoteSession2(), o.getObjet().getAbsenceSession2(), o.getObjet().getCoefficientSession2()));
 		}
 		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession2()!=null) {
-			l.add(createBtnResult(o.getObjet().getResultatSession2().getLibelleCourt(), o.getObjet().getResultatSession2().getLibelleAffichage(), o.getObjet().getCoefficientSession2()));
+			l.add(createBtnResult(o.getObjet().getResultatSession2().getLibelleCourt(), o.getObjet().getResultatSession2().getLibelleAffichage(), o.getObjet().getCoefficientSession2(), o.getLibelle()));
 		}
 		return l;
 	}
-	
+
 	/**
 	 * 
 	 * @param o
 	 * @return Element de la colonne "Notes" du chemin
 	 */
-	private Component getSessionFinaleDetails(CheminDTO o) {
+	private FlexLayout getSessionFinaleDetails(CheminDTO o) {
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
-		
-		if(o!=null && o.getObjet()!=null) {
+
+		if(o!=null && o.getObjet()!=null&& 
+			(o.getObjet().getNoteFinale()!=null || o.getObjet().getAbsenceFinale()!=null)) {
 			l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteFinale(), o.getObjet().getAbsenceFinale(), o.getObjet().getCoefficientFinal()));
 		}
 		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatFinal()!=null) {
-			l.add(createBtnResult(o.getObjet().getResultatFinal().getLibelleCourt(), o.getObjet().getResultatFinal().getLibelleAffichage(),o.getObjet().getCoefficientFinal()));
+			l.add(createBtnResult(o.getObjet().getResultatFinal().getLibelleCourt(), o.getObjet().getResultatFinal().getLibelleAffichage(),o.getObjet().getCoefficientFinal(), o.getLibelle()));
 		}
+
 		return l;
 	}
-	
+
 	private Component createLabelNote(int bareme, BigDecimal note, Object absence, BigDecimal coeff) {
 		Label result = new Label();
 		result.setHeight("1.5em");
@@ -800,15 +836,47 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	}
 
 
-	private Component createBtnResult(String code, String libelle, BigDecimal coeff) {
+	private Component createBtnResult(String code, String resultat, BigDecimal coeff, String objFormation) {
 		Button bResult = new Button(code);
 		bResult.setHeight("1.5em");
-		String message = libelle;
-		if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
-			message += " "+getTranslation("notes.coeff")+ coeff.toString();
-		}
-		bResult.addClickListener(e -> Notification.show(libelle,2000, Position.MIDDLE));
+		//bResult.addClickListener(e -> Notification.show(getResultInfo(objFormation, libelle, coeff),2000, Position.MIDDLE));
+		bResult.addClickListener(e -> {
+			Dialog resultDialog = new Dialog();
+			VerticalLayout dialLayout = new VerticalLayout();
+			Label formationLabel = new Label(objFormation);
+			formationLabel.getStyle().set("margin", "auto");
+			formationLabel.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+			dialLayout.add(formationLabel);
+			Label resultLabel = new Label(resultat);
+			resultLabel.getStyle().set("margin", "auto");
+			dialLayout.add(resultLabel);
+			if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
+				HorizontalLayout hl = new HorizontalLayout();
+				hl.setSizeFull();
+				Label libCoeffLabel = new Label(getTranslation("notes.coeff"));
+				libCoeffLabel.getStyle().set("margin-left", "auto");
+				libCoeffLabel.getStyle().set("font-weight", "bold");
+				hl.add(libCoeffLabel);
+				Label coeffLabel = new Label(Utils.displayBigDecimal(coeff));
+				coeffLabel.getStyle().set("margin-right", "auto");
+				hl.add(libCoeffLabel);
+				hl.add(coeffLabel);
+				dialLayout.add(hl);
+			}
+			resultDialog.add(dialLayout);
+			
+			resultDialog.open();
+		});
 		return bResult;
+	}
+
+
+	private String getResultInfo(String titre, String libelle, BigDecimal coeff) {
+		String message = titre + " : " + libelle;
+		if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
+			message += " ("+getTranslation("notes.coeff")+ " " + Utils.displayBigDecimal(coeff)+")";
+		}
+		return message;
 	}
 
 
