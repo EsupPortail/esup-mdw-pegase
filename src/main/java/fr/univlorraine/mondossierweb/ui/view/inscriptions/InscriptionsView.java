@@ -19,6 +19,7 @@
 package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -89,6 +90,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private static final String ATTEST_FILE_EXT = ".pdf";
 
 
+	@Value("${notes.bareme}")
+	private transient Boolean avecBareme;
+	
+	@Value("${notes.coeff}")
+	private transient Boolean avecCoeff;
+	
 	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
 	private transient List<String> listeStatutsInscriptionAffichees;	
 	@Autowired
@@ -120,8 +127,14 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	List<Button> listButtonAttestation = new LinkedList<Button> ();
 	List<Button> listButtonPhoto = new LinkedList<Button> ();
 	List<Button> listButtonCursus = new LinkedList<Button> ();
+	List<Button> listButtonNotes = new LinkedList<Button> ();
+	
 
 	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<String,List<ObjetMaquetteDTO>>();
+	
+	Map<String,List<CheminDTO>> notesMap = new HashMap<String,List<CheminDTO>>();
+	
+	
 
 	@PostConstruct
 	public void init() {
@@ -182,6 +195,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		for(Button b : listButtonCursus ) {
 			b.setText(getTranslation("inscription.cursus"));
 		}
+		for(Button b : listButtonNotes ) {
+			b.setText(getTranslation("inscription.notes"));
+		}
+		
 
 	}
 
@@ -440,30 +457,28 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.add(flexLayout);
 					verticalLayout.add(buttonLayout);
 
+					// Cursus
 					Dialog cursusDialog = new Dialog();
 					cursusDialog.setWidthFull();
 					cursusDialog.setMaxWidth("50em");
 					Button cursusButton = new Button("", VaadinIcon.SEARCH.create());
 					cursusButton.getStyle().set("margin", "auto");
 					cursusButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
-					
 					cursusButton.addClickListener(c-> {
 						// Si le cursus n'est pas visible
 						if(!cursusDialog.isOpened()) {
-							
-							//INIT dialog
+							//Init dialog (a faire au clic car dépend de la taille de la fenêtre)
 							cursusDialog.removeAll();
 							FlexLayout dialogLayout = new FlexLayout();
 							dialogLayout.setFlexDirection(FlexDirection.COLUMN);
 							dialogLayout.setHeightFull();
 							VerticalLayout cursusLayout = new VerticalLayout();
-							//cursusLayout.setVisible(false);
 							cursusLayout.setPadding(false);
 							HorizontalLayout headerDialog= new HorizontalLayout();
 							Label titreDialog = new Label(libelleInscription);
 							titreDialog.getStyle().set("margin", "auto");
 							titreDialog.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
-							Button closeButton = new Button("Fermer");
+							Button closeButton = new Button(getTranslation("inscription.closedialog"));
 							closeButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 							headerDialog.add(titreDialog);
 							dialogLayout.add(headerDialog);
@@ -486,21 +501,79 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							
 							// Mise à jour de l'affichage du cursus
 							displayCursus(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),cursusLayout);
-							//cursusButton.setIcon(VaadinIcon.SEARCH_MINUS.create());
 							cursusDialog.open();
 						} else {
 							// On masque le cursus
-							//cursusLayout.setVisible(false);
-							//cursusButton.setIcon(VaadinIcon.SEARCH.create());
 							cursusDialog.close();
 							cursusDialog.removeAll();
 						}
 					});
-					
 					// Ajout à la liste des boutons
 					listButtonCursus.add(cursusButton);
 					verticalLayout.add(cursusButton);
-					//verticalLayout.add(cursusLayout);
+					
+					
+					
+					
+					
+		
+					// Notes et résultats
+					Dialog notesDialog = new Dialog();
+					notesDialog.setWidthFull();
+					notesDialog.setMaxWidth("70em");
+					Button notesButton = new Button("", VaadinIcon.SEARCH.create());
+					notesButton.getStyle().set("margin", "auto");
+					notesButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+					notesButton.addClickListener(c-> {
+						// Si le notes n'est pas visible
+						if(!notesDialog.isOpened()) {
+							//Init dialog (a faire au clic car dépend de la taille de la fenêtre)
+							notesDialog.removeAll();
+							FlexLayout dialogLayout = new FlexLayout();
+							dialogLayout.setFlexDirection(FlexDirection.COLUMN);
+							dialogLayout.setHeightFull();
+							VerticalLayout notesLayout = new VerticalLayout();
+							notesLayout.setPadding(false);
+							HorizontalLayout headerDialog= new HorizontalLayout();
+							Label titreDialog = new Label(libelleInscription);
+							titreDialog.getStyle().set("margin", "auto");
+							titreDialog.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+							Button closeButton = new Button(getTranslation("inscription.closedialog"));
+							closeButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+							headerDialog.add(titreDialog);
+							dialogLayout.add(headerDialog);
+							dialogLayout.add(notesLayout);
+							notesDialog.add(dialogLayout);
+							// si écran de petite taille
+							if( windowWidth<=800) {
+								HorizontalLayout footerDialog= new HorizontalLayout();
+								footerDialog.add(closeButton);
+								closeButton.getStyle().set("margin", "auto");
+								closeButton.getStyle().set("margin-top", "0.5em");
+								titreDialog.getStyle().set("margin-bottom", "0.5em");
+								dialogLayout.add(footerDialog);
+								notesDialog.setSizeFull();
+							} else {
+								headerDialog.add(closeButton);
+							}
+							
+							closeButton.addClickListener(cb -> { notesDialog.close(); });
+							
+							// Mise à jour de l'affichage des notes
+							displayNotes(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),notesLayout);
+							notesDialog.open();
+						} else {
+							// On masque le notes
+							notesDialog.close();
+							notesDialog.removeAll();
+						}
+					});
+					// Ajout à la liste des boutons
+					listButtonNotes.add(notesButton);
+					verticalLayout.add(notesButton);
+					
+					
+					
 
 					insCard.addAlt(verticalLayout);
 
@@ -557,6 +630,51 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		arbo.setWidthFull();
 		cursusLayout.add(arbo);
 	}
+	
+	
+	private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout) {
+		log.info("Récupération des notes pour {} sur {}", codeApprenant, codeChemin);
+
+		List<CheminDTO> listObj=new LinkedList<CheminDTO> ();
+		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
+		// Gestion du cache des notes en session
+		if(notesMap.containsKey(insKey)) {
+			log.info("Récupération de la liste notes dans la map");
+			//Récupération de l'arborescence dans la map
+			listObj = notesMap.get(insKey);
+		}else {
+			log.info("Récupération de la liste notes dans Pégase");
+			// Correction du chemin pour en replaçant le séparateur
+			String codeCheminChc = codeChemin.replaceAll("→", ">");
+			// Récupération des notes
+			listObj = Utils.convertCheminToDTO(pegaseService.getNotes(codeApprenant, codePeriode,codeCheminChc), codeCheminChc);
+			log.info("sauvegarde de la liste notes dans la map ({} elements)", listObj.size());
+			// On stocke l'arborescence dans la map
+			notesMap.put(insKey, listObj);
+		}
+		notesLayout.removeAll();
+
+		// Création de la TreeGrid contenant l'arborescence des objets de formation
+		TreeGrid<CheminDTO> arbo = new TreeGrid<CheminDTO>();
+		arbo.setItems(listObj, CheminDTO::getChildObjects);
+		//arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
+		arbo.addComponentHierarchyColumn(o -> getObjetLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
+		arbo.addComponentColumn(o -> getSession1Details(o)).setFlexGrow(1);
+		arbo.addComponentColumn(o -> getSession2Details(o)).setFlexGrow(1);
+		arbo.addComponentColumn(o -> getSessionFinaleDetails(o)).setFlexGrow(1);
+		arbo.expandRecursively(listObj, 10);
+		// si écran de petite taille
+		if( windowWidth<=800) {
+			arbo.setHeightByRows(false);
+			//arbo.setWidthFull();
+			//arbo.setHeightFull();
+			notesLayout.setSizeFull();
+		}else {
+			arbo.setHeightByRows(false);
+		}
+		arbo.setWidthFull();
+		notesLayout.add(arbo);
+	}
 
 
 	/**
@@ -585,7 +703,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
 		
-		//l.setPadding(false);
 		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 			Button bAcquis = new Button(VaadinIcon.CHECK.create());
 			bAcquis.setHeight("1.5em");
@@ -595,6 +712,106 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		return l;
 	}
 	
+	
+	
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne libelle du chemin
+	 */
+	private Component getObjetLibelle(CheminDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+		
+			Label libLabel = new Label(o.getLibelle());
+			libLabel.getStyle().set("white-space", "normal");
+			l.add(libLabel);
+			l.setFlexGrow(1, libLabel);
+		
+		return l;
+	}
+	
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne "Notes" du chemin
+	 */
+	private Component getSession1Details(CheminDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+		
+		if(o!=null && o.getObjet()!=null) {
+			l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteSession1(), o.getObjet().getAbsenceSession1(), o.getObjet().getCoefficientSession1()));
+		}
+		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession1()!=null) {
+			l.add(createBtnResult(o.getObjet().getResultatSession1().getLibelleCourt(), o.getObjet().getResultatSession1().getLibelleAffichage(), o.getObjet().getCoefficientSession1()));
+		}
+		return l;
+	}
+	
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne "Notes" du chemin
+	 */
+	private Component getSession2Details(CheminDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+		
+		if(o!=null && o.getObjet()!=null) {
+			l.add(createLabelNote(o.getObjet().getBareme(),o.getObjet().getNoteSession2(), o.getObjet().getAbsenceSession2(), o.getObjet().getCoefficientSession2()));
+		}
+		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession2()!=null) {
+			l.add(createBtnResult(o.getObjet().getResultatSession2().getLibelleCourt(), o.getObjet().getResultatSession2().getLibelleAffichage(), o.getObjet().getCoefficientSession2()));
+		}
+		return l;
+	}
+	
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne "Notes" du chemin
+	 */
+	private Component getSessionFinaleDetails(CheminDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+		
+		if(o!=null && o.getObjet()!=null) {
+			l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteFinale(), o.getObjet().getAbsenceFinale(), o.getObjet().getCoefficientFinal()));
+		}
+		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatFinal()!=null) {
+			l.add(createBtnResult(o.getObjet().getResultatFinal().getLibelleCourt(), o.getObjet().getResultatFinal().getLibelleAffichage(),o.getObjet().getCoefficientFinal()));
+		}
+		return l;
+	}
+	
+	private Component createLabelNote(int bareme, BigDecimal note, Object absence, BigDecimal coeff) {
+		Label result = new Label();
+		result.setHeight("1.5em");
+		result.getStyle().set("margin", "auto");
+		if(note != null) {
+			result.setText(Utils.displayNote(note, bareme, avecBareme));
+		} else {
+			if(absence != null) {
+				result.setText("ABS");
+			}
+		}
+		return result;
+	}
+
+
+	private Component createBtnResult(String code, String libelle, BigDecimal coeff) {
+		Button bResult = new Button(code);
+		bResult.setHeight("1.5em");
+		String message = libelle;
+		if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
+			message += " "+getTranslation("notes.coeff")+ coeff.toString();
+		}
+		bResult.addClickListener(e -> Notification.show(libelle,2000, Position.MIDDLE));
+		return bResult;
+	}
+
+
 	/**
 	 * met à jour le style de la carte
 	 */
