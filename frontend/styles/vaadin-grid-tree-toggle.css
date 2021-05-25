@@ -1,0 +1,7 @@
+#level-spacer < .mdw-small-grid {
+    display: none;
+}
+
+.mdw-small-grid > [part="toggle"]{
+    display: none;
+}

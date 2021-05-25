@@ -554,7 +554,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							dialogLayout.add(notesLayout);
 							notesDialog.add(dialogLayout);
 							// si écran de petite taille
+							boolean smallGrid=false;
 							if( windowWidth<=800) {
+								smallGrid=true;
 								HorizontalLayout footerDialog= new HorizontalLayout();
 								footerDialog.add(closeButton);
 								closeButton.getStyle().set("margin", "auto");
@@ -570,7 +572,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							closeButton.addClickListener(cb -> { notesDialog.close(); });
 
 							// Mise à jour de l'affichage des notes
-							displayNotes(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),notesLayout);
+							displayNotes(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),notesLayout, smallGrid);
 							notesDialog.open();
 						} else {
 							// On masque le notes
@@ -642,7 +644,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	}
 
 
-	private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout) {
+	private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout, boolean smallGrid) {
 		log.info("Récupération des notes pour {} sur {}", codeApprenant, codeChemin);
 
 		List<CheminDTO> listObj=new LinkedList<CheminDTO> ();
@@ -667,20 +669,19 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// Création de la TreeGrid contenant l'arborescence des objets de formation
 		TreeGrid<CheminDTO> arbo = new TreeGrid<CheminDTO>();
 		arbo.setItems(listObj, CheminDTO::getChildObjects);
-		//arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
 		arbo.addComponentHierarchyColumn(o -> getObjetNotesLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
 		arbo.addComponentColumn(o -> getSessionsDetails(o)).setFlexGrow(1);
 		arbo.setSelectionMode(SelectionMode.SINGLE);
 		arbo.addItemClickListener(o -> { showDetailNoteDialog(o.getItem());});
-		//arbo.addComponentColumn(o -> getSession1Details(o)).setFlexGrow(1);
-		//arbo.addComponentColumn(o -> getSession2Details(o)).setFlexGrow(1);
-		//arbo.addComponentColumn(o -> getSessionFinaleDetails(o)).setFlexGrow(1);
+		
+		if(smallGrid) {
+			arbo.setThemeName("mobile");
+			arbo.addClassName("mdw-small-grid");
+		}
 		arbo.expandRecursively(listObj, 10);
 		// si écran de petite taille
 		if( windowWidth<=800) {
 			arbo.setHeightByRows(false);
-			//arbo.setWidthFull();
-			//arbo.setHeightFull();
 			notesLayout.setSizeFull();
 		}else {
 			arbo.setHeightByRows(false);
