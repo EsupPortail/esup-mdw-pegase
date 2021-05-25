@@ -39,7 +39,9 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -97,6 +99,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	@Value("${notes.coeff}")
 	private transient Boolean avecCoeff;
+	
+	@Value("${notes.ects}")
+	private transient Boolean avecECTS;
+	
 
 	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
 	private transient List<String> listeStatutsInscriptionAffichees;	
@@ -619,8 +625,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		TreeGrid<ObjetMaquetteDTO> arbo = new TreeGrid<ObjetMaquetteDTO>();
 		arbo.setItems(listObj, ObjetMaquetteDTO::getChildObjects);
 		//arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
-		arbo.addComponentHierarchyColumn(o -> getObjetLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
-		arbo.addComponentColumn(o -> getObjetDetails(o)).setFlexGrow(0);
+		arbo.addComponentHierarchyColumn(o -> getObjetCursusLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
+		arbo.addComponentColumn(o -> getObjetCursusDetails(o)).setFlexGrow(0);
 		arbo.expandRecursively(listObj, 10);
 		// si écran de petite taille
 		if( windowWidth<=800) {
@@ -662,8 +668,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		TreeGrid<CheminDTO> arbo = new TreeGrid<CheminDTO>();
 		arbo.setItems(listObj, CheminDTO::getChildObjects);
 		//arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
-		arbo.addComponentHierarchyColumn(o -> getObjetLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
+		arbo.addComponentHierarchyColumn(o -> getObjetNotesLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
 		arbo.addComponentColumn(o -> getSessionsDetails(o)).setFlexGrow(1);
+		arbo.setSelectionMode(SelectionMode.SINGLE);
 		arbo.addItemClickListener(o -> { showDetailNoteDialog(o.getItem());});
 		//arbo.addComponentColumn(o -> getSession1Details(o)).setFlexGrow(1);
 		//arbo.addComponentColumn(o -> getSession2Details(o)).setFlexGrow(1);
@@ -686,9 +693,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	/**
 	 * 
 	 * @param o
-	 * @return Element de la colonne "Acquis" du cursus
+	 * @return Element de la colonne libellé du cursus
 	 */
-	private Component getObjetLibelle(ObjetMaquetteDTO o) {
+	private Component getObjetCursusLibelle(ObjetMaquetteDTO o) {
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
 
@@ -705,12 +712,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	 * @param o
 	 * @return Element de la colonne "Acquis" du cursus
 	 */
-	private Component getObjetDetails(ObjetMaquetteDTO o) {
+	private Component getObjetCursusDetails(ObjetMaquetteDTO o) {
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
 
 		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 			Button bAcquis = new Button(VaadinIcon.CHECK.create());
+			bAcquis.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 			bAcquis.setHeight("1.5em");
 			bAcquis.addClickListener(e -> Notification.show(getTranslation("inscription.element.acquis"),2000, Position.MIDDLE));
 			l.add(bAcquis);
@@ -725,11 +733,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	 * @param o
 	 * @return Element de la colonne libelle du chemin
 	 */
-	private Component getObjetLibelle(CheminDTO o) {
+	private Component getObjetNotesLibelle(CheminDTO o) {
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
 
-		Label libLabel = new Label(o.getLibelle());
+		Div libLabel = new Div();
+		libLabel.setText(o.getLibelle());
 		libLabel.getStyle().set("white-space", "normal");
 		l.add(libLabel);
 		l.setFlexGrow(1, libLabel);
@@ -768,7 +777,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					if(session1layout.getComponentCount()>0) {
 						l.add(session1layout);
 					} else {
-						Label aucunResultat = new Label(getTranslation("notes.aucune"));
+						Div aucunResultat = new Div();
+						aucunResultat.setText(getTranslation("notes.aucune"));
 						aucunResultat.getStyle().set("font-style", "italic");
 						aucunResultat.getStyle().set("font-size", "smaller");
 						aucunResultat.getStyle().set("margin", "auto");
@@ -816,6 +826,21 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			hl.add(coeffLabel);
 			dialLayout.add(hl);
 		}
+		// Ajout des crédits ECTS
+		if(o.getObjet().getCreditEcts()!=null && avecECTS) {
+			HorizontalLayout hl = new HorizontalLayout();
+			hl.setWidthFull();
+			Label libECTSLabel = new Label(getTranslation("notes.ects"));
+			libECTSLabel.getStyle().set("font-weight", "bold");
+			hl.add(libECTSLabel);
+			Label ectsLabel = new Label(Utils.displayBigDecimal(o.getObjet().getCreditEcts()));
+			ectsLabel.setWidthFull();
+			hl.add(libECTSLabel);
+			hl.add(ectsLabel);
+			dialLayout.add(hl);
+		}
+		// AJout des résultats de chaque session
+		boolean aucunResultat=true;
 		// Ajout des infos de session 1
 		if(s1.getComponentCount()>0) {
 			HorizontalLayout session1 = new HorizontalLayout();
@@ -826,6 +851,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			session1.add(labelS1);
 			session1.add(s1);
 			dialLayout.add(session1);
+			aucunResultat=false;
 		}
 		// Ajout des infos de session 2
 		if(s2.getComponentCount()>0) {
@@ -837,6 +863,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			session2.add(labelS2);
 			session2.add(s2);
 			dialLayout.add(session2);
+			aucunResultat=false;
 		}
 		// Ajout des infos de session finale
 		if(sf.getComponentCount()>0) {
@@ -847,8 +874,19 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			sessionFinale.add(labelSF);
 			sessionFinale.add(sf);
 			dialLayout.add(sessionFinale);
+			aucunResultat=false;
 		}
-
+		
+		// Si aucun résultat
+		if(aucunResultat) {
+			HorizontalLayout aucunResLayout = new HorizontalLayout();
+			aucunResLayout.setWidthFull();
+			Div aucunResDiv = new Div();
+			aucunResDiv.setText(getTranslation("notes.aucune"));
+			aucunResDiv.getStyle().set("font-style", "italic");
+			aucunResLayout.add(aucunResDiv);
+			dialLayout.add(aucunResLayout);
+		}
 		resultDialog.add(dialLayout);
 		resultDialog.open();
 
@@ -950,7 +988,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	}
 
 	private Component createLabelNote(int bareme, BigDecimal note, Object absence, BigDecimal coeff) {
-		Label result = new Label();
+		Div result = new Div();
 		result.setHeight("1.5em");
 		result.setWidth("5em");
 		result.getStyle().set("margin", "auto auto auto 1em");
@@ -966,7 +1004,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 
 	private Component createLabelResult(String libCourt) {
-		Label result = new Label();
+		Div result = new Div();
 		result.setHeight("1.5em");
 		result.getStyle().set("margin", "auto auto auto 1em");
 		result.getStyle().set("background-color", CSSColorUtils.MAIN_HEADER_COLOR);

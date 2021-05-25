@@ -115,16 +115,20 @@ public final class Utils {
 						list.add(o);
 						log.info("Racine {} insérée", codeCheminRacine);
 					} else {
-						boolean insere = false;
-						String cheminParent = o.getCodeChemin();
-						log.info("Insertion de {} dans l'arborescence...", cheminParent);
-						// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
-						while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
-							// On supprime le dernier élément du chemin
-							cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
-							log.info("Recherche du parent : {}...", cheminParent);
-							insere = insertInList(list, cheminParent, o);
+						// Si l'étudiant est affecté à cet objet de formation ou qu'il l'a acquis
+						if((o.getAffecte()!=null && o.getAffecte().booleanValue()) ||
+							o.getAcquis()!=null && o.getAcquis().booleanValue()) {
+							boolean insere = false;
+							String cheminParent = o.getCodeChemin();
+							log.info("Insertion de {} dans l'arborescence...", cheminParent);
+							// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
+							while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
+								// On supprime le dernier élément du chemin
+								cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
+								log.info("Recherche du parent : {}...", cheminParent);
+								insere = insertInList(list, cheminParent, o);
 
+							}
 						}
 					}
 				}
@@ -225,7 +229,7 @@ public final class Utils {
 
 		return o;
 	}
-	
+
 	private static boolean insertInList(List<CheminDTO> list, String cheminParent, CheminDTO o) {
 		// On recherche l'élément parent de la liste.
 		for(CheminDTO parent : list) {
@@ -250,7 +254,7 @@ public final class Utils {
 
 	public static String displayNote(BigDecimal note, int bareme, Boolean avecBareme) {
 		String n = displayBigDecimal(note);
-		
+
 		if(StringUtils.hasText(n) && avecBareme!=null && avecBareme.booleanValue()) {
 			n += "/" + bareme;
 		}
@@ -259,7 +263,7 @@ public final class Utils {
 
 	public static String displayBigDecimal(BigDecimal bg) {
 		String n = ""+bg;
-		
+
 		//Formatage de la note pour supprimer les zéros ou les points inutiles
 		while(n.endsWith("0")) {
 			n = n.substring(0, n.length()-1);
