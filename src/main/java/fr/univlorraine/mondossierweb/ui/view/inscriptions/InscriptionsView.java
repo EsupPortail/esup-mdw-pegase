@@ -496,6 +496,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								dialogLayout.add(footerDialog);
 								cursusDialog.setSizeFull();
 							} else {
+								cursusDialog.setHeight("auto");
 								headerDialog.add(closeButton);
 							}
 
@@ -556,6 +557,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								dialogLayout.add(footerDialog);
 								notesDialog.setSizeFull();
 							} else {
+								notesDialog.setHeight("auto");
 								headerDialog.add(closeButton);
 							}
 
@@ -731,10 +733,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		libLabel.getStyle().set("white-space", "normal");
 		l.add(libLabel);
 		l.setFlexGrow(1, libLabel);
-		
-		l.addClickListener(e -> {
+
+		/*l.addClickListener(e -> {
 			showDetailNoteDialog(o);
-		});
+		});*/
 
 		return l;
 	}
@@ -775,18 +777,18 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				}
 			}
 
-			l.addClickListener(e -> {
+			/*l.addClickListener(e -> {
 				showDetailNoteDialog(o);
-			});
+			});*/
 		}
 		return l;
 	}
-	
+
 	private void showDetailNoteDialog(CheminDTO o) {
 		FlexLayout sf = getSessionFinaleDetails(o);
 		FlexLayout s2 = getSession2Details(o);
 		FlexLayout s1 = getSession1Details(o);
-		
+
 		// Création dialog avec le détail des notes et résultat pour l'objet de formation
 		Dialog resultDialog = new Dialog();
 		VerticalLayout dialLayout = new VerticalLayout();
@@ -794,44 +796,25 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		formationLabel.getStyle().set("margin", "auto");
 		formationLabel.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 		dialLayout.add(formationLabel);
-		
+
 		// Ajout du résultat principal
 		/*Label resultLabel = new Label(getResultat(o));
 		resultLabel.getStyle().set("margin", "auto");
 		dialLayout.add(resultLabel);*/
-		
+
 		//Ajout du coeff principal
 		BigDecimal coeff=getCoeff(o);
 		if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
 			HorizontalLayout hl = new HorizontalLayout();
-			hl.setSizeFull();
+			hl.setWidthFull();
 			Label libCoeffLabel = new Label(getTranslation("notes.coeff"));
-			libCoeffLabel.getStyle().set("margin-left", "auto");
 			libCoeffLabel.getStyle().set("font-weight", "bold");
 			hl.add(libCoeffLabel);
 			Label coeffLabel = new Label(Utils.displayBigDecimal(coeff));
-			coeffLabel.getStyle().set("margin-right", "auto");
+			coeffLabel.setWidthFull();
 			hl.add(libCoeffLabel);
 			hl.add(coeffLabel);
 			dialLayout.add(hl);
-		}
-		// Ajout des infos de session finale
-		if(sf.getComponentCount()>0) {
-			HorizontalLayout sessionFinale = new HorizontalLayout();
-			sessionFinale.setWidthFull();
-			sessionFinale.add(new Label(getTranslation("notes.session.finale")));
-			sessionFinale.add(sf);
-			dialLayout.add(sessionFinale);
-		}
-		// Ajout des infos de session 2
-		if(s2.getComponentCount()>0) {
-			HorizontalLayout session2 = new HorizontalLayout();
-			session2.setWidthFull();
-			Label labelS2 = new Label(getTranslation("notes.session.2"));
-			labelS2.getStyle().set("white-space", "nowrap");
-			session2.add(labelS2);
-			session2.add(s2);
-			dialLayout.add(session2);
 		}
 		// Ajout des infos de session 1
 		if(s1.getComponentCount()>0) {
@@ -839,14 +822,36 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			session1.setWidthFull();
 			Label labelS1 = new Label(getTranslation("notes.session.1"));
 			labelS1.getStyle().set("white-space", "nowrap");
+			labelS1.getStyle().set("font-weight", "bold");
 			session1.add(labelS1);
 			session1.add(s1);
 			dialLayout.add(session1);
 		}
+		// Ajout des infos de session 2
+		if(s2.getComponentCount()>0) {
+			HorizontalLayout session2 = new HorizontalLayout();
+			session2.setWidthFull();
+			Label labelS2 = new Label(getTranslation("notes.session.2"));
+			labelS2.getStyle().set("white-space", "nowrap");
+			labelS2.getStyle().set("font-weight", "bold");
+			session2.add(labelS2);
+			session2.add(s2);
+			dialLayout.add(session2);
+		}
+		// Ajout des infos de session finale
+		if(sf.getComponentCount()>0) {
+			HorizontalLayout sessionFinale = new HorizontalLayout();
+			sessionFinale.setWidthFull();
+			Label labelSF = new Label(getTranslation("notes.session.finale"));
+			labelSF.getStyle().set("font-weight", "bold");
+			sessionFinale.add(labelSF);
+			sessionFinale.add(sf);
+			dialLayout.add(sessionFinale);
+		}
 
 		resultDialog.add(dialLayout);
 		resultDialog.open();
-		
+
 	}
 
 
@@ -900,6 +905,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession1()!=null) {
 			l.add(createLabelResult(o.getObjet().getResultatSession1().getLibelleCourt()));
 		}
+		l.getStyle().set("flex-flow", "row wrap");
 		return l;
 	}
 
@@ -919,6 +925,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession2()!=null) {
 			l.add(createLabelResult(o.getObjet().getResultatSession2().getLibelleCourt()));
 		}
+		l.getStyle().set("flex-flow", "row wrap");
 		return l;
 	}
 
@@ -938,14 +945,15 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatFinal()!=null) {
 			l.add(createLabelResult(o.getObjet().getResultatFinal().getLibelleCourt()));
 		}
-
+		l.getStyle().set("flex-flow", "row wrap");
 		return l;
 	}
 
 	private Component createLabelNote(int bareme, BigDecimal note, Object absence, BigDecimal coeff) {
 		Label result = new Label();
 		result.setHeight("1.5em");
-		result.getStyle().set("margin", "auto");
+		result.setWidth("5em");
+		result.getStyle().set("margin", "auto auto auto 1em");
 		if(note != null) {
 			result.setText(Utils.displayNote(note, bareme, avecBareme));
 		} else {
@@ -960,7 +968,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private Component createLabelResult(String libCourt) {
 		Label result = new Label();
 		result.setHeight("1.5em");
-		result.getStyle().set("margin", "auto");
+		result.getStyle().set("margin", "auto auto auto 1em");
 		result.getStyle().set("background-color", CSSColorUtils.MAIN_HEADER_COLOR);
 		result.getStyle().set("color", "white");
 		result.getStyle().set("padding-left", "0.5em");
