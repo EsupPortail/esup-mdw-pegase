@@ -32,6 +32,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -661,6 +662,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		//arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
 		arbo.addComponentHierarchyColumn(o -> getObjetLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
 		arbo.addComponentColumn(o -> getSessionsDetails(o)).setFlexGrow(1);
+		arbo.addItemClickListener(o -> { showDetailNoteDialog(o.getItem());});
 		//arbo.addComponentColumn(o -> getSession1Details(o)).setFlexGrow(1);
 		//arbo.addComponentColumn(o -> getSession2Details(o)).setFlexGrow(1);
 		//arbo.addComponentColumn(o -> getSessionFinaleDetails(o)).setFlexGrow(1);
@@ -729,6 +731,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		libLabel.getStyle().set("white-space", "normal");
 		l.add(libLabel);
 		l.setFlexGrow(1, libLabel);
+		
+		l.addClickListener(e -> {
+			showDetailNoteDialog(o);
+		});
 
 		return l;
 	}
@@ -743,25 +749,140 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		l.setWidthFull();
 
 		if(o!=null && o.getObjet()!=null) {
-			// Ajout du résultat de session finale en tête
 			FlexLayout sessionfinalelayout = getSessionFinaleDetails(o);
+			FlexLayout session2layout = getSession2Details(o);
+			FlexLayout session1layout = getSession1Details(o);
+
+
+			// Ajout du résultat de session finale s'il existe
 			if(sessionfinalelayout.getComponentCount()>0) {
 				l.add(sessionfinalelayout);
-			}
-			// Ajout du résultat de session 2 ensuite
-			FlexLayout session2layout = getSession2Details(o);
-			if(session2layout.getComponentCount()>0) {
-				l.add(session2layout);
-			}
-			// Ajout du résultat de session 1
-			FlexLayout session1layout = getSession1Details(o);
-			if(session1layout.getComponentCount()>0) {
-				l.add(session1layout);
+			}else {
+				// Sinon ajout du résultat de session 2 s'il existe
+				if(session2layout.getComponentCount()>0) {
+					l.add(session2layout);
+				}else {
+					// Sinon ajout du résultat de session 1 s'il existe
+					if(session1layout.getComponentCount()>0) {
+						l.add(session1layout);
+					} else {
+						Label aucunResultat = new Label(getTranslation("notes.aucune"));
+						aucunResultat.getStyle().set("font-style", "italic");
+						aucunResultat.getStyle().set("font-size", "smaller");
+						aucunResultat.getStyle().set("margin", "auto");
+						l.add(aucunResultat);
+					}
+				}
 			}
 
+			l.addClickListener(e -> {
+				showDetailNoteDialog(o);
+			});
 		}
 		return l;
 	}
+	
+	private void showDetailNoteDialog(CheminDTO o) {
+		FlexLayout sf = getSessionFinaleDetails(o);
+		FlexLayout s2 = getSession2Details(o);
+		FlexLayout s1 = getSession1Details(o);
+		
+		// Création dialog avec le détail des notes et résultat pour l'objet de formation
+		Dialog resultDialog = new Dialog();
+		VerticalLayout dialLayout = new VerticalLayout();
+		Label formationLabel = new Label(o.getLibelle());
+		formationLabel.getStyle().set("margin", "auto");
+		formationLabel.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+		dialLayout.add(formationLabel);
+		
+		// Ajout du résultat principal
+		/*Label resultLabel = new Label(getResultat(o));
+		resultLabel.getStyle().set("margin", "auto");
+		dialLayout.add(resultLabel);*/
+		
+		//Ajout du coeff principal
+		BigDecimal coeff=getCoeff(o);
+		if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
+			HorizontalLayout hl = new HorizontalLayout();
+			hl.setSizeFull();
+			Label libCoeffLabel = new Label(getTranslation("notes.coeff"));
+			libCoeffLabel.getStyle().set("margin-left", "auto");
+			libCoeffLabel.getStyle().set("font-weight", "bold");
+			hl.add(libCoeffLabel);
+			Label coeffLabel = new Label(Utils.displayBigDecimal(coeff));
+			coeffLabel.getStyle().set("margin-right", "auto");
+			hl.add(libCoeffLabel);
+			hl.add(coeffLabel);
+			dialLayout.add(hl);
+		}
+		// Ajout des infos de session finale
+		if(sf.getComponentCount()>0) {
+			HorizontalLayout sessionFinale = new HorizontalLayout();
+			sessionFinale.setWidthFull();
+			sessionFinale.add(new Label(getTranslation("notes.session.finale")));
+			sessionFinale.add(sf);
+			dialLayout.add(sessionFinale);
+		}
+		// Ajout des infos de session 2
+		if(s2.getComponentCount()>0) {
+			HorizontalLayout session2 = new HorizontalLayout();
+			session2.setWidthFull();
+			Label labelS2 = new Label(getTranslation("notes.session.2"));
+			labelS2.getStyle().set("white-space", "nowrap");
+			session2.add(labelS2);
+			session2.add(s2);
+			dialLayout.add(session2);
+		}
+		// Ajout des infos de session 1
+		if(s1.getComponentCount()>0) {
+			HorizontalLayout session1 = new HorizontalLayout();
+			session1.setWidthFull();
+			Label labelS1 = new Label(getTranslation("notes.session.1"));
+			labelS1.getStyle().set("white-space", "nowrap");
+			session1.add(labelS1);
+			session1.add(s1);
+			dialLayout.add(session1);
+		}
+
+		resultDialog.add(dialLayout);
+		resultDialog.open();
+		
+	}
+
+
+	// Retourne le dernier coeff
+	private BigDecimal getCoeff(CheminDTO o) {
+		if(o!=null && o.getObjet()!=null) {
+			if(o.getObjet().getCoefficientFinal()!=null) {
+				return o.getObjet().getCoefficientFinal();
+			}
+			if(o.getObjet().getCoefficientSession1()!=null) {
+				return o.getObjet().getCoefficientSession1();
+			}
+			if(o.getObjet().getCoefficientSession2()!=null) {
+				return o.getObjet().getCoefficientSession2();
+			}
+		}
+		return null;
+	}
+
+
+	// Retourne le dernier résultat
+	private String getResultat(CheminDTO o) {
+		if(o!=null && o.getObjet()!=null) {
+			if(o.getObjet().getResultatFinal()!=null) {
+				return o.getObjet().getResultatFinal().getLibelleAffichage();
+			}
+			if(o.getObjet().getResultatSession2()!=null) {
+				return o.getObjet().getResultatSession2().getLibelleAffichage();
+			}
+			if(o.getObjet().getResultatSession1()!=null) {
+				return o.getObjet().getResultatSession1().getLibelleAffichage();
+			}
+		}
+		return null;
+	}
+
 
 	/**
 	 * 
@@ -777,7 +898,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteSession1(), o.getObjet().getAbsenceSession1(), o.getObjet().getCoefficientSession1()));
 		}
 		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession1()!=null) {
-			l.add(createBtnResult(o.getObjet().getResultatSession1().getLibelleCourt(), o.getObjet().getResultatSession1().getLibelleAffichage(), o.getObjet().getCoefficientSession1(), o.getLibelle()));
+			l.add(createLabelResult(o.getObjet().getResultatSession1().getLibelleCourt()));
 		}
 		return l;
 	}
@@ -796,7 +917,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			l.add(createLabelNote(o.getObjet().getBareme(),o.getObjet().getNoteSession2(), o.getObjet().getAbsenceSession2(), o.getObjet().getCoefficientSession2()));
 		}
 		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession2()!=null) {
-			l.add(createBtnResult(o.getObjet().getResultatSession2().getLibelleCourt(), o.getObjet().getResultatSession2().getLibelleAffichage(), o.getObjet().getCoefficientSession2(), o.getLibelle()));
+			l.add(createLabelResult(o.getObjet().getResultatSession2().getLibelleCourt()));
 		}
 		return l;
 	}
@@ -815,7 +936,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteFinale(), o.getObjet().getAbsenceFinale(), o.getObjet().getCoefficientFinal()));
 		}
 		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatFinal()!=null) {
-			l.add(createBtnResult(o.getObjet().getResultatFinal().getLibelleCourt(), o.getObjet().getResultatFinal().getLibelleAffichage(),o.getObjet().getCoefficientFinal(), o.getLibelle()));
+			l.add(createLabelResult(o.getObjet().getResultatFinal().getLibelleCourt()));
 		}
 
 		return l;
@@ -836,38 +957,21 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	}
 
 
-	private Component createBtnResult(String code, String resultat, BigDecimal coeff, String objFormation) {
-		Button bResult = new Button(code);
-		bResult.setHeight("1.5em");
-		//bResult.addClickListener(e -> Notification.show(getResultInfo(objFormation, libelle, coeff),2000, Position.MIDDLE));
-		bResult.addClickListener(e -> {
-			Dialog resultDialog = new Dialog();
-			VerticalLayout dialLayout = new VerticalLayout();
-			Label formationLabel = new Label(objFormation);
-			formationLabel.getStyle().set("margin", "auto");
-			formationLabel.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
-			dialLayout.add(formationLabel);
-			Label resultLabel = new Label(resultat);
-			resultLabel.getStyle().set("margin", "auto");
-			dialLayout.add(resultLabel);
-			if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
-				HorizontalLayout hl = new HorizontalLayout();
-				hl.setSizeFull();
-				Label libCoeffLabel = new Label(getTranslation("notes.coeff"));
-				libCoeffLabel.getStyle().set("margin-left", "auto");
-				libCoeffLabel.getStyle().set("font-weight", "bold");
-				hl.add(libCoeffLabel);
-				Label coeffLabel = new Label(Utils.displayBigDecimal(coeff));
-				coeffLabel.getStyle().set("margin-right", "auto");
-				hl.add(libCoeffLabel);
-				hl.add(coeffLabel);
-				dialLayout.add(hl);
-			}
-			resultDialog.add(dialLayout);
-			
-			resultDialog.open();
-		});
-		return bResult;
+	private Component createLabelResult(String libCourt) {
+		Label result = new Label();
+		result.setHeight("1.5em");
+		result.getStyle().set("margin", "auto");
+		result.getStyle().set("background-color", CSSColorUtils.MAIN_HEADER_COLOR);
+		result.getStyle().set("color", "white");
+		result.getStyle().set("padding-left", "0.5em");
+		result.getStyle().set("padding-right", "0.5em");
+		result.getStyle().set("border-radius", "0.7em");
+
+		if(StringUtils.hasText(libCourt)) {
+			result.setText(libCourt);
+		}
+
+		return result;
 	}
 
 
