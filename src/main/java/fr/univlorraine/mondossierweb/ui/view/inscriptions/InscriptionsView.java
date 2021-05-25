@@ -99,10 +99,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	@Value("${notes.coeff}")
 	private transient Boolean avecCoeff;
-	
+
 	@Value("${notes.ects}")
 	private transient Boolean avecECTS;
-	
+
 
 	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
 	private transient List<String> listeStatutsInscriptionAffichees;	
@@ -841,6 +841,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		}
 		// AJout des résultats de chaque session
 		boolean aucunResultat=true;
+		boolean aucunResultatSession2=true;
 		// Ajout des infos de session 1
 		if(s1.getComponentCount()>0) {
 			HorizontalLayout session1 = new HorizontalLayout();
@@ -864,6 +865,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			session2.add(s2);
 			dialLayout.add(session2);
 			aucunResultat=false;
+			aucunResultatSession2=false;
 		}
 		// Ajout des infos de session finale
 		if(sf.getComponentCount()>0) {
@@ -876,7 +878,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			dialLayout.add(sessionFinale);
 			aucunResultat=false;
 		}
-		
+
 		// Si aucun résultat
 		if(aucunResultat) {
 			HorizontalLayout aucunResLayout = new HorizontalLayout();
@@ -886,6 +888,16 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			aucunResDiv.getStyle().set("font-style", "italic");
 			aucunResLayout.add(aucunResDiv);
 			dialLayout.add(aucunResLayout);
+		}
+		// Si concerné par session 2
+		if(o.getObjet().getConcerneParSession2()!=null && o.getObjet().getConcerneParSession2().booleanValue() && aucunResultatSession2) {
+			HorizontalLayout concerneSession2Layout = new HorizontalLayout();
+			concerneSession2Layout.setWidthFull();
+			Div concerneSession2Div = new Div();
+			concerneSession2Div.setText(getTranslation("notes.concerne.session2"));
+			concerneSession2Div.getStyle().set("font-style", "italic");
+			concerneSession2Layout.add(concerneSession2Div);
+			dialLayout.add(concerneSession2Layout);
 		}
 		resultDialog.add(dialLayout);
 		resultDialog.open();
