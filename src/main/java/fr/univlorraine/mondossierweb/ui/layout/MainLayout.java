@@ -66,12 +66,12 @@ import fr.univlorraine.mondossierweb.service.CurrentUiService;
 import fr.univlorraine.mondossierweb.service.PreferencesService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.AppColorStyle;
+import fr.univlorraine.mondossierweb.ui.view.acces.AccesView;
 import fr.univlorraine.mondossierweb.ui.view.apropos.AProposView;
 import fr.univlorraine.mondossierweb.ui.view.connexions.ConnexionsView;
 import fr.univlorraine.mondossierweb.ui.view.coordonnees.CoordonneesView;
 import fr.univlorraine.mondossierweb.ui.view.etatcivil.EtatCivilView;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.InscriptionsView;
-import fr.univlorraine.mondossierweb.ui.view.parcours.ParcoursView;
 import fr.univlorraine.mondossierweb.ui.view.recherche.RechercheView;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
@@ -175,8 +175,8 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		addDrawerRouterLink(VaadinIcon.USER_CARD, "etatcivil.title", EtatCivilView.class);
 		addDrawerRouterLink(VaadinIcon.HOME, "coordonnees.title", CoordonneesView.class);
 		//addDrawerRouterLink(VaadinIcon.ROAD_BRANCHES, "parcours.title", ParcoursView.class);
-		addDrawerRouterLink(VaadinIcon.FOLDER_OPEN, "parcours.title", ParcoursView.class);
-		addDrawerRouterLink(VaadinIcon.OPEN_BOOK, "inscriptions.title", InscriptionsView.class);
+		addDrawerRouterLink(VaadinIcon.FOLDER_OPEN, "acces.title", AccesView.class);
+		addDrawerRouterLink(VaadinIcon.ACADEMY_CAP, "inscriptions.title", InscriptionsView.class);
 		//addDrawerRouterLink(VaadinIcon.ACADEMY_CAP, "notes.title", NotesView.class);
 		addDrawerRouterLink(VaadinIcon.BAR_CHART_H, "connexions.title", ConnexionsView.class);
 		if (!docUrl.isBlank()) {

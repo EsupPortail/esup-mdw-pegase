@@ -264,7 +264,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 				// Libellé de la carte
 				String libelleInscription = cible.getLibelleCourt() != null ? cible.getLibelleCourt() : cible.getFormation().getLibelleLong() ;
-				Card insCard = new Card(VaadinIcon.ACADEMY_CAP.create(),libelleInscription, true);
+				Card insCard = new Card(VaadinIcon.BOOKMARK_O.create(),libelleInscription, true);
 
 				// FORMATION
 				TextField formation = new TextField();
@@ -464,12 +464,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					//flexLayout.setFlexBasis("10em", buttonLayout);
 					verticalLayout.add(flexLayout);
 					verticalLayout.add(buttonLayout);
-
+					
 					// Cursus
 					Dialog cursusDialog = new Dialog();
 					cursusDialog.setWidthFull();
 					cursusDialog.setMaxWidth("50em");
-					Button cursusButton = new Button("", VaadinIcon.SEARCH.create());
+					Button cursusButton = new Button("", VaadinIcon.ARCHIVE.create());
 					cursusButton.getStyle().set("margin", "auto");
 					cursusButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 					cursusButton.addClickListener(c-> {
@@ -519,10 +519,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					});
 					// Ajout à la liste des boutons
 					listButtonCursus.add(cursusButton);
-					verticalLayout.add(cursusButton);
-
-
-
 
 
 
@@ -530,7 +526,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					Dialog notesDialog = new Dialog();
 					notesDialog.setWidthFull();
 					notesDialog.setMaxWidth("70em");
-					Button notesButton = new Button("", VaadinIcon.SEARCH.create());
+					Button notesButton = new Button("", VaadinIcon.DIPLOMA.create());
 					notesButton.getStyle().set("margin", "auto");
 					notesButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 					notesButton.addClickListener(c-> {
@@ -582,10 +578,28 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					});
 					// Ajout à la liste des boutons
 					listButtonNotes.add(notesButton);
-					verticalLayout.add(notesButton);
-
-
-
+					
+					//Layout des boutons concernant le cursus et les notes
+					FlexLayout buttonLayout2 = new FlexLayout();
+					buttonLayout2.setWidthFull();
+					buttonLayout2.getStyle().set("padding", "0");
+					buttonLayout2.getStyle().set("margin", "auto");
+					Div cursusBtnDiv=new Div();
+					cursusBtnDiv.getStyle().set("padding", "0.3em 1em 0.3em 1em");
+					cursusBtnDiv.getStyle().set("margin", "auto");
+					Div notesBtnDiv=new Div();
+					notesBtnDiv.getStyle().set("padding", "0.3em 1em 0.3em 1em");
+					notesBtnDiv.getStyle().set("margin", "auto");
+					cursusBtnDiv.add(cursusButton);
+					notesBtnDiv.add(notesButton);
+					buttonLayout2.add(cursusBtnDiv);
+					buttonLayout2.add(notesBtnDiv);
+					verticalLayout.add(buttonLayout2);
+					cursusButton.getStyle().set("margin", "auto");
+					notesButton.getStyle().set("margin", "auto");
+					buttonLayout2.setFlexWrap(FlexWrap.WRAP);
+					buttonLayout2.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
+					
 
 					insCard.addAlt(verticalLayout);
 

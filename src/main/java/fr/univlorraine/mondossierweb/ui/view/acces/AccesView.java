@@ -16,7 +16,7 @@
  *  limitations under the License.
  *
  */
-package fr.univlorraine.mondossierweb.ui.view.parcours;
+package fr.univlorraine.mondossierweb.ui.view.acces;
 
 import javax.annotation.PostConstruct;
 
@@ -55,7 +55,7 @@ import lombok.extern.slf4j.Slf4j;
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
-public class ParcoursView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
+public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
 
 	@Autowired
 	private transient SecurityService securityService;
@@ -68,7 +68,7 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final Card bacCard = new Card(VaadinIcon.ACADEMY_CAP.create(),"", false);
+	private final Card bacCard = new Card(VaadinIcon.DIPLOMA_SCROLL.create(),"", false);
 	private final Card anneesCard = new Card(VaadinIcon.INSTITUTION.create(),"", false);
 	private final VerticalLayout parcoursLayout = new VerticalLayout(bacCard, anneesCard);
 
@@ -180,7 +180,7 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 	 */
 	@Override
 	public void localeChange(final LocaleChangeEvent event) {
-		setViewTitle(getTranslation("parcours.title"));
+		setViewTitle(getTranslation("acces.title"));
 
 		bacCard.getTitre().setText(getTranslation("bac.titre"));
 		titreAccesBac.setLabel(getTranslation("bac.titreacces"));
