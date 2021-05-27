@@ -18,7 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.ui.layout;
 
-import java.awt.Dialog.ModalityType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -31,7 +30,6 @@ import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -42,11 +40,13 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -59,23 +59,24 @@ import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.Transport;
 
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
+import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.service.CurrentUiService;
 import fr.univlorraine.mondossierweb.service.PreferencesService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.AppColorStyle;
+import fr.univlorraine.mondossierweb.ui.view.acces.AccesView;
 import fr.univlorraine.mondossierweb.ui.view.apropos.AProposView;
 import fr.univlorraine.mondossierweb.ui.view.connexions.ConnexionsView;
 import fr.univlorraine.mondossierweb.ui.view.coordonnees.CoordonneesView;
 import fr.univlorraine.mondossierweb.ui.view.etatcivil.EtatCivilView;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.InscriptionsView;
-import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
-import fr.univlorraine.mondossierweb.ui.view.parcours.ParcoursView;
 import fr.univlorraine.mondossierweb.ui.view.recherche.RechercheView;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
+import fr.univlorraine.pegase.model.insgestion.Apprenant;
 import lombok.extern.slf4j.Slf4j;
 
 @Push(transport = Transport.WEBSOCKET_XHR)
@@ -92,6 +93,8 @@ import lombok.extern.slf4j.Slf4j;
 @CssImport(value = "./styles/vaadin-checkbox-pointer.css", themeFor = "vaadin-checkbox")
 @CssImport(value = "./styles/vaadin-text-field-pointer.css", themeFor = "vaadin-text-field")
 @CssImport(value = "./styles/vaadin-grid.css", themeFor = "vaadin-grid")
+@CssImport(value = "./styles/vaadin-grid-tree-toggle.css", themeFor = "vaadin-grid-tree-toggle")
+@CssImport(value = "./styles/vaadin-dialog-overlay.css", themeFor = "vaadin-dialog-overlay")
 @CssImport(value = "./styles/vaadin-tab.css", themeFor = "vaadin-tab")
 @CssImport(value = "./styles/vaadin-drawer-toggle.css", themeFor = "vaadin-drawer-toggle")
 @SuppressWarnings("serial")
@@ -106,14 +109,19 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private transient SecurityService securityService;
 	@Autowired
 	private transient PreferencesService prefService;
+	@Autowired
+	private transient MainController mainController;
 
 	@Value("${doc.url:}")
 	private transient String docUrl;
 	@Value("${help.url:}")
 	private transient String helpUrl;
-	
+
 	@Value("${connexion.info.actif}")
 	private transient boolean affichagePopupInfo;
+	
+	@Value("${etudiant.resume.actif}")
+	private transient boolean affichageResumeEtudiant;
 
 	private final Tabs tabs = new Tabs();
 	private final Map<Class<? extends Component>, Tab> navigationTargetToTab = new HashMap<>();
@@ -124,20 +132,22 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	//private MenuItem userMenuCoordonneesItem;
 	private MenuItem userMenuParametresItem;
 	private MenuItem userMenuLogoutItem;
+	private Label nomPrenom = new Label();
+	private Label numeroDossier = new Label();
 
 	@PostConstruct
 	public void init() {
-		
+
 		/* Theme: Mode sombre */
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getDarkModeFlux()
-				.map(darkMode -> () -> getElement().executeJs("setDarkMode($0)", darkMode)));
+			.map(darkMode -> () -> getElement().executeJs("setDarkMode($0)", darkMode)));
 
 		/* Theme: Couleur principale */
 		AppColorStyle appColorStyle = new AppColorStyle();
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getAppColorFlux()
-				.map(appColor -> () -> appColorStyle.setColor(appColor)));
+			.map(appColor -> () -> appColorStyle.setColor(appColor)));
 		getElement().appendChild(appColorStyle.getElement());
 
 		/* Menu au-dessus de la barre d'application */
@@ -146,6 +156,11 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		/* Titre du menu */
 		addToDrawer(appTitle);
 
+		/* Nom, prénom et code apprenant*/
+		if(affichageResumeEtudiant) {
+			addToDrawer(getResumeLayout());
+		}
+		
 		/* Menu */
 		tabs.getStyle().set("max-width", "16em");
 		tabs.getStyle().set("margin-left", "auto");
@@ -158,11 +173,11 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			}
 		});
 		addDrawerRouterLink(VaadinIcon.SEARCH, "recherche.title", RechercheView.class);
-		addDrawerRouterLink(VaadinIcon.USER, "etatcivil.title", EtatCivilView.class);
+		addDrawerRouterLink(VaadinIcon.USER_CARD, "etatcivil.title", EtatCivilView.class);
 		addDrawerRouterLink(VaadinIcon.HOME, "coordonnees.title", CoordonneesView.class);
 		//addDrawerRouterLink(VaadinIcon.ROAD_BRANCHES, "parcours.title", ParcoursView.class);
-				addDrawerRouterLink(VaadinIcon.FOLDER_OPEN, "parcours.title", ParcoursView.class);
-		addDrawerRouterLink(VaadinIcon.OPEN_BOOK, "inscriptions.title", InscriptionsView.class);
+		addDrawerRouterLink(VaadinIcon.FOLDER_OPEN, "acces.title", AccesView.class);
+		addDrawerRouterLink(VaadinIcon.ACADEMY_CAP, "inscriptions.title", InscriptionsView.class);
 		//addDrawerRouterLink(VaadinIcon.ACADEMY_CAP, "notes.title", NotesView.class);
 		addDrawerRouterLink(VaadinIcon.BAR_CHART_H, "connexions.title", ConnexionsView.class);
 		if (!docUrl.isBlank()) {
@@ -177,15 +192,18 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		addToNavbar(new DrawerToggle());
 
 		navBarHeader.getStyle()
-			.set("flex", "1")
-			.set("margin", "0 var(--lumo-space-s) 0 0");
+		.set("flex", "1")
+		.set("margin", "0 var(--lumo-space-s) 0 0");
 		addToNavbar(navBarHeader);
 
 		if (securityService.isUserLoggedIn()) {
 			securityService.getPrincipal()
-				.map(this::createUserMenu)
-				.ifPresent(this::addToNavbar);
+			.map(this::createUserMenu)
+			.ifPresent(this::addToNavbar);
 		}
+
+		// On attache la mainLayout au component afin d'être notifié des changements de dossier
+		mainController.setMainLayout(this);
 		
 		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
 		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
@@ -202,8 +220,60 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		}
 	}
 
-	private MenuBar createUserMenu(final Utilisateur utilisateur) {
+	private Component getResumeLayout() {
+		VerticalLayout nomPrenomLayout = new VerticalLayout();
+		nomPrenomLayout.getStyle().set("max-width", "16em");
+		nomPrenomLayout.getStyle().set("margin-left", "auto");
+		nomPrenomLayout.getStyle().set("box-shadow", "none");
+		nomPrenomLayout.getStyle().set("padding-top", "0.5em");
+		nomPrenomLayout.getStyle().set("padding-bottom", "0");
+
+		nomPrenom.getStyle().set("margin-left", "auto");
+		nomPrenom.getStyle().set("margin-right", "auto");
+		nomPrenom.getStyle().set("color","var(--lumo-contrast-60pct)");
+		nomPrenom.getStyle().set("font-weight","600");
+		nomPrenomLayout.add(nomPrenom);
+
+		numeroDossier.getStyle().set("margin", "0px auto 0px auto");
+		numeroDossier.getStyle().set("font-size", "smaller");
+		numeroDossier.getStyle().set("color","var(--lumo-contrast-60pct)");
+		nomPrenomLayout.add(numeroDossier);
 		
+		// On passe les labels au service pour les mettre à jour en cas de changement de dossier
+		//securityService.setInfoLabels(nomPrenom, numeroDossier);
+		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
+		/*securityService.checkDossier();
+		if(securityService.getDossier()!=null && securityService.getDossier().getApprenant() !=null) {
+			nomPrenom.setText(getInfoNomPrenom(securityService.getDossier().getApprenant()));
+			numeroDossier.setText(securityService.getDossier().getApprenant().getCode());
+		}*/
+		return nomPrenomLayout;
+	}
+	
+	/**
+	 * Mise à jour des données "résumé"
+	 * @param apprenant
+	 */
+	public void updateData(Apprenant apprenant) {
+		if(apprenant!=null) {
+			nomPrenom.setText(getInfoNomPrenom(apprenant));
+			numeroDossier.setText(apprenant.getCode());
+		} else {
+			nomPrenom.setText("");
+			numeroDossier.setText("");
+		}
+		
+	}
+
+
+	private String getInfoNomPrenom(Apprenant apprenant) {
+		String nom = apprenant.getEtatCivil().getNomUsuel() == null ? apprenant.getEtatCivil().getNomDeNaissance() : apprenant.getEtatCivil().getNomUsuel();
+		String prenom = apprenant.getEtatCivil().getPrenom();
+		return nom + " " + prenom;
+	}
+	
+	private MenuBar createUserMenu(final Utilisateur utilisateur) {
+
 		// Maj du darkMode en fonction des préférences de l'utilisateur
 		Optional<PreferencesUtilisateur> prefDarkMode =prefService.getPreference(utilisateur.getUsername(), PrefUtils.DARK_MODE);
 		// Si on a une préférence pour l'utilisateur
@@ -214,7 +284,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			// Dark mode par défaut
 			currentUiService.setDarkMode(false);
 		}
-	
+
 		MenuBar topMenu = new MenuBar();
 		topMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY);
 		topMenu.addClassName("user-menu");
@@ -228,9 +298,9 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		MenuItem usernameItem = userMenu.addItem(name);
 		usernameItem.setEnabled(false);
 		usernameItem.getElement()
-			.getStyle()
-			.set("color", "var(--lumo-primary-color)")
-			.set("text-align", "center");
+		.getStyle()
+		.set("color", "var(--lumo-primary-color)")
+		.set("text-align", "center");
 
 		userMenu.add(new Hr());
 
@@ -250,10 +320,10 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private Component createUserImage(final Utilisateur utilisateur) {
 		String displayName = utilisateur.getDisplayName();
 		//if (displayName == null || displayName.isBlank()) {
-			Icon icon = new Icon(VaadinIcon.USER);
-			icon.addClassName("user-image");
-			icon.getStyle().set("padding-top", "5px");
-			return icon;
+		Icon icon = new Icon(VaadinIcon.USER);
+		icon.addClassName("user-image");
+		icon.getStyle().set("padding-top", "5px");
+		return icon;
 		/*} else {
 			Div div = new Div();
 			div.addClassName("user-image");
@@ -329,10 +399,10 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 		/* Initialise les messages indiquant la perte de connexion. */
 		getUI().map(UI::getReconnectDialogConfiguration)
-			.ifPresent(reconnectDialogConfiguration -> {
-				reconnectDialogConfiguration.setDialogText(getTranslation("vaadin.reconnectDialog.text"));
-				reconnectDialogConfiguration.setDialogTextGaveUp(getTranslation("vaadin.reconnectDialog.textGaveUp"));
-			});
+		.ifPresent(reconnectDialogConfiguration -> {
+			reconnectDialogConfiguration.setDialogText(getTranslation("vaadin.reconnectDialog.text"));
+			reconnectDialogConfiguration.setDialogTextGaveUp(getTranslation("vaadin.reconnectDialog.textGaveUp"));
+		});
 	}
 
 	/**

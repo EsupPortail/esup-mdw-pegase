@@ -20,7 +20,6 @@ package fr.univlorraine.mondossierweb.ui.view.etatcivil;
 
 import javax.annotation.PostConstruct;
 
-import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
@@ -28,10 +27,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.WrapMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
@@ -43,6 +38,7 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
+import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
@@ -65,6 +61,8 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 
 	@Autowired
 	private transient SecurityService securityService;
+	@Autowired
+	private transient MainController etudiantController;
 
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
@@ -73,7 +71,7 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final Card identiteCard = new Card(VaadinIcon.INFO_CIRCLE.create(),"", false);
+	private final Card identiteCard = new Card(VaadinIcon.USER.create(),"", false);
 	private final Card naissanceCard = new Card(VaadinIcon.GLOBE.create(),"", false);
 	private final VerticalLayout etatcivilLayout = new VerticalLayout(identiteCard, naissanceCard);
 
@@ -219,9 +217,9 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 			Notification.show(getTranslation("error.accesdossierrefuse"));
 		}
 		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-		securityService.checkDossier();
+		etudiantController.checkDossier();
 		// Mise à jour de l'affichage
-		updateData(securityService.getDossier()!=null ? securityService.getDossier().getApprenant() : null);
+		updateData(etudiantController.getDossier()!=null ? etudiantController.getDossier().getApprenant() : null);
 	}
 
 	/**

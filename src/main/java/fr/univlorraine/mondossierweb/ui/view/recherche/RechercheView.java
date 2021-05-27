@@ -40,10 +40,10 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 
+import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.service.RechercheEtudiantService;
 import fr.univlorraine.mondossierweb.service.RechercheEtudiantService.RechercheEtudiantFilter;
-import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
@@ -61,7 +61,7 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 	private static int MIN_SEARCH = 2;
 
 	@Autowired
-	private transient SecurityService securityService;
+	private transient MainController mainController;
 	@Autowired
 	private transient RechercheEtudiantService rechercheEtudiantService;
 	@Autowired
@@ -117,7 +117,7 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 		filterTf.setWidthFull();
 		filterTf.setMaxWidth("25em");
 		filterTf.getStyle().set("margin", "auto");
-		filterTf.setValue(securityService.getSearch().orElse(""));
+		filterTf.setValue(mainController.getSearch().orElse(""));
 		filterTf.addValueChangeListener(e -> refresh());
 		selectorLayout.setMinHeight("4em");
 		selectorLayout.setWidthFull();
@@ -134,8 +134,8 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 		etuGrid.setSelectionMode(SelectionMode.SINGLE);
 
 		//Si on a une recherche enregistrée
-		if(securityService.getResultatRecherche()!=null) {
-			etuGrid.setItems(securityService.getResultatRecherche());
+		if(mainController.getResultatRecherche()!=null) {
+			etuGrid.setItems(mainController.getResultatRecherche());
 		} else {
 			etuGrid.setItems(rechercheEtudiantService.getHistorique());
 		}
@@ -160,9 +160,9 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 	 * Rafraichi les user
 	 */
 	private void refresh() {
-		securityService.setResultatRecherche(null);
+		mainController.setResultatRecherche(null);
 		if(StringUtils.isBlank(filterTf.getValue())) {
-			securityService.saveSearch(null);
+			mainController.saveSearch(null);
 			etuGrid.setItems(rechercheEtudiantService.getHistorique());
 		} else {
 			if (filterTf.getValue().length() < MIN_SEARCH) {
@@ -174,12 +174,12 @@ public class RechercheView extends VerticalLayout implements HasDynamicTitle, Ha
 			}
 			personDataProvider = rechercheEtudiantService.createLdapPersonDataProvider(getFilter());
 			etuGrid.setDataProvider(personDataProvider);
-			securityService.setResultatRecherche(personDataProvider.getItems());
+			mainController.setResultatRecherche(personDataProvider.getItems());
 		}
 	}
 
 	private RechercheEtudiantFilter getFilter() {
-		securityService.saveSearch(filterTf.getValue());
+		mainController.saveSearch(filterTf.getValue());
 		return new RechercheEtudiantFilter(filterTf.getValue());
 	}
 

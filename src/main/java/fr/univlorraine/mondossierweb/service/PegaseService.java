@@ -33,9 +33,11 @@ import org.springframework.stereotype.Service;
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
 import fr.univlorraine.pegase.api.chc.InscriptionApi;
+import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
 import fr.univlorraine.pegase.api.insgestion.InscriptionsApi;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
+import fr.univlorraine.pegase.model.coc.Chemin;
 import fr.univlorraine.pegase.model.insgestion.Apprenant;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.Inscriptions;
@@ -62,6 +64,8 @@ public class PegaseService implements Serializable {
 	private transient String apiPaieUrl;
 	@Value("${pegase.api.chc.url}")
 	private transient String apiChcUrl;	
+	@Value("${pegase.api.coc.url}")
+	private transient String apiCocUrl;	
 	@Value("${pegase.photo.code}")
 	private transient String codePhoto;	
 	@Value("${pegase.demo.codeapprenant}")
@@ -81,6 +85,10 @@ public class PegaseService implements Serializable {
 	private ApiClient apiClientChc = new ApiClient();
 	private InscriptionApi insApiChc = new InscriptionApi();
 
+	// COC API
+	private ApiClient apiClientCoc = new ApiClient();
+	private NotesEtResultatsPubliablesApi pubApiCoc = new NotesEtResultatsPubliablesApi();
+
 	@PostConstruct
 	public void init() {
 		// Init INS
@@ -91,10 +99,14 @@ public class PegaseService implements Serializable {
 		// Init PAIE
 		apiClientPaie.setBasePath(apiPaieUrl);
 		insApiPaie.setApiClient(apiClientPaie);
-		
+
 		// Init CHC
 		apiClientChc.setBasePath(apiChcUrl);
 		insApiChc.setApiClient(apiClientChc);
+
+		// Init COC
+		apiClientCoc.setBasePath(apiCocUrl);
+		pubApiCoc.setApiClient(apiClientCoc);
 	}
 
 	/**
@@ -134,7 +146,7 @@ public class PegaseService implements Serializable {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
-			insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
+			insApiChc.getApiClient().setAccessToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
 				List<ObjetMaquetteExtension> listObj = insApiChc.lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode2(codeApprenant, codePeriode, etablissement);
@@ -153,6 +165,31 @@ public class PegaseService implements Serializable {
 
 	}
 
+	public List<Chemin> getNotes(String codeApprenant, String codePeriode, String codeChemin) {
+		// Maj du token pour récupérer le dernier token valide
+		pubApiCoc.getApiClient().setAccessToken(accessTokenService.getToken());
+
+		// Si les paramètres nécessaires sont valués
+		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
+			// Maj du token pour récupérer le dernier token valide
+			pubApiCoc.getApiClient().setAccessToken(accessTokenService.getToken());
+			try {
+				// Appel de l'API Pégase
+				List<Chemin> listObj = pubApiCoc.listerCursusPubliableApprenant(codeApprenant, codeChemin, codePeriode, etablissement);
+				if(listObj != null) {
+					log.info("Notes de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
+					log.debug("Notes de : {}", listObj);
+				} else {
+					log.info("Anomalie lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {}", codeApprenant, codeChemin, codePeriode, etablissement);
+				}
+				return listObj;
+			} catch (ApiException e) {
+				log.error("Erreur lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {}", codeApprenant,codeChemin, codePeriode, etablissement, e);
+			}
+		}
+		return null;
+
+	}
 
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
 

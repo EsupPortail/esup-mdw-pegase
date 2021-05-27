@@ -33,9 +33,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
@@ -46,6 +43,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
+import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.service.LdapService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
@@ -79,6 +77,8 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 	private static final String MAIL = "mail_";
 
+	private static final String CONTACT = "contact_";
+
 	private static final String NOM_ADRESSE = "nomAdresse_";
 
 	private static final String PAYS_ADRESSE = "paysAdresse_";
@@ -98,6 +98,8 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
+	private transient MainController etudiantController;
+	@Autowired
 	protected transient LdapService ldapService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
@@ -109,6 +111,11 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	private final TextHeader header = new TextHeader();
 
 	private final VerticalLayout coordPersoLayout = new VerticalLayout();
+
+	// Carte pour les contacts (mail, tel) personnels
+	private Card contacts;
+	// Carte pour les contacts (mail, tel) d'urgence
+	private Card contactsUrgence;
 
 	@PostConstruct
 	private void init() {
@@ -133,6 +140,16 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		setViewTitle(getTranslation("coordonnees.title"));
 
 		coordPersoLayout.getChildren().forEach(c -> updateCardLocale(c) );
+		// Si on a une carte de contacts personnels
+		if(contacts!=null) {
+			// On met à jour son titre
+			contacts.getTitre().setText(getTranslation("contacts.perso"));
+		}
+		// Si on a une carte de contacts d'urgence
+		if(contactsUrgence!=null) {
+			// On met à jour son titre
+			contactsUrgence.getTitre().setText(getTranslation("contacts.urgence"));
+		}
 
 	}
 
@@ -222,6 +239,18 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	 */
 	private void resetData() {
 		coordPersoLayout.removeAll();
+		// Si on a une carte de contacts personnels
+		if(contacts!=null) {
+			// On supprime le contenu
+			contacts.removeAll();
+			contacts=null;
+		}
+		// Si on a une carte de contacts d'urgence
+		if(contactsUrgence!=null) {
+			// On supprime le contenu
+			contactsUrgence.removeAll();
+			contactsUrgence=null;
+		}
 	}
 
 	/**
@@ -242,10 +271,21 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 					ajouterAdresse(c, cpt);
 					break;
 				case Utils.CANAL_CONTACT_MAIL :
-					ajouterMail(c, cpt);
+					// Si mail de contact d'urgence
+					if(StringUtils.hasText(c.getProprietaire())) {
+						ajouterInfoContactUrgence(c, cpt,getTranslation("mail.libelle"));
+					} else {
+						// mail de l'étudiant
+						ajouterInfoContactPerso(c, cpt);
+					}
 					break;
 				case Utils.CANAL_CONTACT_TEL :
-					ajouterTel(c, cpt);
+					// Si numéro du contact d'urgence
+					if(StringUtils.hasText(c.getProprietaire())) {
+						ajouterInfoContactUrgence(c, cpt, getTranslation("tel.libelle2"));
+					} else {
+						ajouterInfoContactPerso(c, cpt);
+					}
 					break;
 				}
 
@@ -263,15 +303,92 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 					c.setDemandeDeContact(dmc);
 					c.setMail(mail);
 					// Ajout du mail dans la vue
-					ajouterMail(c, cpt);
+					//ajouterMailContact(c, cpt);
+					ajouterInfoContactPerso(c, cpt);
 				}
 			}
 			updateStyle();
 		}
+		// Si on a une carte de contacts d'urgence
+		if(contactsUrgence!=null) {
+			// On met à jour le titre
+			contactsUrgence.getTitre().setText(getTranslation("contacts.urgence"));
+			// On l'ajoute en haut de la vue
+			coordPersoLayout.addComponentAsFirst(contactsUrgence);
+		}
+		// Si on a une carte de contacts personnels
+		if(contacts!=null) {
+			// On met à jour le titre
+			contacts.getTitre().setText(getTranslation("contacts.perso"));
+			// On l'ajoute en haut de la vue
+			coordPersoLayout.addComponentAsFirst(contacts);
+		}
+
 		log.info("updateDate CoordonneesView DONE");
 	}
 
-	private void ajouterMail(ContactComplet c, int n) {
+	private void ajouterInfoContactPerso(ContactComplet c, int n) {
+		// Si on la carte de contact personnels est null
+		if(contacts == null) {
+			// On initialise la carte
+			contacts = new Card(VaadinIcon.USER.create(),"", true);
+		}
+
+		FormLayout contactLayout = new FormLayout();
+		contactLayout.getStyle().set("margin", "0");
+		contacts.addAlt(contactLayout);
+
+		TextField contact=new TextField();
+		contact.setReadOnly(true);
+		contactLayout.add(contact);
+		contact.setLabel(c.getDemandeDeContact().getLibelleAffichage());
+		CmpUtils.valueAndVisibleIfNotNull(contact,getValue(c));
+		CmpUtils.setLongTextField(contact);
+
+		contacts.displayAlt();
+	}
+
+	private void ajouterInfoContactUrgence(ContactComplet c, int n, String libelle) {
+		// Si on la carte de contact d'urgence est null
+		if(contactsUrgence == null) {
+			// On initialise la carte
+			contactsUrgence = new Card(VaadinIcon.BELL.create(),"", true);
+		}
+
+		FormLayout contactLayout = new FormLayout();
+		contactLayout.getStyle().set("margin", "0");
+		contactsUrgence.addAlt(contactLayout);
+
+		TextField contact=new TextField();
+		contact.setReadOnly(true);
+		contactLayout.add(contact);
+		contact.setLabel(libelle+ " ("+c.getProprietaire()+")");
+		CmpUtils.valueAndVisibleIfNotNull(contact,getValue(c));
+		CmpUtils.setLongTextField(contact);
+
+		contactsUrgence.displayAlt();
+	}
+
+	private String getValue(ContactComplet c) {
+		// En fonction du type de contact
+		switch(c.getCanalCommunication().getValue()) {
+		case Utils.CANAL_CONTACT_MAIL :
+			ContactMelComplet cmc= (ContactMelComplet) c;
+			return cmc.getMail();
+		case Utils.CANAL_CONTACT_TEL :
+			ContactTelephoneComplet ctc= (ContactTelephoneComplet) c;
+			return ctc.getTelephone();
+		}
+		return null;
+	}
+
+
+	/**
+	 * Ancienne méthode d'ajout d'un mail de contact dans une carte dédiée
+	 * @param c
+	 * @param n
+	 */
+	private void ajouterMailContact(ContactComplet c, int n) {
 
 		ContactMelComplet cmc= (ContactMelComplet) c;
 
@@ -302,7 +419,12 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		mailCard.displayAlt();
 	}
 
-	private void ajouterTel(ContactComplet c,int n) {
+	/**
+	 * Ancienne méthode d'ajout d'une tel de contact dans une carte dédiée
+	 * @param c
+	 * @param n
+	 */
+	private void ajouterTelContact(ContactComplet c,int n) {
 		ContactTelephoneComplet ctc= (ContactTelephoneComplet) c;
 
 		Card telCard = new Card(VaadinIcon.PHONE.create(),"", true);
@@ -420,8 +542,18 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 
 	protected void updateStyle() {
-		List<Component> listComp = coordPersoLayout.getChildren().collect(Collectors.toList());
+		// Si on a une carte de contact
+		if(contacts!=null) {
+			// On met à jour son style css
+			contacts.updateStyle();
+		}
+		// Si on a une carte de contact d'urgence
+		if(contactsUrgence!=null) {
+			// On met à jour son style css
+			contactsUrgence.updateStyle();
+		}
 
+		List<Component> listComp = coordPersoLayout.getChildren().collect(Collectors.toList());
 		int cpt=0;
 		for(Component c : listComp) {
 			cpt++;
@@ -431,6 +563,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 				coordCard.addClassName("card-with-separator");
 			}
 		}
+
 	}
 
 	@Override
@@ -440,9 +573,9 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 			Notification.show(getTranslation("error.accesdossierrefuse"));
 		}
 		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-		securityService.checkDossier();
+		etudiantController.checkDossier();
 		// Mise à jour de l'affichage
-		updateData(securityService.getDossier()!=null ? securityService.getDossier().getApprenant() : null);
+		updateData(etudiantController.getDossier()!=null ? etudiantController.getDossier().getApprenant() : null);
 		//Force la maj des label
 		localeChange(null);
 	}	

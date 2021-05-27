@@ -16,7 +16,7 @@
  *  limitations under the License.
  *
  */
-package fr.univlorraine.mondossierweb.ui.view.parcours;
+package fr.univlorraine.mondossierweb.ui.view.acces;
 
 import javax.annotation.PostConstruct;
 
@@ -37,6 +37,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
+import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
@@ -54,10 +55,12 @@ import lombok.extern.slf4j.Slf4j;
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
-public class ParcoursView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
+public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
 
 	@Autowired
 	private transient SecurityService securityService;
+	@Autowired
+	private transient MainController etudiantController;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
@@ -65,7 +68,7 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final Card bacCard = new Card(VaadinIcon.ACADEMY_CAP.create(),"", false);
+	private final Card bacCard = new Card(VaadinIcon.DIPLOMA_SCROLL.create(),"", false);
 	private final Card anneesCard = new Card(VaadinIcon.INSTITUTION.create(),"", false);
 	private final VerticalLayout parcoursLayout = new VerticalLayout(bacCard, anneesCard);
 
@@ -177,7 +180,7 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 	 */
 	@Override
 	public void localeChange(final LocaleChangeEvent event) {
-		setViewTitle(getTranslation("parcours.title"));
+		setViewTitle(getTranslation("acces.title"));
 
 		bacCard.getTitre().setText(getTranslation("bac.titre"));
 		titreAccesBac.setLabel(getTranslation("bac.titreacces"));
@@ -217,9 +220,9 @@ public class ParcoursView extends VerticalLayout implements HasDynamicTitle, Has
 			Notification.show(getTranslation("error.accesdossierrefuse"));
 		}
 		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-		securityService.checkDossier();
+		etudiantController.checkDossier();
 		// Mise à jour de l'affichage
-		updateData(securityService.getDossier()!=null ? securityService.getDossier().getApprenant() : null);
+		updateData(etudiantController.getDossier()!=null ? etudiantController.getDossier().getApprenant() : null);
 	}
 
 	/**

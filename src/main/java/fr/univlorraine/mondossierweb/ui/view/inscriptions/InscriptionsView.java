@@ -19,6 +19,7 @@
 package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,17 +32,25 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.treegrid.TreeGrid;
@@ -54,6 +63,7 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
+import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.service.ExportService;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
@@ -84,10 +94,22 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private static final String ATTEST_FILE_EXT = ".pdf";
 
 
+	@Value("${notes.bareme}")
+	private transient Boolean avecBareme;
+
+	@Value("${notes.coeff}")
+	private transient Boolean avecCoeff;
+
+	@Value("${notes.ects}")
+	private transient Boolean avecECTS;
+
+
 	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
 	private transient List<String> listeStatutsInscriptionAffichees;	
 	@Autowired
 	private transient SecurityService securityService;
+	@Autowired
+	private transient MainController etudiantController;
 	@Autowired
 	private transient ExportService exportService;
 	@Autowired
@@ -99,6 +121,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	@Getter
 	private final TextHeader header = new TextHeader();
 
+	private int windowWidth;
 	private final VerticalLayout inscriptionsLayout = new VerticalLayout();
 
 
@@ -112,8 +135,14 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	List<Button> listButtonAttestation = new LinkedList<Button> ();
 	List<Button> listButtonPhoto = new LinkedList<Button> ();
 	List<Button> listButtonCursus = new LinkedList<Button> ();
+	List<Button> listButtonNotes = new LinkedList<Button> ();
+
 
 	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<String,List<ObjetMaquetteDTO>>();
+
+	Map<String,List<CheminDTO>> notesMap = new HashMap<String,List<CheminDTO>>();
+
+
 
 	@PostConstruct
 	public void init() {
@@ -125,6 +154,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		//inscriptionsLayout.setFlexWrap(FlexWrap.WRAP);
 		//inscriptionsLayout.getStyle().set("margin-top", "0");
 		add(inscriptionsLayout);
+
+		UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> { 
+			windowWidth = details.getWindowInnerWidth();
+		});
+		UI.getCurrent().getPage().addBrowserWindowResizeListener(event -> {
+			windowWidth = event.getWidth();
+		});
 	}
 
 
@@ -167,6 +203,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		for(Button b : listButtonCursus ) {
 			b.setText(getTranslation("inscription.cursus"));
 		}
+		for(Button b : listButtonNotes ) {
+			b.setText(getTranslation("inscription.notes"));
+		}
+
 
 	}
 
@@ -184,9 +224,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			Notification.show(getTranslation("error.accesdossierrefuse"));
 		}
 		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-		securityService.checkDossier();
+		etudiantController.checkDossier();
 		// Mise à jour de l'affichage
-		updateData(securityService.getDossier()!=null ? securityService.getDossier() : null);
+		updateData(etudiantController.getDossier()!=null ? etudiantController.getDossier() : null);
 		//Force la maj des label
 		localeChange(null);
 	}
@@ -224,7 +264,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 				// Libellé de la carte
 				String libelleInscription = cible.getLibelleCourt() != null ? cible.getLibelleCourt() : cible.getFormation().getLibelleLong() ;
-				Card insCard = new Card(VaadinIcon.ACADEMY_CAP.create(),libelleInscription, true);
+				Card insCard = new Card(VaadinIcon.BOOKMARK_O.create(),libelleInscription, true);
 
 				// FORMATION
 				TextField formation = new TextField();
@@ -351,7 +391,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					photoButton.addClickListener(c-> {
 						ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  Utils.getCodeVoeu(inscription));
 						if(photo != null) {
-							StreamResource resource = new StreamResource("photo_"+securityService.getDossierConsulte()+".jpg", () -> photo);
+							StreamResource resource = new StreamResource("photo_"+etudiantController.getDossierConsulte()+".jpg", () -> photo);
 							Image image = new Image(resource, "photographie");
 							image.setHeight("10em");
 							photoLayout.removeAll();
@@ -424,29 +464,146 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					//flexLayout.setFlexBasis("10em", buttonLayout);
 					verticalLayout.add(flexLayout);
 					verticalLayout.add(buttonLayout);
-
-					VerticalLayout cursusLayout = new VerticalLayout();
-					cursusLayout.setVisible(false);
-					cursusLayout.setPadding(false);
-					Button cursusButton = new Button("", VaadinIcon.CHEVRON_DOWN_SMALL.create());
+					
+					// Cursus
+					Dialog cursusDialog = new Dialog();
+					cursusDialog.setWidthFull();
+					cursusDialog.setMaxWidth("50em");
+					Button cursusButton = new Button("", VaadinIcon.ARCHIVE.create());
 					cursusButton.getStyle().set("margin", "auto");
 					cursusButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 					cursusButton.addClickListener(c-> {
 						// Si le cursus n'est pas visible
-						if(!cursusLayout.isVisible()) {
+						if(!cursusDialog.isOpened()) {
+							//Init dialog (a faire au clic car dépend de la taille de la fenêtre)
+							cursusDialog.removeAll();
+							FlexLayout dialogLayout = new FlexLayout();
+							dialogLayout.setFlexDirection(FlexDirection.COLUMN);
+							dialogLayout.setHeightFull();
+							VerticalLayout cursusLayout = new VerticalLayout();
+							cursusLayout.setPadding(false);
+							HorizontalLayout headerDialog= new HorizontalLayout();
+							headerDialog.getStyle().set("margin-bottom", "var(--lumo-space-l)");
+							Label titreDialog = new Label(libelleInscription);
+							titreDialog.getStyle().set("margin", "auto");
+							titreDialog.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+							Button closeButton = new Button(getTranslation("inscription.closedialog"));
+							closeButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+							headerDialog.add(titreDialog);
+							dialogLayout.add(headerDialog);
+							dialogLayout.add(cursusLayout);
+							cursusDialog.add(dialogLayout);
+							// si écran de petite taille
+							if( windowWidth<=800) {
+								HorizontalLayout footerDialog= new HorizontalLayout();
+								footerDialog.getStyle().set("margin-top", "var(--lumo-space-l)");
+								footerDialog.add(closeButton);
+								closeButton.getStyle().set("margin", "auto");
+								//closeButton.getStyle().set("margin-top", "0.5em");
+								//titreDialog.getStyle().set("margin-bottom", "0.5em");
+								dialogLayout.add(footerDialog);
+								cursusDialog.setSizeFull();
+							} else {
+								cursusDialog.setHeight("auto");
+								headerDialog.add(closeButton);
+							}
+
+							closeButton.addClickListener(cb -> { cursusDialog.close(); });
+
 							// Mise à jour de l'affichage du cursus
 							displayCursus(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),cursusLayout);
-							cursusButton.setIcon(VaadinIcon.CHEVRON_UP_SMALL.create());
+							cursusDialog.open();
 						} else {
 							// On masque le cursus
-							cursusLayout.setVisible(false);
-							cursusButton.setIcon(VaadinIcon.CHEVRON_DOWN_SMALL.create());
+							cursusDialog.close();
+							cursusDialog.removeAll();
 						}
 					});
 					// Ajout à la liste des boutons
 					listButtonCursus.add(cursusButton);
-					verticalLayout.add(cursusButton);
-					verticalLayout.add(cursusLayout);
+
+
+
+					// Notes et résultats
+					Dialog notesDialog = new Dialog();
+					notesDialog.setWidthFull();
+					notesDialog.setMaxWidth("70em");
+					Button notesButton = new Button("", VaadinIcon.DIPLOMA.create());
+					notesButton.getStyle().set("margin", "auto");
+					notesButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+					notesButton.addClickListener(c-> {
+						// Si le notes n'est pas visible
+						if(!notesDialog.isOpened()) {
+							//Init dialog (a faire au clic car dépend de la taille de la fenêtre)
+							notesDialog.removeAll();
+							FlexLayout dialogLayout = new FlexLayout();
+							dialogLayout.setFlexDirection(FlexDirection.COLUMN);
+							dialogLayout.setHeightFull();
+							VerticalLayout notesLayout = new VerticalLayout();
+							notesLayout.setPadding(false);
+							HorizontalLayout headerDialog= new HorizontalLayout();
+							headerDialog.getStyle().set("margin-bottom", "var(--lumo-space-l)");
+							Label titreDialog = new Label(libelleInscription);
+							titreDialog.getStyle().set("margin", "auto");
+							titreDialog.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+							Button closeButton = new Button(getTranslation("inscription.closedialog"));
+							closeButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+							headerDialog.add(titreDialog);
+							dialogLayout.add(headerDialog);
+							dialogLayout.add(notesLayout);
+							notesDialog.add(dialogLayout);
+							// si écran de petite taille
+							boolean smallGrid=false;
+							if( windowWidth<=800) {
+								smallGrid=true;
+								HorizontalLayout footerDialog= new HorizontalLayout();
+								footerDialog.getStyle().set("margin-top", "var(--lumo-space-l)");
+								footerDialog.add(closeButton);
+								closeButton.getStyle().set("margin", "auto");
+								//closeButton.getStyle().set("margin-top", "0.5em");
+								//titreDialog.getStyle().set("margin-bottom", "0.5em");
+								dialogLayout.add(footerDialog);
+								notesDialog.setSizeFull();
+							} else {
+								notesDialog.setHeight("auto");
+								headerDialog.add(closeButton);
+							}
+
+							closeButton.addClickListener(cb -> { notesDialog.close(); });
+
+							// Mise à jour de l'affichage des notes
+							displayNotes(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),notesLayout, smallGrid);
+							notesDialog.open();
+						} else {
+							// On masque le notes
+							notesDialog.close();
+							notesDialog.removeAll();
+						}
+					});
+					// Ajout à la liste des boutons
+					listButtonNotes.add(notesButton);
+					
+					//Layout des boutons concernant le cursus et les notes
+					FlexLayout buttonLayout2 = new FlexLayout();
+					buttonLayout2.setWidthFull();
+					buttonLayout2.getStyle().set("padding", "0");
+					buttonLayout2.getStyle().set("margin", "auto");
+					Div cursusBtnDiv=new Div();
+					cursusBtnDiv.getStyle().set("padding", "0.3em 1em 0.3em 1em");
+					cursusBtnDiv.getStyle().set("margin", "auto");
+					Div notesBtnDiv=new Div();
+					notesBtnDiv.getStyle().set("padding", "0.3em 1em 0.3em 1em");
+					notesBtnDiv.getStyle().set("margin", "auto");
+					cursusBtnDiv.add(cursusButton);
+					notesBtnDiv.add(notesButton);
+					buttonLayout2.add(cursusBtnDiv);
+					buttonLayout2.add(notesBtnDiv);
+					verticalLayout.add(buttonLayout2);
+					cursusButton.getStyle().set("margin", "auto");
+					notesButton.getStyle().set("margin", "auto");
+					buttonLayout2.setFlexWrap(FlexWrap.WRAP);
+					buttonLayout2.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
+					
 
 					insCard.addAlt(verticalLayout);
 
@@ -457,6 +614,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		}
 		updateStyle();
 	}
+
 
 
 	private void displayCursus(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout cursusLayout) {
@@ -475,6 +633,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			String codeCheminChc = codeChemin.replaceAll("→", ">");
 			// Récupération du cursus
 			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
+			// suppression de la racine
+			listObj = listObj.get(0).getChildObjects();
 			log.info("sauvegarde de la liste cursus dans la map ({} elements)", listObj.size());
 			// On stocke l'arborescence dans la map
 			cursusMap.put(insKey, listObj);
@@ -484,34 +644,424 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// Création de la TreeGrid contenant l'arborescence des objets de formation
 		TreeGrid<ObjetMaquetteDTO> arbo = new TreeGrid<ObjetMaquetteDTO>();
 		arbo.setItems(listObj, ObjetMaquetteDTO::getChildObjects);
-		arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
-		arbo.addComponentColumn(o -> getObjetDetails(o)).setFlexGrow(0);
+		//arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
+		arbo.addComponentHierarchyColumn(o -> getObjetCursusLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
+		arbo.addComponentColumn(o -> getObjetCursusDetails(o)).setFlexGrow(0);
 		arbo.expandRecursively(listObj, 10);
-		arbo.setHeightByRows(true);
+		// si écran de petite taille
+		if( windowWidth<=800) {
+			arbo.setHeightByRows(false);
+			//arbo.setWidthFull();
+			//arbo.setHeightFull();
+			cursusLayout.setSizeFull();
+		}else {
+			arbo.setHeightByRows(false);
+		}
+		arbo.setWidthFull();
 		cursusLayout.add(arbo);
+	}
 
-		// Affichage du cursus
-		cursusLayout.setVisible(true);
+
+	private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout, boolean smallGrid) {
+		log.info("Récupération des notes pour {} sur {}", codeApprenant, codeChemin);
+
+		List<CheminDTO> listObj=new LinkedList<CheminDTO> ();
+		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
+		// Gestion du cache des notes en session
+		if(notesMap.containsKey(insKey)) {
+			log.info("Récupération de la liste notes dans la map");
+			//Récupération de l'arborescence dans la map
+			listObj = notesMap.get(insKey);
+		}else {
+			log.info("Récupération de la liste notes dans Pégase");
+			// Correction du chemin pour en replaçant le séparateur
+			String codeCheminChc = codeChemin.replaceAll("→", ">");
+			// Récupération des notes
+			listObj = Utils.convertCheminToDTO(pegaseService.getNotes(codeApprenant, codePeriode,codeCheminChc), codeCheminChc);
+			log.info("sauvegarde de la liste notes dans la map ({} elements)", listObj.size());
+			// On stocke l'arborescence dans la map
+			notesMap.put(insKey, listObj);
+		}
+		notesLayout.removeAll();
+
+		// Création de la TreeGrid contenant l'arborescence des objets de formation
+		TreeGrid<CheminDTO> arbo = new TreeGrid<CheminDTO>();
+		arbo.setItems(listObj, CheminDTO::getChildObjects);
+		arbo.addComponentHierarchyColumn(o -> getObjetNotesLibelle(o)).setFlexGrow(2).setAutoWidth(true).setWidth("100%");
+		arbo.addComponentColumn(o -> getSessionsDetails(o)).setFlexGrow(1);
+		arbo.setSelectionMode(SelectionMode.SINGLE);
+		arbo.addItemClickListener(o -> { showDetailNoteDialog(o.getItem());});
+		
+		if(smallGrid) {
+			arbo.setThemeName("mobile");
+			arbo.addClassName("mdw-small-grid");
+		}
+		arbo.expandRecursively(listObj, 10);
+		// si écran de petite taille
+		if( windowWidth<=800) {
+			arbo.setHeightByRows(false);
+			notesLayout.setSizeFull();
+		}else {
+			arbo.setHeightByRows(false);
+		}
+		arbo.setWidthFull();
+		notesLayout.add(arbo);
 	}
 
 
 	/**
 	 * 
 	 * @param o
+	 * @return Element de la colonne libellé du cursus
+	 */
+	private Component getObjetCursusLibelle(ObjetMaquetteDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+
+		Label libLabel = new Label(o.getLibelle());
+		libLabel.getStyle().set("white-space", "normal");
+		l.add(libLabel);
+		l.setFlexGrow(1, libLabel);
+
+		return l;
+	}
+
+	/**
+	 * 
+	 * @param o
 	 * @return Element de la colonne "Acquis" du cursus
 	 */
-	private Component getObjetDetails(ObjetMaquetteDTO o) {
+	private Component getObjetCursusDetails(ObjetMaquetteDTO o) {
 		FlexLayout l = new FlexLayout();
-		//l.setPadding(false);
+		l.setWidthFull();
+
 		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 			Button bAcquis = new Button(VaadinIcon.CHECK.create());
+			bAcquis.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 			bAcquis.setHeight("1.5em");
 			bAcquis.addClickListener(e -> Notification.show(getTranslation("inscription.element.acquis"),2000, Position.MIDDLE));
 			l.add(bAcquis);
 		}
 		return l;
 	}
-	
+
+
+
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne libelle du chemin
+	 */
+	private Component getObjetNotesLibelle(CheminDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+
+		Div libLabel = new Div();
+		libLabel.setText(o.getLibelle());
+		libLabel.getStyle().set("white-space", "normal");
+		l.add(libLabel);
+		l.setFlexGrow(1, libLabel);
+
+		/*l.addClickListener(e -> {
+			showDetailNoteDialog(o);
+		});*/
+
+		return l;
+	}
+
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne "Notes" du chemin
+	 */
+	private Component getSessionsDetails(CheminDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+
+		if(o!=null && o.getObjet()!=null) {
+			FlexLayout sessionfinalelayout = getSessionFinaleDetails(o);
+			FlexLayout session2layout = getSession2Details(o);
+			FlexLayout session1layout = getSession1Details(o);
+
+
+			// Ajout du résultat de session finale s'il existe
+			if(sessionfinalelayout.getComponentCount()>0) {
+				l.add(sessionfinalelayout);
+			}else {
+				// Sinon ajout du résultat de session 2 s'il existe
+				if(session2layout.getComponentCount()>0) {
+					l.add(session2layout);
+				}else {
+					// Sinon ajout du résultat de session 1 s'il existe
+					if(session1layout.getComponentCount()>0) {
+						l.add(session1layout);
+					} else {
+						Div aucunResultat = new Div();
+						aucunResultat.setText(getTranslation("notes.aucune"));
+						aucunResultat.getStyle().set("font-style", "italic");
+						aucunResultat.getStyle().set("font-size", "smaller");
+						aucunResultat.getStyle().set("margin", "auto");
+						l.add(aucunResultat);
+					}
+				}
+			}
+
+			/*l.addClickListener(e -> {
+				showDetailNoteDialog(o);
+			});*/
+		}
+		return l;
+	}
+
+	private void showDetailNoteDialog(CheminDTO o) {
+		FlexLayout sf = getSessionFinaleDetails(o);
+		FlexLayout s2 = getSession2Details(o);
+		FlexLayout s1 = getSession1Details(o);
+
+		// Création dialog avec le détail des notes et résultat pour l'objet de formation
+		Dialog resultDialog = new Dialog();
+		VerticalLayout dialLayout = new VerticalLayout();
+		Label formationLabel = new Label(o.getLibelle());
+		formationLabel.getStyle().set("margin", "auto");
+		formationLabel.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+		dialLayout.add(formationLabel);
+
+		// Ajout du résultat principal
+		/*Label resultLabel = new Label(getResultat(o));
+		resultLabel.getStyle().set("margin", "auto");
+		dialLayout.add(resultLabel);*/
+
+		//Ajout du coeff principal
+		BigDecimal coeff=getCoeff(o);
+		if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
+			HorizontalLayout hl = new HorizontalLayout();
+			hl.setWidthFull();
+			Label libCoeffLabel = new Label(getTranslation("notes.coeff"));
+			libCoeffLabel.getStyle().set("font-weight", "bold");
+			hl.add(libCoeffLabel);
+			Label coeffLabel = new Label(Utils.displayBigDecimal(coeff));
+			coeffLabel.setWidthFull();
+			hl.add(libCoeffLabel);
+			hl.add(coeffLabel);
+			dialLayout.add(hl);
+		}
+		// Ajout des crédits ECTS
+		if(o.getObjet().getCreditEcts()!=null && avecECTS) {
+			HorizontalLayout hl = new HorizontalLayout();
+			hl.setWidthFull();
+			Label libECTSLabel = new Label(getTranslation("notes.ects"));
+			libECTSLabel.getStyle().set("font-weight", "bold");
+			hl.add(libECTSLabel);
+			Label ectsLabel = new Label(Utils.displayBigDecimal(o.getObjet().getCreditEcts()));
+			ectsLabel.setWidthFull();
+			hl.add(libECTSLabel);
+			hl.add(ectsLabel);
+			dialLayout.add(hl);
+		}
+		// AJout des résultats de chaque session
+		boolean aucunResultat=true;
+		boolean aucunResultatSession2=true;
+		// Ajout des infos de session 1
+		if(s1.getComponentCount()>0) {
+			HorizontalLayout session1 = new HorizontalLayout();
+			session1.setWidthFull();
+			Label labelS1 = new Label(getTranslation("notes.session.1"));
+			labelS1.getStyle().set("white-space", "nowrap");
+			labelS1.getStyle().set("font-weight", "bold");
+			session1.add(labelS1);
+			session1.add(s1);
+			dialLayout.add(session1);
+			aucunResultat=false;
+		}
+		// Ajout des infos de session 2
+		if(s2.getComponentCount()>0) {
+			HorizontalLayout session2 = new HorizontalLayout();
+			session2.setWidthFull();
+			Label labelS2 = new Label(getTranslation("notes.session.2"));
+			labelS2.getStyle().set("white-space", "nowrap");
+			labelS2.getStyle().set("font-weight", "bold");
+			session2.add(labelS2);
+			session2.add(s2);
+			dialLayout.add(session2);
+			aucunResultat=false;
+			aucunResultatSession2=false;
+		}
+		// Ajout des infos de session finale
+		if(sf.getComponentCount()>0) {
+			HorizontalLayout sessionFinale = new HorizontalLayout();
+			sessionFinale.setWidthFull();
+			Label labelSF = new Label(getTranslation("notes.session.finale"));
+			labelSF.getStyle().set("font-weight", "bold");
+			sessionFinale.add(labelSF);
+			sessionFinale.add(sf);
+			dialLayout.add(sessionFinale);
+			aucunResultat=false;
+		}
+
+		// Si aucun résultat
+		if(aucunResultat) {
+			HorizontalLayout aucunResLayout = new HorizontalLayout();
+			aucunResLayout.setWidthFull();
+			Div aucunResDiv = new Div();
+			aucunResDiv.setText(getTranslation("notes.aucune"));
+			aucunResDiv.getStyle().set("font-style", "italic");
+			aucunResDiv.getStyle().set("margin", "auto");
+			aucunResLayout.add(aucunResDiv);
+			dialLayout.add(aucunResLayout);
+		}
+		// Si concerné par session 2
+		if(o.getObjet().getConcerneParSession2()!=null && o.getObjet().getConcerneParSession2().booleanValue() && aucunResultatSession2) {
+			HorizontalLayout concerneSession2Layout = new HorizontalLayout();
+			concerneSession2Layout.setWidthFull();
+			Div concerneSession2Div = new Div();
+			concerneSession2Div.setText(getTranslation("notes.concerne.session2"));
+			concerneSession2Div.getStyle().set("font-style", "italic");
+			concerneSession2Layout.add(concerneSession2Div);
+			dialLayout.add(concerneSession2Layout);
+		}
+		resultDialog.add(dialLayout);
+		resultDialog.open();
+
+	}
+
+
+	// Retourne le dernier coeff
+	private BigDecimal getCoeff(CheminDTO o) {
+		if(o!=null && o.getObjet()!=null) {
+			if(o.getObjet().getCoefficientFinal()!=null) {
+				return o.getObjet().getCoefficientFinal();
+			}
+			if(o.getObjet().getCoefficientSession1()!=null) {
+				return o.getObjet().getCoefficientSession1();
+			}
+			if(o.getObjet().getCoefficientSession2()!=null) {
+				return o.getObjet().getCoefficientSession2();
+			}
+		}
+		return null;
+	}
+
+
+	// Retourne le dernier résultat
+	private String getResultat(CheminDTO o) {
+		if(o!=null && o.getObjet()!=null) {
+			if(o.getObjet().getResultatFinal()!=null) {
+				return o.getObjet().getResultatFinal().getLibelleAffichage();
+			}
+			if(o.getObjet().getResultatSession2()!=null) {
+				return o.getObjet().getResultatSession2().getLibelleAffichage();
+			}
+			if(o.getObjet().getResultatSession1()!=null) {
+				return o.getObjet().getResultatSession1().getLibelleAffichage();
+			}
+		}
+		return null;
+	}
+
+
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne "Notes" du chemin
+	 */
+	private FlexLayout getSession1Details(CheminDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+
+		if(o!=null && o.getObjet()!=null && 
+			(o.getObjet().getNoteSession1()!=null || o.getObjet().getAbsenceSession1()!=null)) {
+			l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteSession1(), o.getObjet().getAbsenceSession1(), o.getObjet().getCoefficientSession1()));
+		}
+		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession1()!=null) {
+			l.add(createLabelResult(o.getObjet().getResultatSession1().getLibelleCourt()));
+		}
+		l.getStyle().set("flex-flow", "row wrap");
+		return l;
+	}
+
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne "Notes" du chemin
+	 */
+	private FlexLayout getSession2Details(CheminDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+
+		if(o!=null && o.getObjet()!=null&& 
+			(o.getObjet().getNoteSession2()!=null || o.getObjet().getAbsenceSession2()!=null)) {
+			l.add(createLabelNote(o.getObjet().getBareme(),o.getObjet().getNoteSession2(), o.getObjet().getAbsenceSession2(), o.getObjet().getCoefficientSession2()));
+		}
+		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession2()!=null) {
+			l.add(createLabelResult(o.getObjet().getResultatSession2().getLibelleCourt()));
+		}
+		l.getStyle().set("flex-flow", "row wrap");
+		return l;
+	}
+
+	/**
+	 * 
+	 * @param o
+	 * @return Element de la colonne "Notes" du chemin
+	 */
+	private FlexLayout getSessionFinaleDetails(CheminDTO o) {
+		FlexLayout l = new FlexLayout();
+		l.setWidthFull();
+
+		if(o!=null && o.getObjet()!=null&& 
+			(o.getObjet().getNoteFinale()!=null || o.getObjet().getAbsenceFinale()!=null)) {
+			l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteFinale(), o.getObjet().getAbsenceFinale(), o.getObjet().getCoefficientFinal()));
+		}
+		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatFinal()!=null) {
+			l.add(createLabelResult(o.getObjet().getResultatFinal().getLibelleCourt()));
+		}
+		l.getStyle().set("flex-flow", "row wrap");
+		return l;
+	}
+
+	private Component createLabelNote(int bareme, BigDecimal note, Object absence, BigDecimal coeff) {
+		Div result = new Div();
+		result.setHeight("1.5em");
+		result.setWidth("5em");
+		result.getStyle().set("margin", "auto auto auto 1em");
+		if(note != null) {
+			result.setText(Utils.displayNote(note, bareme, avecBareme));
+		} else {
+			if(absence != null) {
+				result.setText("ABS");
+			}
+		}
+		return result;
+	}
+
+
+	private Component createLabelResult(String libCourt) {
+		Div result = new Div();
+		result.setHeight("1.5em");
+		result.getStyle().set("margin", "auto auto auto 1em");
+		result.getStyle().set("background-color", CSSColorUtils.MAIN_HEADER_COLOR);
+		result.getStyle().set("color", "white");
+		result.getStyle().set("padding-left", "0.5em");
+		result.getStyle().set("padding-right", "0.5em");
+		result.getStyle().set("border-radius", "0.7em");
+
+		if(StringUtils.hasText(libCourt)) {
+			result.setText(libCourt);
+		}
+
+		return result;
+	}
+
+
+	private String getResultInfo(String titre, String libelle, BigDecimal coeff) {
+		String message = titre + " : " + libelle;
+		if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
+			message += " ("+getTranslation("notes.coeff")+ " " + Utils.displayBigDecimal(coeff)+")";
+		}
+		return message;
+	}
+
+
 	/**
 	 * met à jour le style de la carte
 	 */

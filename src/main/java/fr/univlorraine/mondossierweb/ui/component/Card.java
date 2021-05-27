@@ -42,7 +42,7 @@ public class Card extends VerticalLayout {
 		}
 		titre.setText(libelle);
 		titre.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
-		titre.addClassName("card-title-bordered");
+		titre.setClassName("card-title-bordered");
 		if(!hasAltVisibleComponent) {
 			useAlt = false;
 			this.add(titre);
@@ -77,11 +77,13 @@ public class Card extends VerticalLayout {
 	public void displayAlt() {
 		alt.setVisible(true);
 		altButton.setIcon(VaadinIcon.ANGLE_UP.create());
+		titre.setClassName("card-title-bordered");
 	}
 	
 	public void hideAlt() {
 		alt.setVisible(false);
 		altButton.setIcon(VaadinIcon.ANGLE_DOWN.create());
+		titre.setClassName("card-title-bordered-closed");
 	}
 	
 
