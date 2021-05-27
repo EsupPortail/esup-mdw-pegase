@@ -483,6 +483,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							VerticalLayout cursusLayout = new VerticalLayout();
 							cursusLayout.setPadding(false);
 							HorizontalLayout headerDialog= new HorizontalLayout();
+							headerDialog.getStyle().set("margin-bottom", "var(--lumo-space-l)");
 							Label titreDialog = new Label(libelleInscription);
 							titreDialog.getStyle().set("margin", "auto");
 							titreDialog.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
@@ -495,10 +496,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							// si écran de petite taille
 							if( windowWidth<=800) {
 								HorizontalLayout footerDialog= new HorizontalLayout();
+								footerDialog.getStyle().set("margin-top", "var(--lumo-space-l)");
 								footerDialog.add(closeButton);
 								closeButton.getStyle().set("margin", "auto");
-								closeButton.getStyle().set("margin-top", "0.5em");
-								titreDialog.getStyle().set("margin-bottom", "0.5em");
+								//closeButton.getStyle().set("margin-top", "0.5em");
+								//titreDialog.getStyle().set("margin-bottom", "0.5em");
 								dialogLayout.add(footerDialog);
 								cursusDialog.setSizeFull();
 							} else {
@@ -540,6 +542,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							VerticalLayout notesLayout = new VerticalLayout();
 							notesLayout.setPadding(false);
 							HorizontalLayout headerDialog= new HorizontalLayout();
+							headerDialog.getStyle().set("margin-bottom", "var(--lumo-space-l)");
 							Label titreDialog = new Label(libelleInscription);
 							titreDialog.getStyle().set("margin", "auto");
 							titreDialog.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
@@ -554,10 +557,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							if( windowWidth<=800) {
 								smallGrid=true;
 								HorizontalLayout footerDialog= new HorizontalLayout();
+								footerDialog.getStyle().set("margin-top", "var(--lumo-space-l)");
 								footerDialog.add(closeButton);
 								closeButton.getStyle().set("margin", "auto");
-								closeButton.getStyle().set("margin-top", "0.5em");
-								titreDialog.getStyle().set("margin-bottom", "0.5em");
+								//closeButton.getStyle().set("margin-top", "0.5em");
+								//titreDialog.getStyle().set("margin-bottom", "0.5em");
 								dialogLayout.add(footerDialog);
 								notesDialog.setSizeFull();
 							} else {
@@ -683,7 +687,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// Création de la TreeGrid contenant l'arborescence des objets de formation
 		TreeGrid<CheminDTO> arbo = new TreeGrid<CheminDTO>();
 		arbo.setItems(listObj, CheminDTO::getChildObjects);
-		arbo.addComponentHierarchyColumn(o -> getObjetNotesLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
+		arbo.addComponentHierarchyColumn(o -> getObjetNotesLibelle(o)).setFlexGrow(2).setAutoWidth(true).setWidth("100%");
 		arbo.addComponentColumn(o -> getSessionsDetails(o)).setFlexGrow(1);
 		arbo.setSelectionMode(SelectionMode.SINGLE);
 		arbo.addItemClickListener(o -> { showDetailNoteDialog(o.getItem());});
@@ -901,6 +905,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			Div aucunResDiv = new Div();
 			aucunResDiv.setText(getTranslation("notes.aucune"));
 			aucunResDiv.getStyle().set("font-style", "italic");
+			aucunResDiv.getStyle().set("margin", "auto");
 			aucunResLayout.add(aucunResDiv);
 			dialLayout.add(aucunResLayout);
 		}

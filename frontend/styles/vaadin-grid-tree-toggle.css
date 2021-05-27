@@ -5,3 +5,16 @@
 .mdw-small-grid > [part="toggle"]{
     display: none;
 }
+
+#level-spacer {
+    width: calc(var(---level, '0') * 0.8 * var(--vaadin-grid-tree-toggle-level-offset)) !important;
+}
+
+[part="toggle"] {
+	padding: 0.2em !important;
+}
+
+:host([leaf]) [part="toggle"] {
+    visibility: hidden !important;
+    width: 0.1em !important;
+}

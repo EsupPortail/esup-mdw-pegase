@@ -94,6 +94,7 @@ import lombok.extern.slf4j.Slf4j;
 @CssImport(value = "./styles/vaadin-text-field-pointer.css", themeFor = "vaadin-text-field")
 @CssImport(value = "./styles/vaadin-grid.css", themeFor = "vaadin-grid")
 @CssImport(value = "./styles/vaadin-grid-tree-toggle.css", themeFor = "vaadin-grid-tree-toggle")
+@CssImport(value = "./styles/vaadin-dialog-overlay.css", themeFor = "vaadin-dialog-overlay")
 @CssImport(value = "./styles/vaadin-tab.css", themeFor = "vaadin-tab")
 @CssImport(value = "./styles/vaadin-drawer-toggle.css", themeFor = "vaadin-drawer-toggle")
 @SuppressWarnings("serial")
