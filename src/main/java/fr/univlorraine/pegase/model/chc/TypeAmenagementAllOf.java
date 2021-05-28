@@ -20,18 +20,16 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.chc.Nomenclature;
-import fr.univlorraine.pegase.model.chc.TypeAmenagementAllOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 import java.time.LocalDate;
 
 /**
- * TypeAmenagement
+ * TypeAmenagementAllOf
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-27T10:38:20.872+02:00[Europe/Paris]")
-public class TypeAmenagement extends Nomenclature {
+public class TypeAmenagementAllOf {
   public static final String SERIALIZED_NAME_MOTIF = "motif";
   @SerializedName(SERIALIZED_NAME_MOTIF)
   private String motif;
@@ -49,7 +47,7 @@ public class TypeAmenagement extends Nomenclature {
   private LocalDate dateConsommation;
 
 
-  public TypeAmenagement motif(String motif) {
+  public TypeAmenagementAllOf motif(String motif) {
     
     this.motif = motif;
     return this;
@@ -72,7 +70,7 @@ public class TypeAmenagement extends Nomenclature {
   }
 
 
-  public TypeAmenagement portee(String portee) {
+  public TypeAmenagementAllOf portee(String portee) {
     
     this.portee = portee;
     return this;
@@ -95,7 +93,7 @@ public class TypeAmenagement extends Nomenclature {
   }
 
 
-  public TypeAmenagement priseEnCompte(String priseEnCompte) {
+  public TypeAmenagementAllOf priseEnCompte(String priseEnCompte) {
     
     this.priseEnCompte = priseEnCompte;
     return this;
@@ -118,7 +116,7 @@ public class TypeAmenagement extends Nomenclature {
   }
 
 
-  public TypeAmenagement dateConsommation(LocalDate dateConsommation) {
+  public TypeAmenagementAllOf dateConsommation(LocalDate dateConsommation) {
     
     this.dateConsommation = dateConsommation;
     return this;
@@ -149,25 +147,23 @@ public class TypeAmenagement extends Nomenclature {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    TypeAmenagement typeAmenagement = (TypeAmenagement) o;
-    return Objects.equals(this.motif, typeAmenagement.motif) &&
-        Objects.equals(this.portee, typeAmenagement.portee) &&
-        Objects.equals(this.priseEnCompte, typeAmenagement.priseEnCompte) &&
-        Objects.equals(this.dateConsommation, typeAmenagement.dateConsommation) &&
-        super.equals(o);
+    TypeAmenagementAllOf typeAmenagementAllOf = (TypeAmenagementAllOf) o;
+    return Objects.equals(this.motif, typeAmenagementAllOf.motif) &&
+        Objects.equals(this.portee, typeAmenagementAllOf.portee) &&
+        Objects.equals(this.priseEnCompte, typeAmenagementAllOf.priseEnCompte) &&
+        Objects.equals(this.dateConsommation, typeAmenagementAllOf.dateConsommation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(motif, portee, priseEnCompte, dateConsommation, super.hashCode());
+    return Objects.hash(motif, portee, priseEnCompte, dateConsommation);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class TypeAmenagement {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("class TypeAmenagementAllOf {\n");
     sb.append("    motif: ").append(toIndentedString(motif)).append("\n");
     sb.append("    portee: ").append(toIndentedString(portee)).append("\n");
     sb.append("    priseEnCompte: ").append(toIndentedString(priseEnCompte)).append("\n");

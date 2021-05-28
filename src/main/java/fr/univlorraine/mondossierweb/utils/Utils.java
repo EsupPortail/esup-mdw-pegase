@@ -34,7 +34,9 @@ import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
 import fr.univlorraine.pegase.model.coc.Chemin;
+import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
+import fr.univlorraine.pegase.model.insgestion.ObjetFormationOuGroupement;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -92,14 +94,14 @@ public final class Utils {
 
 	/** Retour le code période de l'inscription */
 	public static String getCodePeriode(InscriptionComplete inscription) {
-		log.info("code periode : {} => {}",inscription.getCible().getCodeChemin(), inscription.getCible().getPeriode().getCode() );
+		log.info("code periode : {} => {}",getCodeChemin(inscription.getCible()), inscription.getCible().getPeriode().getCode() );
 		return inscription.getCible().getPeriode().getCode();
 	}
 
 	/** Retour le code voeu de l'inscription */
 	public static String getCodeVoeu(InscriptionComplete inscription) {
-		log.info("code chemin :"+inscription.getCible().getCodeChemin());
-		return inscription.getCible().getCodeChemin()+"@"+inscription.getCible().getPeriode().getCode();
+		log.info("code chemin :"+getCodeChemin(inscription.getCible()));
+		return getCodeChemin(inscription.getCible())+"@"+inscription.getCible().getPeriode().getCode();
 	}
 
 	/** Converti une liste de ObjetMaquetteExtension en hiérarchie de ObjetMaquetteDTO */
@@ -273,6 +275,19 @@ public final class Utils {
 		}
 
 		return n;
+	}
+
+	public static String getCodeChemin(CibleInscription cible) {
+		// la racine est le code de la formation
+		String chemin = cible.getFormation().getCode();
+		if(cible.getChemin()!=null && !cible.getChemin().isEmpty()) {
+			for(ObjetFormationOuGroupement c : cible.getChemin()) {
+				// Ajout des éléments au chemin
+				chemin += SEPARATEUR_CHEMIN + c.getCode();
+			}
+		}
+		log.info("Chemin : {} pour Cible {} {}", chemin, cible.getFormation(), cible.getChemin());
+		return chemin ;
 	}
 
 
