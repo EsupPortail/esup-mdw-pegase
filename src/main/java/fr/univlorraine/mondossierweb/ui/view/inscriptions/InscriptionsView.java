@@ -511,7 +511,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							closeButton.addClickListener(cb -> { cursusDialog.close(); });
 
 							// Mise à jour de l'affichage du cursus
-							displayCursus(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),cursusLayout);
+							displayCursus(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription),cursusLayout);
 							cursusDialog.open();
 						} else {
 							// On masque le cursus
@@ -572,7 +572,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							closeButton.addClickListener(cb -> { notesDialog.close(); });
 
 							// Mise à jour de l'affichage des notes
-							displayNotes(dossier.getApprenant().getCode(), inscription.getCible().getCodeChemin(), Utils.getCodePeriode(inscription),notesLayout, smallGrid);
+							displayNotes(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription),notesLayout, smallGrid);
 							notesDialog.open();
 						} else {
 							// On masque le notes
@@ -634,7 +634,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			// Récupération du cursus
 			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
 			// suppression de la racine
-			listObj = listObj.get(0).getChildObjects();
+			if(listObj!=null && !listObj.isEmpty()) {
+				listObj = listObj.get(0).getChildObjects();
+			}
 			log.info("sauvegarde de la liste cursus dans la map ({} elements)", listObj.size());
 			// On stocke l'arborescence dans la map
 			cursusMap.put(insKey, listObj);

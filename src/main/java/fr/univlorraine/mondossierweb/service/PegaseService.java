@@ -36,6 +36,8 @@ import fr.univlorraine.pegase.api.chc.InscriptionApi;
 import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
 import fr.univlorraine.pegase.api.insgestion.InscriptionsApi;
+import fr.univlorraine.pegase.api.insgestion.PaiementApi;
+import fr.univlorraine.pegase.api.insgestion.PiecesApi;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import fr.univlorraine.pegase.model.insgestion.Apprenant;
@@ -60,8 +62,6 @@ public class PegaseService implements Serializable {
 	private transient String etablissement;	
 	@Value("${pegase.api.ins.url}")
 	private transient String apiInsUrl;	
-	@Value("${pegase.api.paie.url}")
-	private transient String apiPaieUrl;
 	@Value("${pegase.api.chc.url}")
 	private transient String apiChcUrl;	
 	@Value("${pegase.api.coc.url}")
@@ -76,10 +76,8 @@ public class PegaseService implements Serializable {
 	private ApiClient apiClientIns = new ApiClient();
 	private ApprenantsApi appApiIns = new ApprenantsApi();
 	private InscriptionsApi insApiIns = new InscriptionsApi();
-
-	// PAIE API (pour l'instant calquée sur INS)
-	private ApiClient apiClientPaie = new ApiClient();
-	private InscriptionsApi insApiPaie = new InscriptionsApi();
+	private PiecesApi insApiPieces = new PiecesApi();
+	private PaiementApi insApiPaie = new PaiementApi();
 
 	// CHC API
 	private ApiClient apiClientChc = new ApiClient();
@@ -91,14 +89,13 @@ public class PegaseService implements Serializable {
 
 	@PostConstruct
 	public void init() {
+		
 		// Init INS
 		apiClientIns.setBasePath(apiInsUrl);
 		insApiIns.setApiClient(apiClientIns);
 		appApiIns.setApiClient(apiClientIns);
-
-		// Init PAIE
-		apiClientPaie.setBasePath(apiPaieUrl);
-		insApiPaie.setApiClient(apiClientPaie);
+		insApiPieces.setApiClient(apiClientIns);
+		insApiPaie.setApiClient(apiClientIns);
 
 		// Init CHC
 		apiClientChc.setBasePath(apiChcUrl);
@@ -149,7 +146,7 @@ public class PegaseService implements Serializable {
 			insApiChc.getApiClient().setAccessToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
-				List<ObjetMaquetteExtension> listObj = insApiChc.lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode2(codeApprenant, codePeriode, etablissement);
+				List<ObjetMaquetteExtension> listObj = insApiChc.lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode(codeApprenant, codePeriode, etablissement);
 				if(listObj != null) {
 					log.info("Cursus de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
 					log.debug("Cursus de : {}", listObj);
@@ -207,7 +204,7 @@ public class PegaseService implements Serializable {
 				// Appel de l'API Pégase
 				ApprenantEtInscriptions dossier = insApiIns.lireInscriptions(etablissement, codeApprenant);
 				if(dossier != null) {
-					log.info("Dossier de {} {} recupere", dossier.getApprenant().getEtatCivil().getPrenom(), dossier.getApprenant().getEtatCivil().getNomUsuel());
+					log.info("Dossier de {} {} {} recupere", dossier.getApprenant().getEtatCivil().getPrenom(),dossier.getApprenant().getEtatCivil().getNomDeNaissance(), dossier.getApprenant().getEtatCivil().getNomUsuel());
 				} else {
 					log.info("Anomalie lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
 				}
@@ -227,10 +224,10 @@ public class PegaseService implements Serializable {
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)
 			&& StringUtils.hasText(cible)) {
 			// Maj du token pour récupérer le dernier token valide
-			insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
+			insApiPieces.getApiClient().setAccessToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
-				File photo = insApiIns.contenuPiece(etablissement, codeApprenant, cible, codePhoto);
+				File photo = insApiPieces.contenuPiece(etablissement, codeApprenant, cible, codePhoto);
 				if(photo != null) {
 					log.info("Photo de {} recupere", codeApprenant);
 				} else {
@@ -276,7 +273,7 @@ public class PegaseService implements Serializable {
 
 		try {
 			// Appel de l'API Pégase
-			File certificat = insApiIns.imprimerAttestationDePaiement(etablissement, codeApprenant, cible);
+			File certificat = insApiPaie.imprimerAttestationDePaiement(etablissement, codeApprenant, cible);
 			if(certificat != null) {
 				log.info("{} attestationDePaiement OK");
 			} else {

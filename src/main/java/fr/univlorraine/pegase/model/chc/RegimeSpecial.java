@@ -26,31 +26,35 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**
- * ParametrageKey
+ * RegimeSpecial
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-27T10:38:20.872+02:00[Europe/Paris]")
-public class ParametrageKey {
+public class RegimeSpecial {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
   private String code;
 
-  public static final String SERIALIZED_NAME_DATE_CONSOMMATION = "dateConsommation";
-  @SerializedName(SERIALIZED_NAME_DATE_CONSOMMATION)
-  private LocalDate dateConsommation;
+  public static final String SERIALIZED_NAME_LIBELLE_COURT = "libelleCourt";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_COURT)
+  private String libelleCourt;
+
+  public static final String SERIALIZED_NAME_DATE_DEBUT = "dateDebut";
+  @SerializedName(SERIALIZED_NAME_DATE_DEBUT)
+  private LocalDate dateDebut;
 
 
-  public ParametrageKey code(String code) {
+  public RegimeSpecial code(String code) {
     
     this.code = code;
     return this;
   }
 
    /**
-   * Code interne du paramétrage choisi par l&#39;établissement
+   * Le code du régime special d&#39;étude - identifiant unique
    * @return code
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Code interne du paramétrage choisi par l'établissement")
+  @ApiModelProperty(value = "Le code du régime special d'étude - identifiant unique")
 
   public String getCode() {
     return code;
@@ -62,26 +66,49 @@ public class ParametrageKey {
   }
 
 
-  public ParametrageKey dateConsommation(LocalDate dateConsommation) {
+  public RegimeSpecial libelleCourt(String libelleCourt) {
     
-    this.dateConsommation = dateConsommation;
+    this.libelleCourt = libelleCourt;
     return this;
   }
 
    /**
-   * Date de la consommation du paramétrage
-   * @return dateConsommation
+   * Le libellé court
+   * @return libelleCourt
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Date de la consommation du paramétrage")
+  @ApiModelProperty(value = "Le libellé court")
 
-  public LocalDate getDateConsommation() {
-    return dateConsommation;
+  public String getLibelleCourt() {
+    return libelleCourt;
   }
 
 
-  public void setDateConsommation(LocalDate dateConsommation) {
-    this.dateConsommation = dateConsommation;
+  public void setLibelleCourt(String libelleCourt) {
+    this.libelleCourt = libelleCourt;
+  }
+
+
+  public RegimeSpecial dateDebut(LocalDate dateDebut) {
+    
+    this.dateDebut = dateDebut;
+    return this;
+  }
+
+   /**
+   * La date de debut
+   * @return dateDebut
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "La date de debut")
+
+  public LocalDate getDateDebut() {
+    return dateDebut;
+  }
+
+
+  public void setDateDebut(LocalDate dateDebut) {
+    this.dateDebut = dateDebut;
   }
 
 
@@ -93,23 +120,25 @@ public class ParametrageKey {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ParametrageKey parametrageKey = (ParametrageKey) o;
-    return Objects.equals(this.code, parametrageKey.code) &&
-        Objects.equals(this.dateConsommation, parametrageKey.dateConsommation);
+    RegimeSpecial regimeSpecial = (RegimeSpecial) o;
+    return Objects.equals(this.code, regimeSpecial.code) &&
+        Objects.equals(this.libelleCourt, regimeSpecial.libelleCourt) &&
+        Objects.equals(this.dateDebut, regimeSpecial.dateDebut);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, dateConsommation);
+    return Objects.hash(code, libelleCourt, dateDebut);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ParametrageKey {\n");
+    sb.append("class RegimeSpecial {\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    dateConsommation: ").append(toIndentedString(dateConsommation)).append("\n");
+    sb.append("    libelleCourt: ").append(toIndentedString(libelleCourt)).append("\n");
+    sb.append("    dateDebut: ").append(toIndentedString(dateDebut)).append("\n");
     sb.append("}");
     return sb.toString();
   }

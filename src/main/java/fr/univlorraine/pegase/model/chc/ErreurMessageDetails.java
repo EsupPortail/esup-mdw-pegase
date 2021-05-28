@@ -23,64 +23,48 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * PlageChoix
+ * ErreurMessageDetails
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-27T10:38:20.872+02:00[Europe/Paris]")
-public class PlageChoix {
-  public static final String SERIALIZED_NAME_MIN = "min";
-  @SerializedName(SERIALIZED_NAME_MIN)
-  private Integer min;
-
-  public static final String SERIALIZED_NAME_MAX = "max";
-  @SerializedName(SERIALIZED_NAME_MAX)
-  private Integer max;
+public class ErreurMessageDetails {
+  public static final String SERIALIZED_NAME_ARGUMENTS = "arguments";
+  @SerializedName(SERIALIZED_NAME_ARGUMENTS)
+  private Map<String, String> arguments = null;
 
 
-  public PlageChoix min(Integer min) {
+  public ErreurMessageDetails arguments(Map<String, String> arguments) {
     
-    this.min = min;
+    this.arguments = arguments;
+    return this;
+  }
+
+  public ErreurMessageDetails putArgumentsItem(String key, String argumentsItem) {
+    if (this.arguments == null) {
+      this.arguments = new HashMap<>();
+    }
+    this.arguments.put(key, argumentsItem);
     return this;
   }
 
    /**
-   * la valeur minimun de la plage
-   * @return min
+   * Get arguments
+   * @return arguments
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "la valeur minimun de la plage")
+  @ApiModelProperty(value = "")
 
-  public Integer getMin() {
-    return min;
+  public Map<String, String> getArguments() {
+    return arguments;
   }
 
 
-  public void setMin(Integer min) {
-    this.min = min;
-  }
-
-
-  public PlageChoix max(Integer max) {
-    
-    this.max = max;
-    return this;
-  }
-
-   /**
-   * la valeur minimun de la plage
-   * @return max
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "la valeur minimun de la plage")
-
-  public Integer getMax() {
-    return max;
-  }
-
-
-  public void setMax(Integer max) {
-    this.max = max;
+  public void setArguments(Map<String, String> arguments) {
+    this.arguments = arguments;
   }
 
 
@@ -92,23 +76,21 @@ public class PlageChoix {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PlageChoix plageChoix = (PlageChoix) o;
-    return Objects.equals(this.min, plageChoix.min) &&
-        Objects.equals(this.max, plageChoix.max);
+    ErreurMessageDetails erreurMessageDetails = (ErreurMessageDetails) o;
+    return Objects.equals(this.arguments, erreurMessageDetails.arguments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(min, max);
+    return Objects.hash(arguments);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class PlageChoix {\n");
-    sb.append("    min: ").append(toIndentedString(min)).append("\n");
-    sb.append("    max: ").append(toIndentedString(max)).append("\n");
+    sb.append("class ErreurMessageDetails {\n");
+    sb.append("    arguments: ").append(toIndentedString(arguments)).append("\n");
     sb.append("}");
     return sb.toString();
   }
