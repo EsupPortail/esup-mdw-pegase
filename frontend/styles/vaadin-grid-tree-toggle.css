@@ -18,3 +18,7 @@
     visibility: hidden !important;
     width: 0.1em !important;
 }
+/*
+:host {
+    --vaadin-grid-tree-toggle-level-offset: 1em !important;
+}*/
