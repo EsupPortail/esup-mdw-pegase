@@ -38,7 +38,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
@@ -76,6 +75,7 @@ import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import fr.univlorraine.pegase.model.chc.TypeAmenagement;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
@@ -103,6 +103,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	@Value("${notes.ects}")
 	private transient Boolean avecECTS;
 
+	@Value("${cursus.factultatif.italique}")
+	private transient Boolean facItalique;
 
 	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
 	private transient List<String> listeStatutsInscriptionAffichees;	
@@ -464,7 +466,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					//flexLayout.setFlexBasis("10em", buttonLayout);
 					verticalLayout.add(flexLayout);
 					verticalLayout.add(buttonLayout);
-					
+
 					// Cursus
 					Dialog cursusDialog = new Dialog();
 					cursusDialog.setWidthFull();
@@ -582,7 +584,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					});
 					// Ajout à la liste des boutons
 					listButtonNotes.add(notesButton);
-					
+
 					//Layout des boutons concernant le cursus et les notes
 					FlexLayout buttonLayout2 = new FlexLayout();
 					buttonLayout2.setWidthFull();
@@ -603,7 +605,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					notesButton.getStyle().set("margin", "auto");
 					buttonLayout2.setFlexWrap(FlexWrap.WRAP);
 					buttonLayout2.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
-					
+
 
 					insCard.addAlt(verticalLayout);
 
@@ -693,7 +695,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		arbo.addComponentColumn(o -> getSessionsDetails(o)).setFlexGrow(1);
 		arbo.setSelectionMode(SelectionMode.SINGLE);
 		arbo.addItemClickListener(o -> { showDetailNoteDialog(o.getItem());});
-		
+
 		if(smallGrid) {
 			arbo.setThemeName("mobile");
 			arbo.addClassName("mdw-small-grid");
@@ -725,6 +727,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		l.add(libLabel);
 		l.setFlexGrow(1, libLabel);
 
+
+		// Si non obligatoire
+		if(facItalique.booleanValue() && o!=null && o.getObjet() != null && o.getObjet().getCaractereObligatoire()!=null && !o.getObjet().getCaractereObligatoire().booleanValue()) {
+			// Le libellé est en italic
+			libLabel.getStyle().set("font-style", "italic");
+		}
+
 		return l;
 	}
 
@@ -736,16 +745,73 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private Component getObjetCursusDetails(ObjetMaquetteDTO o) {
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
+		l.getStyle().set("justify-content", "space-between");
 
 		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 			Button bAcquis = new Button(VaadinIcon.CHECK.create());
 			bAcquis.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 			bAcquis.setHeight("1.5em");
-			bAcquis.addClickListener(e -> Notification.show(getTranslation("inscription.element.acquis"),2000, Position.MIDDLE));
+			//bAcquis.addClickListener(e -> Notification.show(getTranslation("inscription.element.acquis"),2000, Position.MIDDLE));
+			bAcquis.addClickListener(e -> showInfoDialog(getTranslation("inscription.element.acquis")));
 			l.add(bAcquis);
+		}
+		// Si il y a des aménagements
+		if(o!=null && o.getObjet()!=null && o.getObjet().getTypeAmenagementLst()!=null &&  !o.getObjet().getTypeAmenagementLst().isEmpty()) {
+			Button bAmenagement = new Button(VaadinIcon.SLIDERS.create());
+			bAmenagement.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+			bAmenagement.setHeight("1.5em");
+			bAmenagement.addClickListener(e -> showDetailAmenagementDialog(o.getObjet().getTypeAmenagementLst()));
+
+			l.add(bAmenagement);
 		}
 		return l;
 	}
+
+
+	private void showInfoDialog(String info) {
+
+		// Création dialog avec le détail des aménagements
+		Dialog resultDialog = new Dialog();
+		VerticalLayout dialLayout = new VerticalLayout();
+
+		HorizontalLayout hl = new HorizontalLayout();
+		hl.setWidthFull();
+		Label libAmenagements = new Label(info);
+		libAmenagements.getStyle().set("font-weight", "bold");
+		hl.add(libAmenagements);
+		hl.add(libAmenagements);
+		dialLayout.add(hl);
+
+		resultDialog.add(dialLayout);
+		resultDialog.open();
+	}
+
+
+	private void showDetailAmenagementDialog(List<TypeAmenagement> typeAmenagementLst) {
+
+		// Création dialog avec le détail des aménagements
+		Dialog resultDialog = new Dialog();
+		VerticalLayout dialLayout = new VerticalLayout();
+		Label formationLabel = new Label(getTranslation("inscription.element.amenagement"));
+		formationLabel.getStyle().set("margin", "auto");
+		formationLabel.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+		dialLayout.add(formationLabel);
+
+
+		for(TypeAmenagement ta : typeAmenagementLst) {
+			HorizontalLayout hl = new HorizontalLayout();
+			hl.setWidthFull();
+			Label libAmenagements = new Label(ta.getLibelleAffichage());
+			libAmenagements.getStyle().set("font-weight", "bold");
+			hl.add(libAmenagements);
+			hl.add(libAmenagements);
+			dialLayout.add(hl);
+		}
+
+		resultDialog.add(dialLayout);
+		resultDialog.open();
+	}
+
 
 
 
