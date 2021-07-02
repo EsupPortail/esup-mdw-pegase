@@ -21,6 +21,7 @@ package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,7 +46,6 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
@@ -257,6 +257,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private void updateData(ApprenantEtInscriptions dossier) {
 		resetData();
 		if(dossier!=null && dossier.getInscriptions() != null && !dossier.getInscriptions() .isEmpty()) {
+			//On trie les inscriptions sur l'année universitaire de la période, par ordre décroissant
+			dossier.getInscriptions().sort(new Comparator<InscriptionComplete>(){
+				@Override
+				public int compare(InscriptionComplete i1, InscriptionComplete i2) {
+					return i2.getCible().getPeriode().getAnneeUniversitaire().compareTo(i1.getCible().getPeriode().getAnneeUniversitaire());
+				}
+			});
 			for(InscriptionComplete inscription : dossier.getInscriptions() ) {
 				boolean inscriptionValide = false;
 				boolean inscriptionPayee = false;
@@ -745,11 +752,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private Component getObjetCursusDetails(ObjetMaquetteDTO o) {
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
-		l.getStyle().set("justify-content", "space-between");
 
 		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 			Button bAcquis = new Button(VaadinIcon.CHECK.create());
 			bAcquis.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+			bAcquis.getStyle().set("margin-right", "0.5em");
 			bAcquis.setHeight("1.5em");
 			//bAcquis.addClickListener(e -> Notification.show(getTranslation("inscription.element.acquis"),2000, Position.MIDDLE));
 			bAcquis.addClickListener(e -> showInfoDialog(getTranslation("inscription.element.acquis")));
@@ -757,9 +764,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		}
 		// Si il y a des aménagements
 		if(o!=null && o.getObjet()!=null && o.getObjet().getTypeAmenagementLst()!=null &&  !o.getObjet().getTypeAmenagementLst().isEmpty()) {
-			Button bAmenagement = new Button(VaadinIcon.SLIDERS.create());
+			Button bAmenagement = new Button(VaadinIcon.INFO_CIRCLE_O.create());
 			bAmenagement.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 			bAmenagement.setHeight("1.5em");
+			bAmenagement.getStyle().set("margin-right", "0.5em");
 			bAmenagement.addClickListener(e -> showDetailAmenagementDialog(o.getObjet().getTypeAmenagementLst()));
 
 			l.add(bAmenagement);
