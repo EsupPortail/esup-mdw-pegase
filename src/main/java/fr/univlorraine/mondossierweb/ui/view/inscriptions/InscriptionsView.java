@@ -514,12 +514,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								footerDialog.getStyle().set("margin-top", "var(--lumo-space-l)");
 								footerDialog.add(closeButton);
 								closeButton.getStyle().set("margin", "auto");
-								//closeButton.getStyle().set("margin-top", "0.5em");
-								//titreDialog.getStyle().set("margin-bottom", "0.5em");
 								dialogLayout.add(footerDialog);
 								cursusDialog.setSizeFull();
 							} else {
 								cursusDialog.setHeight("auto");
+								cursusDialog.setDraggable(true);
 								headerDialog.add(closeButton);
 							}
 
@@ -575,12 +574,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								footerDialog.getStyle().set("margin-top", "var(--lumo-space-l)");
 								footerDialog.add(closeButton);
 								closeButton.getStyle().set("margin", "auto");
-								//closeButton.getStyle().set("margin-top", "0.5em");
-								//titreDialog.getStyle().set("margin-bottom", "0.5em");
 								dialogLayout.add(footerDialog);
 								notesDialog.setSizeFull();
 							} else {
 								notesDialog.setHeight("auto");
+								notesDialog.setDraggable(true);
 								headerDialog.add(closeButton);
 							}
 
