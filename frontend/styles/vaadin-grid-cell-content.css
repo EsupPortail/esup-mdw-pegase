@@ -1,0 +1,3 @@
+:host {
+    padding: var(--lumo-space-xs) 0 var(--lumo-space-xs) var(--lumo-space-m) !important;
+}

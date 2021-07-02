@@ -21,6 +21,7 @@ package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,7 +39,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
@@ -46,7 +46,6 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
@@ -76,6 +75,7 @@ import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import fr.univlorraine.pegase.model.chc.TypeAmenagement;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
@@ -103,6 +103,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	@Value("${notes.ects}")
 	private transient Boolean avecECTS;
 
+	@Value("${cursus.factultatif.italique}")
+	private transient Boolean facItalique;
 
 	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
 	private transient List<String> listeStatutsInscriptionAffichees;	
@@ -255,6 +257,14 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private void updateData(ApprenantEtInscriptions dossier) {
 		resetData();
 		if(dossier!=null && dossier.getInscriptions() != null && !dossier.getInscriptions() .isEmpty()) {
+			//On trie les inscriptions sur l'année universitaire de la période, par ordre décroissant
+			dossier.getInscriptions().sort(new Comparator<InscriptionComplete>(){
+				@Override
+				public int compare(InscriptionComplete i1, InscriptionComplete i2) {
+					return i2.getCible().getPeriode().getAnneeUniversitaire().compareTo(i1.getCible().getPeriode().getAnneeUniversitaire());
+				}
+			});
+			// Pour chaque inscription
 			for(InscriptionComplete inscription : dossier.getInscriptions() ) {
 				boolean inscriptionValide = false;
 				boolean inscriptionPayee = false;
@@ -300,6 +310,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				CmpUtils.setLongTextField(regime);
 				listTextFieldRegime.add(regime);
 
+				// STATUT INSCRIPTION
 				TextField statut = new TextField();
 				statut.setVisible(false);
 				if(inscription.getStatutInscription()!=null) {
@@ -307,16 +318,20 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					if(inscription.getStatutInscription().getValue().equals(Utils.TEM_INS_VALIDE)) {
 						inscriptionValide =  true;
 					}
+					// Si le statut de l'inscription fait partie des statuts à afficher
 					if(listeStatutsInscriptionAffichees != null && listeStatutsInscriptionAffichees.contains(inscription.getStatutInscription().getValue())) {
+						// l'inscrition doit être affichée
 						inscriptionAffichee = true;
 					}
 				}
+				// Si l'inscrition doit être affichée
 				if(inscriptionAffichee) {
 
 					statut.setReadOnly(true);
 					CmpUtils.setShortTextField(statut);
 					listTextFieldStatut.add(statut);
 
+					// STATUT PAIEMENT
 					TextField paiement = new TextField();
 					paiement.setVisible(false);
 					if(inscription.getStatutPaiement()!=null) {
@@ -329,7 +344,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					CmpUtils.setShortTextField(paiement);
 					listTextFieldPaiement.add(paiement);
 
-
+					// STATUT PIECES JUSTIFICATIVES
 					TextField pieces = new TextField();
 					pieces.setVisible(false);
 					if(inscription.getStatutPieces()!=null) {
@@ -340,9 +355,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					listTextFieldPieces.add(pieces);
 
 					/* AJout de la liste des bourses et aides ?
-				for( OccurrenceNomenclature occ : inscription.getBoursesEtAides()) {
-					occ.getLibelle()
-				} */
+					for( OccurrenceNomenclature occ : inscription.getBoursesEtAides()) {
+						occ.getLibelle()
+					} */
 
 
 					// Ajout bouton certificat de scolarité
@@ -464,7 +479,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					//flexLayout.setFlexBasis("10em", buttonLayout);
 					verticalLayout.add(flexLayout);
 					verticalLayout.add(buttonLayout);
-					
+
 					// Cursus
 					Dialog cursusDialog = new Dialog();
 					cursusDialog.setWidthFull();
@@ -582,7 +597,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					});
 					// Ajout à la liste des boutons
 					listButtonNotes.add(notesButton);
-					
+
 					//Layout des boutons concernant le cursus et les notes
 					FlexLayout buttonLayout2 = new FlexLayout();
 					buttonLayout2.setWidthFull();
@@ -603,7 +618,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					notesButton.getStyle().set("margin", "auto");
 					buttonLayout2.setFlexWrap(FlexWrap.WRAP);
 					buttonLayout2.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
-					
+
 
 					insCard.addAlt(verticalLayout);
 
@@ -693,7 +708,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		arbo.addComponentColumn(o -> getSessionsDetails(o)).setFlexGrow(1);
 		arbo.setSelectionMode(SelectionMode.SINGLE);
 		arbo.addItemClickListener(o -> { showDetailNoteDialog(o.getItem());});
-		
+
 		if(smallGrid) {
 			arbo.setThemeName("mobile");
 			arbo.addClassName("mdw-small-grid");
@@ -725,6 +740,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		l.add(libLabel);
 		l.setFlexGrow(1, libLabel);
 
+
+		// Si non obligatoire
+		if(facItalique.booleanValue() && o!=null && o.getObjet() != null && o.getObjet().getCaractereObligatoire()!=null && !o.getObjet().getCaractereObligatoire().booleanValue()) {
+			// Le libellé est en italic
+			libLabel.getStyle().set("font-style", "italic");
+		}
+
 		return l;
 	}
 
@@ -740,12 +762,70 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 			Button bAcquis = new Button(VaadinIcon.CHECK.create());
 			bAcquis.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+			bAcquis.getStyle().set("margin-right", "0.5em");
 			bAcquis.setHeight("1.5em");
-			bAcquis.addClickListener(e -> Notification.show(getTranslation("inscription.element.acquis"),2000, Position.MIDDLE));
+			//bAcquis.addClickListener(e -> Notification.show(getTranslation("inscription.element.acquis"),2000, Position.MIDDLE));
+			bAcquis.addClickListener(e -> showInfoDialog(getTranslation("inscription.element.acquis")));
 			l.add(bAcquis);
+		}
+		// Si il y a des aménagements
+		if(o!=null && o.getObjet()!=null && o.getObjet().getTypeAmenagementLst()!=null &&  !o.getObjet().getTypeAmenagementLst().isEmpty()) {
+			Button bAmenagement = new Button(VaadinIcon.INFO_CIRCLE_O.create());
+			bAmenagement.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+			bAmenagement.setHeight("1.5em");
+			bAmenagement.getStyle().set("margin-right", "0.5em");
+			bAmenagement.addClickListener(e -> showDetailAmenagementDialog(o.getObjet().getTypeAmenagementLst()));
+
+			l.add(bAmenagement);
 		}
 		return l;
 	}
+
+
+	private void showInfoDialog(String info) {
+
+		// Création dialog avec le détail des aménagements
+		Dialog resultDialog = new Dialog();
+		VerticalLayout dialLayout = new VerticalLayout();
+
+		HorizontalLayout hl = new HorizontalLayout();
+		hl.setWidthFull();
+		Label libAmenagements = new Label(info);
+		libAmenagements.getStyle().set("font-weight", "bold");
+		hl.add(libAmenagements);
+		hl.add(libAmenagements);
+		dialLayout.add(hl);
+
+		resultDialog.add(dialLayout);
+		resultDialog.open();
+	}
+
+
+	private void showDetailAmenagementDialog(List<TypeAmenagement> typeAmenagementLst) {
+
+		// Création dialog avec le détail des aménagements
+		Dialog resultDialog = new Dialog();
+		VerticalLayout dialLayout = new VerticalLayout();
+		Label formationLabel = new Label(getTranslation("inscription.element.amenagement"));
+		formationLabel.getStyle().set("margin", "auto");
+		formationLabel.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+		dialLayout.add(formationLabel);
+
+
+		for(TypeAmenagement ta : typeAmenagementLst) {
+			HorizontalLayout hl = new HorizontalLayout();
+			hl.setWidthFull();
+			Label libAmenagements = new Label(ta.getLibelleAffichage());
+			libAmenagements.getStyle().set("font-weight", "bold");
+			hl.add(libAmenagements);
+			hl.add(libAmenagements);
+			dialLayout.add(hl);
+		}
+
+		resultDialog.add(dialLayout);
+		resultDialog.open();
+	}
+
 
 
 
