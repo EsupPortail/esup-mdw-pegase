@@ -264,6 +264,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					return i2.getCible().getPeriode().getAnneeUniversitaire().compareTo(i1.getCible().getPeriode().getAnneeUniversitaire());
 				}
 			});
+			// Pour chaque inscription
 			for(InscriptionComplete inscription : dossier.getInscriptions() ) {
 				boolean inscriptionValide = false;
 				boolean inscriptionPayee = false;
@@ -309,6 +310,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				CmpUtils.setLongTextField(regime);
 				listTextFieldRegime.add(regime);
 
+				// STATUT INSCRIPTION
 				TextField statut = new TextField();
 				statut.setVisible(false);
 				if(inscription.getStatutInscription()!=null) {
@@ -316,16 +318,20 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					if(inscription.getStatutInscription().getValue().equals(Utils.TEM_INS_VALIDE)) {
 						inscriptionValide =  true;
 					}
+					// Si le statut de l'inscription fait partie des statuts à afficher
 					if(listeStatutsInscriptionAffichees != null && listeStatutsInscriptionAffichees.contains(inscription.getStatutInscription().getValue())) {
+						// l'inscrition doit être affichée
 						inscriptionAffichee = true;
 					}
 				}
+				// Si l'inscrition doit être affichée
 				if(inscriptionAffichee) {
 
 					statut.setReadOnly(true);
 					CmpUtils.setShortTextField(statut);
 					listTextFieldStatut.add(statut);
 
+					// STATUT PAIEMENT
 					TextField paiement = new TextField();
 					paiement.setVisible(false);
 					if(inscription.getStatutPaiement()!=null) {
@@ -338,7 +344,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					CmpUtils.setShortTextField(paiement);
 					listTextFieldPaiement.add(paiement);
 
-
+					// STATUT PIECES JUSTIFICATIVES
 					TextField pieces = new TextField();
 					pieces.setVisible(false);
 					if(inscription.getStatutPieces()!=null) {
@@ -349,9 +355,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					listTextFieldPieces.add(pieces);
 
 					/* AJout de la liste des bourses et aides ?
-				for( OccurrenceNomenclature occ : inscription.getBoursesEtAides()) {
-					occ.getLibelle()
-				} */
+					for( OccurrenceNomenclature occ : inscription.getBoursesEtAides()) {
+						occ.getLibelle()
+					} */
 
 
 					// Ajout bouton certificat de scolarité
