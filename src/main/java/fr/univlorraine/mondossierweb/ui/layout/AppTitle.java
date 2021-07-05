@@ -61,6 +61,7 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 		getStyle().set("padding-bottom", "0.75rem");
 		getStyle().set("padding-top", "0.8rem");
 		getStyle().set("margin-left", "auto");
+		getStyle().set("height", "3.75em");
 		
 
 		ReactiveUtils.subscribeWhenAttached(this,
@@ -78,6 +79,8 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 		titleLayout.setWidthFull();
 		titleLayout.getStyle().set("max-width", "16em");
 		titleLayout.getStyle().set("padding-left", "1em");
+		titleLayout.getStyle().set("margin-top", "auto");
+		titleLayout.getStyle().set("margin-bottom", "auto");
 		
 		getStyle().set("background-color", "#343a40");
 		getStyle().set("color", "white");
