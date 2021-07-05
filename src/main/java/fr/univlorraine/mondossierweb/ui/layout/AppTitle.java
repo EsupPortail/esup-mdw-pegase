@@ -58,8 +58,8 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 	@PostConstruct
 	private void init() {
 		setAlignItems(Alignment.END);
-		getStyle().set("padding-bottom", "0.75rem");
-		getStyle().set("padding-top", "0.8rem");
+		/*getStyle().set("padding-bottom", "0.75rem");
+		getStyle().set("padding-top", "0.8rem");*/
 		getStyle().set("margin-left", "auto");
 		getStyle().set("height", "3.75em");
 		
