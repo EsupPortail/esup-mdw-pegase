@@ -53,6 +53,9 @@ public final class Utils {
 	public static final String TEM_INS_VALIDE = "valide";
 	public static final Object TEM_INS_PAYEE = "valide";
 	private static final String SEPARATEUR_CHEMIN = ">";
+	public static final Object DETAIL_INS_NON_AFFICHE = "false";
+	public static final Object DETAIL_INS_VIA_BOUTON = "button";
+	public static final Object DETAIL_INS_AFFICHE = "true";
 
 
 	/** formatage d'une date en chaine pour un affichage européen */

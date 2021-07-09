@@ -106,6 +106,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	@Value("${cursus.factultatif.italique}")
 	private transient Boolean facItalique;
 
+	@Value("${inscription.detail}")
+	private transient String afficherDetailInscription;
+
 	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
 	private transient List<String> listeStatutsInscriptionAffichees;	
 	@Autowired
@@ -138,6 +141,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	List<Button> listButtonPhoto = new LinkedList<Button> ();
 	List<Button> listButtonCursus = new LinkedList<Button> ();
 	List<Button> listButtonNotes = new LinkedList<Button> ();
+	List<Button> listButtonDetailInscription = new LinkedList<Button> ();
 
 
 	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<String,List<ObjetMaquetteDTO>>();
@@ -208,6 +212,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		for(Button b : listButtonNotes ) {
 			b.setText(getTranslation("inscription.notes"));
 		}
+		for(Button b : listButtonDetailInscription ) {
+			b.setText(getTranslation("inscription.detail"));
+		}
+
 
 
 	}
@@ -297,7 +305,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					}
 				}
 				periode.setReadOnly(true);
-				CmpUtils.setLongTextField(periode);
+				CmpUtils.setModerateTextField(periode);
 				listTextFieldPeriode.add(periode);
 
 				// REGIME
@@ -403,21 +411,23 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					photoLayout.getStyle().set("margin", "auto");
 					photoLayout.getStyle().set("margin-top", "0");
 					photoLayout.getStyle().set("padding", "0");
-					photoButton.addClickListener(c-> {
-						ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  Utils.getCodeVoeu(inscription));
-						if(photo != null) {
-							StreamResource resource = new StreamResource("photo_"+etudiantController.getDossierConsulte()+".jpg", () -> photo);
-							Image image = new Image(resource, "photographie");
-							image.setHeight("10em");
-							photoLayout.removeAll();
-							photoLayout.add(image);
-							photoButton.setVisible(false);
+					if(!afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE)) {
+						photoButton.addClickListener(c-> {
+							ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  Utils.getCodeVoeu(inscription));
+							if(photo != null) {
+								StreamResource resource = new StreamResource("photo_"+etudiantController.getDossierConsulte()+".jpg", () -> photo);
+								Image image = new Image(resource, "photographie");
+								image.setHeight("10em");
+								photoLayout.removeAll();
+								photoLayout.add(image);
+								photoButton.setVisible(false);
 
-						}
-					});
+							}
+						});
 
-					//Récupération de la photo automatiquement
-					photoButton.click();
+						//Récupération de la photo automatiquement
+						photoButton.click();
+					}
 
 					// Ajout à la liste des boutons
 					listButtonPhoto.add(photoButton);
@@ -428,19 +438,30 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.getStyle().set("padding", "0");
 					verticalLayout.setSizeFull();
 
-					VerticalLayout infoLayout = new VerticalLayout();
+					FlexLayout infoLayout = new FlexLayout();
 					infoLayout.getStyle().set("padding", "0");
+					infoLayout.setWidthFull();
+					infoLayout.setJustifyContentMode(JustifyContentMode.START);
+					infoLayout.setFlexWrap(FlexWrap.WRAP);
 					infoLayout.add(formation);
 					infoLayout.add(periode);
-					infoLayout.add(regime);
+					//infoLayout.add(regime);
+					infoLayout.setFlexBasis("24em", formation);
 					verticalLayout.add(infoLayout);
 
 					FlexLayout flexLayout = new FlexLayout();
-					VerticalLayout statutLayout = new VerticalLayout();
-					statutLayout.getStyle().set("padding", "0");
-					statutLayout.add(statut);
-					statutLayout.add(paiement);
-					statutLayout.add(pieces);
+					if(afficherDetailInscription.equals(Utils.DETAIL_INS_AFFICHE)){
+						flexLayout.getStyle().set("border-top", "1px solid lightgray");
+					}
+					flexLayout.getStyle().set("padding-top", "1em");
+					flexLayout.getStyle().set("padding-bottom", "1em");
+					flexLayout.getStyle().set("margin-top", "0");
+					VerticalLayout detailInscriptionLayout = new VerticalLayout();
+					detailInscriptionLayout.getStyle().set("padding", "0");
+					detailInscriptionLayout.add(regime);
+					detailInscriptionLayout.add(statut);
+					detailInscriptionLayout.add(paiement);
+					detailInscriptionLayout.add(pieces);
 
 					// Layout photo
 					photoButton.getStyle().set("margin-left", "1em");
@@ -469,13 +490,34 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					}
 
 
-					flexLayout.add(statutLayout);
+					flexLayout.add(detailInscriptionLayout);
 					flexLayout.add(photoLayout);
+
+					if(afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE) || afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON) ) {
+						detailInscriptionLayout.setVisible(false);
+						photoLayout.setVisible(false);
+						buttonLayout.setVisible(false);
+						if(afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
+							detailInscriptionLayout.addClassName("vflip");
+							Button displayDetailButton=new Button("", VaadinIcon.ANGLE_DOWN.create());
+							displayDetailButton.getStyle().set("margin", "auto");
+							displayDetailButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+							displayDetailButton.addClickListener(c-> {
+								flexLayout.getStyle().set("border-top", "1px solid lightgray");
+								detailInscriptionLayout.setVisible(true);
+								photoLayout.setVisible(true);
+								buttonLayout.setVisible(true);
+								displayDetailButton.setVisible(false);
+							});
+							listButtonDetailInscription.add(displayDetailButton);
+							flexLayout. add(displayDetailButton);
+						}
+					}
 					//flexLayout.add(buttonLayout);
 					flexLayout.setWidthFull();
 					flexLayout.setJustifyContentMode(JustifyContentMode.START);
 					flexLayout.setFlexWrap(FlexWrap.WRAP);
-					flexLayout.setFlexBasis("18em", statutLayout);
+					flexLayout.setFlexBasis("18em", detailInscriptionLayout);
 					//flexLayout.setFlexBasis("10em", buttonLayout);
 					verticalLayout.add(flexLayout);
 					verticalLayout.add(buttonLayout);
@@ -600,6 +642,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					FlexLayout buttonLayout2 = new FlexLayout();
 					buttonLayout2.setWidthFull();
 					buttonLayout2.getStyle().set("padding", "0");
+					buttonLayout2.getStyle().set("padding-top", "1em");
+					buttonLayout2.getStyle().set("border-top", "1px solid lightgray");
 					buttonLayout2.getStyle().set("margin", "auto");
 					Div cursusBtnDiv=new Div();
 					cursusBtnDiv.getStyle().set("padding", "0.3em 1em 0.3em 1em");
