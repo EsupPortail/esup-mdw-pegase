@@ -450,6 +450,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.add(infoLayout);
 
 					FlexLayout flexLayout = new FlexLayout();
+					flexLayout.getStyle().set("border-top", "1px solid lightgray");
+					flexLayout.getStyle().set("padding-top", "1em");
+					flexLayout.getStyle().set("padding-bottom", "1em");
+					flexLayout.getStyle().set("margin-top", "0");
 					VerticalLayout detailInscriptionLayout = new VerticalLayout();
 					detailInscriptionLayout.getStyle().set("padding", "0");
 					detailInscriptionLayout.add(regime);
@@ -490,14 +494,16 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					if(afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE) || afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON) ) {
 						detailInscriptionLayout.setVisible(false);
 						photoLayout.setVisible(false);
+						buttonLayout.setVisible(false);
 						if(afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
 							detailInscriptionLayout.addClassName("vflip");
-							Button displayDetailButton=new Button("", VaadinIcon.PLUS.create());
+							Button displayDetailButton=new Button("", VaadinIcon.ANGLE_DOWN.create());
 							displayDetailButton.getStyle().set("margin", "auto");
 							displayDetailButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 							displayDetailButton.addClickListener(c-> {
 								detailInscriptionLayout.setVisible(true);
 								photoLayout.setVisible(true);
+								buttonLayout.setVisible(true);
 								displayDetailButton.setVisible(false);
 							});
 							listButtonDetailInscription.add(displayDetailButton);
@@ -633,6 +639,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					FlexLayout buttonLayout2 = new FlexLayout();
 					buttonLayout2.setWidthFull();
 					buttonLayout2.getStyle().set("padding", "0");
+					buttonLayout2.getStyle().set("padding-top", "1em");
+					buttonLayout2.getStyle().set("border-top", "1px solid lightgray");
 					buttonLayout2.getStyle().set("margin", "auto");
 					Div cursusBtnDiv=new Div();
 					cursusBtnDiv.getStyle().set("padding", "0.3em 1em 0.3em 1em");
