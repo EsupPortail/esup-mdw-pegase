@@ -55,6 +55,7 @@ public final class Utils {
 	private static final String SEPARATEUR_CHEMIN = ">";
 	public static final Object DETAIL_INS_NON_AFFICHE = "false";
 	public static final Object DETAIL_INS_VIA_BOUTON = "button";
+	public static final Object DETAIL_INS_AFFICHE = "true";
 
 
 	/** formatage d'une date en chaine pour un affichage européen */

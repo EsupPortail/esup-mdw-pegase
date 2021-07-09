@@ -450,7 +450,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.add(infoLayout);
 
 					FlexLayout flexLayout = new FlexLayout();
-					flexLayout.getStyle().set("border-top", "1px solid lightgray");
+					if(afficherDetailInscription.equals(Utils.DETAIL_INS_AFFICHE)){
+						flexLayout.getStyle().set("border-top", "1px solid lightgray");
+					}
 					flexLayout.getStyle().set("padding-top", "1em");
 					flexLayout.getStyle().set("padding-bottom", "1em");
 					flexLayout.getStyle().set("margin-top", "0");
@@ -501,6 +503,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							displayDetailButton.getStyle().set("margin", "auto");
 							displayDetailButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 							displayDetailButton.addClickListener(c-> {
+								flexLayout.getStyle().set("border-top", "1px solid lightgray");
 								detailInscriptionLayout.setVisible(true);
 								photoLayout.setVisible(true);
 								buttonLayout.setVisible(true);
