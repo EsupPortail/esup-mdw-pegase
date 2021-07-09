@@ -105,6 +105,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	@Value("${cursus.factultatif.italique}")
 	private transient Boolean facItalique;
+	
+	@Value("${inscription.detail}")
+	private transient String afficherDetailInscription;
 
 	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
 	private transient List<String> listeStatutsInscriptionAffichees;	
@@ -138,6 +141,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	List<Button> listButtonPhoto = new LinkedList<Button> ();
 	List<Button> listButtonCursus = new LinkedList<Button> ();
 	List<Button> listButtonNotes = new LinkedList<Button> ();
+	List<Button> listButtonDetailInscription = new LinkedList<Button> ();
 
 
 	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<String,List<ObjetMaquetteDTO>>();
@@ -208,6 +212,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		for(Button b : listButtonNotes ) {
 			b.setText(getTranslation("inscription.notes"));
 		}
+		for(Button b : listButtonDetailInscription ) {
+			b.setText(getTranslation("inscription.detail"));
+		}
+		
 
 
 	}
@@ -299,7 +307,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				periode.setReadOnly(true);
 				CmpUtils.setLongTextField(periode);
 				listTextFieldPeriode.add(periode);
-
+				
 				// REGIME
 				TextField regime = new TextField();
 				regime.setVisible(false);
@@ -441,7 +449,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					statutLayout.add(statut);
 					statutLayout.add(paiement);
 					statutLayout.add(pieces);
-
+					
 					// Layout photo
 					photoButton.getStyle().set("margin-left", "1em");
 					photoLayout.addComponentAsFirst(photoButton);
@@ -471,6 +479,23 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 					flexLayout.add(statutLayout);
 					flexLayout.add(photoLayout);
+					
+					if(afficherDetailInscription.equals("false") || afficherDetailInscription.equals("button") ) {
+						statutLayout.setVisible(false);
+						photoLayout.setVisible(false);
+						if(afficherDetailInscription.equals("button")) {
+							Button displayDetailButton=new Button("", VaadinIcon.PLUS.create());
+							displayDetailButton.getStyle().set("margin", "auto");
+							displayDetailButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+							displayDetailButton.addClickListener(c-> {
+								statutLayout.setVisible(true);
+								photoLayout.setVisible(true);
+								displayDetailButton.setVisible(false);
+							});
+							listButtonDetailInscription.add(displayDetailButton);
+							flexLayout. add(displayDetailButton);
+						}
+					}
 					//flexLayout.add(buttonLayout);
 					flexLayout.setWidthFull();
 					flexLayout.setJustifyContentMode(JustifyContentMode.START);
