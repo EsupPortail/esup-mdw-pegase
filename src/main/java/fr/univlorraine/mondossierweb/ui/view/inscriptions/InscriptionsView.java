@@ -105,7 +105,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	@Value("${cursus.factultatif.italique}")
 	private transient Boolean facItalique;
-	
+
 	@Value("${inscription.detail}")
 	private transient String afficherDetailInscription;
 
@@ -215,7 +215,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		for(Button b : listButtonDetailInscription ) {
 			b.setText(getTranslation("inscription.detail"));
 		}
-		
+
 
 
 	}
@@ -307,7 +307,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				periode.setReadOnly(true);
 				CmpUtils.setLongTextField(periode);
 				listTextFieldPeriode.add(periode);
-				
+
 				// REGIME
 				TextField regime = new TextField();
 				regime.setVisible(false);
@@ -411,21 +411,23 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					photoLayout.getStyle().set("margin", "auto");
 					photoLayout.getStyle().set("margin-top", "0");
 					photoLayout.getStyle().set("padding", "0");
-					photoButton.addClickListener(c-> {
-						ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  Utils.getCodeVoeu(inscription));
-						if(photo != null) {
-							StreamResource resource = new StreamResource("photo_"+etudiantController.getDossierConsulte()+".jpg", () -> photo);
-							Image image = new Image(resource, "photographie");
-							image.setHeight("10em");
-							photoLayout.removeAll();
-							photoLayout.add(image);
-							photoButton.setVisible(false);
+					if(!afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE)) {
+						photoButton.addClickListener(c-> {
+							ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  Utils.getCodeVoeu(inscription));
+							if(photo != null) {
+								StreamResource resource = new StreamResource("photo_"+etudiantController.getDossierConsulte()+".jpg", () -> photo);
+								Image image = new Image(resource, "photographie");
+								image.setHeight("10em");
+								photoLayout.removeAll();
+								photoLayout.add(image);
+								photoButton.setVisible(false);
 
-						}
-					});
+							}
+						});
 
-					//Récupération de la photo automatiquement
-					photoButton.click();
+						//Récupération de la photo automatiquement
+						photoButton.click();
+					}
 
 					// Ajout à la liste des boutons
 					listButtonPhoto.add(photoButton);
@@ -449,7 +451,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					statutLayout.add(statut);
 					statutLayout.add(paiement);
 					statutLayout.add(pieces);
-					
+
 					// Layout photo
 					photoButton.getStyle().set("margin-left", "1em");
 					photoLayout.addComponentAsFirst(photoButton);
@@ -479,11 +481,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 					flexLayout.add(statutLayout);
 					flexLayout.add(photoLayout);
-					
-					if(afficherDetailInscription.equals("false") || afficherDetailInscription.equals("button") ) {
+
+					if(afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE) || afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON) ) {
 						statutLayout.setVisible(false);
 						photoLayout.setVisible(false);
-						if(afficherDetailInscription.equals("button")) {
+						if(afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
 							Button displayDetailButton=new Button("", VaadinIcon.PLUS.create());
 							displayDetailButton.getStyle().set("margin", "auto");
 							displayDetailButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
