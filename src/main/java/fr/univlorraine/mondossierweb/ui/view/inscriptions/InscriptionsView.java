@@ -450,12 +450,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.add(infoLayout);
 
 					FlexLayout flexLayout = new FlexLayout();
-					VerticalLayout statutLayout = new VerticalLayout();
-					statutLayout.getStyle().set("padding", "0");
-					statutLayout.add(regime);
-					statutLayout.add(statut);
-					statutLayout.add(paiement);
-					statutLayout.add(pieces);
+					VerticalLayout detailInscriptionLayout = new VerticalLayout();
+					detailInscriptionLayout.getStyle().set("padding", "0");
+					detailInscriptionLayout.add(regime);
+					detailInscriptionLayout.add(statut);
+					detailInscriptionLayout.add(paiement);
+					detailInscriptionLayout.add(pieces);
 
 					// Layout photo
 					photoButton.getStyle().set("margin-left", "1em");
@@ -484,18 +484,19 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					}
 
 
-					flexLayout.add(statutLayout);
+					flexLayout.add(detailInscriptionLayout);
 					flexLayout.add(photoLayout);
 
 					if(afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE) || afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON) ) {
-						statutLayout.setVisible(false);
+						detailInscriptionLayout.setVisible(false);
 						photoLayout.setVisible(false);
 						if(afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
+							detailInscriptionLayout.addClassName("vflip");
 							Button displayDetailButton=new Button("", VaadinIcon.PLUS.create());
 							displayDetailButton.getStyle().set("margin", "auto");
 							displayDetailButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 							displayDetailButton.addClickListener(c-> {
-								statutLayout.setVisible(true);
+								detailInscriptionLayout.setVisible(true);
 								photoLayout.setVisible(true);
 								displayDetailButton.setVisible(false);
 							});
@@ -507,7 +508,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					flexLayout.setWidthFull();
 					flexLayout.setJustifyContentMode(JustifyContentMode.START);
 					flexLayout.setFlexWrap(FlexWrap.WRAP);
-					flexLayout.setFlexBasis("18em", statutLayout);
+					flexLayout.setFlexBasis("18em", detailInscriptionLayout);
 					//flexLayout.setFlexBasis("10em", buttonLayout);
 					verticalLayout.add(flexLayout);
 					verticalLayout.add(buttonLayout);
