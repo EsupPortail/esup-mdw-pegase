@@ -305,7 +305,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					}
 				}
 				periode.setReadOnly(true);
-				CmpUtils.setLongTextField(periode);
+				CmpUtils.setModerateTextField(periode);
 				listTextFieldPeriode.add(periode);
 
 				// REGIME
@@ -438,16 +438,21 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.getStyle().set("padding", "0");
 					verticalLayout.setSizeFull();
 
-					VerticalLayout infoLayout = new VerticalLayout();
+					FlexLayout infoLayout = new FlexLayout();
 					infoLayout.getStyle().set("padding", "0");
+					infoLayout.setWidthFull();
+					infoLayout.setJustifyContentMode(JustifyContentMode.START);
+					infoLayout.setFlexWrap(FlexWrap.WRAP);
 					infoLayout.add(formation);
 					infoLayout.add(periode);
-					infoLayout.add(regime);
+					//infoLayout.add(regime);
+					infoLayout.setFlexBasis("24em", formation);
 					verticalLayout.add(infoLayout);
 
 					FlexLayout flexLayout = new FlexLayout();
 					VerticalLayout statutLayout = new VerticalLayout();
 					statutLayout.getStyle().set("padding", "0");
+					statutLayout.add(regime);
 					statutLayout.add(statut);
 					statutLayout.add(paiement);
 					statutLayout.add(pieces);
