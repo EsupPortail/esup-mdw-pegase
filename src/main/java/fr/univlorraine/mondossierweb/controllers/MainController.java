@@ -11,6 +11,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.service.PegaseService;
+import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,9 @@ public class MainController {
 	@Autowired
 	private transient PegaseService pegaseService;
 	
+	@Autowired
+	private transient SecurityService securityService;
+
 	private MainLayout mainLayout;
 	
 	public ApprenantEtInscriptions getDossier() {
@@ -33,9 +37,14 @@ public class MainController {
 	}
 	
 	public String getDossierConsulte() {
+		// On a rien dans la Session Vaadin mais on a l'info dans le SecurityService (cas d'un étudiant qui vient de se connecter à l'application)
+		if(VaadinSession.getCurrent().getAttribute("codeApprenant")==null && securityService.getCodeEtudiant().isPresent()) {
+			setDossierConsulte(securityService.getCodeEtudiant().get());
+		}
 		if(VaadinSession.getCurrent().getAttribute("codeApprenant")!=null) {
 			return (String) VaadinSession.getCurrent().getAttribute("codeApprenant");
-		}
+		} 
+		
 		return null;
 	}
 	
