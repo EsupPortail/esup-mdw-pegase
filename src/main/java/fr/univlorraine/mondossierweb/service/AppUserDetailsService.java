@@ -88,7 +88,9 @@ public class AppUserDetailsService implements UserDetailsService {
 				utilisateur.setCodeEtudiant(student.getCodeApprenant());
 				utilisateur.setMail(student.getMail());
 				//utilisateur.setCodEtuDossier(student.getCodeApprenant());
-				VaadinSession.getCurrent().setAttribute("codeApprenant", student.getCodeApprenant());
+				if( VaadinSession.getCurrent() != null) {
+					VaadinSession.getCurrent().setAttribute("codeApprenant", student.getCodeApprenant());
+				}
 				// Nécessaire de le faire à cet endroit?
 				// utilisateur.setDossier(pegaseService.recupererDossierApprenant(utilisateur.getCodEtuDossier()));
 			} else {
