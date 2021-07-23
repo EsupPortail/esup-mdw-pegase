@@ -145,8 +145,6 @@ public class PegaseService implements Serializable {
 	}
 
 	public List<ObjetMaquetteExtension> getCursus(String codeApprenant, String codePeriode) {
-		// Maj du token pour récupérer le dernier token valide
-		insApiChc.getApiClient().setAccessToken(accessTokenService.getToken());
 
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
