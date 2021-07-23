@@ -169,8 +169,6 @@ public class PegaseService implements Serializable {
 	}
 
 	public List<Chemin> getNotes(String codeApprenant, String codePeriode, String codeChemin) {
-		// Maj du token pour récupérer le dernier token valide
-		pubApiCoc.getApiClient().setAccessToken(accessTokenService.getToken());
 
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
