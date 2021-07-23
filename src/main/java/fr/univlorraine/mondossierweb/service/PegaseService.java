@@ -66,6 +66,8 @@ public class PegaseService implements Serializable {
 	private transient String apiChcUrl;	
 	@Value("${pegase.api.coc.url}")
 	private transient String apiCocUrl;	
+	@Value("${pegase.api.pai.url}")
+	private transient String apiPaiUrl;
 	@Value("${pegase.photo.code}")
 	private transient String codePhoto;	
 	@Value("${pegase.demo.codeapprenant}")
@@ -77,7 +79,10 @@ public class PegaseService implements Serializable {
 	private ApprenantsApi appApiIns = new ApprenantsApi();
 	private InscriptionsApi insApiIns = new InscriptionsApi();
 	private PiecesApi insApiPieces = new PiecesApi();
-	private PaiementApi insApiPaie = new PaiementApi();
+	
+	// PAI API
+	private ApiClient apiClientPai = new ApiClient();
+	private PaiementApi insApiPai = new PaiementApi();
 
 	// CHC API
 	private ApiClient apiClientChc = new ApiClient();
@@ -95,7 +100,10 @@ public class PegaseService implements Serializable {
 		insApiIns.setApiClient(apiClientIns);
 		appApiIns.setApiClient(apiClientIns);
 		insApiPieces.setApiClient(apiClientIns);
-		insApiPaie.setApiClient(apiClientIns);
+		
+		// Init PAI
+		apiClientPai.setBasePath(apiPaiUrl);
+		insApiPai.setApiClient(apiClientPai);
 
 		// Init CHC
 		apiClientChc.setBasePath(apiChcUrl);
@@ -269,11 +277,11 @@ public class PegaseService implements Serializable {
 		log.info("attestationDePaiement codeApprenant : {} - cible : {}", codeApprenant, cible);
 
 		// Maj du token pour récupérer le dernier token valide
-		insApiPaie.getApiClient().setAccessToken(accessTokenService.getToken());
+		insApiPai.getApiClient().setAccessToken(accessTokenService.getToken());
 
 		try {
 			// Appel de l'API Pégase
-			File certificat = insApiPaie.imprimerAttestationDePaiement(etablissement, codeApprenant, cible);
+			File certificat = insApiPai.imprimerAttestationDePaiement(etablissement, codeApprenant, cible);
 			if(certificat != null) {
 				log.info("{} attestationDePaiement OK");
 			} else {
