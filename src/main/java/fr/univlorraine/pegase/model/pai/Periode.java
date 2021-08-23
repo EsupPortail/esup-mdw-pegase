@@ -20,68 +20,67 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.pai.Devise;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 /**
- * Montant
+ * Periode
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-08-23T14:09:11.765+02:00[Europe/Paris]")
-public class Montant {
-  public static final String SERIALIZED_NAME_VALEUR = "valeur";
-  @SerializedName(SERIALIZED_NAME_VALEUR)
-  private BigDecimal valeur;
+public class Periode {
+  public static final String SERIALIZED_NAME_CODE = "code";
+  @SerializedName(SERIALIZED_NAME_CODE)
+  private String code;
 
-  public static final String SERIALIZED_NAME_DEVISE = "devise";
-  @SerializedName(SERIALIZED_NAME_DEVISE)
-  private Devise devise;
+  public static final String SERIALIZED_NAME_LIBELLE_AFFICHAGE = "libelleAffichage";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_AFFICHAGE)
+  private String libelleAffichage;
 
 
-  public Montant valeur(BigDecimal valeur) {
+  public Periode code(String code) {
     
-    this.valeur = valeur;
+    this.code = code;
     return this;
   }
 
    /**
-   * Get valeur
-   * @return valeur
+   * Code de la période - identifiant unique
+   * @return code
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "Code de la période - identifiant unique")
 
-  public BigDecimal getValeur() {
-    return valeur;
+  public String getCode() {
+    return code;
   }
 
 
-  public void setValeur(BigDecimal valeur) {
-    this.valeur = valeur;
+  public void setCode(String code) {
+    this.code = code;
   }
 
 
-  public Montant devise(Devise devise) {
+  public Periode libelleAffichage(String libelleAffichage) {
     
-    this.devise = devise;
+    this.libelleAffichage = libelleAffichage;
     return this;
   }
 
    /**
-   * Get devise
-   * @return devise
+   * Le libellé affichage de la période
+   * @return libelleAffichage
   **/
-  @ApiModelProperty(required = true, value = "")
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "Le libellé affichage de la période")
 
-  public Devise getDevise() {
-    return devise;
+  public String getLibelleAffichage() {
+    return libelleAffichage;
   }
 
 
-  public void setDevise(Devise devise) {
-    this.devise = devise;
+  public void setLibelleAffichage(String libelleAffichage) {
+    this.libelleAffichage = libelleAffichage;
   }
 
 
@@ -93,23 +92,23 @@ public class Montant {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Montant montant = (Montant) o;
-    return Objects.equals(this.valeur, montant.valeur) &&
-        Objects.equals(this.devise, montant.devise);
+    Periode periode = (Periode) o;
+    return Objects.equals(this.code, periode.code) &&
+        Objects.equals(this.libelleAffichage, periode.libelleAffichage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(valeur, devise);
+    return Objects.hash(code, libelleAffichage);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Montant {\n");
-    sb.append("    valeur: ").append(toIndentedString(valeur)).append("\n");
-    sb.append("    devise: ").append(toIndentedString(devise)).append("\n");
+    sb.append("class Periode {\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    libelleAffichage: ").append(toIndentedString(libelleAffichage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

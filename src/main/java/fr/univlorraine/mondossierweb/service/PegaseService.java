@@ -38,6 +38,7 @@ import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
 import fr.univlorraine.pegase.api.insgestion.InscriptionsApi;
 import fr.univlorraine.pegase.api.insgestion.PaiementApi;
 import fr.univlorraine.pegase.api.insgestion.PiecesApi;
+import fr.univlorraine.pegase.api.pai.PaiApi;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import fr.univlorraine.pegase.model.insgestion.Apprenant;
@@ -82,7 +83,7 @@ public class PegaseService implements Serializable {
 	
 	// PAI API
 	private ApiClient apiClientPai = new ApiClient();
-	private PaiementApi insApiPai = new PaiementApi();
+	private PaiApi insApiPai = new PaiApi();
 
 	// CHC API
 	private ApiClient apiClientChc = new ApiClient();
