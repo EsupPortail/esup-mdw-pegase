@@ -269,16 +269,16 @@ public class PegaseService implements Serializable {
 		return null;
 	}
 
-	public File attestationDePaiement(String codeApprenant, String cible) {
+	public File attestationDePaiement(String codeApprenant, String periode) {
 
-		log.info("attestationDePaiement codeApprenant : {} - cible : {}", codeApprenant, cible);
+		log.info("attestationDePaiement codeApprenant : {} - cible : {}", codeApprenant, periode);
 
 		// Maj du token pour récupérer le dernier token valide
 		insApiPai.getApiClient().setAccessToken(accessTokenService.getToken());
 
 		try {
 			// Appel de l'API Pégase
-			File certificat = insApiPai.imprimerAttestationDePaiement(etablissement, codeApprenant, cible);
+			File certificat = insApiPai.imprimerAttestationDePaiement(etablissement, codeApprenant, periode);
 			if(certificat != null) {
 				log.info("{} attestationDePaiement OK");
 			} else {
