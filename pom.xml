@@ -41,7 +41,7 @@
 
 		<java.version>11</java.version>
 
-		<vaadin.version>14.6.2</vaadin.version>
+		<vaadin.version>14.6.8</vaadin.version>
 		<!--  <vaadin.version>14.5.1</vaadin.version>-->
 		
 		<gson-fire-version>1.8.4</gson-fire-version>
