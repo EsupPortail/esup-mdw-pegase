@@ -268,7 +268,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 
 	private String getInfoNomPrenom(Apprenant apprenant) {
-		String nom = apprenant.getEtatCivil().getNomUsuel() == null ? apprenant.getEtatCivil().getNomDeNaissance() : apprenant.getEtatCivil().getNomUsuel();
+		String nom = !StringUtils.hasText(apprenant.getEtatCivil().getNomUsuel()) ? apprenant.getEtatCivil().getNomDeNaissance() : apprenant.getEtatCivil().getNomUsuel();
 		String prenom = apprenant.getEtatCivil().getPrenom();
 		return nom + " " + prenom;
 	}
