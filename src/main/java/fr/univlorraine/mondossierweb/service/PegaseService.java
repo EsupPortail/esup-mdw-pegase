@@ -32,12 +32,13 @@ import org.springframework.stereotype.Service;
 
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
+import fr.univlorraine.pegase.api.ApiResponse;
 import fr.univlorraine.pegase.api.chc.InscriptionApi;
 import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
 import fr.univlorraine.pegase.api.insgestion.InscriptionsApi;
-import fr.univlorraine.pegase.api.insgestion.PaiementApi;
 import fr.univlorraine.pegase.api.insgestion.PiecesApi;
+import fr.univlorraine.pegase.api.pai.PaiApi;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import fr.univlorraine.pegase.model.insgestion.Apprenant;
@@ -66,6 +67,8 @@ public class PegaseService implements Serializable {
 	private transient String apiChcUrl;	
 	@Value("${pegase.api.coc.url}")
 	private transient String apiCocUrl;	
+	@Value("${pegase.api.pai.url}")
+	private transient String apiPaiUrl;
 	@Value("${pegase.photo.code}")
 	private transient String codePhoto;	
 	@Value("${pegase.demo.codeapprenant}")
@@ -77,7 +80,10 @@ public class PegaseService implements Serializable {
 	private ApprenantsApi appApiIns = new ApprenantsApi();
 	private InscriptionsApi insApiIns = new InscriptionsApi();
 	private PiecesApi insApiPieces = new PiecesApi();
-	private PaiementApi insApiPaie = new PaiementApi();
+	
+	// PAI API
+	private ApiClient apiClientPai = new ApiClient();
+	private PaiApi insApiPai = new PaiApi();
 
 	// CHC API
 	private ApiClient apiClientChc = new ApiClient();
@@ -95,7 +101,10 @@ public class PegaseService implements Serializable {
 		insApiIns.setApiClient(apiClientIns);
 		appApiIns.setApiClient(apiClientIns);
 		insApiPieces.setApiClient(apiClientIns);
-		insApiPaie.setApiClient(apiClientIns);
+		
+		// Init PAI
+		apiClientPai.setBasePath(apiPaiUrl);
+		insApiPai.setApiClient(apiClientPai);
 
 		// Init CHC
 		apiClientChc.setBasePath(apiChcUrl);
@@ -137,8 +146,6 @@ public class PegaseService implements Serializable {
 	}
 
 	public List<ObjetMaquetteExtension> getCursus(String codeApprenant, String codePeriode) {
-		// Maj du token pour récupérer le dernier token valide
-		insApiChc.getApiClient().setAccessToken(accessTokenService.getToken());
 
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
@@ -163,8 +170,6 @@ public class PegaseService implements Serializable {
 	}
 
 	public List<Chemin> getNotes(String codeApprenant, String codePeriode, String codeChemin) {
-		// Maj du token pour récupérer le dernier token valide
-		pubApiCoc.getApiClient().setAccessToken(accessTokenService.getToken());
 
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
@@ -264,22 +269,23 @@ public class PegaseService implements Serializable {
 		return null;
 	}
 
-	public File attestationDePaiement(String codeApprenant, String cible) {
+	public File attestationDePaiement(String codeApprenant, String periode) {
 
-		log.info("attestationDePaiement codeApprenant : {} - cible : {}", codeApprenant, cible);
+		log.info("attestationDePaiement codeApprenant : {} - cible : {}", codeApprenant, periode);
 
 		// Maj du token pour récupérer le dernier token valide
-		insApiPaie.getApiClient().setAccessToken(accessTokenService.getToken());
+		insApiPai.getApiClient().setAccessToken(accessTokenService.getToken());
 
 		try {
 			// Appel de l'API Pégase
-			File certificat = insApiPaie.imprimerAttestationDePaiement(etablissement, codeApprenant, cible);
-			if(certificat != null) {
-				log.info("{} attestationDePaiement OK");
+			File certificat = insApiPai.imprimerAttestationDePaiement(etablissement, codeApprenant, periode);
+			if(certificat != null ) {
+				log.info("attestationDePaiement OK :  ", certificat.getName());
+				return certificat;
 			} else {
 				log.info("Anomalie lors de l'appel à la methode API : attestationDePaiement");
 			}
-			return certificat;
+			return null;
 		} catch (ApiException e) {
 			log.error("Erreur lors de l'appel à la methode API : attestationDePaiement ",e);
 		}

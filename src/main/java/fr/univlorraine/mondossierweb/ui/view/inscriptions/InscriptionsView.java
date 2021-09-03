@@ -394,7 +394,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					exportAttestationAnchor.getStyle().set("margin-left", "0");
 					exportAttestationAnchor.add(attestationButton);
 					exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
-						() -> exportService.getAttestation(dossier.getApprenant().getCode(),  Utils.getCodeVoeu(inscription))));
+						() -> exportService.getAttestation(dossier.getApprenant().getCode(),  Utils.getCodePeriode(inscription))));
 					exportAttestationAnchor.getElement().getStyle().set("margin-left", "1em");
 					exportAttestationAnchor.setTarget("_blank");
 

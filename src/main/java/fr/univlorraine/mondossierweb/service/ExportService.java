@@ -52,11 +52,11 @@ public class ExportService implements Serializable {
 	 * @param codeFormation
 	 * @return
 	 */
-	public ByteArrayInputStream  getAttestation(String codeApprenant, String codeFormation) {
+	public ByteArrayInputStream  getAttestation(String codeApprenant, String codePeriode) {
 		
-		File file = pegaseService.attestationDePaiement(codeApprenant, codeFormation);
+		File file = pegaseService.attestationDePaiement(codeApprenant, codePeriode);
 
-		return getStream(file,codeApprenant, codeFormation, "attestation de paiement");
+		return getStream(file,codeApprenant, codePeriode, "attestation de paiement");
 
 	}
 
