@@ -32,11 +32,11 @@ import org.springframework.stereotype.Service;
 
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
+import fr.univlorraine.pegase.api.ApiResponse;
 import fr.univlorraine.pegase.api.chc.InscriptionApi;
 import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
 import fr.univlorraine.pegase.api.insgestion.InscriptionsApi;
-import fr.univlorraine.pegase.api.insgestion.PaiementApi;
 import fr.univlorraine.pegase.api.insgestion.PiecesApi;
 import fr.univlorraine.pegase.api.pai.PaiApi;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
@@ -279,12 +279,13 @@ public class PegaseService implements Serializable {
 		try {
 			// Appel de l'API Pégase
 			File certificat = insApiPai.imprimerAttestationDePaiement(etablissement, codeApprenant, periode);
-			if(certificat != null) {
-				log.info("{} attestationDePaiement OK");
+			if(certificat != null ) {
+				log.info("attestationDePaiement OK :  ", certificat.getName());
+				return certificat;
 			} else {
 				log.info("Anomalie lors de l'appel à la methode API : attestationDePaiement");
 			}
-			return certificat;
+			return null;
 		} catch (ApiException e) {
 			log.error("Erreur lors de l'appel à la methode API : attestationDePaiement ",e);
 		}
