@@ -322,7 +322,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				TextField statut = new TextField();
 				statut.setVisible(false);
 				if(inscription.getStatutInscription()!=null) {
-					CmpUtils.valueAndVisibleIfNotNull(statut,inscription.getStatutInscription().getValue());
+					CmpUtils.valueAndVisibleIfNotNull(statut,formatEtat(inscription.getStatutInscription().getValue()));
 					if(inscription.getStatutInscription().getValue().equals(Utils.TEM_INS_VALIDE)) {
 						inscriptionValide =  true;
 					}
@@ -343,7 +343,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					TextField paiement = new TextField();
 					paiement.setVisible(false);
 					if(inscription.getStatutPaiement()!=null) {
-						CmpUtils.valueAndVisibleIfNotNull(paiement,inscription.getStatutPaiement().getValue());
+						CmpUtils.valueAndVisibleIfNotNull(paiement, formatEtat(inscription.getStatutPaiement().getValue()));
 						if(inscription.getStatutPaiement().getValue().equals(Utils.TEM_INS_PAYEE)) {
 							inscriptionPayee =  true;
 						}
@@ -356,7 +356,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					TextField pieces = new TextField();
 					pieces.setVisible(false);
 					if(inscription.getStatutPieces()!=null) {
-						CmpUtils.valueAndVisibleIfNotNull(pieces,inscription.getStatutPieces().getValue());
+						CmpUtils.valueAndVisibleIfNotNull(pieces,formatEtat(inscription.getStatutPieces().getValue()));
 					}
 					pieces.setReadOnly(true);
 					CmpUtils.setShortTextField(pieces);
@@ -672,6 +672,15 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		updateStyle();
 	}
 
+
+
+	private String formatEtat(String value) {
+		if(StringUtils.hasText(value)) {
+			value = value.replaceAll("_", " ");
+			value = Character.toUpperCase(value.charAt(0)) + value.substring(1).toLowerCase();
+		}
+		return value;
+	}
 
 
 	private void displayCursus(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout cursusLayout) {

@@ -72,13 +72,13 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	private final Card anneesCard = new Card(VaadinIcon.INSTITUTION.create(),"", false);
 	private final VerticalLayout parcoursLayout = new VerticalLayout(bacCard, anneesCard);
 
-	private final TextField titreAccesBac=new TextField();
+	//private final TextField titreAccesBac=new TextField();
 	private final TextField anneeBac=new TextField();
 	private final TextField typeBac=new TextField();
 	private final TextField mentionBac=new TextField();
 	private final TextField paysEtbBac=new TextField();
 	private final TextField departementEtbBac=new TextField();
-	private final TextField etablissementBac=new TextField();
+	//private final TextField etablissementBac=new TextField();
 	private final TextField codeIneBac=new TextField();
 
 
@@ -110,8 +110,8 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 		codeIneBac.setReadOnly(true);
 		bacLayout.add(codeIneBac);
 
-		titreAccesBac.setReadOnly(true);
-		bacLayout.add(titreAccesBac);
+		//titreAccesBac.setReadOnly(true);
+		//bacLayout.add(titreAccesBac);
 
 		anneeBac.setReadOnly(true);
 		bacLayout.add(anneeBac);
@@ -128,10 +128,10 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 		departementEtbBac.setReadOnly(true);
 		bacLayout.add(departementEtbBac);
 
-		etablissementBac.setReadOnly(true);
-		bacLayout.add(etablissementBac);
+		//etablissementBac.setReadOnly(true);
+		//bacLayout.add(etablissementBac);
 
-		CmpUtils.setLongTextField(titreAccesBac);
+		//CmpUtils.setLongTextField(titreAccesBac);
 
 		CmpUtils.formatTextField(anneeBac);
 
@@ -143,7 +143,7 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 
 		CmpUtils.setLongTextField(departementEtbBac);
 
-		CmpUtils.setLongTextField(etablissementBac);
+		//CmpUtils.setLongTextField(etablissementBac);
 
 		CmpUtils.setModerateTextField(codeIneBac);
 
@@ -183,13 +183,13 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 		setViewTitle(getTranslation("acces.title"));
 
 		bacCard.getTitre().setText(getTranslation("bac.titre"));
-		titreAccesBac.setLabel(getTranslation("bac.titreacces"));
+		//titreAccesBac.setLabel(getTranslation("bac.titreacces"));
 		anneeBac.setLabel(getTranslation("bac.annee"));
 		typeBac.setLabel(getTranslation("bac.type"));
 		mentionBac.setLabel(getTranslation("bac.mention"));
 		paysEtbBac.setLabel(getTranslation("bac.pays"));
 		departementEtbBac.setLabel(getTranslation("bac.departement"));
-		etablissementBac.setLabel(getTranslation("bac.etablissement"));
+		//etablissementBac.setLabel(getTranslation("bac.etablissement"));
 		codeIneBac.setLabel(getTranslation("bac.codeine"));
 
 		anneesCard.getTitre().setText(getTranslation("annees.titre"));
@@ -230,13 +230,13 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	 * @param apprenant
 	 */
 	private void resetData() {
-		titreAccesBac.setValue("");
+		//titreAccesBac.setValue("");
 		anneeBac.setValue("");
 		typeBac.setValue("");
 		mentionBac.setValue("");
 		paysEtbBac.setValue("");
 		departementEtbBac.setValue("");
-		etablissementBac.setValue("");
+		//etablissementBac.setValue("");
 
 		codeIneBac.setValue("");
 		anneeSupFr.setValue("");
@@ -251,17 +251,17 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 		resetData();
 		if(apprenant != null) {
 			// Mise à jour des infos sur le bac
-			CmpUtils.valueAndVisibleIfNotNull(titreAccesBac,apprenant.getBac().getTitreAcces());
+			//CmpUtils.valueAndVisibleIfNotNull(titreAccesBac,apprenant.getBac().getTitreAcces());
 			CmpUtils.valueAndVisibleIfNotNull(anneeBac,apprenant.getBac().getAnneeObtention());
 			CmpUtils.valueAndVisibleIfNotNull(typeBac,apprenant.getBac().getSerie());
 			CmpUtils.valueAndVisibleIfNotNull(mentionBac,apprenant.getBac().getMention());
 			CmpUtils.valueAndVisibleIfNotNull(paysEtbBac,apprenant.getBac().getPays());
 			if(apprenant.getBac()!=null && apprenant.getBac().getPays()!=null && apprenant.getBac().getPays().equals(Utils.CODE_PAYS_FRANCE)) {
 				CmpUtils.valueAndVisibleIfNotNull(departementEtbBac,apprenant.getBac().getDepartement());
-				CmpUtils.valueAndVisibleIfNotNull(etablissementBac,apprenant.getBac().getEtablissement());
+				//CmpUtils.valueAndVisibleIfNotNull(etablissementBac,apprenant.getBac().getEtablissement());
 			} else {
 				CmpUtils.valueAndVisibleIfNotNull(departementEtbBac,null);
-				CmpUtils.valueAndVisibleIfNotNull(etablissementBac,apprenant.getBac().getEtablissementLibre());
+				//CmpUtils.valueAndVisibleIfNotNull(etablissementBac,apprenant.getBac().getEtablissementLibre());
 			}
 			CmpUtils.valueAndVisibleIfNotNull(codeIneBac,apprenant.getBac().getIne());
 			CmpUtils.valueAndVisibleIfNotNull(anneeSupFr,apprenant.getPremieresInscriptions().getAnneeEnseignementSuperieur());
