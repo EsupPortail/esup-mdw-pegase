@@ -255,14 +255,14 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 
 			// Mise à jour des données de naissance
 			dateNaissance.setValue(Utils.formatStringDateToDisplay(apprenant.getNaissance().getDateDeNaissance()));
-			paysNaissance.setValue(apprenant.getNaissance().getPaysDeNaissance());
+			paysNaissance.setValue(apprenant.getNaissance().getLibellePaysDeNaissance());
 			if(apprenant.getNaissance().getPaysDeNaissance().equals(Utils.CODE_PAYS_FRANCE)) {
-				CmpUtils.valueAndVisibleIfNotNull(communeNaissance,apprenant.getNaissance().getCommuneDeNaissance());
+				CmpUtils.valueAndVisibleIfNotNull(communeNaissance,apprenant.getNaissance().getLibelleCommuneDeNaissance());
 			} else {
 				CmpUtils.valueAndVisibleIfNotNull(communeNaissance,apprenant.getNaissance().getCommuneDeNaissanceEtranger());
 			}
-			CmpUtils.valueAndVisibleIfNotNull(nationaliteNaissance,apprenant.getNaissance().getNationalite());
-			CmpUtils.valueAndVisibleIfNotNull(nationaliteNaissance2,apprenant.getNaissance().getDeuxiemeNationalite());
+			CmpUtils.valueAndVisibleIfNotNull(nationaliteNaissance,apprenant.getNaissance().getLibelleNationalite());
+			CmpUtils.valueAndVisibleIfNotNull(nationaliteNaissance2,apprenant.getNaissance().getLibelleDeuxiemeNationalite());
 
 		}
 	}

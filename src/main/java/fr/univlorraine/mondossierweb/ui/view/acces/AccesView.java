@@ -253,11 +253,11 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 			// Mise à jour des infos sur le bac
 			//CmpUtils.valueAndVisibleIfNotNull(titreAccesBac,apprenant.getBac().getTitreAcces());
 			CmpUtils.valueAndVisibleIfNotNull(anneeBac,apprenant.getBac().getAnneeObtention());
-			CmpUtils.valueAndVisibleIfNotNull(typeBac,apprenant.getBac().getSerie());
-			CmpUtils.valueAndVisibleIfNotNull(mentionBac,apprenant.getBac().getMention());
-			CmpUtils.valueAndVisibleIfNotNull(paysEtbBac,apprenant.getBac().getPays());
+			CmpUtils.valueAndVisibleIfNotNull(typeBac,apprenant.getBac().getLibelleSerie());
+			CmpUtils.valueAndVisibleIfNotNull(mentionBac,apprenant.getBac().getLibelleMention());
+			CmpUtils.valueAndVisibleIfNotNull(paysEtbBac,apprenant.getBac().getLibellePays());
 			if(apprenant.getBac()!=null && apprenant.getBac().getPays()!=null && apprenant.getBac().getPays().equals(Utils.CODE_PAYS_FRANCE)) {
-				CmpUtils.valueAndVisibleIfNotNull(departementEtbBac,apprenant.getBac().getDepartement());
+				CmpUtils.valueAndVisibleIfNotNull(departementEtbBac,apprenant.getBac().getLibelleDepartement());
 				//CmpUtils.valueAndVisibleIfNotNull(etablissementBac,apprenant.getBac().getEtablissement());
 			} else {
 				CmpUtils.valueAndVisibleIfNotNull(departementEtbBac,null);

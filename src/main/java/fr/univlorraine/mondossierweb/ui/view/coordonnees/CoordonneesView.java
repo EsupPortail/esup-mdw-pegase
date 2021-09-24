@@ -476,7 +476,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		paysAdresse.setId(PAYS_ADRESSE + n);
 		paysAdresse.setReadOnly(true);
 		adresseLayout.add(paysAdresse);
-		CmpUtils.valueAndVisibleIfNotNull(paysAdresse,cac.getPays());
+		CmpUtils.valueAndVisibleIfNotNull(paysAdresse,cac.getLibellePays());
 		CmpUtils.setLongTextField(paysAdresse);
 
 
@@ -529,7 +529,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 		if(cac.getPays()!=null && cac.getPays().equals(Utils.CODE_PAYS_FRANCE)) {
 			CmpUtils.valueAndVisibleIfNotNull(codePostalAdresse,cac.getCodePostal());
-			CmpUtils.valueAndVisibleIfNotNull(communeAdresse,cac.getCommune());
+			CmpUtils.valueAndVisibleIfNotNull(communeAdresse,cac.getLibelleCommune());
 		} else {
 			CmpUtils.valueAndVisibleIfNotNull(codePostalAdresse,cac.getCodePostal());
 			CmpUtils.valueAndVisibleIfNotNull(communeAdresse,cac.getLigne5Etranger());
