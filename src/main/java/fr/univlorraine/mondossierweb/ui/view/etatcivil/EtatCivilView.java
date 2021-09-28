@@ -52,7 +52,7 @@ import fr.univlorraine.pegase.model.insgestion.Apprenant;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-@Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_ENSEIGNANT})
+@Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_GESTIONNAIRE})
 @Route(layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
 @SuppressWarnings("serial")

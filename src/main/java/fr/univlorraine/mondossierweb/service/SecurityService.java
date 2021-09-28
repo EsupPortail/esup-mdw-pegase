@@ -147,7 +147,7 @@ public class SecurityService implements VaadinServiceInitListener {
 			.anyMatch(SecurityUtils.ROLE_SUPERADMIN::contains);
 	}
 
-	public boolean isEnseignant() {
+	public boolean isGestionnaire() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		if (authentication == null) {
@@ -158,7 +158,7 @@ public class SecurityService implements VaadinServiceInitListener {
 			.getAuthorities()
 			.stream()
 			.map(GrantedAuthority::getAuthority)
-			.anyMatch(SecurityUtils.ROLE_ENSEIGNANT::contains);
+			.anyMatch(SecurityUtils.ROLE_GESTIONNAIRE::contains);
 	}
 
 	public boolean isAccessGrantedForStudent(String codetu) {
@@ -166,7 +166,7 @@ public class SecurityService implements VaadinServiceInitListener {
 		if(isStudent()) {
 			return codetu.equals(getCodeEtudiant().orElse(null));
 		}
-		return isAdmin() || isEnseignant();
+		return isAdmin() || isGestionnaire();
 	}
 
 	public boolean isAccessGranted(final Class<?> securedClass) {

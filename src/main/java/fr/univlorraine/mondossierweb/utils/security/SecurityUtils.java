@@ -32,7 +32,7 @@ import com.vaadin.flow.shared.ApplicationConstants;
 public final class SecurityUtils {
 	
 	public static final String ROLE_ETUDIANT = "ROLE_ETUDIANT";
-	public static final String ROLE_ENSEIGNANT = "ROLE_ENSEIGNANT";
+	public static final String ROLE_GESTIONNAIRE = "ROLE_GESTIONNAIRE";
 	public static final String ROLE_SUPERADMIN = "ROLE_SUPERADMIN";
 
 	private SecurityUtils() {

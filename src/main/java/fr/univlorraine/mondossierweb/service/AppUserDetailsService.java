@@ -37,7 +37,6 @@ import org.springframework.util.Assert;
 import com.vaadin.flow.server.VaadinSession;
 
 import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
-import fr.univlorraine.mondossierweb.model.app.repository.PreferencesUtilisateurRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.UtilisateurRepository;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
@@ -49,19 +48,13 @@ public class AppUserDetailsService implements UserDetailsService {
 	private transient UtilisateurRepository utilisateurRepository;
 
 	@Autowired
-	private transient PreferencesUtilisateurRepository preferencesUtilisateurRepository;
-
-	@Autowired
 	protected transient LdapService ldapService;
-	
-	@Autowired
-	private transient PegaseService pegaseService;
 
 	@Value("${app.superadmins:}")
 	private transient List<String> superAdmins;
 
-	@Value("${acces.enseignant.actif}")
-	private transient boolean accesEnseignantActif;
+	@Value("${acces.gestionnaire.actif}")
+	private transient boolean accesGestionnaireActif;
 
 	@Value("${acces.etudiant.actif}")
 	private transient boolean accesEtudiantActif;
@@ -94,12 +87,12 @@ public class AppUserDetailsService implements UserDetailsService {
 				// Nécessaire de le faire à cet endroit?
 				// utilisateur.setDossier(pegaseService.recupererDossierApprenant(utilisateur.getCodEtuDossier()));
 			} else {
-				// 3- Si l'accès enseignant est activé
-				if(accesEnseignantActif) {
-					// 3.1 - On cherche à savoir si l'utilisateur est enseignant
-					LdapPerson teacher = ldapService.findTeacherByUid(username);
+				// 3- Si l'accès gestionnaire est activé
+				if(accesGestionnaireActif) {
+					// 3.1 - On cherche à savoir si l'utilisateur est gestionnaire
+					LdapPerson teacher = ldapService.findAdministratorByUid(username);
 					if(teacher != null) {
-						utilisateur.getAuthorities().add(new SimpleGrantedAuthority(SecurityUtils.ROLE_ENSEIGNANT));
+						utilisateur.getAuthorities().add(new SimpleGrantedAuthority(SecurityUtils.ROLE_GESTIONNAIRE));
 						utilisateur.setDisplayName(teacher.getDisplayName());
 					}
 				}

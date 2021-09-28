@@ -52,7 +52,7 @@ import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-@Secured({SecurityUtils.ROLE_SUPERADMIN, SecurityUtils.ROLE_ENSEIGNANT})
+@Secured({SecurityUtils.ROLE_SUPERADMIN, SecurityUtils.ROLE_GESTIONNAIRE})
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
