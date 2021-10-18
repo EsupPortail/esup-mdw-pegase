@@ -63,7 +63,7 @@ import fr.univlorraine.pegase.model.insgestion.DemandeDeContactSimple;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-@Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_ENSEIGNANT})
+@Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_GESTIONNAIRE})
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
@@ -476,7 +476,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		paysAdresse.setId(PAYS_ADRESSE + n);
 		paysAdresse.setReadOnly(true);
 		adresseLayout.add(paysAdresse);
-		CmpUtils.valueAndVisibleIfNotNull(paysAdresse,cac.getPays());
+		CmpUtils.valueAndVisibleIfNotNull(paysAdresse,cac.getLibellePays());
 		CmpUtils.setLongTextField(paysAdresse);
 
 
@@ -529,7 +529,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 		if(cac.getPays()!=null && cac.getPays().equals(Utils.CODE_PAYS_FRANCE)) {
 			CmpUtils.valueAndVisibleIfNotNull(codePostalAdresse,cac.getCodePostal());
-			CmpUtils.valueAndVisibleIfNotNull(communeAdresse,cac.getCommune());
+			CmpUtils.valueAndVisibleIfNotNull(communeAdresse,cac.getLibelleCommune());
 		} else {
 			CmpUtils.valueAndVisibleIfNotNull(codePostalAdresse,cac.getCodePostal());
 			CmpUtils.valueAndVisibleIfNotNull(communeAdresse,cac.getLigne5Etranger());

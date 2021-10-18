@@ -20,20 +20,22 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.VueContact;
-import fr.univlorraine.pegase.model.insgestion.VueContactAdresseAllOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * VueContactAdresse
+ * ContactAdresseCompletAllOf
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-09-23T16:13:33.468+02:00[Europe/Paris]")
-public class VueContactAdresse extends VueContact {
+public class ContactAdresseCompletAllOf {
   public static final String SERIALIZED_NAME_PAYS = "pays";
   @SerializedName(SERIALIZED_NAME_PAYS)
   private String pays;
+
+  public static final String SERIALIZED_NAME_LIBELLE_PAYS = "libellePays";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_PAYS)
+  private String libellePays;
 
   public static final String SERIALIZED_NAME_LIGNE1_OU_ETAGE = "ligne1OuEtage";
   @SerializedName(SERIALIZED_NAME_LIGNE1_OU_ETAGE)
@@ -63,8 +65,12 @@ public class VueContactAdresse extends VueContact {
   @SerializedName(SERIALIZED_NAME_COMMUNE)
   private String commune;
 
+  public static final String SERIALIZED_NAME_LIBELLE_COMMUNE = "libelleCommune";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_COMMUNE)
+  private String libelleCommune;
 
-  public VueContactAdresse pays(String pays) {
+
+  public ContactAdresseCompletAllOf pays(String pays) {
     
     this.pays = pays;
     return this;
@@ -86,7 +92,30 @@ public class VueContactAdresse extends VueContact {
   }
 
 
-  public VueContactAdresse ligne1OuEtage(String ligne1OuEtage) {
+  public ContactAdresseCompletAllOf libellePays(String libellePays) {
+    
+    this.libellePays = libellePays;
+    return this;
+  }
+
+   /**
+   * libelle du pays
+   * @return libellePays
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "libelle du pays")
+
+  public String getLibellePays() {
+    return libellePays;
+  }
+
+
+  public void setLibellePays(String libellePays) {
+    this.libellePays = libellePays;
+  }
+
+
+  public ContactAdresseCompletAllOf ligne1OuEtage(String ligne1OuEtage) {
     
     this.ligne1OuEtage = ligne1OuEtage;
     return this;
@@ -109,7 +138,7 @@ public class VueContactAdresse extends VueContact {
   }
 
 
-  public VueContactAdresse ligne2OuBatiment(String ligne2OuBatiment) {
+  public ContactAdresseCompletAllOf ligne2OuBatiment(String ligne2OuBatiment) {
     
     this.ligne2OuBatiment = ligne2OuBatiment;
     return this;
@@ -132,7 +161,7 @@ public class VueContactAdresse extends VueContact {
   }
 
 
-  public VueContactAdresse ligne3OuVoie(String ligne3OuVoie) {
+  public ContactAdresseCompletAllOf ligne3OuVoie(String ligne3OuVoie) {
     
     this.ligne3OuVoie = ligne3OuVoie;
     return this;
@@ -155,7 +184,7 @@ public class VueContactAdresse extends VueContact {
   }
 
 
-  public VueContactAdresse ligne4OuComplement(String ligne4OuComplement) {
+  public ContactAdresseCompletAllOf ligne4OuComplement(String ligne4OuComplement) {
     
     this.ligne4OuComplement = ligne4OuComplement;
     return this;
@@ -178,7 +207,7 @@ public class VueContactAdresse extends VueContact {
   }
 
 
-  public VueContactAdresse ligne5Etranger(String ligne5Etranger) {
+  public ContactAdresseCompletAllOf ligne5Etranger(String ligne5Etranger) {
     
     this.ligne5Etranger = ligne5Etranger;
     return this;
@@ -201,7 +230,7 @@ public class VueContactAdresse extends VueContact {
   }
 
 
-  public VueContactAdresse codePostal(String codePostal) {
+  public ContactAdresseCompletAllOf codePostal(String codePostal) {
     
     this.codePostal = codePostal;
     return this;
@@ -224,7 +253,7 @@ public class VueContactAdresse extends VueContact {
   }
 
 
-  public VueContactAdresse commune(String commune) {
+  public ContactAdresseCompletAllOf commune(String commune) {
     
     this.commune = commune;
     return this;
@@ -247,6 +276,29 @@ public class VueContactAdresse extends VueContact {
   }
 
 
+  public ContactAdresseCompletAllOf libelleCommune(String libelleCommune) {
+    
+    this.libelleCommune = libelleCommune;
+    return this;
+  }
+
+   /**
+   * Le libelle de la commune de l&#39;adresse en France (vide si adresse étrangère)
+   * @return libelleCommune
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "Le libelle de la commune de l'adresse en France (vide si adresse étrangère)")
+
+  public String getLibelleCommune() {
+    return libelleCommune;
+  }
+
+
+  public void setLibelleCommune(String libelleCommune) {
+    this.libelleCommune = libelleCommune;
+  }
+
+
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -255,30 +307,31 @@ public class VueContactAdresse extends VueContact {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    VueContactAdresse vueContactAdresse = (VueContactAdresse) o;
-    return Objects.equals(this.pays, vueContactAdresse.pays) &&
-        Objects.equals(this.ligne1OuEtage, vueContactAdresse.ligne1OuEtage) &&
-        Objects.equals(this.ligne2OuBatiment, vueContactAdresse.ligne2OuBatiment) &&
-        Objects.equals(this.ligne3OuVoie, vueContactAdresse.ligne3OuVoie) &&
-        Objects.equals(this.ligne4OuComplement, vueContactAdresse.ligne4OuComplement) &&
-        Objects.equals(this.ligne5Etranger, vueContactAdresse.ligne5Etranger) &&
-        Objects.equals(this.codePostal, vueContactAdresse.codePostal) &&
-        Objects.equals(this.commune, vueContactAdresse.commune) &&
-        super.equals(o);
+    ContactAdresseCompletAllOf contactAdresseCompletAllOf = (ContactAdresseCompletAllOf) o;
+    return Objects.equals(this.pays, contactAdresseCompletAllOf.pays) &&
+        Objects.equals(this.libellePays, contactAdresseCompletAllOf.libellePays) &&
+        Objects.equals(this.ligne1OuEtage, contactAdresseCompletAllOf.ligne1OuEtage) &&
+        Objects.equals(this.ligne2OuBatiment, contactAdresseCompletAllOf.ligne2OuBatiment) &&
+        Objects.equals(this.ligne3OuVoie, contactAdresseCompletAllOf.ligne3OuVoie) &&
+        Objects.equals(this.ligne4OuComplement, contactAdresseCompletAllOf.ligne4OuComplement) &&
+        Objects.equals(this.ligne5Etranger, contactAdresseCompletAllOf.ligne5Etranger) &&
+        Objects.equals(this.codePostal, contactAdresseCompletAllOf.codePostal) &&
+        Objects.equals(this.commune, contactAdresseCompletAllOf.commune) &&
+        Objects.equals(this.libelleCommune, contactAdresseCompletAllOf.libelleCommune);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pays, ligne1OuEtage, ligne2OuBatiment, ligne3OuVoie, ligne4OuComplement, ligne5Etranger, codePostal, commune, super.hashCode());
+    return Objects.hash(pays, libellePays, ligne1OuEtage, ligne2OuBatiment, ligne3OuVoie, ligne4OuComplement, ligne5Etranger, codePostal, commune, libelleCommune);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class VueContactAdresse {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("class ContactAdresseCompletAllOf {\n");
     sb.append("    pays: ").append(toIndentedString(pays)).append("\n");
+    sb.append("    libellePays: ").append(toIndentedString(libellePays)).append("\n");
     sb.append("    ligne1OuEtage: ").append(toIndentedString(ligne1OuEtage)).append("\n");
     sb.append("    ligne2OuBatiment: ").append(toIndentedString(ligne2OuBatiment)).append("\n");
     sb.append("    ligne3OuVoie: ").append(toIndentedString(ligne3OuVoie)).append("\n");
@@ -286,6 +339,7 @@ public class VueContactAdresse extends VueContact {
     sb.append("    ligne5Etranger: ").append(toIndentedString(ligne5Etranger)).append("\n");
     sb.append("    codePostal: ").append(toIndentedString(codePostal)).append("\n");
     sb.append("    commune: ").append(toIndentedString(commune)).append("\n");
+    sb.append("    libelleCommune: ").append(toIndentedString(libelleCommune)).append("\n");
     sb.append("}");
     return sb.toString();
   }

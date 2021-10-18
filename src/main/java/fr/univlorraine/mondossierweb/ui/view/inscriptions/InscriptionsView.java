@@ -82,7 +82,7 @@ import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-@Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_ENSEIGNANT})
+@Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_GESTIONNAIRE})
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
@@ -322,7 +322,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				TextField statut = new TextField();
 				statut.setVisible(false);
 				if(inscription.getStatutInscription()!=null) {
-					CmpUtils.valueAndVisibleIfNotNull(statut,inscription.getStatutInscription().getValue());
+					CmpUtils.valueAndVisibleIfNotNull(statut,formatEtat(inscription.getStatutInscription().getValue()));
 					if(inscription.getStatutInscription().getValue().equals(Utils.TEM_INS_VALIDE)) {
 						inscriptionValide =  true;
 					}
@@ -343,7 +343,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					TextField paiement = new TextField();
 					paiement.setVisible(false);
 					if(inscription.getStatutPaiement()!=null) {
-						CmpUtils.valueAndVisibleIfNotNull(paiement,inscription.getStatutPaiement().getValue());
+						CmpUtils.valueAndVisibleIfNotNull(paiement, formatEtat(inscription.getStatutPaiement().getValue()));
 						if(inscription.getStatutPaiement().getValue().equals(Utils.TEM_INS_PAYEE)) {
 							inscriptionPayee =  true;
 						}
@@ -356,7 +356,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					TextField pieces = new TextField();
 					pieces.setVisible(false);
 					if(inscription.getStatutPieces()!=null) {
-						CmpUtils.valueAndVisibleIfNotNull(pieces,inscription.getStatutPieces().getValue());
+						CmpUtils.valueAndVisibleIfNotNull(pieces,formatEtat(inscription.getStatutPieces().getValue()));
 					}
 					pieces.setReadOnly(true);
 					CmpUtils.setShortTextField(pieces);
@@ -418,10 +418,23 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								StreamResource resource = new StreamResource("photo_"+etudiantController.getDossierConsulte()+".jpg", () -> photo);
 								Image image = new Image(resource, "photographie");
 								image.setHeight("10em");
+								image.getStyle().set("border-radius", "0.8em");
+								image.getStyle().set("border", "0.1em solid lightgray");
 								photoLayout.removeAll();
 								photoLayout.add(image);
 								photoButton.setVisible(false);
 
+							} else {
+								if(StringUtils.hasText(getTranslation("photo.aucune"))) {
+									Label noPhotoLabel=new Label(getTranslation("photo.aucune"));
+									photoLayout.getStyle().set("font-style", "italic");
+									photoLayout.getStyle().set("border-radius", "0.8em");
+									photoLayout.getStyle().set("padding", "3em 1em 3em 1em");
+									photoLayout.getStyle().set("border", "0.1em dashed lightgray");
+									photoLayout.removeAll();
+									photoLayout.add(noPhotoLabel);
+								}
+								photoButton.setVisible(false);
 							}
 						});
 
@@ -672,6 +685,15 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		updateStyle();
 	}
 
+
+
+	private String formatEtat(String value) {
+		if(StringUtils.hasText(value)) {
+			value = value.replaceAll("_", " ");
+			value = Character.toUpperCase(value.charAt(0)) + value.substring(1).toLowerCase();
+		}
+		return value;
+	}
 
 
 	private void displayCursus(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout cursusLayout) {

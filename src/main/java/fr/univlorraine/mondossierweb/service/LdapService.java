@@ -55,8 +55,8 @@ public class LdapService implements Serializable {
 	private transient String ldapMailAttribute;
 	@Value("${ldap.filtre.etudiant}")
 	private transient String ldapFiltreEtudiant;
-	@Value("${ldap.filtre.etudiant}")
-	private transient String ldapFiltreEnseignant;
+	@Value("${ldap.filtre.gestionnaire}")
+	private transient String ldapFiltreGestionnaire;
 	@Value("${ldap.filtre.limit}")
 	private transient int maxLimitLdap;
 
@@ -95,10 +95,10 @@ public class LdapService implements Serializable {
 
 	}
 
-	public LdapPerson findTeacherByUid(String username) {
+	public LdapPerson findAdministratorByUid(String username) {
 		log.info("findTeacherByUid : {}", username);
 
-		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+ldapFiltreEnseignant+"("+ldapLoginAttribute+"=" + username + "))", new PersonAttributesMapper());
+		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+ldapFiltreGestionnaire+"("+ldapLoginAttribute+"=" + username + "))", new PersonAttributesMapper());
 
 		return (peoples!=null && !peoples.isEmpty()) ? peoples.get(0) : null ;
 	}
