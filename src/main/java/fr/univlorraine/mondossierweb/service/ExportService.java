@@ -2,7 +2,6 @@ package fr.univlorraine.mondossierweb.service;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,8 +9,6 @@ import java.io.Serializable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.vaadin.flow.server.StreamResource;
 
 import lombok.extern.slf4j.Slf4j;
 

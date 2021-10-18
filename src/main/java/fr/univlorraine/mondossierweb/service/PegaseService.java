@@ -240,7 +240,8 @@ public class PegaseService implements Serializable {
 				}
 				return photo;
 			} catch (ApiException e) {
-				log.error("Erreur lors de l'appel à la methode API : contenuPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {}", codeApprenant, etablissement, cible, codePhoto, e);
+				// Erreur lors de la récupération de la photo. Un simple warning
+				log.warn("Erreur lors de l'appel à la methode API : contenuPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {}", codeApprenant, etablissement, cible, codePhoto, e);
 			}
 		}
 		return null;

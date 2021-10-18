@@ -418,10 +418,23 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								StreamResource resource = new StreamResource("photo_"+etudiantController.getDossierConsulte()+".jpg", () -> photo);
 								Image image = new Image(resource, "photographie");
 								image.setHeight("10em");
+								image.getStyle().set("border-radius", "0.8em");
+								image.getStyle().set("border", "0.1em solid lightgray");
 								photoLayout.removeAll();
 								photoLayout.add(image);
 								photoButton.setVisible(false);
 
+							} else {
+								if(StringUtils.hasText(getTranslation("photo.aucune"))) {
+									Label noPhotoLabel=new Label(getTranslation("photo.aucune"));
+									photoLayout.getStyle().set("font-style", "italic");
+									photoLayout.getStyle().set("border-radius", "0.8em");
+									photoLayout.getStyle().set("padding", "3em 1em 3em 1em");
+									photoLayout.getStyle().set("border", "0.1em dashed lightgray");
+									photoLayout.removeAll();
+									photoLayout.add(noPhotoLabel);
+								}
+								photoButton.setVisible(false);
 							}
 						});
 
