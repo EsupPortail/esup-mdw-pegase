@@ -24,6 +24,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
+import fr.univlorraine.mondossierweb.ui.component.TextLabel;
 import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
 
 /**
@@ -34,6 +35,12 @@ public final class CmpUtils {
 
 	public static void formatTextField(TextField tf) {
 		tf.getStyle().set("margin", "0em");
+		//tf.addClassName("nice-textfield");
+		//tf.addThemeName("nice-label");
+	}
+	
+	public static void formatTextLabel(TextLabel tl) {
+		tl.getStyle().set("margin", "0em");
 		//tf.addClassName("nice-textfield");
 		//tf.addThemeName("nice-label");
 	}
@@ -50,6 +57,12 @@ public final class CmpUtils {
 		tf.setMaxWidth("20em");
 	}
 	
+	public static void setModerateTextLabel(TextLabel tl) {
+		formatTextLabel(tl);
+		tl.setWidthFull();
+		tl.setMaxWidth("20em");
+	}
+	
 	public static void setShortTextField(TextField tf) {
 		formatTextField(tf);
 		tf.setWidthFull();
@@ -63,6 +76,16 @@ public final class CmpUtils {
 		}	else {
 			cmp.setVisible(false);
 		}
+	}
+
+	public static void valueAndVisibleIfNotNull(TextLabel label, String value) {
+		if(StringUtils.hasText(value)) {
+			label.setValeur(value);
+			label.setVisible(true);
+		}	else {
+			label.setVisible(false);
+		}
+		
 	}
 
 	/*public static void setBackgroundLogo(VerticalLayout view) {
