@@ -518,7 +518,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						if(afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
 							verticalInfoPhotoAndExportLayout.setVisible(false);
 							verticalInfoPhotoAndExportLayout.addClassName("ddrop");
-							flexInfoAndPhotoLayout.addClassName("ddrop");
+							//flexInfoAndPhotoLayout.addClassName("ddrop");
 							Button displayDetailButton=new Button("", VaadinIcon.ANGLE_DOWN.create());
 							displayDetailButton.getStyle().set("margin", "auto");
 							displayDetailButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);

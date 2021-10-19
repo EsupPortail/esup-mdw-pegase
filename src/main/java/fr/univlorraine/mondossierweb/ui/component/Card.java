@@ -53,6 +53,7 @@ public class Card extends VerticalLayout {
 			titreLayout.add(altButton);
 			this.add(titreLayout);
 			
+			//alt.addClassName("ddrop");
 			this.add(alt);
 			alt.getStyle().set("padding", "0");
 			alt.setVisible(false);
