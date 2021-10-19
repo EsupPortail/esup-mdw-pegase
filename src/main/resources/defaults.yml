@@ -14,7 +14,7 @@ spring:
     jpa:
         open-in-view: false
     messages:
-        basename: i18n/vaadin-messages, i18n/messages
+        basename: i18n/vaadin-messages, i18n/vaadin-messages-default, i18n/messages, i18n/messages-default
 
 vaadin:
     heartbeatInterval: 15
