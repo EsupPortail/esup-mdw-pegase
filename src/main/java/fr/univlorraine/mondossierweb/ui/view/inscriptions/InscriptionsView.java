@@ -462,13 +462,15 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					infoLayout.setFlexBasis("24em", formation);
 					verticalLayout.add(infoLayout);
 
-					FlexLayout flexLayout = new FlexLayout();
+					VerticalLayout verticalInfoPhotoAndExportLayout= new VerticalLayout();
+					verticalInfoPhotoAndExportLayout.getStyle().set("padding", "0");
+					
+					FlexLayout flexInfoAndPhotoLayout = new FlexLayout();
 					if(afficherDetailInscription.equals(Utils.DETAIL_INS_AFFICHE)){
-						flexLayout.getStyle().set("border-top", "1px solid lightgray");
+						flexInfoAndPhotoLayout.getStyle().set("border-top", "1px solid lightgray");
 					}
-					flexLayout.getStyle().set("padding-top", "1em");
-					flexLayout.getStyle().set("padding-bottom", "1em");
-					flexLayout.getStyle().set("margin-top", "0");
+					flexInfoAndPhotoLayout.getStyle().set("padding-top", "1em");
+					flexInfoAndPhotoLayout.getStyle().set("margin-top", "0");
 					VerticalLayout detailInscriptionLayout = new VerticalLayout();
 					detailInscriptionLayout.getStyle().set("padding", "0");
 					detailInscriptionLayout.add(regime);
@@ -481,20 +483,20 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					photoLayout.addComponentAsFirst(photoButton);
 
 					//Layout des boutons
-					FlexLayout buttonLayout = new FlexLayout();
-					buttonLayout.setSizeUndefined();
-					buttonLayout.getStyle().set("padding", "0");
-					buttonLayout.getStyle().set("margin", "auto");
+					FlexLayout buttonExportLayout = new FlexLayout();
+					buttonExportLayout.setSizeUndefined();
+					buttonExportLayout.getStyle().set("padding", "0");
+					buttonExportLayout.getStyle().set("margin", "auto");
 					exportCertificatAnchor.setMinWidth("15em");
 					exportCertificatAnchor.getStyle().set("margin", "auto");
 					exportCertificatAnchor.getStyle().set("padding", "1em");
-					buttonLayout.add(exportCertificatAnchor);
+					buttonExportLayout.add(exportCertificatAnchor);
 					exportAttestationAnchor.setMinWidth("15em");
 					exportAttestationAnchor.getStyle().set("margin", "auto");
 					exportAttestationAnchor.getStyle().set("padding", "1em");
-					buttonLayout.add(exportAttestationAnchor);
-					buttonLayout.setFlexWrap(FlexWrap.WRAP);
-					buttonLayout.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
+					buttonExportLayout.add(exportAttestationAnchor);
+					buttonExportLayout.setFlexWrap(FlexWrap.WRAP);
+					buttonExportLayout.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
 					if(inscriptionEnCours && !inscriptionValide) {
 						exportCertificatAnchor.setVisible(false);
 					}
@@ -502,38 +504,43 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						exportAttestationAnchor.setVisible(false);
 					}
 
+					flexInfoAndPhotoLayout.getStyle().set("border-top", "1px solid lightgray");
+					flexInfoAndPhotoLayout.add(detailInscriptionLayout);
+					flexInfoAndPhotoLayout.add(photoLayout);
 
-					flexLayout.add(detailInscriptionLayout);
-					flexLayout.add(photoLayout);
-
+					FlexLayout flexDropDownButtonLayout= new FlexLayout();
+					flexDropDownButtonLayout.setVisible(false);
+					flexDropDownButtonLayout.getStyle().set("padding-bottom","1em");
+					flexDropDownButtonLayout.setWidthFull();
+					
 					if(afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE) || afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON) ) {
-						detailInscriptionLayout.setVisible(false);
-						photoLayout.setVisible(false);
-						buttonLayout.setVisible(false);
+						verticalInfoPhotoAndExportLayout.setVisible(false);
 						if(afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
-							detailInscriptionLayout.addClassName("vflip");
+							verticalInfoPhotoAndExportLayout.setVisible(false);
+							verticalInfoPhotoAndExportLayout.addClassName("ddrop");
+							flexInfoAndPhotoLayout.addClassName("ddrop");
 							Button displayDetailButton=new Button("", VaadinIcon.ANGLE_DOWN.create());
 							displayDetailButton.getStyle().set("margin", "auto");
 							displayDetailButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
 							displayDetailButton.addClickListener(c-> {
-								flexLayout.getStyle().set("border-top", "1px solid lightgray");
-								detailInscriptionLayout.setVisible(true);
-								photoLayout.setVisible(true);
-								buttonLayout.setVisible(true);
-								displayDetailButton.setVisible(false);
+								flexDropDownButtonLayout.setVisible(false);
+								verticalInfoPhotoAndExportLayout.setVisible(true);
 							});
 							listButtonDetailInscription.add(displayDetailButton);
-							flexLayout. add(displayDetailButton);
+							flexDropDownButtonLayout.add(displayDetailButton);
+							flexDropDownButtonLayout.setVisible(true);
 						}
 					}
-					//flexLayout.add(buttonLayout);
-					flexLayout.setWidthFull();
-					flexLayout.setJustifyContentMode(JustifyContentMode.START);
-					flexLayout.setFlexWrap(FlexWrap.WRAP);
-					flexLayout.setFlexBasis("18em", detailInscriptionLayout);
-					//flexLayout.setFlexBasis("10em", buttonLayout);
-					verticalLayout.add(flexLayout);
-					verticalLayout.add(buttonLayout);
+					flexInfoAndPhotoLayout.setWidthFull();
+					flexInfoAndPhotoLayout.setJustifyContentMode(JustifyContentMode.START);
+					flexInfoAndPhotoLayout.setFlexWrap(FlexWrap.WRAP);
+					flexInfoAndPhotoLayout.setFlexBasis("18em", detailInscriptionLayout);
+					verticalInfoPhotoAndExportLayout.add(flexInfoAndPhotoLayout);
+					verticalInfoPhotoAndExportLayout.add(buttonExportLayout);
+					verticalLayout.add(verticalInfoPhotoAndExportLayout);
+					if(flexDropDownButtonLayout.isVisible()) {
+						verticalLayout.add(flexDropDownButtonLayout);
+					}
 
 					// Cursus
 					Dialog cursusDialog = new Dialog();
