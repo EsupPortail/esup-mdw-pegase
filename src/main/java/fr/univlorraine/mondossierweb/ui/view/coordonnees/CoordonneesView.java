@@ -182,40 +182,40 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 			//log.info("Recherche du message pour : {}", type);
 			switch(type) {
 			case NOM_TEL :
-				t.setTitre(getTranslation("tel.nom"));
+				t.setLabel(getTranslation("tel.nom"));
 				break;
 			case TEL :
-				t.setTitre(getTranslation("tel.libelle"));
+				t.setLabel(getTranslation("tel.libelle"));
 				break;
 			case NOM_MAIL :
-				t.setTitre(getTranslation("mail.nom"));
+				t.setLabel(getTranslation("mail.nom"));
 				break;
 			case MAIL :
-				t.setTitre(getTranslation("mail.libelle"));
+				t.setLabel(getTranslation("mail.libelle"));
 				break;
 			case NOM_ADRESSE :
-				t.setTitre(getTranslation("adresse.nom"));
+				t.setLabel(getTranslation("adresse.nom"));
 				break;
 			case PAYS_ADRESSE :
-				t.setTitre(getTranslation("adresse.pays"));
+				t.setLabel(getTranslation("adresse.pays"));
 				break;
 			case COMP1_ADRESSE :
-				t.setTitre(getTranslation("adresse.compl1"));
+				t.setLabel(getTranslation("adresse.compl1"));
 				break;
 			case COMP2_ADRESSE :
-				t.setTitre(getTranslation("adresse.compl2"));
+				t.setLabel(getTranslation("adresse.compl2"));
 				break;
 			case NUM_VOIE_ADRESSE :
-				t.setTitre(getTranslation("adresse.numvoie"));
+				t.setLabel(getTranslation("adresse.numvoie"));
 				break;
 			case LIEU_SERV_ADRESSE :
-				t.setTitre(getTranslation("adresse.lieuservice"));
+				t.setLabel(getTranslation("adresse.lieuservice"));
 				break;
 			case CODE_POSTAL_ADRESSE :
-				t.setTitre(getTranslation("adresse.codepostal"));
+				t.setLabel(getTranslation("adresse.codepostal"));
 				break;
 			case COMMUNE_ADRESSE :
-				t.setTitre(getTranslation("adresse.commune"));
+				t.setLabel(getTranslation("adresse.commune"));
 				break;
 
 			}
@@ -338,7 +338,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 		TextLabel contact=new TextLabel();
 		contactLayout.add(contact);
-		contact.setTitre(c.getDemandeDeContact().getLibelleAffichage());
+		contact.setLabel(c.getDemandeDeContact().getLibelleAffichage());
 		CmpUtils.valueAndVisibleIfNotNull(contact,getValue(c));
 		CmpUtils.setModerateTextLabel(contact);
 
@@ -358,7 +358,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 		TextLabel contact=new TextLabel();
 		contactLayout.add(contact);
-		contact.setTitre(libelle+ " ("+c.getProprietaire()+")");
+		contact.setLabel(libelle+ " ("+c.getProprietaire()+")");
 		CmpUtils.valueAndVisibleIfNotNull(contact,getValue(c));
 		CmpUtils.setModerateTextLabel(contact);
 

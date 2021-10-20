@@ -10,29 +10,28 @@ import lombok.Getter;
 public class TextLabel extends VerticalLayout {
 
 	@Getter
-	private final Label titre = new Label();
+	private final Label label = new Label();
 	@Getter
-	private final Label valeur = new Label();
+	private final Label value = new Label();
 
 
 	public TextLabel() {
 		super();
 		//addClassName("flip");
 		this.setClassName("text-label");
-		titre.setClassName("label-titre");
-		this.add(titre);
-		valeur.setClassName("label-valeur");
-		this.add(valeur);
+		label.setClassName("label-titre");
+		this.add(label);
+		value.setClassName("label-valeur");
+		this.add(value);
 	}
 	
-	public void setTitre(String text) {
-		titre.setText(text);
+	public void setLabel(String text) {
+		label.setText(text);
 	}
 	
-	public void setValeur(String text) {
-		valeur.setText(text);
+	public void setValue(String text) {
+		value.setText(text);
 	}
-
 
 	public void updateStyle() {
 			/*this.getStyle().set("border", "0.1em solid");

@@ -53,7 +53,7 @@ public class PreferencesService {
 		ppk.setPrefId(pref);
 		PreferencesUtilisateur p = new PreferencesUtilisateur();
 		p.setId(ppk);
-		p.setValeur(value);
+		p.setValue(value);
 		p.setLastUpdate(LocalDateTime.now());
 		prefUtilRepository.save(p);
 	}

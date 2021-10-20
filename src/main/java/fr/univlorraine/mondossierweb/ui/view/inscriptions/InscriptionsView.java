@@ -180,22 +180,22 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 		
 		for(TextLabel tl : listTextLabelFormation) {
-			tl.setTitre(getTranslation("inscription.formation"));
+			tl.setLabel(getTranslation("inscription.formation"));
 		}
 		for(TextLabel tf : listTextLabelPeriode) {
-			tf.setTitre(getTranslation("inscription.periode"));
+			tf.setLabel(getTranslation("inscription.periode"));
 		}
 		for(TextLabel tf : listTextLabelRegime) {
-			tf.setTitre(getTranslation("inscription.regime"));
+			tf.setLabel(getTranslation("inscription.regime"));
 		}
 		for(TextLabel tf : listTextLabelStatut) {
-			tf.setTitre(getTranslation("inscription.statut"));
+			tf.setLabel(getTranslation("inscription.statut"));
 		}
 		for(TextLabel tf : listTextLabelPaiement) {
-			tf.setTitre(getTranslation("inscription.paiement"));
+			tf.setLabel(getTranslation("inscription.paiement"));
 		}
 		for(TextLabel tf : listTextLabelPieces) {
-			tf.setTitre(getTranslation("inscription.pieces"));
+			tf.setLabel(getTranslation("inscription.pieces"));
 		}
 		for(Button b : listButtonCertificat) {
 			b.setText(getTranslation("inscription.certificat"));

@@ -78,7 +78,7 @@ public class NotationGpa {
   }
 
 
-  public void setValeur(String valeur) {
+  public void setValue(String valeur) {
     this.valeur = valeur;
   }
 

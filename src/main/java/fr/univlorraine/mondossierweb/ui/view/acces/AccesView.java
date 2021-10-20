@@ -160,18 +160,18 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 
 		bacCard.getTitre().setText(getTranslation("bac.titre"));
 		//titreAccesBac.setLabel(getTranslation("bac.titreacces"));
-		anneeBac.setTitre(getTranslation("bac.annee"));
-		typeBac.setTitre(getTranslation("bac.type"));
-		mentionBac.setTitre(getTranslation("bac.mention"));
-		paysEtbBac.setTitre(getTranslation("bac.pays"));
-		departementEtbBac.setTitre(getTranslation("bac.departement"));
+		anneeBac.setLabel(getTranslation("bac.annee"));
+		typeBac.setLabel(getTranslation("bac.type"));
+		mentionBac.setLabel(getTranslation("bac.mention"));
+		paysEtbBac.setLabel(getTranslation("bac.pays"));
+		departementEtbBac.setLabel(getTranslation("bac.departement"));
 		//etablissementBac.setLabel(getTranslation("bac.etablissement"));
-		codeIneBac.setTitre(getTranslation("bac.codeine"));
+		codeIneBac.setLabel(getTranslation("bac.codeine"));
 
 		anneesCard.getTitre().setText(getTranslation("annees.titre"));
-		anneeSupFr.setTitre(getTranslation("annees.anneesupfr"));
-		anneeUnivFr.setTitre(getTranslation("annees.anneeunivfr"));
-		anneeEtablissement.setTitre(getTranslation("annee.anneetablissement"));
+		anneeSupFr.setLabel(getTranslation("annees.anneesupfr"));
+		anneeUnivFr.setLabel(getTranslation("annees.anneeunivfr"));
+		anneeEtablissement.setLabel(getTranslation("annee.anneetablissement"));
 	}
 
 
@@ -207,17 +207,17 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	 */
 	private void resetData() {
 		//titreAccesBac.setValue("");
-		anneeBac.setValeur("");
-		typeBac.setValeur("");
-		mentionBac.setValeur("");
-		paysEtbBac.setValeur("");
-		departementEtbBac.setValeur("");
+		anneeBac.setValue("");
+		typeBac.setValue("");
+		mentionBac.setValue("");
+		paysEtbBac.setValue("");
+		departementEtbBac.setValue("");
 		//etablissementBac.setValue("");
 
-		codeIneBac.setValeur("");
-		anneeSupFr.setValeur("");
-		anneeUnivFr.setValeur("");
-		anneeEtablissement.setValeur("");
+		codeIneBac.setValue("");
+		anneeSupFr.setValue("");
+		anneeUnivFr.setValue("");
+		anneeEtablissement.setValue("");
 	}
 	/**
 	 * Mise à jour des données affichées

@@ -86,7 +86,7 @@ public final class CmpUtils {
 
 	public static void valueAndVisibleIfNotNull(TextLabel label, String value) {
 		if(StringUtils.hasText(value)) {
-			label.setValeur(value);
+			label.setValue(value);
 			label.setVisible(true);
 		}	else {
 			label.setVisible(false);
