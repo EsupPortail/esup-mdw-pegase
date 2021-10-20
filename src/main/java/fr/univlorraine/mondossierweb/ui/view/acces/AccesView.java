@@ -28,7 +28,6 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.BeforeEvent;
@@ -40,6 +39,7 @@ import com.vaadin.flow.router.Route;
 import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
+import fr.univlorraine.mondossierweb.ui.component.TextLabel;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
@@ -72,19 +72,19 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	private final Card anneesCard = new Card(VaadinIcon.INSTITUTION.create(),"", false);
 	private final VerticalLayout parcoursLayout = new VerticalLayout(bacCard, anneesCard);
 
-	//private final TextField titreAccesBac=new TextField();
-	private final TextField anneeBac=new TextField();
-	private final TextField typeBac=new TextField();
-	private final TextField mentionBac=new TextField();
-	private final TextField paysEtbBac=new TextField();
-	private final TextField departementEtbBac=new TextField();
-	//private final TextField etablissementBac=new TextField();
-	private final TextField codeIneBac=new TextField();
+	//private final TextLabel titreAccesBac=new TextLabel();
+	private final TextLabel anneeBac=new TextLabel();
+	private final TextLabel typeBac=new TextLabel();
+	private final TextLabel mentionBac=new TextLabel();
+	private final TextLabel paysEtbBac=new TextLabel();
+	private final TextLabel departementEtbBac=new TextLabel();
+	//private final TextLabel etablissementBac=new TextLabel();
+	private final TextLabel codeIneBac=new TextLabel();
 
 
-	private final TextField anneeSupFr=new TextField();
-	private final TextField anneeUnivFr=new TextField();
-	private final TextField anneeEtablissement=new TextField();
+	private final TextLabel anneeSupFr=new TextLabel();
+	private final TextLabel anneeUnivFr=new TextLabel();
+	private final TextLabel anneeEtablissement=new TextLabel();
 
 
 
@@ -96,8 +96,6 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 		parcoursLayout.setWidthFull();
 		parcoursLayout.getStyle().set("max-width", "52em");
 		parcoursLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
-		//parcoursLayout.setFlexWrap(FlexWrap.WRAP);
-		//parcoursLayout.setFlexBasis("28em", bacLayout, anneesLayout);
 		add(parcoursLayout);
 		updateStyle();
 	}
@@ -107,45 +105,28 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 		bacLayout.getStyle().set("margin", "0");
 		bacCard.add(bacLayout);
 
-		codeIneBac.setReadOnly(true);
 		bacLayout.add(codeIneBac);
-
-		//titreAccesBac.setReadOnly(true);
 		//bacLayout.add(titreAccesBac);
-
-		anneeBac.setReadOnly(true);
 		bacLayout.add(anneeBac);
-
-		typeBac.setReadOnly(true);
 		bacLayout.add(typeBac);
-
-		mentionBac.setReadOnly(true);
 		bacLayout.add(mentionBac);
-
-		paysEtbBac.setReadOnly(true);
 		bacLayout.add(paysEtbBac);
-
-		departementEtbBac.setReadOnly(true);
 		bacLayout.add(departementEtbBac);
-
-		//etablissementBac.setReadOnly(true);
 		//bacLayout.add(etablissementBac);
 
-		//CmpUtils.setLongTextField(titreAccesBac);
+		CmpUtils.formatTextLabel(anneeBac);
 
-		CmpUtils.formatTextField(anneeBac);
+		CmpUtils.setModerateTextLabel(typeBac);
 
-		CmpUtils.setModerateTextField(typeBac);
+		CmpUtils.formatTextLabel(mentionBac);
 
-		CmpUtils.formatTextField(mentionBac);
+		CmpUtils.setModerateTextLabel(paysEtbBac);
 
-		CmpUtils.setLongTextField(paysEtbBac);
+		CmpUtils.setModerateTextLabel(departementEtbBac);
 
-		CmpUtils.setLongTextField(departementEtbBac);
+		//CmpUtils.setModerateTextLabel(etablissementBac);
 
-		//CmpUtils.setLongTextField(etablissementBac);
-
-		CmpUtils.setModerateTextField(codeIneBac);
+		CmpUtils.setModerateTextLabel(codeIneBac);
 
 	}
 
@@ -155,20 +136,15 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 		anneesLayout.getStyle().set("margin", "0");
 		anneesCard.add(anneesLayout);
 		
-		anneeSupFr.setReadOnly(true);
 		anneesLayout.add(anneeSupFr);
-
-		anneeUnivFr.setReadOnly(true);
 		anneesLayout.add(anneeUnivFr);
-
-		anneeEtablissement.setReadOnly(true);
 		anneesLayout.add(anneeEtablissement);
 
-		CmpUtils.setModerateTextField(anneeSupFr);
+		CmpUtils.setModerateTextLabel(anneeSupFr);
 
-		CmpUtils.formatTextField(anneeUnivFr);
+		CmpUtils.formatTextLabel(anneeUnivFr);
 
-		CmpUtils.formatTextField(anneeEtablissement);
+		CmpUtils.formatTextLabel(anneeEtablissement);
 
 	}
 

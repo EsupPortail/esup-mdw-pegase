@@ -58,7 +58,7 @@ public class Montant {
   }
 
 
-  public void setValeur(BigDecimal valeur) {
+  public void setValue(BigDecimal valeur) {
     this.valeur = valeur;
   }
 

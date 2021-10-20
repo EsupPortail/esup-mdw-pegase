@@ -39,6 +39,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
@@ -51,7 +52,6 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
@@ -67,6 +67,7 @@ import fr.univlorraine.mondossierweb.service.ExportService;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
+import fr.univlorraine.mondossierweb.ui.component.TextLabel;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
@@ -130,12 +131,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private final VerticalLayout inscriptionsLayout = new VerticalLayout();
 
 
-	List<TextField> listTextFieldFormation = new LinkedList<TextField> ();
-	List<TextField> listTextFieldPeriode = new LinkedList<TextField> ();
-	List<TextField> listTextFieldRegime = new LinkedList<TextField> ();
-	List<TextField> listTextFieldStatut = new LinkedList<TextField> ();
-	List<TextField> listTextFieldPaiement = new LinkedList<TextField> ();
-	List<TextField> listTextFieldPieces = new LinkedList<TextField> ();
+	List<TextLabel> listTextLabelFormation = new LinkedList<TextLabel> ();
+	List<TextLabel> listTextLabelPeriode = new LinkedList<TextLabel> ();
+	List<TextLabel> listTextLabelRegime = new LinkedList<TextLabel> ();
+	List<TextLabel> listTextLabelStatut = new LinkedList<TextLabel> ();
+	List<TextLabel> listTextLabelPaiement = new LinkedList<TextLabel> ();
+	List<TextLabel> listTextLabelPieces = new LinkedList<TextLabel> ();
 	List<Button> listButtonCertificat = new LinkedList<Button> ();
 	List<Button> listButtonAttestation = new LinkedList<Button> ();
 	List<Button> listButtonPhoto = new LinkedList<Button> ();
@@ -157,8 +158,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		inscriptionsLayout.setWidthFull();
 		inscriptionsLayout.getStyle().set("max-width", "52em");
 		inscriptionsLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
-		//inscriptionsLayout.setFlexWrap(FlexWrap.WRAP);
-		//inscriptionsLayout.getStyle().set("margin-top", "0");
 		add(inscriptionsLayout);
 
 		UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> { 
@@ -179,22 +178,23 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		setViewTitle(getTranslation("inscriptions.title"));
 
 
-		for(TextField tf : listTextFieldFormation) {
-			tf.setLabel(getTranslation("inscription.formation"));
+		
+		for(TextLabel tl : listTextLabelFormation) {
+			tl.setLabel(getTranslation("inscription.formation"));
 		}
-		for(TextField tf : listTextFieldPeriode) {
+		for(TextLabel tf : listTextLabelPeriode) {
 			tf.setLabel(getTranslation("inscription.periode"));
 		}
-		for(TextField tf : listTextFieldRegime) {
+		for(TextLabel tf : listTextLabelRegime) {
 			tf.setLabel(getTranslation("inscription.regime"));
 		}
-		for(TextField tf : listTextFieldStatut) {
+		for(TextLabel tf : listTextLabelStatut) {
 			tf.setLabel(getTranslation("inscription.statut"));
 		}
-		for(TextField tf : listTextFieldPaiement) {
+		for(TextLabel tf : listTextLabelPaiement) {
 			tf.setLabel(getTranslation("inscription.paiement"));
 		}
-		for(TextField tf : listTextFieldPieces) {
+		for(TextLabel tf : listTextLabelPieces) {
 			tf.setLabel(getTranslation("inscription.pieces"));
 		}
 		for(Button b : listButtonCertificat) {
@@ -247,12 +247,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	 */
 	private void resetData() {
 		inscriptionsLayout.removeAll();
-		listTextFieldFormation.clear();
-		listTextFieldPeriode.clear();
-		listTextFieldRegime.clear();
-		listTextFieldStatut.clear();
-		listTextFieldPaiement.clear();
-		listTextFieldPieces.clear();
+		listTextLabelFormation.clear();
+		listTextLabelPeriode.clear();
+		listTextLabelRegime.clear();
+		listTextLabelStatut.clear();
+		listTextLabelPaiement.clear();
+		listTextLabelPieces.clear();
 		listButtonCertificat.clear();
 		listButtonAttestation.clear();
 		listButtonCursus.clear();
@@ -285,18 +285,17 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				Card insCard = new Card(VaadinIcon.BOOKMARK_O.create(),libelleInscription, true);
 
 				// FORMATION
-				TextField formation = new TextField();
+				TextLabel formation = new TextLabel();
 				formation.setVisible(false);
 				if(cible.getFormation()!=null) {
 					CmpUtils.valueAndVisibleIfNotNull(formation,cible.getFormation().getLibelleLong());
 				}
-				formation.setReadOnly(true);
-				CmpUtils.setLongTextField(formation);
-				listTextFieldFormation.add(formation);
+				formation.getStyle().set("margin-top", "var(--lumo-space-m)");
+				listTextLabelFormation.add(formation);
 
 
 				// PERIODE
-				TextField periode = new TextField();
+				TextLabel periode = new TextLabel();
 				periode.setVisible(false);
 				if(cible.getPeriode()!=null) {
 					CmpUtils.valueAndVisibleIfNotNull(periode,cible.getPeriode().getLibelleAffichage());
@@ -304,22 +303,21 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						inscriptionEnCours = true;
 					}
 				}
-				periode.setReadOnly(true);
-				CmpUtils.setModerateTextField(periode);
-				listTextFieldPeriode.add(periode);
+				CmpUtils.setModerateTextLabel(periode);
+				periode.getStyle().set("margin-top", "var(--lumo-space-m)");
+				listTextLabelPeriode.add(periode);
 
 				// REGIME
-				TextField regime = new TextField();
+				TextLabel regime = new TextLabel();
 				regime.setVisible(false);
 				if(inscription.getRegimeInscription()!=null ) {
 					CmpUtils.valueAndVisibleIfNotNull(regime,inscription.getRegimeInscription().getLibelle());
 				}
-				regime.setReadOnly(true);
-				CmpUtils.setLongTextField(regime);
-				listTextFieldRegime.add(regime);
+				//CmpUtils.setLongTextLabel(regime);
+				listTextLabelRegime.add(regime);
 
 				// STATUT INSCRIPTION
-				TextField statut = new TextField();
+				TextLabel statut = new TextLabel();
 				statut.setVisible(false);
 				if(inscription.getStatutInscription()!=null) {
 					CmpUtils.valueAndVisibleIfNotNull(statut,formatEtat(inscription.getStatutInscription().getValue()));
@@ -335,12 +333,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				// Si l'inscrition doit être affichée
 				if(inscriptionAffichee) {
 
-					statut.setReadOnly(true);
-					CmpUtils.setShortTextField(statut);
-					listTextFieldStatut.add(statut);
+					listTextLabelStatut.add(statut);
 
 					// STATUT PAIEMENT
-					TextField paiement = new TextField();
+					TextLabel paiement = new TextLabel();
 					paiement.setVisible(false);
 					if(inscription.getStatutPaiement()!=null) {
 						CmpUtils.valueAndVisibleIfNotNull(paiement, formatEtat(inscription.getStatutPaiement().getValue()));
@@ -348,19 +344,15 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							inscriptionPayee =  true;
 						}
 					}
-					paiement.setReadOnly(true);
-					CmpUtils.setShortTextField(paiement);
-					listTextFieldPaiement.add(paiement);
+					listTextLabelPaiement.add(paiement);
 
 					// STATUT PIECES JUSTIFICATIVES
-					TextField pieces = new TextField();
+					TextLabel pieces = new TextLabel();
 					pieces.setVisible(false);
 					if(inscription.getStatutPieces()!=null) {
 						CmpUtils.valueAndVisibleIfNotNull(pieces,formatEtat(inscription.getStatutPieces().getValue()));
 					}
-					pieces.setReadOnly(true);
-					CmpUtils.setShortTextField(pieces);
-					listTextFieldPieces.add(pieces);
+					listTextLabelPieces.add(pieces);
 
 					/* AJout de la liste des bourses et aides ?
 					for( OccurrenceNomenclature occ : inscription.getBoursesEtAides()) {
@@ -451,15 +443,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.getStyle().set("padding", "0");
 					verticalLayout.setSizeFull();
 
-					FlexLayout infoLayout = new FlexLayout();
-					infoLayout.getStyle().set("padding", "0");
-					infoLayout.setWidthFull();
-					infoLayout.setJustifyContentMode(JustifyContentMode.START);
-					infoLayout.setFlexWrap(FlexWrap.WRAP);
+					FormLayout infoLayout = new FormLayout();
+					infoLayout.getStyle().set("margin", "0");
 					infoLayout.add(formation);
 					infoLayout.add(periode);
 					//infoLayout.add(regime);
-					infoLayout.setFlexBasis("24em", formation);
 					verticalLayout.add(infoLayout);
 
 					VerticalLayout verticalInfoPhotoAndExportLayout= new VerticalLayout();
@@ -470,7 +458,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						flexInfoAndPhotoLayout.getStyle().set("border-top", "1px solid lightgray");
 					}
 					flexInfoAndPhotoLayout.getStyle().set("padding-top", "1em");
-					flexInfoAndPhotoLayout.getStyle().set("margin-top", "0");
 					VerticalLayout detailInscriptionLayout = new VerticalLayout();
 					detailInscriptionLayout.getStyle().set("padding", "0");
 					detailInscriptionLayout.add(regime);
@@ -518,7 +505,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						if(afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
 							verticalInfoPhotoAndExportLayout.setVisible(false);
 							verticalInfoPhotoAndExportLayout.addClassName("ddrop");
-							//flexInfoAndPhotoLayout.addClassName("ddrop");
 							Button displayDetailButton=new Button("", VaadinIcon.ANGLE_DOWN.create());
 							displayDetailButton.getStyle().set("margin", "auto");
 							displayDetailButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
@@ -739,8 +725,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// si écran de petite taille
 		if( windowWidth<=800) {
 			arbo.setHeightByRows(false);
-			//arbo.setWidthFull();
-			//arbo.setHeightFull();
 			cursusLayout.setSizeFull();
 		}else {
 			arbo.setHeightByRows(false);

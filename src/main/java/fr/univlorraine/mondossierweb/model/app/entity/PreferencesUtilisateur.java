@@ -70,7 +70,7 @@ public class PreferencesUtilisateur implements Serializable {
 		return this.valeur;
 	}
 
-	public void setValeur(String valeur) {
+	public void setValue(String valeur) {
 		this.valeur = valeur;
 	}
 
