@@ -51,6 +51,12 @@ public final class CmpUtils {
 		tf.setMaxWidth("25em");
 	}
 	
+	/*public static void setLongTextLabel(TextLabel tf) {
+		formatTextLabel(tf);
+		tf.setWidthFull();
+		tf.setMaxWidth("25em");
+	}*/
+	
 	public static void setModerateTextField(TextField tf) {
 		formatTextField(tf);
 		tf.setWidthFull();
@@ -59,8 +65,8 @@ public final class CmpUtils {
 	
 	public static void setModerateTextLabel(TextLabel tl) {
 		formatTextLabel(tl);
-		tl.setWidthFull();
-		tl.setMaxWidth("20em");
+		//tl.setWidthFull();
+		//tl.setMaxWidth("20em");
 	}
 	
 	public static void setShortTextField(TextField tf) {

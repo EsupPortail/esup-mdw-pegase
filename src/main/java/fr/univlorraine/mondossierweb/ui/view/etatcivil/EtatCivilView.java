@@ -28,7 +28,6 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.BeforeEvent;
@@ -41,6 +40,7 @@ import com.vaadin.flow.router.RouteAlias;
 import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
+import fr.univlorraine.mondossierweb.ui.component.TextLabel;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
@@ -75,18 +75,18 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	private final Card naissanceCard = new Card(VaadinIcon.GLOBE.create(),"", false);
 	private final VerticalLayout etatcivilLayout = new VerticalLayout(identiteCard, naissanceCard);
 
-	private final TextField nomFamille=new TextField();
-	private final TextField nomUsage=new TextField();
-	private final TextField prenom=new TextField();
-	private final TextField prenom2=new TextField();
-	private final TextField prenom3=new TextField();
+	private final TextLabel nomFamille=new TextLabel();
+	private final TextLabel nomUsage=new TextLabel();
+	private final TextLabel prenom=new TextLabel();
+	private final TextLabel prenom2=new TextLabel();
+	private final TextLabel prenom3=new TextLabel();
 
 
-	private final TextField dateNaissance=new TextField();
-	private final TextField paysNaissance=new TextField();
-	private final TextField communeNaissance=new TextField();
-	private final TextField nationaliteNaissance=new TextField();
-	private final TextField nationaliteNaissance2=new TextField();
+	private final TextLabel dateNaissance=new TextLabel();
+	private final TextLabel paysNaissance=new TextLabel();
+	private final TextLabel communeNaissance=new TextLabel();
+	private final TextLabel nationaliteNaissance=new TextLabel();
+	private final TextLabel nationaliteNaissance2=new TextLabel();
 
 
 
@@ -98,8 +98,6 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 		etatcivilLayout.setWidthFull();
 		etatcivilLayout.getStyle().set("max-width", "52em");
 		etatcivilLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
-		//etatcivilLayout.setFlexWrap(FlexWrap.WRAP);
-		//etatcivilLayout.setFlexBasis("28em", identiteLayout, naissanceLayout);
 		add(etatcivilLayout);
 		updateStyle();
 	}
@@ -109,32 +107,23 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 		FormLayout identiteLayout = new FormLayout();
 		identiteLayout.getStyle().set("margin", "0");
 		
-		nomFamille.setReadOnly(true);
 		identiteLayout.add(nomFamille);
-
-		nomUsage.setReadOnly(true);
 		identiteLayout.add(nomUsage);
-
-		prenom.setReadOnly(true);
 		identiteLayout.add(prenom);
-
-		prenom2.setReadOnly(true);
 		identiteLayout.add(prenom2);
-
-		prenom3.setReadOnly(true);
 		identiteLayout.add(prenom3);
 		
 		identiteCard.add(identiteLayout);
 
-		CmpUtils.setLongTextField(nomFamille);
+		CmpUtils.setModerateTextLabel(nomFamille);
 
-		CmpUtils.setLongTextField(nomUsage);
+		CmpUtils.setModerateTextLabel(nomUsage);
 
-		CmpUtils.setModerateTextField(prenom);
+		CmpUtils.setModerateTextLabel(prenom);
 
-		CmpUtils.setModerateTextField(prenom2);
+		CmpUtils.setModerateTextLabel(prenom2);
 
-		CmpUtils.setModerateTextField(prenom3);
+		CmpUtils.setModerateTextLabel(prenom3);
 
 	}
 
@@ -143,32 +132,23 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 		naissanceLayout.addClassName("card-layout");
 		naissanceLayout.getStyle().set("margin", "0");
 
-		dateNaissance.setReadOnly(true);
 		naissanceLayout.add(dateNaissance);
-
-		paysNaissance.setReadOnly(true);
 		naissanceLayout.add(paysNaissance);
-
-		communeNaissance.setReadOnly(true);
 		naissanceLayout.add(communeNaissance);
-
-		nationaliteNaissance.setReadOnly(true);
 		naissanceLayout.add(nationaliteNaissance);
-
-		nationaliteNaissance2.setReadOnly(true);
 		naissanceLayout.add(nationaliteNaissance2);
 		
 		naissanceCard.add(naissanceLayout);
 
-		CmpUtils.formatTextField(dateNaissance);
+		CmpUtils.formatTextLabel(dateNaissance);
 
-		CmpUtils.setLongTextField(paysNaissance);
+		CmpUtils.setModerateTextLabel(paysNaissance);
 
-		CmpUtils.setLongTextField(communeNaissance);
+		CmpUtils.setModerateTextLabel(communeNaissance);
 
-		CmpUtils.setModerateTextField(nationaliteNaissance);
+		CmpUtils.setModerateTextLabel(nationaliteNaissance);
 
-		CmpUtils.setModerateTextField(nationaliteNaissance2);
+		CmpUtils.setModerateTextLabel(nationaliteNaissance2);
 
 	}
 
@@ -181,18 +161,18 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 		setViewTitle(getTranslation("etatcivil.title"));
 
 		identiteCard.getTitre().setText(getTranslation("identite.titre"));
-		nomFamille.setLabel(getTranslation("identite.nomfamille"));
-		nomUsage.setLabel(getTranslation("identite.nomusage"));
-		prenom.setLabel(getTranslation("identite.prenom"));
-		prenom2.setLabel(getTranslation("identite.prenom2"));
-		prenom3.setLabel(getTranslation("identite.prenom3"));
+		nomFamille.setTitre(getTranslation("identite.nomfamille"));
+		nomUsage.setTitre(getTranslation("identite.nomusage"));
+		prenom.setTitre(getTranslation("identite.prenom"));
+		prenom2.setTitre(getTranslation("identite.prenom2"));
+		prenom3.setTitre(getTranslation("identite.prenom3"));
 
 		naissanceCard.getTitre().setText(getTranslation("naissance.titre"));
-		dateNaissance.setLabel(getTranslation("naissance.date"));
-		paysNaissance.setLabel(getTranslation("naissance.pays"));
-		communeNaissance.setLabel(getTranslation("naissance.commune"));
-		nationaliteNaissance.setLabel(getTranslation("naissance.nationalite"));
-		nationaliteNaissance2.setLabel(getTranslation("naissance.nationalite2"));
+		dateNaissance.setTitre(getTranslation("naissance.date"));
+		paysNaissance.setTitre(getTranslation("naissance.pays"));
+		communeNaissance.setTitre(getTranslation("naissance.commune"));
+		nationaliteNaissance.setTitre(getTranslation("naissance.nationalite"));
+		nationaliteNaissance2.setTitre(getTranslation("naissance.nationalite2"));
 	}
 
 
@@ -227,17 +207,17 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	 * @param apprenant
 	 */
 	private void resetData() {
-		nomFamille.setValue("");
-		nomUsage.setValue("");
-		prenom.setValue("");
-		prenom2.setValue("");
-		prenom3.setValue("");
+		nomFamille.setValeur("");
+		nomUsage.setValeur("");
+		prenom.setValeur("");
+		prenom2.setValeur("");
+		prenom3.setValeur("");
 
-		dateNaissance.setValue("");
-		paysNaissance.setValue("");
-		communeNaissance.setValue("");
-		nationaliteNaissance.setValue("");
-		nationaliteNaissance2.setValue("");
+		dateNaissance.setValeur("");
+		paysNaissance.setValeur("");
+		communeNaissance.setValeur("");
+		nationaliteNaissance.setValeur("");
+		nationaliteNaissance2.setValeur("");
 	}
 	/**
 	 * Mise à jour des données affichées
@@ -254,8 +234,8 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 			CmpUtils.valueAndVisibleIfNotNull(prenom3,apprenant.getEtatCivil().getTroisiemePrenom());
 
 			// Mise à jour des données de naissance
-			dateNaissance.setValue(Utils.formatStringDateToDisplay(apprenant.getNaissance().getDateDeNaissance()));
-			paysNaissance.setValue(apprenant.getNaissance().getLibellePaysDeNaissance());
+			dateNaissance.setValeur(Utils.formatStringDateToDisplay(apprenant.getNaissance().getDateDeNaissance()));
+			paysNaissance.setValeur(apprenant.getNaissance().getLibellePaysDeNaissance());
 			if(apprenant.getNaissance().getPaysDeNaissance().equals(Utils.CODE_PAYS_FRANCE)) {
 				CmpUtils.valueAndVisibleIfNotNull(communeNaissance,apprenant.getNaissance().getLibelleCommuneDeNaissance());
 			} else {

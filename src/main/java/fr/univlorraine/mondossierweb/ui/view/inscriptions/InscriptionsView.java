@@ -39,6 +39,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
@@ -157,8 +158,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		inscriptionsLayout.setWidthFull();
 		inscriptionsLayout.getStyle().set("max-width", "52em");
 		inscriptionsLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
-		//inscriptionsLayout.setFlexWrap(FlexWrap.WRAP);
-		//inscriptionsLayout.getStyle().set("margin-top", "0");
 		add(inscriptionsLayout);
 
 		UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> { 
@@ -304,7 +303,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						inscriptionEnCours = true;
 					}
 				}
-				/*periode.setReadOnly(true);*/
 				CmpUtils.setModerateTextLabel(periode);
 				periode.getStyle().set("margin-top", "var(--lumo-space-m)");
 				listTextLabelPeriode.add(periode);
@@ -315,8 +313,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				if(inscription.getRegimeInscription()!=null ) {
 					CmpUtils.valueAndVisibleIfNotNull(regime,inscription.getRegimeInscription().getLibelle());
 				}
-				/*regime.setReadOnly(true);
-				CmpUtils.setLongTextLabel(regime);*/
+				//CmpUtils.setLongTextLabel(regime);
 				listTextLabelRegime.add(regime);
 
 				// STATUT INSCRIPTION
@@ -336,8 +333,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				// Si l'inscrition doit être affichée
 				if(inscriptionAffichee) {
 
-					/*statut.setReadOnly(true);
-					CmpUtils.setShortTextLabel(statut);*/
 					listTextLabelStatut.add(statut);
 
 					// STATUT PAIEMENT
@@ -349,8 +344,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							inscriptionPayee =  true;
 						}
 					}
-					/*paiement.setReadOnly(true);
-					CmpUtils.setShortTextLabel(paiement);*/
 					listTextLabelPaiement.add(paiement);
 
 					// STATUT PIECES JUSTIFICATIVES
@@ -359,8 +352,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					if(inscription.getStatutPieces()!=null) {
 						CmpUtils.valueAndVisibleIfNotNull(pieces,formatEtat(inscription.getStatutPieces().getValue()));
 					}
-					/*pieces.setReadOnly(true);
-					CmpUtils.setShortTextLabel(pieces);*/
 					listTextLabelPieces.add(pieces);
 
 					/* AJout de la liste des bourses et aides ?
@@ -452,17 +443,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					verticalLayout.getStyle().set("padding", "0");
 					verticalLayout.setSizeFull();
 
-					FlexLayout infoLayout = new FlexLayout();
-					infoLayout.getStyle().set("padding", "0");
-					infoLayout.getStyle().set("margin-bottom", "var(--lumo-space-m)");
-					infoLayout.getStyle().set("margin-top", "0");
-					infoLayout.setWidthFull();
-					infoLayout.setJustifyContentMode(JustifyContentMode.START);
-					infoLayout.setFlexWrap(FlexWrap.WRAP);
+					FormLayout infoLayout = new FormLayout();
+					infoLayout.getStyle().set("margin", "0");
 					infoLayout.add(formation);
 					infoLayout.add(periode);
 					//infoLayout.add(regime);
-					infoLayout.setFlexBasis("24em", formation);
 					verticalLayout.add(infoLayout);
 
 					VerticalLayout verticalInfoPhotoAndExportLayout= new VerticalLayout();
@@ -473,7 +458,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						flexInfoAndPhotoLayout.getStyle().set("border-top", "1px solid lightgray");
 					}
 					flexInfoAndPhotoLayout.getStyle().set("padding-top", "1em");
-					flexInfoAndPhotoLayout.getStyle().set("margin-top", "0");
 					VerticalLayout detailInscriptionLayout = new VerticalLayout();
 					detailInscriptionLayout.getStyle().set("padding", "0");
 					detailInscriptionLayout.add(regime);
@@ -521,7 +505,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						if(afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
 							verticalInfoPhotoAndExportLayout.setVisible(false);
 							verticalInfoPhotoAndExportLayout.addClassName("ddrop");
-							//flexInfoAndPhotoLayout.addClassName("ddrop");
 							Button displayDetailButton=new Button("", VaadinIcon.ANGLE_DOWN.create());
 							displayDetailButton.getStyle().set("margin", "auto");
 							displayDetailButton.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
@@ -742,8 +725,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// si écran de petite taille
 		if( windowWidth<=800) {
 			arbo.setHeightByRows(false);
-			//arbo.setWidthFull();
-			//arbo.setHeightFull();
 			cursusLayout.setSizeFull();
 		}else {
 			arbo.setHeightByRows(false);
