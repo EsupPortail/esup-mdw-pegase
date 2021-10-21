@@ -2,7 +2,7 @@
 <!--
 
 
-     ESUP-Portail MONDOSSIERWEB - Copyright (c) 2020 ESUP-Portail consortium
+     ESUP-Portail ESUP-MONDOSSIERWEB-PEGASE - Copyright (c) 2021 ESUP-Portail consortium
 
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,6 @@
 
 
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -358,25 +357,25 @@
                 <dependencies>
                 	<!-- Jaxb API -->
     				<dependency>
-    <groupId>com.sun.xml.bind</groupId>
-    <artifactId>jaxb-core</artifactId>
-    <version>2.3.0.1</version>
-</dependency>
-<dependency>
-    <groupId>javax.xml.bind</groupId>
-    <artifactId>jaxb-api</artifactId>
-    <version>2.3.1</version>
-</dependency>
-<dependency>
-    <groupId>com.sun.xml.bind</groupId>
-    <artifactId>jaxb-impl</artifactId>
-    <version>2.3.1</version>
-</dependency>
-<dependency>
-    <groupId>org.javassist</groupId>
-    <artifactId>javassist</artifactId>
-    <version>3.25.0-GA</version>
-</dependency>
+    					<groupId>com.sun.xml.bind</groupId>
+    					<artifactId>jaxb-core</artifactId>
+    					<version>2.3.0.1</version>
+					</dependency>
+					<dependency>
+    					<groupId>javax.xml.bind</groupId>
+    					<artifactId>jaxb-api</artifactId>
+    					<version>2.3.1</version>
+					</dependency>
+					<dependency>
+    					<groupId>com.sun.xml.bind</groupId>
+    					<artifactId>jaxb-impl</artifactId>
+    					<version>2.3.1</version>
+					</dependency>
+					<dependency>
+    					<groupId>org.javassist</groupId>
+    					<artifactId>javassist</artifactId>
+    					<version>3.25.0-GA</version>
+					</dependency>
                 </dependencies>
 	    	</plugin>
 	    	

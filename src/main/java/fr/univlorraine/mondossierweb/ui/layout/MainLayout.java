@@ -1,6 +1,6 @@
 /**
  *
- *  ESUP-Portail MONDOSSIERWEB - Copyright (c) 2020 ESUP-Portail consortium
+ *  ESUP-Portail ESUP-MONDOSSIERWEB-PEGASE - Copyright (c) 2021 ESUP-Portail consortium
  *
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -82,6 +82,7 @@ import lombok.extern.slf4j.Slf4j;
 @Push(transport = Transport.WEBSOCKET_XHR)
 @JsModule("./src/set-dark-mode.js")
 @JsModule("./src/font-open-sans.js")
+@CssImport(value = "./styles/mdw-default.css")
 @CssImport(value = "./styles/mdw.css")
 @CssImport(value = "./styles/lumo-font-family.css")
 @CssImport(value = "./styles/vaadin-app-layout.css", themeFor = "vaadin-app-layout")

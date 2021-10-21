@@ -1,5 +1,5 @@
-Copyright (C) 2020 Université de Lorraine http://www.univ-lorraine.fr
-Copyright (C) 2020 Esup Portail http://www.esup-portail.org
+Copyright (C) 2021 Université de Lorraine http://www.univ-lorraine.fr
+Copyright (C) 2021 Esup Portail http://www.esup-portail.org
 
 Licensed under the Apache License, Version 2.0 (the
 "License"); you may not use this file except in compliance
@@ -28,6 +28,8 @@ This project includes:
   Apache HttpCore under Apache License, Version 2.0
   Apache Log4j API under Apache License, Version 2.0
   Apache Log4j to SLF4J Adapter under Apache License, Version 2.0
+  Apache Oltu - OAuth 2.0 - Client under The Apache Software License, Version 2.0
+  Apache Oltu - OAuth 2.0 - Common under The Apache Software License, Version 2.0
   AspectJ weaver under Eclipse Public License - v 1.0
   AssertJ fluent assertions under Apache License, Version 2.0
   atmosphere-runtime under CDDL or Apache License 2.0
@@ -44,13 +46,16 @@ This project includes:
   Flow Client under Apache License Version 2.0
   Flow Data under Apache License Version 2.0
   Flow HTML Components under Apache License Version 2.0
+  Flow Lit Templates Support under Apache License Version 2.0
   Flow Push under Apache License Version 2.0
   Flow Server under Apache License Version 2.0
   flyway-core under Apache License, Version 2.0
   Generic HTML 5 Drag and Drop support for Flow under Apache License Version 2.0
   GenTyRef under The Apache Software License, Version 2.0
   Gson under Apache 2.0
+  Gson on Fire! under Apache-2.0
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
+  H2 Database Engine under MPL 2.0 or EPL 1.0
   Hamcrest under BSD Licence 3
   Hibernate Commons Annotations under GNU Library General Public License v2.1 or later
   Hibernate ORM - hibernate-core under GNU Library General Public License v2.1 or later
@@ -87,9 +92,11 @@ This project includes:
   Java Annotation Indexer under Apache License, Version 2.0
   Java archiving library under Apache 2
   Javassist under MPL 1.1 or LGPL 2.1 or Apache License 2.0
+  javax.annotation API under CDDL + GPLv2 with classpath exception
   javax.transaction API under EPL 2.0 or GPL2 w/ CPE
   JAXB Runtime under Eclipse Distribution License - v 1.0
   JBoss Logging 3 under Apache License, version 2.0
+  JSON in Java under The JSON License
   JSON library from Android SDK under Apache License 2.0
   JSON Small and Fast Parser under The Apache Software License, Version 2.0
   JSONassert under The Apache Software License, Version 2.0
@@ -113,6 +120,7 @@ This project includes:
   Non-Blocking Reactive Foundation for the JVM under Apache License, Version 2.0
   Objenesis under Apache 2
   OkHttp under Apache 2.0
+  OkHttp Logging Interceptor under Apache 2.0
   Okio under Apache 2.0
   org.apiguardian:apiguardian-api under The Apache License, Version 2.0
   org.opentest4j:opentest4j under The Apache License, Version 2.0
@@ -177,41 +185,45 @@ This project includes:
   spring-security-core under The Apache Software License, Version 2.0
   spring-security-test under The Apache Software License, Version 2.0
   spring-security-web under The Apache Software License, Version 2.0
+  swagger-annotations under Apache License 2.0
   tomcat-embed-core under Apache License, Version 2.0
   tomcat-embed-el under Apache License, Version 2.0
   tomcat-embed-websocket under Apache License, Version 2.0
   TXW2 Runtime under Eclipse Distribution License - v 1.0
   Vaadin Accordion under Apache License Version 2.0
   Vaadin App Layout under Apache License Version 2.0
+  Vaadin Avatar under Apache License Version 2.0
   Vaadin Button under Apache License Version 2.0
   Vaadin Checkbox under Apache License Version 2.0
   Vaadin Combo Box under Apache License Version 2.0
   Vaadin Context Menu under Apache License Version 2.0
-  Vaadin CustomField under Apache License Version 2.0
+  Vaadin Custom Field under Apache License Version 2.0
   Vaadin Customized GWT Elemental Library under Apache License Version 2.0
-  Vaadin DatePicker under Apache License Version 2.0
+  Vaadin Date Picker under Apache License Version 2.0
+  Vaadin Date Time Picker under Apache License Version 2.0
   Vaadin Details under Apache License Version 2.0
-  Vaadin Dialog Flow under Apache License Version 2.0
+  Vaadin Dialog under Apache License Version 2.0
   Vaadin Form Layout under Apache License Version 2.0
-  Vaadin Grid Flow under Apache License Version 2.0
+  Vaadin Grid under Apache License Version 2.0
   Vaadin Icons under Apache License Version 2.0
-  Vaadin IronList under Apache License Version 2.0
+  Vaadin Iron List under Apache License Version 2.0
   Vaadin List Box under Apache License Version 2.0
   Vaadin Login under Apache License Version 2.0
-  Vaadin MenuBar under Apache License Version 2.0
+  Vaadin Menu Bar under Apache License Version 2.0
   Vaadin Notification under Apache License Version 2.0
-  Vaadin Ordered Layouts under Apache License Version 2.0
+  Vaadin Ordered Layout under Apache License Version 2.0
   Vaadin Platform (vaadin-core) under Apache License Version 2.0
-  Vaadin ProgressBar under Apache License Version 2.0
-  Vaadin Radio Button Flow under Apache License Version 2.0
+  Vaadin Progress Bar under Apache License Version 2.0
+  Vaadin Radio Button under Apache License Version 2.0
   Vaadin Select under Apache License Version 2.0
   Vaadin Split Layout under Apache License Version 2.0
-  Vaadin Tabs Flow under Apache License Version 2.0
-  Vaadin TextField under Apache License Version 2.0
-  Vaadin TimePicker under Apache License Version 2.0
+  Vaadin Tabs under Apache License Version 2.0
+  Vaadin Text Field under Apache License Version 2.0
+  Vaadin Time Picker under Apache License Version 2.0
   Vaadin Upload under Apache License Version 2.0
   vaadin-accordion under Apache-2.0
   vaadin-app-layout under Apache-2.0
+  vaadin-avatar under Apache-2.0
   vaadin-button under Apache-2.0
   vaadin-checkbox under Apache-2.0
   vaadin-combo-box under Apache-2.0
@@ -219,6 +231,7 @@ This project includes:
   vaadin-control-state-mixin under Apache-2.0
   vaadin-custom-field under Apache-2.0
   vaadin-date-picker under Apache-2.0
+  vaadin-date-time-picker under Apache-2.0
   vaadin-details under Apache-2.0
   vaadin-development-mode-detector under Apache-2.0
   vaadin-dialog under Apache-2.0
