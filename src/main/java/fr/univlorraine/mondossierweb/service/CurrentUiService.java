@@ -23,7 +23,6 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 import lombok.Getter;
@@ -36,8 +35,9 @@ import reactor.core.publisher.UnicastProcessor;
 @Service
 public class CurrentUiService {
 
-	@Value("${app.color}")
-	private transient String appColorDefault;
+	//@Value("${app.color}")
+	//private transient String appColorDefault;
+	private String appColorDefault = "#0096ea";
 
 	@PostConstruct
 	private void init() {
