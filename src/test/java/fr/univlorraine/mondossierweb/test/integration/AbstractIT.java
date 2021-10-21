@@ -1,6 +1,6 @@
 /**
  *
- *  ESUP-Portail MONDOSSIERWEB - Copyright (c) 2020 ESUP-Portail consortium
+ *  ESUP-Portail ESUP-MONDOSSIERWEB-PEGASE - Copyright (c) 2021 ESUP-Portail consortium
  *
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
