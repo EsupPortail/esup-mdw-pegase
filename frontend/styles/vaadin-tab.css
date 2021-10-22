@@ -1,17 +1,17 @@
 
 :host([selected]) {
 	/*color: #343a40;*/
-	color: #0096ea;
+	color: var(--main-color);
    background-color: #7b7b7b4a;
-   /*background-color: #0096ea;*/
+   /*background-color: var(--main-color);*/
 }
 
 :host([focused]) {
 	/*color: #343a40;*/
-	color: #0096ea;
+	color: var(--main-color);
     background-color: #7b7b7b4a;
 }
 
 :host([selected])::before, :host([selected])::after {
-    background-color: #0096ea; 
+    background-color: var(--main-color); 
 }
