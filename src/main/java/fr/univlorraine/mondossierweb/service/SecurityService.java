@@ -55,7 +55,6 @@ import com.vaadin.flow.server.VaadinSession;
 
 import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.ui.view.error.AccessDeniedView;
-import fr.univlorraine.mondossierweb.ui.view.recherche.RechercheView;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,10 +65,6 @@ public class SecurityService implements VaadinServiceInitListener {
 
 	@Autowired
 	private transient BeanFactory beanFactory;
-
-	
-	@Value("${recherche.actif}")
-	private transient boolean rechercheActive;	
 
 	private final SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
 	private final StandardEvaluationContext evaluationContext = new StandardEvaluationContext();
@@ -170,9 +165,6 @@ public class SecurityService implements VaadinServiceInitListener {
 	}
 
 	public boolean isAccessGranted(final Class<?> securedClass) {
-		if(!rechercheActive && RechercheView.class.equals(securedClass) ) {
-			return false;
-		}
 		return (AccessDeniedView.class.equals(securedClass) || isUserLoggedIn())
 			&& isAccessGrantedForPreAuthorize(securedClass)
 			&& isAccessGrantedForRoleAnnotations(securedClass);

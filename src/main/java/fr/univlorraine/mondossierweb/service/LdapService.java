@@ -57,8 +57,6 @@ public class LdapService implements Serializable {
 	private transient String ldapFiltreEtudiant;
 	@Value("${ldap.filtre.gestionnaire}")
 	private transient String ldapFiltreGestionnaire;
-	@Value("${ldap.filtre.limit}")
-	private transient int maxLimitLdap;
 
 
 	@Resource
@@ -113,21 +111,7 @@ public class LdapService implements Serializable {
 
 	}
 	
-	public List<LdapPerson> searchStudentFromString(String chaine) {
-		log.info("searchStudentByDisplayName : {}", chaine);
 
-		ldapTemplate.setDefaultCountLimit(maxLimitLdap);
-		
-		if(!StringUtils.hasText(chaine)) {
-			return new LinkedList<LdapPerson>();
-		}
-		String filtreDisplayName = "("+ldapDisplayNameAttribute+"=*" + chaine + "*)";
-		String filtreCodeEtu = "("+ldapCodEtuAttribute+"=" + chaine + ")";
-		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+ldapFiltreEtudiant+"(|"+filtreDisplayName+filtreCodeEtu+"))", new StudentAttributesMapper());
-
-		return peoples;
-
-	}
 
 	public String getStudentMailByCodeApprenant(String code) {
 		log.info("findStudentByCodeApprenant : {}", code);
