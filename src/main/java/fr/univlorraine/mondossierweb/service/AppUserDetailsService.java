@@ -38,8 +38,10 @@ import com.vaadin.flow.server.VaadinSession;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class AppUserDetailsService implements UserDetailsService {
 
 
@@ -97,23 +99,10 @@ public class AppUserDetailsService implements UserDetailsService {
 
 		// On renseigne l'attribut lastRole de l'utilisateur
 		utilisateur.setLastRole(utilisateur.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", ")));
-
-		// Si l'utilisateur existe, on met à jour la date de dernière connexion et le role
-		/*Optional<Utilisateur> u = utilisateurRepository.findById(username);
-		if(u.isPresent()) {
-			Utilisateur util = u.get();
-			util.setDisplayName(utilisateur.getDisplayName());
-			util.setLastRole(utilisateur.getLastRole());
-			util.setLastLogin(LocalDateTime.now());
-			utilisateurRepository.save(util);
-			//utilisateurRepository.updateInfo(username, utilisateur.getDisplayName(), utilisateur.getLastRole());
-		} else {
-			// sinon on crée l'utilisateur
-			utilisateurRepository.save(utilisateur);
-		}*/
 		
-		// TODO tracer l'accès dans un fichier de log
-
+		// Tracer l'accès dans un fichier de log
+		log.trace("Connexion de {} (login:{} - codeApprenant:{}) en tant que {}",utilisateur.getDisplayName(), utilisateur.getUsername(), utilisateur.getCodeEtudiant(), utilisateur.getLastRole());
+		
 		return utilisateur;
 	}
 
