@@ -53,7 +53,7 @@ import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 import com.vaadin.flow.server.VaadinSession;
 
-import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
+import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.ui.view.error.AccessDeniedView;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;

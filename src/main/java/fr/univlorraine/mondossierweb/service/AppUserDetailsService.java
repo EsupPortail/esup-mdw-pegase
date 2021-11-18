@@ -20,7 +20,6 @@ package fr.univlorraine.mondossierweb.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +35,13 @@ import org.springframework.util.Assert;
 
 import com.vaadin.flow.server.VaadinSession;
 
-import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
-import fr.univlorraine.mondossierweb.model.app.repository.UtilisateurRepository;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
+import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 
 @Service
 public class AppUserDetailsService implements UserDetailsService {
 
-	@Autowired
-	private transient UtilisateurRepository utilisateurRepository;
 
 	@Autowired
 	protected transient LdapService ldapService;
@@ -103,7 +99,7 @@ public class AppUserDetailsService implements UserDetailsService {
 		utilisateur.setLastRole(utilisateur.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", ")));
 
 		// Si l'utilisateur existe, on met à jour la date de dernière connexion et le role
-		Optional<Utilisateur> u = utilisateurRepository.findById(username);
+		/*Optional<Utilisateur> u = utilisateurRepository.findById(username);
 		if(u.isPresent()) {
 			Utilisateur util = u.get();
 			util.setDisplayName(utilisateur.getDisplayName());
@@ -114,7 +110,9 @@ public class AppUserDetailsService implements UserDetailsService {
 		} else {
 			// sinon on crée l'utilisateur
 			utilisateurRepository.save(utilisateur);
-		}
+		}*/
+		
+		// TODO tracer l'accès dans un fichier de log
 
 		return utilisateur;
 	}

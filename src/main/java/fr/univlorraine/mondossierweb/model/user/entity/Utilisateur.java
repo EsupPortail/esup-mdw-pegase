@@ -16,18 +16,12 @@
  *  limitations under the License.
  *
  */
-package fr.univlorraine.mondossierweb.model.app.entity;
+package fr.univlorraine.mondossierweb.model.user.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,39 +29,30 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
 @SuppressWarnings("serial")
 public class Utilisateur implements Serializable, UserDetails {
 
-	@Id
-	@NotBlank
-	@Column(length = 10)
+
 	private String username;
 
 	/** Nom à afficher. */
-	@Column(name="display_name",length = 64)
 	private String displayName;
 	
 	/** Identifiant etudiant correspondant */
-	@Column(name="code_etudiant")
 	private String codeEtudiant;
 
 	/** Date et heure de dernière connexion. */
-	@Column(name="last_login")
 	private LocalDateTime lastLogin;
 	
 	/** Roles lors de la dernière connexion. */
-	@Column(name="last_role")
 	private String lastRole;
 	
 	/* Mail */
-	@Transient
 	private String mail;
 
 	/* Implémentation de UserDetails */
-	@Transient
 	private final List<GrantedAuthority> authorities = new ArrayList<>();
 
 	/**

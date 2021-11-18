@@ -61,7 +61,7 @@ import com.vaadin.flow.shared.ui.Transport;
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
 import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
-import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
+import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.service.CurrentUiService;
 import fr.univlorraine.mondossierweb.service.PreferencesService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
