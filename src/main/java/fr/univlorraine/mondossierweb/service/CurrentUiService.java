@@ -20,11 +20,11 @@ package fr.univlorraine.mondossierweb.service;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.vaadin.flow.spring.annotation.UIScope;
 
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import lombok.Getter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
@@ -37,7 +37,7 @@ public class CurrentUiService {
 
 	//@Value("${app.color}")
 	//private transient String appColorDefault;
-	private String appColorDefault = "#0096ea";
+	private String appColorDefault = CSSColorUtils.MAIN_HEADER_COLOR;
 
 	@PostConstruct
 	private void init() {

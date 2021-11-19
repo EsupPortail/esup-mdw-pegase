@@ -43,7 +43,7 @@ import org.springframework.security.web.context.HttpRequestResponseHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.filter.GenericFilterBean;
 
-import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
+import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 
 /**
  * Permet de simuler l'authentification d'un utilisateur via l'url à des fins de tests.

@@ -18,7 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.model.ldap.entity;
 
-import fr.univlorraine.mondossierweb.model.app.entity.HistoriqueRecherche;
 import lombok.Data;
 
 @Data
@@ -29,14 +28,6 @@ public class LdapPerson {
 	private String displayName;
 	private String codeApprenant;
 	private String mail;
-	
-	public LdapPerson(HistoriqueRecherche hr) {
-		super();
-		this.login=hr.getUidApprenant();
-		this.displayName=hr.getDisplayName();
-		this.codeApprenant=hr.getCodeApprenant();
-		this.mail = hr.getMail();
-	}
 
 	public LdapPerson() {
 		// TODO Auto-generated constructor stub

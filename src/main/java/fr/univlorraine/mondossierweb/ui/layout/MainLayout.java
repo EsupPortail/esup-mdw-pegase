@@ -61,7 +61,7 @@ import com.vaadin.flow.shared.ui.Transport;
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
 import fr.univlorraine.mondossierweb.controllers.MainController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
-import fr.univlorraine.mondossierweb.model.app.entity.Utilisateur;
+import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.service.CurrentUiService;
 import fr.univlorraine.mondossierweb.service.PreferencesService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
@@ -72,7 +72,6 @@ import fr.univlorraine.mondossierweb.ui.view.connexions.ConnexionsView;
 import fr.univlorraine.mondossierweb.ui.view.coordonnees.CoordonneesView;
 import fr.univlorraine.mondossierweb.ui.view.etatcivil.EtatCivilView;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.InscriptionsView;
-import fr.univlorraine.mondossierweb.ui.view.recherche.RechercheView;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
@@ -174,7 +173,6 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 				tabs.setSelectedTab(event.getPreviousTab());
 			}
 		});
-		addDrawerRouterLink(VaadinIcon.SEARCH, "recherche.title", RechercheView.class);
 		addDrawerRouterLink(VaadinIcon.USER_CARD, "etatcivil.title", EtatCivilView.class);
 		addDrawerRouterLink(VaadinIcon.HOME, "coordonnees.title", CoordonneesView.class);
 		//addDrawerRouterLink(VaadinIcon.ROAD_BRANCHES, "parcours.title", ParcoursView.class);

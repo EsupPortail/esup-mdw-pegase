@@ -30,7 +30,7 @@ public final class CSSColorUtils {
 
 	private static final String PATTERN_HEX_COLOR_SHORT = "^#[0-9a-fA-F]{3}$";
 	private static final String PATTERN_HEX_COLOR_LONG = "^#[0-9a-fA-F]{6}$";
-	public static final String MAIN_HEADER_COLOR = "#0096EA";
+	public static final String MAIN_HEADER_COLOR = "#0096ea";
 
 	private CSSColorUtils() {
 	}
