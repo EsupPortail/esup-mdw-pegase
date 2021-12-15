@@ -213,7 +213,12 @@ public final class Utils {
 							cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
 							log.info("Recherche du parent : {}...", cheminParent);
 							insere = insertInList(list, cheminParent, o);
-
+						}
+						// Si element non insere
+						if(!insere) {
+							// injecter l'élément à la fin de la liste
+							list.add(o);
+							log.info("Element {} inséré en fin de liste car sans parent", o.getCodeChemin());
 						}
 					}
 				}
