@@ -158,7 +158,6 @@
 		<dependency>
     		<groupId>com.h2database</groupId>
     		<artifactId>h2</artifactId>
-    		<version>1.4.199</version>
     		<scope>runtime</scope>
 		</dependency>
 		<!--  FLYWAY -->
@@ -263,6 +262,15 @@
             <artifactId>javax.annotation-api</artifactId>
         </dependency>
         <!--  FIN DES DEPENDANCES OPENAPI GENERATOR -->
+        
+        <!-- https://mvnrepository.com/artifact/com.google.cloud.tools/jib-maven-plugin -->
+		<!-- <dependency>
+    		<groupId>com.google.cloud.tools</groupId>
+    		<artifactId>jib-maven-plugin</artifactId>
+    		<version>3.1.4</version>
+		</dependency>  -->
+
+        
 	</dependencies>
 
 	<build>
@@ -379,6 +387,20 @@
                 </dependencies>
 	    	</plugin>
 	    	
+	    	
+	    	 
+	    	<plugin>
+        		<groupId>com.google.cloud.tools</groupId>
+        		<artifactId>jib-maven-plugin</artifactId>
+        		<version>3.1.4</version>
+        		<configuration>
+          			<to>
+            			
+            			<image>mdw-pegase</image>
+          			</to>
+        		</configuration>
+      		</plugin>
+	    	 
 		</plugins>
 	</build>
 
