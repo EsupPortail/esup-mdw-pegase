@@ -33,6 +33,8 @@ import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -46,7 +48,10 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -120,7 +125,9 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 	@Value("${connexion.info.actif}")
 	private transient boolean affichagePopupInfo;
-	
+	@Value("${connexion.info.pref}")
+	private transient boolean popupInfoDesactivable;
+
 	@Value("${etudiant.resume.actif}")
 	private transient boolean affichageResumeEtudiant;
 
@@ -161,7 +168,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		if(affichageResumeEtudiant) {
 			addToDrawer(getResumeLayout());
 		}
-		
+
 		/* Menu */
 		tabs.getStyle().set("max-width", "16em");
 		tabs.getStyle().set("margin-left", "auto");
@@ -204,21 +211,14 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 		// On attache la mainLayout au component afin d'être notifié des changements de dossier
 		mainController.setMainLayout(this);
-		
+
 		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
 		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
-			log.info("Affichage popup info");
-			Dialog infoDialog = new Dialog();
-			Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
-			infoIcon.getStyle().set("margin-right", "1em");
-			infoIcon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
-			infoDialog.add(infoIcon);
-			Span info = new Span();
-			info.getElement().setProperty("innerHTML", getTranslation("connexion.info"));
-			infoDialog.add(info);
-			infoDialog.open();
+			log.info("Affichage popup info ?");
+			createInfoPopUp(securityService.getPrincipal().get());
 		}
 	}
+
 
 	private Component getResumeLayout() {
 		VerticalLayout nomPrenomLayout = new VerticalLayout();
@@ -238,7 +238,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		numeroDossier.getStyle().set("font-size", "smaller");
 		numeroDossier.getStyle().set("color","var(--lumo-contrast-60pct)");
 		nomPrenomLayout.add(numeroDossier);
-		
+
 		// On passe les labels au service pour les mettre à jour en cas de changement de dossier
 		//securityService.setInfoLabels(nomPrenom, numeroDossier);
 		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
@@ -249,7 +249,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		}*/
 		return nomPrenomLayout;
 	}
-	
+
 	/**
 	 * Mise à jour des données "résumé"
 	 * @param apprenant
@@ -262,7 +262,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			nomPrenom.setText("");
 			numeroDossier.setText("");
 		}
-		
+
 	}
 
 
@@ -271,7 +271,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		String prenom = apprenant.getEtatCivil().getPrenom();
 		return nom + " " + prenom;
 	}
-	
+
 	private MenuBar createUserMenu(final Utilisateur utilisateur) {
 
 		// Maj du darkMode en fonction des préférences de l'utilisateur
@@ -341,6 +341,51 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			}
 			return div;
 		}*/
+	}
+	
+	private void createInfoPopUp(final Utilisateur utilisateur) {
+		Optional<PreferencesUtilisateur> pu = prefService.getPreference(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE);
+		// Si la pop-up n'est pas désactivable par l'utilisateur ou qu'il n'a pas demandé à la désactiver
+		if(!popupInfoDesactivable || pu.isEmpty() || !Boolean.parseBoolean(pu.get().getValeur())) {
+			log.info("Affichage popup info");
+			Dialog infoDialog = new Dialog();
+			infoDialog.setCloseOnOutsideClick(true);
+			infoDialog.setCloseOnEsc(false);
+			VerticalLayout dialogLayout = new VerticalLayout();
+			dialogLayout.setPadding(false);
+			Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
+			infoIcon.getStyle().set("margin-right", "1em");
+			infoIcon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
+
+			Span info = new Span();
+			info.getElement().setProperty("innerHTML", getTranslation("connexion.info"));
+
+			HorizontalLayout infoLayout = new HorizontalLayout();
+			infoLayout.add(infoIcon);
+			infoLayout.add(info);
+
+			Checkbox checkInfo =new Checkbox(getTranslation("connexion.check"));
+			checkInfo.getStyle().set("margin-top", "auto");
+			checkInfo.getStyle().set("margin-bottom", "auto");
+			checkInfo.addClickListener(e-> {
+				log.info("Enregistrement parametre Masquer message bienvenu : {}",checkInfo.getValue());
+				prefService.saveUserPref(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE, checkInfo.getValue());
+			});
+
+			FlexLayout btnLayout = new FlexLayout();
+			btnLayout.getStyle().set("margin", "auto");
+			btnLayout.setFlexWrap(FlexWrap.WRAP);
+			btnLayout.add(checkInfo);
+
+			dialogLayout.add(infoLayout);
+			dialogLayout.add(btnLayout);
+			infoDialog.add(dialogLayout);
+
+			infoDialog.open();
+		} else {
+			log.info("Pop-up désactivée par l'utilisateur {}",utilisateur.getUsername());
+		}
+		
 	}
 
 	private void addDrawerRouterLink(final VaadinIcon icon, final String textKey, final Class<? extends Component> navigationTarget) {

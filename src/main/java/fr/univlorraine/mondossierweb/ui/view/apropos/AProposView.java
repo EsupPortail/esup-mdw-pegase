@@ -22,21 +22,16 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.textfield.TextField;
@@ -51,8 +46,6 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
-import fr.univlorraine.mondossierweb.utils.CmpUtils;
-import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.Getter;
 
 @Route(layout = MainLayout.class)
@@ -71,10 +64,10 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 	@Autowired
 	private transient BuildProperties buildProperties;
 
-	private final H4 userDivTitle = new H4();
 	private final TextField username = new TextField();
 	private final Paragraph message = new Paragraph();
 	private final TextField roles = new TextField();
+	private final Span info = new Span();
 	
 	@PostConstruct
 	private void init() {
@@ -101,34 +94,26 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 		Paragraph descriptionComp = new Paragraph(buildProperties.get("description"));
 		descriptionComp.getStyle().set("font-style", "italic");
 		add(descriptionComp);
+
 	}
 	
 	private void initMessageInfo() {
+		add(info);
+		
 		add(message);
 		message.getStyle().set("padding", "1em");
 		message.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
 		message.getStyle().set("border-radius", "1em");
+		
+		
 	}
 
 	private void initUserInfo() {
-		userDivTitle.getStyle().set("margin-bottom", "0");
-		add(userDivTitle);
 
 		securityService.getUsername().ifPresent(username::setValue);
 		username.setReadOnly(true);
 
-		securityService.getPrincipal()
-			.map(UserDetails::getAuthorities)
-			.map(authorities -> authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", ")))
-			.ifPresent(roles::setValue);
-		roles.setReadOnly(true);
-
 		FormLayout userForm = new FormLayout(username);
-		//Si l'utilisateur n'est pas étudiant
-		if(StringUtils.hasText(roles.getValue()) && !roles.getValue().contains(SecurityUtils.ROLE_ETUDIANT) ) {
-			//On affiche également ses rôles
-			userForm.add(roles);
-		}
 		add(userForm);
 	}
 
@@ -139,10 +124,10 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 	public void localeChange(final LocaleChangeEvent event) {
 		setViewTitle(getTranslation("apropos.title"));
 
-		userDivTitle.setText(getTranslation("apropos.usertitle"));
 		username.setLabel(getTranslation("apropos.field.username"));
 		roles.setLabel(getTranslation("apropos.field.roles"));
 		message.setText(getTranslation("apropos.message"));
+		info.getElement().setProperty("innerHTML", getTranslation("connexion.info"));
 	}
 
 	private void setViewTitle(final String viewTitle) {
