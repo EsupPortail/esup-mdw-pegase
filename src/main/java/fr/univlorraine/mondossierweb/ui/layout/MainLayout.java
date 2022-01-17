@@ -342,50 +342,52 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			return div;
 		}*/
 	}
-	
+
 	private void createInfoPopUp(final Utilisateur utilisateur) {
-		Optional<PreferencesUtilisateur> pu = prefService.getPreference(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE);
-		// Si la pop-up n'est pas désactivable par l'utilisateur ou qu'il n'a pas demandé à la désactiver
-		if(!popupInfoDesactivable || pu.isEmpty() || !Boolean.parseBoolean(pu.get().getValeur())) {
-			log.info("Affichage popup info");
-			Dialog infoDialog = new Dialog();
-			infoDialog.setCloseOnOutsideClick(true);
-			infoDialog.setCloseOnEsc(false);
-			VerticalLayout dialogLayout = new VerticalLayout();
-			dialogLayout.setPadding(false);
-			Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
-			infoIcon.getStyle().set("margin-right", "1em");
-			infoIcon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
+		if(StringUtils.hasText(utilisateur.getUsername())) {
+			Optional<PreferencesUtilisateur> pu = prefService.getPreference(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE);
+			// Si la pop-up n'est pas désactivable par l'utilisateur ou qu'il n'a pas demandé à la désactiver
+			if(!popupInfoDesactivable || pu.isEmpty() || !Boolean.parseBoolean(pu.get().getValeur())) {
+				log.info("Affichage popup info");
+				Dialog infoDialog = new Dialog();
+				infoDialog.setCloseOnOutsideClick(true);
+				infoDialog.setCloseOnEsc(false);
+				VerticalLayout dialogLayout = new VerticalLayout();
+				dialogLayout.setPadding(false);
+				Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
+				infoIcon.getStyle().set("margin-right", "1em");
+				infoIcon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
 
-			Span info = new Span();
-			info.getElement().setProperty("innerHTML", getTranslation("connexion.info"));
+				Span info = new Span();
+				info.getElement().setProperty("innerHTML", getTranslation("connexion.info"));
 
-			HorizontalLayout infoLayout = new HorizontalLayout();
-			infoLayout.add(infoIcon);
-			infoLayout.add(info);
+				HorizontalLayout infoLayout = new HorizontalLayout();
+				infoLayout.add(infoIcon);
+				infoLayout.add(info);
 
-			Checkbox checkInfo =new Checkbox(getTranslation("connexion.check"));
-			checkInfo.getStyle().set("margin-top", "auto");
-			checkInfo.getStyle().set("margin-bottom", "auto");
-			checkInfo.addClickListener(e-> {
-				log.info("Enregistrement parametre Masquer message bienvenu : {}",checkInfo.getValue());
-				prefService.saveUserPref(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE, checkInfo.getValue());
-			});
+				Checkbox checkInfo =new Checkbox(getTranslation("connexion.check"));
+				checkInfo.getStyle().set("margin-top", "auto");
+				checkInfo.getStyle().set("margin-bottom", "auto");
+				checkInfo.addClickListener(e-> {
+					log.info("Enregistrement parametre Masquer message bienvenu : {}",checkInfo.getValue());
+					prefService.saveUserPref(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE, checkInfo.getValue());
+				});
 
-			FlexLayout btnLayout = new FlexLayout();
-			btnLayout.getStyle().set("margin", "auto");
-			btnLayout.setFlexWrap(FlexWrap.WRAP);
-			btnLayout.add(checkInfo);
+				FlexLayout btnLayout = new FlexLayout();
+				btnLayout.getStyle().set("margin", "auto");
+				btnLayout.setFlexWrap(FlexWrap.WRAP);
+				btnLayout.add(checkInfo);
 
-			dialogLayout.add(infoLayout);
-			dialogLayout.add(btnLayout);
-			infoDialog.add(dialogLayout);
+				dialogLayout.add(infoLayout);
+				dialogLayout.add(btnLayout);
+				infoDialog.add(dialogLayout);
 
-			infoDialog.open();
-		} else {
-			log.info("Pop-up désactivée par l'utilisateur {}",utilisateur.getUsername());
+				infoDialog.open();
+			} else {
+				log.info("Pop-up désactivée par l'utilisateur {}",utilisateur.getUsername());
+			}
 		}
-		
+
 	}
 
 	private void addDrawerRouterLink(final VaadinIcon icon, final String textKey, final Class<? extends Component> navigationTarget) {
