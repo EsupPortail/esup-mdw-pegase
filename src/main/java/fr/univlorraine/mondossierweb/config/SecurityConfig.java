@@ -38,7 +38,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -46,7 +45,6 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
-import org.springframework.security.web.authentication.switchuser.SwitchUserFilter;
 
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.internal.RouteUtil;
@@ -132,17 +130,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(ACCESS_DENIED_URL)
 			.permitAll()
 			/* Autorise l'usurpation de compte pour les admins */
-			.antMatchers(SWITCH_USER_URL)
+			/*.antMatchers(SWITCH_USER_URL)
 			.hasAuthority(SecurityUtils.ROLE_SUPERADMIN)
 			.antMatchers(SWITCH_USER_EXIT_URL)
-			.hasAuthority(SwitchUserFilter.ROLE_PREVIOUS_ADMINISTRATOR)
+			.hasAuthority(SwitchUserFilter.ROLE_PREVIOUS_ADMINISTRATOR)*/
 			.anyRequest()
 			.authenticated()
 			.and()
 			.addFilter(casAuthenticationFilter())
 			.addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class)
 			.addFilterBefore(logoutFilter(), LogoutFilter.class)
-			.addFilterAfter(switchUserFilter(), FilterSecurityInterceptor.class)
+			//.addFilterAfter(switchUserFilter(), FilterSecurityInterceptor.class)
 			/* La protection Spring Security contre le Cross Scripting Request Forgery est désactivée, Vaadin implémente sa propre protection */
 			.csrf()
 			.disable()
@@ -260,7 +258,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * @throws Exception
 	 *                       lors d'une erreur
 	 */
-	@Bean
+/*	@Bean
 	public SwitchUserFilter switchUserFilter() throws Exception {
 		final SwitchUserFilter switchUserFilter = new SwitchUserFilter();
 		switchUserFilter.setUserDetailsService(userDetailsService);
@@ -268,7 +266,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		switchUserFilter.setExitUserUrl(SWITCH_USER_EXIT_URL);
 		switchUserFilter.setTargetUrl("/");
 		return switchUserFilter;
-	}
+	}*/
 
 	
 	

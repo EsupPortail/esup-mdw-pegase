@@ -25,10 +25,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;

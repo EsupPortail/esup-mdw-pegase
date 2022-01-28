@@ -11,4 +11,4 @@ VOLUME /tmp
 COPY --from=builder /build/target/webapp/WEB-INF/lib /app/lib
 COPY --from=builder /build/target/webapp/META-INF /app/META-INF
 COPY --from=builder /build/target/webapp/WEB-INF/classes /app
-ENTRYPOINT ["java","-cp","app:app/lib/*","fr.univlorraine.blank.Application"]
+ENTRYPOINT ["java","-cp","app:app/lib/*","fr.univlorraine.mondossierweb.Application"]
