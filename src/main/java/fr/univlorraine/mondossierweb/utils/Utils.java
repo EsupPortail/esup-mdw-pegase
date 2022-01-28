@@ -28,12 +28,13 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.flywaydb.core.internal.util.StringUtils;
+import org.springframework.util.StringUtils;
 
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
 import fr.univlorraine.pegase.model.coc.Chemin;
+import fr.univlorraine.pegase.model.coc.Controle;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
 import fr.univlorraine.pegase.model.insgestion.ObjetFormationOuGroupement;
@@ -192,13 +193,13 @@ public final class Utils {
 		return o;
 	}
 
-	public static List<CheminDTO> convertCheminToDTO(List<Chemin> listObj, String codeCheminRacine) {
+	public static List<CheminDTO> convertCheminToDTO(List<Chemin> listObj, String codeCheminRacine, boolean avecControle) {
 		List<CheminDTO> list = new LinkedList<CheminDTO>();
 		if(listObj != null) {
 			for(Chemin obj : listObj) {
 				// Si on est sur un objet concerné par la racine
 				if(obj!=null && obj.getCodeChemin()!=null && obj.getCodeChemin().contains(codeCheminRacine)) {
-					CheminDTO o = createCheminDTO(obj);
+					CheminDTO o = createCheminDTO(obj, avecControle);
 					// S'il s'agit de la racine
 					if(obj.getCodeChemin().equals(codeCheminRacine)) {
 						list.add(o);
@@ -227,7 +228,7 @@ public final class Utils {
 		return list;
 	}
 
-	private static CheminDTO createCheminDTO(Chemin obj) {
+	private static CheminDTO createCheminDTO(Chemin obj, boolean avecControle) {
 		CheminDTO o = new CheminDTO();
 		o.setCode(obj.getCodeChemin());
 		o.setCodeChemin(obj.getCodeChemin());
@@ -236,9 +237,32 @@ public final class Utils {
 
 		o.setObjet(obj);
 		o.setChildObjects(new LinkedList<CheminDTO>());
-
+		
+		// Si l'objet a des contrôles et qu'on doit les afficher
+		if(avecControle && obj.getListeControle()!=null && !obj.getListeControle().isEmpty()) {
+			// Pour chaque contrôle
+			for(Controle c : obj.getListeControle() ) {
+				// Si le contrôle est porteur d'information
+				if(c.getNote()!=null || c.getResultat()!=null || c.getAbsence()!=null) {
+					// Ajout du contrôle en tant qu'enfant de l'objet en cours
+					o.getChildObjects().add(createCheminDTO(c, obj));
+				}
+			}
+		}
 		return o;
 	}
+	
+	private static CheminDTO createCheminDTO(Controle c, Chemin pere) {
+		CheminDTO o = new CheminDTO();
+		o.setCode(c.getCode() + "_" + c.getNumeroSession());
+		o.setCodeChemin(pere.getCodeChemin() + ">" + c.getCode() + "_" + c.getNumeroSession());
+		o.setLibelle(c.getLibelle());
+		o.setControle(c);
+		o.setObjet(pere);
+		o.setChildObjects(new LinkedList<CheminDTO>());
+		return o;
+	}
+	
 
 	private static boolean insertInList(List<CheminDTO> list, String cheminParent, CheminDTO o) {
 		// On recherche l'élément parent de la liste.

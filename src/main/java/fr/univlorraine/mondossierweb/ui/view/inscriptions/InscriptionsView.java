@@ -48,6 +48,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.ContentAlignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -77,6 +78,10 @@ import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.model.chc.TypeAmenagement;
+import fr.univlorraine.pegase.model.coc.Chemin.AbsenceFinaleEnum;
+import fr.univlorraine.pegase.model.coc.Chemin.AbsenceSession1Enum;
+import fr.univlorraine.pegase.model.coc.Chemin.AbsenceSession2Enum;
+import fr.univlorraine.pegase.model.coc.Controle.AbsenceEnum;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
@@ -103,6 +108,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	@Value("${notes.ects}")
 	private transient Boolean avecECTS;
+
+	@Value("${notes.controle}")
+	private transient Boolean avecControle;
 
 	@Value("${cursus.factultatif.italique}")
 	private transient Boolean facItalique;
@@ -178,7 +186,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		setViewTitle(getTranslation("inscriptions.title"));
 
 
-		
+
 		for(TextLabel tl : listTextLabelFormation) {
 			tl.setLabel(getTranslation("inscription.formation"));
 		}
@@ -452,7 +460,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 					VerticalLayout verticalInfoPhotoAndExportLayout= new VerticalLayout();
 					verticalInfoPhotoAndExportLayout.getStyle().set("padding", "0");
-					
+
 					FlexLayout flexInfoAndPhotoLayout = new FlexLayout();
 					if(afficherDetailInscription.equals(Utils.DETAIL_INS_AFFICHE)){
 						flexInfoAndPhotoLayout.getStyle().set("border-top", "1px solid lightgray");
@@ -499,7 +507,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					flexDropDownButtonLayout.setVisible(false);
 					flexDropDownButtonLayout.getStyle().set("padding-bottom","1em");
 					flexDropDownButtonLayout.setWidthFull();
-					
+
 					if(afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE) || afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON) ) {
 						verticalInfoPhotoAndExportLayout.setVisible(false);
 						if(afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
@@ -749,7 +757,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			// Correction du chemin pour en replaçant le séparateur
 			String codeCheminChc = codeChemin.replaceAll("→", ">");
 			// Récupération des notes
-			listObj = Utils.convertCheminToDTO(pegaseService.getNotes(codeApprenant, codePeriode,codeCheminChc), codeCheminChc);
+			listObj = Utils.convertCheminToDTO(pegaseService.getNotes(codeApprenant, codePeriode,codeCheminChc), codeCheminChc, avecControle);
 			log.info("sauvegarde de la liste notes dans la map ({} elements)", listObj.size());
 			// On stocke l'arborescence dans la map
 			notesMap.put(insKey, listObj);
@@ -759,8 +767,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// Création de la TreeGrid contenant l'arborescence des objets de formation
 		TreeGrid<CheminDTO> arbo = new TreeGrid<CheminDTO>();
 		arbo.setItems(listObj, CheminDTO::getChildObjects);
-		arbo.addComponentHierarchyColumn(o -> getObjetNotesLibelle(o)).setFlexGrow(2).setAutoWidth(true).setWidth("100%");
-		arbo.addComponentColumn(o -> getSessionsDetails(o)).setFlexGrow(1);
+		arbo.addComponentHierarchyColumn(o -> getObjetNotesLibelle(o)).setFlexGrow(50).setAutoWidth(true).setWidth("100%");
+		arbo.addComponentColumn(o -> getSessionsDetails(o)).setFlexGrow(1).setAutoWidth(true);
 		arbo.setSelectionMode(SelectionMode.SINGLE);
 		arbo.addItemClickListener(o -> { showDetailNoteDialog(o.getItem());});
 
@@ -912,153 +920,203 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	 * @return Element de la colonne "Notes" du chemin
 	 */
 	private Component getSessionsDetails(CheminDTO o) {
+		// Préparation du layout à retourner
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
+		//l.setAlignContent(ContentAlignment.START);
 
-		if(o!=null && o.getObjet()!=null) {
-			FlexLayout sessionfinalelayout = getSessionFinaleDetails(o);
-			FlexLayout session2layout = getSession2Details(o);
-			FlexLayout session1layout = getSession1Details(o);
-
-
-			// Ajout du résultat de session finale s'il existe
-			if(sessionfinalelayout.getComponentCount()>0) {
-				l.add(sessionfinalelayout);
-			}else {
-				// Sinon ajout du résultat de session 2 s'il existe
-				if(session2layout.getComponentCount()>0) {
-					l.add(session2layout);
-				}else {
-					// Sinon ajout du résultat de session 1 s'il existe
-					if(session1layout.getComponentCount()>0) {
-						l.add(session1layout);
-					} else {
-						Div aucunResultat = new Div();
-						aucunResultat.setText(getTranslation("notes.aucune"));
-						aucunResultat.getStyle().set("font-style", "italic");
-						aucunResultat.getStyle().set("font-size", "smaller");
-						aucunResultat.getStyle().set("margin", "auto");
-						l.add(aucunResultat);
+		// Si l'objet est de type Contrôle
+		if(o.getControle() != null) {
+			FlexLayout controleLayout = getSessionControleDetails(o,true);
+			if(controleLayout.getComponentCount()>0) {
+				// Si note controle n'appartient pas à la session 1
+				if(o.getControle().getNumeroSession().intValue() > 1) {
+					// Ajout d'un espacement pour décaler le résultat du contrôle dans la colonne correspondant à la session
+					for( int i = 1 ; i < o.getControle().getNumeroSession().intValue(); i++ ) {
+						FlexLayout fl = new FlexLayout();
+						fl.setWidth("7em");
+						l.add(fl);
 					}
 				}
+				l.add(controleLayout);
+			} else {
+				l.add(getAucunResultat());
 			}
+		} else {
+			if(o!=null && o.getObjet()!=null) {
+				Component sessionfinalelayout = getSessionFinaleDetails(o, true);
+				Component session2layout = getSession2Details(o, true);
+				Component session1layout = getSession1Details(o, true);
 
-			/*l.addClickListener(e -> {
+				if(session1layout != null) {
+					l.add(session1layout);
+				}
+				if(session2layout != null) {
+					l.add(session2layout);
+				}
+				if(sessionfinalelayout != null) {
+					l.add(sessionfinalelayout);
+				}
+				if(session1layout == null && session2layout == null && sessionfinalelayout == null) {
+					l.add(getAucunResultat());
+				}
+
+				/*l.addClickListener(e -> {
 				showDetailNoteDialog(o);
 			});*/
+			}
 		}
 		return l;
 	}
 
-	private void showDetailNoteDialog(CheminDTO o) {
-		FlexLayout sf = getSessionFinaleDetails(o);
-		FlexLayout s2 = getSession2Details(o);
-		FlexLayout s1 = getSession1Details(o);
 
+	private Component getAucunResultat() {
+		Div aucunResultat = new Div();
+		aucunResultat.setText(getTranslation("notes.aucune"));
+		aucunResultat.getStyle().set("font-style", "italic");
+		aucunResultat.getStyle().set("font-size", "smaller");
+		aucunResultat.getStyle().set("margin", "auto");
+		return aucunResultat;
+	}
+
+
+	private void showDetailNoteDialog(CheminDTO o) {
 		// Création dialog avec le détail des notes et résultat pour l'objet de formation
 		Dialog resultDialog = new Dialog();
 		VerticalLayout dialLayout = new VerticalLayout();
 		Label formationLabel = new Label(o.getLibelle());
+		Label formationLabelPere = new Label(o.getObjet().getObjetFeuille().getLibelleCourt());
 		formationLabel.getStyle().set("margin", "auto");
 		formationLabel.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+		formationLabelPere.getStyle().set("margin", "auto");
+		formationLabelPere.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+		// Si c'est un contrôle
+		if(o.getControle()!=null) {
+			// on affiche le libellé de l'élément parent
+			dialLayout.add(formationLabelPere);
+		}
 		dialLayout.add(formationLabel);
 
-		// Ajout du résultat principal
-		/*Label resultLabel = new Label(getResultat(o));
+
+		// S'il s'agit d'un objet de type contrôle
+		if(o.getControle()!=null) {
+			FlexLayout controleLayout = getSessionControleDetails(o, false);
+			if(controleLayout.getComponentCount()>0) {
+				HorizontalLayout session1 = new HorizontalLayout();
+				session1.setWidthFull();
+				Label labelS1 = new Label(getTranslation("notes.session."+o.getControle().getNumeroSession()));
+				labelS1.getStyle().set("white-space", "nowrap");
+				labelS1.getStyle().set("font-weight", "bold");
+				session1.add(labelS1);
+				session1.add(controleLayout);
+				dialLayout.add(session1);
+			} else {
+				dialLayout.add(getAucunResultat());
+			}
+
+		} else {
+			Component sf = getSessionFinaleDetails(o, false);
+			Component s2 = getSession2Details(o, false);
+			Component s1 = getSession1Details(o, false);
+
+
+			// Ajout du résultat principal
+			/*Label resultLabel = new Label(getResultat(o));
 		resultLabel.getStyle().set("margin", "auto");
 		dialLayout.add(resultLabel);*/
 
-		//Ajout du coeff principal
-		BigDecimal coeff=getCoeff(o);
-		if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
-			HorizontalLayout hl = new HorizontalLayout();
-			hl.setWidthFull();
-			Label libCoeffLabel = new Label(getTranslation("notes.coeff"));
-			libCoeffLabel.getStyle().set("font-weight", "bold");
-			hl.add(libCoeffLabel);
-			Label coeffLabel = new Label(Utils.displayBigDecimal(coeff));
-			coeffLabel.setWidthFull();
-			hl.add(libCoeffLabel);
-			hl.add(coeffLabel);
-			dialLayout.add(hl);
-		}
-		// Ajout des crédits ECTS
-		if(o.getObjet().getCreditEcts()!=null && avecECTS) {
-			HorizontalLayout hl = new HorizontalLayout();
-			hl.setWidthFull();
-			Label libECTSLabel = new Label(getTranslation("notes.ects"));
-			libECTSLabel.getStyle().set("font-weight", "bold");
-			hl.add(libECTSLabel);
-			Label ectsLabel = new Label(Utils.displayBigDecimal(o.getObjet().getCreditEcts()));
-			ectsLabel.setWidthFull();
-			hl.add(libECTSLabel);
-			hl.add(ectsLabel);
-			dialLayout.add(hl);
-		}
-		// AJout des résultats de chaque session
-		boolean aucunResultat=true;
-		boolean aucunResultatSession2=true;
-		// Ajout des infos de session 1
-		if(s1.getComponentCount()>0) {
-			HorizontalLayout session1 = new HorizontalLayout();
-			session1.setWidthFull();
-			Label labelS1 = new Label(getTranslation("notes.session.1"));
-			labelS1.getStyle().set("white-space", "nowrap");
-			labelS1.getStyle().set("font-weight", "bold");
-			session1.add(labelS1);
-			session1.add(s1);
-			dialLayout.add(session1);
-			aucunResultat=false;
-		}
-		// Ajout des infos de session 2
-		if(s2.getComponentCount()>0) {
-			HorizontalLayout session2 = new HorizontalLayout();
-			session2.setWidthFull();
-			Label labelS2 = new Label(getTranslation("notes.session.2"));
-			labelS2.getStyle().set("white-space", "nowrap");
-			labelS2.getStyle().set("font-weight", "bold");
-			session2.add(labelS2);
-			session2.add(s2);
-			dialLayout.add(session2);
-			aucunResultat=false;
-			aucunResultatSession2=false;
-		}
-		// Ajout des infos de session finale
-		if(sf.getComponentCount()>0) {
-			HorizontalLayout sessionFinale = new HorizontalLayout();
-			sessionFinale.setWidthFull();
-			Label labelSF = new Label(getTranslation("notes.session.finale"));
-			labelSF.getStyle().set("font-weight", "bold");
-			sessionFinale.add(labelSF);
-			sessionFinale.add(sf);
-			dialLayout.add(sessionFinale);
-			aucunResultat=false;
-		}
+			//Ajout du coeff principal
+			BigDecimal coeff=getCoeff(o);
+			if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
+				HorizontalLayout hl = new HorizontalLayout();
+				hl.setWidthFull();
+				Label libCoeffLabel = new Label(getTranslation("notes.coeff"));
+				libCoeffLabel.getStyle().set("font-weight", "bold");
+				hl.add(libCoeffLabel);
+				Label coeffLabel = new Label(Utils.displayBigDecimal(coeff));
+				coeffLabel.setWidthFull();
+				hl.add(libCoeffLabel);
+				hl.add(coeffLabel);
+				dialLayout.add(hl);
+			}
+			// Ajout des crédits ECTS
+			if(o.getObjet().getCreditEcts()!=null && avecECTS) {
+				HorizontalLayout hl = new HorizontalLayout();
+				hl.setWidthFull();
+				Label libECTSLabel = new Label(getTranslation("notes.ects"));
+				libECTSLabel.getStyle().set("font-weight", "bold");
+				hl.add(libECTSLabel);
+				Label ectsLabel = new Label(Utils.displayBigDecimal(o.getObjet().getCreditEcts()));
+				ectsLabel.setWidthFull();
+				hl.add(libECTSLabel);
+				hl.add(ectsLabel);
+				dialLayout.add(hl);
+			}
 
-		// Si aucun résultat
-		if(aucunResultat) {
-			HorizontalLayout aucunResLayout = new HorizontalLayout();
-			aucunResLayout.setWidthFull();
-			Div aucunResDiv = new Div();
-			aucunResDiv.setText(getTranslation("notes.aucune"));
-			aucunResDiv.getStyle().set("font-style", "italic");
-			aucunResDiv.getStyle().set("margin", "auto");
-			aucunResLayout.add(aucunResDiv);
-			dialLayout.add(aucunResLayout);
-		}
-		// Si concerné par session 2
-		if(o.getObjet().getConcerneParSession2()!=null && o.getObjet().getConcerneParSession2().booleanValue() && aucunResultatSession2) {
-			HorizontalLayout concerneSession2Layout = new HorizontalLayout();
-			concerneSession2Layout.setWidthFull();
-			Div concerneSession2Div = new Div();
-			concerneSession2Div.setText(getTranslation("notes.concerne.session2"));
-			concerneSession2Div.getStyle().set("font-style", "italic");
-			concerneSession2Layout.add(concerneSession2Div);
-			dialLayout.add(concerneSession2Layout);
+			boolean aucunResultatSession2=true;
+			boolean aucunResultat=true;
+			// Ajout des infos de session 1
+			if(s1 != null) {
+				HorizontalLayout session1 = new HorizontalLayout();
+				session1.setWidthFull();
+				Label labelS1 = new Label(getTranslation("notes.session.1"));
+				labelS1.getStyle().set("white-space", "nowrap");
+				labelS1.getStyle().set("font-weight", "bold");
+				session1.add(labelS1);
+				session1.add(s1);
+				dialLayout.add(session1);
+				aucunResultat=false;
+			}
+			// Ajout des infos de session 2
+			if(s2 != null) {
+				HorizontalLayout session2 = new HorizontalLayout();
+				session2.setWidthFull();
+				Label labelS2 = new Label(getTranslation("notes.session.2"));
+				labelS2.getStyle().set("white-space", "nowrap");
+				labelS2.getStyle().set("font-weight", "bold");
+				session2.add(labelS2);
+				session2.add(s2);
+				dialLayout.add(session2);
+				aucunResultat=false;
+				aucunResultatSession2=false;
+			}
+			// Ajout des infos de session finale
+			if(sf != null) {
+				HorizontalLayout sessionFinale = new HorizontalLayout();
+				sessionFinale.setWidthFull();
+				Label labelSF = new Label(getTranslation("notes.session.finale"));
+				labelSF.getStyle().set("font-weight", "bold");
+				sessionFinale.add(labelSF);
+				sessionFinale.add(sf);
+				dialLayout.add(sessionFinale);
+				aucunResultat=false;
+			}
+
+			// Si aucun résultat
+			if(aucunResultat) {
+				HorizontalLayout aucunResLayout = new HorizontalLayout();
+				aucunResLayout.setWidthFull();
+				Div aucunResDiv = new Div();
+				aucunResDiv.setText(getTranslation("notes.aucune"));
+				aucunResDiv.getStyle().set("font-style", "italic");
+				aucunResDiv.getStyle().set("margin", "auto");
+				aucunResLayout.add(aucunResDiv);
+				dialLayout.add(aucunResLayout);
+			}
+			// Si concerné par session 2
+			if(o.getObjet().getConcerneParSession2()!=null && o.getObjet().getConcerneParSession2().booleanValue() && aucunResultatSession2) {
+				HorizontalLayout concerneSession2Layout = new HorizontalLayout();
+				concerneSession2Layout.setWidthFull();
+				Div concerneSession2Div = new Div();
+				concerneSession2Div.setText(getTranslation("notes.concerne.session2"));
+				concerneSession2Div.getStyle().set("font-style", "italic");
+				concerneSession2Layout.add(concerneSession2Div);
+				dialLayout.add(concerneSession2Layout);
+			}
+
 		}
 		resultDialog.add(dialLayout);
 		resultDialog.open();
-
 	}
 
 
@@ -1095,22 +1153,25 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		return null;
 	}
 
-
 	/**
 	 * 
 	 * @param o
-	 * @return Element de la colonne "Notes" du chemin
+	 * @param compact
+	 * @return Element de la colonne "Notes" du contrôle
 	 */
-	private FlexLayout getSession1Details(CheminDTO o) {
+	private FlexLayout getSessionControleDetails(CheminDTO o, boolean compact) {
 		FlexLayout l = new FlexLayout();
-		l.setWidthFull();
-
-		if(o!=null && o.getObjet()!=null && 
-			(o.getObjet().getNoteSession1()!=null || o.getObjet().getAbsenceSession1()!=null)) {
-			l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteSession1(), o.getObjet().getAbsenceSession1(), o.getObjet().getCoefficientSession1()));
+		if(compact) {
+			l.setMaxWidth("7em");
 		}
-		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession1()!=null) {
-			l.add(createLabelResult(o.getObjet().getResultatSession1().getLibelleCourt()));
+		// Si le controle est non null et publiable
+		if(o!=null && o.getControle()!=null && o.getControle().getPublie()) {
+			if(o.getControle().getNote()!=null || o.getControle().getAbsence()!=null) {
+				l.add(createLabelNoteControle(o.getObjet().getBareme(), o.getControle().getNote(), o.getControle().getAbsence(), compact));
+			}
+			if(o.getControle().getResultat()!=null) {
+				l.add(createLabelResult(compact ? o.getControle().getResultat().getLibelleCourt() : o.getControle().getResultat().getLibelleAffichage()));
+			}
 		}
 		l.getStyle().set("flex-flow", "row wrap");
 		return l;
@@ -1119,53 +1180,133 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	/**
 	 * 
 	 * @param o
+	 * @param compact
 	 * @return Element de la colonne "Notes" du chemin
 	 */
-	private FlexLayout getSession2Details(CheminDTO o) {
+	private Component getSession1Details(CheminDTO o, boolean compact) {
 		FlexLayout l = new FlexLayout();
-		l.setWidthFull();
-
-		if(o!=null && o.getObjet()!=null&& 
-			(o.getObjet().getNoteSession2()!=null || o.getObjet().getAbsenceSession2()!=null)) {
-			l.add(createLabelNote(o.getObjet().getBareme(),o.getObjet().getNoteSession2(), o.getObjet().getAbsenceSession2(), o.getObjet().getCoefficientSession2()));
+		if(compact) {
+			l.setMaxWidth("7em");
 		}
-		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatSession2()!=null) {
-			l.add(createLabelResult(o.getObjet().getResultatSession2().getLibelleCourt()));
+
+		//Si l'objet est non null est que les info de session1 sont publiables
+		if(o!=null && o.getObjet()!=null && o.getObjet().getPublieSession1()) {
+			if(o.getObjet().getNoteSession1()!=null || o.getObjet().getAbsenceSession1()!=null) {
+				l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteSession1(), o.getObjet().getAbsenceSession1(), compact));
+			}
+			if(o.getObjet().getResultatSession1()!=null) {
+				l.add(createLabelResult(compact ? o.getObjet().getResultatSession1().getLibelleCourt() : o.getObjet().getResultatSession1().getLibelleAffichage()));
+			}
 		}
 		l.getStyle().set("flex-flow", "row wrap");
-		return l;
+		l.getStyle().set("flex-direction", "column");
+
+		if(l.getComponentCount()>0) {
+			return l;
+		}
+		return null;
 	}
 
 	/**
 	 * 
 	 * @param o
+	 * @param compact
 	 * @return Element de la colonne "Notes" du chemin
 	 */
-	private FlexLayout getSessionFinaleDetails(CheminDTO o) {
+	private Component getSession2Details(CheminDTO o, boolean compact) {
 		FlexLayout l = new FlexLayout();
-		l.setWidthFull();
+		if(compact) {
+			l.setMaxWidth("7em");
+		}
 
-		if(o!=null && o.getObjet()!=null&& 
-			(o.getObjet().getNoteFinale()!=null || o.getObjet().getAbsenceFinale()!=null)) {
-			l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteFinale(), o.getObjet().getAbsenceFinale(), o.getObjet().getCoefficientFinal()));
+		//Si l'objet est non null est que les info de session2 sont publiables
+		if(o!=null && o.getObjet()!=null && o.getObjet().getPublieSession2()) {
+			if(o.getObjet().getNoteSession2()!=null || o.getObjet().getAbsenceSession2()!=null) {
+				l.add(createLabelNote(o.getObjet().getBareme(),o.getObjet().getNoteSession2(), o.getObjet().getAbsenceSession2(), compact));
+			}
+			if(o.getObjet().getResultatSession2()!=null) {
+				l.add(createLabelResult(compact ? o.getObjet().getResultatSession2().getLibelleCourt() : o.getObjet().getResultatSession2().getLibelleAffichage()));
+			}
 		}
-		if(o!=null && o.getObjet()!=null && o.getObjet().getResultatFinal()!=null) {
-			l.add(createLabelResult(o.getObjet().getResultatFinal().getLibelleCourt()));
-		}
+
 		l.getStyle().set("flex-flow", "row wrap");
-		return l;
+		l.getStyle().set("flex-direction", "column");
+
+		if(l.getComponentCount()>0) {
+			return l;
+		}
+		return null;
 	}
 
-	private Component createLabelNote(int bareme, BigDecimal note, Object absence, BigDecimal coeff) {
+	/**
+	 * 
+	 * @param o
+	 * @param compact
+	 * @return Element de la colonne "Notes" du chemin
+	 */
+	private Component getSessionFinaleDetails(CheminDTO o, boolean compact) {
+		FlexLayout l = new FlexLayout();
+		if(compact) {
+			l.setMaxWidth("7em");
+		}
+
+		//Si l'objet est non null est que les info de session finale sont publiables
+		if(o!=null && o.getObjet()!=null && o.getObjet().getPublieEvaluationsFinales()) {
+			if(o.getObjet().getNoteFinale()!=null || o.getObjet().getAbsenceFinale()!=null) {
+				l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteFinale(), o.getObjet().getAbsenceFinale(), compact));
+			}
+			if(o.getObjet().getResultatFinal()!=null) {
+				l.add(createLabelResult(compact ? o.getObjet().getResultatFinal().getLibelleCourt() : o.getObjet().getResultatFinal().getLibelleAffichage()));
+			}
+		}
+
+		l.getStyle().set("flex-flow", "row wrap");
+		l.getStyle().set("flex-direction", "column");
+
+		if(l.getComponentCount()>0) {
+			return l;
+		}
+		return null;
+	}
+
+	private Component createLabelNote(int bareme, BigDecimal note, Object absence, boolean compact) {
 		Div result = new Div();
 		result.setHeight("1.5em");
-		result.setWidth("5em");
+		if(compact) {
+			result.setWidth("5em");
+		}
+		result.getStyle().set("margin", "auto auto auto 1em");
+		if(note != null) {
+			result.setText(Utils.displayNote(note, bareme, avecBareme));
+		} else {
+			if(absence != null && absence instanceof AbsenceSession1Enum) {
+				AbsenceSession1Enum as1 = (AbsenceSession1Enum) absence;
+				result.setText(compact? getTranslation("notes.absence.prefix") + as1.getValue().charAt(0) : getTranslation("notes.absence") + " " + as1.getValue());
+			}
+			if(absence != null && absence instanceof AbsenceSession2Enum) {
+				AbsenceSession2Enum as2 = (AbsenceSession2Enum) absence;
+				result.setText(compact ? getTranslation("notes.absence.prefix") + as2.getValue().charAt(0) : getTranslation("notes.absence") + " " + as2.getValue());
+			}
+			if(absence != null && absence instanceof AbsenceFinaleEnum) {
+				AbsenceFinaleEnum  af = (AbsenceFinaleEnum ) absence;
+				result.setText(compact ? getTranslation("notes.absence.prefix") + af.getValue().charAt(0) : getTranslation("notes.absence") + " " + af.getValue());
+			}
+		}
+		return result;
+	}
+
+	private Component createLabelNoteControle(int bareme, BigDecimal note, AbsenceEnum absence, boolean compact) {
+		Div result = new Div();
+		result.setHeight("1.5em");
+		if(compact) {
+			result.setWidth("5em");
+		}
 		result.getStyle().set("margin", "auto auto auto 1em");
 		if(note != null) {
 			result.setText(Utils.displayNote(note, bareme, avecBareme));
 		} else {
 			if(absence != null) {
-				result.setText("ABS");
+				result.setText(compact ? getTranslation("notes.absence.prefix") + absence.getValue().charAt(0) : getTranslation("notes.absence") + " " + absence.getValue());
 			}
 		}
 		return result;

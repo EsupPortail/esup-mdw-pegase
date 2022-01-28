@@ -18,14 +18,13 @@
  */
 package fr.univlorraine.mondossierweb.utils;
 
-import org.flywaydb.core.internal.util.StringUtils;
 
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+import org.springframework.util.StringUtils;
+
 import com.vaadin.flow.component.textfield.TextField;
 
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
-import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
 
 /**
  * Outils pour la gestion des préférences de l'application
