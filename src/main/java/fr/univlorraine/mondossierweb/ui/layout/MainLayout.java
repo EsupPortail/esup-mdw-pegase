@@ -395,6 +395,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			DrawerRouterLink routerLink = new DrawerRouterLink(icon, textKey, navigationTarget);
 			Tab tab = new Tab(routerLink);
 			tabs.add(tab);
+			//tabs.add(routerLink);
 			navigationTargetToTab.put(navigationTarget, tab);
 		}
 	}
@@ -403,6 +404,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		DrawerHrefLink link = new DrawerHrefLink(icon, textKey, href, openInNewTab);
 		Tab tab = new Tab(link);
 		tabs.add(tab);
+		//tabs.add(link);
 	}
 
 	/**

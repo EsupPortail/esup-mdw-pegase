@@ -12,3 +12,7 @@ webpack.generated.js
 
 # local dev
 **/application.properties
+
+# Docker
+.docker
+.docker/**/.*
