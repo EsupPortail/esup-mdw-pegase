@@ -27,7 +27,7 @@
 	<artifactId>esup-mdw-pegase</artifactId>
 	<name>mondossierweb</name>
 	<description>Version Pegase de MonDossierWeb</description>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<packaging>war</packaging>
 
 
