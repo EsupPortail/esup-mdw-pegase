@@ -30,7 +30,6 @@
 	<version>1.0.3</version>
 	<packaging>war</packaging>
 
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -430,7 +429,7 @@
 	<profiles>
 
 		<profile>
-			<!-- Production mode is activated using -Pproduction -->
+			<!-- Production mode is activated using -P production -->
 			<id>production</id>
 			<properties>
 				<vaadin.productionMode>true</vaadin.productionMode>
