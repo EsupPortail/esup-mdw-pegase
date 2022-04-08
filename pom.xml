@@ -430,7 +430,7 @@
 	<profiles>
 
 		<profile>
-			<!-- Production mode is activated using -Pproduction -->
+			<!-- Production mode is activated using -P production -->
 			<id>production</id>
 			<properties>
 				<vaadin.productionMode>true</vaadin.productionMode>
