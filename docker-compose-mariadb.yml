@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+
+  php:
+    image: php:7.2-fpm
+    volumes:
+      - ./.docker/php/php.ini:/usr/local/etc/php/php.ini
+    networks:
+      - mdw-network
+    container_name: mariadb_php
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:10.4
+    restart: always
+    container_name: mariadb_mariadb
+    volumes:
+      - ./.docker/mariadb-data:/var/lib/mysql
+    networks:
+      - mdw-network
+    environment:
+      MYSQL_ROOT_PASSWORD: mypass
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: mariadb_phpmyadmin
+    ports:
+      - 8000:80
+    networks:
+      - mdw-network
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+    depends_on:
+      - mariadb
+
+networks:
+    mdw-network:
+        external:
+            name: mdw-network
