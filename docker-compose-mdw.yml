@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+
+  mariadb:
+    #image: registry.univ.fr/esup-mdw-pegase:1.0.2
+    image: esup-mdw-pegase:1.0.2
+    restart: always
+    container_name: mdw-pegase_mdw-pegase
+    ports:
+      - 8080:8080
+    volumes:
+      - ./.docker/esup-mdw-pegase:/config
+    networks:
+      - mdw-network
+    environment:
+      JAVA_OPTS: -Dspring.config.location=file:/config/application.properties
+
+networks:
+    mdw-network:
+        external:
+            name: mdw-network
