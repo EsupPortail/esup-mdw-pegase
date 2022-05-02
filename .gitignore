@@ -1,0 +1,29 @@
+# build
+node/
+node_modules/
+/target/
+webpack.generated.js
+
+# IDE
+.classpath
+.project
+.settings
+.idea/
+
+# local dev
+**/application.properties
+
+# Docker
+.docker
+.docker/**/.*
+
+# k8s
+.k8s
+.k8s/**/.*
+
+# Helm
+helmchart
+helmchart/**/.*
+
+pnpmfile.js
+pnpm-lock.yaml
