@@ -1,0 +1,22 @@
+
+              `:+syhddddhys+:`
+          `/ymMMMMMMMMMMMMMMMMmy/`
+        :hMMMMMMMMMMMMMMMMMMMMMMMMh:
+      :dMMMMMMMMMMMMMMMMMMMMMMMMMMMMm:
+    `yMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMh`
+   .mMMMMMy:::::+MMMMMMo:::::sMMMMMMMMMm.
+  `mMMMMMM+     -MMMMMM:     /MMMMMMMMMMN.
+  hMMMMMMM+     -MMMMMM:     /MMMMMMMMMMMh
+ -MMMMMMMM+     -MMMMMM:     /MMMMMMMMMMMM:
+ oMMMMMMMM+     -MMMMMM:     /MMMMMMMMMMMMs
+ yMMMMMMMM+     -MMMMMM:     /MMMMMMMMMMMMy
+ oMMMMMMMM+     -MMMMMM:     /MMMMMMMMMMMMs
+ -MMMMMMMMs     `NMMMMM+     .MMMMMMMMMMMM:
+  hMMMMMMMN`     -shhyMm      :yhhhNMMMMMd
+  .NMMMMMMMd`         yMy`         yMMMMN.
+   .mMMMMMMMNo`        oNm+`       yMMMN-
+    `hMMMMMMMMMmyo++++oyNMMMdyo++//dMMh`
+      :mMMMMMMMMMMMMMMMMMMMMMMMMMMMMm/
+        :hMMMMMMMMMMMMMMMMMMMMMMMMh/      ${build.name} v${build.version}
+          `/yNMMMMMMMMMMMMMMMMNy+`     Université de Lorraine
+              .:+syhddmdhys+:.

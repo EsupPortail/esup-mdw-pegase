@@ -1,0 +1,11 @@
+[part="content"] {
+   /* padding-left: 0 !important;
+    padding-right: 0 !important;*/
+}
+
+:host {
+    top : 60px !important;
+    bottom : 0px !important;
+    left : 0px !important;
+    right : 0px !important;
+}

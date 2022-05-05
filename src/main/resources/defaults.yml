@@ -1,0 +1,20 @@
+app:
+    color: hsl(0, 90%, 90%)
+
+cas:
+    key: ${random.uuid}
+
+logging:
+    level:
+        com.vaadin.flow.server.communication.PushAtmosphereHandler: OFF
+        com.vaadin.flow.server.communication.PushHandler: OFF
+        fr.univlorraine.mondossierweb.utils.security.AppRequestCache: OFF
+
+spring:
+    jpa:
+        open-in-view: false
+    messages:
+        basename: i18n/vaadin-messages, i18n/vaadin-messages-default, i18n/messages, i18n/messages-default
+
+vaadin:
+    heartbeatInterval: 15

@@ -1,0 +1,24 @@
+[part="navbar"] {
+	padding: var(--lumo-space-s);
+	align-items: baseline;
+	color: white;
+}
+
+[part="navbar"]::before {
+	/*background-color: var(--lumo-secondary-text-color);*/
+	background-color: #343a40!important;
+	opacity: 1;
+}
+	
+[part="drawer"] {
+	background-color : var(--lumo-contrast-5pct);
+	min-width: 28%;
+	border: none !important;
+}
+
+div[content] {
+	background-repeat: no-repeat;
+    background-size: 20%;
+    background-image: url(./images/logo-back.png);
+    background-position: right bottom;
+}

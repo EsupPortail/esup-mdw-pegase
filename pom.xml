@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+
+     ESUP-Portail ESUP-MONDOSSIERWEB-PEGASE - Copyright (c) 2021 ESUP-Portail consortium
+
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fr.univlorraine</groupId>
+	<artifactId>esup-mdw-pegase</artifactId>
+	<name>mondossierweb</name>
+	<description>Version Pegase de MonDossierWeb</description>
+	<version>1.0.3</version>
+	<packaging>war</packaging>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<!-- <version>2.2.13.RELEASE</version> -->
+	 	<version>2.5.12</version>
+	</parent>
+
+	<properties>
+		<java.version>11</java.version>
+		<vaadin.version>14.8.5</vaadin.version>
+		<!--  <vaadin.version>14.6.2</vaadin.version>-->
+		
+		<gson-fire-version>1.8.4</gson-fire-version>
+        <swagger-core-version>1.5.24</swagger-core-version>
+        <okhttp-version>3.14.7</okhttp-version> 
+        <gson-version>2.8.6</gson-version>
+        <commons-lang3-version>3.10</commons-lang3-version>
+        <javax-annotation-version>1.3.2</javax-annotation-version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-bom</artifactId>
+				<version>${vaadin.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<distributionManagement>
+		<repository>
+			<id>ul-releases</id>
+			<url>http://maven.univ-lorraine.fr/content/repositories/releases</url>
+		</repository>
+	</distributionManagement>
+
+	<dependencies>
+		<!-- Packaging (cf. https://docs.spring.io/spring-boot/docs/2.2.3.RELEASE/reference/html/howto.html#howto-create-a-deployable-war-file) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Vaadin -->
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<!-- Replace artifactId with vaadin-core to use only free components -->
+			<artifactId>vaadin-core</artifactId>
+			<exclusions>
+				<!-- Webjars are only needed when running in Vaadin 13 compatibility mode -->
+				<exclusion>
+					<groupId>com.vaadin.webjar</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.insites</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.polymer</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.polymerelements</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.vaadin</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.webcomponents</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-spring-boot-starter</artifactId>
+			<exclusions>
+				<!-- Excluding so that webjars are not included. -->
+				<exclusion>
+					<groupId>com.vaadin</groupId>
+					<artifactId>vaadin-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-cas</artifactId>
+		</dependency>
+
+		<!-- LDAP -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-ldap</artifactId>
+		</dependency>
+
+		<!-- Base de données -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<!--  MYSQL -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!--  H2 -->
+	 	<dependency>
+    		<groupId>com.h2database</groupId>
+    		<artifactId>h2</artifactId>
+    		<scope>runtime</scope>
+		</dependency>
+		<!--  FLYWAY -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<!-- <version>7.7.3</version> -->
+			<!-- <version>3.2.1</version>  -->
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Reactor -->
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-core</artifactId>
+		</dependency>
+
+		<!-- Mails -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		
+		<!-- Développement -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		
+		
+		 <!--  DEBUT DES DEPENDANCES OPENAPI GENERATOR -->
+		<dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger-core-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.gsonfire</groupId>
+            <artifactId>gson-fire</artifactId>
+            <version>${gson-fire-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.oltu.oauth2</groupId>
+            <artifactId>org.apache.oltu.oauth2.client</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+        </dependency>
+        <!--  FIN DES DEPENDANCES OPENAPI GENERATOR -->
+        
+        <!-- https://mvnrepository.com/artifact/com.google.cloud.tools/jib-maven-plugin -->
+		<!-- <dependency>
+    		<groupId>com.google.cloud.tools</groupId>
+    		<artifactId>jib-maven-plugin</artifactId>
+    		<version>3.1.4</version>
+		</dependency>  -->
+
+        
+	</dependencies>
+
+	<build>
+		<defaultGoal>spring-boot:run</defaultGoal>
+		<plugins>
+			<plugin>
+    			<groupId>org.apache.maven.plugins</groupId>
+    			<artifactId>maven-resources-plugin</artifactId>
+    			<version>3.1.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webappDirectory>${project.build.directory}/webapp</webappDirectory>
+					<packagingExcludes>WEB-INF/classes/application.properties</packagingExcludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- Clean build and startup time for Vaadin apps sometimes may exceed the default Spring Boot's 30sec timeout.  -->
+				<configuration>
+					<wait>500</wait>
+					<maxAttempts>240</maxAttempts>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+						<configuration>
+							<additionalProperties>
+								<description>${project.description}</description>
+								<filename>${project.build.finalName}.${project.packaging}</filename>
+							</additionalProperties>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Take care of synchronizing java dependencies and imports in package.json 
+				and main.js files. It also creates webpack.config.js if not exists yet. -->
+			<plugin>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-maven-plugin</artifactId>
+				<version>${vaadin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-frontend</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<pnpmEnable>true</pnpmEnable>
+				</configuration>
+			</plugin>
+
+			<!-- Runs the integration tests (*IT) -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+			</plugin>
+			
+			<!-- License plugin -->
+			<plugin>
+    			<groupId>com.mycila</groupId>
+    			<artifactId>license-maven-plugin</artifactId>
+    			<version>2.3</version>
+    			<configuration>
+        		<header>license/LICENSE-2-header.txt</header>
+        		<properties>
+            		<owner>ESUP-Portail</owner>
+        		</properties>
+        		<includes>
+        		<include>**/*.java</include>
+        		<include>**/*.xml</include>
+        		</includes>
+        		 <excludes>
+            		<exclude>**/*.properties</exclude>
+        		</excludes>
+    			</configuration>
+    			<executions>
+        			<execution>
+            			<goals>
+                			<goal>check</goal>
+            			</goals>
+        			</execution>
+    			</executions>
+			</plugin>
+
+			<!-- Notice plugin -->
+			<plugin>
+                <groupId>org.jasig.maven</groupId>
+                <artifactId>maven-notice-plugin</artifactId>
+                <version>1.0.6</version>
+                <configuration>
+                    <noticeTemplate>license/NOTICE.template</noticeTemplate>
+                    <licenseMapping>
+                        <param>license/license-mappings.xml</param>
+                    </licenseMapping>
+                </configuration>
+                <dependencies>
+                	<!-- Jaxb API -->
+    				<dependency>
+    					<groupId>com.sun.xml.bind</groupId>
+    					<artifactId>jaxb-core</artifactId>
+    					<version>2.3.0.1</version>
+					</dependency>
+					<dependency>
+    					<groupId>javax.xml.bind</groupId>
+    					<artifactId>jaxb-api</artifactId>
+    					<version>2.3.1</version>
+					</dependency>
+					<dependency>
+    					<groupId>com.sun.xml.bind</groupId>
+    					<artifactId>jaxb-impl</artifactId>
+    					<version>2.3.1</version>
+					</dependency>
+					<dependency>
+    					<groupId>org.javassist</groupId>
+    					<artifactId>javassist</artifactId>
+    					<version>3.25.0-GA</version>
+					</dependency>
+                </dependencies>
+	    	</plugin>
+	    	
+	    	
+	    	 
+	    	<plugin>
+        		<groupId>com.google.cloud.tools</groupId>
+        		<artifactId>jib-maven-plugin</artifactId>
+        		<version>3.1.4</version>
+        		<configuration>
+          			<to>
+            			<image>mdw-pegase</image>
+          			</to>
+        		</configuration>
+      		</plugin>
+      		
+			
+	    	 
+		</plugins>
+
+
+	</build>
+
+	<profiles>
+
+		<profile>
+			<!-- Production mode is activated using -P production -->
+			<id>production</id>
+			<properties>
+				<vaadin.productionMode>true</vaadin.productionMode>
+			</properties>
+
+			<dependencies>
+				<dependency>
+					<groupId>com.vaadin</groupId>
+					<artifactId>flow-server-production-mode</artifactId>
+				</dependency>
+			</dependencies>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>-Dvaadin.productionMode</jvmArguments>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>com.vaadin</groupId>
+						<artifactId>vaadin-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>build-frontend</goal>
+								</goals>
+								<phase>compile</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<!-- Docker chromedriver and mysql containers are activated using -Pdocker-tests -->
+			<id>docker-tests</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.fabric8</groupId>
+						<artifactId>docker-maven-plugin</artifactId>
+						<version>0.33.0</version>
+						<configuration>
+							<images>
+								<image>
+									<name>selenium/standalone-chrome:latest</name>
+									<run>
+										<ports>
+											<port>4444:4444</port>
+										</ports>
+										<shmSize>2147483648</shmSize>
+										<env>
+											<START_XVFB>false</START_XVFB>
+										</env>
+									</run>
+								</image>
+								<image>
+									<name>mysql:5</name>
+									<run>
+										<ports>
+											<port>13306:3306</port>
+										</ports>
+										<volumes>
+											<bind>
+												<volume>/var/lib/mysql</volume>
+											</bind>
+										</volumes>
+										<env>
+											<MYSQL_DATABASE>${project.artifactId}-test</MYSQL_DATABASE>
+											<MYSQL_RANDOM_ROOT_PASSWORD>yes</MYSQL_RANDOM_ROOT_PASSWORD>
+											<MYSQL_USER>${project.artifactId}-db-user</MYSQL_USER>
+											<MYSQL_PASSWORD>${project.artifactId}-test-pwd</MYSQL_PASSWORD>
+										</env>
+										<wait>
+											<log>mysqld: ready for connections</log>
+											<time>20000</time>
+										</wait>
+									</run>
+								</image>
+							</images>
+						</configuration>
+						<executions>
+							<execution>
+								<id>start-chromedriver</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>start</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>stop-chromedriver</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>stop</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<configuration>
+							<environmentVariables>
+								<SELENIUM_REMOTE_URL>http://localhost:4444/wd/hub</SELENIUM_REMOTE_URL>
+								<MYSQL_URL>jdbc:mysql://localhost:13306/${project.artifactId}-test?serverTimezone=Europe/Paris</MYSQL_URL>
+								<MYSQL_USER>${project.artifactId}-db-user</MYSQL_USER>
+								<MYSQL_PASSWORD>${project.artifactId}-test-pwd</MYSQL_PASSWORD>
+							</environmentVariables>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<!-- Maven frontend (node+npm) is activated using -Pmaven-frontend -->
+			<id>maven-frontend</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>1.9.1</version>
+						<configuration>
+							<nodeVersion>v12.16.1</nodeVersion>
+						</configuration>
+						<executions>
+							<execution>
+								<id>install node and npm</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+</project>

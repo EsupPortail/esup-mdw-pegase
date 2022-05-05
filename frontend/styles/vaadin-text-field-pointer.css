@@ -1,0 +1,29 @@
+
+:host label {
+	font-weight: 500 !important;
+    font-size: .7rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #343a40;
+}
+
+:host input {
+	font-weight: 700;
+    padding: 0;
+    color: 	#343a40;
+}
+
+	
+:host([readonly]) [part="input-field"] {
+	padding: 0;
+}
+
+:host([readonly]) [part="input-field"]::after {
+	border-style: none;    
+}
+
+/*
+:host(.nice-textfield) [part="input-field"]::after {
+	border-style: none;    
+	 border-width: 0px;     
+}*/

@@ -1,0 +1,22 @@
+:host(.user-menu) [part="menu-bar-button"] {
+	padding: 0;
+	border-radius: 50%;
+}
+
+:host(.user-menu) vaadin-context-menu-item {
+	padding: 2px;
+}
+
+:host .user-image {
+	width: 36px;
+	height: 36px;
+	line-height: 36px;
+	margin: var(--lumo-space-xs);
+	padding: 0;
+	border-radius: 50%;
+	overflow: hidden;
+	/* rouge clair */
+	/*background-color: var(--lumo-primary-color-10pct);*/
+	background-color: #ffffff3b;
+	color: white;
+}
