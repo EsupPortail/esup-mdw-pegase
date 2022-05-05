@@ -362,6 +362,7 @@
         		</includes>
         		 <excludes>
             		<exclude>**/*.properties</exclude>
+            		<exclude>.m2/**/*.*</exclude>
         		</excludes>
     			</configuration>
     			<executions>
