@@ -1,0 +1,6 @@
+include:
+  - project: 'dn-sied/ci-config'
+    file: '/.gitlab-ci-template.yml'
+
+variables:
+  MAVEN_ADDITIONAL_CLI_OPTS: "-Pproduction -Dmaven.test.skip=true -Dspring-boot.run.profiles=test"

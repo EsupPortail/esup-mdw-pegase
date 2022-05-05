@@ -27,7 +27,7 @@
 	<artifactId>esup-mdw-pegase</artifactId>
 	<name>mondossierweb</name>
 	<description>Version Pegase de MonDossierWeb</description>
-	<version>1.0.3</version>
+	<version>${revision}${sha1}${changelist}</version>
 	<packaging>war</packaging>
 
 	<parent>
@@ -38,6 +38,9 @@
 	</parent>
 
 	<properties>
+		<revision>1.0.3</revision>
+		<sha1></sha1>
+		<changelist>-SNAPSHOT</changelist>
 		<java.version>11</java.version>
 		<vaadin.version>14.8.5</vaadin.version>
 		<!--  <vaadin.version>14.6.2</vaadin.version>-->
