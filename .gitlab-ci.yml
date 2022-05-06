@@ -7,6 +7,7 @@ variables:
   
 .build_image:
   image : docker:19.03.12
+  stage: deploy
   script:
     - docker build -t esup-mdw-pegase .
 
