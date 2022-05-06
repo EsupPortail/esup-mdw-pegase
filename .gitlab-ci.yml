@@ -9,7 +9,7 @@ variables:
   image : docker:19.03.12
   stage: deploy
   services:
-    - docker:dind
+    - docker:19.03.12-dind
   before_script:
     - docker info
     - echo $CI_BUILD_TOKEN | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY 
