@@ -4,7 +4,7 @@ include:
 
 variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pproduction -Dmaven.test.skip=true -Dspring-boot.run.profiles=test"
-  
+
 .build_image:
   image : 
     name: gcr.io/kaniko-project/executor:debug
