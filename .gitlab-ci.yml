@@ -5,10 +5,6 @@ include:
 variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pproduction -Dmaven.test.skip=true -Dspring-boot.run.profiles=test"
   
-before_script:
-  image : docker:19.03.12
-  - docker info
-  
 build_image:
   image : docker:19.03.12
   script:
