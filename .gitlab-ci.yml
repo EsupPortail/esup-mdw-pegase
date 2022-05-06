@@ -7,7 +7,6 @@ variables:
   
 .build_image:
   image : docker:stable
-  privileged : true
   stage: deploy
   when: manual
   script:
