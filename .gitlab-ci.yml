@@ -8,11 +8,14 @@ variables:
 .build_image:
   image : docker:19.03.12
   stage: deploy
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY 
   when: manual
   script:
-    - docker build -t esup-mdw-pegase:1.0.3 .
-    - docker image tag esup-mdw-pegase:1.0.3 registry.univ-lorraine.fr/esup-mdw-pegase:1.0.3
-    - docker image push registry.univ-lorraine.fr/esup-mdw-pegase:1.0.3
+    - docker build -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
 
 build and push docker image:
   extends: .build_image
