@@ -4,3 +4,10 @@ include:
 
 variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pproduction -Dmaven.test.skip=true -Dspring-boot.run.profiles=test"
+  
+before_script:
+  - docker info
+  
+build_image:
+  script:
+    - docker build -t esup-mdw-pegase .
