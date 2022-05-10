@@ -18,8 +18,10 @@
  */
 package fr.univlorraine.mondossierweb.controllers;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,10 +29,12 @@ import org.springframework.stereotype.Component;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
 
-import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
+import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
+import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,14 +43,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MainController {
 	
+	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<String,List<ObjetMaquetteDTO>>();
+
+	Map<String,List<CheminDTO>> notesMap = new HashMap<String,List<CheminDTO>>();
+
+	
 	@Autowired
 	private transient PegaseService pegaseService;
 	
 	@Autowired
 	private transient SecurityService securityService;
 
+	// Layout permettant la maj du menu latéral lors de la récupération dossier (cf méthode checkDossier)
 	private MainLayout mainLayout;
 	
+	public void setMainLayout(MainLayout mainLayout) {
+		this.mainLayout = mainLayout;
+	}
+	
+	/**
+	 * 
+	 * @return Dossier en session si renseigné
+	 */
 	public ApprenantEtInscriptions getDossier() {
 		if(VaadinSession.getCurrent().getAttribute("dossierApprenant")!=null) {
 			return (ApprenantEtInscriptions) VaadinSession.getCurrent().getAttribute("dossierApprenant");
@@ -54,6 +72,10 @@ public class MainController {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @return Code apprenant du dossier en cours de consultation
+	 */
 	public String getDossierConsulte() {
 		// On a rien dans la Session Vaadin mais on a l'info dans le SecurityService (cas d'un étudiant qui vient de se connecter à l'application)
 		if(VaadinSession.getCurrent().getAttribute("codeApprenant")==null && securityService.getCodeEtudiant().isPresent()) {
@@ -90,35 +112,66 @@ public class MainController {
 		}
 	}
 
-	public MainLayout getMainLayout() {
-		return mainLayout;
-	}
-
-	public void setMainLayout(MainLayout mainLayout) {
-		this.mainLayout = mainLayout;
+	/**
+	 * 
+	 * @param codeApprenant
+	 * @param codeChemin
+	 * @param codePeriode
+	 * @return le cursus de l'apprenant pour le chemin et la période en paramètre
+	 */
+	public List<ObjetMaquetteDTO> getCursus(String codeApprenant, String codeChemin, String codePeriode) {
+		List<ObjetMaquetteDTO> listObj=new LinkedList<ObjetMaquetteDTO> ();
+		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
+		// Gestion du cache des cursus en session
+		if(cursusMap.containsKey(insKey)) {
+			log.info("Récupération de la liste cursus dans la map");
+			//Récupération de l'arborescence dans la map
+			listObj = cursusMap.get(insKey);
+		}else {
+			log.info("Récupération de la liste cursus dans Pégase");
+			// Correction du chemin pour en replaçant le séparateur
+			String codeCheminChc = codeChemin.replaceAll("→", ">");
+			// Récupération du cursus
+			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
+			// suppression de la racine
+			if(listObj!=null && !listObj.isEmpty()) {
+				listObj = listObj.get(0).getChildObjects();
+			}
+			log.info("sauvegarde de la liste cursus dans la map ({} elements)", listObj.size());
+			// On stocke l'arborescence dans la map
+			cursusMap.put(insKey, listObj);
+		}
+		return listObj;
 	}
 	
-	public Optional<String> getSearch() {
-		if(VaadinSession.getCurrent().getAttribute("recherche")!=null) {
-			return Optional.of((String) VaadinSession.getCurrent().getAttribute("recherche"));
+	/**
+	 * 
+	 * @param codeApprenant
+	 * @param codeChemin
+	 * @param codePeriode
+	 * @param avecControle
+	 * @return les notes de l'étudiant pour le codeApprenant, le chemin, la période en paramètre
+	 */
+	public List<CheminDTO> getNotes(String codeApprenant, String codeChemin, String codePeriode, boolean avecControle) {
+		
+		List<CheminDTO> listObj=new LinkedList<CheminDTO> ();
+		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
+		// Gestion du cache des notes en session
+		if(notesMap.containsKey(insKey)) {
+			log.info("Récupération de la liste notes dans la map");
+			//Récupération de l'arborescence dans la map
+			listObj = notesMap.get(insKey);
+		}else {
+			log.info("Récupération de la liste notes dans Pégase");
+			// Correction du chemin pour en replaçant le séparateur
+			String codeCheminChc = codeChemin.replaceAll("→", ">");
+			// Récupération des notes
+			listObj = Utils.convertCheminToDTO(pegaseService.getNotes(codeApprenant, codePeriode,codeCheminChc), codeCheminChc, avecControle);
+			log.info("sauvegarde de la liste notes dans la map ({} elements)", listObj.size());
+			// On stocke l'arborescence dans la map
+			notesMap.put(insKey, listObj);
 		}
-		return Optional.empty();
-	}
-
-	@SuppressWarnings("unchecked")
-	public Collection<LdapPerson> getResultatRecherche() {
-		if(VaadinSession.getCurrent().getAttribute("resultatRecherche")!=null) {
-			return (Collection<LdapPerson>) VaadinSession.getCurrent().getAttribute("resultatRecherche");
-		}
-		return null;
-	}
-
-	public void setResultatRecherche(Collection<LdapPerson> collection) {
-		VaadinSession.getCurrent().setAttribute("resultatRecherche", collection);
-	}
-
-	public void saveSearch(String recherche) {
-		VaadinSession.getCurrent().setAttribute("recherche", recherche);
+		return listObj;
 	}
 	
 
