@@ -74,10 +74,7 @@ import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.model.chc.TypeAmenagement;
-import fr.univlorraine.pegase.model.coc.Chemin.AbsenceFinaleEnum;
-import fr.univlorraine.pegase.model.coc.Chemin.AbsenceSession1Enum;
-import fr.univlorraine.pegase.model.coc.Chemin.AbsenceSession2Enum;
-import fr.univlorraine.pegase.model.coc.Controle.AbsenceEnum;
+import fr.univlorraine.pegase.model.coc.Absence;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
@@ -1232,7 +1229,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		return null;
 	}
 
-	private Component createLabelNote(int bareme, BigDecimal note, Object absence, boolean compact) {
+	private Component createLabelNote(int bareme, BigDecimal note, Absence absence, boolean compact) {
 		Div result = new Div();
 		result.setHeight("1.5em");
 		if(compact) {
@@ -1242,7 +1239,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		if(note != null) {
 			result.setText(Utils.displayNote(note, bareme, avecBareme));
 		} else {
-			if(absence != null && absence instanceof AbsenceSession1Enum) {
+			/*if(absence != null && absence instanceof AbsenceSession1Enum) {
 				AbsenceSession1Enum as1 = (AbsenceSession1Enum) absence;
 				result.setText(compact? getTranslation("notes.absence.prefix") + as1.getValue().charAt(0) : getTranslation("notes.absence") + " " + as1.getValue());
 			}
@@ -1253,12 +1250,15 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			if(absence != null && absence instanceof AbsenceFinaleEnum) {
 				AbsenceFinaleEnum  af = (AbsenceFinaleEnum ) absence;
 				result.setText(compact ? getTranslation("notes.absence.prefix") + af.getValue().charAt(0) : getTranslation("notes.absence") + " " + af.getValue());
+			}*/
+			if(absence != null) {
+				result.setText(compact ? getTranslation("notes.absence.prefix") + absence.getValue().charAt(0) : getTranslation("notes.absence") + " " + absence.getValue());
 			}
 		}
 		return result;
 	}
 
-	private Component createLabelNoteControle(int bareme, BigDecimal note, AbsenceEnum absence, boolean compact) {
+	private Component createLabelNoteControle(int bareme, BigDecimal note, Absence absence, boolean compact) {
 		Div result = new Div();
 		result.setHeight("1.5em");
 		if(compact) {

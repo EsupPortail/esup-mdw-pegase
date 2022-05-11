@@ -1,26 +1,8 @@
-/**
- *
- *  ESUP-Portail ESUP-MONDOSSIERWEB-PEGASE - Copyright (c) 2021 ESUP-Portail consortium
- *
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- */
 /*
- * API Contrôle du cursus - Bloc «publication»
- * Fonctionnement général de l'API -------------------------------  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`  Vous pouvez recevoir un des ces codes retours si vous n'êtes pas authentifié ou autorisé :   * 401 - Unauthorized - Vous n'êtes pas authentifié    * Il n'y a pas de token passé dans le header HTTP `Authorization`    * Le token passé n'est pas au bon format (Bearer [<token-jwt>](https://jwt.io/))  * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération    * La signature du token est incorrecte / n'a pas pû être vérifiée    * Le token est expiré    * Vérifier les droits de l'utilisateur  * 500 - Internal Server Error    * Il n'est pas encore actif   ### Code retour   * 200 - Ok : L'opération s'est déroulée avec succès  * 201 - Created : L'opération a aboutie à la création d'une ressource  * 400 - Bad request :    * Un ou des paramètres d'entrées sont erronées    * Une erreur fonctionnelle s'est produite  * 404 - Not Found : La ressource demandée n'est pas trouvé    * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide  * 500 - Internal server error : Erreur inattendue et non gérés  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :  * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)    * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés    * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)  * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))  * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))  * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)  * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)  * boolean - Un booléen représenté par `true` ou `false` 
+ * COC Publication v1 - Contrôle du cursus - Bloc «publication»
+ * Liste l'ensemble des services et des opérations disponible pour la publication de notes et des résultats à partir des données du module COC (Contrôle du cursus)  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé (voir le paragraphe [Authentification](#section/Authentication) pour les détails).  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :  * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)    * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés    * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)  * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))  * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))  * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)  * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)  * boolean - Un booléen représenté par `true` ou `false`  ### Code retour   * 200 - Ok : L'opération s'est déroulée avec succès  * 201 - Created : L'opération a aboutie à la création d'une ressource  * 400 - Bad request :    * Un ou des paramètres d'entrées sont erronées    * Une erreur fonctionnelle s'est produite  * 404 - Not Found : La ressource demandée n'est pas trouvé    * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide  * 500 - Internal server error : Erreur inattendue et non gérés 
  *
- * The version of the OpenAPI document: 1.0.0
+ * The version of the OpenAPI document: 1.1.0
  * 
  *
  * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
@@ -46,7 +28,7 @@ import java.io.IOException;
  * Le détail de l&#39;élément feuille (le plus à droite) du chemin
  */
 @ApiModel(description = "Le détail de l'élément feuille (le plus à droite) du chemin")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-21T15:23:17.003+02:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:42.638+02:00[Europe/Paris]")
 public class ObjetFeuille {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
@@ -60,6 +42,8 @@ public class ObjetFeuille {
   @SerializedName(SERIALIZED_NAME_LIBELLE_LONG)
   private String libelleLong;
 
+  public ObjetFeuille() { 
+  }
 
   public ObjetFeuille code(String code) {
     
@@ -71,6 +55,7 @@ public class ObjetFeuille {
    * Le code de l&#39;objet feuille
    * @return code
   **/
+  @javax.annotation.Nonnull
   @ApiModelProperty(example = "ANNEE1", required = true, value = "Le code de l'objet feuille")
 
   public String getCode() {
@@ -93,6 +78,7 @@ public class ObjetFeuille {
    * Le libellé court de l&#39;objet feuille
    * @return libelleCourt
   **/
+  @javax.annotation.Nonnull
   @ApiModelProperty(example = "A1", required = true, value = "Le libellé court de l'objet feuille")
 
   public String getLibelleCourt() {
@@ -115,6 +101,7 @@ public class ObjetFeuille {
    * Le libellé long de l&#39;objet feuille
    * @return libelleLong
   **/
+  @javax.annotation.Nonnull
   @ApiModelProperty(example = "Année 1", required = true, value = "Le libellé long de l'objet feuille")
 
   public String getLibelleLong() {
@@ -128,7 +115,7 @@ public class ObjetFeuille {
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -146,7 +133,6 @@ public class ObjetFeuille {
     return Objects.hash(code, libelleCourt, libelleLong);
   }
 
-
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
@@ -162,7 +148,7 @@ public class ObjetFeuille {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }
