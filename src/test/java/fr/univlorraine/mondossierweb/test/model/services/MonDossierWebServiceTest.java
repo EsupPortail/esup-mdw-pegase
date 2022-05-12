@@ -58,13 +58,14 @@ public class MonDossierWebServiceTest {
 
 	private List<ObjetMaquetteDTO> cursus1;
 	
-	private List<ObjetMaquetteExtension> maquette1;
+	private List<List<ObjetMaquetteExtension>> maquette1;
 	
 	/** Initialisation. */
 	@Before
 	public void setUp() {
 		cursus1 = new LinkedList<ObjetMaquetteDTO> ();
-		maquette1 = new LinkedList<ObjetMaquetteExtension> ();
+		//maquette1 = new LinkedList<ObjetMaquetteExtension> ();
+		
 	}
 
 	

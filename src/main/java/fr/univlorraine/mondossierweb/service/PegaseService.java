@@ -30,8 +30,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
+import fr.univlorraine.pegase.api.chc.CursusApi;
 import fr.univlorraine.pegase.api.chc.InscriptionApi;
 import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
@@ -86,7 +88,7 @@ public class PegaseService implements Serializable {
 
 	// CHC API
 	private ApiClient apiClientChc = new ApiClient();
-	private InscriptionApi insApiChc = new InscriptionApi();
+	private CursusApi insApiChc = new CursusApi();
 
 	// COC API
 	private ApiClient apiClientCoc = new ApiClient();
@@ -151,7 +153,7 @@ public class PegaseService implements Serializable {
 
 	}
 
-	public List<ObjetMaquetteExtension> getCursus(String codeApprenant, String codePeriode) {
+	public List<List<ObjetMaquetteExtension>> getCursus(String codeApprenant, String codePeriode) {
 
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
@@ -159,8 +161,10 @@ public class PegaseService implements Serializable {
 			//insApiChc.getApiClient().setAccessToken(accessTokenService.getToken());
 			insApiChc.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
+				List<String> statutsInscription = List.of(Utils.STATUT_INSCRIPTION_VALIDE);
 				// Appel de l'API Pégase
-				List<ObjetMaquetteExtension> listObj = insApiChc.lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode(codeApprenant, codePeriode, etablissement);
+				//List<ObjetMaquetteExtension> listObj = insApiChc.lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode(codeApprenant, codePeriode, etablissement);
+				List<List<ObjetMaquetteExtension>> listObj = insApiChc.lireArbreCursusDesInscriptions(etablissement, codeApprenant, codePeriode, statutsInscription);
 				if(listObj != null) {
 					log.info("Cursus de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
 					log.debug("Cursus de : {}", listObj);
@@ -185,7 +189,7 @@ public class PegaseService implements Serializable {
 			pubApiCoc.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
-				List<Chemin> listObj = pubApiCoc.listerCursusPubliableApprenant(codeApprenant, codeChemin, codePeriode, etablissement);
+				List<Chemin> listObj = pubApiCoc.listerCursusPubliableApprenant(etablissement, codePeriode,codeApprenant, codeChemin);
 				if(listObj != null) {
 					log.info("Notes de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
 					log.debug("Notes de : {}", listObj);
