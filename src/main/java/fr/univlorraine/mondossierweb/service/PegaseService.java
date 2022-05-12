@@ -148,7 +148,7 @@ public class PegaseService implements Serializable {
 				log.info("Anomalie lors de l'appel à la methode API : listerInscriptionsValidees");
 			}
 		} catch (ApiException e) {
-			log.error("Erreur lors de l'appel à la methode API : listerInscriptionsValidees => ({}) {} ",e.getCode(), e.getMessage(), e);
+			log.error("Erreur lors de l'appel à la methode API : listerInscriptionsValidees => ({}) message: {} body : {} ",e.getCode(), e.getMessage(), e.getResponseBody(), e);
 		}
 
 	}
@@ -173,7 +173,7 @@ public class PegaseService implements Serializable {
 				}
 				return listObj;
 			} catch (ApiException e) {
-				log.error("Erreur lors de l'appel à la methode API : lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode2 pour le code apprenant : {}, periode {} et etablissement : {} => ({}) {}", codeApprenant,codePeriode, etablissement,e.getCode(), e.getMessage(),  e);
+				log.error("Erreur lors de l'appel à la methode API : lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode2 pour le code apprenant : {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codePeriode, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
 			}
 		}
 		return null;
@@ -198,7 +198,7 @@ public class PegaseService implements Serializable {
 				}
 				return listObj;
 			} catch (ApiException e) {
-				log.error("Erreur lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {} => ({}) {}", codeApprenant,codeChemin, codePeriode, etablissement, e.getCode(), e.getMessage(), e);
+				log.error("Erreur lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codeChemin, codePeriode, etablissement, e.getCode(), e.getMessage(), e.getResponseBody(), e);
 			}
 		}
 		return null;
@@ -228,7 +228,7 @@ public class PegaseService implements Serializable {
 				}
 				return dossier;
 			} catch (ApiException e) {
-				log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ({}) {}", codeApprenant, etablissement,e.getCode(), e.getMessage(), e);
+				log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(), e);
 			}
 		}
 		return null;
@@ -255,7 +255,7 @@ public class PegaseService implements Serializable {
 				return photo;
 			} catch (ApiException e) {
 				// Erreur lors de la récupération de la photo. Un simple warning
-				log.warn("Erreur lors de l'appel à la methode API : contenuPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {} => ({}) {}", codeApprenant, etablissement, cible, codePhoto,e.getCode(), e.getMessage());
+				log.warn("Erreur lors de l'appel à la methode API : contenuPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {} => ({}) message: {} body : {}", codeApprenant, etablissement, cible, codePhoto,e.getCode(), e.getMessage(),e.getResponseBody());
 			}
 		}
 		return null;
@@ -280,7 +280,7 @@ public class PegaseService implements Serializable {
 			}
 			return certificat;
 		} catch (ApiException e) {
-			log.error("Erreur lors de l'appel à la methode API : certificatDeScolarite => ({}) {}",e.getCode(), e.getMessage(), e);
+			log.error("Erreur lors de l'appel à la methode API : certificatDeScolarite => ({}) message: {} body : {}",e.getCode(), e.getMessage(), e.getResponseBody(), e);
 		}
 		return null;
 	}
@@ -304,7 +304,7 @@ public class PegaseService implements Serializable {
 			}
 			return null;
 		} catch (ApiException e) {
-			log.error("Erreur lors de l'appel à la methode API : attestationDePaiement => ({}) {}",e.getCode(), e.getMessage(),e);
+			log.error("Erreur lors de l'appel à la methode API : attestationDePaiement => ({}) message: {} body : {}",e.getCode(), e.getMessage(), e.getResponseBody(), e);
 		}
 		return null;
 	}
@@ -329,7 +329,7 @@ public class PegaseService implements Serializable {
 				log.info("Anomalie lors de l'appel à la methode API : lireApprenant");
 			}
 		} catch (ApiException e) {
-			log.error("Erreur lors de l'appel à la methode API : lireApprenant => ({}) {}",e.getCode(), e.getMessage(), e);
+			log.error("Erreur lors de l'appel à la methode API : lireApprenant => ({}) message: {} body : {}",e.getCode(), e.getMessage(), e.getResponseBody(), e);
 		}
 
 	}
