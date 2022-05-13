@@ -60,7 +60,8 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
-import fr.univlorraine.mondossierweb.controllers.MainController;
+import fr.univlorraine.mondossierweb.controllers.PegaseController;
+import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.service.ExportService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
@@ -116,7 +117,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
-	private transient MainController etudiantController;
+	private transient SessionController sessionController;
+	@Autowired
+	private transient PegaseController pegaseController;
 	@Autowired
 	private transient ExportService exportService;
 	@Autowired
@@ -233,9 +236,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			Notification.show(getTranslation("error.accesdossierrefuse"));
 		}
 		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-		etudiantController.checkDossier();
+		sessionController.checkDossier();
 		// Mise à jour de l'affichage
-		updateData(etudiantController.getDossier()!=null ? etudiantController.getDossier() : null);
+		updateData(sessionController.getDossier()!=null ? sessionController.getDossier() : null);
 		//Force la maj des label
 		localeChange(null);
 	}
@@ -406,7 +409,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						photoButton.addClickListener(c-> {
 							ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  Utils.getCodeVoeu(inscription));
 							if(photo != null) {
-								StreamResource resource = new StreamResource("photo_"+etudiantController.getDossierConsulte()+".jpg", () -> photo);
+								StreamResource resource = new StreamResource("photo_"+sessionController.getDossierConsulte()+".jpg", () -> photo);
 								Image image = new Image(resource, "photographie");
 								image.setHeight("10em");
 								image.getStyle().set("border-radius", "0.8em");
@@ -692,7 +695,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		log.info("Récupération du cursus pour {} sur {}", codeApprenant, codeChemin);
 
 		//Récupération du cursus
-		List<ObjetMaquetteDTO> listObj = etudiantController.getCursus(codeApprenant, codeChemin, codePeriode);
+		List<ObjetMaquetteDTO> listObj = pegaseController.getCursus(codeApprenant, codeChemin, codePeriode);
 
 		// clean du layout
 		cursusLayout.removeAll();
@@ -720,7 +723,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		log.info("Récupération des notes pour {} sur {}", codeApprenant, codeChemin);
 
 		// Récupération des notes
-		List<CheminDTO> listObj = etudiantController.getNotes(codeApprenant, codeChemin, codePeriode, avecControle);
+		List<CheminDTO> listObj = pegaseController.getNotes(codeApprenant, codeChemin, codePeriode, avecControle);
 
 		notesLayout.removeAll();
 

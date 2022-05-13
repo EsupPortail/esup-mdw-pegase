@@ -20,33 +20,35 @@ package fr.univlorraine.mondossierweb.test.model.services;
 
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 
-
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import fr.univlorraine.mondossierweb.controllers.MainController;
+import fr.univlorraine.mondossierweb.controllers.PegaseController;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
+import lombok.extern.slf4j.Slf4j;
 
 /** Tests du controller mainController.
 *
 * @author Charlie Dubois */
-@RunWith(SpringRunner.class)
-@Import({PegaseService.class})
+@ExtendWith(SpringExtension.class)
+@Import({PegaseController.class})
+@Slf4j
 public class MonDossierWebServiceTest {
 
 	@MockBean
@@ -54,17 +56,18 @@ public class MonDossierWebServiceTest {
 
 	
 	@Resource
-	private MainController mainController;
+	private PegaseController pegaseController;
 
-	private List<ObjetMaquetteDTO> cursus1;
+	private static List<ObjetMaquetteDTO> cursus1;
 	
-	private List<List<ObjetMaquetteExtension>> maquette1;
+	private static List<List<ObjetMaquetteExtension>> maquette1;
 	
 	/** Initialisation. */
-	@Before
-	public void setUp() {
+	@BeforeAll
+	public static void setUp() {
 		cursus1 = new LinkedList<ObjetMaquetteDTO> ();
-		//maquette1 = new LinkedList<ObjetMaquetteExtension> ();
+		List<ObjetMaquetteExtension> maquette0 = new LinkedList<ObjetMaquetteExtension> ();
+		maquette1 = Arrays.asList(maquette0);
 		
 	}
 
@@ -72,8 +75,9 @@ public class MonDossierWebServiceTest {
 	/** Teste la méthode getCursus. */
 	@Test
 	public void testGetCursus() {
+		log.info("service {}",pegaseService);
 		given(pegaseService.getCursus(anyString(), anyString())).willReturn(maquette1);
-		assertThat(mainController.getCursus("000000001","F-ING-HYD→F-ING-HYD-A4","PER-2020"), is(cursus1));
+		assertThat(pegaseController.getCursus("000000001","F-ING-HYD→F-ING-HYD-A4","PER-2020"), is(cursus1));
 	}
 
 }

@@ -64,7 +64,7 @@ import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.Transport;
 
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
-import fr.univlorraine.mondossierweb.controllers.MainController;
+import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.service.CurrentUiService;
@@ -116,7 +116,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	@Autowired
 	private transient PreferencesService prefService;
 	@Autowired
-	private transient MainController mainController;
+	private transient SessionController mainController;
 
 	@Value("${doc.url:}")
 	private transient String docUrl;
