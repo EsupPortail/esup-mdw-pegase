@@ -41,6 +41,7 @@ import fr.univlorraine.mondossierweb.controllers.PegaseController;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
+import fr.univlorraine.pegase.model.chc.Periode;
 import lombok.extern.slf4j.Slf4j;
 
 /** Tests du controller mainController.
@@ -67,6 +68,12 @@ public class MonDossierWebServiceTest {
 	public static void setUp() {
 		cursus1 = new LinkedList<ObjetMaquetteDTO> ();
 		List<ObjetMaquetteExtension> maquette0 = new LinkedList<ObjetMaquetteExtension> ();
+		ObjetMaquetteExtension o = new ObjetMaquetteExtension();
+		Periode p = new Periode();
+		p.setAnneeUniversitaire(2021);
+		p.setCode("PER-2021");
+		o.setPeriode(p);
+		maquette0.add(o);
 		maquette1 = Arrays.asList(maquette0);
 		
 	}
