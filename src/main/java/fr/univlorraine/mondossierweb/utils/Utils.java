@@ -57,6 +57,7 @@ public final class Utils {
 	public static final Object DETAIL_INS_NON_AFFICHE = "false";
 	public static final Object DETAIL_INS_VIA_BOUTON = "button";
 	public static final Object DETAIL_INS_AFFICHE = "true";
+	public static final String STATUT_INSCRIPTION_VALIDE = "VALIDE";
 
 
 	/** formatage d'une date en chaine pour un affichage européen */
@@ -109,31 +110,38 @@ public final class Utils {
 	}
 
 	/** Converti une liste de ObjetMaquetteExtension en hiérarchie de ObjetMaquetteDTO */
-	public static List<ObjetMaquetteDTO> convertObjetMaquetteListToDTO(List<ObjetMaquetteExtension> listObj, String codeCheminRacine) {
+	public static List<ObjetMaquetteDTO> convertObjetMaquetteListToDTO(List<List<ObjetMaquetteExtension>> listObj, String codeCheminRacine) {
 		List<ObjetMaquetteDTO> list = new LinkedList<ObjetMaquetteDTO>();
 		if(listObj != null) {
-			for(ObjetMaquetteExtension obj : listObj) {
-				// Si on est sur un objet concerné par la racine
-				if(obj!=null && obj.getCodeChemin()!=null && obj.getCodeChemin().contains(codeCheminRacine)) {
-					ObjetMaquetteDTO o = createObjetMaquetteDTO(obj);
-					// S'il s'agit de la racine
-					if(obj.getCodeChemin().equals(codeCheminRacine)) {
-						list.add(o);
-						log.info("Racine {} insérée", codeCheminRacine);
-					} else {
-						// Si l'étudiant est affecté à cet objet de formation ou qu'il l'a acquis
-						if((o.getAffecte()!=null && o.getAffecte().booleanValue()) ||
-							o.getAcquis()!=null && o.getAcquis().booleanValue()) {
-							boolean insere = false;
-							String cheminParent = o.getCodeChemin();
-							log.info("Insertion de {} dans l'arborescence...", cheminParent);
-							// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
-							while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
-								// On supprime le dernier élément du chemin
-								cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
-								log.info("Recherche du parent : {}...", cheminParent);
-								insere = insertInList(list, cheminParent, o);
+			boolean listObjMaquetteTrouvee = false;
+			for(List<ObjetMaquetteExtension> lobj : listObj) {
+				// Si on a pas déjà trouvé la liste des objets de maquette recherchés dans un élément précédent de la liste
+				if(!listObjMaquetteTrouvee) {
+					for(ObjetMaquetteExtension obj : lobj) {
+						// Si on est sur un objet concerné par la racine
+						if(obj!=null && obj.getCodeChemin()!=null && obj.getCodeChemin().contains(codeCheminRacine)) {
+							listObjMaquetteTrouvee = true;
+							ObjetMaquetteDTO o = createObjetMaquetteDTO(obj);
+							// S'il s'agit de la racine
+							if(obj.getCodeChemin().equals(codeCheminRacine)) {
+								list.add(o);
+								log.info("Racine {} insérée", codeCheminRacine);
+							} else {
+								// Si l'étudiant est affecté à cet objet de formation ou qu'il l'a acquis
+								if((o.getAffecte()!=null && o.getAffecte().booleanValue()) ||
+									o.getAcquis()!=null && o.getAcquis().booleanValue()) {
+									boolean insere = false;
+									String cheminParent = o.getCodeChemin();
+									log.info("Insertion de {} dans l'arborescence...", cheminParent);
+									// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
+									while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
+										// On supprime le dernier élément du chemin
+										cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
+										log.info("Recherche du parent : {}...", cheminParent);
+										insere = insertInList(list, cheminParent, o);
 
+									}
+								}
 							}
 						}
 					}
@@ -237,7 +245,7 @@ public final class Utils {
 
 		o.setObjet(obj);
 		o.setChildObjects(new LinkedList<CheminDTO>());
-		
+
 		// Si l'objet a des contrôles et qu'on doit les afficher
 		if(avecControle && obj.getListeControle()!=null && !obj.getListeControle().isEmpty()) {
 			// Pour chaque contrôle
@@ -251,7 +259,7 @@ public final class Utils {
 		}
 		return o;
 	}
-	
+
 	private static CheminDTO createCheminDTO(Controle c, Chemin pere) {
 		CheminDTO o = new CheminDTO();
 		o.setCode(c.getCode() + "_" + c.getNumeroSession());
@@ -262,7 +270,7 @@ public final class Utils {
 		o.setChildObjects(new LinkedList<CheminDTO>());
 		return o;
 	}
-	
+
 
 	private static boolean insertInList(List<CheminDTO> list, String cheminParent, CheminDTO o) {
 		// On recherche l'élément parent de la liste.
