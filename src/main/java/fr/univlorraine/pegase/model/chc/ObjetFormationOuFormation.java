@@ -55,9 +55,9 @@ public class ObjetFormationOuFormation {
    */
   @JsonAdapter(TypeEnum.Adapter.class)
   public enum TypeEnum {
-    FORMATION("Formation"),
+    Formation("Formation"),
     
-    OBJETFORMATION("ObjetFormation");
+    ObjetFormation("ObjetFormation");
 
     private String value;
 

@@ -115,6 +115,35 @@ public class PegaseService implements Serializable {
 		apiClientCoc.setBasePath(apiCocUrl);
 		pubApiCoc.setApiClient(apiClientCoc);
 	}
+	
+	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
+
+		// Si on a aucun codeApprenant en paramètre et qu'on a paramétré un code démo.
+		if(!StringUtils.hasText(codeApprenant) && StringUtils.hasText(codeApprenantDemo)) {
+			codeApprenant = codeApprenantDemo;
+		}
+
+		// Si les paramètres nécessaires sont valués
+		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
+			// Maj du token pour récupérer le dernier token valide
+			//insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
+			insApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
+			//insApiIns.getApiClient().updateParamsForAuth(authNames, queryParams, headerParams, cookieParams);
+			try {
+				// Appel de l'API Pégase
+				ApprenantEtInscriptions dossier = insApiIns.lireInscriptions(etablissement, codeApprenant);
+				if(dossier != null) {
+					log.info("Dossier de {} {} {} recupere", dossier.getApprenant().getEtatCivil().getPrenom(),dossier.getApprenant().getEtatCivil().getNomDeNaissance(), dossier.getApprenant().getEtatCivil().getNomUsuel());
+				} else {
+					log.info("Anomalie lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} LE DOSSIER RECUPERE EST NULL", codeApprenant, etablissement);
+				}
+				return dossier;
+			} catch (ApiException e) {
+				log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(), e);
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * méthode de test qui liste les inscriptions validées dans Pégase
@@ -203,35 +232,6 @@ public class PegaseService implements Serializable {
 		}
 		return null;
 
-	}
-
-	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
-
-		// Si on a aucun codeApprenant en paramètre et qu'on a paramétré un code démo.
-		if(!StringUtils.hasText(codeApprenant) && StringUtils.hasText(codeApprenantDemo)) {
-			codeApprenant = codeApprenantDemo;
-		}
-
-		// Si les paramètres nécessaires sont valués
-		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
-			// Maj du token pour récupérer le dernier token valide
-			//insApiIns.getApiClient().setAccessToken(accessTokenService.getToken());
-			insApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
-			//insApiIns.getApiClient().updateParamsForAuth(authNames, queryParams, headerParams, cookieParams);
-			try {
-				// Appel de l'API Pégase
-				ApprenantEtInscriptions dossier = insApiIns.lireInscriptions(etablissement, codeApprenant);
-				if(dossier != null) {
-					log.info("Dossier de {} {} {} recupere", dossier.getApprenant().getEtatCivil().getPrenom(),dossier.getApprenant().getEtatCivil().getNomDeNaissance(), dossier.getApprenant().getEtatCivil().getNomUsuel());
-				} else {
-					log.info("Anomalie lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} LE DOSSIER RECUPERE EST NULL", codeApprenant, etablissement);
-				}
-				return dossier;
-			} catch (ApiException e) {
-				log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(), e);
-			}
-		}
-		return null;
 	}
 
 	public File recuperePhoto(String codeApprenant, String cible) {
