@@ -16,19 +16,19 @@
  *  limitations under the License.
  *
  */
-package fr.univlorraine.mondossierweb.test.model.services;
+package fr.univlorraine.mondossierweb.test.controller;
 
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -51,21 +51,21 @@ import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import lombok.extern.slf4j.Slf4j;
 
-/** Tests du controller mainController.
+/** Tests du PegaseController.
 *
 * @author Charlie Dubois */
 @ExtendWith(SpringExtension.class)
 @Import({PegaseController.class})
 @Slf4j
-public class MonDossierWebServiceTest {
+public class TestPegaseController {
 	
 	private static final String CODE_APPRENANT_TEST = "000000001";
 	
 	private static final String CHEMIN_CURSUS_NON_FORMATE = "F-ING-HYD→F-ING-HYD-A4";
-
-	private static final String PERIODE_CURSUS_TEST = "PER-2020";
 	
 	private static final String CHEMIN_NOTES_NON_FORMATE = "F-ING-HYD→F-ING-HYD-A4";
+	
+	private static final String PERIODE_CURSUS_TEST = "PER-2020";
 
 	private static final String PERIODE_NOTES_TEST = "PER-2020";
 
@@ -111,18 +111,20 @@ public class MonDossierWebServiceTest {
 	/** Teste la méthode getCursus. */
 	@Test
 	public void testGetCursus() {
-		log.info("service {}", pegaseService);
+		log.debug("Test PegaseController getCursus");
 		given(pegaseService.getCursus(anyString(), anyString())).willReturn(maquette1);
-		List<ObjetMaquetteDTO> cursus = pegaseController.getCursus(CODE_APPRENANT_TEST,CHEMIN_CURSUS_NON_FORMATE,PERIODE_CURSUS_TEST);
+		List<ObjetMaquetteDTO> cursus = pegaseController.getCursus(CODE_APPRENANT_TEST,CHEMIN_CURSUS_NON_FORMATE,PERIODE_CURSUS_TEST);		
+		assertThat(cursus, is(notNullValue()));
 		assertThat(cursus, is(not(empty())));
 	}
 	
 	/** Teste la méthode getCursus. */
 	@Test
 	public void testGetNotes() {
-		log.info("service {}", pegaseService);
+		log.debug("Test PegaseController getNotes");
 		given(pegaseService.getNotes(anyString(), anyString() , anyString())).willReturn(notes1);
 		List<CheminDTO> notes = pegaseController.getNotes(CODE_APPRENANT_TEST,CHEMIN_NOTES_NON_FORMATE,PERIODE_NOTES_TEST, true);
+		assertThat(notes, is(notNullValue()));
 		assertThat(notes, is(not(empty())));
 	}
 

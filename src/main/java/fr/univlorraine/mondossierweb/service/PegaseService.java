@@ -198,11 +198,11 @@ public class PegaseService implements Serializable {
 					log.info("Cursus de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
 					log.debug("Cursus de : {}", listObj);
 				} else {
-					log.info("Anomalie lors de l'appel à la methode API : lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode2 pour le code apprenant : {}, periode {} et etablissement : {}", codeApprenant, codePeriode, etablissement);
+					log.info("Anomalie lors de l'appel à la methode API : lireArbreCursusDesInscriptions pour le code apprenant : {}, periode {} et etablissement : {}", codeApprenant, codePeriode, etablissement);
 				}
 				return listObj;
 			} catch (ApiException e) {
-				log.error("Erreur lors de l'appel à la methode API : lireListeInscriptionsObjetsMaquettesPourApprenantDansPeriode2 pour le code apprenant : {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codePeriode, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
+				log.error("Erreur lors de l'appel à la methode API : lireArbreCursusDesInscriptions pour le code apprenant : {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codePeriode, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
 			}
 		}
 		return null;

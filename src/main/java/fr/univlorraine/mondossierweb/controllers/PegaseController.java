@@ -63,7 +63,7 @@ public class PegaseController {
 		}else {
 			log.info("Récupération de la liste cursus dans Pégase");
 			// Correction du chemin pour en replaçant le séparateur
-			String codeCheminChc = codeChemin.replaceAll("→", ">");
+			String codeCheminChc = formatChemin(codeChemin);
 			// Récupération du cursus
 			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
 			// suppression de la racine
@@ -77,6 +77,7 @@ public class PegaseController {
 		return listObj;
 	}
 	
+
 	/**
 	 * 
 	 * @param codeApprenant
@@ -97,7 +98,7 @@ public class PegaseController {
 		}else {
 			log.info("Récupération de la liste notes dans Pégase");
 			// Correction du chemin pour en replaçant le séparateur
-			String codeCheminChc = codeChemin.replaceAll("→", ">");
+			String codeCheminChc = formatChemin(codeChemin);
 			// Récupération des notes
 			listObj = Utils.convertCheminToDTO(pegaseService.getNotes(codeApprenant, codePeriode,codeCheminChc), codeCheminChc, avecControle);
 			log.info("sauvegarde de la liste notes dans la map ({} elements)", listObj.size());
@@ -107,5 +108,13 @@ public class PegaseController {
 		return listObj;
 	}
 	
+	/**
+	 * 
+	 * @param codeChemin
+	 * @return chemin formaté pour l'API Pégase
+	 */
+	private String formatChemin(String codeChemin) {
+		return codeChemin.replaceAll("→", ">");
+	}
 
 }
