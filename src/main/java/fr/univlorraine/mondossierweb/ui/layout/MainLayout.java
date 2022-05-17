@@ -64,7 +64,7 @@ import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.Transport;
 
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
-import fr.univlorraine.mondossierweb.controllers.MainController;
+import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.service.CurrentUiService;
@@ -77,6 +77,7 @@ import fr.univlorraine.mondossierweb.ui.view.connexions.ConnexionsView;
 import fr.univlorraine.mondossierweb.ui.view.coordonnees.CoordonneesView;
 import fr.univlorraine.mondossierweb.ui.view.etatcivil.EtatCivilView;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.InscriptionsView;
+import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
@@ -116,7 +117,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	@Autowired
 	private transient PreferencesService prefService;
 	@Autowired
-	private transient MainController mainController;
+	private transient SessionController mainController;
 
 	@Value("${doc.url:}")
 	private transient String docUrl;
@@ -307,7 +308,9 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		//userMenuEtatCivilItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(EtatCivilView.class)));
 		//userMenuCoordonneesItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(CoordonneesView.class)));
 		// Entrée 'Paramètres' dans le menu en haut à droite :
-		//userMenuParametresItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(ParametresView.class)));
+		/*if (securityService.isAccessGranted(ParametresView.class)) {
+			userMenuParametresItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(ParametresView.class)));
+		}*/
 		userMenuAproposItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(AProposView.class)));
 
 		userMenuLogoutItem =

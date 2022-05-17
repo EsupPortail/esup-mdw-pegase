@@ -37,7 +37,7 @@ mvn spring-boot:run
 - Créer le package pour production (création du .war) :
 
 ```
-mvn clean package -P production
+mvn clean package -P production -Dmaven.test.skip=true
 ```
 
 

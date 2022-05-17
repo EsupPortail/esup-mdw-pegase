@@ -36,7 +36,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
-import fr.univlorraine.mondossierweb.controllers.MainController;
+import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
@@ -60,7 +60,7 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
-	private transient MainController etudiantController;
+	private transient SessionController etudiantController;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter

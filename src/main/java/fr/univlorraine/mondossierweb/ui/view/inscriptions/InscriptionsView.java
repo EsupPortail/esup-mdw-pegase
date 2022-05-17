@@ -22,10 +22,8 @@ import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -48,7 +46,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.ContentAlignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -63,9 +60,9 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
-import fr.univlorraine.mondossierweb.controllers.MainController;
+import fr.univlorraine.mondossierweb.controllers.PegaseController;
+import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.service.ExportService;
-import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
@@ -78,10 +75,7 @@ import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.model.chc.TypeAmenagement;
-import fr.univlorraine.pegase.model.coc.Chemin.AbsenceFinaleEnum;
-import fr.univlorraine.pegase.model.coc.Chemin.AbsenceSession1Enum;
-import fr.univlorraine.pegase.model.coc.Chemin.AbsenceSession2Enum;
-import fr.univlorraine.pegase.model.coc.Controle.AbsenceEnum;
+import fr.univlorraine.pegase.model.coc.Absence;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
@@ -123,11 +117,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
-	private transient MainController etudiantController;
+	private transient SessionController sessionController;
+	@Autowired
+	private transient PegaseController pegaseController;
 	@Autowired
 	private transient ExportService exportService;
-	@Autowired
-	private transient PegaseService pegaseService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
@@ -153,9 +147,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	List<Button> listButtonDetailInscription = new LinkedList<Button> ();
 
 
-	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<String,List<ObjetMaquetteDTO>>();
+	/*Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<String,List<ObjetMaquetteDTO>>();
 
-	Map<String,List<CheminDTO>> notesMap = new HashMap<String,List<CheminDTO>>();
+	Map<String,List<CheminDTO>> notesMap = new HashMap<String,List<CheminDTO>>();*/
 
 
 
@@ -242,9 +236,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			Notification.show(getTranslation("error.accesdossierrefuse"));
 		}
 		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-		etudiantController.checkDossier();
+		sessionController.checkDossier();
 		// Mise à jour de l'affichage
-		updateData(etudiantController.getDossier()!=null ? etudiantController.getDossier() : null);
+		updateData(sessionController.getDossier()!=null ? sessionController.getDossier() : null);
 		//Force la maj des label
 		localeChange(null);
 	}
@@ -415,7 +409,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						photoButton.addClickListener(c-> {
 							ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  Utils.getCodeVoeu(inscription));
 							if(photo != null) {
-								StreamResource resource = new StreamResource("photo_"+etudiantController.getDossierConsulte()+".jpg", () -> photo);
+								StreamResource resource = new StreamResource("photo_"+sessionController.getDossierConsulte()+".jpg", () -> photo);
 								Image image = new Image(resource, "photographie");
 								image.setHeight("10em");
 								image.getStyle().set("border-radius", "0.8em");
@@ -700,27 +694,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private void displayCursus(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout cursusLayout) {
 		log.info("Récupération du cursus pour {} sur {}", codeApprenant, codeChemin);
 
-		List<ObjetMaquetteDTO> listObj=new LinkedList<ObjetMaquetteDTO> ();
-		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
-		// Gestion du cache des cursus en session
-		if(cursusMap.containsKey(insKey)) {
-			log.info("Récupération de la liste cursus dans la map");
-			//Récupération de l'arborescence dans la map
-			listObj = cursusMap.get(insKey);
-		}else {
-			log.info("Récupération de la liste cursus dans Pégase");
-			// Correction du chemin pour en replaçant le séparateur
-			String codeCheminChc = codeChemin.replaceAll("→", ">");
-			// Récupération du cursus
-			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
-			// suppression de la racine
-			if(listObj!=null && !listObj.isEmpty()) {
-				listObj = listObj.get(0).getChildObjects();
-			}
-			log.info("sauvegarde de la liste cursus dans la map ({} elements)", listObj.size());
-			// On stocke l'arborescence dans la map
-			cursusMap.put(insKey, listObj);
-		}
+		//Récupération du cursus
+		List<ObjetMaquetteDTO> listObj = pegaseController.getCursus(codeApprenant, codeChemin, codePeriode);
+
+		// clean du layout
 		cursusLayout.removeAll();
 
 		// Création de la TreeGrid contenant l'arborescence des objets de formation
@@ -745,23 +722,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout, boolean smallGrid) {
 		log.info("Récupération des notes pour {} sur {}", codeApprenant, codeChemin);
 
-		List<CheminDTO> listObj=new LinkedList<CheminDTO> ();
-		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
-		// Gestion du cache des notes en session
-		if(notesMap.containsKey(insKey)) {
-			log.info("Récupération de la liste notes dans la map");
-			//Récupération de l'arborescence dans la map
-			listObj = notesMap.get(insKey);
-		}else {
-			log.info("Récupération de la liste notes dans Pégase");
-			// Correction du chemin pour en replaçant le séparateur
-			String codeCheminChc = codeChemin.replaceAll("→", ">");
-			// Récupération des notes
-			listObj = Utils.convertCheminToDTO(pegaseService.getNotes(codeApprenant, codePeriode,codeCheminChc), codeCheminChc, avecControle);
-			log.info("sauvegarde de la liste notes dans la map ({} elements)", listObj.size());
-			// On stocke l'arborescence dans la map
-			notesMap.put(insKey, listObj);
-		}
+		// Récupération des notes
+		List<CheminDTO> listObj = pegaseController.getNotes(codeApprenant, codeChemin, codePeriode, avecControle);
+
 		notesLayout.removeAll();
 
 		// Création de la TreeGrid contenant l'arborescence des objets de formation
@@ -1269,7 +1232,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		return null;
 	}
 
-	private Component createLabelNote(int bareme, BigDecimal note, Object absence, boolean compact) {
+	private Component createLabelNote(int bareme, BigDecimal note, Absence absence, boolean compact) {
 		Div result = new Div();
 		result.setHeight("1.5em");
 		if(compact) {
@@ -1279,7 +1242,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		if(note != null) {
 			result.setText(Utils.displayNote(note, bareme, avecBareme));
 		} else {
-			if(absence != null && absence instanceof AbsenceSession1Enum) {
+			/*if(absence != null && absence instanceof AbsenceSession1Enum) {
 				AbsenceSession1Enum as1 = (AbsenceSession1Enum) absence;
 				result.setText(compact? getTranslation("notes.absence.prefix") + as1.getValue().charAt(0) : getTranslation("notes.absence") + " " + as1.getValue());
 			}
@@ -1290,12 +1253,15 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			if(absence != null && absence instanceof AbsenceFinaleEnum) {
 				AbsenceFinaleEnum  af = (AbsenceFinaleEnum ) absence;
 				result.setText(compact ? getTranslation("notes.absence.prefix") + af.getValue().charAt(0) : getTranslation("notes.absence") + " " + af.getValue());
+			}*/
+			if(absence != null) {
+				result.setText(compact ? getTranslation("notes.absence.prefix") + absence.getValue().charAt(0) : getTranslation("notes.absence") + " " + absence.getValue());
 			}
 		}
 		return result;
 	}
 
-	private Component createLabelNoteControle(int bareme, BigDecimal note, AbsenceEnum absence, boolean compact) {
+	private Component createLabelNoteControle(int bareme, BigDecimal note, Absence absence, boolean compact) {
 		Div result = new Div();
 		result.setHeight("1.5em");
 		if(compact) {
