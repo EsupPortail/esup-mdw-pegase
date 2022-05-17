@@ -18,20 +18,19 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.parametres;
 
-import java.time.LocalTime;
-
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
@@ -44,12 +43,12 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
-import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
+import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.Getter;
 
+@Secured(SecurityUtils.ROLE_SUPERADMIN)
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 public class ParametresView extends Div implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
@@ -62,15 +61,29 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private transient SecurityService securityService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
+	
+	@Value("${doc.url:}")
+	private transient String docUrl;
+	@Value("${help.url:}")
+	private transient String helpUrl;
+
+	@Value("${connexion.info.actif}")
+	private transient boolean affichagePopupInfo;
+	@Value("${connexion.info.pref}")
+	private transient boolean popupInfoDesactivable;
+
+	@Value("${etudiant.resume.actif}")
+	private transient boolean affichageResumeEtudiant;
+	
 	@Getter
 	private String pageTitle = "";
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	
+	VerticalLayout parameterLayout = new VerticalLayout();
 	private final Checkbox darkModeCB = new Checkbox();
-	
-	private final TextField colorTF = new TextField();
+	private final TextField docUrlTF = new TextField();
+	private final TextField assistanceUrlTF = new TextField();
 	
 	private final Button buttonTN = new Button();
 
@@ -78,57 +91,49 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	@PostConstruct
 	private void init() {
 		getStyle().set("padding", "1em");
+		getStyle().set("display", "flex");
+		getStyle().set("flex-direction", "column");
 		
-		//initSetBaseColor();
-		initSetDarkMode();
-		//initTestNotif();
+		initMessageWIP();
+		
+		//initSetDarkMode();
+		
+		initBasicParameters();
 
 	}
-
-	private void initSetBaseColor() {
-		/* Pour changer la couleur de base du theme, injecter le bean
-		 * currentUIService et utiliser sa méthode setAppColor([couleur CSS]).
-		 *
-		 * Pour changer la couleur d'une vue seulement, y ajouter un composant
-		 * AppColorStyle, ex: add(new AppColorStyle("rgb(211, 47, 47)")); */
-		ReactiveUtils.subscribeWhenAttached(this,
-			currentUiService.getAppColorFlux().map(appColor -> () -> colorTF.setValue(appColor)));
-		colorTF.addValueChangeListener(event -> {
-			String color = event.getValue();
-			if (CSSColorUtils.isSupportedColor(color)) {
-				colorTF.setInvalid(false);
-				currentUiService.setAppColor(color);
-			} else {
-				colorTF.setInvalid(true);
-				colorTF.setErrorMessage(getTranslation("parametres.error.invalid-color"));
-			}
-		});
-		colorTF.setValueChangeMode(ValueChangeMode.EAGER);
-		add(colorTF);
+	
+	private void initMessageWIP() {
+		Label infoLabel = new Label("Vue en cours de développement");
+		infoLabel.getStyle().set("margin", "auto");
+		add(infoLabel);
+	};
+	
+	private void initBasicParameters() {
+		
+		docUrlTF.setValue(docUrl);
+		docUrlTF.setReadOnly(true);
+		parameterLayout.add(docUrlTF);
+		
+		assistanceUrlTF.setValue(helpUrl);
+		assistanceUrlTF.setReadOnly(true);
+		parameterLayout.add(assistanceUrlTF);
+		
+		add(parameterLayout);
 	}
 	
 	private void initSetDarkMode() {
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getDarkModeFlux().map(darkMode -> () -> darkModeCB.setValue(darkMode)));
+		
 		darkModeCB.addValueChangeListener(event -> {
 			currentUiService.setDarkMode(event.getValue());
 			
 			securityService.getUsername().ifPresent(username -> {
 				prefService.saveUserPref(username, PrefUtils.DARK_MODE, event.getValue());
 			});
-			
 		});
+		
 		add(darkModeCB);
-	}
-
-	private void initTestNotif() {
-		buttonTN.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-		buttonTN.addClickListener(event -> notifyClicked());
-		add(buttonTN);
-	}
-
-	private void notifyClicked() {
-		Notification.show(getTranslation("parametres.clicked", LocalTime.now()));
 	}
 
 	/**
@@ -138,7 +143,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	public void localeChange(final LocaleChangeEvent event) {
 		setViewTitle(getTranslation("parametres.title"));
 
-		colorTF.setLabel(getTranslation("parametres.color-label"));
+		docUrlTF.setLabel(getTranslation("parametres.doc-url"));
+		assistanceUrlTF.setLabel(getTranslation("parametres.assistance-url"));
 		darkModeCB.setLabel(getTranslation("parametres.dark-mode-label"));
 		buttonTN.setText(getTranslation("parametres.button-test-notification"));
 	}
