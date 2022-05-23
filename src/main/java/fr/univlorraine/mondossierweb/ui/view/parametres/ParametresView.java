@@ -45,6 +45,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
@@ -267,6 +268,10 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			Checkbox cb = (Checkbox) c;
 			cb.setReadOnly(readonly);
 		}
+		if(c instanceof ComboBox) {
+			ComboBox<PreferencesApplicationValeurs> cb = (ComboBox<PreferencesApplicationValeurs>) c;
+			cb.setReadOnly(readonly);
+		}
 	}
 
 	// Sauvegarde des valeurs en base
@@ -287,9 +292,15 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				PreferencesApplication pa = prefService.savePref(c.getId().get(), cb.getValue().toString());
 				cb.setValue(pa.getValeur().equals(TRUE_VALUE));
 			}
+			if(c instanceof ComboBox) {
+				ComboBox<PreferencesApplicationValeurs> cb = (ComboBox<PreferencesApplicationValeurs>) c;
+				PreferencesApplication pa = prefService.savePref(c.getId().get(), cb.getValue().getValeur());
+				cb.setValue(prefService.getPreferencesApplicationValeurs(pa));
+			}
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void backupOrRollbackValue(Component c,  boolean rollback) {
 		if(c.getId().isPresent()) {
 			// On récupère les anciennes valeurs
@@ -326,14 +337,28 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}
 			}
 			if(c instanceof ComboBox) {
-				ComboBox cb = (ComboBox) c;
+				ComboBox<PreferencesApplicationValeurs> cb = (ComboBox<PreferencesApplicationValeurs>) c;
 				if(rollback) {
-					cb.setValue(value);
+					cb.setValue(getPreferencesApplicationValeursFromValId(cb, Integer.parseInt(value)));
 				} else {
-					backupValues.put(c.getId().get(), cb.getValue().toString());
+					backupValues.put(c.getId().get(), cb.getValue().getValId().toString());
 				}
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private PreferencesApplicationValeurs getPreferencesApplicationValeursFromValId(ComboBox<PreferencesApplicationValeurs> comboBox, Integer value) {
+		ListDataProvider<PreferencesApplicationValeurs> dataProvider = (ListDataProvider<PreferencesApplicationValeurs>) comboBox.getDataProvider();
+		List<PreferencesApplicationValeurs> items = (List<PreferencesApplicationValeurs>) dataProvider.getItems();
+		if(items!=null && !items.isEmpty()) {
+			for(PreferencesApplicationValeurs item : items) {
+				if(item!=null && item.getValId() == value) {
+					return item;
+				}
+			}
+		}
+		return null;
 	}
 
 	protected void updateStyle() {
