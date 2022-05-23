@@ -34,7 +34,6 @@ import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateurPK;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplicationCategorieRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplicationRepository;
-import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplicationTypeRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplicationValeursRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesUtilisateurRepository;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
@@ -55,8 +54,11 @@ public class PreferencesService {
 	private transient PreferencesApplicationValeursRepository preferencesApplicationValeursRepository;
 
 	
+	public boolean getBooleanValue(PreferencesApplication p) {
+		return PrefUtils.getBooleanValue(p.getValeur());
+	}
 	
-	public boolean getBooleanPref(PreferencesUtilisateur p) {
+	public boolean getBooleanValue(PreferencesUtilisateur p) {
 		return PrefUtils.getBooleanValue(p.getValeur());
 	}
 
@@ -113,6 +115,10 @@ public class PreferencesService {
 			pref = preferencesApplicationRepository.save(pref);		
 		}
 		return pref;
+	}
+
+	public PreferencesApplication getPreferences(String prefId) {
+		return preferencesApplicationRepository.getById(prefId);
 	}
 
 }

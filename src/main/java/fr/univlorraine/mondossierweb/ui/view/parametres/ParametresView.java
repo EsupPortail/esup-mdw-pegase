@@ -23,7 +23,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -54,9 +53,7 @@ import com.vaadin.flow.router.Route;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCategorie;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
-import fr.univlorraine.mondossierweb.service.CurrentUiService;
 import fr.univlorraine.mondossierweb.service.PreferencesService;
-import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
@@ -76,11 +73,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final String TYPE_LIST_STRING = "LIST_STRING";
 	private static final String TRUE_VALUE = "true";
 	@Autowired
-	private transient CurrentUiService currentUiService;
-	@Autowired
 	private transient PreferencesService prefService;
-	@Autowired
-	private transient SecurityService securityService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 

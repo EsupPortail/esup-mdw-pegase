@@ -280,7 +280,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		// Si on a une préférence pour l'utilisateur
 		if(prefDarkMode.isPresent()) {
 			// Maj du skin en fonction de la préférence de l'utilisateur
-			currentUiService.setDarkMode(prefService.getBooleanPref(prefDarkMode.get()));
+			currentUiService.setDarkMode(prefService.getBooleanValue(prefDarkMode.get()));
 		}else {
 			// Dark mode par défaut
 			currentUiService.setDarkMode(false);
