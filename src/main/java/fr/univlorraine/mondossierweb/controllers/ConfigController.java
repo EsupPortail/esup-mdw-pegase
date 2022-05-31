@@ -57,12 +57,27 @@ public class ConfigController {
 	private static final String LDAP_MAIL_ATTRIBUTE = "LDAP_MAIL_ATTRIBUTE";
 
 	private static final String UNIV_LOGO = "UNIV_LOGO";
+
+	private static final String INSCRIPTION_DETAIL = "INSCRIPTION_DETAIL";
+
+	private static final String NOTE_BAREME = "NOTE_BAREME";
+	
+	private static final String CURSUS_FAC_ITALIQUE = "CURSUS_FAC_ITALIQUE";
+
+	private static final String INSCRIPTION_STATUTS = "INSCRIPTION_STATUTS";
+	
 	
 	@Autowired
 	private transient PreferencesService prefService;
 	
 	public boolean isAccesEtudiantActif() {
 		return getBooleanValueForParameter(ACCES_ETUDIANT_ACTIF);
+	}
+	public boolean isAffichageCursusFacItalique() {
+		return getBooleanValueForParameter(CURSUS_FAC_ITALIQUE);
+	}
+	public boolean isAffichageNoteBaremeActif() {
+		return getBooleanValueForParameter(NOTE_BAREME);
 	}
 	public boolean isAccesGestionnaireActif() {
 		return getBooleanValueForParameter(ACCES_GESTIONNAIRE_ACTIF);
@@ -106,6 +121,12 @@ public class ConfigController {
 	public String getAccesTokenPassword() {
 		return getSecretValueForParameter(ACCESSTOKEN_PASSWORD);
 	}
+	public String getInscriptionDetail() {
+		return getStringValueForParameter(INSCRIPTION_DETAIL);
+	}
+	public String getInscriptionStatuts() {
+		return getStringValueForParameter(INSCRIPTION_STATUTS);
+	}
 	
 	
 	/**
@@ -134,5 +155,6 @@ public class ConfigController {
 	private boolean getBooleanValueForParameter(String parametre){
 		return prefService.getBooleanValue(prefService.getPreferences(parametre));
 	}
+
 
 }

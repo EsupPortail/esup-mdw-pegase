@@ -35,6 +35,7 @@ import org.springframework.util.Assert;
 
 import com.vaadin.flow.server.VaadinSession;
 
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
@@ -47,15 +48,18 @@ public class AppUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	protected transient LdapService ldapService;
+	
+	@Autowired
+	private transient ConfigController configController;
 
 	@Value("${app.superadmins:}")
 	private transient List<String> superAdmins;
 
-	@Value("${acces.gestionnaire.actif}")
-	private transient boolean accesGestionnaireActif;
+	/*@Value("${acces.gestionnaire.actif}")
+	private transient boolean accesGestionnaireActif;*/
 
-	@Value("${acces.etudiant.actif}")
-	private transient boolean accesEtudiantActif;
+	/*@Value("${acces.etudiant.actif}")
+	private transient boolean accesEtudiantActif;*/
 
 	@Transactional
 	@Override
@@ -73,7 +77,7 @@ public class AppUserDetailsService implements UserDetailsService {
 			// 2 - On cherche à savoir si l'utilisateur est étudiant
 			LdapPerson student = ldapService.findStudentByUid(username);
 			// 2.1- Si l'accès étudiant est activé et que l'utilisateur est étudiant
-			if(accesEtudiantActif && student != null) {
+			if(configController.isAccesEtudiantActif() && student != null) {
 				utilisateur.getAuthorities().add(new SimpleGrantedAuthority(SecurityUtils.ROLE_ETUDIANT));
 				utilisateur.setDisplayName(student.getDisplayName());
 				utilisateur.setCodeEtudiant(student.getCodeApprenant());
@@ -86,7 +90,7 @@ public class AppUserDetailsService implements UserDetailsService {
 				// utilisateur.setDossier(pegaseService.recupererDossierApprenant(utilisateur.getCodEtuDossier()));
 			} else {
 				// 3- Si l'accès gestionnaire est activé
-				if(accesGestionnaireActif) {
+				if(configController.isAccesGestionnaireActif()) {
 					// 3.1 - On cherche à savoir si l'utilisateur est gestionnaire
 					LdapPerson teacher = ldapService.findAdministratorByUid(username);
 					if(teacher != null) {

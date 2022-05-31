@@ -37,8 +37,10 @@ import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplication
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplicationValeursRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesUtilisateurRepository;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class PreferencesService {
 	
 	@Autowired
@@ -52,7 +54,6 @@ public class PreferencesService {
 	
 	@Autowired
 	private transient PreferencesApplicationValeursRepository preferencesApplicationValeursRepository;
-
 	
 	public boolean getBooleanValue(PreferencesApplication p) {
 		return PrefUtils.getBooleanValue(p.getValeur());
@@ -104,21 +105,25 @@ public class PreferencesService {
 
 	@Transactional
 	public PreferencesApplication savePref(String prefId, String value) {
-		PreferencesApplication pref = preferencesApplicationRepository.getById(prefId);
-		if(pref != null) {
+		Optional<PreferencesApplication> pref = preferencesApplicationRepository.findById(prefId);
+		if(pref.isPresent()) {
+			PreferencesApplication pa = pref.get();
 			// Si c'est un parametre de type "secret" (cad crypté en base)
-			if(pref.getType().isSecret()) {
-				pref.setSecret(value);
+			if(pa.getType().isSecret()) {
+				pa.setSecret(value);
 			} else {
-				pref.setValeur(value);
+				pa.setValeur(value);
 			}
-			pref = preferencesApplicationRepository.save(pref);		
+			pa = preferencesApplicationRepository.save(pa);	
+			return pa;
 		}
-		return pref;
+		return null;
 	}
 
+	@Transactional
 	public PreferencesApplication getPreferences(String prefId) {
-		return preferencesApplicationRepository.getById(prefId);
+		Optional<PreferencesApplication> pa = preferencesApplicationRepository.findById(prefId);
+		return pa.get();
 	}
 
 }

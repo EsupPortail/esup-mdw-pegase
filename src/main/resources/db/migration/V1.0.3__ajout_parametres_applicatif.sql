@@ -138,15 +138,21 @@ VALUES ('ACCES_ETUDIANT_ACTIF', 'Activer le profil étudiant pour que les étudi
 
 -- paramètres d'affichage
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('NOTE_COEFF', 'Afficher le coeff avec le libelle du résultat', NULL, 'true', '4', 'BOOLEAN', 1);
+VALUES ('NOTE_BAREME', 'Afficher le barême avec les notes', NULL, 'true', '4', 'BOOLEAN', 1);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('NOTE_ECTS', 'Afficher les crédits ECTS avec les résultats', NULL, 'true', '4', 'BOOLEAN', 2);
+VALUES ('NOTE_COEFF', 'Afficher le coeff avec le libelle du résultat', NULL, 'true', '4', 'BOOLEAN', 2);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('NOTE_CONTROLE', 'Afficher les contrôles avec les résultats', NULL, 'false', '4', 'BOOLEAN', 3);
+VALUES ('NOTE_ECTS', 'Afficher les crédits ECTS avec les résultats', NULL, 'true', '4', 'BOOLEAN', 3);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('INSCRIPTION_DETAIL', 'Afficher le détail de l''inscription (statut, paiement, PJ, photo) : true, false, button', NULL, 'button', '4', 'LIST_STRING', 4);
+VALUES ('NOTE_CONTROLE', 'Afficher les contrôles avec les résultats', NULL, 'false', '4', 'BOOLEAN', 4);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('UNIV_LOGO', 'URL vers le logo de l''université', NULL, './images/logo.png', '4', 'STRING', 5);
+VALUES ('INSCRIPTION_DETAIL', 'Afficher le détail de l''inscription (statut, paiement, PJ, photo) : true, false, button', NULL, 'button', '4', 'LIST_STRING', 5);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('UNIV_LOGO', 'URL vers le logo de l''université', NULL, './images/logo.png', '4', 'STRING', 6);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('CURSUS_FAC_ITALIQUE', 'Afficher les objets de formation non obligatoires du cursus en italique', NULL, 'true', '4', 'BOOLEAN', 7);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('INSCRIPTION_STATUTS', 'Statuts des inscriptions à afficher séparés par des virgules', NULL, 'valide', '4', 'STRING', 8);
 
 -- paramètres d'aide
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 

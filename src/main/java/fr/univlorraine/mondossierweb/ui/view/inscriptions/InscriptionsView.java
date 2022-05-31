@@ -21,6 +21,7 @@ package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,6 +61,7 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.controllers.PegaseController;
 import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.service.ExportService;
@@ -94,25 +96,25 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private static final String ATTEST_FILE_EXT = ".pdf";
 
 
-	@Value("${notes.bareme}")
+	//@Value("${notes.bareme}")
 	private transient Boolean avecBareme;
 
-	@Value("${notes.coeff}")
+	//@Value("${notes.coeff}")
 	private transient Boolean avecCoeff;
-
-	@Value("${notes.ects}")
+	
+	//@Value("${notes.ects}")
 	private transient Boolean avecECTS;
 
-	@Value("${notes.controle}")
+	//@Value("${notes.controle}")
 	private transient Boolean avecControle;
 
-	@Value("${cursus.factultatif.italique}")
+	//@Value("${inscription.detail}")
+	private transient String afficherDetailInscription;
+	
+	//@Value("${cursus.factultatif.italique}")
 	private transient Boolean facItalique;
 
-	@Value("${inscription.detail}")
-	private transient String afficherDetailInscription;
-
-	@Value("#{'${pegase.inscription.statut}'.split(',')}") 
+	//@Value("#{'${pegase.inscription.statut}'.split(',')}") 
 	private transient List<String> listeStatutsInscriptionAffichees;	
 	@Autowired
 	private transient SecurityService securityService;
@@ -120,6 +122,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private transient SessionController sessionController;
 	@Autowired
 	private transient PegaseController pegaseController;
+	@Autowired
+	private transient ConfigController configController;
 	@Autowired
 	private transient ExportService exportService;
 	@Autowired
@@ -155,8 +159,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	@PostConstruct
 	public void init() {
+		
+		initParameters();
+		
 		setSizeFull();
-
+	
 		inscriptionsLayout.setWidthFull();
 		inscriptionsLayout.getStyle().set("max-width", "52em");
 		inscriptionsLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
@@ -168,6 +175,17 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		UI.getCurrent().getPage().addBrowserWindowResizeListener(event -> {
 			windowWidth = event.getWidth();
 		});
+	}
+
+
+	private void initParameters() {
+		avecBareme = configController.isAffichageNoteBaremeActif();
+		avecCoeff = configController.isAffichageNoteCoeffActif();
+		avecECTS = configController.isAffichageCreditECTSActif();
+		avecControle = configController.isAffichageNoteControleActif();
+		afficherDetailInscription = configController.getInscriptionDetail();
+		facItalique = configController.isAffichageCursusFacItalique();
+		listeStatutsInscriptionAffichees = Arrays.asList(configController.getInscriptionStatuts().split(","));
 	}
 
 
@@ -1296,14 +1314,14 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		return result;
 	}
 
-
+/*
 	private String getResultInfo(String titre, String libelle, BigDecimal coeff) {
 		String message = titre + " : " + libelle;
-		if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
+		if(coeff!=null && affichageAvecCoeff()!=null && affichageAvecCoeff().booleanValue()) {
 			message += " ("+getTranslation("notes.coeff")+ " " + Utils.displayBigDecimal(coeff)+")";
 		}
 		return message;
-	}
+	}*/
 
 
 	/**
