@@ -33,6 +33,7 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.spring.annotation.UIScope;
 
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.service.CurrentUiService;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 
@@ -41,22 +42,28 @@ import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 @SuppressWarnings("serial")
 public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 
-	@Value("${logo.light.src}")
+	//@Value("${logo.light.src}")
 	private transient String srcLogo;
-	@Value("${logo.light.src}")
+	//@Value("${logo.light.src}")
 	private transient String srcLogoDark;
 
 	@Autowired
 	private transient CurrentUiService currentUiService;
 	@Autowired
 	private transient BuildProperties buildProperties;
+	@Autowired
+	private transient ConfigController configController;
 	
 	private HorizontalLayout titleLayout = new HorizontalLayout();
 
 	private final Image logo = new Image();
 
+	private void initParameters() {
+		srcLogo = configController.getUnivLogoPath();
+	}
 	@PostConstruct
 	private void init() {
+		initParameters();
 		setAlignItems(Alignment.END);
 		/*getStyle().set("padding-bottom", "0.75rem");
 		getStyle().set("padding-top", "0.8rem");*/

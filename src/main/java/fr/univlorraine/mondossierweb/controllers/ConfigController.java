@@ -56,7 +56,7 @@ public class ConfigController {
 
 	private static final String LDAP_MAIL_ATTRIBUTE = "LDAP_MAIL_ATTRIBUTE";
 
-	private static final String UNIV_LOGO = "UNIV_LOGO";
+	private static final String UNIV_LOGO_PATH = "UNIV_LOGO_PATH";
 
 	private static final String INSCRIPTION_DETAIL = "INSCRIPTION_DETAIL";
 
@@ -115,8 +115,8 @@ public class ConfigController {
 	public String getLdapMailAttribute() {
 		return getStringValueForParameter(LDAP_MAIL_ATTRIBUTE);
 	}
-	public String getUnivLogo() {
-		return getStringValueForParameter(UNIV_LOGO);
+	public String getUnivLogoPath() {
+		return getStringValueForParameter(UNIV_LOGO_PATH);
 	}
 	public String getAccesTokenPassword() {
 		return getSecretValueForParameter(ACCESSTOKEN_PASSWORD);
@@ -155,6 +155,5 @@ public class ConfigController {
 	private boolean getBooleanValueForParameter(String parametre){
 		return prefService.getBooleanValue(prefService.getPreferences(parametre));
 	}
-
 
 }
