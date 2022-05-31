@@ -65,6 +65,10 @@ public class ConfigController {
 	private static final String CURSUS_FAC_ITALIQUE = "CURSUS_FAC_ITALIQUE";
 
 	private static final String INSCRIPTION_STATUTS = "INSCRIPTION_STATUTS";
+
+	private static final String LDAP_LOGIN_ATTRIBUTE = "LDAP_LOGIN_ATTRIBUTE";
+
+	private static final String LDAP_DISPLAYNAME_ATTRIBUTE = "LDAP_DISPLAYNAME_ATTRIBUTE";
 	
 	
 	@Autowired
@@ -115,6 +119,12 @@ public class ConfigController {
 	public String getLdapMailAttribute() {
 		return getStringValueForParameter(LDAP_MAIL_ATTRIBUTE);
 	}
+	public String getLdapLoginAttribute() {
+		return getStringValueForParameter(LDAP_LOGIN_ATTRIBUTE);
+	}
+	public String getLdapDisplayNameAttribute() {
+		return getStringValueForParameter(LDAP_DISPLAYNAME_ATTRIBUTE);
+	}
 	public String getUnivLogoPath() {
 		return getStringValueForParameter(UNIV_LOGO_PATH);
 	}
@@ -155,5 +165,6 @@ public class ConfigController {
 	private boolean getBooleanValueForParameter(String parametre){
 		return prefService.getBooleanValue(prefService.getPreferences(parametre));
 	}
+	
 
 }

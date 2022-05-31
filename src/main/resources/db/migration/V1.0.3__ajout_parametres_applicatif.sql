@@ -94,7 +94,7 @@ COMMIT;
 -- 
 -- Insertion des catégories
 -- 
-INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('1', 'LDAP', '1');
+INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('1', 'LDAP (restart nécessaire)', '1');
 INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('2', 'Pégase', '2');
 INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('3', 'Profils', '3');
 INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('4', 'Affichage', '4');
@@ -114,13 +114,17 @@ INSERT INTO preferences_application_type (type_id, secret) VALUES ('LIST_STRING'
 
 -- paramètres LDAP
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('LDAP_CODETU_ATTRIBUTE', 'Attribut ldap contenant le code apprenant de l''étudiant', NULL, 'supannEtuId', '1', 'STRING',1);
+VALUES ('LDAP_LOGIN_ATTRIBUTE', 'Attribut ldap contenant le login', NULL, 'uid', '1', 'STRING',1);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('LDAP_MAIL_ATTRIBUTE', 'Attribut ldap contenant le mail de l''étudiant', NULL, 'mail', '1', 'STRING', 2);
+VALUES ('LDAP_DISPLAYNAME_ATTRIBUTE', 'Attribut ldap contenant le displayname de l''utilisateur connecté ', NULL, 'displayName', '1', 'STRING',2);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('LDAP_FILTRE_ETUDIANT', 'Filtre ldap identifiant les étudiants', NULL, '(supannEtuId=*)', '1', 'STRING', 3);
+VALUES ('LDAP_CODETU_ATTRIBUTE', 'Attribut ldap contenant le code apprenant de l''étudiant', NULL, 'supannEtuId', '1', 'STRING',3);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('LDAP_FILTRE_GESTIONNAIRE', 'Filtre ldap identifiant les gestionnaire de l''application (possibilité de consulter tous les dossiers)', NULL, NULL, '1', 'STRING', 4);
+VALUES ('LDAP_MAIL_ATTRIBUTE', 'Attribut ldap contenant le mail de l''étudiant', NULL, 'mail', '1', 'STRING', 4);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('LDAP_FILTRE_ETUDIANT', 'Filtre ldap identifiant les étudiants', NULL, '(supannEtuId=*)', '1', 'STRING', 5);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('LDAP_FILTRE_GESTIONNAIRE', 'Filtre ldap identifiant les gestionnaires de l''application (possibilité de consulter tous les dossiers)', NULL, NULL, '1', 'STRING', 6);
 
 -- paramètres Pégase
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
