@@ -64,6 +64,7 @@ import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.shared.ui.Transport;
 
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
@@ -118,10 +119,12 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private transient PreferencesService prefService;
 	@Autowired
 	private transient SessionController mainController;
+	@Autowired
+	private transient ConfigController configController;
 
-	@Value("${doc.url:}")
+	//@Value("${doc.url:}")
 	private transient String docUrl;
-	@Value("${help.url:}")
+	//@Value("${help.url:}")
 	private transient String helpUrl;
 
 	@Value("${connexion.info.actif}")
@@ -144,9 +147,16 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private Label nomPrenom = new Label();
 	private Label numeroDossier = new Label();
 
+	private void initParameters() {
+		docUrl = configController.getDocUrl();
+		helpUrl = configController.getHelpUrl();
+	}
+
 	@PostConstruct
 	public void init() {
 
+		initParameters();
+		
 		/* Theme: Mode sombre */
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getDarkModeFlux()
@@ -219,6 +229,8 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			createInfoPopUp(securityService.getPrincipal().get());
 		}
 	}
+
+
 
 
 	private Component getResumeLayout() {
