@@ -77,19 +77,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 
-	@Value("${doc.url:}")
-	private transient String docUrl;
-	@Value("${help.url:}")
-	private transient String helpUrl;
-
-	@Value("${connexion.info.actif}")
-	private transient boolean affichagePopupInfo;
-	@Value("${connexion.info.pref}")
-	private transient boolean popupInfoDesactivable;
-
-	@Value("${etudiant.resume.actif}")
-	private transient boolean affichageResumeEtudiant;
-
 	@Getter
 	private String pageTitle = "";
 	@Getter

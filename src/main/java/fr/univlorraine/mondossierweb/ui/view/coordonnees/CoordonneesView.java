@@ -42,6 +42,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.service.LdapService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
@@ -100,10 +101,12 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	@Autowired
 	private transient SessionController etudiantController;
 	@Autowired
+	private transient ConfigController configController;
+	@Autowired
 	protected transient LdapService ldapService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
-	@Value("${etudiant.mail.ldap}")
+	//@Value("${etudiant.mail.ldap}")
 	private transient Boolean afficherMailLdap;
 	@Getter
 	private String pageTitle = "";
@@ -117,8 +120,14 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	// Carte pour les contacts (mail, tel) d'urgence
 	private Card contactsUrgence;
 
+	private void initParameters() {
+		afficherMailLdap = configController.isEtudiantMailLdapActif();
+	}
+	
 	@PostConstruct
 	private void init() {
+		initParameters();
+		
 		setSizeFull();
 
 		coordPersoLayout.setWidthFull();
@@ -127,7 +136,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 		add(coordPersoLayout);
 	}
-
 
 	/**
 	 * @see com.vaadin.flow.i18n.LocaleChangeObserver#localeChange(com.vaadin.flow.i18n.LocaleChangeEvent)

@@ -70,10 +70,30 @@ public class ConfigController {
 
 	private static final String LDAP_DISPLAYNAME_ATTRIBUTE = "LDAP_DISPLAYNAME_ATTRIBUTE";
 	
+	private static final String INFO_CONNEXION = "INFO_CONNEXION";
+	
+	private static final String INFO_CONNEXION_PREF = "INFO_CONNEXION_PREF";
+	
+	private static final String ETUDIANT_MAIL_LDAP = "ETUDIANT_MAIL_LDAP";
+	
+	private static final String ETUDIANT_RESUME = "ETUDIANT_RESUME";
+	
 	
 	@Autowired
 	private transient PreferencesService prefService;
 	
+	public boolean isInfoConnexionActif() {
+		return getBooleanValueForParameter(INFO_CONNEXION);
+	}
+	public boolean isInfoConnexionPrefActif() {
+		return getBooleanValueForParameter(INFO_CONNEXION_PREF);
+	}
+	public boolean isEtudiantMailLdapActif() {
+		return getBooleanValueForParameter(ETUDIANT_MAIL_LDAP);
+	}
+	public boolean isEtudiantResumeActif() {
+		return getBooleanValueForParameter(ETUDIANT_RESUME);
+	}
 	public boolean isAccesEtudiantActif() {
 		return getBooleanValueForParameter(ACCES_ETUDIANT_ACTIF);
 	}

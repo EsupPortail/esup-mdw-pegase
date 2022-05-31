@@ -127,12 +127,12 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	//@Value("${help.url:}")
 	private transient String helpUrl;
 
-	@Value("${connexion.info.actif}")
+	//@Value("${connexion.info.actif}")
 	private transient boolean affichagePopupInfo;
-	@Value("${connexion.info.pref}")
+	//@Value("${connexion.info.pref}")
 	private transient boolean popupInfoDesactivable;
 
-	@Value("${etudiant.resume.actif}")
+	//@Value("${etudiant.resume.actif}")
 	private transient boolean affichageResumeEtudiant;
 
 	private final Tabs tabs = new Tabs();
@@ -150,13 +150,16 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private void initParameters() {
 		docUrl = configController.getDocUrl();
 		helpUrl = configController.getHelpUrl();
+		affichagePopupInfo = configController.isInfoConnexionActif();
+		popupInfoDesactivable = configController.isInfoConnexionPrefActif();
+		affichageResumeEtudiant = configController.isEtudiantResumeActif();
 	}
 
 	@PostConstruct
 	public void init() {
 
 		initParameters();
-		
+
 		/* Theme: Mode sombre */
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getDarkModeFlux()
@@ -379,22 +382,25 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 				HorizontalLayout infoLayout = new HorizontalLayout();
 				infoLayout.add(infoIcon);
 				infoLayout.add(info);
-
-				Checkbox checkInfo =new Checkbox(getTranslation("connexion.check"));
-				checkInfo.getStyle().set("margin-top", "auto");
-				checkInfo.getStyle().set("margin-bottom", "auto");
-				checkInfo.addClickListener(e-> {
-					log.info("Enregistrement parametre Masquer message bienvenu : {}",checkInfo.getValue());
-					prefService.saveUserPref(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE, checkInfo.getValue());
-				});
-
-				FlexLayout btnLayout = new FlexLayout();
-				btnLayout.getStyle().set("margin", "auto");
-				btnLayout.setFlexWrap(FlexWrap.WRAP);
-				btnLayout.add(checkInfo);
-
+				
 				dialogLayout.add(infoLayout);
-				dialogLayout.add(btnLayout);
+				
+				if(popupInfoDesactivable) {
+					Checkbox checkInfo =new Checkbox(getTranslation("connexion.check"));
+					checkInfo.getStyle().set("margin-top", "auto");
+					checkInfo.getStyle().set("margin-bottom", "auto");
+					checkInfo.addClickListener(e-> {
+						log.info("Enregistrement parametre Masquer message bienvenu : {}",checkInfo.getValue());
+						prefService.saveUserPref(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE, checkInfo.getValue());
+					});
+
+					FlexLayout btnLayout = new FlexLayout();
+					btnLayout.getStyle().set("margin", "auto");
+					btnLayout.setFlexWrap(FlexWrap.WRAP);
+					btnLayout.add(checkInfo);
+					dialogLayout.add(btnLayout);
+				}
+				
 				infoDialog.add(dialogLayout);
 
 				infoDialog.open();

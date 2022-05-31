@@ -158,6 +158,15 @@ VALUES ('CURSUS_FAC_ITALIQUE', 'Afficher les objets de formation non obligatoire
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('INSCRIPTION_STATUTS', 'Statuts des inscriptions à afficher séparés par des virgules', NULL, 'valide', '4', 'STRING', 8);
 
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('INFO_CONNEXION', 'true si on veut afficher une pop-up d''info à la connexion sur l''application', NULL, 'true', '4', 'BOOLEAN', 9);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('INFO_CONNEXION_PREF', 'true si on veut donner la possibilité à l''utilisateur de masquer la pop-up d''info de connexion via case à cocher', NULL, 'true', '4', 'BOOLEAN', 10);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('ETUDIANT_MAIL_LDAP', 'true si on veut afficher le mail extrait du ldap', NULL, 'true', '4', 'BOOLEAN', 11);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('ETUDIANT_RESUME', 'true si on veut afficher le nom/prenom et le numéro de dossier au dessus du menu latéral', NULL, 'true', '4', 'BOOLEAN', 12);
+
 -- paramètres d'aide
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('DOC_URL', 'URL de la documentation de l''application', NULL, 'https://wiki.fr', '5', 'STRING', 1);
