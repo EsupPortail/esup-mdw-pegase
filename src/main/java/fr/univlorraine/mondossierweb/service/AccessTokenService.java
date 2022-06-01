@@ -146,8 +146,10 @@ public class AccessTokenService implements Serializable {
 		return token;
 	}
 
-	@Scheduled(fixedRate = 900000)
+	@Scheduled(fixedRate = 60000)
 	public void cronJobCheckToken() {
+		// TODO mécanisque pour forcer la maj du token depuis un témoin bdd pour que les instances de mdw mettent à jour le token
+		
 		checkToken(false);
 	}
 
