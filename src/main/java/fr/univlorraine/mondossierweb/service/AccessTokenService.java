@@ -61,49 +61,46 @@ public class AccessTokenService implements Serializable {
 	private transient ConfigController configController;
 
 
-	private String getTokenUrl(boolean force) {
-		if(token == null || tokenUrl == null || force) {
-			tokenUrl = configController.getAccesTokenUrl();
-		}
-		return tokenUrl;
+	private void getTokenUrl() {
+		tokenUrl = configController.getAccesTokenUrl();
 	}
 	
-	private String getUsername(boolean force) {
-		if(token == null || username == null || force) {
+	private void getUsername() {
 			username = configController.getAccesTokenUsername();
-		}
-		return username;
 	}
 	
-	private String getPassword(boolean force) {
-		if(token == null || password == null || force) {
-			password = configController.getAccesTokenPassword();
-		}
-		return password;
+	private void getPassword() {
+		password = configController.getAccesTokenPassword();
 	}
 	
-	private long getDuration(boolean force) {
-		if(token == null || duration == null || force) {
-			duration = Long.parseLong(configController.getAccesTokenDuration());
-		}
-		return duration;
+	private void getDuration() {
+		duration = Long.parseLong(configController.getAccesTokenDuration());
+	}
+	
+	public void refreshParameters() {
+		getTokenUrl();
+		getUsername();
+		getPassword();
+		getDuration();
 	}
 	
 	private void getAccessToken(boolean forceParamRefresh) {
-		String urlToken = getTokenUrl(forceParamRefresh);
+		if(tokenUrl == null || forceParamRefresh) {
+			refreshParameters();
+		}
 		// Si l'url de récupération du token est paramétrée
-		if(StringUtils.hasText(urlToken)){
+		if(StringUtils.hasText(tokenUrl)){
 			// Headers
 			HttpHeaders requestHeaders = new HttpHeaders();
 			requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
 			// URL
-			String url = urlToken + "?username={username}&password={password}&token=true";
+			String url = tokenUrl + "?username={username}&password={password}&token=true";
 
 			// Paramètres
 			Map<String, String> uriVariables = new HashMap<>();
-			uriVariables.put("username", getUsername(forceParamRefresh));
-			uriVariables.put("password", getPassword(forceParamRefresh));
+			uriVariables.put("username", username);
+			uriVariables.put("password", password);
 
 			// RestTemplate
 			RestTemplate restTemplate = new RestTemplate();
@@ -133,7 +130,7 @@ public class AccessTokenService implements Serializable {
 
 	private boolean tokenExpired() {
 		LocalDateTime ldt = LocalDateTime.now();
-		return (tokenCreatedDateTime.until( ldt, ChronoUnit.HOURS ) > getDuration(false));
+		return (tokenCreatedDateTime.until( ldt, ChronoUnit.HOURS ) > duration);
 	}
 
 	public String getToken(boolean forceParamRefresh) {
