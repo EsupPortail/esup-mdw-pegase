@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -39,6 +39,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -53,6 +54,7 @@ import com.vaadin.flow.router.Route;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCategorie;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
+import fr.univlorraine.mondossierweb.service.AccessTokenService;
 import fr.univlorraine.mondossierweb.service.PreferencesService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
@@ -72,8 +74,11 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final String TYPE_BOOLEAN = "BOOLEAN";
 	private static final String TYPE_LIST_STRING = "LIST_STRING";
 	private static final String TRUE_VALUE = "true";
+	private static final Integer PEGASE_ACCESS_TOKEN_ID = 2;
 	@Autowired
 	private transient PreferencesService prefService;
+	@Autowired
+	private transient AccessTokenService accessTokenService;	
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 
@@ -176,9 +181,10 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 							}
 						}
 					}
-					initButtons(categorieLayout);
+					initButtons(categorieLayout, categorie.getCatId());
 					categorieCard.add(categorieLayout);
 					//categorieCard.displayAlt();
+
 				}
 				parametresLayout.add(categorieCard);
 			}
@@ -188,7 +194,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 	}
 
-	private void initButtons(VerticalLayout layout) {
+	private void initButtons(VerticalLayout layout, Integer categorieId) {
 		HorizontalLayout bl = new HorizontalLayout();
 		bl.setWidthFull();
 		Button buttonEditer = new Button();
@@ -207,9 +213,16 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		buttonEnregistrer.getStyle().set("margin", "auto");
 		layout.add(bl);
 
+		HorizontalLayout accessTokenLayout = new HorizontalLayout();
+		accessTokenLayout.setWidthFull();
+		Button buttonTester = new Button();
+		buttonTester.getStyle().set("margin", "auto");
+		accessTokenLayout.add(buttonTester);
+
 		buttonEditer.addClickListener(e -> {
 			layout.getChildren().forEach(c -> setEditableComponent(c, false, false, false));
 			buttonEditer.setVisible(false);
+			buttonTester.setVisible(false);
 			buttonAnnuler.setVisible(true);
 			buttonEnregistrer.setVisible(true);
 		});
@@ -217,6 +230,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		buttonAnnuler.addClickListener(e -> {
 			layout.getChildren().forEach(c -> setEditableComponent(c, true, true, false));
 			buttonEditer.setVisible(true);
+			buttonTester.setVisible(true);
 			buttonAnnuler.setVisible(false);
 			buttonEnregistrer.setVisible(false);
 		});
@@ -224,9 +238,28 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		buttonEnregistrer.addClickListener(e -> {
 			layout.getChildren().forEach(c -> setEditableComponent(c, true, false, true));
 			buttonEditer.setVisible(true);
+			buttonTester.setVisible(true);
 			buttonAnnuler.setVisible(false);
 			buttonEnregistrer.setVisible(false);
 		});
+
+		//S'il s'agit de la catégorie Pégase Access-token
+		if(categorieId == PEGASE_ACCESS_TOKEN_ID) {
+			buttonTester.setText(getTranslation("parametres.button-tester-accesstoken"));
+			buttonTester.addClickListener(e -> {
+				try {
+					String t = accessTokenService.getToken(true);
+					if(StringUtils.hasText(t)) {
+						Notification.show(getTranslation("accesstoken.ok"));
+					} else {
+						Notification.show(getTranslation("accesstoken.error"));
+					}
+				}catch(Exception ex) {
+					Notification.show(getTranslation("accesstoken.error") + " : " + ex.getLocalizedMessage());
+				}
+			});
+			layout.add(accessTokenLayout);
+		}
 	}
 
 	// modification du composant/paramètreApplicatif en fonction des paramètres 

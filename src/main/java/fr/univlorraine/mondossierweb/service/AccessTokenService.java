@@ -24,7 +24,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,33 +45,65 @@ import lombok.extern.slf4j.Slf4j;
 public class AccessTokenService implements Serializable {
 
 
-	@Value("${pegase.accesstoken.url}")
-	private transient String tokenurl;	
-	@Value("${pegase.accesstoken.username}")
+	//@Value("${pegase.accesstoken.url}")
+	private transient String tokenUrl;	
+	//@Value("${pegase.accesstoken.username}")
 	private transient String username;	
-	@Value("${pegase.accesstoken.password}")
+	//@Value("${pegase.accesstoken.password}")
 	private transient String password;
-	@Value("${pegase.accesstoken.duration}")
-	private transient long duration;
+	//@Value("${pegase.accesstoken.duration}")
+	private transient Long duration;
 
 	private String token;
 	private LocalDateTime tokenCreatedDateTime;
+	
+	@Autowired
+	private transient ConfigController configController;
 
 
-	private void getAccessToken() {
+	private String getTokenUrl(boolean force) {
+		if(token == null || tokenUrl == null || force) {
+			tokenUrl = configController.getAccesTokenUrl();
+		}
+		return tokenUrl;
+	}
+	
+	private String getUsername(boolean force) {
+		if(token == null || username == null || force) {
+			username = configController.getAccesTokenUsername();
+		}
+		return username;
+	}
+	
+	private String getPassword(boolean force) {
+		if(token == null || password == null || force) {
+			password = configController.getAccesTokenPassword();
+		}
+		return password;
+	}
+	
+	private long getDuration(boolean force) {
+		if(token == null || duration == null || force) {
+			duration = Long.parseLong(configController.getAccesTokenDuration());
+		}
+		return duration;
+	}
+	
+	private void getAccessToken(boolean forceParamRefresh) {
+		String urlToken = getTokenUrl(forceParamRefresh);
 		// Si l'url de récupération du token est paramétrée
-		if(StringUtils.hasText(tokenurl)){
+		if(StringUtils.hasText(urlToken)){
 			// Headers
 			HttpHeaders requestHeaders = new HttpHeaders();
 			requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
 			// URL
-			String url = tokenurl + "?username={username}&password={password}&token=true";
+			String url = urlToken + "?username={username}&password={password}&token=true";
 
 			// Paramètres
 			Map<String, String> uriVariables = new HashMap<>();
-			uriVariables.put("username", username);
-			uriVariables.put("password", password);
+			uriVariables.put("username", getUsername(forceParamRefresh));
+			uriVariables.put("password", getPassword(forceParamRefresh));
 
 			// RestTemplate
 			RestTemplate restTemplate = new RestTemplate();
@@ -89,28 +122,33 @@ public class AccessTokenService implements Serializable {
 	}
 
 	@Synchronized
-	private void checkToken() {
-		log.info("Check Access Token");
-		if(token==null || tokenExpired()) {
-			getAccessToken();
+	private void checkToken(boolean forceParamRefresh) {
+		log.info("Check Access Token - forceParamRefresh : {}",forceParamRefresh);
+		if(forceParamRefresh) {
+			getAccessToken(true);
+		} else if(token == null || tokenExpired()) {
+			getAccessToken(false);
 		}
 	}
 
 	private boolean tokenExpired() {
 		LocalDateTime ldt = LocalDateTime.now();
-		return (tokenCreatedDateTime.until( ldt, ChronoUnit.HOURS ) > duration);
+		return (tokenCreatedDateTime.until( ldt, ChronoUnit.HOURS ) > getDuration(false));
 	}
 
-	public String getToken() {
+	public String getToken(boolean forceParamRefresh) {
+		if(forceParamRefresh) {
+			token = null;
+		}
 		if(token == null) {
-			checkToken();
+			checkToken(forceParamRefresh);
 		}
 		return token;
 	}
 
 	@Scheduled(fixedRate = 900000)
 	public void cronJobCheckToken() {
-		checkToken();
+		checkToken(false);
 	}
 
 }

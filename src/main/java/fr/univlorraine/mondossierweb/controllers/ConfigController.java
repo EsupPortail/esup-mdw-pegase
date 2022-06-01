@@ -43,6 +43,8 @@ public class ConfigController {
 	private static final String ACCESSTOKEN_PASSWORD = "ACCESSTOKEN_PASSWORD";
 
 	private static final String ACCESSTOKEN_USERNAME = "ACCESSTOKEN_USERNAME";
+	
+	private static final String ACCESSTOKEN_DURATION = "ACCESSTOKEN_DURATION";
 
 	private static final String DOC_URL = "DOC_URL";
 
@@ -77,6 +79,8 @@ public class ConfigController {
 	private static final String ETUDIANT_MAIL_LDAP = "ETUDIANT_MAIL_LDAP";
 	
 	private static final String ETUDIANT_RESUME = "ETUDIANT_RESUME";
+
+
 	
 	
 	@Autowired
@@ -150,6 +154,9 @@ public class ConfigController {
 	}
 	public String getAccesTokenPassword() {
 		return getSecretValueForParameter(ACCESSTOKEN_PASSWORD);
+	}
+	public String getAccesTokenDuration() {
+		return getStringValueForParameter(ACCESSTOKEN_DURATION);
 	}
 	public String getInscriptionDetail() {
 		return getStringValueForParameter(INSCRIPTION_DETAIL);
