@@ -24,6 +24,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -78,16 +80,21 @@ public class AccessTokenService implements Serializable {
 	}
 	
 	public void refreshParameters() {
+		// Maj des paramétres depuis la bdd
 		getTokenUrl();
 		getUsername();
 		getPassword();
 		getDuration();
+		// suppression de l'ancien token
+		token = null;
 	}
 	
-	private void getAccessToken(boolean forceParamRefresh) {
-		if(tokenUrl == null || forceParamRefresh) {
-			refreshParameters();
-		}
+	@PostConstruct
+	public void init() {	
+		refreshParameters();
+	}
+	
+	private void getAccessToken() {
 		// Si l'url de récupération du token est paramétrée
 		if(StringUtils.hasText(tokenUrl)){
 			// Headers
@@ -119,12 +126,10 @@ public class AccessTokenService implements Serializable {
 	}
 
 	@Synchronized
-	private void checkToken(boolean forceParamRefresh) {
-		log.info("Check Access Token - forceParamRefresh : {}",forceParamRefresh);
-		if(forceParamRefresh) {
-			getAccessToken(true);
-		} else if(token == null || tokenExpired()) {
-			getAccessToken(false);
+	private void checkToken() {
+		log.info("Check Access Token");
+		if(token == null || tokenExpired()) {
+			getAccessToken();
 		}
 	}
 
@@ -133,12 +138,9 @@ public class AccessTokenService implements Serializable {
 		return (tokenCreatedDateTime.until( ldt, ChronoUnit.HOURS ) > duration);
 	}
 
-	public String getToken(boolean forceParamRefresh) {
-		if(forceParamRefresh) {
-			token = null;
-		}
+	public String getToken() {
 		if(token == null) {
-			checkToken(forceParamRefresh);
+			checkToken();
 		}
 		return token;
 	}
@@ -146,8 +148,8 @@ public class AccessTokenService implements Serializable {
 	@Scheduled(fixedRate = 60000)
 	public void cronJobCheckToken() {
 		// TODO mécanisque pour forcer la maj du token depuis un témoin bdd pour que les instances de mdw mettent à jour le token
-		
-		checkToken(false);
+
+		checkToken();
 	}
 
 }

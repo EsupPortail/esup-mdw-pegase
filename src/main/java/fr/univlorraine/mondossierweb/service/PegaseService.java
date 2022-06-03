@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
@@ -75,12 +76,15 @@ public class PegaseService implements Serializable {
 	private transient String codeApprenantDemo;	
 	//private transient String codeCibleDemo="F-ING-BIOSC→FING-BIOSC@PER-2019";	
 
+	@Autowired
+	private transient ConfigController configController;
+
 	// INS API
 	private ApiClient apiClientIns = new ApiClient();
 	private ApprenantsApi appApiIns = new ApprenantsApi();
 	private InscriptionsApi insApiIns = new InscriptionsApi();
 	private PiecesApi insApiPieces = new PiecesApi();
-	
+
 	// PAI API
 	private ApiClient apiClientPai = new ApiClient();
 	private PaiApi insApiPai = new PaiApi();
@@ -93,15 +97,51 @@ public class PegaseService implements Serializable {
 	private ApiClient apiClientCoc = new ApiClient();
 	private NotesEtResultatsPubliablesApi pubApiCoc = new NotesEtResultatsPubliablesApi();
 
-	@PostConstruct
-	public void init() {
-		
+	public String getcodeApprenantDemo() {
+		return codeApprenantDemo;
+	}
+	
+	private void setEtablissement() {
+		etablissement = configController.getEtablissement();
+	}
+	private void setcodeApprenantDemo() {
+		codeApprenantDemo = configController.getPegaseDemoAppenant();
+	}
+	private void setCodePhoto() {
+		codePhoto = configController.getIdPjPhoto();
+	}
+
+	private void setApiPaiUrl() {
+		apiPaiUrl = configController.getApiPaiUrl();
+	}
+
+	private void setApiCocUrl() {
+		apiCocUrl = configController.getApiCocUrl();
+	}
+
+	private void setApiChcUrl() {
+		apiChcUrl = configController.getApiChcUrl();
+	}
+
+	private void setApiInsUrl() {
+		apiInsUrl = configController.getApiInsUrl();	
+	}
+
+	public void refreshParameters() {
+		setEtablissement();
+		setApiInsUrl();
+		setApiChcUrl();
+		setApiCocUrl();
+		setApiPaiUrl();
+		setCodePhoto();
+		setcodeApprenantDemo();
+
 		// Init INS
 		apiClientIns.setBasePath(apiInsUrl);
 		insApiIns.setApiClient(apiClientIns);
 		appApiIns.setApiClient(apiClientIns);
 		insApiPieces.setApiClient(apiClientIns);
-		
+
 		// Init PAI
 		apiClientPai.setBasePath(apiPaiUrl);
 		insApiPai.setApiClient(apiClientPai);
@@ -114,7 +154,13 @@ public class PegaseService implements Serializable {
 		apiClientCoc.setBasePath(apiCocUrl);
 		pubApiCoc.setApiClient(apiClientCoc);
 	}
-	
+
+
+	@PostConstruct
+	public void init() {
+		refreshParameters();
+	}
+
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
 
 		// Si on a aucun codeApprenant en paramètre et qu'on a paramétré un code démo.
@@ -126,7 +172,7 @@ public class PegaseService implements Serializable {
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
 			//insApiIns.getApiClient().setAccessToken(accessTokenService.getToken(false));
-			insApiIns.getApiClient().setBearerToken(accessTokenService.getToken(false));
+			insApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
 			//insApiIns.getApiClient().updateParamsForAuth(authNames, queryParams, headerParams, cookieParams);
 			try {
 				// Appel de l'API Pégase
@@ -150,7 +196,7 @@ public class PegaseService implements Serializable {
 	public void listerInscriptionsValidees() {
 		// Maj du token pour récupérer le dernier token valide
 		//insApiIns.getApiClient().setAccessToken(accessTokenService.getToken(false));
-		insApiIns.getApiClient().setBearerToken(accessTokenService.getToken(false));
+		insApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
 
 		// Préparation des paramètres
 		List<StatutInscriptionVoeu> statutsInscription = new LinkedList<StatutInscriptionVoeu> ();
@@ -166,7 +212,7 @@ public class PegaseService implements Serializable {
 		String codeApprenant = null;
 		String ine = null;
 		int limit = 0;
-		
+
 		try {
 			// Appel de l'API Pégase
 			Inscriptions response = insApiIns.listerInscriptionsValidees(etablissement, statutsInscription, statutsPieces, statutsPaiement, tri, recherche, periode, objetMaquette, nomOuPrenom, codeApprenant, ine, limit);
@@ -187,7 +233,7 @@ public class PegaseService implements Serializable {
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
 			//insApiChc.getApiClient().setAccessToken(accessTokenService.getToken(false));
-			insApiChc.getApiClient().setBearerToken(accessTokenService.getToken(false));
+			insApiChc.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				List<String> statutsInscription = List.of(Utils.STATUT_INSCRIPTION_VALIDE);
 				// Appel de l'API Pégase
@@ -214,7 +260,7 @@ public class PegaseService implements Serializable {
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
 			//pubApiCoc.getApiClient().setAccessToken(accessTokenService.getToken(false));
-			pubApiCoc.getApiClient().setBearerToken(accessTokenService.getToken(false));
+			pubApiCoc.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
 				List<Chemin> listObj = pubApiCoc.listerCursusPubliableApprenant(etablissement, codePeriode,codeApprenant, codeChemin);
@@ -242,7 +288,7 @@ public class PegaseService implements Serializable {
 			&& StringUtils.hasText(cible)) {
 			// Maj du token pour récupérer le dernier token valide
 			//insApiPieces.getApiClient().setAccessToken(accessTokenService.getToken(false));
-			insApiPieces.getApiClient().setBearerToken(accessTokenService.getToken(false));
+			insApiPieces.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
 				File photo = insApiPieces.contenuPiece(etablissement, codeApprenant, cible, codePhoto);
@@ -267,7 +313,7 @@ public class PegaseService implements Serializable {
 
 		// Maj du token pour récupérer le dernier token valide
 		//insApiIns.getApiClient().setAccessToken(accessTokenService.getToken(false));
-		insApiIns.getApiClient().setBearerToken(accessTokenService.getToken(false));
+		insApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
 
 		try {
 			// Appel de l'API Pégase
@@ -290,7 +336,7 @@ public class PegaseService implements Serializable {
 
 		// Maj du token pour récupérer le dernier token valide
 		//insApiPai.getApiClient().setAccessToken(accessTokenService.getToken(false));
-		insApiPai.getApiClient().setBearerToken(accessTokenService.getToken(false));
+		insApiPai.getApiClient().setBearerToken(accessTokenService.getToken());
 
 		try {
 			// Appel de l'API Pégase
@@ -317,7 +363,7 @@ public class PegaseService implements Serializable {
 	public void lireApprenant() {
 		// Maj du token pour récupérer le dernier token valide
 		//appApiIns.getApiClient().setAccessToken(accessTokenService.getToken(false));
-		appApiIns.getApiClient().setBearerToken(accessTokenService.getToken(false));
+		appApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
 
 		try {
 			// Appel de l'API Pégase

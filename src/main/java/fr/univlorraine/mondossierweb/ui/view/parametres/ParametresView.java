@@ -40,6 +40,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -55,6 +56,7 @@ import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCategorie;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
 import fr.univlorraine.mondossierweb.service.AccessTokenService;
+import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.PreferencesService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
@@ -75,10 +77,13 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final String TYPE_LIST_STRING = "LIST_STRING";
 	private static final String TRUE_VALUE = "true";
 	private static final Integer PEGASE_ACCESS_TOKEN_ID = 2;
+	private static final Integer PEGASE_API_ID = 3;
 	@Autowired
 	private transient PreferencesService prefService;
 	@Autowired
-	private transient AccessTokenService accessTokenService;	
+	private transient AccessTokenService accessTokenService;
+	@Autowired
+	private transient PegaseService pegaseService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 
@@ -248,18 +253,50 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			buttonTester.setText(getTranslation("parametres.button-tester-accesstoken"));
 			buttonTester.addClickListener(e -> {
 				try {
-					String t = accessTokenService.getToken(true);
+					// Maj des paramètres depuis la BDD
+					accessTokenService.refreshParameters();
+					// Récupération du token
+					String t = accessTokenService.getToken();
 					if(StringUtils.hasText(t)) {
-						Notification.show(getTranslation("accesstoken.ok"));
+						notifierSucces(getTranslation("accesstoken.ok"));
 					} else {
-						Notification.show(getTranslation("accesstoken.error"));
+						notifierAnomalie(getTranslation("accesstoken.error"));
 					}
 				}catch(Exception ex) {
-					Notification.show(getTranslation("accesstoken.error") + " : " + ex.getLocalizedMessage());
+					notifierAnomalie(getTranslation("accesstoken.error") + " : " + ex.getLocalizedMessage());
 				}
 			});
 			layout.add(accessTokenLayout);
 		}
+
+		//S'il s'agit de la catégorie Pégase API
+		if(categorieId == PEGASE_API_ID) {
+			buttonTester.setText(getTranslation("parametres.button-tester-api"));
+			buttonTester.addClickListener(e -> {
+				try {
+					// Maj des paramètres depuis la BDD
+					pegaseService.refreshParameters();
+					if(pegaseService.recupererDossierApprenant(pegaseService.getcodeApprenantDemo()) != null) {
+						notifierSucces(getTranslation("api-ins.ok", pegaseService.getcodeApprenantDemo()));
+					} else {
+						notifierAnomalie(getTranslation("api-ins.error", pegaseService.getcodeApprenantDemo()));
+					}
+				}catch(Exception ex) {
+					notifierAnomalie(getTranslation("api-ins.error", pegaseService.getcodeApprenantDemo()) + " : " + ex.getLocalizedMessage());
+				}
+			});
+			layout.add(accessTokenLayout);
+		}
+	}
+
+	private void notifierSucces(String message) {
+		Notification notification= Notification.show(message);
+		notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+	}
+	
+	private void notifierAnomalie(String message) {
+		Notification notification= Notification.show(message);
+		notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 	}
 
 	// modification du composant/paramètreApplicatif en fonction des paramètres 

@@ -78,6 +78,20 @@ public class ConfigController {
 	
 	private static final String ETUDIANT_RESUME = "ETUDIANT_RESUME";
 
+	private static final String PEGASE_ETAB = "PEGASE_ETAB";
+
+	private static final String PEGASE_API_INS_URL = "PEGASE_API_INS_URL";
+
+	private static final String PEGASE_API_CHC_URL = "PEGASE_API_CHC_URL";
+
+	private static final String PEGASE_API_COC_URL = "PEGASE_API_COC_URL";
+
+	private static final String PEGASE_API_PAI_URL = "PEGASE_API_PAI_URL";
+
+	private static final String PEGASE_ID_PJ_PHOTO = "PEGASE_ID_PJ_PHOTO";
+
+	private static final String PEGASE_DEMO_APPRENANT = "PEGASE_DEMO_APPRENANT";
+
 
 	
 	
@@ -159,6 +173,27 @@ public class ConfigController {
 	public String getInscriptionStatuts() {
 		return getStringValueForParameter(INSCRIPTION_STATUTS);
 	}
+	public String getEtablissement() {
+		return getStringValueForParameter(PEGASE_ETAB);
+	}
+	public String getApiInsUrl() {
+		return getStringValueForParameter(PEGASE_API_INS_URL);
+	}
+	public String getApiChcUrl() {
+		return getStringValueForParameter(PEGASE_API_CHC_URL);
+	}
+	public String getApiCocUrl() {
+		return getStringValueForParameter(PEGASE_API_COC_URL);
+	}
+	public String getApiPaiUrl() {
+		return getStringValueForParameter(PEGASE_API_PAI_URL);
+	}
+	public String getIdPjPhoto() {
+		return getStringValueForParameter(PEGASE_ID_PJ_PHOTO);
+	}
+	public String getPegaseDemoAppenant() {
+		return getStringValueForParameter(PEGASE_DEMO_APPRENANT);
+	}
 	
 	
 	/**
@@ -187,6 +222,7 @@ public class ConfigController {
 	private boolean getBooleanValueForParameter(String parametre){
 		return prefService.getBooleanValue(prefService.getPreferences(parametre));
 	}
+
 	
 
 }
