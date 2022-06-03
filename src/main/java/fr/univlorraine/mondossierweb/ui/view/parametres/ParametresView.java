@@ -63,6 +63,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -258,12 +259,12 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 					// Récupération du token
 					String t = accessTokenService.getToken();
 					if(StringUtils.hasText(t)) {
-						notifierSucces(getTranslation("accesstoken.ok"));
+						Utils.notifierSucces(getTranslation("accesstoken.ok"));
 					} else {
-						notifierAnomalie(getTranslation("accesstoken.error"));
+						Utils.notifierAnomalie(getTranslation("accesstoken.error"));
 					}
 				}catch(Exception ex) {
-					notifierAnomalie(getTranslation("accesstoken.error") + " : " + ex.getLocalizedMessage());
+					Utils.notifierAnomalie(getTranslation("accesstoken.error") + " : " + ex.getLocalizedMessage());
 				}
 			});
 			layout.add(accessTokenLayout);
@@ -273,31 +274,43 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		if(categorieId == PEGASE_API_ID) {
 			buttonTester.setText(getTranslation("parametres.button-tester-api"));
 			buttonTester.addClickListener(e -> {
+				// Maj des paramètres depuis la BDD
+				pegaseService.refreshParameters();
 				try {
-					// Maj des paramètres depuis la BDD
-					pegaseService.refreshParameters();
-					if(pegaseService.recupererDossierApprenant(pegaseService.getcodeApprenantDemo()) != null) {
-						notifierSucces(getTranslation("api-ins.ok", pegaseService.getcodeApprenantDemo()));
+					// teste api INS
+					if(pegaseService.recupererDossierApprenant(pegaseService.getCodeApprenantTest()) != null) {
+						Utils.notifierSucces(getTranslation("api-ins.ok", pegaseService.getCodeApprenantTest()));
 					} else {
-						notifierAnomalie(getTranslation("api-ins.error", pegaseService.getcodeApprenantDemo()));
+						Utils.notifierAnomalie(getTranslation("api-ins.error", pegaseService.getCodeApprenantTest()));
 					}
 				}catch(Exception ex) {
-					notifierAnomalie(getTranslation("api-ins.error", pegaseService.getcodeApprenantDemo()) + " : " + ex.getLocalizedMessage());
+					Utils.notifierAnomalie(getTranslation("api-ins.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+				}
+				try {
+					// teste api CHC
+					if(pegaseService.getCursus(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest()) != null) {
+						Utils.notifierSucces(getTranslation("api-chc.ok", pegaseService.getCodeApprenantTest()));
+					} else {
+						Utils.notifierAnomalie(getTranslation("api-chc.error", pegaseService.getCodeApprenantTest()));
+					}
+				}catch(Exception ex) {
+					Utils.notifierAnomalie(getTranslation("api-chc.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+				}
+				try {
+					// teste api COC
+					if(pegaseService.getNotes(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest(), pegaseService.getCodeCheminTest()) != null) {
+						Utils.notifierSucces(getTranslation("api-coc.ok", pegaseService.getCodeApprenantTest()));
+					} else {
+						Utils.notifierAnomalie(getTranslation("api-coc.error", pegaseService.getCodeApprenantTest()));
+					}
+				}catch(Exception ex) {
+					Utils.notifierAnomalie(getTranslation("api-coc.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
 			});
 			layout.add(accessTokenLayout);
 		}
 	}
 
-	private void notifierSucces(String message) {
-		Notification notification= Notification.show(message);
-		notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-	}
-	
-	private void notifierAnomalie(String message) {
-		Notification notification= Notification.show(message);
-		notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-	}
 
 	// modification du composant/paramètreApplicatif en fonction des paramètres 
 	private void setEditableComponent(Component c, boolean readonly, boolean rollback, boolean save) {

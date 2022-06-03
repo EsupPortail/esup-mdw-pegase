@@ -60,20 +60,23 @@ public class PegaseService implements Serializable {
 	@Autowired
 	private transient AccessTokenService accessTokenService;	
 
-	@Value("${pegase.etablissement}")
+	//@Value("${pegase.etablissement}")
 	private transient String etablissement;	
-	@Value("${pegase.api.ins.url}")
+	//@Value("${pegase.api.ins.url}")
 	private transient String apiInsUrl;	
-	@Value("${pegase.api.chc.url}")
+	//@Value("${pegase.api.chc.url}")
 	private transient String apiChcUrl;	
-	@Value("${pegase.api.coc.url}")
+	//@Value("${pegase.api.coc.url}")
 	private transient String apiCocUrl;	
-	@Value("${pegase.api.pai.url}")
+	//@Value("${pegase.api.pai.url}")
 	private transient String apiPaiUrl;
-	@Value("${pegase.photo.code}")
+	//@Value("${pegase.photo.code}")
 	private transient String codePhoto;	
-	@Value("${pegase.demo.codeapprenant}")
+	//@Value("${pegase.demo.codeapprenant}")
 	private transient String codeApprenantDemo;	
+	private transient String codeApprenantTest;	
+	private transient String codePeriodeTest;	
+	private transient String codeCheminTest;
 	//private transient String codeCibleDemo="F-ING-BIOSC→FING-BIOSC@PER-2019";	
 
 	@Autowired
@@ -97,15 +100,32 @@ public class PegaseService implements Serializable {
 	private ApiClient apiClientCoc = new ApiClient();
 	private NotesEtResultatsPubliablesApi pubApiCoc = new NotesEtResultatsPubliablesApi();
 
-	public String getcodeApprenantDemo() {
+	public String getCodeApprenantDemo() {
 		return codeApprenantDemo;
 	}
-	
+	public String getCodePeriodeTest() {
+		return codePeriodeTest;
+	}
+	public String getCodeApprenantTest() {
+		return codeApprenantTest;
+	}
+	public String getCodeCheminTest() {
+		return codeCheminTest;
+	}
 	private void setEtablissement() {
 		etablissement = configController.getEtablissement();
 	}
-	private void setcodeApprenantDemo() {
-		codeApprenantDemo = configController.getPegaseDemoAppenant();
+	private void setCodeApprenantDemo() {
+		codeApprenantDemo = configController.getPegaseDemoApprenant();
+	}
+	private void setCodePeriodeTest() {
+		codePeriodeTest = configController.getPegaseTestPeriode();
+	}
+	private void setCodeCheminTest() {
+		codeCheminTest = configController.getPegaseTestChemin();
+	}
+	private void setCodeApprenantTest() {
+		codeApprenantTest = configController.getPegaseTestApprenant();
 	}
 	private void setCodePhoto() {
 		codePhoto = configController.getIdPjPhoto();
@@ -134,7 +154,10 @@ public class PegaseService implements Serializable {
 		setApiCocUrl();
 		setApiPaiUrl();
 		setCodePhoto();
-		setcodeApprenantDemo();
+		setCodeApprenantDemo();
+		setCodePeriodeTest();
+		setCodeApprenantTest();
+		setCodeCheminTest();
 
 		// Init INS
 		apiClientIns.setBasePath(apiInsUrl);

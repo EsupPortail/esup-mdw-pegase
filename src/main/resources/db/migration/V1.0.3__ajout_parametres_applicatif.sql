@@ -153,6 +153,12 @@ INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id,
 VALUES ('PEGASE_ID_PJ_PHOTO', 'Code de la PJ Pégase correspondant à la photo de l''étudiant', NULL, 'PHOTO-001', '4', 'STRING', 2);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('PEGASE_DEMO_APPRENANT', 'Permet de cibler un dossier par défaut. Attention : A renseigner uniquement pour une démonstration ou en phase de test/développement.', NULL, '000000001', '4', 'STRING', 3);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('PEGASE_TEST_PERIODE', 'Permet de cibler une période pour tester les appels aux API.', NULL, 'PER-2020', '4', 'STRING', 4);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('PEGASE_TEST_APPRENANT', 'Permet de cibler un dossier pour tester les appels aux API.', NULL, '000000001', '4', 'STRING', 5);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('PEGASE_TEST_CHEMIN', 'Permet de cibler un chemin pour tester les appels aux API.', NULL, 'F-ING-HYD>F-ING-HYD-A4', '4', 'STRING', 6);
 
 
 -- paramètres des profils

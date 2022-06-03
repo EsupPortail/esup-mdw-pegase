@@ -30,6 +30,9 @@ import java.util.List;
 
 import org.springframework.util.StringUtils;
 
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
+
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
@@ -328,6 +331,16 @@ public final class Utils {
 		}
 		log.info("Chemin : {} pour Cible {} {}", chemin, cible.getFormation(), cible.getChemin());
 		return chemin ;
+	}
+	
+	public static void notifierSucces(String message) {
+		Notification notification= Notification.show(message);
+		notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+	}
+	
+	public static void notifierAnomalie(String message) {
+		Notification notification= Notification.show(message);
+		notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 	}
 
 

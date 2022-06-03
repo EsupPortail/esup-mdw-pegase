@@ -92,9 +92,13 @@ public class ConfigController {
 
 	private static final String PEGASE_DEMO_APPRENANT = "PEGASE_DEMO_APPRENANT";
 
+	private static final String PEGASE_TEST_PERIODE = "PEGASE_TEST_PERIODE";
+	
+	private static final String PEGASE_TEST_APPRENANT = "PEGASE_TEST_APPRENANT";
+	
+	private static final String PEGASE_TEST_CHEMIN = "PEGASE_TEST_CHEMIN";
 
-	
-	
+
 	@Autowired
 	private transient PreferencesService prefService;
 	
@@ -191,9 +195,19 @@ public class ConfigController {
 	public String getIdPjPhoto() {
 		return getStringValueForParameter(PEGASE_ID_PJ_PHOTO);
 	}
-	public String getPegaseDemoAppenant() {
+	public String getPegaseDemoApprenant() {
 		return getStringValueForParameter(PEGASE_DEMO_APPRENANT);
 	}
+	public String getPegaseTestPeriode() {
+		return getStringValueForParameter(PEGASE_TEST_PERIODE);
+	}
+	public String getPegaseTestApprenant() {
+		return getStringValueForParameter(PEGASE_TEST_APPRENANT);
+	}
+	public String getPegaseTestChemin() {
+		return getStringValueForParameter(PEGASE_TEST_CHEMIN);
+	}
+	
 	
 	
 	/**
@@ -222,6 +236,7 @@ public class ConfigController {
 	private boolean getBooleanValueForParameter(String parametre){
 		return prefService.getBooleanValue(prefService.getPreferences(parametre));
 	}
+
 
 	
 
