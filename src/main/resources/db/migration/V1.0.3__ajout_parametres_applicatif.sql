@@ -116,17 +116,15 @@ INSERT INTO preferences_application_type (type_id, secret) VALUES ('LIST_STRING'
 
 -- paramètres LDAP
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('LDAP_LOGIN_ATTRIBUTE', 'Attribut ldap contenant le login', NULL, 'uid', '1', 'STRING',1);
+VALUES ('LDAP_DISPLAYNAME_ATTRIBUTE', 'Attribut ldap contenant le displayname de l''utilisateur connecté ', NULL, 'displayName', '1', 'STRING',1);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('LDAP_DISPLAYNAME_ATTRIBUTE', 'Attribut ldap contenant le displayname de l''utilisateur connecté ', NULL, 'displayName', '1', 'STRING',2);
+VALUES ('LDAP_CODETU_ATTRIBUTE', 'Attribut ldap contenant le code apprenant de l''étudiant', NULL, 'supannEtuId', '1', 'STRING',2);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('LDAP_CODETU_ATTRIBUTE', 'Attribut ldap contenant le code apprenant de l''étudiant', NULL, 'supannEtuId', '1', 'STRING',3);
+VALUES ('LDAP_MAIL_ATTRIBUTE', 'Attribut ldap contenant le mail de l''étudiant', NULL, 'mail', '1', 'STRING', 3);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('LDAP_MAIL_ATTRIBUTE', 'Attribut ldap contenant le mail de l''étudiant', NULL, 'mail', '1', 'STRING', 4);
+VALUES ('LDAP_FILTRE_ETUDIANT', 'Filtre ldap identifiant les étudiants', NULL, '(supannEtuId=*)', '1', 'STRING', 4);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('LDAP_FILTRE_ETUDIANT', 'Filtre ldap identifiant les étudiants', NULL, '(supannEtuId=*)', '1', 'STRING', 5);
-INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('LDAP_FILTRE_GESTIONNAIRE', 'Filtre ldap identifiant les gestionnaires de l''application (possibilité de consulter tous les dossiers)', NULL, NULL, '1', 'STRING', 6);
+VALUES ('LDAP_FILTRE_GESTIONNAIRE', 'Filtre ldap identifiant les gestionnaires de l''application (possibilité de consulter tous les dossiers)', NULL, NULL, '1', 'STRING', 5);
 
 -- paramètres Pégase token d’accès
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 

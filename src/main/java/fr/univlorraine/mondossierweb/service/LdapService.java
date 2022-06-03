@@ -27,6 +27,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LdapService implements Serializable {
 
 
-	//@Value("${ldap.login.attribute}")
+	@Value("${ldap.login.attribute}")
 	private transient String ldapLoginAttribute;	
 	//@Value("${ldap.displayname.attribute}")
 	private transient String ldapDisplayNameAttribute;	
@@ -65,7 +66,7 @@ public class LdapService implements Serializable {
 	private class StudentAttributesMapper implements AttributesMapper {
 		public Object mapFromAttributes(Attributes attrs) throws NamingException {
 			LdapPerson person = new LdapPerson();
-			person.setLogin((String)attrs.get(getLdapLoginAttribute()).get());
+			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
 			person.setDisplayName((String)attrs.get(getLdapDisplayNameAttribute()).get());
 			person.setCodeApprenant((String)attrs.get(getLdapCodEtuAttribute()).get());
 			person.setMail(attrs.get(getLdapMailAttribute())!=null?(String)attrs.get(getLdapMailAttribute()).get():null);
@@ -76,9 +77,13 @@ public class LdapService implements Serializable {
 	private class PersonAttributesMapper implements AttributesMapper {
 		public Object mapFromAttributes(Attributes attrs) throws NamingException {
 			LdapPerson person = new LdapPerson();
-			person.setLogin((String)attrs.get(getLdapLoginAttribute()).get());
-			person.setDisplayName((String)attrs.get(getLdapDisplayNameAttribute()).get());
-			person.setMail((String)attrs.get(getLdapMailAttribute()).get());
+			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
+			try {
+				person.setDisplayName((String)attrs.get(getLdapDisplayNameAttribute()).get());
+				person.setMail((String)attrs.get(getLdapMailAttribute()).get());
+			}catch(Exception e) {
+				log.error("Erreur lors de la récupération des informations du compte ldap {}", person.getLogin(), e);	
+			}
 			return person;
 		}
 	}
@@ -87,7 +92,7 @@ public class LdapService implements Serializable {
 	public LdapPerson findStudentByUid(String username) {
 		log.info("findStudentByUid : {}", username);
 
-		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+getLdapFiltreEtudiant()+"("+getLdapLoginAttribute()+"=" + username + "))", new StudentAttributesMapper());
+		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+getLdapFiltreEtudiant()+"("+ldapLoginAttribute+"=" + username + "))", new StudentAttributesMapper());
 
 		return (peoples!=null && !peoples.isEmpty()) ? peoples.get(0) : null ;
 
@@ -96,7 +101,7 @@ public class LdapService implements Serializable {
 	public LdapPerson findAdministratorByUid(String username) {
 		log.info("findTeacherByUid : {}", username);
 
-		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+getLdapFiltreGestionnaire()+"("+getLdapLoginAttribute()+"=" + username + "))", new PersonAttributesMapper());
+		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+getLdapFiltreGestionnaire()+"("+ldapLoginAttribute+"=" + username + "))", new PersonAttributesMapper());
 
 		return (peoples!=null && !peoples.isEmpty()) ? peoples.get(0) : null ;
 	}
@@ -105,7 +110,7 @@ public class LdapService implements Serializable {
 	public Optional<LdapPerson> findByUid(String username) {
 		log.info("findByUid : {}", username);
 
-		List<LdapPerson> peoples = ldapTemplate.search("",  "(&("+getLdapLoginAttribute()+"=" + username + "))", new PersonAttributesMapper());
+		List<LdapPerson> peoples = ldapTemplate.search("",  "(&("+ldapLoginAttribute+"=" + username + "))", new PersonAttributesMapper());
 
 		return (peoples!=null && !peoples.isEmpty()) ? Optional.ofNullable(peoples.get(0)) : null ;
 
@@ -137,14 +142,6 @@ public class LdapService implements Serializable {
 			ldapFiltreGestionnaire = configController.getLdapFiltreGestionnaire();
 		}
 		return ldapFiltreGestionnaire;
-	}
-	
-
-	private String getLdapLoginAttribute() {
-		if(ldapLoginAttribute == null) {
-			ldapLoginAttribute = configController.getLdapLoginAttribute();
-		}
-		return ldapLoginAttribute;
 	}
 	
 	private String getLdapDisplayNameAttribute() {
