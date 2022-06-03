@@ -306,6 +306,16 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}catch(Exception ex) {
 					Utils.notifierAnomalie(getTranslation("api-coc.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
+				try {
+					// teste api PAI
+					if(pegaseService.attestationDePaiement(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest()) != null) {
+						Utils.notifierSucces(getTranslation("api-pai.ok", pegaseService.getCodeApprenantTest()));
+					} else {
+						Utils.notifierAnomalie(getTranslation("api-pai.error", pegaseService.getCodeApprenantTest()));
+					}
+				}catch(Exception ex) {
+					Utils.notifierAnomalie(getTranslation("api-pai.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+				}
 			});
 			layout.add(accessTokenLayout);
 		}
