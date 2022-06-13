@@ -56,8 +56,10 @@ import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCategorie;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
 import fr.univlorraine.mondossierweb.service.AccessTokenService;
+import fr.univlorraine.mondossierweb.service.LdapService;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.PreferencesService;
+import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
@@ -77,10 +79,14 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final String TYPE_BOOLEAN = "BOOLEAN";
 	private static final String TYPE_LIST_STRING = "LIST_STRING";
 	private static final String TRUE_VALUE = "true";
+	private static final Integer LDAP_ID = 1;
 	private static final Integer PEGASE_ACCESS_TOKEN_ID = 2;
 	private static final Integer PEGASE_API_ID = 3;
+	private static final Integer PEGASE_PARAM = 4;
 	@Autowired
 	private transient PreferencesService prefService;
+	@Autowired
+	private transient SecurityService securityService;
 	@Autowired
 	private transient AccessTokenService accessTokenService;
 	@Autowired
@@ -219,11 +225,17 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		buttonEnregistrer.getStyle().set("margin", "auto");
 		layout.add(bl);
 
-		HorizontalLayout accessTokenLayout = new HorizontalLayout();
-		accessTokenLayout.setWidthFull();
+		HorizontalLayout testButtonLayout = new HorizontalLayout();
+		testButtonLayout.setWidthFull();
 		Button buttonTester = new Button();
 		buttonTester.getStyle().set("margin", "auto");
-		accessTokenLayout.add(buttonTester);
+		testButtonLayout.add(buttonTester);
+
+		HorizontalLayout syncButtonLayout = new HorizontalLayout();
+		syncButtonLayout.setWidthFull();
+		Button buttonSync = new Button();
+		buttonSync.getStyle().set("margin", "auto");
+		syncButtonLayout.add(buttonSync);
 
 		buttonEditer.addClickListener(e -> {
 			layout.getChildren().forEach(c -> setEditableComponent(c, false, false, false));
@@ -249,6 +261,14 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			buttonEnregistrer.setVisible(false);
 		});
 
+		//S'il s'agit de la catégorie LDAP
+		if(categorieId == LDAP_ID) {
+			buttonSync.setText(getTranslation("parametres.button-sync"));
+			buttonSync.addClickListener(e -> {
+				syncServiceConfig(LdapService.class.getName(),"refreshParameters");
+			});
+			layout.add(syncButtonLayout);
+		}
 		//S'il s'agit de la catégorie Pégase Access-token
 		if(categorieId == PEGASE_ACCESS_TOKEN_ID) {
 			buttonTester.setText(getTranslation("parametres.button-tester-accesstoken"));
@@ -267,7 +287,13 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 					Utils.notifierAnomalie(getTranslation("accesstoken.error") + " : " + ex.getLocalizedMessage());
 				}
 			});
-			layout.add(accessTokenLayout);
+			layout.add(testButtonLayout);
+
+			buttonSync.setText(getTranslation("parametres.button-sync"));
+			buttonSync.addClickListener(e -> {
+				syncServiceConfig(AccessTokenService.class.getName(), "refreshParameters");
+			});
+			layout.add(syncButtonLayout);
 		}
 
 		//S'il s'agit de la catégorie Pégase API
@@ -317,10 +343,39 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 					Utils.notifierAnomalie(getTranslation("api-pai.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
 			});
-			layout.add(accessTokenLayout);
+			layout.add(testButtonLayout);
+
+			buttonSync.setText(getTranslation("parametres.button-sync"));
+			buttonSync.addClickListener(e -> {
+				syncServiceConfig(PegaseService.class.getName(), "refreshApiParameters");
+			});
+			layout.add(syncButtonLayout);
+		}
+
+		//S'il s'agit de la catégorie LDAP
+		if(categorieId == PEGASE_PARAM) {
+			buttonSync.setText(getTranslation("parametres.button-sync"));
+			buttonSync.addClickListener(e -> {
+				syncServiceConfig(PegaseService.class.getName(), "refreshPegaseParameters");
+			});
+			layout.add(syncButtonLayout);
 		}
 	}
 
+
+	private void syncServiceConfig(String serviceClassName, String methodName) {
+		try {
+			// Demander la maj des services des instances via la BDD
+			boolean syncOk = prefService.forceServiceSync(serviceClassName, methodName, securityService.getUsername());
+			if(syncOk) {
+				Utils.notifierSucces(getTranslation("sync.ok"));
+			} else {
+				Utils.notifierAnomalie(getTranslation("sync.error"));
+			}
+		}catch(Exception ex) {
+			Utils.notifierAnomalie(getTranslation("sync.error") + " : " + ex.getLocalizedMessage());
+		}
+	}
 
 	// modification du composant/paramètreApplicatif en fonction des paramètres 
 	private void setEditableComponent(Component c, boolean readonly, boolean rollback, boolean save) {

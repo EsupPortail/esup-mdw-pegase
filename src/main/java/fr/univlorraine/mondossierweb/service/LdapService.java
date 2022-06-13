@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
@@ -55,7 +56,7 @@ public class LdapService implements Serializable {
 	private transient String ldapFiltreEtudiant;
 	//@Value("${ldap.filtre.gestionnaire}")
 	private transient String ldapFiltreGestionnaire;
-	
+
 	@Autowired
 	private transient ConfigController configController;
 
@@ -63,13 +64,18 @@ public class LdapService implements Serializable {
 	@Resource
 	private transient LdapTemplate ldapTemplate;
 
+	@PostConstruct
+	public void init() {	
+		refreshParameters();
+	}
+	
 	private class StudentAttributesMapper implements AttributesMapper {
 		public Object mapFromAttributes(Attributes attrs) throws NamingException {
 			LdapPerson person = new LdapPerson();
 			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
-			person.setDisplayName((String)attrs.get(getLdapDisplayNameAttribute()).get());
-			person.setCodeApprenant((String)attrs.get(getLdapCodEtuAttribute()).get());
-			person.setMail(attrs.get(getLdapMailAttribute())!=null?(String)attrs.get(getLdapMailAttribute()).get():null);
+			person.setDisplayName((String)attrs.get(ldapDisplayNameAttribute).get());
+			person.setCodeApprenant((String)attrs.get(ldapCodEtuAttribute).get());
+			person.setMail(attrs.get(ldapMailAttribute)!=null?(String)attrs.get(ldapMailAttribute).get():null);
 			return person;
 		}
 	}
@@ -79,8 +85,8 @@ public class LdapService implements Serializable {
 			LdapPerson person = new LdapPerson();
 			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
 			try {
-				person.setDisplayName((String)attrs.get(getLdapDisplayNameAttribute()).get());
-				person.setMail((String)attrs.get(getLdapMailAttribute()).get());
+				person.setDisplayName((String)attrs.get(ldapDisplayNameAttribute).get());
+				person.setMail((String)attrs.get(ldapMailAttribute).get());
 			}catch(Exception e) {
 				log.error("Erreur lors de la récupération des informations du compte ldap {}", person.getLogin(), e);	
 			}
@@ -88,11 +94,11 @@ public class LdapService implements Serializable {
 		}
 	}
 
-	
+
 	public LdapPerson findStudentByUid(String username) {
 		log.info("findStudentByUid : {}", username);
 
-		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+getLdapFiltreEtudiant()+"("+ldapLoginAttribute+"=" + username + "))", new StudentAttributesMapper());
+		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+ldapFiltreEtudiant+"("+ldapLoginAttribute+"=" + username + "))", new StudentAttributesMapper());
 
 		return (peoples!=null && !peoples.isEmpty()) ? peoples.get(0) : null ;
 
@@ -101,12 +107,12 @@ public class LdapService implements Serializable {
 	public LdapPerson findAdministratorByUid(String username) {
 		log.info("findTeacherByUid : {}", username);
 
-		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+getLdapFiltreGestionnaire()+"("+ldapLoginAttribute+"=" + username + "))", new PersonAttributesMapper());
+		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+ldapFiltreGestionnaire+"("+ldapLoginAttribute+"=" + username + "))", new PersonAttributesMapper());
 
 		return (peoples!=null && !peoples.isEmpty()) ? peoples.get(0) : null ;
 	}
 
-	
+
 	public Optional<LdapPerson> findByUid(String username) {
 		log.info("findByUid : {}", username);
 
@@ -115,11 +121,11 @@ public class LdapService implements Serializable {
 		return (peoples!=null && !peoples.isEmpty()) ? Optional.ofNullable(peoples.get(0)) : null ;
 
 	}
-	
+
 	public String getStudentMailByCodeApprenant(String code) {
 		log.info("findStudentByCodeApprenant : {}", code);
 
-		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+getLdapFiltreEtudiant()+"("+getLdapCodEtuAttribute()+"=" + code + "))", new StudentAttributesMapper());
+		List<LdapPerson> peoples = ldapTemplate.search("",  "(&"+ldapFiltreEtudiant+"("+ldapCodEtuAttribute+"=" + code + "))", new StudentAttributesMapper());
 
 		//Si on a récupéré qu'une seule entrée
 		if(peoples != null && peoples.size()==1) {
@@ -130,41 +136,34 @@ public class LdapService implements Serializable {
 		return null;
 	}
 
-	private String getLdapFiltreEtudiant() {
-		if(ldapFiltreEtudiant == null) {
-			ldapFiltreEtudiant = configController.getLdapFiltreEtudiant();
-		}
-		return ldapFiltreEtudiant;
-	}
-	
-	private String getLdapFiltreGestionnaire() {
-		if(ldapFiltreGestionnaire == null) {
-			ldapFiltreGestionnaire = configController.getLdapFiltreGestionnaire();
-		}
-		return ldapFiltreGestionnaire;
-	}
-	
-	private String getLdapDisplayNameAttribute() {
-		if(ldapDisplayNameAttribute == null) {
-			ldapDisplayNameAttribute = configController.getLdapDisplayNameAttribute();
-		}
-		return ldapDisplayNameAttribute;
-	}
-	
-	private String getLdapMailAttribute() {
-		if(ldapMailAttribute == null) {
-			ldapMailAttribute = configController.getLdapMailAttribute();
-		}
-		return ldapMailAttribute;
-	}
-	
-	private String getLdapCodEtuAttribute() {
-		if(ldapCodEtuAttribute == null) {
-			ldapCodEtuAttribute = configController.getLdapCodEtuAttribute();
-		}
-		return ldapCodEtuAttribute;
+	public void refreshParameters() {
+		getLdapFiltreEtudiant();
+		getLdapFiltreGestionnaire();
+		getLdapDisplayNameAttribute();
+		getLdapMailAttribute();
+		getLdapCodEtuAttribute();
 	}
 
-	
-	
+	private void getLdapFiltreEtudiant() {
+		ldapFiltreEtudiant = configController.getLdapFiltreEtudiant();
+	}
+
+	private void getLdapFiltreGestionnaire() {
+		ldapFiltreGestionnaire = configController.getLdapFiltreGestionnaire();
+	}
+
+	private void getLdapDisplayNameAttribute() {
+		ldapDisplayNameAttribute = configController.getLdapDisplayNameAttribute();
+	}
+
+	private void getLdapMailAttribute() {
+		ldapMailAttribute = configController.getLdapMailAttribute();
+	}
+
+	private void getLdapCodEtuAttribute() {
+		ldapCodEtuAttribute = configController.getLdapCodEtuAttribute();
+	}
+
+
+
 }

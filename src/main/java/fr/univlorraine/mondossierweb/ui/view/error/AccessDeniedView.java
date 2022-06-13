@@ -37,6 +37,7 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
@@ -48,6 +49,8 @@ import lombok.Getter;
 public class AccessDeniedView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
 
 	@Autowired
+	private transient ConfigController configController;
+	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
 	private String pageTitle = "";
@@ -56,13 +59,14 @@ public class AccessDeniedView extends VerticalLayout implements HasDynamicTitle,
 
 	private final Label label = new Label();
 
-	@Value("${help.url:}")
+	//@Value("${help.url:}")
 	private transient String helpUrl;
 	private final Label helpLabel = new Label();
 	private final Button helpButton = new Button(new Icon(VaadinIcon.LIFEBUOY));
 
 	@PostConstruct
 	public void init() {
+		helpUrl = configController.getHelpUrl();
 		add(label);
 
 		if (!helpUrl.isBlank()) {

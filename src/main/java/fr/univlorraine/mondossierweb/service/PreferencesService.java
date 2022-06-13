@@ -18,23 +18,30 @@
  */
 package fr.univlorraine.mondossierweb.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCategorie;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
+import fr.univlorraine.mondossierweb.model.app.entity.PreferencesServiceSync;
+import fr.univlorraine.mondossierweb.model.app.entity.PreferencesServiceSyncPK;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateurPK;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplicationCategorieRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplicationRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplicationValeursRepository;
+import fr.univlorraine.mondossierweb.model.app.repository.PreferencesServiceSyncRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesUtilisateurRepository;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -42,23 +49,36 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class PreferencesService {
+
+	@Autowired
+	ApplicationContext ctx;
 	
 	@Autowired
 	private transient PreferencesUtilisateurRepository prefUtilRepository;
-	
+
 	@Autowired
 	private transient PreferencesApplicationCategorieRepository preferencesApplicationCategorieRepository;
-	
+
 	@Autowired
 	private transient PreferencesApplicationRepository preferencesApplicationRepository;
-	
+
+	@Autowired
+	private transient PreferencesServiceSyncRepository preferencesServiceSyncRepository;
+
 	@Autowired
 	private transient PreferencesApplicationValeursRepository preferencesApplicationValeursRepository;
-	
+
+	private transient LocalDateTime lastSyncUpdate;
+
+	@PostConstruct
+	public void init() {
+		lastSyncUpdate = LocalDateTime.now();
+	}
+
 	public boolean getBooleanValue(PreferencesApplication p) {
 		return PrefUtils.getBooleanValue(p.getValeur());
 	}
-	
+
 	public boolean getBooleanValue(PreferencesUtilisateur p) {
 		return PrefUtils.getBooleanValue(p.getValeur());
 	}
@@ -80,15 +100,15 @@ public class PreferencesService {
 		p.setLastUpdate(LocalDateTime.now());
 		prefUtilRepository.save(p);
 	}
-	
+
 	public void saveUserPref(String username, String pref, Boolean value) {
 		saveUserPref(username, pref, value.toString());
 	}
-	
+
 	public List<PreferencesApplicationCategorie> getCategories() {
 		return preferencesApplicationCategorieRepository.findAllByOrderByOrdre();
 	}
-	
+
 	@Transactional
 	public PreferencesApplicationValeurs getPreferencesApplicationValeurs(PreferencesApplication pa) {
 		if(pa.getValeur() == null) {
@@ -100,8 +120,8 @@ public class PreferencesService {
 		}
 		return lp.get(0);
 	}
-	
-	
+
+
 
 	@Transactional
 	public PreferencesApplication savePref(String prefId, String value) {
@@ -124,6 +144,65 @@ public class PreferencesService {
 	public PreferencesApplication getPreferences(String prefId) {
 		Optional<PreferencesApplication> pa = preferencesApplicationRepository.findById(prefId);
 		return pa.get();
+	}
+
+	@Scheduled(fixedRate = 5000)
+	public void cronJobCheckSync() {
+		LocalDateTime newSyncUpdate = LocalDateTime.now();
+		List<PreferencesServiceSync> lsync = preferencesServiceSyncRepository.findByLastUpdateAfter(lastSyncUpdate);
+		if(lsync != null && !lsync.isEmpty()) {
+			lsync.forEach(sync -> refreshServiceParameters(sync));
+		}
+		lastSyncUpdate = newSyncUpdate;
+	}
+
+	private void refreshServiceParameters(PreferencesServiceSync sync) {
+		log.info("Mise à jour du service {}->{} demandés par {} ", sync.getId().getServiceName(), sync.getId().getMethodName(), sync.getUsername());
+		Object bean = ctx.getBean(sync.getId().getServiceName());
+		try {
+			bean.getClass().getMethod(sync.getId().getMethodName()).invoke(bean);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
+
+	@Transactional
+	public boolean forceServiceSync(String serviceName, String methodName, Optional<String> username) {
+		serviceName = getBeanNameFromClass(serviceName);
+		log.info("Forcer sync des paramètres du service {} demandés par {} ", serviceName, username.orElse(null));
+		try {
+			PreferencesServiceSyncPK psspk = new PreferencesServiceSyncPK();
+			psspk.setServiceName(serviceName);
+			psspk.setMethodName(methodName);
+			Optional<PreferencesServiceSync> pss = preferencesServiceSyncRepository.findById(psspk);
+			PreferencesServiceSync p;
+			if(pss.isPresent()) {
+				p = pss.get();
+			} else {
+				p = new PreferencesServiceSync();
+				p.setId(new PreferencesServiceSyncPK());
+				p.getId().setServiceName(serviceName);
+				p.getId().setMethodName(methodName);
+			}
+			p.setUsername(username.orElse(null));
+			p.setLastUpdate(LocalDateTime.now());
+			p = preferencesServiceSyncRepository.save(p);
+			return true;
+		}catch(Exception e) {
+			log.error("Erreur lors de la sync des paramètres du service {} demandés par {} ", serviceName, username.orElse(null), e);
+			return false;
+		}
+	}
+
+	private String getBeanNameFromClass(String serviceName) {
+		if(serviceName.contains(".")) {
+			// suppression du nom du package
+			serviceName = serviceName.substring(serviceName.lastIndexOf(".") + 1);
+		}
+		char c[] = serviceName.toCharArray();
+		c[0] = Character.toLowerCase(c[0]);
+		return new String(c);
 	}
 
 }

@@ -145,6 +145,12 @@ INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id,
 VALUES ('PEGASE_API_COC_URL', 'Base Url de l''API COC (Publication v1) de Pégase (attention à conserver la structure de l''url d''exemple)', NULL, 'https://coc.pegase.fr/api/coc/publication/v1', '3', 'STRING', 3);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('PEGASE_API_PAI_URL', 'Base Url de l''API PAI (Paiement v1) de Pégase (attention à conserver la structure de l''url d''exemple)', NULL, 'https://pai-pegase.fr/api/v1', '3', 'STRING', 4);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('PEGASE_TEST_PERIODE', 'Permet de cibler une période pour tester les appels aux API.', NULL, 'PER-2020', '3', 'STRING', 5);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('PEGASE_TEST_APPRENANT', 'Permet de cibler un dossier pour tester les appels aux API.', NULL, '000000001', '3', 'STRING', 6);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('PEGASE_TEST_CHEMIN', 'Permet de cibler un chemin pour tester les appels aux API.', NULL, 'F-ING-HYD>F-ING-HYD-A4', '3', 'STRING', 7);
 
 -- paramètres Pégase Paramétrage
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
@@ -153,12 +159,6 @@ INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id,
 VALUES ('PEGASE_ID_PJ_PHOTO', 'Code de la PJ Pégase correspondant à la photo de l''étudiant', NULL, 'PHOTO-001', '4', 'STRING', 2);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('PEGASE_DEMO_APPRENANT', 'Permet de cibler un dossier par défaut. Attention : A renseigner uniquement pour une démonstration ou en phase de test/développement.', NULL, '000000001', '4', 'STRING', 3);
-INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('PEGASE_TEST_PERIODE', 'Permet de cibler une période pour tester les appels aux API.', NULL, 'PER-2020', '4', 'STRING', 4);
-INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('PEGASE_TEST_APPRENANT', 'Permet de cibler un dossier pour tester les appels aux API.', NULL, '000000001', '4', 'STRING', 5);
-INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('PEGASE_TEST_CHEMIN', 'Permet de cibler un chemin pour tester les appels aux API.', NULL, 'F-ING-HYD>F-ING-HYD-A4', '4', 'STRING', 6);
 
 
 -- paramètres des profils
@@ -197,7 +197,7 @@ VALUES ('ETUDIANT_RESUME', 'true si on veut afficher le nom/prenom et le numéro
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('DOC_URL', 'URL de la documentation de l''application', NULL, 'https://wiki.fr', '7', 'STRING', 1);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('HELP_URL', 'URL du helpdesk', NULL, 'https://helpdesk.univ-lorraine.fr', '7', 'STRING', 2);
+VALUES ('HELP_URL', 'URL du helpdesk', NULL, 'https://helpdesk.univ.fr', '7', 'STRING', 2);
 
 
 -- 

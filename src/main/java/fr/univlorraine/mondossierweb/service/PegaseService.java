@@ -148,17 +148,25 @@ public class PegaseService implements Serializable {
 	}
 
 	public void refreshParameters() {
+		refreshPegaseParameters();
+		refreshApiParameters();
+	}
+
+	public void refreshPegaseParameters() {
 		setEtablissement();
+		setCodePhoto();
+		setCodeApprenantDemo();
+	}
+	
+	public void refreshApiParameters() {
 		setApiInsUrl();
 		setApiChcUrl();
 		setApiCocUrl();
 		setApiPaiUrl();
-		setCodePhoto();
-		setCodeApprenantDemo();
 		setCodePeriodeTest();
 		setCodeApprenantTest();
 		setCodeCheminTest();
-
+		
 		// Init INS
 		apiClientIns.setBasePath(apiInsUrl);
 		insApiIns.setApiClient(apiClientIns);
@@ -177,8 +185,7 @@ public class PegaseService implements Serializable {
 		apiClientCoc.setBasePath(apiCocUrl);
 		pubApiCoc.setApiClient(apiClientCoc);
 	}
-
-
+	
 	@PostConstruct
 	public void init() {
 		refreshParameters();
