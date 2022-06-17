@@ -22,10 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import fr.univlorraine.mondossierweb.service.PreferencesService;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
-@Slf4j
 public class ConfigController {
 	
 	private static final String ACCES_ETUDIANT_ACTIF = "ACCES_ETUDIANT_ACTIF";
