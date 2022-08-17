@@ -38,7 +38,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - mvn verify sonar:sonar -Dsonar.projectKey=dn-sied_esup-mdw-pegase_AYKnXTAEqABQhVJ6jeQ3
+    - mvn verify sonar:sonar -Dsonar.projectKey=dn-sied_esup-mdw-pegase_AYKnXTAEqABQhVJ6jeQ3 -Dmaven.test.skip=true
   allow_failure: true
   only:
     - developUL # or the name of your main branch
