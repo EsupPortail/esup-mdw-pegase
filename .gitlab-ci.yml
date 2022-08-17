@@ -41,5 +41,5 @@ sonarqube-check:
     - mvn verify sonar:sonar -Dsonar.projectKey=dn-sied_esup-mdw-pegase_AYKnXTAEqABQhVJ6jeQ3
   allow_failure: true
   only:
-    - master # or the name of your main branch
+    - developUL # or the name of your main branch
     
