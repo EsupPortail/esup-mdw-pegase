@@ -136,7 +136,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private int windowWidth;
 	private final VerticalLayout inscriptionsLayout = new VerticalLayout();
 
-
+	// label d'erreur
+	private final Label errorLabel = new Label();
+		
 	List<TextLabel> listTextLabelFormation = new LinkedList<TextLabel> ();
 	List<TextLabel> listTextLabelPeriode = new LinkedList<TextLabel> ();
 	List<TextLabel> listTextLabelRegime = new LinkedList<TextLabel> ();
@@ -197,7 +199,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		log.info("localeChange");
 		setViewTitle(getTranslation("inscriptions.title"));
 
-
+		errorLabel.setText(getTranslation("error.unknown"));
 
 		for(TextLabel tl : listTextLabelFormation) {
 			tl.setLabel(getTranslation("inscription.formation"));
@@ -284,6 +286,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	 */
 	private void updateData(ApprenantEtInscriptions dossier) {
 		resetData();
+		if(dossier == null ) {
+			this.removeAll();
+			add(errorLabel);
+		}
 		if(dossier!=null && dossier.getInscriptions() != null && !dossier.getInscriptions() .isEmpty()) {
 			//On trie les inscriptions sur l'année universitaire de la période, par ordre décroissant
 			dossier.getInscriptions().sort(new Comparator<InscriptionComplete>(){

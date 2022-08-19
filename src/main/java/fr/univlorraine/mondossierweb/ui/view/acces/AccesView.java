@@ -25,6 +25,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -68,6 +69,9 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	@Getter
 	private final TextHeader header = new TextHeader();
 
+	// label d'erreur
+	private final Label errorLabel = new Label();
+		
 	private final Card bacCard = new Card(VaadinIcon.DIPLOMA_SCROLL.create(),"", false);
 	private final Card anneesCard = new Card(VaadinIcon.INSTITUTION.create(),"", false);
 	private final VerticalLayout parcoursLayout = new VerticalLayout(bacCard, anneesCard);
@@ -158,6 +162,8 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	public void localeChange(final LocaleChangeEvent event) {
 		setViewTitle(getTranslation("acces.title"));
 
+		errorLabel.setText(getTranslation("error.unknown"));
+		
 		bacCard.getTitre().setText(getTranslation("bac.titre"));
 		//titreAccesBac.setLabel(getTranslation("bac.titreacces"));
 		anneeBac.setLabel(getTranslation("bac.annee"));
@@ -225,7 +231,10 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	 */
 	private void updateData(Apprenant apprenant) {
 		resetData();
-		if(apprenant != null) {
+		if(apprenant == null ) {
+			this.removeAll();
+			add(errorLabel);
+		} else {
 			// Mise à jour des infos sur le bac
 			//CmpUtils.valueAndVisibleIfNotNull(titreAccesBac,apprenant.getBac().getTitreAcces());
 			CmpUtils.valueAndVisibleIfNotNull(anneeBac,apprenant.getBac().getAnneeObtention());

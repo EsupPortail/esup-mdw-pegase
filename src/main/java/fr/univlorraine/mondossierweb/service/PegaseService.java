@@ -57,6 +57,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PegaseService implements Serializable {
 
+	private static final String APPRENANT_NON_TROUVE = "apprenant non trouve";
+
 	@Autowired
 	private transient AccessTokenService accessTokenService;	
 
@@ -157,7 +159,7 @@ public class PegaseService implements Serializable {
 		setCodePhoto();
 		setCodeApprenantDemo();
 	}
-	
+
 	public void refreshApiParameters() {
 		setApiInsUrl();
 		setApiChcUrl();
@@ -166,7 +168,7 @@ public class PegaseService implements Serializable {
 		setCodePeriodeTest();
 		setCodeApprenantTest();
 		setCodeCheminTest();
-		
+
 		// Init INS
 		apiClientIns.setBasePath(apiInsUrl);
 		insApiIns.setApiClient(apiClientIns);
@@ -185,7 +187,7 @@ public class PegaseService implements Serializable {
 		apiClientCoc.setBasePath(apiCocUrl);
 		pubApiCoc.setApiClient(apiClientCoc);
 	}
-	
+
 	@PostConstruct
 	public void init() {
 		refreshParameters();
@@ -214,7 +216,11 @@ public class PegaseService implements Serializable {
 				}
 				return dossier;
 			} catch (ApiException e) {
-				log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(), e);
+				if(e.getCode() == 500 && e.getResponseBody()!=null && e.getResponseBody().contains(APPRENANT_NON_TROUVE)) {
+					log.warn("Apprenant non trouvé lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
+				} else {
+					log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(), e);
+				}
 			}
 		}
 		return null;
