@@ -61,6 +61,8 @@ public final class Utils {
 	public static final Object DETAIL_INS_VIA_BOUTON = "button";
 	public static final Object DETAIL_INS_AFFICHE = "true";
 	public static final String STATUT_INSCRIPTION_VALIDE = "VALIDE";
+	public static final String DOSSIER_APPRENANT = "dossierApprenant";
+	public static final String DOSSIER_CONSULTE_APPRENANT = "dossierConsulteApprenant";
 
 
 	/** formatage d'une date en chaine pour un affichage européen */

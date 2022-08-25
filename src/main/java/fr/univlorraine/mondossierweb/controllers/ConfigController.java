@@ -98,7 +98,7 @@ public class ConfigController {
 
 
 	@Autowired
-	private transient PreferencesService prefService;
+	private PreferencesService prefService;
 	
 	public boolean isInfoConnexionActif() {
 		return getBooleanValueForParameter(INFO_CONNEXION);

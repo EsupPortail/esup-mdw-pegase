@@ -36,7 +36,6 @@ import reactor.core.publisher.UnicastProcessor;
 public class CurrentUiService {
 
 	//@Value("${app.color}")
-	//private transient String appColorDefault;
 	private String appColorDefault = CSSColorUtils.MAIN_HEADER_COLOR;
 
 	@PostConstruct
@@ -71,10 +70,6 @@ public class CurrentUiService {
 	 * Détecte la préférence du mode sombre.
 	 */
 	public void setDarkModeFromMedia() {
-		/*UI.getCurrent()
-			.getPage()
-			.executeJs("return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches")
-			.then(Boolean.class, this::setDarkMode);*/
 		this.setDarkMode(false);
 	}
 

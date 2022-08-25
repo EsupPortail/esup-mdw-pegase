@@ -65,6 +65,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.Getter;
@@ -113,13 +114,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 	@PostConstruct
 	private void init() {
-		/*getStyle().set("padding", "1em");
-		getStyle().set("display", "flex");
-		getStyle().set("flex-direction", "column");*/
 		setSizeFull();
-
-		//initMessageWIP();
-
+		
 		parametresLayout.setWidthFull();
 		parametresLayout.getStyle().set("max-width", "52em");
 		parametresLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
@@ -132,7 +128,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 	private void initMessageWIP() {
 		Label infoLabel = new Label("Vue en cours de développement");
-		infoLabel.getStyle().set("margin", "auto");
+		infoLabel.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 		add(infoLabel);
 	};
 
@@ -220,21 +216,21 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		bl.add(buttonEditer);
 		bl.add(buttonAnnuler);
 		bl.add(buttonEnregistrer);
-		buttonEditer.getStyle().set("margin", "auto");
-		buttonAnnuler.getStyle().set("margin", "auto");
-		buttonEnregistrer.getStyle().set("margin", "auto");
+		buttonEditer.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+		buttonAnnuler.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+		buttonEnregistrer.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 		layout.add(bl);
 
 		HorizontalLayout testButtonLayout = new HorizontalLayout();
 		testButtonLayout.setWidthFull();
 		Button buttonTester = new Button();
-		buttonTester.getStyle().set("margin", "auto");
+		buttonTester.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 		testButtonLayout.add(buttonTester);
 
 		HorizontalLayout syncButtonLayout = new HorizontalLayout();
 		syncButtonLayout.setWidthFull();
 		Button buttonSync = new Button();
-		buttonSync.getStyle().set("margin", "auto");
+		buttonSync.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 		syncButtonLayout.add(buttonSync);
 
 		buttonEditer.addClickListener(e -> {

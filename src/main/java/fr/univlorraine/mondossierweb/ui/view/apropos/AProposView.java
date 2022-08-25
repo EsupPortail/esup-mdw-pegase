@@ -46,6 +46,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import lombok.Getter;
 
 @Route(layout = MainLayout.class)
@@ -71,7 +72,7 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 	
 	@PostConstruct
 	private void init() {
-		getStyle().set("padding", "1em");
+		getStyle().set(CSSColorUtils.PADDING, "1em");
 
 		initAppInfo();
 		initMessageInfo();
@@ -88,11 +89,11 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 		Element buildTimeElement = new Element("small");
 		ZonedDateTime buildTime = buildProperties.getTime().atZone(ZoneId.systemDefault());
 		buildTimeElement.setText(' ' + DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(buildTime));
-		buildTimeElement.getStyle().set("color", "var(--lumo-secondary-text-color)");
+		buildTimeElement.getStyle().set(CSSColorUtils.COLOR, "var(--lumo-secondary-text-color)");
 		getElement().appendChild(buildTimeElement);
 
 		Paragraph descriptionComp = new Paragraph(buildProperties.get("description"));
-		descriptionComp.getStyle().set("font-style", "italic");
+		descriptionComp.getStyle().set(CSSColorUtils.FONT_STYLE, CSSColorUtils.ITALIC);
 		add(descriptionComp);
 
 	}
@@ -101,9 +102,9 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 		add(info);
 		
 		add(message);
-		message.getStyle().set("padding", "1em");
-		message.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
-		message.getStyle().set("border-radius", "1em");
+		message.getStyle().set(CSSColorUtils.PADDING, "1em");
+		message.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, "var(--lumo-contrast-5pct)");
+		message.getStyle().set(CSSColorUtils.BORDER_RADIUS, "1em");
 		
 		
 	}

@@ -140,8 +140,6 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 	private final Div navBarHeader = new Div();
 	private MenuItem userMenuAproposItem;
-	//private MenuItem userMenuEtatCivilItem;
-	//private MenuItem userMenuCoordonneesItem;
 	private MenuItem userMenuParametresItem;
 	private MenuItem userMenuLogoutItem;
 	private Label nomPrenom = new Label();
@@ -185,7 +183,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 		/* Menu */
 		tabs.getStyle().set("max-width", "16em");
-		tabs.getStyle().set("margin-left", "auto");
+		tabs.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
 		tabs.getStyle().set("box-shadow", "none");
 		tabs.setOrientation(Tabs.Orientation.VERTICAL);
 		tabs.addSelectedChangeListener(event -> {
@@ -196,10 +194,8 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		});
 		addDrawerRouterLink(VaadinIcon.USER_CARD, "etatcivil.title", EtatCivilView.class);
 		addDrawerRouterLink(VaadinIcon.HOME, "coordonnees.title", CoordonneesView.class);
-		//addDrawerRouterLink(VaadinIcon.ROAD_BRANCHES, "parcours.title", ParcoursView.class);
 		addDrawerRouterLink(VaadinIcon.FOLDER_OPEN, "acces.title", AccesView.class);
 		addDrawerRouterLink(VaadinIcon.ACADEMY_CAP, "inscriptions.title", InscriptionsView.class);
-		//addDrawerRouterLink(VaadinIcon.ACADEMY_CAP, "notes.title", NotesView.class);
 		addDrawerRouterLink(VaadinIcon.BAR_CHART_H, "connexions.title", ConnexionsView.class);
 		if (!docUrl.isBlank()) {
 			addDrawerHrefLink(VaadinIcon.BOOK, "menu.doc", docUrl, true);
@@ -214,7 +210,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 		navBarHeader.getStyle()
 		.set("flex", "1")
-		.set("margin", "0 var(--lumo-space-s) 0 0");
+		.set(CSSColorUtils.MARGIN, "0 var(--lumo-space-s) 0 0");
 		addToNavbar(navBarHeader);
 
 		if (securityService.isUserLoggedIn()) {
@@ -239,30 +235,22 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private Component getResumeLayout() {
 		VerticalLayout nomPrenomLayout = new VerticalLayout();
 		nomPrenomLayout.getStyle().set("max-width", "16em");
-		nomPrenomLayout.getStyle().set("margin-left", "auto");
+		nomPrenomLayout.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
 		nomPrenomLayout.getStyle().set("box-shadow", "none");
 		nomPrenomLayout.getStyle().set("padding-top", "0.5em");
 		nomPrenomLayout.getStyle().set("padding-bottom", "0");
 
-		nomPrenom.getStyle().set("margin-left", "auto");
-		nomPrenom.getStyle().set("margin-right", "auto");
-		nomPrenom.getStyle().set("color","var(--lumo-contrast-60pct)");
+		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
+		nomPrenom.getStyle().set("margin-right", CSSColorUtils.AUTO);
+		nomPrenom.getStyle().set(CSSColorUtils.COLOR,"var(--lumo-contrast-60pct)");
 		nomPrenom.getStyle().set("font-weight","600");
 		nomPrenomLayout.add(nomPrenom);
 
-		numeroDossier.getStyle().set("margin", "0px auto 0px auto");
+		numeroDossier.getStyle().set(CSSColorUtils.MARGIN, "0px auto 0px auto");
 		numeroDossier.getStyle().set("font-size", "smaller");
 		numeroDossier.getStyle().set("color","var(--lumo-contrast-60pct)");
 		nomPrenomLayout.add(numeroDossier);
 
-		// On passe les labels au service pour les mettre à jour en cas de changement de dossier
-		//securityService.setInfoLabels(nomPrenom, numeroDossier);
-		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-		/*securityService.checkDossier();
-		if(securityService.getDossier()!=null && securityService.getDossier().getApprenant() !=null) {
-			nomPrenom.setText(getInfoNomPrenom(securityService.getDossier().getApprenant()));
-			numeroDossier.setText(securityService.getDossier().getApprenant().getCode());
-		}*/
 		return nomPrenomLayout;
 	}
 
@@ -315,13 +303,11 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		usernameItem.setEnabled(false);
 		usernameItem.getElement()
 		.getStyle()
-		.set("color", "var(--lumo-primary-color)")
+		.set(CSSColorUtils.COLOR, "var(--lumo-primary-color)")
 		.set("text-align", "center");
 
 		userMenu.add(new Hr());
 
-		//userMenuEtatCivilItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(EtatCivilView.class)));
-		//userMenuCoordonneesItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(CoordonneesView.class)));
 		// Entrée 'Paramètres' dans le menu en haut à droite :
 		if (securityService.isAccessGranted(ParametresView.class)) {
 			userMenuParametresItem = userMenu.addItem((String) null, event -> getUI().ifPresent(ui -> ui.navigate(ParametresView.class)));
@@ -337,28 +323,10 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 	private Component createUserImage(final Utilisateur utilisateur) {
 		String displayName = utilisateur.getDisplayName();
-		//if (displayName == null || displayName.isBlank()) {
 		Icon icon = new Icon(VaadinIcon.USER);
 		icon.addClassName("user-image");
 		icon.getStyle().set("padding-top", "5px");
 		return icon;
-		/*} else {
-			Div div = new Div();
-			div.addClassName("user-image");
-
-			String initials = displayName.replaceAll("\\W|(?<=\\w)\\w", "");
-			if (initials.length() > 4) {
-				initials = initials.substring(0, 4);
-			}
-			div.setText(initials);
-
-			if (initials.length() == 3) {
-				div.getStyle().set("font-size", "small");
-			} else if (initials.length() == 4) {
-				div.getStyle().set("font-size", "x-small");
-			}
-			return div;
-		}*/
 	}
 
 	private void createInfoPopUp(final Utilisateur utilisateur) {
@@ -387,15 +355,15 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 				
 				if(popupInfoDesactivable) {
 					Checkbox checkInfo =new Checkbox(getTranslation("connexion.check"));
-					checkInfo.getStyle().set("margin-top", "auto");
-					checkInfo.getStyle().set("margin-bottom", "auto");
+					checkInfo.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
+					checkInfo.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
 					checkInfo.addClickListener(e-> {
 						log.info("Enregistrement parametre Masquer message bienvenu : {}",checkInfo.getValue());
 						prefService.saveUserPref(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE, checkInfo.getValue());
 					});
 
 					FlexLayout btnLayout = new FlexLayout();
-					btnLayout.getStyle().set("margin", "auto");
+					btnLayout.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 					btnLayout.setFlexWrap(FlexWrap.WRAP);
 					btnLayout.add(checkInfo);
 					dialogLayout.add(btnLayout);
@@ -416,7 +384,6 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			DrawerRouterLink routerLink = new DrawerRouterLink(icon, textKey, navigationTarget);
 			Tab tab = new Tab(routerLink);
 			tabs.add(tab);
-			//tabs.add(routerLink);
 			navigationTargetToTab.put(navigationTarget, tab);
 		}
 	}
@@ -425,7 +392,6 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		DrawerHrefLink link = new DrawerHrefLink(icon, textKey, href, openInNewTab);
 		Tab tab = new Tab(link);
 		tabs.add(tab);
-		//tabs.add(link);
 	}
 
 	/**
@@ -457,12 +423,6 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		if (userMenuLogoutItem != null) {
 			userMenuLogoutItem.setText(getTranslation("menu.exit"));
 		}
-		/*if (userMenuEtatCivilItem != null) {
-			userMenuEtatCivilItem.setText(getTranslation("etatcivil.title"));
-		}
-		if (userMenuCoordonneesItem != null) {
-			userMenuCoordonneesItem.setText(getTranslation("coordonnees.title"));
-		}*/
 		if( userMenuParametresItem != null) {
 			userMenuParametresItem.setText(getTranslation("parametres.title"));
 		}

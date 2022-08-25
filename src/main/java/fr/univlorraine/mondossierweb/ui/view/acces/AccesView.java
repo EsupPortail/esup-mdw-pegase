@@ -45,6 +45,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
@@ -106,7 +107,7 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 
 	private void initBac() {
 		FormLayout bacLayout = new FormLayout();
-		bacLayout.getStyle().set("margin", "0");
+		bacLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
 		bacCard.add(bacLayout);
 
 		bacLayout.add(codeIneBac);
@@ -137,7 +138,7 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	private void initAnnees() {
 
 		FormLayout anneesLayout = new FormLayout();
-		anneesLayout.getStyle().set("margin", "0");
+		anneesLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
 		anneesCard.add(anneesLayout);
 		
 		anneesLayout.add(anneeSupFr);

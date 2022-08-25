@@ -38,6 +38,7 @@ import com.vaadin.flow.server.VaadinSession;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,19 +48,13 @@ public class AppUserDetailsService implements UserDetailsService {
 
 
 	@Autowired
-	protected transient LdapService ldapService;
+	protected LdapService ldapService;
 	
 	@Autowired
-	private transient ConfigController configController;
+	private ConfigController configController;
 
 	@Value("${app.superadmins:}")
-	private transient List<String> superAdmins;
-
-	/*@Value("${acces.gestionnaire.actif}")
-	private transient boolean accesGestionnaireActif;*/
-
-	/*@Value("${acces.etudiant.actif}")
-	private transient boolean accesEtudiantActif;*/
+	private List<String> superAdmins;
 
 	@Transactional
 	@Override
@@ -82,12 +77,10 @@ public class AppUserDetailsService implements UserDetailsService {
 				utilisateur.setDisplayName(student.getDisplayName());
 				utilisateur.setCodeEtudiant(student.getCodeApprenant());
 				utilisateur.setMail(student.getMail());
-				//utilisateur.setCodEtuDossier(student.getCodeApprenant());
 				if( VaadinSession.getCurrent() != null) {
-					VaadinSession.getCurrent().setAttribute("codeApprenant", student.getCodeApprenant());
+					VaadinSession.getCurrent().setAttribute(Utils.DOSSIER_CONSULTE_APPRENANT, student.getCodeApprenant());
 				}
 				// Nécessaire de le faire à cet endroit?
-				// utilisateur.setDossier(pegaseService.recupererDossierApprenant(utilisateur.getCodEtuDossier()));
 			} else {
 				// 3- Si l'accès gestionnaire est activé
 				if(configController.isAccesGestionnaireActif()) {

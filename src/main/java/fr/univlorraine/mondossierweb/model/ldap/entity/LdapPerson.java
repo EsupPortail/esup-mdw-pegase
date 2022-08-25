@@ -29,7 +29,4 @@ public class LdapPerson {
 	private String codeApprenant;
 	private String mail;
 
-	public LdapPerson() {
-		// TODO Auto-generated constructor stub
-	}
 }

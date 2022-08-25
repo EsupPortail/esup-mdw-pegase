@@ -114,13 +114,13 @@ public class AccessTokenService implements Serializable {
 			log.info("Demande du Access Token à Pegase...");
 			ResponseEntity<String> tokenResponse = restTemplate.exchange(url, HttpMethod.POST, null, String.class, uriVariables);
 			// Récupération du token dans la réponse
-			if(tokenResponse!=null && tokenResponse.getStatusCode().is2xxSuccessful() 
+			if(tokenResponse.getStatusCode().is2xxSuccessful() 
 				&& StringUtils.hasText(tokenResponse.getBody())) {
 				this.token= tokenResponse.getBody();
 				this.tokenCreatedDateTime = LocalDateTime.now();
 				log.info("Access Token récupéré : {}", this.token);
 			} else {
-				log.error("Anomalie lors de la récupération de access token PEGASE : {}", tokenResponse != null ? tokenResponse.getStatusCode() : null );
+				log.error("Anomalie lors de la récupération de access token PEGASE : {}", tokenResponse.getStatusCode());
 			}
 		}
 	}

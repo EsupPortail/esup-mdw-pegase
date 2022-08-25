@@ -30,7 +30,6 @@ import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.expression.EvaluationException;
@@ -55,6 +54,7 @@ import com.vaadin.flow.server.VaadinSession;
 
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.ui.view.error.AccessDeniedView;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,8 +66,8 @@ public class SecurityService implements VaadinServiceInitListener {
 	@Autowired
 	private transient BeanFactory beanFactory;
 
-	private final SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
-	private final StandardEvaluationContext evaluationContext = new StandardEvaluationContext();
+	private final transient SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
+	private final transient StandardEvaluationContext evaluationContext = new StandardEvaluationContext();
 
 	@PostConstruct
 	private void init() {
@@ -239,7 +239,7 @@ public class SecurityService implements VaadinServiceInitListener {
 	}
 	
 	public void setDossierConsulte(String codeApprenant) {
-		VaadinSession.getCurrent().setAttribute("codeApprenant", codeApprenant);
+		VaadinSession.getCurrent().setAttribute(Utils.DOSSIER_CONSULTE_APPRENANT, codeApprenant);
 	}
 
 }

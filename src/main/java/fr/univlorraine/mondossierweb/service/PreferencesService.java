@@ -54,21 +54,21 @@ public class PreferencesService {
 	ApplicationContext ctx;
 	
 	@Autowired
-	private transient PreferencesUtilisateurRepository prefUtilRepository;
+	private PreferencesUtilisateurRepository prefUtilRepository;
 
 	@Autowired
-	private transient PreferencesApplicationCategorieRepository preferencesApplicationCategorieRepository;
+	private PreferencesApplicationCategorieRepository preferencesApplicationCategorieRepository;
 
 	@Autowired
-	private transient PreferencesApplicationRepository preferencesApplicationRepository;
+	private PreferencesApplicationRepository preferencesApplicationRepository;
 
 	@Autowired
-	private transient PreferencesServiceSyncRepository preferencesServiceSyncRepository;
+	private PreferencesServiceSyncRepository preferencesServiceSyncRepository;
 
 	@Autowired
-	private transient PreferencesApplicationValeursRepository preferencesApplicationValeursRepository;
+	private PreferencesApplicationValeursRepository preferencesApplicationValeursRepository;
 
-	private transient LocalDateTime lastSyncUpdate;
+	private LocalDateTime lastSyncUpdate;
 
 	@PostConstruct
 	public void init() {
@@ -143,7 +143,10 @@ public class PreferencesService {
 	@Transactional
 	public PreferencesApplication getPreferences(String prefId) {
 		Optional<PreferencesApplication> pa = preferencesApplicationRepository.findById(prefId);
-		return pa.get();
+		if(pa.isPresent()) {
+			return pa.get();
+		}
+		return null;
 	}
 
 	@Scheduled(fixedRate = 5000)
@@ -151,7 +154,7 @@ public class PreferencesService {
 		LocalDateTime newSyncUpdate = LocalDateTime.now();
 		List<PreferencesServiceSync> lsync = preferencesServiceSyncRepository.findByLastUpdateAfter(lastSyncUpdate);
 		if(lsync != null && !lsync.isEmpty()) {
-			lsync.forEach(sync -> refreshServiceParameters(sync));
+			lsync.forEach(this::refreshServiceParameters);
 		}
 		lastSyncUpdate = newSyncUpdate;
 	}
@@ -162,7 +165,6 @@ public class PreferencesService {
 		try {
 			bean.getClass().getMethod(sync.getId().getMethodName()).invoke(bean);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 	}
@@ -187,7 +189,7 @@ public class PreferencesService {
 			}
 			p.setUsername(username.orElse(null));
 			p.setLastUpdate(LocalDateTime.now());
-			p = preferencesServiceSyncRepository.save(p);
+			preferencesServiceSyncRepository.save(p);
 			return true;
 		}catch(Exception e) {
 			log.error("Erreur lors de la sync des paramètres du service {} demandés par {} ", serviceName, username.orElse(null), e);
@@ -200,7 +202,7 @@ public class PreferencesService {
 			// suppression du nom du package
 			serviceName = serviceName.substring(serviceName.lastIndexOf(".") + 1);
 		}
-		char c[] = serviceName.toCharArray();
+		char[] c = serviceName.toCharArray();
 		c[0] = Character.toLowerCase(c[0]);
 		return new String(c);
 	}

@@ -18,6 +18,7 @@
  */
 package fr.univlorraine.mondossierweb.converters;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
 
@@ -39,12 +40,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JPACryptoConverter implements AttributeConverter<String, String> {
 
-	private static String ALGORITHM = null;
-	private static byte[] KEY = null;
+	private String algo = null;
+	private byte[] cle = null;
 	
 	
 	@Value("${app.secretkey}")
-	private transient String secretKey;	
+	private String secretKey;	
 
 	private boolean attributesok  = false;
 
@@ -55,9 +56,9 @@ public class JPACryptoConverter implements AttributeConverter<String, String> {
 
 	private void checkParam() {
 		if(!attributesok) {
-			ALGORITHM = "AES/ECB/PKCS5Padding";
+			algo = "AES/ECB/PKCS5Padding";
 			
-			KEY = secretKey.getBytes();
+			cle = secretKey.getBytes();
 
 			attributesok = true;
 
@@ -73,14 +74,11 @@ public class JPACryptoConverter implements AttributeConverter<String, String> {
 			return null;
 		}
 		checkParam();
-		Key key = new SecretKeySpec(KEY, "AES");
+		Key key = new SecretKeySpec(cle, "AES");
 		try {
-			final Cipher c = Cipher.getInstance(ALGORITHM);
+			final Cipher c = Cipher.getInstance(algo);
 			c.init(Cipher.ENCRYPT_MODE, key);
-			final String encrypted = new String(Base64.getEncoder().encode(c
-					.doFinal(sensitive.getBytes())), "UTF-8");
-			//log.info(sensitive+ " -> "+encrypted);
-			return encrypted;
+			return new String(Base64.getEncoder().encode(c.doFinal(sensitive.getBytes())), StandardCharsets.UTF_8);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -92,14 +90,11 @@ public class JPACryptoConverter implements AttributeConverter<String, String> {
 			return null;
 		}
 		checkParam();
-		Key key = new SecretKeySpec(KEY, "AES");
+		Key key = new SecretKeySpec(cle, "AES");
 		try {
-			final Cipher c = Cipher.getInstance(ALGORITHM);
+			final Cipher c = Cipher.getInstance(algo);
 			c.init(Cipher.DECRYPT_MODE, key);
-			final String decrypted = new String(c.doFinal(Base64.getDecoder()
-					.decode(sensitive.getBytes("UTF-8"))));
-			//log.info(sensitive+ " -> "+decrypted);
-			return decrypted;
+			return new String(c.doFinal(Base64.getDecoder().decode(sensitive.getBytes(StandardCharsets.UTF_8))));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

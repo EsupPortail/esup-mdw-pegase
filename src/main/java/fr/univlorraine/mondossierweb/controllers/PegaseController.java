@@ -19,7 +19,6 @@
 package fr.univlorraine.mondossierweb.controllers;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,13 +35,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PegaseController {
 	
-	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<String,List<ObjetMaquetteDTO>>();
+	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<>();
 
-	Map<String,List<CheminDTO>> notesMap = new HashMap<String,List<CheminDTO>>();
+	Map<String,List<CheminDTO>> notesMap = new HashMap<>();
 
 	
 	@Autowired
-	private transient PegaseService pegaseService;
+	private PegaseService pegaseService;
 	
 
 	/**
@@ -53,7 +52,7 @@ public class PegaseController {
 	 * @return le cursus de l'apprenant pour le chemin et la période en paramètre
 	 */
 	public List<ObjetMaquetteDTO> getCursus(String codeApprenant, String codeChemin, String codePeriode) {
-		List<ObjetMaquetteDTO> listObj=new LinkedList<ObjetMaquetteDTO> ();
+		List<ObjetMaquetteDTO> listObj;
 		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
 		// Gestion du cache des cursus en session
 		if(cursusMap.containsKey(insKey)) {
@@ -67,10 +66,10 @@ public class PegaseController {
 			// Récupération du cursus
 			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
 			// suppression de la racine
-			if(listObj!=null && !listObj.isEmpty()) {
+			if(listObj != null && !listObj.isEmpty()) {
 				listObj = listObj.get(0).getChildObjects();
 			}
-			log.info("sauvegarde de la liste cursus dans la map ({} elements)", listObj.size());
+			log.info("sauvegarde de la liste cursus dans la map ({} elements)", listObj != null ? listObj.size() : 0 );
 			// On stocke l'arborescence dans la map
 			cursusMap.put(insKey, listObj);
 		}
@@ -88,7 +87,7 @@ public class PegaseController {
 	 */
 	public List<CheminDTO> getNotes(String codeApprenant, String codeChemin, String codePeriode, boolean avecControle) {
 		
-		List<CheminDTO> listObj=new LinkedList<CheminDTO> ();
+		List<CheminDTO> listObj;
 		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
 		// Gestion du cache des notes en session
 		if(notesMap.containsKey(insKey)) {
@@ -114,7 +113,7 @@ public class PegaseController {
 	 * @return chemin formaté pour l'API Pégase
 	 */
 	private String formatChemin(String codeChemin) {
-		return codeChemin.replaceAll("→", ">");
+		return codeChemin.replace("→", ">");
 	}
 
 }

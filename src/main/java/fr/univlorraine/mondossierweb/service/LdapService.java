@@ -118,7 +118,7 @@ public class LdapService implements Serializable {
 
 		List<LdapPerson> peoples = ldapTemplate.search("",  "(&("+ldapLoginAttribute+"=" + username + "))", new PersonAttributesMapper());
 
-		return (peoples!=null && !peoples.isEmpty()) ? Optional.ofNullable(peoples.get(0)) : null ;
+		return (peoples!=null && !peoples.isEmpty()) ? Optional.ofNullable(peoples.get(0)) : Optional.empty();
 
 	}
 

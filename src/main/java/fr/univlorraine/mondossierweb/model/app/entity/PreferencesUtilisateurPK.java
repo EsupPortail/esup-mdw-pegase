@@ -36,6 +36,7 @@ public class PreferencesUtilisateurPK implements Serializable {
 	private String prefId;
 
 	public PreferencesUtilisateurPK() {
+		super();
 	}
 	public String getUsername() {
 		return this.username;

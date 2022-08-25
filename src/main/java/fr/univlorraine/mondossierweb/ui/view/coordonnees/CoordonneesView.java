@@ -53,6 +53,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
@@ -150,7 +151,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 		errorLabel.setText(getTranslation("error.unknown"));
 		
-		coordPersoLayout.getChildren().forEach(c -> updateCardLocale(c) );
+		coordPersoLayout.getChildren().forEach(this::updateCardLocale );
 		// Si on a une carte de contacts personnels
 		if(contacts!=null) {
 			// On met à jour son titre
@@ -165,22 +166,18 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	}
 
 	private void updateCardLocale(Component c) {
-		//log.info("Traitement des messages de la card : {}", c);
-		c.getChildren().forEach(l -> updateLayoutLocale(l));
+		c.getChildren().forEach(this::updateLayoutLocale);
 	}
 
 	private void updateLayoutLocale(Component c) {
-		//log.info("Traitement des layout de la card : {}", c);
-		c.getChildren().forEach(fl -> updateFormLayoutLocale(fl));
+		c.getChildren().forEach(this::updateFormLayoutLocale);
 	}
 
 	private void updateFormLayoutLocale(Component c) {
-		//log.info("Traitement des formlayout de la card : {}", c);
-		c.getChildren().forEach(tf -> updateTextLabelLocale(tf));
+		c.getChildren().forEach(this::updateTextLabelLocale);
 	}
 
 	private void updateTextLabelLocale(Component c) {
-		//log.info("Traitement des messages du composant : {}", c);
 		TextLabel t = null;
 
 		try {
@@ -192,7 +189,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		if(t!=null && t.getId().isPresent()) {
 			String id = t.getId().orElse("");
 			String type = id.split("_")[0] + "_";
-			//log.info("Recherche du message pour : {}", type);
 			switch(type) {
 			case NOM_TEL :
 				t.setLabel(getTranslation("tel.nom"));
@@ -288,24 +284,24 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 				case Utils.CANAL_CONTACT_MAIL :
 					// Si mail de contact d'urgence
 					if(StringUtils.hasText(c.getProprietaire())) {
-						ajouterInfoContactUrgence(c, cpt,getTranslation("mail.libelle"));
+						ajouterInfoContactUrgence(c,getTranslation("mail.libelle"));
 					} else {
 						// mail de l'étudiant
-						ajouterInfoContactPerso(c, cpt);
+						ajouterInfoContactPerso(c);
 					}
 					break;
 				case Utils.CANAL_CONTACT_TEL :
 					// Si numéro du contact d'urgence
 					if(StringUtils.hasText(c.getProprietaire())) {
-						ajouterInfoContactUrgence(c, cpt, getTranslation("tel.libelle2"));
+						ajouterInfoContactUrgence(c, getTranslation("tel.libelle2"));
 					} else {
-						ajouterInfoContactPerso(c, cpt);
+						ajouterInfoContactPerso(c);
 					}
 					break;
 				}
 
 			}
-			if(afficherMailLdap) {
+			if(Boolean.TRUE.equals(afficherMailLdap)) {
 				// récupération du mail dans le ldap
 				String mail = ldapService.getStudentMailByCodeApprenant(apprenant.getCode());
 				// Si on a récupéré un mail
@@ -318,8 +314,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 					c.setDemandeDeContact(dmc);
 					c.setMail(mail);
 					// Ajout du mail dans la vue
-					//ajouterMailContact(c, cpt);
-					ajouterInfoContactPerso(c, cpt);
+					ajouterInfoContactPerso(c);
 				}
 			}
 			updateStyle();
@@ -342,7 +337,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		log.info("updateDate CoordonneesView DONE");
 	}
 
-	private void ajouterInfoContactPerso(ContactComplet c, int n) {
+	private void ajouterInfoContactPerso(ContactComplet c) {
 		// Si on la carte de contact personnels est null
 		if(contacts == null) {
 			// On initialise la carte
@@ -350,7 +345,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		}
 
 		FormLayout contactLayout = new FormLayout();
-		contactLayout.getStyle().set("margin", "0");
+		contactLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
 		contacts.addAlt(contactLayout);
 
 		TextLabel contact=new TextLabel();
@@ -362,7 +357,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		contacts.displayAlt();
 	}
 
-	private void ajouterInfoContactUrgence(ContactComplet c, int n, String libelle) {
+	private void ajouterInfoContactUrgence(ContactComplet c, String libelle) {
 		// Si on la carte de contact d'urgence est null
 		if(contactsUrgence == null) {
 			// On initialise la carte
@@ -370,7 +365,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		}
 
 		FormLayout contactLayout = new FormLayout();
-		contactLayout.getStyle().set("margin", "0");
+		contactLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
 		contactsUrgence.addAlt(contactLayout);
 
 		TextLabel contact=new TextLabel();
@@ -409,7 +404,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		mailCard.getTitre().setText(cmc.getDemandeDeContact().getLibelleAffichage());
 
 		FormLayout mailLayout = new FormLayout();
-		mailLayout.getStyle().set("margin", "0");
+		mailLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
 		mailCard.addAlt(mailLayout);
 
 		TextLabel nomMail=new TextLabel();
@@ -442,7 +437,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		telCard.getTitre().setText(ctc.getDemandeDeContact().getLibelleAffichage());
 
 		FormLayout telLayout = new FormLayout();
-		telLayout.getStyle().set("margin", "0");
+		telLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
 		telCard.addAlt(telLayout);
 
 
@@ -470,7 +465,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		adresseCard.getTitre().setText(cac.getDemandeDeContact().getLibelleAffichage());
 
 		FormLayout adresseLayout = new FormLayout();
-		adresseLayout.getStyle().set("margin", "0");
+		adresseLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
 		adresseCard.addAlt(adresseLayout);
 
 		TextLabel nomAdresse=new TextLabel();
@@ -528,7 +523,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		CmpUtils.setModerateTextLabel(communeAdresse);
 
 
-		if(cac.getPays()!=null && cac.getPays().equals(Utils.CODE_PAYS_FRANCE)) {
+		if(cac.getPays().equals(Utils.CODE_PAYS_FRANCE)) {
 			CmpUtils.valueAndVisibleIfNotNull(codePostalAdresse,cac.getCodePostal());
 			CmpUtils.valueAndVisibleIfNotNull(communeAdresse,cac.getLibelleCommune());
 		} else {

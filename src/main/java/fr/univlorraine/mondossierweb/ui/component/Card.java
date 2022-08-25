@@ -59,7 +59,7 @@ public class Card extends VerticalLayout {
 			titre.setIcon(titleIcon);
 		}
 		titre.setText(libelle);
-		titre.getStyle().set("color", CSSColorUtils.MAIN_HEADER_COLOR);
+		titre.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
 		titre.setClassName("card-title-bordered");
 		if(!hasAltVisibleComponent) {
 			useAlt = false;
@@ -67,20 +67,15 @@ public class Card extends VerticalLayout {
 		}else {
 			useAlt = true;
 			titreLayout.addAndExpand(titre);
-			altButton.getStyle().set("color",CSSColorUtils.MAIN_HEADER_COLOR);
+			altButton.getStyle().set(CSSColorUtils.COLOR,CSSColorUtils.MAIN_HEADER_COLOR);
 			titreLayout.add(altButton);
 			this.add(titreLayout);
 			
-			//alt.addClassName("ddrop");
 			this.add(alt);
-			alt.getStyle().set("padding", "0");
+			alt.getStyle().set(CSSColorUtils.PADDING, "0");
 			alt.setVisible(false);
-			altButton.addClickListener(e->{
-				changeAlt();
-			});
-			titre.addClickListener(e->{
-				changeAlt();
-			});
+			altButton.addClickListener(e -> changeAlt());
+			titre.addClickListener(e -> changeAlt());
 			titre.getStyle().set("cursor", "pointer");
 		}
 	}
@@ -111,29 +106,18 @@ public class Card extends VerticalLayout {
 	}
 	
 	public void updateStyle() {
-			/*this.getStyle().set("margin", "1em auto 1em auto");
-			this.getStyle().set("border-radius", "4px");*/
 			this.getStyle().set("border", "0.1em solid");
  
-			//this.getStyle().set("border-color", "var(--lumo-base-color)");
 			this.getStyle().set("border-color", "lightgray");
-			this.getStyle().set("margin", "0.5em auto 0.5em auto");
-			this.getStyle().set("border-radius", "0.5em");
+			this.getStyle().set(CSSColorUtils.MARGIN, "0.5em auto 0.5em auto");
+			this.getStyle().set(CSSColorUtils.BORDER_RADIUS, "0.5em");
 			
-			//this.getStyle().set("border-bottom-width", "0.1em");
-			//this.getStyle().set("border-bottom-style", "solid");
-			/*this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");*/
-			//this.getStyle().set("background-color", "hsl(214deg 79% 42% / 24%)");
-			this.getStyle().set("color", "#343a40");
+			this.getStyle().set(CSSColorUtils.COLOR, "#343a40");
 			
-			this.getStyle().set("padding", "1em 2em");
-			
-			/*this.getStyle().set("background-color", "rgba(40, 45, 51, 0.95)");
-			this.getStyle().set("color", "white");*/
+			this.getStyle().set(CSSColorUtils.PADDING, "1em 2em");
 			
 			this.setHeight("fit-content");
 			
-			//this.setWidth(!isMobile && !princ ? "46%" :"100%");
 			this.setWidth("100%");
 			this.setMaxWidth("50em");
 			

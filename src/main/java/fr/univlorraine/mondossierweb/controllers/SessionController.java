@@ -27,6 +27,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,12 +36,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SessionController {
 
+	@Autowired
+	private PegaseService pegaseService;
 	
 	@Autowired
-	private transient PegaseService pegaseService;
-	
-	@Autowired
-	private transient SecurityService securityService;
+	private SecurityService securityService;
 
 	// Layout permettant la maj du menu latéral lors de la récupération dossier (cf méthode checkDossier)
 	private MainLayout mainLayout;
@@ -54,8 +54,8 @@ public class SessionController {
 	 * @return Dossier en session si renseigné
 	 */
 	public ApprenantEtInscriptions getDossier() {
-		if(VaadinSession.getCurrent().getAttribute("dossierApprenant")!=null) {
-			return (ApprenantEtInscriptions) VaadinSession.getCurrent().getAttribute("dossierApprenant");
+		if(VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_APPRENANT)!=null) {
+			return (ApprenantEtInscriptions) VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_APPRENANT);
 		}
 		return null;
 	}
@@ -66,22 +66,24 @@ public class SessionController {
 	 */
 	public String getDossierConsulte() {
 		// On a rien dans la Session Vaadin mais on a l'info dans le SecurityService (cas d'un étudiant qui vient de se connecter à l'application)
-		if(VaadinSession.getCurrent().getAttribute("codeApprenant")==null && securityService.getCodeEtudiant().isPresent()) {
-			setDossierConsulte(securityService.getCodeEtudiant().get());
+		if(VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_CONSULTE_APPRENANT) == null 
+			&& securityService != null 
+			&& securityService.getCodeEtudiant().isPresent()) {
+				setDossierConsulte(securityService.getCodeEtudiant().get());
 		}
-		if(VaadinSession.getCurrent().getAttribute("codeApprenant")!=null) {
-			return (String) VaadinSession.getCurrent().getAttribute("codeApprenant");
+		if(VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_CONSULTE_APPRENANT) != null) {
+			return (String) VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_CONSULTE_APPRENANT);
 		} 
 		
 		return null;
 	}
 	
 	public void setDossierConsulte(String codeApprenant) {
-		VaadinSession.getCurrent().setAttribute("codeApprenant", codeApprenant);
+		VaadinSession.getCurrent().setAttribute(Utils.DOSSIER_CONSULTE_APPRENANT, codeApprenant);
 	}
 
 	public void setDossier(ApprenantEtInscriptions dossier) {
-		VaadinSession.getCurrent().setAttribute("dossierApprenant", dossier);
+		VaadinSession.getCurrent().setAttribute(Utils.DOSSIER_APPRENANT, dossier);
 	}
 	
 	/**

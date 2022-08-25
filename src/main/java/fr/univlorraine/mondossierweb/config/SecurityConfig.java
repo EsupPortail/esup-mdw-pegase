@@ -69,14 +69,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public static final String LOGOUT_URL = "/logout";
 
 	@Autowired
-	private transient AppUserDetailsService userDetailsService;
+	private AppUserDetailsService userDetailsService;
 
 	@Value("${app.url}")
-	private transient String appUrl;
+	private String appUrl;
 	@Value("${cas.url}")
-	private transient String casUrl;
+	private String casUrl;
 	@Value("${cas.key}")
-	private transient String casKey;
+	private String casKey;
 	
 
 
@@ -227,7 +227,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public SingleSignOutFilter singleSignOutFilter() {
 		final SingleSignOutFilter singleSignOutFilter = new SingleSignOutFilter();
 		singleSignOutFilter.setIgnoreInitConfiguration(true);
-		//singleSignOutFilter.setCasServerUrlPrefix(casUrl);
 		return singleSignOutFilter;
 	}
 
@@ -237,7 +236,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public LogoutFilter logoutFilter() {
 		LogoutFilter logoutFilter = new LogoutFilter(
-			casUrl + "/logout",
+			casUrl + LOGOUT_URL,
 			new SecurityContextLogoutHandler(),
 			new CookieClearingLogoutHandler(AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY));
 		logoutFilter.setFilterProcessesUrl(LOGOUT_URL);
@@ -249,52 +248,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * @return
 	 */
 	@EventListener
-	public SingleSignOutHttpSessionListener SingleSignOutHttpSessionListener(final HttpSessionEvent event) {
+	public SingleSignOutHttpSessionListener singleSignOutHttpSessionListener(final HttpSessionEvent event) {
 		return new SingleSignOutHttpSessionListener();
 	}
 
-	/**
-	 * @return           Filtre permettant de prendre le rôle d'un autre utilisateur
-	 * @throws Exception
-	 *                       lors d'une erreur
-	 */
-/*	@Bean
-	public SwitchUserFilter switchUserFilter() throws Exception {
-		final SwitchUserFilter switchUserFilter = new SwitchUserFilter();
-		switchUserFilter.setUserDetailsService(userDetailsService);
-		switchUserFilter.setSwitchUserUrl(SWITCH_USER_URL);
-		switchUserFilter.setExitUserUrl(SWITCH_USER_EXIT_URL);
-		switchUserFilter.setTargetUrl("/");
-		return switchUserFilter;
-	}*/
-
-	
-	
-	/*
-	@Bean
-	public LdapContextSource ldapServer() {
-		LdapContextSource ldapContextSource = new LdapContextSource();
-		String urls= ldapUrl;
-		if(urls!=null && urls.contains(";")){
-			ldapContextSource.setUrls(urls.split(";"));
-		}else{
-			ldapContextSource.setUrl(urls);
-		}
-
-		String userDn = ldapUserDn;
-		if (userDn instanceof String && !userDn.isEmpty()) {
-			ldapContextSource.setUserDn(userDn);
-		}
-
-		String password = ldapUserPwd;
-		if (password instanceof String && !password.isEmpty()) {
-			ldapContextSource.setPassword(password);
-		}
-
-		return ldapContextSource;
-	}
-	*/
-
-	
 
 }
