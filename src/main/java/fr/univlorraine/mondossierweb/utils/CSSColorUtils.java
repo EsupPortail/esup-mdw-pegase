@@ -33,9 +33,11 @@ public final class CSSColorUtils {
 	public static final String MAIN_HEADER_COLOR = "#0096ea";
 	public static final String COLOR = "color";
 	public static final String MARGIN_LEFT = "margin-left";
+	public static final String MARGIN_RIGHT = "margin-right";
 	public static final String MARGIN = "margin";
 	public static final String MARGIN_TOP = "margin-top";
 	public static final String WHITE = "white";
+	public static final String WHITE_SPACE = "white-space";
 	public static final String BACKGROUND_COLOR = "background-color";
 	public static final String PADDING_LEFT = "padding-left";
 	public static final String PADDING_RIGHT = "padding-right";
@@ -47,6 +49,12 @@ public final class CSSColorUtils {
 	public static final String VAR_LUMO_SPACE_L = "var(--lumo-space-l)";
 	public static final String MARGIN_BOTTOM = "margin-bottom";
 	public static final String AUTO = "auto";
+	public static final String FONT_WEIGHT = "font-weight";
+	public static final String NOWRAP = "nowrap";
+	public static final String FLEW_FLOW = "flex-flow";
+	public static final String ROW_WRAP = "row wrap";
+	public static final String COLUMN = "column";
+	public static final String FLEX_DIRECTION = "flex-direction";
 
 	private CSSColorUtils() {
 	}

@@ -241,9 +241,9 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		nomPrenomLayout.getStyle().set("padding-bottom", "0");
 
 		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
-		nomPrenom.getStyle().set("margin-right", CSSColorUtils.AUTO);
+		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
 		nomPrenom.getStyle().set(CSSColorUtils.COLOR,"var(--lumo-contrast-60pct)");
-		nomPrenom.getStyle().set("font-weight","600");
+		nomPrenom.getStyle().set(CSSColorUtils.FONT_WEIGHT,"600");
 		nomPrenomLayout.add(nomPrenom);
 
 		numeroDossier.getStyle().set(CSSColorUtils.MARGIN, "0px auto 0px auto");
@@ -341,7 +341,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 				VerticalLayout dialogLayout = new VerticalLayout();
 				dialogLayout.setPadding(false);
 				Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
-				infoIcon.getStyle().set("margin-right", "1em");
+				infoIcon.getStyle().set(CSSColorUtils.MARGIN_RIGHT, "1em");
 				infoIcon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
 
 				Span info = new Span();

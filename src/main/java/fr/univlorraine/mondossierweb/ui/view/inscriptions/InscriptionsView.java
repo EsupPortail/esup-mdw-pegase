@@ -579,7 +579,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								headerDialog.add(closeButton);
 							}
 
-							closeButton.addClickListener(cb -> { cursusDialog.close(); });
+							closeButton.addClickListener(cb -> cursusDialog.close());
 
 							// Mise à jour de l'affichage du cursus
 							displayCursus(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription),cursusLayout);
@@ -639,7 +639,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								headerDialog.add(closeButton);
 							}
 
-							closeButton.addClickListener(cb -> { notesDialog.close(); });
+							closeButton.addClickListener(cb -> notesDialog.close());
 
 							// Mise à jour de l'affichage des notes
 							displayNotes(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription),notesLayout, smallGrid);
@@ -691,7 +691,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	private String formatEtat(String value) {
 		if(StringUtils.hasText(value)) {
-			value = value.replaceAll("_", " ");
+			value = value.replace("_", " ");
 			value = Character.toUpperCase(value.charAt(0)) + value.substring(1).toLowerCase();
 		}
 		return value;
@@ -708,10 +708,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		cursusLayout.removeAll();
 
 		// Création de la TreeGrid contenant l'arborescence des objets de formation
-		TreeGrid<ObjetMaquetteDTO> arbo = new TreeGrid<ObjetMaquetteDTO>();
+		TreeGrid<ObjetMaquetteDTO> arbo = new TreeGrid<>();
 		arbo.setItems(listObj, ObjetMaquetteDTO::getChildObjects);
-		//arbo.addHierarchyColumn(ObjetMaquetteDTO::getLibelle).setFlexGrow(1).setAutoWidth(true);
-		arbo.addComponentHierarchyColumn(o -> getObjetCursusLibelle(o)).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
+		arbo.addComponentHierarchyColumn(this::getObjetCursusLibelle).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
 		arbo.addComponentColumn(o -> getObjetCursusDetails(o)).setFlexGrow(0);
 		arbo.expandRecursively(listObj, 10);
 		// si écran de petite taille
@@ -735,12 +734,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		notesLayout.removeAll();
 
 		// Création de la TreeGrid contenant l'arborescence des objets de formation
-		TreeGrid<CheminDTO> arbo = new TreeGrid<CheminDTO>();
+		TreeGrid<CheminDTO> arbo = new TreeGrid<>();
 		arbo.setItems(listObj, CheminDTO::getChildObjects);
-		arbo.addComponentHierarchyColumn(o -> getObjetNotesLibelle(o)).setFlexGrow(50).setAutoWidth(true).setWidth("100%");
-		arbo.addComponentColumn(o -> getSessionsDetails(o)).setFlexGrow(1).setAutoWidth(true);
+		arbo.addComponentHierarchyColumn(this::getObjetNotesLibelle).setFlexGrow(50).setAutoWidth(true).setWidth("100%");
+		arbo.addComponentColumn(this::getSessionsDetails).setFlexGrow(1).setAutoWidth(true);
 		arbo.setSelectionMode(SelectionMode.SINGLE);
-		arbo.addItemClickListener(o -> { showDetailNoteDialog(o.getItem());});
+		arbo.addItemClickListener(o -> showDetailNoteDialog(o.getItem()));
 
 		if(smallGrid) {
 			arbo.setThemeName("mobile");
@@ -769,13 +768,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		l.setWidthFull();
 
 		Label libLabel = new Label(o.getLibelle());
-		libLabel.getStyle().set("white-space", "normal");
+		libLabel.getStyle().set(CSSColorUtils.WHITE_SPACE, "normal");
 		l.add(libLabel);
 		l.setFlexGrow(1, libLabel);
 
 
 		// Si non obligatoire
-		if(facItalique.booleanValue() && o!=null && o.getObjet() != null && o.getObjet().getCaractereObligatoire()!=null && !o.getObjet().getCaractereObligatoire().booleanValue()) {
+		if(facItalique.booleanValue() && o.getObjet() != null && o.getObjet().getCaractereObligatoire()!=null && !o.getObjet().getCaractereObligatoire().booleanValue()) {
 			// Le libellé est en italic
 			libLabel.getStyle().set(CSSColorUtils.FONT_STYLE, CSSColorUtils.ITALIC);
 		}
@@ -795,9 +794,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 			Button bAcquis = new Button(VaadinIcon.CHECK.create());
 			bAcquis.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
-			bAcquis.getStyle().set("margin-right", "0.5em");
+			bAcquis.getStyle().set(CSSColorUtils.MARGIN_RIGHT, "0.5em");
 			bAcquis.setHeight("1.5em");
-			//bAcquis.addClickListener(e -> Notification.show(getTranslation("inscription.element.acquis"),2000, Position.MIDDLE));
 			bAcquis.addClickListener(e -> showInfoDialog(getTranslation("inscription.element.acquis")));
 			l.add(bAcquis);
 		}
@@ -806,7 +804,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			Button bAmenagement = new Button(VaadinIcon.INFO_CIRCLE_O.create());
 			bAmenagement.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
 			bAmenagement.setHeight("1.5em");
-			bAmenagement.getStyle().set("margin-right", "0.5em");
+			bAmenagement.getStyle().set(CSSColorUtils.MARGIN_RIGHT, "0.5em");
 			bAmenagement.addClickListener(e -> showDetailAmenagementDialog(o.getObjet().getTypeAmenagementLst()));
 
 			l.add(bAmenagement);
@@ -824,7 +822,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		HorizontalLayout hl = new HorizontalLayout();
 		hl.setWidthFull();
 		Label libAmenagements = new Label(info);
-		libAmenagements.getStyle().set("font-weight", "bold");
+		libAmenagements.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 		hl.add(libAmenagements);
 		hl.add(libAmenagements);
 		dialLayout.add(hl);
@@ -849,7 +847,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			HorizontalLayout hl = new HorizontalLayout();
 			hl.setWidthFull();
 			Label libAmenagements = new Label(ta.getLibelleAffichage());
-			libAmenagements.getStyle().set("font-weight", "bold");
+			libAmenagements.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 			hl.add(libAmenagements);
 			hl.add(libAmenagements);
 			dialLayout.add(hl);
@@ -873,13 +871,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 		Div libLabel = new Div();
 		libLabel.setText(o.getLibelle());
-		libLabel.getStyle().set("white-space", "normal");
+		libLabel.getStyle().set(CSSColorUtils.WHITE_SPACE, "normal");
 		l.add(libLabel);
 		l.setFlexGrow(1, libLabel);
-
-		/*l.addClickListener(e -> {
-			showDetailNoteDialog(o);
-		});*/
 
 		return l;
 	}
@@ -893,7 +887,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// Préparation du layout à retourner
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
-		//l.setAlignContent(ContentAlignment.START);
 
 		// Si l'objet est de type Contrôle
 		if(o.getControle() != null) {
@@ -913,7 +906,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				l.add(getAucunResultat());
 			}
 		} else {
-			if(o!=null && o.getObjet()!=null) {
+			if(o.getObjet()!=null) {
 				Component sessionfinalelayout = getSessionFinaleDetails(o, true);
 				Component session2layout = getSession2Details(o, true);
 				Component session1layout = getSession1Details(o, true);
@@ -931,9 +924,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					l.add(getAucunResultat());
 				}
 
-				/*l.addClickListener(e -> {
-				showDetailNoteDialog(o);
-			});*/
 			}
 		}
 		return l;
@@ -975,8 +965,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				HorizontalLayout session1 = new HorizontalLayout();
 				session1.setWidthFull();
 				Label labelS1 = new Label(getTranslation("notes.session."+o.getControle().getNumeroSession()));
-				labelS1.getStyle().set("white-space", "nowrap");
-				labelS1.getStyle().set("font-weight", "bold");
+				labelS1.getStyle().set(CSSColorUtils.WHITE_SPACE, CSSColorUtils.NOWRAP);
+				labelS1.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				session1.add(labelS1);
 				session1.add(controleLayout);
 				dialLayout.add(session1);
@@ -989,19 +979,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			Component s2 = getSession2Details(o, false);
 			Component s1 = getSession1Details(o, false);
 
-
-			// Ajout du résultat principal
-			/*Label resultLabel = new Label(getResultat(o));
-		resultLabel.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-		dialLayout.add(resultLabel);*/
-
 			//Ajout du coeff principal
 			BigDecimal coeff=getCoeff(o);
 			if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
 				HorizontalLayout hl = new HorizontalLayout();
 				hl.setWidthFull();
 				Label libCoeffLabel = new Label(getTranslation("notes.coeff"));
-				libCoeffLabel.getStyle().set("font-weight", "bold");
+				libCoeffLabel.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				hl.add(libCoeffLabel);
 				Label coeffLabel = new Label(Utils.displayBigDecimal(coeff));
 				coeffLabel.setWidthFull();
@@ -1014,7 +998,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				HorizontalLayout hl = new HorizontalLayout();
 				hl.setWidthFull();
 				Label libECTSLabel = new Label(getTranslation("notes.ects"));
-				libECTSLabel.getStyle().set("font-weight", "bold");
+				libECTSLabel.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				hl.add(libECTSLabel);
 				Label ectsLabel = new Label(Utils.displayBigDecimal(o.getObjet().getCreditEcts()));
 				ectsLabel.setWidthFull();
@@ -1030,8 +1014,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				HorizontalLayout session1 = new HorizontalLayout();
 				session1.setWidthFull();
 				Label labelS1 = new Label(getTranslation("notes.session.1"));
-				labelS1.getStyle().set("white-space", "nowrap");
-				labelS1.getStyle().set("font-weight", "bold");
+				labelS1.getStyle().set(CSSColorUtils.WHITE_SPACE, CSSColorUtils.NOWRAP);
+				labelS1.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				session1.add(labelS1);
 				session1.add(s1);
 				dialLayout.add(session1);
@@ -1042,8 +1026,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				HorizontalLayout session2 = new HorizontalLayout();
 				session2.setWidthFull();
 				Label labelS2 = new Label(getTranslation("notes.session.2"));
-				labelS2.getStyle().set("white-space", "nowrap");
-				labelS2.getStyle().set("font-weight", "bold");
+				labelS2.getStyle().set(CSSColorUtils.WHITE_SPACE, CSSColorUtils.NOWRAP);
+				labelS2.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				session2.add(labelS2);
 				session2.add(s2);
 				dialLayout.add(session2);
@@ -1055,7 +1039,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				HorizontalLayout sessionFinale = new HorizontalLayout();
 				sessionFinale.setWidthFull();
 				Label labelSF = new Label(getTranslation("notes.session.finale"));
-				labelSF.getStyle().set("font-weight", "bold");
+				labelSF.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				sessionFinale.add(labelSF);
 				sessionFinale.add(sf);
 				dialLayout.add(sessionFinale);
@@ -1143,7 +1127,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				l.add(createLabelResult(compact ? o.getControle().getResultat().getLibelleCourt() : o.getControle().getResultat().getLibelleAffichage()));
 			}
 		}
-		l.getStyle().set("flex-flow", "row wrap");
+		l.getStyle().set(CSSColorUtils.FLEW_FLOW, CSSColorUtils.ROW_WRAP);
 		return l;
 	}
 
@@ -1168,8 +1152,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				l.add(createLabelResult(compact ? o.getObjet().getResultatSession1().getLibelleCourt() : o.getObjet().getResultatSession1().getLibelleAffichage()));
 			}
 		}
-		l.getStyle().set("flex-flow", "row wrap");
-		l.getStyle().set("flex-direction", "column");
+		l.getStyle().set(CSSColorUtils.FLEW_FLOW, CSSColorUtils.ROW_WRAP);
+		l.getStyle().set(CSSColorUtils.FLEX_DIRECTION, CSSColorUtils.COLUMN);
 
 		if(l.getComponentCount()>0) {
 			return l;
@@ -1199,8 +1183,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			}
 		}
 
-		l.getStyle().set("flex-flow", "row wrap");
-		l.getStyle().set("flex-direction", "column");
+		l.getStyle().set(CSSColorUtils.FLEW_FLOW, CSSColorUtils.ROW_WRAP);
+		l.getStyle().set(CSSColorUtils.FLEX_DIRECTION, CSSColorUtils.COLUMN);
 
 		if(l.getComponentCount()>0) {
 			return l;
@@ -1230,8 +1214,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			}
 		}
 
-		l.getStyle().set("flex-flow", "row wrap");
-		l.getStyle().set("flex-direction", "column");
+		l.getStyle().set(CSSColorUtils.FLEW_FLOW, CSSColorUtils.ROW_WRAP);
+		l.getStyle().set(CSSColorUtils.FLEX_DIRECTION, CSSColorUtils.COLUMN);
 
 		if(l.getComponentCount()>0) {
 			return l;
@@ -1303,14 +1287,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		return result;
 	}
 
-/*
-	private String getResultInfo(String titre, String libelle, BigDecimal coeff) {
-		String message = titre + " : " + libelle;
-		if(coeff!=null && affichageAvecCoeff()!=null && affichageAvecCoeff().booleanValue()) {
-			message += " ("+getTranslation("notes.coeff")+ " " + Utils.displayBigDecimal(coeff)+")";
-		}
-		return message;
-	}*/
 
 
 	/**

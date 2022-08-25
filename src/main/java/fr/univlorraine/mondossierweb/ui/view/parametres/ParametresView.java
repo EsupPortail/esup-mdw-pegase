@@ -106,11 +106,11 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 	private final VerticalLayout parametresLayout = new VerticalLayout();
 
-	private List<Button> buttonsEditer = new LinkedList<Button> ();
-	private List<Button> buttonsAnnuler = new LinkedList<Button> ();
-	private List<Button> buttonsEnregistrer = new LinkedList<Button> ();
+	private List<Button> buttonsEditer = new LinkedList<> ();
+	private List<Button> buttonsAnnuler = new LinkedList<> ();
+	private List<Button> buttonsEnregistrer = new LinkedList<> ();
 
-	private HashMap<String,String> backupValues = new HashMap<String,String> ();
+	private HashMap<String,String> backupValues = new HashMap<> ();
 
 	@PostConstruct
 	private void init() {
@@ -168,7 +168,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 								categorieLayout.add(cb);
 							} else {
 								if(p.getType().getTypeId().equals(TYPE_LIST_STRING)){
-									ComboBox<PreferencesApplicationValeurs> cb = new ComboBox<PreferencesApplicationValeurs>(p.getPrefDesc());
+									ComboBox<PreferencesApplicationValeurs> cb = new ComboBox<>(p.getPrefDesc());
 									cb.setWidthFull();
 									cb.setId(p.getPrefId());
 									cb.setItems(p.getValeurs());
@@ -191,7 +191,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 					}
 					initButtons(categorieLayout, categorie.getCatId());
 					categorieCard.add(categorieLayout);
-					//categorieCard.displayAlt();
 
 				}
 				parametresLayout.add(categorieCard);
@@ -258,7 +257,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		});
 
 		//S'il s'agit de la catégorie LDAP
-		if(categorieId == LDAP_ID) {
+		if(categorieId.equals(LDAP_ID)) {
 			buttonSync.setText(getTranslation("parametres.button-sync"));
 			buttonSync.addClickListener(e -> {
 				syncServiceConfig(LdapService.class.getName(),"refreshParameters");
@@ -266,7 +265,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			layout.add(syncButtonLayout);
 		}
 		//S'il s'agit de la catégorie Pégase Access-token
-		if(categorieId == PEGASE_ACCESS_TOKEN_ID) {
+		if(categorieId.equals(PEGASE_ACCESS_TOKEN_ID)) {
 			buttonTester.setText(getTranslation("parametres.button-tester-accesstoken"));
 			buttonTester.addClickListener(e -> {
 				try {
@@ -293,7 +292,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		}
 
 		//S'il s'agit de la catégorie Pégase API
-		if(categorieId == PEGASE_API_ID) {
+		if(categorieId.equals(PEGASE_API_ID)) {
 			buttonTester.setText(getTranslation("parametres.button-tester-api"));
 			buttonTester.addClickListener(e -> {
 				// Maj des paramètres depuis la BDD
@@ -349,7 +348,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		}
 
 		//S'il s'agit de la catégorie LDAP
-		if(categorieId == PEGASE_PARAM) {
+		if(categorieId.equals(PEGASE_PARAM)) {
 			buttonSync.setText(getTranslation("parametres.button-sync"));
 			buttonSync.addClickListener(e -> {
 				syncServiceConfig(PegaseService.class.getName(), "refreshPegaseParameters");
@@ -455,7 +454,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			if(c instanceof Checkbox) {
 				Checkbox cb = (Checkbox) c;
 				if(rollback) {
-					cb.setValue(value.equals(TRUE_VALUE));
+					cb.setValue(value != null && value.equals(TRUE_VALUE));
 				} else {
 					backupValues.put(c.getId().get(), cb.getValue().toString());
 				}

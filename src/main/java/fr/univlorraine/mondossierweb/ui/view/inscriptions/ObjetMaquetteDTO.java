@@ -35,7 +35,4 @@ public class ObjetMaquetteDTO {
 	private Boolean affecte;
 	private Boolean iaValide;
 	
-	/*public List<ObjetMaquetteDTO> getChildObjects(ObjetMaquetteDTO o) {
-		return childObjects;
-	}*/
 }
