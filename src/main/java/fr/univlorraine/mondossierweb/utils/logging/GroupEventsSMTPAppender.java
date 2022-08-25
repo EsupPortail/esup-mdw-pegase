@@ -42,18 +42,18 @@ public class GroupEventsSMTPAppender extends SMTPAppender implements Serializabl
 	private int mailDelaySeconds = 1;
 
 	/** Timer entre chaque envoi de mails. */
-	private final Timer timer = new Timer();
+	private final transient Timer timer = new Timer();
 
 	/** Tâche timer courante. */
 	private transient TimerTask currentTimerTask;
 
 	/** Dernier événement de log. */
-	private ILoggingEvent lastEventObject;
+	private transient ILoggingEvent lastEventObject;
 
 	/**
 	 * @return the mailDelaySeconds
 	 */
-	public int getMailDelaySeconds() {
+	public synchronized int getMailDelaySeconds() {
 		return mailDelaySeconds;
 	}
 
@@ -150,7 +150,7 @@ public class GroupEventsSMTPAppender extends SMTPAppender implements Serializabl
 	 * @see ch.qos.logback.core.net.SMTPAppenderBase#stop()
 	 */
 	@Override
-	public void stop() {
+	public synchronized void stop() {
 		synchronized (this) {
 			sendMail();
 			super.stop();

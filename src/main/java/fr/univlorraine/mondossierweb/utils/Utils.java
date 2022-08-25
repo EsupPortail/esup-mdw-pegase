@@ -167,7 +167,7 @@ public final class Utils {
 				return true;
 			}
 			// Si l'élément a des enfants et que son chemin est moins profond que celui ce l'élément à insérer
-			if(!parent.getChildObjects().isEmpty() && parent.getCodeChemin().length() < cheminParent.length()) {
+			if(parent != null && parent.getChildObjects() != null && !parent.getChildObjects().isEmpty() && parent.getCodeChemin().length() < cheminParent.length()) {
 				boolean insertInChild = insertInList(parent.getChildObjects(),cheminParent,o);
 				// Si l'élément a été inséré dans les enfants
 				if(insertInChild) {
@@ -281,14 +281,14 @@ public final class Utils {
 		// On recherche l'élément parent de la liste.
 		for(CheminDTO parent : list) {
 			// Si c'est le parent de l'objet en cours
-			if(parent != null && parent.getCodeChemin().equals(cheminParent)) {
+			if(parent.getCodeChemin().equals(cheminParent)) {
 				//Ajout au parent
 				parent.getChildObjects().add(o);
 				log.info("Element inséré.");
 				return true;
 			}
 			// Si l'élément a des enfants et que son chemin est moins profond que celui ce l'élément à insérer
-			if(!parent.getChildObjects().isEmpty() && parent.getCodeChemin().length() < cheminParent.length()) {
+			if(parent.getChildObjects() != null && !parent.getChildObjects().isEmpty() && parent.getCodeChemin().length() < cheminParent.length()) {
 				boolean insertInChild = insertInList(parent.getChildObjects(),cheminParent,o);
 				// Si l'élément a été inséré dans les enfants
 				if(insertInChild) {
