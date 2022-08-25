@@ -18,7 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -165,7 +164,7 @@ public class PreferencesService {
 		try {
 			bean.getClass().getMethod(sync.getId().getMethodName()).invoke(bean);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.warn("Erreur lors de la maj du service {}", sync.getId().getServiceName(), e);
 		} 
 	}
 
