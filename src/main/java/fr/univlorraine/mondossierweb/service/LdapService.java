@@ -69,8 +69,8 @@ public class LdapService implements Serializable {
 		refreshParameters();
 	}
 	
-	private class StudentAttributesMapper implements AttributesMapper {
-		public Object mapFromAttributes(Attributes attrs) throws NamingException {
+	private class StudentAttributesMapper implements AttributesMapper<LdapPerson> {
+		public LdapPerson mapFromAttributes(Attributes attrs) throws NamingException {
 			LdapPerson person = new LdapPerson();
 			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
 			person.setDisplayName((String)attrs.get(ldapDisplayNameAttribute).get());
@@ -80,8 +80,8 @@ public class LdapService implements Serializable {
 		}
 	}
 
-	private class PersonAttributesMapper implements AttributesMapper {
-		public Object mapFromAttributes(Attributes attrs) throws NamingException {
+	private class PersonAttributesMapper implements AttributesMapper<LdapPerson> {
+		public LdapPerson mapFromAttributes(Attributes attrs) throws NamingException {
 			LdapPerson person = new LdapPerson();
 			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
 			try {
