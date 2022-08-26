@@ -225,7 +225,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
 		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
 			log.info("Affichage popup info ?");
-			createInfoPopUp(securityService.getPrincipal().get());
+			createInfoPopUp(securityService.getPrincipal().orElse(null));
 		}
 	}
 
@@ -293,7 +293,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		topMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY);
 		topMenu.addClassName("user-menu");
 
-		MenuItem userItem = topMenu.addItem(createUserImage(utilisateur));
+		MenuItem userItem = topMenu.addItem(createUserImage());
 		SubMenu userMenu = userItem.getSubMenu();
 
 		String name = Optional.ofNullable(utilisateur.getDisplayName())
@@ -321,8 +321,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		return topMenu;
 	}
 
-	private Component createUserImage(final Utilisateur utilisateur) {
-		String displayName = utilisateur.getDisplayName();
+	private Component createUserImage() {
 		Icon icon = new Icon(VaadinIcon.USER);
 		icon.addClassName("user-image");
 		icon.getStyle().set("padding-top", "5px");
@@ -330,7 +329,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	}
 
 	private void createInfoPopUp(final Utilisateur utilisateur) {
-		if(StringUtils.hasText(utilisateur.getUsername())) {
+		if(utilisateur != null && StringUtils.hasText(utilisateur.getUsername())) {
 			Optional<PreferencesUtilisateur> pu = prefService.getPreference(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE);
 			// Si la pop-up n'est pas désactivable par l'utilisateur ou qu'il n'a pas demandé à la désactiver
 			if(!popupInfoDesactivable || pu.isEmpty() || !Boolean.parseBoolean(pu.get().getValeur())) {
