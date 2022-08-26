@@ -64,6 +64,12 @@ public final class Utils {
 	public static final String DOSSIER_APPRENANT = "dossierApprenant";
 	public static final String DOSSIER_CONSULTE_APPRENANT = "dossierConsulteApprenant";
 
+	private Utils() {
+	    throw new IllegalStateException("Utility class");
+	}
+
+
+	
 
 	/** formatage d'une date en chaine pour un affichage européen */
 	public static String formatStringDateToDisplay(String date) {
@@ -98,8 +104,7 @@ public final class Utils {
 	/** Convertit la date JSON en LocalDate */
 	private static LocalDate getLocalDateFromJsonDate(String date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate localDate = LocalDate.parse(date, formatter);
-		return localDate;
+		return LocalDate.parse(date, formatter);
 	}
 
 	/** Retour le code période de l'inscription */
@@ -116,7 +121,7 @@ public final class Utils {
 
 	/** Converti une liste de ObjetMaquetteExtension en hiérarchie de ObjetMaquetteDTO */
 	public static List<ObjetMaquetteDTO> convertObjetMaquetteListToDTO(List<List<ObjetMaquetteExtension>> listObj, String codeCheminRacine) {
-		List<ObjetMaquetteDTO> list = new LinkedList<ObjetMaquetteDTO>();
+		List<ObjetMaquetteDTO> list = new LinkedList<>();
 		if(listObj != null) {
 			boolean listObjMaquetteTrouvee = false;
 			for(List<ObjetMaquetteExtension> lobj : listObj) {
@@ -192,26 +197,26 @@ public final class Utils {
 		}
 
 		o.setObjet(obj);
-		o.setChildObjects(new LinkedList<ObjetMaquetteDTO>());
+		o.setChildObjects(new LinkedList<>());
 
-		if(obj.getTemoinAcquis()) {
+		if(Boolean.TRUE.equals(obj.getTemoinAcquis())) {
 			o.setAcquis(true);
 		}
-		if(obj.getTemoinAffecte()) {
+		if(Boolean.TRUE.equals(obj.getTemoinAffecte())) {
 			o.setAffecte(true);
 		}
-		if(obj.getTemoinIAValide()) {
+		if(Boolean.TRUE.equals(obj.getTemoinIAValide())) {
 			o.setIaValide(true);
 		}
 		return o;
 	}
 
 	public static List<CheminDTO> convertCheminToDTO(List<Chemin> listObj, String codeCheminRacine, boolean avecControle) {
-		List<CheminDTO> list = new LinkedList<CheminDTO>();
+		List<CheminDTO> list = new LinkedList<>();
 		if(listObj != null) {
 			for(Chemin obj : listObj) {
 				// Si on est sur un objet concerné par la racine
-				if(obj!=null && obj.getCodeChemin()!=null && obj.getCodeChemin().contains(codeCheminRacine)) {
+				if(obj != null && obj.getCodeChemin() != null && obj.getCodeChemin().contains(codeCheminRacine)) {
 					CheminDTO o = createCheminDTO(obj, avecControle);
 					// S'il s'agit de la racine
 					if(obj.getCodeChemin().equals(codeCheminRacine)) {
@@ -249,10 +254,10 @@ public final class Utils {
 		o.setLibelle(obj.getObjetFeuille().getLibelleCourt());
 
 		o.setObjet(obj);
-		o.setChildObjects(new LinkedList<CheminDTO>());
+		o.setChildObjects(new LinkedList<>());
 
 		// Si l'objet a des contrôles et qu'on doit les afficher
-		if(avecControle && obj.getListeControle()!=null && !obj.getListeControle().isEmpty()) {
+		if(avecControle && obj.getListeControle() != null && !obj.getListeControle().isEmpty()) {
 			// Pour chaque contrôle
 			for(Controle c : obj.getListeControle() ) {
 				// Si le contrôle est porteur d'information
@@ -272,7 +277,7 @@ public final class Utils {
 		o.setLibelle(c.getLibelle());
 		o.setControle(c);
 		o.setObjet(pere);
-		o.setChildObjects(new LinkedList<CheminDTO>());
+		o.setChildObjects(new LinkedList<>());
 		return o;
 	}
 
@@ -324,15 +329,16 @@ public final class Utils {
 
 	public static String getCodeChemin(CibleInscription cible) {
 		// la racine est le code de la formation
-		String chemin = cible.getFormation().getCode();
+		StringBuilder chemin = new StringBuilder();
+		chemin.append(cible.getFormation().getCode());
 		if(cible.getChemin()!=null && !cible.getChemin().isEmpty()) {
 			for(ObjetFormationOuGroupement c : cible.getChemin()) {
 				// Ajout des éléments au chemin
-				chemin += SEPARATEUR_CHEMIN + c.getCode();
+				chemin.append(SEPARATEUR_CHEMIN + c.getCode());
 			}
 		}
 		log.info("Chemin : {} pour Cible {} {}", chemin, cible.getFormation(), cible.getChemin());
-		return chemin ;
+		return chemin.toString() ;
 	}
 	
 	public static void notifierSucces(String message) {

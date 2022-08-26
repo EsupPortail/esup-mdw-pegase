@@ -282,12 +282,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		}
 		if(dossier!=null && dossier.getInscriptions() != null && !dossier.getInscriptions() .isEmpty()) {
 			//On trie les inscriptions sur l'année universitaire de la période, par ordre décroissant
-			dossier.getInscriptions().sort(new Comparator<InscriptionComplete>(){
-				@Override
-				public int compare(InscriptionComplete i1, InscriptionComplete i2) {
-					return i2.getCible().getPeriode().getAnneeUniversitaire().compareTo(i1.getCible().getPeriode().getAnneeUniversitaire());
-				}
-			});
+			dossier.getInscriptions().sort((InscriptionComplete i1, InscriptionComplete i2) ->
+					i2.getCible().getPeriode().getAnneeUniversitaire().compareTo(i1.getCible().getPeriode().getAnneeUniversitaire()));
 			// Pour chaque inscription
 			for(InscriptionComplete inscription : dossier.getInscriptions() ) {
 				boolean inscriptionValide = false;
@@ -464,7 +460,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 					FlexLayout flexInfoAndPhotoLayout = new FlexLayout();
 					if(afficherDetailInscription.equals(Utils.DETAIL_INS_AFFICHE)){
-						flexInfoAndPhotoLayout.getStyle().set(CSSColorUtils.BORDER_TOP, "1px solid lightgray");
+						flexInfoAndPhotoLayout.getStyle().set(CSSColorUtils.BORDER_TOP, CSSColorUtils.SOLID_LIGHTGRAY);
 					}
 					flexInfoAndPhotoLayout.getStyle().set("padding-top", "1em");
 					VerticalLayout detailInscriptionLayout = new VerticalLayout();
@@ -500,7 +496,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						exportAttestationAnchor.setVisible(false);
 					}
 
-					flexInfoAndPhotoLayout.getStyle().set(CSSColorUtils.BORDER_TOP, "1px solid lightgray");
+					flexInfoAndPhotoLayout.getStyle().set(CSSColorUtils.BORDER_TOP, CSSColorUtils.SOLID_LIGHTGRAY);
 					flexInfoAndPhotoLayout.add(detailInscriptionLayout);
 					flexInfoAndPhotoLayout.add(photoLayout);
 
@@ -658,7 +654,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					buttonLayout2.setWidthFull();
 					buttonLayout2.getStyle().set(CSSColorUtils.PADDING, "0");
 					buttonLayout2.getStyle().set("padding-top", "1em");
-					buttonLayout2.getStyle().set(CSSColorUtils.BORDER_TOP, "1px solid lightgray");
+					buttonLayout2.getStyle().set(CSSColorUtils.BORDER_TOP, CSSColorUtils.SOLID_LIGHTGRAY);
 					buttonLayout2.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 					Div cursusBtnDiv=new Div();
 					cursusBtnDiv.getStyle().set(CSSColorUtils.PADDING, "0.3em 1em 0.3em 1em");
@@ -711,7 +707,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		TreeGrid<ObjetMaquetteDTO> arbo = new TreeGrid<>();
 		arbo.setItems(listObj, ObjetMaquetteDTO::getChildObjects);
 		arbo.addComponentHierarchyColumn(this::getObjetCursusLibelle).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
-		arbo.addComponentColumn(o -> getObjetCursusDetails(o)).setFlexGrow(0);
+		arbo.addComponentColumn(this::getObjetCursusDetails).setFlexGrow(0);
 		arbo.expandRecursively(listObj, 10);
 		// si écran de petite taille
 		if( windowWidth<=800) {
@@ -794,8 +790,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 			Button bAcquis = new Button(VaadinIcon.CHECK.create());
 			bAcquis.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
-			bAcquis.getStyle().set(CSSColorUtils.MARGIN_RIGHT, "0.5em");
-			bAcquis.setHeight("1.5em");
+			bAcquis.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
+			bAcquis.setHeight(CSSColorUtils.EM_1_5);
 			bAcquis.addClickListener(e -> showInfoDialog(getTranslation("inscription.element.acquis")));
 			l.add(bAcquis);
 		}
@@ -803,8 +799,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		if(o!=null && o.getObjet()!=null && o.getObjet().getTypeAmenagementLst()!=null &&  !o.getObjet().getTypeAmenagementLst().isEmpty()) {
 			Button bAmenagement = new Button(VaadinIcon.INFO_CIRCLE_O.create());
 			bAmenagement.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
-			bAmenagement.setHeight("1.5em");
-			bAmenagement.getStyle().set(CSSColorUtils.MARGIN_RIGHT, "0.5em");
+			bAmenagement.setHeight(CSSColorUtils.EM_1_5);
+			bAmenagement.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
 			bAmenagement.addClickListener(e -> showDetailAmenagementDialog(o.getObjet().getTypeAmenagementLst()));
 
 			l.add(bAmenagement);
@@ -1121,7 +1117,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// Si le controle est non null et publiable
 		if(o!=null && o.getControle()!=null && o.getControle().getPublie()) {
 			if(o.getControle().getNote()!=null || o.getControle().getAbsence()!=null) {
-				l.add(createLabelNoteControle(o.getObjet().getBareme(), o.getControle().getNote(), o.getControle().getAbsence(), compact));
+				l.add(createLabelNote(o.getObjet().getBareme(), o.getControle().getNote(), o.getControle().getAbsence(), compact));
 			}
 			if(o.getControle().getResultat()!=null) {
 				l.add(createLabelResult(compact ? o.getControle().getResultat().getLibelleCourt() : o.getControle().getResultat().getLibelleAffichage()));
@@ -1225,40 +1221,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	private Component createLabelNote(int bareme, BigDecimal note, Absence absence, boolean compact) {
 		Div result = new Div();
-		result.setHeight("1.5em");
+		result.setHeight(CSSColorUtils.EM_1_5);
 		if(compact) {
 			result.setWidth("5em");
 		}
-		result.getStyle().set(CSSColorUtils.MARGIN, "auto auto auto 1em");
-		if(note != null) {
-			result.setText(Utils.displayNote(note, bareme, avecBareme));
-		} else {
-			/*if(absence != null && absence instanceof AbsenceSession1Enum) {
-				AbsenceSession1Enum as1 = (AbsenceSession1Enum) absence;
-				result.setText(compact? getTranslation("notes.absence.prefix") + as1.getValue().charAt(0) : getTranslation("notes.absence") + " " + as1.getValue());
-			}
-			if(absence != null && absence instanceof AbsenceSession2Enum) {
-				AbsenceSession2Enum as2 = (AbsenceSession2Enum) absence;
-				result.setText(compact ? getTranslation("notes.absence.prefix") + as2.getValue().charAt(0) : getTranslation("notes.absence") + " " + as2.getValue());
-			}
-			if(absence != null && absence instanceof AbsenceFinaleEnum) {
-				AbsenceFinaleEnum  af = (AbsenceFinaleEnum ) absence;
-				result.setText(compact ? getTranslation("notes.absence.prefix") + af.getValue().charAt(0) : getTranslation("notes.absence") + " " + af.getValue());
-			}*/
-			if(absence != null) {
-				result.setText(compact ? getTranslation("notes.absence.prefix") + absence.getValue().charAt(0) : getTranslation("notes.absence") + " " + absence.getValue());
-			}
-		}
-		return result;
-	}
-
-	private Component createLabelNoteControle(int bareme, BigDecimal note, Absence absence, boolean compact) {
-		Div result = new Div();
-		result.setHeight("1.5em");
-		if(compact) {
-			result.setWidth("5em");
-		}
-		result.getStyle().set(CSSColorUtils.MARGIN, "auto auto auto 1em");
+		result.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO_AUTO_AUTO_1EM);
 		if(note != null) {
 			result.setText(Utils.displayNote(note, bareme, avecBareme));
 		} else {
@@ -1272,12 +1239,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	private Component createLabelResult(String libCourt) {
 		Div result = new Div();
-		result.setHeight("1.5em");
-		result.getStyle().set(CSSColorUtils.MARGIN, "auto auto auto 1em");
+		result.setHeight(CSSColorUtils.EM_1_5);
+		result.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO_AUTO_AUTO_1EM);
 		result.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
 		result.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
-		result.getStyle().set(CSSColorUtils.PADDING_LEFT, "0.5em");
-		result.getStyle().set(CSSColorUtils.PADDING_RIGHT, "0.5em");
+		result.getStyle().set(CSSColorUtils.PADDING_LEFT, CSSColorUtils.EM_0_5);
+		result.getStyle().set(CSSColorUtils.PADDING_RIGHT, CSSColorUtils.EM_0_5);
 		result.getStyle().set(CSSColorUtils.BORDER_RADIUS, "0.7em");
 
 		if(StringUtils.hasText(libCourt)) {

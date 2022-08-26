@@ -237,7 +237,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		nomPrenomLayout.getStyle().set("max-width", "16em");
 		nomPrenomLayout.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
 		nomPrenomLayout.getStyle().set("box-shadow", "none");
-		nomPrenomLayout.getStyle().set("padding-top", "0.5em");
+		nomPrenomLayout.getStyle().set("padding-top", CSSColorUtils.EM_0_5);
 		nomPrenomLayout.getStyle().set("padding-bottom", "0");
 
 		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);

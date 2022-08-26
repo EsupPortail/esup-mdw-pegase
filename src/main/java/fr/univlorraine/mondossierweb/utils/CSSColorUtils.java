@@ -55,6 +55,10 @@ public final class CSSColorUtils {
 	public static final String ROW_WRAP = "row wrap";
 	public static final String COLUMN = "column";
 	public static final String FLEX_DIRECTION = "flex-direction";
+	public static final String EM_1_5 = "1.5em";
+	public static final String EM_0_5 = "0.5em";
+	public static final String SOLID_LIGHTGRAY = "1px solid lightgray";
+	public static final String AUTO_AUTO_AUTO_1EM = "auto auto auto 1em";
 
 	private CSSColorUtils() {
 	}

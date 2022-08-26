@@ -126,12 +126,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 	}
 
-	private void initMessageWIP() {
-		Label infoLabel = new Label("Vue en cours de développement");
-		infoLabel.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-		add(infoLabel);
-	};
-
 	private void initParameters() {
 
 		List<PreferencesApplicationCategorie> categories = prefService.getCategories();
@@ -142,12 +136,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				categorieCard.getTitre().setText(categorie.getCatDesc());
 
 				if(categorie.getPreferencesApplication() != null && !categorie.getPreferencesApplication().isEmpty()) {
-					Collections.sort(categorie.getPreferencesApplication(), new Comparator<PreferencesApplication>() {
-						@Override
-						public int compare(PreferencesApplication p1, PreferencesApplication p2) {
-							return p1.getOrdre().compareTo(p2.getOrdre());
-						}
-					});
+					Collections.sort(categorie.getPreferencesApplication(), 
+						(PreferencesApplication p1, PreferencesApplication p2) -> p1.getOrdre().compareTo(p2.getOrdre()));
 					VerticalLayout categorieLayout = new VerticalLayout();
 					for(PreferencesApplication p : categorie.getPreferencesApplication()) {
 						if(p.getType().isSecret()) {
@@ -285,9 +275,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			layout.add(testButtonLayout);
 
 			buttonSync.setText(getTranslation("parametres.button-sync"));
-			buttonSync.addClickListener(e -> {
-				syncServiceConfig(AccessTokenService.class.getName(), "refreshParameters");
-			});
+			buttonSync.addClickListener(e -> syncServiceConfig(AccessTokenService.class.getName(), "refreshParameters"));
 			layout.add(syncButtonLayout);
 		}
 
@@ -341,18 +329,14 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			layout.add(testButtonLayout);
 
 			buttonSync.setText(getTranslation("parametres.button-sync"));
-			buttonSync.addClickListener(e -> {
-				syncServiceConfig(PegaseService.class.getName(), "refreshApiParameters");
-			});
+			buttonSync.addClickListener(e -> syncServiceConfig(PegaseService.class.getName(), "refreshApiParameters"));
 			layout.add(syncButtonLayout);
 		}
 
 		//S'il s'agit de la catégorie LDAP
 		if(categorieId.equals(PEGASE_PARAM)) {
 			buttonSync.setText(getTranslation("parametres.button-sync"));
-			buttonSync.addClickListener(e -> {
-				syncServiceConfig(PegaseService.class.getName(), "refreshPegaseParameters");
-			});
+			buttonSync.addClickListener(e -> syncServiceConfig(PegaseService.class.getName(), "refreshPegaseParameters"));
 			layout.add(syncButtonLayout);
 		}
 	}
@@ -400,19 +384,20 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	// Sauvegarde des valeurs en base
 	private void saveValueToDb(Component c) {
 		if(c.getId().isPresent()) {
+			String id = c.getId().get();
 			if(c instanceof TextField) {
 				TextField tf = (TextField) c;
-				PreferencesApplication pa = prefService.savePref(c.getId().get(), tf.getValue());
+				PreferencesApplication pa = prefService.savePref(id, tf.getValue());
 				tf.setValue(pa.getValeur());
 			}
 			if(c instanceof PasswordField) {
 				PasswordField pf = (PasswordField) c;
-				PreferencesApplication pa = prefService.savePref(c.getId().get(), pf.getValue());
+				PreferencesApplication pa = prefService.savePref(id, pf.getValue());
 				pf.setValue(pa.getSecret());
 			}
 			if(c instanceof Checkbox) {
 				Checkbox cb = (Checkbox) c;
-				PreferencesApplication pa = prefService.savePref(c.getId().get(), cb.getValue().toString());
+				PreferencesApplication pa = prefService.savePref(id, cb.getValue().toString());
 				cb.setValue(pa.getValeur().equals(TRUE_VALUE));
 			}
 			if(c instanceof ComboBox) {
