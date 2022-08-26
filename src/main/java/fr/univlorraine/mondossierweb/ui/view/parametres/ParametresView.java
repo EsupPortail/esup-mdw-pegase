@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -383,26 +384,26 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 	// Sauvegarde des valeurs en base
 	private void saveValueToDb(Component c) {
-		if(c.getId().isPresent()) {
-			String id = c.getId().get();
+		Optional<String> componentId = c.getId();
+		if(componentId.isPresent()) {
 			if(c instanceof TextField) {
 				TextField tf = (TextField) c;
-				PreferencesApplication pa = prefService.savePref(id, tf.getValue());
+				PreferencesApplication pa = prefService.savePref(componentId.get(), tf.getValue());
 				tf.setValue(pa.getValeur());
 			}
 			if(c instanceof PasswordField) {
 				PasswordField pf = (PasswordField) c;
-				PreferencesApplication pa = prefService.savePref(id, pf.getValue());
+				PreferencesApplication pa = prefService.savePref(componentId.get(), pf.getValue());
 				pf.setValue(pa.getSecret());
 			}
 			if(c instanceof Checkbox) {
 				Checkbox cb = (Checkbox) c;
-				PreferencesApplication pa = prefService.savePref(id, cb.getValue().toString());
+				PreferencesApplication pa = prefService.savePref(componentId.get(), cb.getValue().toString());
 				cb.setValue(pa.getValeur().equals(TRUE_VALUE));
 			}
 			if(c instanceof ComboBox) {
 				ComboBox<PreferencesApplicationValeurs> cb = (ComboBox<PreferencesApplicationValeurs>) c;
-				PreferencesApplication pa = prefService.savePref(c.getId().get(), cb.getValue().getValeur());
+				PreferencesApplication pa = prefService.savePref(componentId.get(), cb.getValue().getValeur());
 				cb.setValue(prefService.getPreferencesApplicationValeurs(pa));
 			}
 		}
@@ -410,22 +411,23 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 	@SuppressWarnings("unchecked")
 	private void backupOrRollbackValue(Component c,  boolean rollback) {
-		if(c.getId().isPresent()) {
+		Optional<String> componentId = c.getId();
+		if(componentId.isPresent()) {
 			// On récupère les anciennes valeurs
 			String value = null;
 			// Si on a une valeur sauvegardée pour le composant
-			if(backupValues.containsKey(c.getId().get())) {
+			if(backupValues.containsKey(componentId.get())) {
 				// récupération de la valeur stockée
-				value = backupValues.get(c.getId().get());
+				value = backupValues.get(componentId.get());
 				// suppression de la valeur sauvegardée dans la hashMap
-				backupValues.remove(c.getId().get());
+				backupValues.remove(componentId.get());
 			}
 			if(c instanceof TextField) {
 				TextField tf = (TextField) c;
 				if(rollback) {
 					tf.setValue(value);
 				} else {
-					backupValues.put(c.getId().get(), tf.getValue());
+					backupValues.put(componentId.get(), tf.getValue());
 				}
 			}
 			if(c instanceof PasswordField) {
@@ -433,7 +435,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				if(rollback) {
 					pf.setValue(value);
 				} else {
-					backupValues.put(c.getId().get(), pf.getValue());
+					backupValues.put(componentId.get(), pf.getValue());
 				}
 			}
 			if(c instanceof Checkbox) {
@@ -441,7 +443,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				if(rollback) {
 					cb.setValue(value != null && value.equals(TRUE_VALUE));
 				} else {
-					backupValues.put(c.getId().get(), cb.getValue().toString());
+					backupValues.put(componentId.get(), cb.getValue().toString());
 				}
 			}
 			if(c instanceof ComboBox) {
@@ -449,7 +451,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				if(rollback) {
 					cb.setValue(getPreferencesApplicationValeursFromValId(cb, Integer.parseInt(value)));
 				} else {
-					backupValues.put(c.getId().get(), cb.getValue().getValId().toString());
+					backupValues.put(componentId.get(), cb.getValue().getValId().toString());
 				}
 			}
 		}
@@ -461,7 +463,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		List<PreferencesApplicationValeurs> items = (List<PreferencesApplicationValeurs>) dataProvider.getItems();
 		if(items!=null && !items.isEmpty()) {
 			for(PreferencesApplicationValeurs item : items) {
-				if(item!=null && item.getValId() == value) {
+				if(item!=null && item.getValId().equals(value)) {
 					return item;
 				}
 			}

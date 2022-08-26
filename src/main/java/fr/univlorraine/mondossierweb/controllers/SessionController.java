@@ -18,6 +18,8 @@
  */
 package fr.univlorraine.mondossierweb.controllers;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,17 +40,17 @@ public class SessionController {
 
 	@Autowired
 	private PegaseService pegaseService;
-	
+
 	@Autowired
 	private SecurityService securityService;
 
 	// Layout permettant la maj du menu latéral lors de la récupération dossier (cf méthode checkDossier)
 	private MainLayout mainLayout;
-	
+
 	public void setMainLayout(MainLayout mainLayout) {
 		this.mainLayout = mainLayout;
 	}
-	
+
 	/**
 	 * 
 	 * @return Dossier en session si renseigné
@@ -59,25 +61,27 @@ public class SessionController {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * @return Code apprenant du dossier en cours de consultation
 	 */
 	public String getDossierConsulte() {
-		// On a rien dans la Session Vaadin mais on a l'info dans le SecurityService (cas d'un étudiant qui vient de se connecter à l'application)
-		if(VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_CONSULTE_APPRENANT) == null 
-			&& securityService != null 
-			&& securityService.getCodeEtudiant().isPresent()) {
-				setDossierConsulte(securityService.getCodeEtudiant().get());
+		if(securityService != null) {
+			Optional<String> codeEtudiant = securityService.getCodeEtudiant();
+			// On a rien dans la Session Vaadin mais on a l'info dans le SecurityService (cas d'un étudiant qui vient de se connecter à l'application)
+			if(VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_CONSULTE_APPRENANT) == null 
+				&& codeEtudiant.isPresent()) {
+				setDossierConsulte(codeEtudiant.get());
+			}
 		}
 		if(VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_CONSULTE_APPRENANT) != null) {
 			return (String) VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_CONSULTE_APPRENANT);
 		} 
-		
+
 		return null;
 	}
-	
+
 	public void setDossierConsulte(String codeApprenant) {
 		VaadinSession.getCurrent().setAttribute(Utils.DOSSIER_CONSULTE_APPRENANT, codeApprenant);
 	}
@@ -85,7 +89,7 @@ public class SessionController {
 	public void setDossier(ApprenantEtInscriptions dossier) {
 		VaadinSession.getCurrent().setAttribute(Utils.DOSSIER_APPRENANT, dossier);
 	}
-	
+
 	/**
 	 * Met à jour les informations sur le dossier si nécessaire
 	 */
@@ -103,8 +107,8 @@ public class SessionController {
 	}
 
 
-	
 
-	
+
+
 
 }
