@@ -21,7 +21,6 @@ package fr.univlorraine.mondossierweb.ui.layout;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Component;
 
@@ -43,11 +42,6 @@ import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 @SuppressWarnings("serial")
 public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 
-	//@Value("${logo.light.src}")
-	private transient String srcLogo;
-	//@Value("${logo.light.src}")
-	private transient String srcLogoDark;
-
 	@Autowired
 	private transient CurrentUiService currentUiService;
 	@Autowired
@@ -55,16 +49,17 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 	@Autowired
 	private transient ConfigController configController;
 	
-	private HorizontalLayout titleLayout = new HorizontalLayout();
 
+	private transient String srcLogoDark;
+	
+	private HorizontalLayout titleLayout = new HorizontalLayout();
 	private final Image logo = new Image();
 
-	private void initParameters() {
-		srcLogo = configController.getUnivLogoPath();
-	}
+
 	@PostConstruct
 	private void init() {
-		initParameters();
+		String srcLogo = configController.getUnivLogoPath();
+		
 		setAlignItems(Alignment.END);
 		getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
 		getStyle().set("height", "3.75em");

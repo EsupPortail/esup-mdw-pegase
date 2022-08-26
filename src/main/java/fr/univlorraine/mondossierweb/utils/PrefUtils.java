@@ -27,6 +27,10 @@ public final class PrefUtils {
 	public static final String DARK_MODE = "DARK_MODE";
 	public static final String HIDE_WELCOME_MESSAGE = "HIDE_WELCOME_MESSAGE ";
 
+	private PrefUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+	
 	public static Boolean getBooleanValue(String valeur) {
 		return (valeur != null && valeur.equalsIgnoreCase("true"));	
 	}

@@ -85,6 +85,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final Integer PEGASE_ACCESS_TOKEN_ID = 2;
 	private static final Integer PEGASE_API_ID = 3;
 	private static final Integer PEGASE_PARAM = 4;
+	private static final String PARAMETRES_BUTTON_SYNC = "parametres.button-sync";
 	@Autowired
 	private transient PreferencesService prefService;
 	@Autowired
@@ -249,10 +250,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 		//S'il s'agit de la catégorie LDAP
 		if(categorieId.equals(LDAP_ID)) {
-			buttonSync.setText(getTranslation("parametres.button-sync"));
-			buttonSync.addClickListener(e -> {
-				syncServiceConfig(LdapService.class.getName(),"refreshParameters");
-			});
+			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
+			buttonSync.addClickListener(e -> syncServiceConfig(LdapService.class.getName(),"refreshParameters"));
 			layout.add(syncButtonLayout);
 		}
 		//S'il s'agit de la catégorie Pégase Access-token
@@ -275,7 +274,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			});
 			layout.add(testButtonLayout);
 
-			buttonSync.setText(getTranslation("parametres.button-sync"));
+			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
 			buttonSync.addClickListener(e -> syncServiceConfig(AccessTokenService.class.getName(), "refreshParameters"));
 			layout.add(syncButtonLayout);
 		}
@@ -308,7 +307,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}
 				try {
 					// teste api COC
-					if(pegaseService.getNotes(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest(), pegaseService.getCodeCheminTest()) != null) {
+					if(!pegaseService.getNotes(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest(), pegaseService.getCodeCheminTest()).isEmpty()) {
 						Utils.notifierSucces(getTranslation("api-coc.ok", pegaseService.getCodeApprenantTest()));
 					} else {
 						Utils.notifierAnomalie(getTranslation("api-coc.error", pegaseService.getCodeApprenantTest()));
@@ -329,14 +328,14 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			});
 			layout.add(testButtonLayout);
 
-			buttonSync.setText(getTranslation("parametres.button-sync"));
+			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
 			buttonSync.addClickListener(e -> syncServiceConfig(PegaseService.class.getName(), "refreshApiParameters"));
 			layout.add(syncButtonLayout);
 		}
 
 		//S'il s'agit de la catégorie LDAP
 		if(categorieId.equals(PEGASE_PARAM)) {
-			buttonSync.setText(getTranslation("parametres.button-sync"));
+			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
 			buttonSync.addClickListener(e -> syncServiceConfig(PegaseService.class.getName(), "refreshPegaseParameters"));
 			layout.add(syncButtonLayout);
 		}

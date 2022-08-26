@@ -79,7 +79,7 @@ public class TestPegaseService {
 	
 	/** Teste la méthode getCursus. */
 	@Test
-	public void testGetCursus() {
+	void testGetCursus() {
 		log.debug("Test PegaseService getCursus");
 		List<List<ObjetMaquetteExtension>> cursus = pegaseService.getCursus(CODE_APPRENANT_TEST, PERIODE_CURSUS_TEST);
 		log.debug("Cursus : {}",cursus);
@@ -89,7 +89,7 @@ public class TestPegaseService {
 	
 	/** Teste la méthode getNotes. */
 	@Test
-	public void testGetNotes() {
+	void testGetNotes() {
 		log.debug("Test PegaseService getNotes");
 		List<Chemin> notes = pegaseService.getNotes(CODE_APPRENANT_TEST,PERIODE_NOTES_TEST , CHEMIN_NOTES_FORMATE);
 		log.debug("Notes : {}",notes);
@@ -99,7 +99,7 @@ public class TestPegaseService {
 	
 	/** Teste la méthode recupererDossierApprenant. */
 	@Test
-	public void testRecupererDossierApprenant() {
+	void testRecupererDossierApprenant() {
 		log.debug("Test PegaseService recupererDossierApprenant");
 		ApprenantEtInscriptions dossier = pegaseService.recupererDossierApprenant(CODE_APPRENANT_TEST);
 		log.debug("Dossier : {}",dossier);

@@ -31,6 +31,10 @@ import fr.univlorraine.mondossierweb.ui.component.TextLabel;
  * @author Charlie Dubois
  */
 public final class CmpUtils {
+	
+	private CmpUtils() {
+		throw new IllegalStateException("Utility class");
+	}
 
 	public static void formatTextField(TextField tf) {
 		tf.getStyle().set(CSSColorUtils.MARGIN, "0em");

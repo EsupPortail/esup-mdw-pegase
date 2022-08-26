@@ -47,8 +47,8 @@ import reactor.core.publisher.UnicastProcessor;
 public class UiService implements VaadinServiceInitListener {
 
 	/* Événements UIs */
-	private final UnicastProcessor<List<UiInfo>> uiInfosProcessor = UnicastProcessor.create();
-	private final FluxSink<List<UiInfo>> uiInfosSink = uiInfosProcessor.sink(OverflowStrategy.LATEST);
+	private final transient UnicastProcessor<List<UiInfo>> uiInfosProcessor = UnicastProcessor.create();
+	private final transient FluxSink<List<UiInfo>> uiInfosSink = uiInfosProcessor.sink(OverflowStrategy.LATEST);
 	@Getter
 	private final transient Flux<List<UiInfo>> uiInfosFlux = uiInfosProcessor.defaultIfEmpty(List.of()).replay(1).autoConnect();
 

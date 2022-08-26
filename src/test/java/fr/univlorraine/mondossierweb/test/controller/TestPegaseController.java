@@ -110,7 +110,7 @@ public class TestPegaseController {
 	
 	/** Teste la méthode getCursus. */
 	@Test
-	public void testGetCursus() {
+	void testGetCursus() {
 		log.debug("Test PegaseController getCursus");
 		given(pegaseService.getCursus(anyString(), anyString())).willReturn(maquette1);
 		List<ObjetMaquetteDTO> cursus = pegaseController.getCursus(CODE_APPRENANT_TEST,CHEMIN_CURSUS_NON_FORMATE,PERIODE_CURSUS_TEST);		
@@ -120,7 +120,7 @@ public class TestPegaseController {
 	
 	/** Teste la méthode getCursus. */
 	@Test
-	public void testGetNotes() {
+	void testGetNotes() {
 		log.debug("Test PegaseController getNotes");
 		given(pegaseService.getNotes(anyString(), anyString() , anyString())).willReturn(notes1);
 		List<CheminDTO> notes = pegaseController.getNotes(CODE_APPRENANT_TEST,CHEMIN_NOTES_NON_FORMATE,PERIODE_NOTES_TEST, true);

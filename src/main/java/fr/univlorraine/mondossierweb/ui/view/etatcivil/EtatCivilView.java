@@ -65,7 +65,6 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	private transient SecurityService securityService;
 	@Autowired
 	private transient SessionController etudiantController;
-
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter

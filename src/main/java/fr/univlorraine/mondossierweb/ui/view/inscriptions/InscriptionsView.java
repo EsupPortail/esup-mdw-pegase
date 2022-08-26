@@ -22,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -709,12 +708,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		arbo.addComponentHierarchyColumn(this::getObjetCursusLibelle).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
 		arbo.addComponentColumn(this::getObjetCursusDetails).setFlexGrow(0);
 		arbo.expandRecursively(listObj, 10);
+		arbo.setAllRowsVisible(false);
 		// si écran de petite taille
 		if( windowWidth<=800) {
-			arbo.setHeightByRows(false);
 			cursusLayout.setSizeFull();
-		}else {
-			arbo.setHeightByRows(false);
 		}
 		arbo.setWidthFull();
 		cursusLayout.add(arbo);
@@ -742,12 +739,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			arbo.addClassName("mdw-small-grid");
 		}
 		arbo.expandRecursively(listObj, 10);
+		arbo.setAllRowsVisible(false);
 		// si écran de petite taille
 		if( windowWidth<=800) {
-			arbo.setHeightByRows(false);
 			notesLayout.setSizeFull();
-		}else {
-			arbo.setHeightByRows(false);
 		}
 		arbo.setWidthFull();
 		notesLayout.add(arbo);
@@ -1081,23 +1076,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			}
 			if(o.getObjet().getCoefficientSession2()!=null) {
 				return o.getObjet().getCoefficientSession2();
-			}
-		}
-		return null;
-	}
-
-
-	// Retourne le dernier résultat
-	private String getResultat(CheminDTO o) {
-		if(o!=null && o.getObjet()!=null) {
-			if(o.getObjet().getResultatFinal()!=null) {
-				return o.getObjet().getResultatFinal().getLibelleAffichage();
-			}
-			if(o.getObjet().getResultatSession2()!=null) {
-				return o.getObjet().getResultatSession2().getLibelleAffichage();
-			}
-			if(o.getObjet().getResultatSession1()!=null) {
-				return o.getObjet().getResultatSession1().getLibelleAffichage();
 			}
 		}
 		return null;

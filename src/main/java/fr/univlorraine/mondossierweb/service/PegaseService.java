@@ -302,7 +302,7 @@ public class PegaseService implements Serializable {
 				log.error("Erreur lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codeChemin, codePeriode, etablissement, e.getCode(), e.getMessage(), e.getResponseBody(), e);
 			}
 		}
-		return null;
+		return Collections.emptyList();
 
 	}
 

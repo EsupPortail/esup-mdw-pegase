@@ -79,8 +79,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 
 	private static final String MAIL = "mail_";
 
-	private static final String CONTACT = "contact_";
-
 	private static final String NOM_ADRESSE = "nomAdresse_";
 
 	private static final String PAYS_ADRESSE = "paysAdresse_";
@@ -107,8 +105,9 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	protected transient LdapService ldapService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
-	//@Value("${etudiant.mail.ldap}")
+
 	private transient Boolean afficherMailLdap;
+	
 	@Getter
 	private String pageTitle = "";
 	@Getter
@@ -225,6 +224,8 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 			case COMMUNE_ADRESSE :
 				t.setLabel(getTranslation("adresse.commune"));
 				break;
+			default:
+				break;
 
 			}
 		}
@@ -296,6 +297,8 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 					} else {
 						ajouterInfoContactPerso(c);
 					}
+					break;
+				default:
 					break;
 				}
 
@@ -384,76 +387,10 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		case Utils.CANAL_CONTACT_TEL :
 			ContactTelephoneComplet ctc= (ContactTelephoneComplet) c;
 			return ctc.getTelephone();
+		default:
+			break;
 		}
 		return null;
-	}
-
-
-	/**
-	 * Ancienne méthode d'ajout d'un mail de contact dans une carte dédiée
-	 * @param c
-	 * @param n
-	 */
-	private void ajouterMailContact(ContactComplet c, int n) {
-
-		ContactMelComplet cmc= (ContactMelComplet) c;
-
-		Card mailCard = new Card(VaadinIcon.ENVELOPE_O.create(),"", true);
-		mailCard.getTitre().setText(cmc.getDemandeDeContact().getLibelleAffichage());
-
-		FormLayout mailLayout = new FormLayout();
-		mailLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
-		mailCard.addAlt(mailLayout);
-
-		TextLabel nomMail=new TextLabel();
-		nomMail.setId(NOM_MAIL + n);
-		mailLayout.add(nomMail);
-		CmpUtils.valueAndVisibleIfNotNull(nomMail, cmc.getProprietaire());
-		CmpUtils.setModerateTextLabel(nomMail);
-
-
-		TextLabel mail=new TextLabel();
-		mail.setId(MAIL + n);
-		mailLayout.add(mail);
-		CmpUtils.valueAndVisibleIfNotNull(mail,cmc.getMail());
-		CmpUtils.setModerateTextLabel(mail);
-
-		coordPersoLayout.addComponentAsFirst(mailCard);
-
-		mailCard.displayAlt();
-	}
-
-	/**
-	 * Ancienne méthode d'ajout d'une tel de contact dans une carte dédiée
-	 * @param c
-	 * @param n
-	 */
-	private void ajouterTelContact(ContactComplet c,int n) {
-		ContactTelephoneComplet ctc= (ContactTelephoneComplet) c;
-
-		Card telCard = new Card(VaadinIcon.PHONE.create(),"", true);
-		telCard.getTitre().setText(ctc.getDemandeDeContact().getLibelleAffichage());
-
-		FormLayout telLayout = new FormLayout();
-		telLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
-		telCard.addAlt(telLayout);
-
-
-		TextLabel nomTel=new TextLabel();
-		nomTel.setId(NOM_TEL + n);
-		telLayout.add(nomTel);
-		CmpUtils.valueAndVisibleIfNotNull(nomTel,ctc.getProprietaire());
-		CmpUtils.setModerateTextLabel(nomTel);
-
-		TextLabel tel=new TextLabel();
-		tel.setId(TEL + n);
-		telLayout.add(tel);
-		CmpUtils.valueAndVisibleIfNotNull(tel,ctc.getTelephone());
-		CmpUtils.setModerateTextLabel(tel);
-
-		coordPersoLayout.addComponentAsFirst(telCard);
-
-		telCard.displayAlt();
 	}
 
 	private void ajouterAdresse(ContactComplet c,int n) {
