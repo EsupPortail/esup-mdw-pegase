@@ -42,7 +42,6 @@ import fr.univlorraine.pegase.api.insgestion.PiecesApi;
 import fr.univlorraine.pegase.api.pai.PaiApi;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
 import fr.univlorraine.pegase.model.coc.Chemin;
-import fr.univlorraine.pegase.model.insgestion.Apprenant;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.Inscriptions;
 import fr.univlorraine.pegase.model.insgestion.StatutInscriptionVoeu;
@@ -279,7 +278,7 @@ public class PegaseService implements Serializable {
 				log.error("Erreur lors de l'appel à la methode API : lireArbreCursusDesInscriptions pour le code apprenant : {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codePeriode, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
 			}
 		}
-		return null;
+		return Collections.emptyList();
 
 	}
 

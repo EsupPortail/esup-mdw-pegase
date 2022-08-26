@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 
@@ -306,7 +305,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 				String mail = ldapService.getStudentMailByCodeApprenant(apprenant.getCode());
 				// Si on a récupéré un mail
 				if(StringUtils.hasText(mail)) {
-					cpt++;
 					// Création d'un contact correspondant au mail établissement
 					ContactMelComplet c = new ContactMelComplet();
 					DemandeDeContactSimple dmc = new DemandeDeContactSimple();

@@ -298,7 +298,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}
 				try {
 					// teste api CHC
-					if(pegaseService.getCursus(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest()) != null) {
+					if(!pegaseService.getCursus(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest()).isEmpty()) {
 						Utils.notifierSucces(getTranslation("api-chc.ok", pegaseService.getCodeApprenantTest()));
 					} else {
 						Utils.notifierAnomalie(getTranslation("api-chc.error", pegaseService.getCodeApprenantTest()));
