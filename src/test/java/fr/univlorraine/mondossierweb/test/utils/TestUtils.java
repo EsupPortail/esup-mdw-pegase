@@ -37,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 * @author Charlie Dubois */
 @ExtendWith(SpringExtension.class)
 @Slf4j
-public class TestUtils {
+class TestUtils {
 	
 	/** Teste de la class Utils. */
 	@Test
