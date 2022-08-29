@@ -54,6 +54,7 @@ import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCate
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
 import fr.univlorraine.mondossierweb.service.AccessTokenService;
 import fr.univlorraine.mondossierweb.service.LdapService;
+import fr.univlorraine.mondossierweb.service.ParametrageService;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.mondossierweb.service.PreferencesService;
 import fr.univlorraine.mondossierweb.service.SecurityService;
@@ -81,7 +82,9 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final Integer PEGASE_ACCESS_TOKEN_ID = 2;
 	private static final Integer PEGASE_API_ID = 3;
 	private static final Integer PEGASE_PARAM = 4;
+	private static final Integer ADMIN_PARAM = 8;
 	private static final String PARAMETRES_BUTTON_SYNC = "parametres.button-sync";
+
 	@Autowired
 	private transient PreferencesService prefService;
 	@Autowired
@@ -90,6 +93,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private transient AccessTokenService accessTokenService;
 	@Autowired
 	private transient PegaseService pegaseService;
+	@Autowired
+	private transient ParametrageService parametrageService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 
@@ -113,7 +118,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	@PostConstruct
 	private void init() {
 		setSizeFull();
-		
+
 		parametresLayout.setWidthFull();
 		parametresLayout.getStyle().set("max-width", "52em");
 		parametresLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
@@ -329,10 +334,17 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			layout.add(syncButtonLayout);
 		}
 
-		//S'il s'agit de la catégorie LDAP
+		//S'il s'agit de la catégorie paramétrage Pégase
 		if(categorieId.equals(PEGASE_PARAM)) {
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
 			buttonSync.addClickListener(e -> syncServiceConfig(PegaseService.class.getName(), "refreshPegaseParameters"));
+			layout.add(syncButtonLayout);
+		}
+
+		//S'il s'agit de la catégorie Administration
+		if(categorieId.equals(ADMIN_PARAM)) {
+			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
+			buttonSync.addClickListener(e -> syncServiceConfig(ParametrageService.class.getName(), "refreshParameters"));
 			layout.add(syncButtonLayout);
 		}
 	}

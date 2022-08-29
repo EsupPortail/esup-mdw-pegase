@@ -206,7 +206,7 @@ VALUES ('HELP_URL', 'URL du helpdesk', NULL, 'https://helpdesk.univ.fr', '7', 'S
 
 -- paramètres d'administration
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('SHOW_SQL', 'true pour tracer les requêtes SQL dans les logs de l''application', NULL, 'true', '8', 'BOOLEAN', 1);
+VALUES ('SHOW_SQL', 'true pour tracer les requêtes SQL dans les logs de l''application', NULL, 'false', '8', 'BOOLEAN', 1);
 
 
 -- 
