@@ -75,6 +75,12 @@ public class ConfigController {
 	private static final String ETUDIANT_MAIL_LDAP = "ETUDIANT_MAIL_LDAP";
 	
 	private static final String ETUDIANT_RESUME = "ETUDIANT_RESUME";
+	
+	private static final String BTN_CERT = "BTN_CERT";
+	
+	private static final String BTN_ATTEST_PAI = "BTN_ATTEST_PAI";
+	
+	private static final String SHOW_SQL = "SHOW_SQL";
 
 	private static final String PEGASE_ETAB = "PEGASE_ETAB";
 
@@ -111,6 +117,15 @@ public class ConfigController {
 	}
 	public boolean isEtudiantResumeActif() {
 		return getBooleanValueForParameter(ETUDIANT_RESUME);
+	}
+	public boolean isCertificatActif() {
+		return getBooleanValueForParameter(BTN_CERT);
+	}
+	public boolean isAttestationPaiementActif() {
+		return getBooleanValueForParameter(BTN_ATTEST_PAI);
+	}
+	public boolean isShowSqlActif() {
+		return getBooleanValueForParameter(SHOW_SQL);
 	}
 	public boolean isAccesEtudiantActif() {
 		return getBooleanValueForParameter(ACCES_ETUDIANT_ACTIF);

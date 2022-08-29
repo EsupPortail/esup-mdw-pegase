@@ -99,7 +99,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	//@Value("${notes.coeff}")
 	private transient Boolean avecCoeff;
-	
+
 	//@Value("${notes.ects}")
 	private transient Boolean avecECTS;
 
@@ -108,7 +108,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	//@Value("${inscription.detail}")
 	private transient String afficherDetailInscription;
-	
+
 	//@Value("${cursus.factultatif.italique}")
 	private transient Boolean facItalique;
 
@@ -136,7 +136,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	// label d'erreur
 	private final Label errorLabel = new Label();
-		
+
 	transient List<TextLabel> listTextLabelFormation = new LinkedList<> ();
 	transient List<TextLabel> listTextLabelPeriode = new LinkedList<> ();
 	transient List<TextLabel> listTextLabelRegime = new LinkedList<> ();
@@ -154,11 +154,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 	@PostConstruct
 	public void init() {
-		
+
 		initParameters();
-		
+
 		setSizeFull();
-	
+
 		inscriptionsLayout.setWidthFull();
 		inscriptionsLayout.getStyle().set("max-width", "52em");
 		inscriptionsLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
@@ -282,7 +282,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		if(dossier!=null && dossier.getInscriptions() != null && !dossier.getInscriptions() .isEmpty()) {
 			//On trie les inscriptions sur l'année universitaire de la période, par ordre décroissant
 			dossier.getInscriptions().sort((InscriptionComplete i1, InscriptionComplete i2) ->
-					i2.getCible().getPeriode().getAnneeUniversitaire().compareTo(i1.getCible().getPeriode().getAnneeUniversitaire()));
+			i2.getCible().getPeriode().getAnneeUniversitaire().compareTo(i1.getCible().getPeriode().getAnneeUniversitaire()));
 			// Pour chaque inscription
 			for(InscriptionComplete inscription : dossier.getInscriptions() ) {
 				boolean inscriptionValide = false;
@@ -365,39 +365,41 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					listTextLabelPieces.add(pieces);
 
 
-					// Ajout bouton certificat de scolarité
-					Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
-					certButton.setWidth("15em");
-					certButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, "#343a40");
-					certButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
 					Anchor exportCertificatAnchor = new Anchor();
-					exportCertificatAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
-					exportCertificatAnchor.add(certButton);
-					exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
-						() -> exportService.getCertificat(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription))));
-					exportCertificatAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
-					exportCertificatAnchor.setTarget("_blank");
+					if(configController.isCertificatActif()) {
+						// Ajout bouton certificat de scolarité
+						Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
+						certButton.setWidth("15em");
+						certButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, "#343a40");
+						certButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
+						exportCertificatAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
+						exportCertificatAnchor.add(certButton);
+						exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
+							() -> exportService.getCertificat(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription))));
+						exportCertificatAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
+						exportCertificatAnchor.setTarget("_blank");
 
-					// Ajout à la liste des boutons
-					listButtonCertificat.add(certButton);
+						// Ajout à la liste des boutons
+						listButtonCertificat.add(certButton);
+					}
 
-
-					// Ajout bouton attestation de paiement
-					Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
-					attestationButton.setWidth("15em");
-					attestationButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, "#343a40");
-					attestationButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
 					Anchor exportAttestationAnchor = new Anchor();
-					exportAttestationAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
-					exportAttestationAnchor.add(attestationButton);
-					exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
-						() -> exportService.getAttestation(dossier.getApprenant().getCode(),  Utils.getCodePeriode(inscription))));
-					exportAttestationAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
-					exportAttestationAnchor.setTarget("_blank");
+					if(configController.isAttestationPaiementActif()) {
+						// Ajout bouton attestation de paiement
+						Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
+						attestationButton.setWidth("15em");
+						attestationButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, "#343a40");
+						attestationButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
+						exportAttestationAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
+						exportAttestationAnchor.add(attestationButton);
+						exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
+							() -> exportService.getAttestation(dossier.getApprenant().getCode(),  Utils.getCodePeriode(inscription))));
+						exportAttestationAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
+						exportAttestationAnchor.setTarget("_blank");
 
-					// Ajout à la liste des boutons
-					listButtonAttestation.add(attestationButton);
-
+						// Ajout à la liste des boutons
+						listButtonAttestation.add(attestationButton);
+					}
 
 					// Ajout bouton photo
 					Button photoButton = new Button("", VaadinIcon.USER.create());
@@ -478,21 +480,25 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					buttonExportLayout.setSizeUndefined();
 					buttonExportLayout.getStyle().set(CSSColorUtils.PADDING, "0");
 					buttonExportLayout.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-					exportCertificatAnchor.setMinWidth("15em");
-					exportCertificatAnchor.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-					exportCertificatAnchor.getStyle().set(CSSColorUtils.PADDING, "1em");
-					buttonExportLayout.add(exportCertificatAnchor);
-					exportAttestationAnchor.setMinWidth("15em");
-					exportAttestationAnchor.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-					exportAttestationAnchor.getStyle().set(CSSColorUtils.PADDING, "1em");
-					buttonExportLayout.add(exportAttestationAnchor);
 					buttonExportLayout.setFlexWrap(FlexWrap.WRAP);
-					buttonExportLayout.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
-					if(inscriptionEnCours && !inscriptionValide) {
-						exportCertificatAnchor.setVisible(false);
+					
+					if(configController.isCertificatActif()) {
+						setAnchorStyle(exportCertificatAnchor);
+						buttonExportLayout.add(exportCertificatAnchor);
+						if(inscriptionEnCours && !inscriptionValide) {
+							exportCertificatAnchor.setVisible(false);
+						}
 					}
-					if(inscriptionEnCours && !inscriptionPayee) {
-						exportAttestationAnchor.setVisible(false);
+					
+					if(configController.isAttestationPaiementActif()) {
+						setAnchorStyle(exportAttestationAnchor);
+						buttonExportLayout.add(exportAttestationAnchor);
+						if(inscriptionEnCours && !inscriptionPayee) {
+							exportAttestationAnchor.setVisible(false);
+						}
+					}
+					if(configController.isCertificatActif() && configController.isAttestationPaiementActif()) {
+						buttonExportLayout.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
 					}
 
 					flexInfoAndPhotoLayout.getStyle().set(CSSColorUtils.BORDER_TOP, CSSColorUtils.SOLID_LIGHTGRAY);
@@ -669,7 +675,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					cursusButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 					notesButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 					buttonLayout2.setFlexWrap(FlexWrap.WRAP);
-					buttonLayout2.setFlexBasis("15em", exportCertificatAnchor,exportAttestationAnchor);
 
 
 					insCard.addAlt(verticalLayout);
@@ -682,6 +687,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		updateStyle();
 	}
 
+
+
+	private void setAnchorStyle(Anchor anchor) {
+		anchor.setMinWidth("15em");
+		anchor.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+		anchor.getStyle().set(CSSColorUtils.PADDING, "1em");
+	}
 
 
 	private String formatEtat(String value) {
