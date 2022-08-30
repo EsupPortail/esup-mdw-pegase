@@ -184,7 +184,7 @@ VALUES ('NOTE_ECTS', 'Afficher les crédits ECTS avec les résultats', NULL, 'tr
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('NOTE_CONTROLE', 'Afficher les contrôles avec les résultats', NULL, 'false', '6', 'BOOLEAN', 6);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('INSCRIPTION_DETAIL', 'Afficher le détail de l''inscription (statut, paiement, PJ, photo) : true, false, button', NULL, 'button', '6', 'LIST_STRING', 7);
+VALUES ('INSCRIPTION_DETAIL', 'Afficher le détail de l''inscription (statut, paiement, PJ, photo)', NULL, 'button', '6', 'LIST_STRING', 7);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('UNIV_LOGO_PATH', 'Path vers le logo de l''université (à placer dans le répertoire ''images'')', NULL, './images/logo.png', '6', 'STRING', 8);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
@@ -192,13 +192,13 @@ VALUES ('CURSUS_FAC_ITALIQUE', 'Afficher les objets de formation non obligatoire
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('INSCRIPTION_STATUTS', 'Statuts des inscriptions à afficher séparés par des virgules', NULL, 'valide', '6', 'STRING', 10);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('INFO_CONNEXION', 'true si on veut afficher une pop-up d''info à la connexion sur l''application', NULL, 'true', '6', 'BOOLEAN', 11);
+VALUES ('INFO_CONNEXION', 'Afficher une pop-up d''info à la connexion sur l''application', NULL, 'true', '6', 'BOOLEAN', 11);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('INFO_CONNEXION_PREF', 'true si on veut donner la possibilité à l''utilisateur de masquer la pop-up d''info de connexion via case à cocher', NULL, 'true', '6', 'BOOLEAN', 12);
+VALUES ('INFO_CONNEXION_PREF', 'Donner la possibilité à l''utilisateur de masquer la pop-up d''info de connexion via case à cocher', NULL, 'true', '6', 'BOOLEAN', 12);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('ETUDIANT_MAIL_LDAP', 'true si on veut afficher le mail extrait du ldap', NULL, 'true', '6', 'BOOLEAN', 13);
+VALUES ('ETUDIANT_MAIL_LDAP', 'Afficher le mail extrait du ldap', NULL, 'true', '6', 'BOOLEAN', 13);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('ETUDIANT_RESUME', 'true si on veut afficher le nom/prenom et le numéro de dossier au dessus du menu latéral', NULL, 'true', '6', 'BOOLEAN', 14);
+VALUES ('ETUDIANT_RESUME', 'Afficher le nom/prenom et le numéro de dossier au dessus du menu latéral', NULL, 'true', '6', 'BOOLEAN', 14);
 
 -- paramètres d'aide
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
@@ -208,7 +208,7 @@ VALUES ('HELP_URL', 'URL du helpdesk', NULL, 'https://helpdesk.univ.fr', '7', 'S
 
 -- paramètres d'administration
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('SHOW_SQL', 'true pour tracer les requêtes SQL dans les logs de l''application', NULL, 'false', '8', 'BOOLEAN', 1);
+VALUES ('SHOW_SQL', 'Tracer les requêtes SQL dans les logs de l''application', NULL, 'false', '8', 'BOOLEAN', 1);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('SMTP_HOST', 'SMTP Host', NULL, 'smtp.univ.fr', '8', 'STRING', 2);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
