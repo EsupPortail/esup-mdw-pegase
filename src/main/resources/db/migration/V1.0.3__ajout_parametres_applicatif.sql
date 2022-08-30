@@ -207,7 +207,18 @@ VALUES ('HELP_URL', 'URL du helpdesk', NULL, 'https://helpdesk.univ.fr', '7', 'S
 -- paramètres d'administration
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('SHOW_SQL', 'true pour tracer les requêtes SQL dans les logs de l''application', NULL, 'false', '8', 'BOOLEAN', 1);
-
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('SMTP_HOST', 'SMTP Host', NULL, 'smtp.univ.fr', '8', 'STRING', 2);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('SMTP_PORT', 'SMTP Port', NULL, '25', '8', 'STRING', 3);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('SMTP_USERNAME', 'SMTP Username', NULL, '', '8', 'STRING', 4);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('SMTP_PASSWORD', 'SMTP Password', NULL, '', '8', 'SECRET_STRING', 5);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('SMTP_FROM', 'SMTP From', NULL, 'noreply@univ.fr', '8', 'STRING', 6);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('LOG_MAIL_TO', 'Destinataire des mails d''erreur', NULL, 'mdw.admin@univ.fr', '8', 'STRING', 7);
 
 -- 
 -- Insertion des valeurs

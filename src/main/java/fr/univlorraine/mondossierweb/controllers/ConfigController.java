@@ -101,6 +101,18 @@ public class ConfigController {
 	private static final String PEGASE_TEST_APPRENANT = "PEGASE_TEST_APPRENANT";
 	
 	private static final String PEGASE_TEST_CHEMIN = "PEGASE_TEST_CHEMIN";
+	
+	private static final String SMTP_HOST = "SMTP_HOST";
+	
+	private static final String SMTP_PORT = "SMTP_PORT";
+	
+	private static final String SMTP_USERNAME = "SMTP_USERNAME";
+	
+	private static final String SMTP_PASSWORD = "SMTP_PASSWORD";
+	
+	private static final String SMTP_FROM = "SMTP_FROM";
+	
+	private static final String LOG_MAIL_TO = "LOG_MAIL_TO";
 
 
 	@Autowired
@@ -220,7 +232,24 @@ public class ConfigController {
 	public String getPegaseTestChemin() {
 		return getStringValueForParameter(PEGASE_TEST_CHEMIN);
 	}
-	
+	public String getSmtpHost() {
+		return getStringValueForParameter(SMTP_HOST);
+	}
+	public String getSmtpPort() {
+		return getStringValueForParameter(SMTP_PORT);
+	}
+	public String getSmtpUsername() {
+		return getStringValueForParameter(SMTP_USERNAME);
+	}
+	public String getSmtpPassword() {
+		return getSecretValueForParameter(SMTP_PASSWORD);
+	}
+	public String getSmtpFrom() {
+		return getStringValueForParameter(SMTP_FROM);
+	}
+	public String getLogMailTo() {
+		return getStringValueForParameter(LOG_MAIL_TO);
+	}
 	
 	
 	/**

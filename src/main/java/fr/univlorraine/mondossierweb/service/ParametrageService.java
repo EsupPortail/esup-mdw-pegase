@@ -22,11 +22,15 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.stereotype.Service;
 
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.net.SMTPAppender;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,7 +59,43 @@ public class ParametrageService implements Serializable {
 
 	public void refreshParameters() {
 		refreshLogParameters();
+		refreshSmtpParameters();
 	}
+
+	public void refreshSmtpParameters() {
+		LoggerContext logCtx  = (LoggerContext) LoggerFactory.getILoggerFactory();
+		Logger logger = logCtx.getLogger(Logger.ROOT_LOGGER_NAME);
+		SMTPAppender mailAppender = (SMTPAppender) logger.getAppender("MAIL");
+		logMailAppender(mailAppender);
+		mailAppender.setSmtpHost(configController.getSmtpHost());
+		mailAppender.setSmtpPort(Integer. valueOf(configController.getSmtpPort()));
+		mailAppender.setUsername(configController.getSmtpUsername());
+		mailAppender.setPassword(configController.getSmtpPassword());
+		mailAppender.setFrom(configController.getSmtpFrom());
+		mailAppender.getToList().clear();
+		String mails = configController.getLogMailTo();
+		if(mails !=null && mails.contains(";")) {
+			String[] tmails = mails.split(";");
+			for (String m : tmails) {
+				mailAppender.addTo(m);
+			}
+		} else {
+			mailAppender.addTo(configController.getLogMailTo());
+		}
+		mailAppender.stop();
+		mailAppender.start();
+		logMailAppender(mailAppender);
+	}
+	
+	private void logMailAppender(SMTPAppender mailAppender) {
+		log.info("** MailAppender : {}", mailAppender.getClass());
+		log.info("**** smtp host : {}", mailAppender.getSmtpHost());
+		log.info("**** smtp port : {}", mailAppender.getSmtpPort());
+		log.info("**** username : {}", mailAppender.getUsername());
+		log.info("**** from : {}", mailAppender.getFrom());
+		log.info("**** to : {}", mailAppender.getToAsListOfString());
+	}
+
 
 	public void refreshLogParameters() {
 		setShowSql();
