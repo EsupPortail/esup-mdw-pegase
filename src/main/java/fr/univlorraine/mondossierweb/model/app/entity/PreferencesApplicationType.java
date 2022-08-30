@@ -44,7 +44,7 @@ public class PreferencesApplicationType implements Serializable {
 	@Column(name="SECRET")
 	private boolean secret;
 	
-	@OneToMany(mappedBy = "categorie", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
 	private List<PreferencesApplication> preferencesApplication;
 	
 }

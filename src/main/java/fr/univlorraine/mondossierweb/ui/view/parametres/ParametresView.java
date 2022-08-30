@@ -308,7 +308,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}
 				try {
 					// teste api COC
-					if(!pegaseService.getNotes(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest(), pegaseService.getCodeCheminTest()).isEmpty()) {
+					if(pegaseService.getNotes(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest(), pegaseService.getCodeCheminTest()) != null) {
 						Utils.notifierSucces(getTranslation("api-coc.ok", pegaseService.getCodeApprenantTest()));
 					} else {
 						Utils.notifierAnomalie(getTranslation("api-coc.error", pegaseService.getCodeApprenantTest()));

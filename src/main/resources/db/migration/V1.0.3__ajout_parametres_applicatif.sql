@@ -80,7 +80,9 @@ ALTER TABLE preferences_application_valeurs
 -- Contraintes pour la table preferences_application
 --
 ALTER TABLE preferences_application
-  ADD CONSTRAINT FK_TYPE_PREF FOREIGN KEY (type_id) REFERENCES preferences_application_type (type_id),
+  ADD CONSTRAINT FK_TYPE_PREF FOREIGN KEY (type_id) REFERENCES preferences_application_type (type_id);
+
+ALTER TABLE preferences_application
   ADD CONSTRAINT FK_CAT_PREF FOREIGN KEY (cat_id) REFERENCES preferences_application_categorie (cat_id);
 
 --
