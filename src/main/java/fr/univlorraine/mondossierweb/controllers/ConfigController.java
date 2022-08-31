@@ -114,6 +114,8 @@ public class ConfigController {
 	
 	private static final String LOG_MAIL_TO = "LOG_MAIL_TO";
 
+	private static final String ADMINS = "ADMINS";
+
 
 	@Autowired
 	private PreferencesService prefService;
@@ -250,6 +252,9 @@ public class ConfigController {
 	public String getLogMailTo() {
 		return getStringValueForParameter(LOG_MAIL_TO);
 	}
+	public String getAdmins() {
+		return getStringValueForParameter(ADMINS);
+	}
 	
 	
 	/**
@@ -278,8 +283,7 @@ public class ConfigController {
 	private boolean getBooleanValueForParameter(String parametre){
 		return prefService.getBooleanValue(prefService.getPreferences(parametre));
 	}
-
-
 	
+
 
 }

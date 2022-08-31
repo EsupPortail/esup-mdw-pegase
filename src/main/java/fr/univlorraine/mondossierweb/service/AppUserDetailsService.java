@@ -19,8 +19,11 @@
 package fr.univlorraine.mondossierweb.service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +35,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.server.VaadinSession;
 
@@ -49,13 +53,37 @@ public class AppUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	protected LdapService ldapService;
-	
+
 	@Autowired
 	private ConfigController configController;
 
 	@Value("${app.superadmins:}")
+	private List<String> initSuperAdmins;
+
+	@Value("${app.superadmins:}")
 	private List<String> superAdmins;
 
+
+	@PostConstruct
+	public void init() {
+		refreshParameters();
+	}
+
+	public void refreshParameters() {
+		superAdmins.clear();
+		superAdmins.addAll(initSuperAdmins);
+		String admins = configController.getAdmins();
+		if (StringUtils.hasText(admins)) {
+			if(admins.contains(";")) {
+				String[] tmails = admins.split(";");
+				superAdmins.addAll(Arrays.asList(tmails));
+			} else {
+				superAdmins.add(configController.getLogMailTo());
+			}
+		}
+		log.info("Admins : {}",superAdmins);
+	}
+	
 	@Transactional
 	@Override
 	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
@@ -96,10 +124,10 @@ public class AppUserDetailsService implements UserDetailsService {
 
 		// On renseigne l'attribut lastRole de l'utilisateur
 		utilisateur.setLastRole(utilisateur.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", ")));
-		
+
 		// Tracer l'accès dans un fichier de log
 		log.trace("Connexion de {} (login:{} - codeApprenant:{}) en tant que {}",utilisateur.getDisplayName(), utilisateur.getUsername(), utilisateur.getCodeEtudiant(), utilisateur.getLastRole());
-		
+
 		return utilisateur;
 	}
 

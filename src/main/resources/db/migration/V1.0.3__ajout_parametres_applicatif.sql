@@ -96,14 +96,15 @@ COMMIT;
 -- 
 -- Insertion des catégories
 -- 
-INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('1', 'LDAP', '1');
-INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('2', 'Pégase Access token', '2');
-INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('3', 'Pégase API', '3');
-INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('4', 'Pégase Paramétrage', '4');
-INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('5', 'Profils', '5');
-INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('6', 'Affichage', '6');
-INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('7', 'Aide', '7');
-INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('8', 'Administration', '8');
+INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('8', 'Administration', '1');
+INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('5', 'Profils', '2');
+INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('1', 'LDAP', '3');
+INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('2', 'Pégase Access token', '4');
+INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('3', 'Pégase API', '5');
+INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('4', 'Pégase Paramétrage', '6');
+INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('6', 'Affichage', '7');
+INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('7', 'Aide', '8');
+INSERT INTO preferences_application_categorie (cat_id, cat_desc, ordre) VALUES ('9', 'SMTP', '9');
 
 -- 
 -- Insertion des types
@@ -208,19 +209,23 @@ VALUES ('HELP_URL', 'URL du helpdesk', NULL, 'https://helpdesk.univ.fr', '7', 'S
 
 -- paramètres d'administration
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('SHOW_SQL', 'Tracer les requêtes SQL dans les logs de l''application', NULL, 'false', '8', 'BOOLEAN', 1);
+VALUES ('ADMINS', 'Logins des administrateurs supplémentaires de l''application (séparés par ;)', NULL, '', '8', 'STRING', 1);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('SMTP_HOST', 'SMTP Host', NULL, 'smtp.univ.fr', '8', 'STRING', 2);
+VALUES ('SHOW_SQL', 'Tracer les requêtes SQL dans les logs de l''application', NULL, 'false', '8', 'BOOLEAN', 2);
+
+-- paramètres SMTP
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('SMTP_PORT', 'SMTP Port', NULL, '25', '8', 'STRING', 3);
+VALUES ('SMTP_HOST', 'SMTP Host', NULL, 'smtp.univ.fr', '9', 'STRING', 1);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('SMTP_USERNAME', 'SMTP Username', NULL, '', '8', 'STRING', 4);
+VALUES ('SMTP_PORT', 'SMTP Port', NULL, '25', '9', 'STRING', 2);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('SMTP_PASSWORD', 'SMTP Password', NULL, '', '8', 'SECRET_STRING', 5);
+VALUES ('SMTP_USERNAME', 'SMTP Username', NULL, '', '9', 'STRING', 3);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('SMTP_FROM', 'SMTP From', NULL, 'noreply@univ.fr', '8', 'STRING', 6);
+VALUES ('SMTP_PASSWORD', 'SMTP Password', NULL, '', '9', 'SECRET_STRING', 4);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('LOG_MAIL_TO', 'Destinataire des mails d''erreur', NULL, 'mdw.admin@univ.fr', '8', 'STRING', 7);
+VALUES ('SMTP_FROM', 'SMTP From', NULL, 'noreply@univ.fr', '9', 'STRING', 5);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('LOG_MAIL_TO', 'Destinataires des mails d''erreur (séparés par ;)', NULL, 'mdw.admin@univ.fr', '9', 'STRING', 6);
 
 -- 
 -- Insertion des valeurs

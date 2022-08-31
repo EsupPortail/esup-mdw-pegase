@@ -53,6 +53,7 @@ import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCategorie;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
 import fr.univlorraine.mondossierweb.service.AccessTokenService;
+import fr.univlorraine.mondossierweb.service.AppUserDetailsService;
 import fr.univlorraine.mondossierweb.service.LdapService;
 import fr.univlorraine.mondossierweb.service.ParametrageService;
 import fr.univlorraine.mondossierweb.service.PegaseService;
@@ -83,6 +84,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final Integer PEGASE_API_ID = 3;
 	private static final Integer PEGASE_PARAM = 4;
 	private static final Integer ADMIN_PARAM = 8;
+	private static final Integer SMTP_PARAM = 9;
 	private static final String PARAMETRES_BUTTON_SYNC = "parametres.button-sync";
 
 	@Autowired
@@ -344,7 +346,19 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		//S'il s'agit de la catégorie Administration
 		if(categorieId.equals(ADMIN_PARAM)) {
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
-			buttonSync.addClickListener(e -> syncServiceConfig(ParametrageService.class.getName(), "refreshParameters"));
+			buttonSync.addClickListener(e -> {
+				syncServiceConfig(ParametrageService.class.getName(), "refreshLogParameters");
+				syncServiceConfig(AppUserDetailsService.class.getName(), "refreshParameters");
+			});
+			layout.add(syncButtonLayout);
+		}
+
+		//S'il s'agit de la catégorie SMTP
+		if(categorieId.equals(SMTP_PARAM)) {
+			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
+			buttonSync.addClickListener(e -> {
+				syncServiceConfig(ParametrageService.class.getName(), "refreshSmtpParameters");
+			});
 			layout.add(syncButtonLayout);
 		}
 	}
