@@ -189,7 +189,7 @@ VALUES ('NOTE_CONTROLE', 'Afficher les contrôles avec les résultats', NULL, 'f
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('INSCRIPTION_DETAIL', 'Afficher le détail de l''inscription (statut, paiement, PJ, photo)', NULL, 'button', '6', 'LIST_STRING', 7);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('UNIV_LOGO_IMG', 'Image du logo de l''Université (34px/34px)', NULL, NULL, '6', 'IMAGE', 9);
+VALUES ('UNIV_LOGO_IMG', 'Logo de l''Université (34px/34px)', NULL, NULL, '6', 'IMAGE', 9);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('CURSUS_FAC_ITALIQUE', 'Afficher les objets de formation non obligatoires du cursus en italique', NULL, 'true', '6', 'BOOLEAN', 10);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
