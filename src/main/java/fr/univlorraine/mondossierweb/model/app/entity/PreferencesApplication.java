@@ -27,6 +27,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -59,6 +60,10 @@ public class PreferencesApplication implements Serializable {
 	
 	@Column(name="ORDRE")
 	private Integer ordre;
+	
+	@Column(name="DATA")
+	@Lob
+	private byte[] data;
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name="CAT_ID" )

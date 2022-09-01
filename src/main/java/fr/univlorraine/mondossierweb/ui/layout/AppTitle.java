@@ -18,6 +18,8 @@
  */
 package fr.univlorraine.mondossierweb.ui.layout;
 
+import java.io.ByteArrayInputStream;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +32,20 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.service.CurrentUiService;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
+import fr.univlorraine.mondossierweb.utils.Utils;
 
 @Component
 @UIScope
 @SuppressWarnings("serial")
 public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
-
+	
 	@Autowired
 	private transient CurrentUiService currentUiService;
 	@Autowired
@@ -49,8 +53,8 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 	@Autowired
 	private transient ConfigController configController;
 	
-
-	private transient String srcLogoDark;
+	private transient String srcLogo = "";
+	private transient String srcLogoDark = "";
 	
 	private HorizontalLayout titleLayout = new HorizontalLayout();
 	private final Image logo = new Image();
@@ -58,7 +62,7 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 
 	@PostConstruct
 	private void init() {
-		String srcLogo = configController.getUnivLogoPath();
+		byte[] imgLogo = configController.getUnivLogoImg();
 		
 		setAlignItems(Alignment.END);
 		getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
@@ -68,7 +72,8 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getDarkModeFlux()
 				.map(darkMode -> Boolean.TRUE.equals(darkMode) ? srcLogoDark : srcLogo)
-				.map(logoSrc -> () -> logo.setSrc(logoSrc)));
+				.map(logoSrc -> () -> updateLogo(imgLogo)));
+
 		titleLayout.add(logo);
 
 		Div appNameTitle = new Div(new Text(buildProperties.getName()));
@@ -89,6 +94,15 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 		add(titleLayout);
 		
 		
+	}
+
+	private void updateLogo(byte[] logoImg) {
+		if(logoImg != null) {
+			StreamResource resource = new StreamResource("", () -> new ByteArrayInputStream(logoImg));
+			logo.setSrc(resource);
+		}
+		logo.setHeight(Utils.LARGEUR_LOGO);
+		logo.setWidth(Utils.HAUTEUR_LOGO);
 	}
 
 	/**

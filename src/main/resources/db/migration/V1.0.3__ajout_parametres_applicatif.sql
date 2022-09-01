@@ -11,7 +11,8 @@ CREATE TABLE preferences_application (
   valeur varchar(200) DEFAULT NULL,
   cat_id int(11) NOT NULL,
   type_id varchar(20) NOT NULL,
-  ordre int(11) NOT NULL
+  ordre int(11) NOT NULL,
+  data blob DEFAULT NULL
 );
 
 -- --------------------------------------------------------
@@ -113,6 +114,7 @@ INSERT INTO preferences_application_type (type_id, secret) VALUES ('STRING', 0);
 INSERT INTO preferences_application_type (type_id, secret) VALUES ('BOOLEAN', 0);
 INSERT INTO preferences_application_type (type_id, secret) VALUES ('SECRET_STRING', 1);
 INSERT INTO preferences_application_type (type_id, secret) VALUES ('LIST_STRING', 0);
+INSERT INTO preferences_application_type (type_id, secret) VALUES ('IMAGE', 0);
 
 -- 
 -- Insertion des paramètres
@@ -187,19 +189,19 @@ VALUES ('NOTE_CONTROLE', 'Afficher les contrôles avec les résultats', NULL, 'f
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('INSCRIPTION_DETAIL', 'Afficher le détail de l''inscription (statut, paiement, PJ, photo)', NULL, 'button', '6', 'LIST_STRING', 7);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('UNIV_LOGO_PATH', 'Path vers le logo de l''université (à placer dans le répertoire ''images'')', NULL, './images/logo.png', '6', 'STRING', 8);
+VALUES ('UNIV_LOGO_IMG', 'Image du logo de l''Université (34px/34px)', NULL, NULL, '6', 'IMAGE', 9);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('CURSUS_FAC_ITALIQUE', 'Afficher les objets de formation non obligatoires du cursus en italique', NULL, 'true', '6', 'BOOLEAN', 9);
+VALUES ('CURSUS_FAC_ITALIQUE', 'Afficher les objets de formation non obligatoires du cursus en italique', NULL, 'true', '6', 'BOOLEAN', 10);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('INSCRIPTION_STATUTS', 'Statuts des inscriptions à afficher séparés par des virgules', NULL, 'valide', '6', 'STRING', 10);
+VALUES ('INSCRIPTION_STATUTS', 'Statuts des inscriptions à afficher séparés par des virgules', NULL, 'valide', '6', 'STRING', 11);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('INFO_CONNEXION', 'Afficher une pop-up d''info à la connexion sur l''application', NULL, 'true', '6', 'BOOLEAN', 11);
+VALUES ('INFO_CONNEXION', 'Afficher une pop-up d''info à la connexion sur l''application', NULL, 'true', '6', 'BOOLEAN', 12);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('INFO_CONNEXION_PREF', 'Donner la possibilité à l''utilisateur de masquer la pop-up d''info de connexion via case à cocher', NULL, 'true', '6', 'BOOLEAN', 12);
+VALUES ('INFO_CONNEXION_PREF', 'Donner la possibilité à l''utilisateur de masquer la pop-up d''info de connexion via case à cocher', NULL, 'true', '6', 'BOOLEAN', 13);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('ETUDIANT_MAIL_LDAP', 'Afficher le mail extrait du ldap', NULL, 'true', '6', 'BOOLEAN', 13);
+VALUES ('ETUDIANT_MAIL_LDAP', 'Afficher le mail extrait du ldap', NULL, 'true', '6', 'BOOLEAN', 14);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('ETUDIANT_RESUME', 'Afficher le nom/prenom et le numéro de dossier au dessus du menu latéral', NULL, 'true', '6', 'BOOLEAN', 14);
+VALUES ('ETUDIANT_RESUME', 'Afficher le nom/prenom et le numéro de dossier au dessus du menu latéral', NULL, 'true', '6', 'BOOLEAN', 15);
 
 -- paramètres d'aide
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 

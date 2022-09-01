@@ -63,6 +63,8 @@ public final class Utils {
 	public static final String STATUT_INSCRIPTION_VALIDE = "VALIDE";
 	public static final String DOSSIER_APPRENANT = "dossierApprenant";
 	public static final String DOSSIER_CONSULTE_APPRENANT = "dossierConsulteApprenant";
+	public static final String LARGEUR_LOGO = "34px";
+	public static final String HAUTEUR_LOGO = "34px";
 
 	private Utils() {
 		throw new IllegalStateException("Utility class");

@@ -18,6 +18,9 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.parametres;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -37,17 +40,24 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCategorie;
@@ -78,6 +88,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 	private static final String TYPE_BOOLEAN = "BOOLEAN";
 	private static final String TYPE_LIST_STRING = "LIST_STRING";
+	private static final String TYPE_IMG = "IMAGE";
 	private static final String TRUE_VALUE = "true";
 	private static final Integer LDAP_ID = 1;
 	private static final Integer PEGASE_ACCESS_TOKEN_ID = 2;
@@ -116,6 +127,16 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private List<Button> buttonsEnregistrer = new LinkedList<> ();
 
 	private HashMap<String,String> backupValues = new HashMap<> ();
+	
+	private HashMap<String,byte[]> blobValues = new HashMap<> ();
+	
+	private HashMap<String,String> blobNames = new HashMap<> ();
+	
+	private HashMap<String, Image> blobImages = new HashMap<> ();
+
+
+	StreamResource resource;
+	Image image = new Image();
 
 	@PostConstruct
 	private void init() {
@@ -172,14 +193,65 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 									cb.setReadOnly(true);
 									categorieLayout.add(cb);
 								} else {
-									TextField tf = new TextField(p.getPrefDesc());
-									tf.setId(p.getPrefId());
-									tf.setWidthFull();
-									if(p.getValeur()!=null) {
-										tf.setValue(p.getValeur());
+									// S'il s'agit d'une image
+									if(p.getType().getTypeId().equals(TYPE_IMG)){
+										Label labelImage = new Label(p.getPrefDesc());
+										categorieLayout.add(labelImage);
+										if (p.getData() != null) {
+											resource = new StreamResource(p.getValeur(), () -> new ByteArrayInputStream(p.getData()));
+											image = new Image(resource, p.getValeur());
+										}
+										image.setHeight(Utils.LARGEUR_LOGO);
+										image.setWidth(Utils.HAUTEUR_LOGO);;
+										categorieLayout.add(image);
+										MemoryBuffer memoryBuffer = new MemoryBuffer();
+										Upload uploadImg = new Upload(memoryBuffer);
+										uploadImg.setId(p.getPrefId());
+										blobImages.put(p.getPrefId(), image);
+										uploadImg.setAcceptedFileTypes("image/png","image/jpg");
+										uploadImg.addSucceededListener(event -> {
+											// Récupération des informations sur le fichier
+											InputStream fileData = memoryBuffer.getInputStream();
+											String fileName = event.getFileName();
+
+											log.info("Image {} mimeType : {} length : {}", fileName, event.getMIMEType(),event.getContentLength());
+											// Maj de l'image
+											try {
+												blobValues.put(uploadImg.getId().get(), fileData.readAllBytes());
+												blobNames.put(uploadImg.getId().get(), fileName);
+											} catch (IOException e) {
+												String errorMessage = e.getMessage();
+
+												Notification notification = Notification.show(
+													errorMessage,
+													5000,
+													Notification.Position.MIDDLE
+													);
+												notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+											}
+										});
+										uploadImg.addFileRejectedListener(event -> {
+											String errorMessage = event.getErrorMessage();
+
+											Notification notification = Notification.show(
+												errorMessage,
+												5000,
+												Notification.Position.MIDDLE
+												);
+											notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+										});
+										uploadImg.setVisible(false);
+										categorieLayout.add(uploadImg);
+									} else {
+										TextField tf = new TextField(p.getPrefDesc());
+										tf.setId(p.getPrefId());
+										tf.setWidthFull();
+										if(p.getValeur()!=null) {
+											tf.setValue(p.getValeur());
+										}
+										tf.setReadOnly(true);
+										categorieLayout.add(tf);
 									}
-									tf.setReadOnly(true);
-									categorieLayout.add(tf);
 								}
 							}
 						}
@@ -356,9 +428,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		//S'il s'agit de la catégorie SMTP
 		if(categorieId.equals(SMTP_PARAM)) {
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
-			buttonSync.addClickListener(e -> {
-				syncServiceConfig(ParametrageService.class.getName(), "refreshSmtpParameters");
-			});
+			buttonSync.addClickListener(e -> syncServiceConfig(ParametrageService.class.getName(), "refreshSmtpParameters"));
 			layout.add(syncButtonLayout);
 		}
 	}
@@ -397,6 +467,10 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			Checkbox cb = (Checkbox) c;
 			cb.setReadOnly(readonly);
 		}
+		if(c instanceof Upload) {
+			Upload u = (Upload) c;
+			u.setVisible(!readonly);
+		}
 		if(c instanceof ComboBox) {
 			ComboBox<PreferencesApplicationValeurs> cb = (ComboBox<PreferencesApplicationValeurs>) c;
 			cb.setReadOnly(readonly);
@@ -421,6 +495,17 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				Checkbox cb = (Checkbox) c;
 				PreferencesApplication pa = prefService.savePref(componentId.get(), cb.getValue().toString());
 				cb.setValue(pa.getValeur().equals(TRUE_VALUE));
+			}
+			if(c instanceof Upload) {
+				Upload u = (Upload) c;
+				String idPref = componentId.get().replace("_uploadcmp", "");
+				byte[] v = blobValues.get(componentId.get());
+				String n = blobNames.get(componentId.get());
+				PreferencesApplication pa = prefService.savePref(idPref, n, v);
+				StreamResource resource = new StreamResource(n, () -> new ByteArrayInputStream(v));
+				Image i = blobImages.get(componentId.get());
+				i.setSrc(resource);
+				i.setAlt(n);
 			}
 			if(c instanceof ComboBox) {
 				ComboBox<PreferencesApplicationValeurs> cb = (ComboBox<PreferencesApplicationValeurs>) c;
@@ -466,6 +551,14 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				} else {
 					backupValues.put(componentId.get(), cb.getValue().toString());
 				}
+			}
+			if(c instanceof Upload) {
+				Upload u = (Upload) c;
+				Optional<String> uid = u.getId();
+				if(rollback && uid.isPresent()) {
+					blobValues.remove(uid.get());
+					blobNames.remove(uid.get());
+				} 
 			}
 			if(c instanceof ComboBox) {
 				ComboBox<PreferencesApplicationValeurs> cb = (ComboBox<PreferencesApplicationValeurs>) c;

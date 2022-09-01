@@ -55,9 +55,9 @@ public class ConfigController {
 	private static final String LDAP_FILTRE_GESTIONNAIRE = "LDAP_FILTRE_GESTIONNAIRE";
 
 	private static final String LDAP_MAIL_ATTRIBUTE = "LDAP_MAIL_ATTRIBUTE";
-
-	private static final String UNIV_LOGO_PATH = "UNIV_LOGO_PATH";
-
+	
+	private static final String UNIV_LOGO_IMG = "UNIV_LOGO_IMG";
+	
 	private static final String INSCRIPTION_DETAIL = "INSCRIPTION_DETAIL";
 
 	private static final String NOTE_BAREME = "NOTE_BAREME";
@@ -189,8 +189,8 @@ public class ConfigController {
 	public String getLdapDisplayNameAttribute() {
 		return getStringValueForParameter(LDAP_DISPLAYNAME_ATTRIBUTE);
 	}
-	public String getUnivLogoPath() {
-		return getStringValueForParameter(UNIV_LOGO_PATH);
+	public byte[] getUnivLogoImg() {
+		return getByteValueForParameter(UNIV_LOGO_IMG);
 	}
 	public String getAccesTokenPassword() {
 		return getSecretValueForParameter(ACCESSTOKEN_PASSWORD);
@@ -264,6 +264,15 @@ public class ConfigController {
 	 */
 	private String getSecretValueForParameter(String parametre){
 		return prefService.getPreferences(parametre).getSecret();
+	}
+	
+	/**
+	 * 
+	 * @param parameter
+	 * @return la valeur d'un parametre de type Blob
+	 */
+	private byte[] getByteValueForParameter(String parametre){
+		return prefService.getPreferences(parametre).getData();
 	}
 	
 	/**

@@ -138,6 +138,19 @@ public class PreferencesService {
 		}
 		return null;
 	}
+	
+	@Transactional
+	public PreferencesApplication savePref(String prefId, String value, byte[] data) {
+		Optional<PreferencesApplication> pref = preferencesApplicationRepository.findById(prefId);
+		if(pref.isPresent()) {
+			PreferencesApplication pa = pref.get();
+			pa.setValeur(value);
+			pa.setData(data);
+			pa = preferencesApplicationRepository.save(pa);	
+			return pa;
+		}
+		return null;
+	}
 
 	@Transactional
 	public PreferencesApplication getPreferences(String prefId) {
