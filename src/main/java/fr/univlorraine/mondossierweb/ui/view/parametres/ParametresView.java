@@ -439,7 +439,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		}
 	}
 
-
 	private void syncServiceConfig(String serviceClassName, String methodName) {
 		try {
 			// Demander la maj des services des instances via la BDD
