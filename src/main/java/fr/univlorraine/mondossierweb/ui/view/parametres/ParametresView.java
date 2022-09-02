@@ -21,6 +21,7 @@ package fr.univlorraine.mondossierweb.ui.view.parametres;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -96,6 +97,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final Integer PEGASE_PARAM = 4;
 	private static final Integer ADMIN_PARAM = 8;
 	private static final Integer SMTP_PARAM = 9;
+	private static final Integer AFFICHAGE_PARAM = 6;
 	private static final String PARAMETRES_BUTTON_SYNC = "parametres.button-sync";
 
 	@Autowired
@@ -106,8 +108,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private transient AccessTokenService accessTokenService;
 	@Autowired
 	private transient PegaseService pegaseService;
-	@Autowired
-	private transient ParametrageService parametrageService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 
@@ -127,16 +127,12 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private List<Button> buttonsEnregistrer = new LinkedList<> ();
 
 	private HashMap<String,String> backupValues = new HashMap<> ();
-	
+
 	private HashMap<String,byte[]> blobValues = new HashMap<> ();
-	
+
 	private HashMap<String,String> blobNames = new HashMap<> ();
-	
+
 	private HashMap<String, Image> blobImages = new HashMap<> ();
-
-
-	StreamResource resource;
-	Image image = new Image();
 
 	@PostConstruct
 	private void init() {
@@ -197,6 +193,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 									if(p.getType().getTypeId().equals(TYPE_IMG)){
 										Label labelImage = new Label(p.getPrefDesc());
 										categorieLayout.add(labelImage);
+										Image image = new Image();
+										StreamResource resource;
 										if (p.getData() != null) {
 											resource = new StreamResource(p.getValeur(), () -> new ByteArrayInputStream(p.getData()));
 											image = new Image(resource, p.getValeur());
@@ -218,7 +216,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 											// Maj de l'image
 											try {
 												blobValues.put(uploadImg.getId().get(), fileData.readAllBytes());
-												blobNames.put(uploadImg.getId().get(), fileName);
+												Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+												blobNames.put(uploadImg.getId().get(), Utils.getFileName(fileName) + "-" + timestamp.getTime() + Utils.getFileExtension(fileName));
 											} catch (IOException e) {
 												String errorMessage = e.getMessage();
 
@@ -425,6 +424,13 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			layout.add(syncButtonLayout);
 		}
 
+		//S'il s'agit de la catégorie Affichage
+		if(categorieId.equals(AFFICHAGE_PARAM)) {
+			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
+			buttonSync.addClickListener(e -> syncServiceConfig(ParametrageService.class.getName(), "refreshFavIconParameters"));
+			layout.add(syncButtonLayout);
+		}
+
 		//S'il s'agit de la catégorie SMTP
 		if(categorieId.equals(SMTP_PARAM)) {
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
@@ -497,15 +503,17 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				cb.setValue(pa.getValeur().equals(TRUE_VALUE));
 			}
 			if(c instanceof Upload) {
-				Upload u = (Upload) c;
-				String idPref = componentId.get().replace("_uploadcmp", "");
+				String idPref = componentId.get();
 				byte[] v = blobValues.get(componentId.get());
 				String n = blobNames.get(componentId.get());
-				PreferencesApplication pa = prefService.savePref(idPref, n, v);
-				StreamResource resource = new StreamResource(n, () -> new ByteArrayInputStream(v));
-				Image i = blobImages.get(componentId.get());
-				i.setSrc(resource);
-				i.setAlt(n);
+				if(n != null) {
+					prefService.savePref(idPref, n, v);
+					Image i = blobImages.get(componentId.get());
+
+					StreamResource resource = new StreamResource(n, () -> new ByteArrayInputStream(v));
+					i.setSrc(resource);
+					i.setAlt(n);
+				}
 			}
 			if(c instanceof ComboBox) {
 				ComboBox<PreferencesApplicationValeurs> cb = (ComboBox<PreferencesApplicationValeurs>) c;

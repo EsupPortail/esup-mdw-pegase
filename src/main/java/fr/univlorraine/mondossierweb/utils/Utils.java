@@ -350,4 +350,30 @@ public final class Utils {
 	}
 
 
+
+
+	public static String getFileName(String fileName) {
+		int index = fileName.lastIndexOf('.');
+		if(index > 0) {
+			String name = fileName.substring(0, index);
+			log.info("File name of {} is {}",fileName, name);
+			return name;
+		}
+		return null;
+	}
+
+
+
+
+	public static String getFileExtension(String fileName) {
+		int index = fileName.lastIndexOf('.');
+		if(index > 0) {
+			String extension = fileName.substring(index);
+			log.info("File extension of {} is {}",fileName, extension);
+			return extension;
+		}
+		return null;
+	}
+
+
 }

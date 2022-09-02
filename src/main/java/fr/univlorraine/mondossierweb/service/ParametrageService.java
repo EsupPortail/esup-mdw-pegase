@@ -18,11 +18,14 @@
  */
 package fr.univlorraine.mondossierweb.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.logging.LogLevel;
@@ -53,11 +56,11 @@ public class ParametrageService implements Serializable {
 	private transient LoggingSystem loggingSystem;
 
 
-	
+
 	private void setShowSql() {
 		showSql = configController.isShowSqlActif();
 	}
-	
+
 
 	public void refreshParameters() {
 		refreshLogParameters();
@@ -88,7 +91,7 @@ public class ParametrageService implements Serializable {
 		mailAppender.start();
 		logMailAppender(mailAppender);
 	}
-	
+
 	private void logMailAppender(SMTPAppender mailAppender) {
 		log.info("** MailAppender : {}", mailAppender.getClass());
 		log.info("**** smtp host : {}", mailAppender.getSmtpHost());
@@ -110,6 +113,29 @@ public class ParametrageService implements Serializable {
 			loggingSystem.setLogLevel("org.hibernate.SQL", LogLevel.ERROR);
 			loggingSystem.setLogLevel("org.hibernate.type", LogLevel.ERROR);
 		}
+	}
+
+	public void refreshFavIconParameters() {
+		// Récupération des favicon en base et copie dans le repertoire static
+		writeFaviconToRessources(configController.getUnivFavicon16(),  configController.getUnivFavicon16Name());
+		writeFaviconToRessources(configController.getUnivFavicon32(), configController.getUnivFavicon32Name());
+	}
+
+
+	private void writeFaviconToRessources(byte[] favicon, String name) {
+		if(favicon != null) {
+			ClassLoader classLoader = getClass().getClassLoader();
+			File outputFile = new File(classLoader.getResource(".").getFile() + "/static/" + name);
+			try {
+				log.error("Ecriture du fichier {}", outputFile.getAbsolutePath());
+				FileUtils.writeByteArrayToFile(outputFile, favicon);
+			} catch (IOException e) {
+				log.error("Erreur lors de l'écriture du favicon dans le répertoire ressources", e);
+			}
+		} else {
+			log.info("Favicon {} null",name);
+		}
+
 	}
 
 

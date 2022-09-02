@@ -407,8 +407,9 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	 */
 	@Override
 	public void configurePage(final InitialPageSettings settings) {
-		settings.addFavIcon("icon", "/favicon-32x32.png", "32x32");
-		settings.addFavIcon("icon", "/favicon-16x16.png", "16x16");
+		// Parametrage des favicon
+		settings.addFavIcon("icon", "/"+configController.getUnivFavicon32Name(), "32x32");
+		settings.addFavIcon("icon", "/"+configController.getUnivFavicon16Name(), "16x16");
 	}
 
 	/**

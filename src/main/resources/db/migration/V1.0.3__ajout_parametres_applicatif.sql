@@ -191,17 +191,21 @@ VALUES ('INSCRIPTION_DETAIL', 'Afficher le détail de l''inscription (statut, pa
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
 VALUES ('UNIV_LOGO_IMG', 'Logo de l''Université (34px/34px)', NULL, NULL, '6', 'IMAGE', 9);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('CURSUS_FAC_ITALIQUE', 'Afficher les objets de formation non obligatoires du cursus en italique', NULL, 'true', '6', 'BOOLEAN', 10);
+VALUES ('UNIV_FAVICON_32', 'Favicon de l''Université (32px/32px)', NULL, NULL, '6', 'IMAGE', 10);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('INSCRIPTION_STATUTS', 'Statuts des inscriptions à afficher séparés par des virgules', NULL, 'valide', '6', 'STRING', 11);
+VALUES ('UNIV_FAVICON_16', 'Favicon de l''Université (16px/16px)', NULL, NULL, '6', 'IMAGE', 11);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('INFO_CONNEXION', 'Afficher une pop-up d''info à la connexion sur l''application', NULL, 'true', '6', 'BOOLEAN', 12);
+VALUES ('CURSUS_FAC_ITALIQUE', 'Afficher les objets de formation non obligatoires du cursus en italique', NULL, 'true', '6', 'BOOLEAN', 12);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('INFO_CONNEXION_PREF', 'Donner la possibilité à l''utilisateur de masquer la pop-up d''info de connexion via case à cocher', NULL, 'true', '6', 'BOOLEAN', 13);
+VALUES ('INSCRIPTION_STATUTS', 'Statuts des inscriptions à afficher séparés par des virgules', NULL, 'valide', '6', 'STRING', 13);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('ETUDIANT_MAIL_LDAP', 'Afficher le mail extrait du ldap', NULL, 'true', '6', 'BOOLEAN', 14);
+VALUES ('INFO_CONNEXION', 'Afficher une pop-up d''info à la connexion sur l''application', NULL, 'true', '6', 'BOOLEAN', 14);
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
-VALUES ('ETUDIANT_RESUME', 'Afficher le nom/prenom et le numéro de dossier au dessus du menu latéral', NULL, 'true', '6', 'BOOLEAN', 15);
+VALUES ('INFO_CONNEXION_PREF', 'Donner la possibilité à l''utilisateur de masquer la pop-up d''info de connexion via case à cocher', NULL, 'true', '6', 'BOOLEAN', 15);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('ETUDIANT_MAIL_LDAP', 'Afficher le mail extrait du ldap', NULL, 'true', '6', 'BOOLEAN', 16);
+INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 
+VALUES ('ETUDIANT_RESUME', 'Afficher le nom/prenom et le numéro de dossier au dessus du menu latéral', NULL, 'true', '6', 'BOOLEAN', 17);
 
 -- paramètres d'aide
 INSERT INTO preferences_application (pref_id, pref_desc, secret, valeur, cat_id, type_id, ordre) 

@@ -58,6 +58,10 @@ public class ConfigController {
 	
 	private static final String UNIV_LOGO_IMG = "UNIV_LOGO_IMG";
 	
+	private static final String UNIV_FAVICON_32 = "UNIV_FAVICON_32";
+	
+	private static final String UNIV_FAVICON_16 = "UNIV_FAVICON_16";
+	
 	private static final String INSCRIPTION_DETAIL = "INSCRIPTION_DETAIL";
 
 	private static final String NOTE_BAREME = "NOTE_BAREME";
@@ -191,6 +195,18 @@ public class ConfigController {
 	}
 	public byte[] getUnivLogoImg() {
 		return getByteValueForParameter(UNIV_LOGO_IMG);
+	}
+	public byte[] getUnivFavicon32() {
+		return getByteValueForParameter(UNIV_FAVICON_32);
+	}
+	public String getUnivFavicon32Name() {
+		return getStringValueForParameter(UNIV_FAVICON_32);
+	}
+	public byte[] getUnivFavicon16() {
+		return getByteValueForParameter(UNIV_FAVICON_16);
+	}
+	public String getUnivFavicon16Name() {
+		return getStringValueForParameter(UNIV_FAVICON_16);
 	}
 	public String getAccesTokenPassword() {
 		return getSecretValueForParameter(ACCESSTOKEN_PASSWORD);
