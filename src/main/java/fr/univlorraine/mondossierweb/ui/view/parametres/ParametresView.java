@@ -99,6 +99,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final Integer SMTP_PARAM = 9;
 	private static final Integer AFFICHAGE_PARAM = 6;
 	private static final String PARAMETRES_BUTTON_SYNC = "parametres.button-sync";
+	private static final String REFRESH_PARAMETERS = "refreshParameters";
 
 	@Autowired
 	private transient PreferencesService prefService;
@@ -200,7 +201,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 											image = new Image(resource, p.getValeur());
 										}
 										image.setHeight(Utils.LARGEUR_LOGO);
-										image.setWidth(Utils.HAUTEUR_LOGO);;
+										image.setWidth(Utils.HAUTEUR_LOGO);
 										categorieLayout.add(image);
 										MemoryBuffer memoryBuffer = new MemoryBuffer();
 										Upload uploadImg = new Upload(memoryBuffer);
@@ -325,7 +326,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		//S'il s'agit de la catégorie LDAP
 		if(categorieId.equals(LDAP_ID)) {
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
-			buttonSync.addClickListener(e -> syncServiceConfig(LdapService.class.getName(),"refreshParameters"));
+			buttonSync.addClickListener(e -> syncServiceConfig(LdapService.class.getName(),REFRESH_PARAMETERS));
 			layout.add(syncButtonLayout);
 		}
 		//S'il s'agit de la catégorie Pégase Access-token
@@ -349,7 +350,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			layout.add(testButtonLayout);
 
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
-			buttonSync.addClickListener(e -> syncServiceConfig(AccessTokenService.class.getName(), "refreshParameters"));
+			buttonSync.addClickListener(e -> syncServiceConfig(AccessTokenService.class.getName(), REFRESH_PARAMETERS));
 			layout.add(syncButtonLayout);
 		}
 
@@ -419,7 +420,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
 			buttonSync.addClickListener(e -> {
 				syncServiceConfig(ParametrageService.class.getName(), "refreshLogParameters");
-				syncServiceConfig(AppUserDetailsService.class.getName(), "refreshParameters");
+				syncServiceConfig(AppUserDetailsService.class.getName(), REFRESH_PARAMETERS);
 			});
 			layout.add(syncButtonLayout);
 		}
