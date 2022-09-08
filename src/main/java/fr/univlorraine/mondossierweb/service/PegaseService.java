@@ -278,7 +278,7 @@ public class PegaseService implements Serializable {
 				log.error("Erreur lors de l'appel à la methode API : lireArbreCursusDesInscriptions pour le code apprenant : {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codePeriode, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
 			}
 		}
-		return Collections.emptyList();
+		return null;
 
 	}
 
@@ -302,7 +302,7 @@ public class PegaseService implements Serializable {
 				log.error("Erreur lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codeChemin, codePeriode, etablissement, e.getCode(), e.getMessage(), e.getResponseBody(), e);
 			}
 		}
-		return Collections.emptyList();
+		return null;
 
 	}
 
@@ -344,7 +344,7 @@ public class PegaseService implements Serializable {
 			// Appel de l'API Pégase
 			File certificat = insApiIns.imprimerCertificatDeScolarite(etablissement, codeApprenant, cible);
 			if(certificat != null) {
-				log.info("{} certificatDeScolarite OK");
+				log.info("certificatDeScolarite OK");
 			} else {
 				log.info("Anomalie lors de l'appel à la methode API : certificatDeScolarite");
 			}
@@ -366,7 +366,7 @@ public class PegaseService implements Serializable {
 			// Appel de l'API Pégase
 			File certificat = insApiPai.imprimerAttestationDePaiement(etablissement, codeApprenant, periode);
 			if(certificat != null ) {
-				log.info("attestationDePaiement OK :  ", certificat.getName());
+				log.info("attestationDePaiement OK :  {}", certificat.getName());
 				return certificat;
 			} else {
 				log.info("Anomalie lors de l'appel à la methode API : attestationDePaiement");

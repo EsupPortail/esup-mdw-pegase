@@ -65,6 +65,7 @@ public final class Utils {
 	public static final String DOSSIER_CONSULTE_APPRENANT = "dossierConsulteApprenant";
 	public static final String LARGEUR_LOGO = "34px";
 	public static final String HAUTEUR_LOGO = "34px";
+	public static final String EXT_PDF = ".pdf";
 
 	private Utils() {
 		throw new IllegalStateException("Utility class");
@@ -125,32 +126,34 @@ public final class Utils {
 	public static List<ObjetMaquetteDTO> convertObjetMaquetteListToDTO(List<List<ObjetMaquetteExtension>> listObj, String codeCheminRacine) {
 		List<ObjetMaquetteDTO> list = new LinkedList<>();
 		boolean listObjMaquetteTrouvee = false;
-		for(List<ObjetMaquetteExtension> lobj : listObj) {
-			// Si on a pas déjà trouvé la liste des objets de maquette recherchés dans un élément précédent de la liste
-			if(!listObjMaquetteTrouvee) {
-				for(ObjetMaquetteExtension obj : lobj) {
-					// Si on est sur un objet concerné par la racine
-					if(obj!=null && obj.getCodeChemin()!=null && obj.getCodeChemin().contains(codeCheminRacine)) {
-						listObjMaquetteTrouvee = true;
-						ObjetMaquetteDTO o = createObjetMaquetteDTO(obj);
-						// S'il s'agit de la racine
-						if(obj.getCodeChemin().equals(codeCheminRacine)) {
-							list.add(o);
-							log.info("Racine {} insérée", codeCheminRacine);
-						} else {
-							// Si l'étudiant est affecté à cet objet de formation ou qu'il l'a acquis
-							if((o.getAffecte()!=null && o.getAffecte().booleanValue()) ||
-								o.getAcquis()!=null && o.getAcquis().booleanValue()) {
-								boolean insere = false;
-								String cheminParent = o.getCodeChemin();
-								log.info("Insertion de {} dans l'arborescence...", cheminParent);
-								// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
-								while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
-									// On supprime le dernier élément du chemin
-									cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
-									log.info("Recherche du parent : {}...", cheminParent);
-									insere = insertInList(list, cheminParent, o);
+		if(listObj != null) {
+			for(List<ObjetMaquetteExtension> lobj : listObj) {
+				// Si on a pas déjà trouvé la liste des objets de maquette recherchés dans un élément précédent de la liste
+				if(!listObjMaquetteTrouvee) {
+					for(ObjetMaquetteExtension obj : lobj) {
+						// Si on est sur un objet concerné par la racine
+						if(obj!=null && obj.getCodeChemin()!=null && obj.getCodeChemin().contains(codeCheminRacine)) {
+							listObjMaquetteTrouvee = true;
+							ObjetMaquetteDTO o = createObjetMaquetteDTO(obj);
+							// S'il s'agit de la racine
+							if(obj.getCodeChemin().equals(codeCheminRacine)) {
+								list.add(o);
+								log.info("Racine {} insérée", codeCheminRacine);
+							} else {
+								// Si l'étudiant est affecté à cet objet de formation ou qu'il l'a acquis
+								if((o.getAffecte()!=null && o.getAffecte().booleanValue()) ||
+									o.getAcquis()!=null && o.getAcquis().booleanValue()) {
+									boolean insere = false;
+									String cheminParent = o.getCodeChemin();
+									log.info("Insertion de {} dans l'arborescence...", cheminParent);
+									// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
+									while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
+										// On supprime le dernier élément du chemin
+										cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
+										log.info("Recherche du parent : {}...", cheminParent);
+										insere = insertInList(list, cheminParent, o);
 
+									}
 								}
 							}
 						}
@@ -213,30 +216,32 @@ public final class Utils {
 
 	public static List<CheminDTO> convertCheminToDTO(List<Chemin> listObj, String codeCheminRacine, boolean avecControle) {
 		List<CheminDTO> list = new LinkedList<>();
-		for(Chemin obj : listObj) {
-			// Si on est sur un objet concerné par la racine
-			if(obj != null && obj.getCodeChemin().contains(codeCheminRacine)) {
-				CheminDTO o = createCheminDTO(obj, avecControle);
-				// S'il s'agit de la racine
-				if(obj.getCodeChemin().equals(codeCheminRacine)) {
-					list.add(o);
-					log.info("Racine {} insérée", codeCheminRacine);
-				} else {
-					boolean insere = false;
-					String cheminParent = o.getCodeChemin();
-					log.info("Insertion de {} dans l'arborescence...", cheminParent);
-					// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
-					while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
-						// On supprime le dernier élément du chemin
-						cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
-						log.info("Recherche du parent : {}...", cheminParent);
-						insere = insertInList(list, cheminParent, o);
-					}
-					// Si element non insere
-					if(!insere) {
-						// injecter l'élément à la fin de la liste
+		if(listObj != null) {
+			for(Chemin obj : listObj) {
+				// Si on est sur un objet concerné par la racine
+				if(obj != null && obj.getCodeChemin().contains(codeCheminRacine)) {
+					CheminDTO o = createCheminDTO(obj, avecControle);
+					// S'il s'agit de la racine
+					if(obj.getCodeChemin().equals(codeCheminRacine)) {
 						list.add(o);
-						log.info("Element {} inséré en fin de liste car sans parent", o.getCodeChemin());
+						log.info("Racine {} insérée", codeCheminRacine);
+					} else {
+						boolean insere = false;
+						String cheminParent = o.getCodeChemin();
+						log.info("Insertion de {} dans l'arborescence...", cheminParent);
+						// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
+						while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
+							// On supprime le dernier élément du chemin
+							cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
+							log.info("Recherche du parent : {}...", cheminParent);
+							insere = insertInList(list, cheminParent, o);
+						}
+						// Si element non insere
+						if(!insere) {
+							// injecter l'élément à la fin de la liste
+							list.add(o);
+							log.info("Element {} inséré en fin de liste car sans parent", o.getCodeChemin());
+						}
 					}
 				}
 			}

@@ -19,6 +19,7 @@
 package fr.univlorraine.mondossierweb.ui.view.parametres;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -372,7 +373,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}
 				try {
 					// teste api CHC
-					if(!pegaseService.getCursus(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest()).isEmpty()) {
+					if(pegaseService.getCursus(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest()) != null) {
 						Utils.notifierSucces(getTranslation("api-chc.ok", pegaseService.getCodeApprenantTest()));
 					} else {
 						Utils.notifierAnomalie(getTranslation("api-chc.error", pegaseService.getCodeApprenantTest()));
@@ -392,7 +393,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}
 				try {
 					// teste api PAI
-					if(pegaseService.attestationDePaiement(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest()) != null) {
+					File pdf = pegaseService.attestationDePaiement(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest());
+					if(pdf != null && StringUtils.hasText(pdf.getName()) && pdf.getName().endsWith(Utils.EXT_PDF)) {
 						Utils.notifierSucces(getTranslation("api-pai.ok", pegaseService.getCodeApprenantTest()));
 					} else {
 						Utils.notifierAnomalie(getTranslation("api-pai.error", pegaseService.getCodeApprenantTest()));
