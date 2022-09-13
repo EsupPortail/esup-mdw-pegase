@@ -3,7 +3,7 @@ include:
     file: '/.gitlab-ci-template.yml'
 
 variables:
-  MAVEN_ADDITIONAL_CLI_OPTS: "-Pproduction -Dmaven.test.skip=true -Dspring-boot.run.profiles=test"
+  MAVEN_ADDITIONAL_CLI_OPTS: "-Pproduction -DskipITs=true"
 
 .build_image:
   image : 
