@@ -51,7 +51,7 @@ import lombok.extern.slf4j.Slf4j;
 @Import({PegaseService.class, AccessTokenService.class})
 @TestPropertySource("classpath:application.properties")
 @Slf4j
-public class TestPegaseService {
+public class PegaseServiceIT {
 	
 	private static final String CODE_APPRENANT_TEST = "000000035";
 	
