@@ -46,15 +46,10 @@ public class LdapService implements Serializable {
 
 	@Value("${ldap.login.attribute}")
 	private transient String ldapLoginAttribute;	
-	//@Value("${ldap.displayname.attribute}")
 	private transient String ldapDisplayNameAttribute;	
-	//@Value("${ldap.codetu.attribute}")
 	private transient String ldapCodEtuAttribute;
-	//@Value("${ldap.mail.attribute}")
 	private transient String ldapMailAttribute;
-	//@Value("${ldap.filtre.etudiant}")
 	private transient String ldapFiltreEtudiant;
-	//@Value("${ldap.filtre.gestionnaire}")
 	private transient String ldapFiltreGestionnaire;
 
 	@Autowired

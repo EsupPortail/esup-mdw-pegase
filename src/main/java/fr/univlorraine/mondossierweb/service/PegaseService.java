@@ -61,19 +61,13 @@ public class PegaseService implements Serializable {
 	@Autowired
 	private transient AccessTokenService accessTokenService;	
 
-	//@Value("${pegase.etablissement}")
+
 	private transient String etablissement;	
-	//@Value("${pegase.api.ins.url}")
 	private transient String apiInsUrl;	
-	//@Value("${pegase.api.chc.url}")
 	private transient String apiChcUrl;	
-	//@Value("${pegase.api.coc.url}")
 	private transient String apiCocUrl;	
-	//@Value("${pegase.api.pai.url}")
 	private transient String apiPaiUrl;
-	//@Value("${pegase.photo.code}")
 	private transient String codePhoto;	
-	//@Value("${pegase.demo.codeapprenant}")
 	private transient String codeApprenantDemo;	
 	private transient String codeApprenantTest;	
 	private transient String codePeriodeTest;	
@@ -283,7 +277,6 @@ public class PegaseService implements Serializable {
 	}
 
 	public List<Chemin> getNotes(String codeApprenant, String codePeriode, String codeChemin) {
-
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide

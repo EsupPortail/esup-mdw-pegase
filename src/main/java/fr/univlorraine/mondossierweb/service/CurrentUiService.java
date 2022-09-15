@@ -35,7 +35,7 @@ import reactor.core.publisher.UnicastProcessor;
 @Service
 public class CurrentUiService {
 
-	//@Value("${app.color}")
+
 	private String appColorDefault = CSSColorUtils.MAIN_HEADER_COLOR;
 
 	@PostConstruct

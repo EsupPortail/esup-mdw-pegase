@@ -122,17 +122,13 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	@Autowired
 	private transient ConfigController configController;
 
-	//@Value("${doc.url:}")
+	
 	private transient String docUrl;
-	//@Value("${help.url:}")
 	private transient String helpUrl;
 
-	//@Value("${connexion.info.actif}")
 	private transient boolean affichagePopupInfo;
-	//@Value("${connexion.info.pref}")
 	private transient boolean popupInfoDesactivable;
 
-	//@Value("${etudiant.resume.actif}")
 	private transient boolean affichageResumeEtudiant;
 
 	private final Tabs tabs = new Tabs();

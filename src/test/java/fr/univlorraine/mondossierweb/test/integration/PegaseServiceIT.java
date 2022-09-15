@@ -25,18 +25,28 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.BDDMockito.given;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.service.AccessTokenService;
 import fr.univlorraine.mondossierweb.service.PegaseService;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
@@ -48,41 +58,63 @@ import lombok.extern.slf4j.Slf4j;
 *
 * @author Charlie Dubois */
 @ExtendWith(SpringExtension.class)
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @Import({PegaseService.class, AccessTokenService.class})
 @TestPropertySource("classpath:application.properties")
+@TestInstance(Lifecycle.PER_CLASS)
 @Slf4j
 public class PegaseServiceIT {
 	
-	private static final String CODE_APPRENANT_TEST = "000000035";
-	
-	private static final String CHEMIN_NOTES_FORMATE = "F-ING-HYD>F-ING-HYD-A4";
 
-	private static final String PERIODE_CURSUS_TEST = "PER-2020";
-	
-	private static final String PERIODE_NOTES_TEST = "PER-2020";
-
-
-	@Resource
+	@Autowired
 	private PegaseService pegaseService;
+	@Autowired
+	private AccessTokenService accessTokenService;	
 	
-	@Resource
-	private AccessTokenService accessTokenService;
+	@MockBean
+    private ConfigController configController;
 	
-
+	@Value("${apprenant}")
+	private String codeApprenant;
+	@Value("${etablissement}")
+	private String codeEtab;
+	@Value("${pj.photo}")
+	private String codePjPhoto;
+	@Value("${chemin}")
+	private String chemin;
+	@Value("${periode}")
+	private String periode;
+	@Value("${accesstoken.duration}")
+	private String accessTokenDuration;
+	@Value("${accesstoken.username}")
+	private String accessTokenUsername;
+	@Value("${accesstoken.password}")
+	private String accessTokenPassword;
+	@Value("${accesstoken.url}")
+	private String accessTokenUrl;
+	@Value("${apiIns.url}")
+	private String apiInsUrl;
+	@Value("${apiChc.url}")
+	private String apiChcUrl;
+	@Value("${apiCoc.url}")
+	private String apiCocUrl;
+	@Value("${apiPai.url}")
+	private String apiPaiUrl;
 	
 	/** Initialisation. */
 	@BeforeAll
-	public static void setUp() {
-		
+	public void setUp() {
+		final Logger logger = (Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+	    logger.setLevel(Level.INFO);
+		initParameters();
 	}
 
-	
 	/** Teste la méthode getCursus. */
 	@Test
 	void testGetCursus() {
-		log.debug("Test PegaseService getCursus");
-		List<List<ObjetMaquetteExtension>> cursus = pegaseService.getCursus(CODE_APPRENANT_TEST, PERIODE_CURSUS_TEST);
-		log.debug("Cursus : {}",cursus);
+		log.info("Test PegaseService getCursus");
+		List<List<ObjetMaquetteExtension>> cursus = pegaseService.getCursus(codeApprenant, periode);
+		log.info("Cursus : {}",cursus);
 		assertThat(cursus, is(notNullValue()));
 		assertThat(cursus, is(not(empty())));
 	}
@@ -90,9 +122,9 @@ public class PegaseServiceIT {
 	/** Teste la méthode getNotes. */
 	@Test
 	void testGetNotes() {
-		log.debug("Test PegaseService getNotes");
-		List<Chemin> notes = pegaseService.getNotes(CODE_APPRENANT_TEST,PERIODE_NOTES_TEST , CHEMIN_NOTES_FORMATE);
-		log.debug("Notes : {}",notes);
+		log.info("Test PegaseService getNotes");
+		List<Chemin> notes = pegaseService.getNotes(codeApprenant, periode , chemin);
+		log.info("Notes : {}",notes);
 		assertThat(notes, is(notNullValue()));
 		assertThat(notes, is(not(empty())));
 	}
@@ -100,15 +132,31 @@ public class PegaseServiceIT {
 	/** Teste la méthode recupererDossierApprenant. */
 	@Test
 	void testRecupererDossierApprenant() {
-		log.debug("Test PegaseService recupererDossierApprenant");
-		ApprenantEtInscriptions dossier = pegaseService.recupererDossierApprenant(CODE_APPRENANT_TEST);
-		log.debug("Dossier : {}",dossier);
+		log.info("Test PegaseService recupererDossierApprenant");
+		ApprenantEtInscriptions dossier = pegaseService.recupererDossierApprenant(codeApprenant);
+		log.info("Dossier : {}",dossier);
 		assertThat(dossier, is(notNullValue()));
 		assertThat(dossier.getApprenant(), is(notNullValue()));
-		assertThat(dossier.getApprenant().getCode(), equalTo(CODE_APPRENANT_TEST));
+		assertThat(dossier.getApprenant().getCode(), equalTo(codeApprenant));
 		assertThat(dossier.getInscriptions(), is(notNullValue()));
 		assertThat(dossier.getInscriptions(), is(not(empty())));
 	}
 
-	
+	private void initParameters() {
+		given(configController.getAccesTokenDuration()).willReturn(accessTokenDuration);
+		given(configController.getAccesTokenUsername()).willReturn(accessTokenUsername);
+		given(configController.getAccesTokenPassword()).willReturn(accessTokenPassword);
+		given(configController.getAccesTokenUrl()).willReturn(accessTokenUrl);
+		accessTokenService.refreshParameters();
+		given(configController.getApiInsUrl()).willReturn(apiInsUrl);
+		given(configController.getApiChcUrl()).willReturn(apiChcUrl);
+		given(configController.getApiCocUrl()).willReturn(apiCocUrl);
+		given(configController.getApiPaiUrl()).willReturn(apiPaiUrl);
+		pegaseService.refreshApiParameters();
+		given(configController.getEtablissement()).willReturn(codeEtab);
+		given(configController.getIdPjPhoto()).willReturn(codePjPhoto);
+		given(configController.getPegaseDemoApprenant()).willReturn(codeApprenant);
+		pegaseService.refreshPegaseParameters();
+		log.info("Test PegaseService getCursus token : {}",accessTokenService.getToken());
+	}
 }

@@ -59,7 +59,7 @@ public class AccessDeniedView extends VerticalLayout implements HasDynamicTitle,
 
 	private final Label label = new Label();
 
-	//@Value("${help.url:}")
+
 	private transient String helpUrl;
 	private final Label helpLabel = new Label();
 	private final Button helpButton = new Button(new Icon(VaadinIcon.LIFEBUOY));

@@ -53,7 +53,7 @@ public class PreferencesService {
 	ApplicationContext ctx;
 	
 	@Autowired
-	private PreferencesUtilisateurRepository prefUtilRepository;
+	private PreferencesUtilisateurRepository preferencesUtilisateurRepository;
 
 	@Autowired
 	private PreferencesApplicationCategorieRepository preferencesApplicationCategorieRepository;
@@ -86,7 +86,7 @@ public class PreferencesService {
 		PreferencesUtilisateurPK ppk = new PreferencesUtilisateurPK();
 		ppk.setUsername(username);
 		ppk.setPrefId(pref);
-		return prefUtilRepository.findById(ppk);
+		return preferencesUtilisateurRepository.findById(ppk);
 	}
 
 	public void saveUserPref(String username, String pref, String value) {
@@ -97,7 +97,7 @@ public class PreferencesService {
 		p.setId(ppk);
 		p.setValue(value);
 		p.setLastUpdate(LocalDateTime.now());
-		prefUtilRepository.save(p);
+		preferencesUtilisateurRepository.save(p);
 	}
 
 	public void saveUserPref(String username, String pref, Boolean value) {

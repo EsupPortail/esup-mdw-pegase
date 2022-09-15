@@ -47,13 +47,9 @@ import lombok.extern.slf4j.Slf4j;
 public class AccessTokenService implements Serializable {
 
 
-	//@Value("${pegase.accesstoken.url}")
 	private transient String tokenUrl;	
-	//@Value("${pegase.accesstoken.username}")
 	private transient String username;	
-	//@Value("${pegase.accesstoken.password}")
 	private transient String password;
-	//@Value("${pegase.accesstoken.duration}")
 	private transient Long duration;
 
 	private String token;
@@ -76,7 +72,10 @@ public class AccessTokenService implements Serializable {
 	}
 	
 	private void getDuration() {
-		duration = Long.parseLong(configController.getAccesTokenDuration());
+		String d = configController.getAccesTokenDuration();
+		if(d != null) {
+			duration = Long.parseLong(d);
+		}
 	}
 	
 	public void refreshParameters() {

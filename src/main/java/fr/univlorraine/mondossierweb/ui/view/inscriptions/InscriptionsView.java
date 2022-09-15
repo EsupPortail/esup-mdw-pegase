@@ -94,25 +94,18 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private static final String ATTEST_FILE_EXT = ".pdf";
 
 
-	//@Value("${notes.bareme}")
 	private transient Boolean avecBareme;
 
-	//@Value("${notes.coeff}")
 	private transient Boolean avecCoeff;
 
-	//@Value("${notes.ects}")
 	private transient Boolean avecECTS;
 
-	//@Value("${notes.controle}")
 	private transient Boolean avecControle;
 
-	//@Value("${inscription.detail}")
 	private transient String afficherDetailInscription;
 
-	//@Value("${cursus.factultatif.italique}")
 	private transient Boolean facItalique;
 
-	//@Value("#{'${pegase.inscription.statut}'.split(',')}") 
 	private transient List<String> listeStatutsInscriptionAffichees;	
 	@Autowired
 	private transient SecurityService securityService;
