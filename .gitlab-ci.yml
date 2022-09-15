@@ -9,7 +9,7 @@ variables:
 acopy_test_properties:
   stage: build
   script:
-    - cp ${TEST_APPLICATION_PROPERTIES} ${CI_PROJECT_DIR}/src/test/resources
+    - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources
   when: always
 
 .build_image:
