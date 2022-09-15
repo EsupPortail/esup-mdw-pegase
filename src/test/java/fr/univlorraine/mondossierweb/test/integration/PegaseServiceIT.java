@@ -60,7 +60,7 @@ import lombok.extern.slf4j.Slf4j;
 @ExtendWith(SpringExtension.class)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @Import({PegaseService.class, AccessTokenService.class})
-@TestPropertySource("classpath:application.properties")
+@TestPropertySource("classpath:test.properties")
 @TestInstance(Lifecycle.PER_CLASS)
 @Slf4j
 public class PegaseServiceIT {
