@@ -3,7 +3,13 @@ include:
     file: '/.gitlab-ci-template.yml'
 
 variables:
-  MAVEN_ADDITIONAL_CLI_OPTS: "-Pproduction -DskipITs=true"
+  MAVEN_ADDITIONAL_CLI_OPTS: "-Pproduction"
+
+
+.copy_test_properties:
+  extends: build
+  before_script:
+    - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}\src\test\resources
 
 .build_image:
   image : 
