@@ -3,7 +3,7 @@ include:
     file: '/.gitlab-ci-template.yml'
 
 variables:
-  MAVEN_ADDITIONAL_CLI_OPTS: "-P 'coverage production'"
+  MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage -Pproduction'"
 
 
 build:
