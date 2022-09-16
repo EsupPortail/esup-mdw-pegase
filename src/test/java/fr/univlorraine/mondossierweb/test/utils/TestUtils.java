@@ -54,9 +54,10 @@ class TestUtils {
 	/** Test de la class Utils. */
 	@Test
 	void testfDisplayNote() {
-		String n = Utils.displayNote(new BigDecimal(15),20, true);
-		//assertThat(n, is(equalTo("15/20")));
-		assertEquals("15/20", n);
+		assertEquals("15/20", Utils.displayNote(new BigDecimal(15),20, true));
+		assertEquals("10/20", Utils.displayNote(new BigDecimal(10),20, true));
+		assertEquals("12/20", Utils.displayNote(new BigDecimal("12.0"),20, true));
+		assertEquals("5.6/20", Utils.displayNote(new BigDecimal("5.6"),20, true));
 	}
 
 }

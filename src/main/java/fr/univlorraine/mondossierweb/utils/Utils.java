@@ -320,7 +320,7 @@ public final class Utils {
 		String n = ""+bg;
 
 		//Formatage de la note pour supprimer les zéros ou les points inutiles
-		while(n.endsWith("0")) {
+		while(n.contains(".") && n.endsWith("0")) {
 			n = n.substring(0, n.length()-1);
 		}
 		if(n.endsWith(".")) {
