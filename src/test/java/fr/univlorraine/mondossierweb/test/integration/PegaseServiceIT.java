@@ -104,8 +104,8 @@ public class PegaseServiceIT {
 	/** Initialisation. */
 	@BeforeAll
 	public void setUp() {
-		final Logger logger = (Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-	    logger.setLevel(Level.INFO);
+		//final Logger logger = (Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+	    //logger.setLevel(Level.INFO);
 		initParameters();
 	}
 
