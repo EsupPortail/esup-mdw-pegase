@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -126,6 +127,10 @@ public class TestPegaseController {
 		List<CheminDTO> notes = pegaseController.getNotes(CODE_APPRENANT_TEST,CHEMIN_NOTES_NON_FORMATE,PERIODE_NOTES_TEST, true);
 		assertThat(notes, is(notNullValue()));
 		assertThat(notes, is(not(empty())));
+		List<CheminDTO> notes2 = pegaseController.getNotes(CODE_APPRENANT_TEST,CHEMIN_NOTES_NON_FORMATE,PERIODE_NOTES_TEST, true);
+		assertThat(notes2, is(notNullValue()));
+		assertThat(notes2, is(not(empty())));
+		assertEquals(notes2.size(), notes.size());
 	}
 
 	
