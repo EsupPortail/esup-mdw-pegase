@@ -59,6 +59,15 @@ class TestUtils {
 		assertThat(tf.getStyle().get(CSSColorUtils.MARGIN), is(equalTo("0em")));
 	}
 	
+	@Test
+	void testShortTextField() {
+		TextField tf = new TextField();
+		CmpUtils.setShortTextField(tf);
+		assertThat(tf.getStyle().get(CSSColorUtils.MARGIN), is(equalTo("0em")));
+		assertEquals("100%",tf.getWidth());
+		assertEquals("15em",tf.getMaxWidth());
+	}
+	
 	/** Test de la class Utils. */
 	@Test
 	void testDisplayNote() {
