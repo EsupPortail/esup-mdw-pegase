@@ -74,6 +74,7 @@ class TestUtils {
 		Formation f = new Formation();
 		f.setCode("FORM");
 		cible.setFormation(f);
+		assertEquals("FORM", Utils.getCodeChemin(cible));
 		List<ObjetFormationOuGroupement> chemin = new LinkedList<>();
 		ObjetFormationOuGroupement obj1 = new ObjetFormationOuGroupement();
 		obj1.setCode("obj1");
@@ -116,6 +117,7 @@ class TestUtils {
 	@Test
 	void testFormatStringDateToDisplay() {
 		assertEquals("25/03/2022", Utils.formatStringDateToDisplay("2022-03-25"));
+		assertEquals("25/03/2022", Utils.formatStringDateToDisplay("25/03/2022"));
 		assertEquals("", Utils.formatStringDateToDisplay(""));
 	}
 }
