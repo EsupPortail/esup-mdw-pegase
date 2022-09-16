@@ -38,6 +38,7 @@ import com.vaadin.flow.component.textfield.TextField;
 
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.Formation;
@@ -66,6 +67,13 @@ class TestUtils {
 		assertThat(tf.getStyle().get(CSSColorUtils.MARGIN), is(equalTo("0em")));
 		assertEquals("100%",tf.getWidth());
 		assertEquals("15em",tf.getMaxWidth());
+	}
+	
+	/** Test de la class PrefUtils */
+	@Test
+	void testgetBooleanValue() {
+		assertEquals(true,PrefUtils.getBooleanValue("true"));
+		assertEquals(false,PrefUtils.getBooleanValue("false"));
 	}
 	
 	/** Test de la class Utils. */
