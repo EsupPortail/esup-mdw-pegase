@@ -114,7 +114,7 @@ public class PegaseServiceIT {
 	void testGetCursus() {
 		log.info("Test PegaseService getCursus");
 		List<List<ObjetMaquetteExtension>> cursus = pegaseService.getCursus(codeApprenant, periode);
-		log.info("Cursus : {}",cursus);
+		log.debug("Cursus : {}",cursus);
 		assertThat(cursus, is(notNullValue()));
 		assertThat(cursus, is(not(empty())));
 	}
@@ -124,7 +124,7 @@ public class PegaseServiceIT {
 	void testGetNotes() {
 		log.info("Test PegaseService getNotes");
 		List<Chemin> notes = pegaseService.getNotes(codeApprenant, periode , chemin);
-		log.info("Notes : {}",notes);
+		log.debug("Notes : {}",notes);
 		assertThat(notes, is(notNullValue()));
 		assertThat(notes, is(not(empty())));
 	}
@@ -134,7 +134,7 @@ public class PegaseServiceIT {
 	void testRecupererDossierApprenant() {
 		log.info("Test PegaseService recupererDossierApprenant");
 		ApprenantEtInscriptions dossier = pegaseService.recupererDossierApprenant(codeApprenant);
-		log.info("Dossier : {}",dossier);
+		log.debug("Dossier : {}",dossier);
 		assertThat(dossier, is(notNullValue()));
 		assertThat(dossier.getApprenant(), is(notNullValue()));
 		assertThat(dossier.getApprenant().getCode(), equalTo(codeApprenant));
