@@ -16,7 +16,7 @@
  *  limitations under the License.
  *
  */
-package fr.univlorraine.mondossierweb.service;
+package fr.univlorraine.mondossierweb.services;
 
 import javax.annotation.PostConstruct;
 

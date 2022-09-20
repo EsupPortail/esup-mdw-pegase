@@ -45,7 +45,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.univlorraine.mondossierweb.controllers.PegaseController;
-import fr.univlorraine.mondossierweb.service.PegaseService;
+import fr.univlorraine.mondossierweb.services.PegaseService;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;

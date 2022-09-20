@@ -49,7 +49,7 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.internal.RouteUtil;
 
-import fr.univlorraine.mondossierweb.service.AppUserDetailsService;
+import fr.univlorraine.mondossierweb.services.AppUserDetailsService;
 import fr.univlorraine.mondossierweb.ui.view.error.AccessDeniedView;
 import fr.univlorraine.mondossierweb.utils.security.AppRequestCache;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;

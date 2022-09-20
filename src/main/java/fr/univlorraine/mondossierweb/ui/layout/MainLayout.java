@@ -25,7 +25,6 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.Component;
@@ -33,7 +32,6 @@ import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
@@ -49,9 +47,9 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -68,9 +66,9 @@ import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
-import fr.univlorraine.mondossierweb.service.CurrentUiService;
-import fr.univlorraine.mondossierweb.service.PreferencesService;
-import fr.univlorraine.mondossierweb.service.SecurityService;
+import fr.univlorraine.mondossierweb.services.CurrentUiService;
+import fr.univlorraine.mondossierweb.services.PreferencesService;
+import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.AppColorStyle;
 import fr.univlorraine.mondossierweb.ui.view.acces.AccesView;
 import fr.univlorraine.mondossierweb.ui.view.apropos.AProposView;
@@ -78,6 +76,7 @@ import fr.univlorraine.mondossierweb.ui.view.connexions.ConnexionsView;
 import fr.univlorraine.mondossierweb.ui.view.coordonnees.CoordonneesView;
 import fr.univlorraine.mondossierweb.ui.view.etatcivil.EtatCivilView;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.InscriptionsView;
+import fr.univlorraine.mondossierweb.ui.view.logger.LoggersView;
 import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
@@ -193,6 +192,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		addDrawerRouterLink(VaadinIcon.FOLDER_OPEN, "acces.title", AccesView.class);
 		addDrawerRouterLink(VaadinIcon.ACADEMY_CAP, "inscriptions.title", InscriptionsView.class);
 		addDrawerRouterLink(VaadinIcon.BAR_CHART_H, "connexions.title", ConnexionsView.class);
+		addDrawerRouterLink(VaadinIcon.COGS, "loggers.title", LoggersView.class);
 		if (!docUrl.isBlank()) {
 			addDrawerHrefLink(VaadinIcon.BOOK, "menu.doc", docUrl, true);
 		}

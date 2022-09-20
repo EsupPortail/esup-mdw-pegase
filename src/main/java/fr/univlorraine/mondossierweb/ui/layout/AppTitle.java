@@ -36,7 +36,7 @@ import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
-import fr.univlorraine.mondossierweb.service.CurrentUiService;
+import fr.univlorraine.mondossierweb.services.CurrentUiService;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;

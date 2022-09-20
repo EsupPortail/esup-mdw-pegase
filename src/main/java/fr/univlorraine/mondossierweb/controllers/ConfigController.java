@@ -21,7 +21,7 @@ package fr.univlorraine.mondossierweb.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import fr.univlorraine.mondossierweb.service.PreferencesService;
+import fr.univlorraine.mondossierweb.services.PreferencesService;
 
 @Component
 public class ConfigController {

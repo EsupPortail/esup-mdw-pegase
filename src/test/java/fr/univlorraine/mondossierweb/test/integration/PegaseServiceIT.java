@@ -43,8 +43,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
-import fr.univlorraine.mondossierweb.service.AccessTokenService;
-import fr.univlorraine.mondossierweb.service.PegaseService;
+import fr.univlorraine.mondossierweb.services.AccessTokenService;
+import fr.univlorraine.mondossierweb.services.PegaseService;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
