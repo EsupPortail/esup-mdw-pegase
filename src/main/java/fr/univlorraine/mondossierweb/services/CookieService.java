@@ -75,8 +75,9 @@ public class CookieService implements Serializable {
 			cookie.setHttpOnly(true);
 			/* Save */
 			VaadinService.getCurrentResponse().addCookie(cookie);
+		} else {
+			Assert.hasText("", "name cannot be null!");
 		}
-		Assert.hasText("", "name cannot be null!");
 	}
 
 	/**
