@@ -66,17 +66,17 @@ public class CookieService implements Serializable {
 	 *            value
 	 */
 	public void addCookie(final Optional<String> name, final String value) {
-		if (name.isEmpty()) {
-			Assert.hasText("", "name cannot be null!");
+		if(name.isPresent()) {
+			Cookie cookie = new Cookie(buildProperties.getArtifact() + COOKIE_SEPARATOR + name.get(), value != null ? value : "");
+			/* Durée de vie - 5j */
+			cookie.setMaxAge(60 * 60 * 24 * 5);
+			cookie.setSecure(VaadinService.getCurrentRequest().isSecure());
+			cookie.setPath("/");
+			cookie.setHttpOnly(true);
+			/* Save */
+			VaadinService.getCurrentResponse().addCookie(cookie);
 		}
-		Cookie cookie = new Cookie(buildProperties.getArtifact() + COOKIE_SEPARATOR + name.get(), value != null ? value : "");
-		/* Durée de vie - 5j */
-		cookie.setMaxAge(60 * 60 * 24 * 5);
-		cookie.setSecure(VaadinService.getCurrentRequest().isSecure());
-		cookie.setPath("/");
-		cookie.setHttpOnly(true);
-		/* Save */
-		VaadinService.getCurrentResponse().addCookie(cookie);
+		Assert.hasText("", "name cannot be null!");
 	}
 
 	/**
@@ -134,10 +134,10 @@ public class CookieService implements Serializable {
 				}
 				/* Ajout d'un listener sur l'ordre des colonnes pour mise à jour du cookie */
 				g.addColumnReorderListener(e -> addCookie(g.getId(),
-						e.getColumns().stream().filter(Objects::nonNull).map(c -> c.getKey() + COOKIE_WIDTH_SEPARATOR + c.getWidth()).collect(Collectors.joining(COOKIE_SEPARATOR))));
+					e.getColumns().stream().filter(Objects::nonNull).map(c -> c.getKey() + COOKIE_WIDTH_SEPARATOR + c.getWidth()).collect(Collectors.joining(COOKIE_SEPARATOR))));
 				/* Ajout d'un listener sur la taille des colonnes pour mise à jour du cookie */
 				g.addColumnResizeListener(e -> addCookie(g.getId(),
-						g.getColumns().stream().filter(Objects::nonNull).map(c -> c.getKey() + COOKIE_WIDTH_SEPARATOR + c.getWidth()).collect(Collectors.joining(COOKIE_SEPARATOR))));
+					g.getColumns().stream().filter(Objects::nonNull).map(c -> c.getKey() + COOKIE_WIDTH_SEPARATOR + c.getWidth()).collect(Collectors.joining(COOKIE_SEPARATOR))));
 			});
 		}
 	}
@@ -148,7 +148,7 @@ public class CookieService implements Serializable {
 		Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
 		/* Suppression */
 		Arrays.stream(cookies).filter(c -> c.getName().startsWith(buildProperties.getArtifact() + COOKIE_SEPARATOR))
-				.forEach(cookie -> addCookie(Optional.of(cookie.getName().replace(buildProperties.getArtifact() + COOKIE_SEPARATOR, "")), ""));
+		.forEach(cookie -> addCookie(Optional.of(cookie.getName().replace(buildProperties.getArtifact() + COOKIE_SEPARATOR, "")), ""));
 		/* Notification */
 		notificationService.success(VaadinService.getCurrent().getInstantiator().getI18NProvider().getTranslation("cookies.removeAll.success", Locale.getDefault()));
 	}
