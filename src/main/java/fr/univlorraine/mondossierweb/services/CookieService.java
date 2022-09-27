@@ -67,7 +67,7 @@ public class CookieService implements Serializable {
 	 */
 	public void addCookie(final Optional<String> name, final String value) {
 		if (name.isEmpty()) {
-			Assert.hasText(name.get(), "name cannot be null!");
+			Assert.hasText("", "name cannot be null!");
 		}
 		Cookie cookie = new Cookie(buildProperties.getArtifact() + COOKIE_SEPARATOR + name.get(), value != null ? value : "");
 		/* Durée de vie - 5j */
