@@ -45,7 +45,7 @@
 	</parent>
 
 	<properties>
-		<revision>1.0.9</revision>
+		<revision>1.0.10</revision>
 		<sha1></sha1>
 		<changelist>-SNAPSHOT</changelist>
 		<java.version>11</java.version>
@@ -164,6 +164,14 @@
     		<artifactId>snakeyaml</artifactId>
     		<version>1.33</version>
 		</dependency>
+		
+		<!-- Surcharge jsoup -->
+		<dependency>
+    		<groupId>org.jsoup</groupId>
+   		 	<artifactId>jsoup</artifactId>
+   		 	<version>1.15.3</version>
+		</dependency>
+
 
 		<!-- Base de données -->
 		<dependency>
