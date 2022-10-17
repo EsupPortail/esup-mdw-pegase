@@ -306,6 +306,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			buttonTester.setVisible(false);
 			buttonAnnuler.setVisible(true);
 			buttonEnregistrer.setVisible(true);
+			buttonSync.setVisible(false);
 		});
 
 		buttonAnnuler.addClickListener(e -> {
@@ -314,6 +315,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			buttonTester.setVisible(true);
 			buttonAnnuler.setVisible(false);
 			buttonEnregistrer.setVisible(false);
+			buttonSync.setVisible(true);
 		});
 
 		buttonEnregistrer.addClickListener(e -> {
@@ -322,6 +324,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			buttonTester.setVisible(true);
 			buttonAnnuler.setVisible(false);
 			buttonEnregistrer.setVisible(false);
+			buttonSync.setVisible(true);
 		});
 
 		//S'il s'agit de la catégorie LDAP
