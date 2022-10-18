@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 public class PageTitleFormatter {
 
 	@Autowired
-	private transient BuildProperties buildProperties;
+	private BuildProperties buildProperties;
 
 	public String format(final String title) {
 		return title + " - " + buildProperties.getName();

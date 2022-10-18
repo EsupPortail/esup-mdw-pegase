@@ -18,10 +18,11 @@
  */
 package fr.univlorraine.mondossierweb.ui.layout;
 
+import java.io.ByteArrayInputStream;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Component;
 
@@ -31,43 +32,48 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.spring.annotation.UIScope;
 
-import fr.univlorraine.mondossierweb.service.CurrentUiService;
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
+import fr.univlorraine.mondossierweb.services.CurrentUiService;
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
+import fr.univlorraine.mondossierweb.utils.Utils;
 
 @Component
 @UIScope
 @SuppressWarnings("serial")
 public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
-
-	@Value("${logo.light.src}")
-	private transient String srcLogo;
-	@Value("${logo.light.src}")
-	private transient String srcLogoDark;
-
+	
 	@Autowired
 	private transient CurrentUiService currentUiService;
 	@Autowired
 	private transient BuildProperties buildProperties;
+	@Autowired
+	private transient ConfigController configController;
+	
+	private transient String srcLogo = "";
+	private transient String srcLogoDark = "";
 	
 	private HorizontalLayout titleLayout = new HorizontalLayout();
-
 	private final Image logo = new Image();
+
 
 	@PostConstruct
 	private void init() {
+		byte[] imgLogo = configController.getUnivLogoImg();
+		
 		setAlignItems(Alignment.END);
-		/*getStyle().set("padding-bottom", "0.75rem");
-		getStyle().set("padding-top", "0.8rem");*/
-		getStyle().set("margin-left", "auto");
+		getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
 		getStyle().set("height", "3.75em");
 		
 
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getDarkModeFlux()
-				.map(darkMode -> darkMode ? srcLogoDark : srcLogo)
-				.map(logoSrc -> () -> logo.setSrc(logoSrc)));
+				.map(darkMode -> Boolean.TRUE.equals(darkMode) ? srcLogoDark : srcLogo)
+				.map(logoSrc -> () -> updateLogo(imgLogo)));
+
 		titleLayout.add(logo);
 
 		Div appNameTitle = new Div(new Text(buildProperties.getName()));
@@ -75,19 +81,28 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 		appNameTitle.addClassName("tracking-in-expand");
 		titleLayout.add(appNameTitle);
 		
-		titleLayout.getStyle().set("margin-left", "auto");
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
 		titleLayout.setWidthFull();
 		titleLayout.getStyle().set("max-width", "16em");
-		titleLayout.getStyle().set("padding-left", "1em");
-		titleLayout.getStyle().set("margin-top", "auto");
-		titleLayout.getStyle().set("margin-bottom", "auto");
+		titleLayout.getStyle().set(CSSColorUtils.PADDING_LEFT, "1em");
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
 		
-		getStyle().set("background-color", "#343a40");
-		getStyle().set("color", "white");
+		getStyle().set(CSSColorUtils.BACKGROUND_COLOR, "#343a40");
+		getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
 		
 		add(titleLayout);
 		
 		
+	}
+
+	private void updateLogo(byte[] logoImg) {
+		if(logoImg != null) {
+			StreamResource resource = new StreamResource("", () -> new ByteArrayInputStream(logoImg));
+			logo.setSrc(resource);
+		}
+		logo.setHeight(Utils.LARGEUR_LOGO);
+		logo.setWidth(Utils.HAUTEUR_LOGO);
 	}
 
 	/**

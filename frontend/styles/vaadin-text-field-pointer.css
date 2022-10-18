@@ -22,6 +22,10 @@
 	border-style: none;    
 }
 
+:host label {
+	white-space: normal;
+}
+
 /*
 :host(.nice-textfield) [part="input-field"]::after {
 	border-style: none;    

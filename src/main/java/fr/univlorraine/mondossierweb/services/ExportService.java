@@ -16,7 +16,7 @@
  *  limitations under the License.
  *
  */
-package fr.univlorraine.mondossierweb.service;
+package fr.univlorraine.mondossierweb.services;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -81,10 +81,9 @@ public class ExportService implements Serializable {
 
 				FileInputStream fileInputStream=new FileInputStream(file);
 				byte[] data=new byte[(int) file.length()];
-				BufferedInputStream bufferedInputStream=new BufferedInputStream(fileInputStream);
-
-				bufferedInputStream.read(data,0,data.length);
-				bufferedInputStream.close();
+				try (BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream)){
+					bufferedInputStream.read(data,0,data.length);
+				}
 				log.info("PDF generated {} {} ", codeApprenant, codeFormation);
 				return new ByteArrayInputStream(data);
 			} catch (IOException e) {

@@ -28,6 +28,8 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.RouterLink;
 
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+
 @SuppressWarnings("serial")
 public class DrawerRouterLink extends RouterLink implements LocaleChangeObserver {
 
@@ -42,7 +44,7 @@ public class DrawerRouterLink extends RouterLink implements LocaleChangeObserver
 		HorizontalLayout linkLayout = new HorizontalLayout(new Icon(icon), text);
 		linkLayout.setAlignItems(Alignment.CENTER);
 		linkLayout.setWidthFull();
-		linkLayout.getStyle().set("margin", "var(--lumo-space-s) var(--lumo-space-s) var(--lumo-space-s) 0.75rem");
+		linkLayout.getStyle().set(CSSColorUtils.MARGIN, "var(--lumo-space-s) var(--lumo-space-s) var(--lumo-space-s) 0.75rem");
 		add(linkLayout);
 	}
 

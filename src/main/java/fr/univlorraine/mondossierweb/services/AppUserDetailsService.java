@@ -16,11 +16,14 @@
  *  limitations under the License.
  *
  */
-package fr.univlorraine.mondossierweb.service;
+package fr.univlorraine.mondossierweb.services;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,11 +35,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.server.VaadinSession;
 
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,17 +52,38 @@ public class AppUserDetailsService implements UserDetailsService {
 
 
 	@Autowired
-	protected transient LdapService ldapService;
+	protected LdapService ldapService;
+
+	@Autowired
+	private ConfigController configController;
 
 	@Value("${app.superadmins:}")
-	private transient List<String> superAdmins;
+	private List<String> initSuperAdmins;
 
-	@Value("${acces.gestionnaire.actif}")
-	private transient boolean accesGestionnaireActif;
+	@Value("${app.superadmins:}")
+	private List<String> superAdmins;
 
-	@Value("${acces.etudiant.actif}")
-	private transient boolean accesEtudiantActif;
 
+	@PostConstruct
+	public void init() {
+		refreshParameters();
+	}
+
+	public void refreshParameters() {
+		superAdmins.clear();
+		superAdmins.addAll(initSuperAdmins);
+		String admins = configController.getAdmins();
+		if (StringUtils.hasText(admins)) {
+			if(admins.contains(";")) {
+				String[] tmails = admins.split(";");
+				superAdmins.addAll(Arrays.asList(tmails));
+			} else {
+				superAdmins.add(configController.getLogMailTo());
+			}
+		}
+		log.info("Admins : {}",superAdmins);
+	}
+	
 	@Transactional
 	@Override
 	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
@@ -73,20 +100,18 @@ public class AppUserDetailsService implements UserDetailsService {
 			// 2 - On cherche à savoir si l'utilisateur est étudiant
 			LdapPerson student = ldapService.findStudentByUid(username);
 			// 2.1- Si l'accès étudiant est activé et que l'utilisateur est étudiant
-			if(accesEtudiantActif && student != null) {
+			if(configController.isAccesEtudiantActif() && student != null) {
 				utilisateur.getAuthorities().add(new SimpleGrantedAuthority(SecurityUtils.ROLE_ETUDIANT));
 				utilisateur.setDisplayName(student.getDisplayName());
 				utilisateur.setCodeEtudiant(student.getCodeApprenant());
 				utilisateur.setMail(student.getMail());
-				//utilisateur.setCodEtuDossier(student.getCodeApprenant());
 				if( VaadinSession.getCurrent() != null) {
-					VaadinSession.getCurrent().setAttribute("codeApprenant", student.getCodeApprenant());
+					VaadinSession.getCurrent().setAttribute(Utils.DOSSIER_CONSULTE_APPRENANT, student.getCodeApprenant());
 				}
 				// Nécessaire de le faire à cet endroit?
-				// utilisateur.setDossier(pegaseService.recupererDossierApprenant(utilisateur.getCodEtuDossier()));
 			} else {
 				// 3- Si l'accès gestionnaire est activé
-				if(accesGestionnaireActif) {
+				if(configController.isAccesGestionnaireActif()) {
 					// 3.1 - On cherche à savoir si l'utilisateur est gestionnaire
 					LdapPerson teacher = ldapService.findAdministratorByUid(username);
 					if(teacher != null) {
@@ -99,10 +124,10 @@ public class AppUserDetailsService implements UserDetailsService {
 
 		// On renseigne l'attribut lastRole de l'utilisateur
 		utilisateur.setLastRole(utilisateur.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", ")));
-		
+
 		// Tracer l'accès dans un fichier de log
 		log.trace("Connexion de {} (login:{} - codeApprenant:{}) en tant que {}",utilisateur.getDisplayName(), utilisateur.getUsername(), utilisateur.getCodeEtudiant(), utilisateur.getLastRole());
-		
+
 		return utilisateur;
 	}
 

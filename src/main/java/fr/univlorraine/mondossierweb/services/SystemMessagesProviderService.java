@@ -16,7 +16,7 @@
  *  limitations under the License.
  *
  */
-package fr.univlorraine.mondossierweb.service;
+package fr.univlorraine.mondossierweb.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

@@ -35,7 +35,6 @@ public class TextLabel extends VerticalLayout {
 
 	public TextLabel() {
 		super();
-		//addClassName("flip");
 		this.setClassName("text-label");
 		label.setClassName("label-titre");
 		this.add(label);
@@ -52,15 +51,7 @@ public class TextLabel extends VerticalLayout {
 	}
 
 	public void updateStyle() {
-			/*this.getStyle().set("border", "0.1em solid");
-			this.getStyle().set("border-color", "lightgray");
-			this.getStyle().set("margin", "0.5em auto 0.5em auto");
-			this.getStyle().set("border-radius", "0.5em");
-			this.getStyle().set("color", "#343a40");
-			this.getStyle().set("padding", "1em 2em");
-			this.setHeight("fit-content");
-			this.setWidth("100%");
-			this.setMaxWidth("50em");*/
+		// NOTHING TO DO
 	}
 
 }

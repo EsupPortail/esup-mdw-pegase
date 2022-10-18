@@ -31,17 +31,17 @@ import fr.univlorraine.mondossierweb.ui.component.TextLabel;
  * @author Charlie Dubois
  */
 public final class CmpUtils {
+	
+	private CmpUtils() {
+		throw new IllegalStateException("Utility class");
+	}
 
 	public static void formatTextField(TextField tf) {
-		tf.getStyle().set("margin", "0em");
-		//tf.addClassName("nice-textfield");
-		//tf.addThemeName("nice-label");
+		tf.getStyle().set(CSSColorUtils.MARGIN, "0em");
 	}
 	
 	public static void formatTextLabel(TextLabel tl) {
-		tl.getStyle().set("margin", "0em");
-		//tf.addClassName("nice-textfield");
-		//tf.addThemeName("nice-label");
+		tl.getStyle().set(CSSColorUtils.MARGIN, "0em");
 	}
 	
 	public static void setLongTextField(TextField tf) {
@@ -49,12 +49,6 @@ public final class CmpUtils {
 		tf.setWidthFull();
 		tf.setMaxWidth("25em");
 	}
-	
-	/*public static void setLongTextLabel(TextLabel tf) {
-		formatTextLabel(tf);
-		tf.setWidthFull();
-		tf.setMaxWidth("25em");
-	}*/
 	
 	public static void setModerateTextField(TextField tf) {
 		formatTextField(tf);
@@ -64,8 +58,6 @@ public final class CmpUtils {
 	
 	public static void setModerateTextLabel(TextLabel tl) {
 		formatTextLabel(tl);
-		//tl.setWidthFull();
-		//tl.setMaxWidth("20em");
 	}
 	
 	public static void setShortTextField(TextField tf) {
@@ -93,13 +85,5 @@ public final class CmpUtils {
 		
 	}
 
-	/*public static void setBackgroundLogo(VerticalLayout view) {
-		view.getStyle().set("background-image", "url(./images/logo-back.png)");
-		view.getStyle().set("background-repeat", "no-repeat");
-		view.getStyle().set("background-position", "bottom right");
-		view.getStyle().set("background-size", "20%");
-
-		
-	}*/
 
 }

@@ -30,8 +30,8 @@ public class CardHeader extends HorizontalLayout {
 	
 	public CardHeader() {
 		libDiv.getStyle().set("font-size", "var(--lumo-font-size-xl)");
-		libDiv.getStyle().set("margin-top", "auto");
-		libDiv.getStyle().set("margin-bottom", "auto");
+		libDiv.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
+		libDiv.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
 		getStyle().set("min-height", "2.5em");
 	}
 
@@ -42,8 +42,8 @@ public class CardHeader extends HorizontalLayout {
 
 	public void setIcon(Icon icon) {
 		icon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
-		icon.getStyle().set("margin-top", "auto");
-		icon.getStyle().set("margin-bottom", "auto");
+		icon.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
+		icon.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
 		add(icon);
 	}
 

@@ -20,8 +20,6 @@ package fr.univlorraine.mondossierweb.model.app.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -48,6 +46,7 @@ public class PreferencesUtilisateur implements Serializable {
 	private String valeur;
 
 	public PreferencesUtilisateur() {
+		super();
 	}
 
 	public PreferencesUtilisateurPK getId() {

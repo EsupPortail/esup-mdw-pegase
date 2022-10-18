@@ -25,6 +25,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -38,13 +39,14 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
 import fr.univlorraine.mondossierweb.controllers.SessionController;
-import fr.univlorraine.mondossierweb.service.SecurityService;
+import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
@@ -63,7 +65,6 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	private transient SecurityService securityService;
 	@Autowired
 	private transient SessionController etudiantController;
-
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
@@ -71,6 +72,9 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	@Getter
 	private final TextHeader header = new TextHeader();
 
+	// label d'erreur
+	private final Label errorLabel = new Label();
+	
 	private final Card identiteCard = new Card(VaadinIcon.USER.create(),"", false);
 	private final Card naissanceCard = new Card(VaadinIcon.GLOBE.create(),"", false);
 	private final VerticalLayout etatcivilLayout = new VerticalLayout(identiteCard, naissanceCard);
@@ -105,7 +109,7 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	private void initIdentite() {
 
 		FormLayout identiteLayout = new FormLayout();
-		identiteLayout.getStyle().set("margin", "0");
+		identiteLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
 		
 		identiteLayout.add(nomFamille);
 		identiteLayout.add(nomUsage);
@@ -130,7 +134,7 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	private void initNaissance() {
 		FormLayout naissanceLayout = new FormLayout();
 		naissanceLayout.addClassName("card-layout");
-		naissanceLayout.getStyle().set("margin", "0");
+		naissanceLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
 
 		naissanceLayout.add(dateNaissance);
 		naissanceLayout.add(paysNaissance);
@@ -160,6 +164,8 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	public void localeChange(final LocaleChangeEvent event) {
 		setViewTitle(getTranslation("etatcivil.title"));
 
+		errorLabel.setText(getTranslation("error.unknown"));
+		
 		identiteCard.getTitre().setText(getTranslation("identite.titre"));
 		nomFamille.setLabel(getTranslation("identite.nomfamille"));
 		nomUsage.setLabel(getTranslation("identite.nomusage"));
@@ -225,7 +231,10 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	 */
 	private void updateData(Apprenant apprenant) {
 		resetData();
-		if(apprenant != null) {
+		if(apprenant == null ) {
+			this.removeAll();
+			add(errorLabel);
+		} else {
 			// Mise à jour de l'état-civil
 			CmpUtils.valueAndVisibleIfNotNull(nomFamille,apprenant.getEtatCivil().getNomDeNaissance());
 			CmpUtils.valueAndVisibleIfNotNull(nomUsage,apprenant.getEtatCivil().getNomUsuel());

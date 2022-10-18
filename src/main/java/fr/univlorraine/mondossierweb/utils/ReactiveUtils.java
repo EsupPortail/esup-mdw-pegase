@@ -29,6 +29,10 @@ import reactor.core.publisher.Flux;
 
 public class ReactiveUtils {
 
+	private ReactiveUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+	
 	public static void addDisposableWhenAttached(final Component component, final Function<AttachEvent, Disposable> disposableFunction) {
 		component.addAttachListener(attachEvent -> {
 			Disposable disposable = disposableFunction.apply(attachEvent);

@@ -30,6 +30,9 @@ import java.util.List;
 
 import org.springframework.util.StringUtils;
 
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
+
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
@@ -58,6 +61,17 @@ public final class Utils {
 	public static final Object DETAIL_INS_VIA_BOUTON = "button";
 	public static final Object DETAIL_INS_AFFICHE = "true";
 	public static final String STATUT_INSCRIPTION_VALIDE = "VALIDE";
+	public static final String DOSSIER_APPRENANT = "dossierApprenant";
+	public static final String DOSSIER_CONSULTE_APPRENANT = "dossierConsulteApprenant";
+	public static final String LARGEUR_LOGO = "34px";
+	public static final String HAUTEUR_LOGO = "34px";
+	public static final String EXT_PDF = ".pdf";
+
+	private Utils() {
+		throw new IllegalStateException("Utility class");
+	}
+
+
 
 
 	/** formatage d'une date en chaine pour un affichage européen */
@@ -93,8 +107,7 @@ public final class Utils {
 	/** Convertit la date JSON en LocalDate */
 	private static LocalDate getLocalDateFromJsonDate(String date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate localDate = LocalDate.parse(date, formatter);
-		return localDate;
+		return LocalDate.parse(date, formatter);
 	}
 
 	/** Retour le code période de l'inscription */
@@ -111,9 +124,9 @@ public final class Utils {
 
 	/** Converti une liste de ObjetMaquetteExtension en hiérarchie de ObjetMaquetteDTO */
 	public static List<ObjetMaquetteDTO> convertObjetMaquetteListToDTO(List<List<ObjetMaquetteExtension>> listObj, String codeCheminRacine) {
-		List<ObjetMaquetteDTO> list = new LinkedList<ObjetMaquetteDTO>();
+		List<ObjetMaquetteDTO> list = new LinkedList<>();
+		boolean listObjMaquetteTrouvee = false;
 		if(listObj != null) {
-			boolean listObjMaquetteTrouvee = false;
 			for(List<ObjetMaquetteExtension> lobj : listObj) {
 				// Si on a pas déjà trouvé la liste des objets de maquette recherchés dans un élément précédent de la liste
 				if(!listObjMaquetteTrouvee) {
@@ -162,7 +175,7 @@ public final class Utils {
 				return true;
 			}
 			// Si l'élément a des enfants et que son chemin est moins profond que celui ce l'élément à insérer
-			if(!parent.getChildObjects().isEmpty() && parent.getCodeChemin().length() < cheminParent.length()) {
+			if(parent != null && parent.getChildObjects() != null && !parent.getChildObjects().isEmpty() && parent.getCodeChemin().length() < cheminParent.length()) {
 				boolean insertInChild = insertInList(parent.getChildObjects(),cheminParent,o);
 				// Si l'élément a été inséré dans les enfants
 				if(insertInChild) {
@@ -187,26 +200,26 @@ public final class Utils {
 		}
 
 		o.setObjet(obj);
-		o.setChildObjects(new LinkedList<ObjetMaquetteDTO>());
+		o.setChildObjects(new LinkedList<>());
 
-		if(obj.getTemoinAcquis()) {
+		if(Boolean.TRUE.equals(obj.getTemoinAcquis())) {
 			o.setAcquis(true);
 		}
-		if(obj.getTemoinAffecte()) {
+		if(Boolean.TRUE.equals(obj.getTemoinAffecte())) {
 			o.setAffecte(true);
 		}
-		if(obj.getTemoinIAValide()) {
+		if(Boolean.TRUE.equals(obj.getTemoinIAValide())) {
 			o.setIaValide(true);
 		}
 		return o;
 	}
 
 	public static List<CheminDTO> convertCheminToDTO(List<Chemin> listObj, String codeCheminRacine, boolean avecControle) {
-		List<CheminDTO> list = new LinkedList<CheminDTO>();
+		List<CheminDTO> list = new LinkedList<>();
 		if(listObj != null) {
 			for(Chemin obj : listObj) {
 				// Si on est sur un objet concerné par la racine
-				if(obj!=null && obj.getCodeChemin()!=null && obj.getCodeChemin().contains(codeCheminRacine)) {
+				if(obj != null && obj.getCodeChemin().contains(codeCheminRacine)) {
 					CheminDTO o = createCheminDTO(obj, avecControle);
 					// S'il s'agit de la racine
 					if(obj.getCodeChemin().equals(codeCheminRacine)) {
@@ -244,10 +257,10 @@ public final class Utils {
 		o.setLibelle(obj.getObjetFeuille().getLibelleCourt());
 
 		o.setObjet(obj);
-		o.setChildObjects(new LinkedList<CheminDTO>());
+		o.setChildObjects(new LinkedList<>());
 
 		// Si l'objet a des contrôles et qu'on doit les afficher
-		if(avecControle && obj.getListeControle()!=null && !obj.getListeControle().isEmpty()) {
+		if(avecControle && !obj.getListeControle().isEmpty()) {
 			// Pour chaque contrôle
 			for(Controle c : obj.getListeControle() ) {
 				// Si le contrôle est porteur d'information
@@ -267,7 +280,7 @@ public final class Utils {
 		o.setLibelle(c.getLibelle());
 		o.setControle(c);
 		o.setObjet(pere);
-		o.setChildObjects(new LinkedList<CheminDTO>());
+		o.setChildObjects(new LinkedList<>());
 		return o;
 	}
 
@@ -276,14 +289,14 @@ public final class Utils {
 		// On recherche l'élément parent de la liste.
 		for(CheminDTO parent : list) {
 			// Si c'est le parent de l'objet en cours
-			if(parent != null && parent.getCodeChemin().equals(cheminParent)) {
+			if(parent.getCodeChemin().equals(cheminParent)) {
 				//Ajout au parent
 				parent.getChildObjects().add(o);
 				log.info("Element inséré.");
 				return true;
 			}
 			// Si l'élément a des enfants et que son chemin est moins profond que celui ce l'élément à insérer
-			if(!parent.getChildObjects().isEmpty() && parent.getCodeChemin().length() < cheminParent.length()) {
+			if(parent.getChildObjects() != null && !parent.getChildObjects().isEmpty() && parent.getCodeChemin().length() < cheminParent.length()) {
 				boolean insertInChild = insertInList(parent.getChildObjects(),cheminParent,o);
 				// Si l'élément a été inséré dans les enfants
 				if(insertInChild) {
@@ -307,7 +320,7 @@ public final class Utils {
 		String n = ""+bg;
 
 		//Formatage de la note pour supprimer les zéros ou les points inutiles
-		while(n.endsWith("0")) {
+		while(n.contains(".") && n.endsWith("0")) {
 			n = n.substring(0, n.length()-1);
 		}
 		if(n.endsWith(".")) {
@@ -319,15 +332,52 @@ public final class Utils {
 
 	public static String getCodeChemin(CibleInscription cible) {
 		// la racine est le code de la formation
-		String chemin = cible.getFormation().getCode();
+		StringBuilder chemin = new StringBuilder();
+		chemin.append(cible.getFormation().getCode());
 		if(cible.getChemin()!=null && !cible.getChemin().isEmpty()) {
 			for(ObjetFormationOuGroupement c : cible.getChemin()) {
 				// Ajout des éléments au chemin
-				chemin += SEPARATEUR_CHEMIN + c.getCode();
+				chemin.append(SEPARATEUR_CHEMIN + c.getCode());
 			}
 		}
 		log.info("Chemin : {} pour Cible {} {}", chemin, cible.getFormation(), cible.getChemin());
-		return chemin ;
+		return chemin.toString() ;
+	}
+
+	public static void notifierSucces(String message) {
+		Notification notification= Notification.show(message);
+		notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+	}
+
+	public static void notifierAnomalie(String message) {
+		Notification notification= Notification.show(message);
+		notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+	}
+
+
+
+
+	public static String getFileName(String fileName) {
+		int index = fileName.lastIndexOf('.');
+		if(index > 0) {
+			String name = fileName.substring(0, index);
+			log.info("File name of {} is {}",fileName, name);
+			return name;
+		}
+		return null;
+	}
+
+
+
+
+	public static String getFileExtension(String fileName) {
+		int index = fileName.lastIndexOf('.');
+		if(index > 0) {
+			String extension = fileName.substring(index);
+			log.info("File extension of {} is {}",fileName, extension);
+			return extension;
+		}
+		return null;
 	}
 
 

@@ -25,6 +25,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -37,13 +38,14 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
 import fr.univlorraine.mondossierweb.controllers.SessionController;
-import fr.univlorraine.mondossierweb.service.SecurityService;
+import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
@@ -68,17 +70,18 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	@Getter
 	private final TextHeader header = new TextHeader();
 
+	// label d'erreur
+	private final Label errorLabel = new Label();
+		
 	private final Card bacCard = new Card(VaadinIcon.DIPLOMA_SCROLL.create(),"", false);
 	private final Card anneesCard = new Card(VaadinIcon.INSTITUTION.create(),"", false);
 	private final VerticalLayout parcoursLayout = new VerticalLayout(bacCard, anneesCard);
 
-	//private final TextLabel titreAccesBac=new TextLabel();
 	private final TextLabel anneeBac=new TextLabel();
 	private final TextLabel typeBac=new TextLabel();
 	private final TextLabel mentionBac=new TextLabel();
 	private final TextLabel paysEtbBac=new TextLabel();
 	private final TextLabel departementEtbBac=new TextLabel();
-	//private final TextLabel etablissementBac=new TextLabel();
 	private final TextLabel codeIneBac=new TextLabel();
 
 
@@ -102,17 +105,15 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 
 	private void initBac() {
 		FormLayout bacLayout = new FormLayout();
-		bacLayout.getStyle().set("margin", "0");
+		bacLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
 		bacCard.add(bacLayout);
 
 		bacLayout.add(codeIneBac);
-		//bacLayout.add(titreAccesBac);
 		bacLayout.add(anneeBac);
 		bacLayout.add(typeBac);
 		bacLayout.add(mentionBac);
 		bacLayout.add(paysEtbBac);
 		bacLayout.add(departementEtbBac);
-		//bacLayout.add(etablissementBac);
 
 		CmpUtils.formatTextLabel(anneeBac);
 
@@ -124,8 +125,6 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 
 		CmpUtils.setModerateTextLabel(departementEtbBac);
 
-		//CmpUtils.setModerateTextLabel(etablissementBac);
-
 		CmpUtils.setModerateTextLabel(codeIneBac);
 
 	}
@@ -133,7 +132,7 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	private void initAnnees() {
 
 		FormLayout anneesLayout = new FormLayout();
-		anneesLayout.getStyle().set("margin", "0");
+		anneesLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
 		anneesCard.add(anneesLayout);
 		
 		anneesLayout.add(anneeSupFr);
@@ -158,14 +157,14 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	public void localeChange(final LocaleChangeEvent event) {
 		setViewTitle(getTranslation("acces.title"));
 
+		errorLabel.setText(getTranslation("error.unknown"));
+		
 		bacCard.getTitre().setText(getTranslation("bac.titre"));
-		//titreAccesBac.setLabel(getTranslation("bac.titreacces"));
 		anneeBac.setLabel(getTranslation("bac.annee"));
 		typeBac.setLabel(getTranslation("bac.type"));
 		mentionBac.setLabel(getTranslation("bac.mention"));
 		paysEtbBac.setLabel(getTranslation("bac.pays"));
 		departementEtbBac.setLabel(getTranslation("bac.departement"));
-		//etablissementBac.setLabel(getTranslation("bac.etablissement"));
 		codeIneBac.setLabel(getTranslation("bac.codeine"));
 
 		anneesCard.getTitre().setText(getTranslation("annees.titre"));
@@ -206,13 +205,11 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	 * @param apprenant
 	 */
 	private void resetData() {
-		//titreAccesBac.setValue("");
 		anneeBac.setValue("");
 		typeBac.setValue("");
 		mentionBac.setValue("");
 		paysEtbBac.setValue("");
 		departementEtbBac.setValue("");
-		//etablissementBac.setValue("");
 
 		codeIneBac.setValue("");
 		anneeSupFr.setValue("");
@@ -225,19 +222,19 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	 */
 	private void updateData(Apprenant apprenant) {
 		resetData();
-		if(apprenant != null) {
+		if(apprenant == null ) {
+			this.removeAll();
+			add(errorLabel);
+		} else {
 			// Mise à jour des infos sur le bac
-			//CmpUtils.valueAndVisibleIfNotNull(titreAccesBac,apprenant.getBac().getTitreAcces());
 			CmpUtils.valueAndVisibleIfNotNull(anneeBac,apprenant.getBac().getAnneeObtention());
 			CmpUtils.valueAndVisibleIfNotNull(typeBac,apprenant.getBac().getLibelleSerie());
 			CmpUtils.valueAndVisibleIfNotNull(mentionBac,apprenant.getBac().getLibelleMention());
 			CmpUtils.valueAndVisibleIfNotNull(paysEtbBac,apprenant.getBac().getLibellePays());
 			if(apprenant.getBac()!=null && apprenant.getBac().getPays()!=null && apprenant.getBac().getPays().equals(Utils.CODE_PAYS_FRANCE)) {
 				CmpUtils.valueAndVisibleIfNotNull(departementEtbBac,apprenant.getBac().getLibelleDepartement());
-				//CmpUtils.valueAndVisibleIfNotNull(etablissementBac,apprenant.getBac().getEtablissement());
 			} else {
 				CmpUtils.valueAndVisibleIfNotNull(departementEtbBac,null);
-				//CmpUtils.valueAndVisibleIfNotNull(etablissementBac,apprenant.getBac().getEtablissementLibre());
 			}
 			CmpUtils.valueAndVisibleIfNotNull(codeIneBac,apprenant.getBac().getIne());
 			CmpUtils.valueAndVisibleIfNotNull(anneeSupFr,apprenant.getPremieresInscriptions().getAnneeEnseignementSuperieur());

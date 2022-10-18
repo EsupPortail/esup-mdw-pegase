@@ -16,7 +16,7 @@
  *  limitations under the License.
  *
  */
-package fr.univlorraine.mondossierweb.service;
+package fr.univlorraine.mondossierweb.services;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,14 +47,14 @@ import reactor.core.publisher.UnicastProcessor;
 public class UiService implements VaadinServiceInitListener {
 
 	/* Événements UIs */
-	private final UnicastProcessor<List<UiInfo>> uiInfosProcessor = UnicastProcessor.create();
-	private final FluxSink<List<UiInfo>> uiInfosSink = uiInfosProcessor.sink(OverflowStrategy.LATEST);
+	private final transient UnicastProcessor<List<UiInfo>> uiInfosProcessor = UnicastProcessor.create();
+	private final transient FluxSink<List<UiInfo>> uiInfosSink = uiInfosProcessor.sink(OverflowStrategy.LATEST);
 	@Getter
-	private final Flux<List<UiInfo>> uiInfosFlux = uiInfosProcessor.defaultIfEmpty(List.of()).replay(1).autoConnect();
+	private final transient Flux<List<UiInfo>> uiInfosFlux = uiInfosProcessor.defaultIfEmpty(List.of()).replay(1).autoConnect();
 
 	/* Liste d'UiInfos */
 	@Getter
-	private final List<UiInfo> uiInfos = Collections.synchronizedList(new ArrayList<>());
+	private final transient List<UiInfo> uiInfos = Collections.synchronizedList(new ArrayList<>());
 
 	/**
 	 * UI informations.
@@ -109,7 +109,7 @@ public class UiService implements VaadinServiceInitListener {
 			.map(UI::getSession)
 			.map(VaadinSession::getBrowser)
 			.map(browser -> {
-				final StringBuffer sb = new StringBuffer();
+				final StringBuilder sb = new StringBuilder();
 				if (browser.isChrome()) {
 					sb.append("Chrome");
 				} else if (browser.isFirefox()) {

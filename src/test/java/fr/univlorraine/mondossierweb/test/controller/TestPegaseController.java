@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -44,7 +45,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.univlorraine.mondossierweb.controllers.PegaseController;
-import fr.univlorraine.mondossierweb.service.PegaseService;
+import fr.univlorraine.mondossierweb.services.PegaseService;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
@@ -110,22 +111,30 @@ public class TestPegaseController {
 	
 	/** Teste la méthode getCursus. */
 	@Test
-	public void testGetCursus() {
+	void testGetCursus() {
 		log.debug("Test PegaseController getCursus");
 		given(pegaseService.getCursus(anyString(), anyString())).willReturn(maquette1);
 		List<ObjetMaquetteDTO> cursus = pegaseController.getCursus(CODE_APPRENANT_TEST,CHEMIN_CURSUS_NON_FORMATE,PERIODE_CURSUS_TEST);		
 		assertThat(cursus, is(notNullValue()));
 		assertThat(cursus, is(not(empty())));
+		List<ObjetMaquetteDTO> cursusFromMap = pegaseController.getCursus(CODE_APPRENANT_TEST,CHEMIN_CURSUS_NON_FORMATE,PERIODE_CURSUS_TEST);		
+		assertThat(cursusFromMap, is(notNullValue()));
+		assertThat(cursusFromMap, is(not(empty())));
+		assertEquals(cursusFromMap.size(), cursus.size());
 	}
 	
 	/** Teste la méthode getCursus. */
 	@Test
-	public void testGetNotes() {
+	void testGetNotes() {
 		log.debug("Test PegaseController getNotes");
 		given(pegaseService.getNotes(anyString(), anyString() , anyString())).willReturn(notes1);
 		List<CheminDTO> notes = pegaseController.getNotes(CODE_APPRENANT_TEST,CHEMIN_NOTES_NON_FORMATE,PERIODE_NOTES_TEST, true);
 		assertThat(notes, is(notNullValue()));
 		assertThat(notes, is(not(empty())));
+		List<CheminDTO> notesFromMap = pegaseController.getNotes(CODE_APPRENANT_TEST,CHEMIN_NOTES_NON_FORMATE,PERIODE_NOTES_TEST, true);
+		assertThat(notesFromMap, is(notNullValue()));
+		assertThat(notesFromMap, is(not(empty())));
+		assertEquals(notesFromMap.size(), notes.size());
 	}
 
 	

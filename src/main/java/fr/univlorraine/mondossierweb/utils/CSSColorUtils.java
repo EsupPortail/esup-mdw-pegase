@@ -31,6 +31,34 @@ public final class CSSColorUtils {
 	private static final String PATTERN_HEX_COLOR_SHORT = "^#[0-9a-fA-F]{3}$";
 	private static final String PATTERN_HEX_COLOR_LONG = "^#[0-9a-fA-F]{6}$";
 	public static final String MAIN_HEADER_COLOR = "#0096ea";
+	public static final String COLOR = "color";
+	public static final String MARGIN_LEFT = "margin-left";
+	public static final String MARGIN_RIGHT = "margin-right";
+	public static final String MARGIN = "margin";
+	public static final String MARGIN_TOP = "margin-top";
+	public static final String WHITE = "white";
+	public static final String WHITE_SPACE = "white-space";
+	public static final String BACKGROUND_COLOR = "background-color";
+	public static final String PADDING_LEFT = "padding-left";
+	public static final String PADDING_RIGHT = "padding-right";
+	public static final String BORDER_RADIUS = "border-radius";
+	public static final String PADDING = "padding";
+	public static final String ITALIC = "italic";
+	public static final String FONT_STYLE = "font-style";
+	public static final String BORDER_TOP = "border-top";
+	public static final String VAR_LUMO_SPACE_L = "var(--lumo-space-l)";
+	public static final String MARGIN_BOTTOM = "margin-bottom";
+	public static final String AUTO = "auto";
+	public static final String FONT_WEIGHT = "font-weight";
+	public static final String NOWRAP = "nowrap";
+	public static final String FLEW_FLOW = "flex-flow";
+	public static final String ROW_WRAP = "row wrap";
+	public static final String COLUMN = "column";
+	public static final String FLEX_DIRECTION = "flex-direction";
+	public static final String EM_1_5 = "1.5em";
+	public static final String EM_0_5 = "0.5em";
+	public static final String SOLID_LIGHTGRAY = "1px solid lightgray";
+	public static final String AUTO_AUTO_AUTO_1EM = "auto auto auto 1em";
 
 	private CSSColorUtils() {
 	}

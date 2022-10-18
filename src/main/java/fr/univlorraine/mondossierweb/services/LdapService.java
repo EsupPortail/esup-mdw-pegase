@@ -16,25 +16,24 @@
  *  limitations under the License.
  *
  */
-package fr.univlorraine.mondossierweb.service;
+package fr.univlorraine.mondossierweb.services;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.query.LdapQuery;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,23 +46,26 @@ public class LdapService implements Serializable {
 
 	@Value("${ldap.login.attribute}")
 	private transient String ldapLoginAttribute;	
-	@Value("${ldap.displayname.attribute}")
 	private transient String ldapDisplayNameAttribute;	
-	@Value("${ldap.codetu.attribute}")
 	private transient String ldapCodEtuAttribute;
-	@Value("${ldap.mail.attribute}")
 	private transient String ldapMailAttribute;
-	@Value("${ldap.filtre.etudiant}")
 	private transient String ldapFiltreEtudiant;
-	@Value("${ldap.filtre.gestionnaire}")
 	private transient String ldapFiltreGestionnaire;
+
+	@Autowired
+	private transient ConfigController configController;
 
 
 	@Resource
 	private transient LdapTemplate ldapTemplate;
 
-	private class StudentAttributesMapper implements AttributesMapper {
-		public Object mapFromAttributes(Attributes attrs) throws NamingException {
+	@PostConstruct
+	public void init() {	
+		refreshParameters();
+	}
+	
+	private class StudentAttributesMapper implements AttributesMapper<LdapPerson> {
+		public LdapPerson mapFromAttributes(Attributes attrs) throws NamingException {
 			LdapPerson person = new LdapPerson();
 			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
 			person.setDisplayName((String)attrs.get(ldapDisplayNameAttribute).get());
@@ -73,17 +75,21 @@ public class LdapService implements Serializable {
 		}
 	}
 
-	private class PersonAttributesMapper implements AttributesMapper {
-		public Object mapFromAttributes(Attributes attrs) throws NamingException {
+	private class PersonAttributesMapper implements AttributesMapper<LdapPerson> {
+		public LdapPerson mapFromAttributes(Attributes attrs) throws NamingException {
 			LdapPerson person = new LdapPerson();
 			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
-			person.setDisplayName((String)attrs.get(ldapDisplayNameAttribute).get());
-			person.setMail((String)attrs.get(ldapMailAttribute).get());
+			try {
+				person.setDisplayName((String)attrs.get(ldapDisplayNameAttribute).get());
+				person.setMail((String)attrs.get(ldapMailAttribute).get());
+			}catch(Exception e) {
+				log.error("Erreur lors de la récupération des informations du compte ldap {}", person.getLogin(), e);	
+			}
 			return person;
 		}
 	}
 
-	
+
 	public LdapPerson findStudentByUid(String username) {
 		log.info("findStudentByUid : {}", username);
 
@@ -101,17 +107,15 @@ public class LdapService implements Serializable {
 		return (peoples!=null && !peoples.isEmpty()) ? peoples.get(0) : null ;
 	}
 
-	
+
 	public Optional<LdapPerson> findByUid(String username) {
 		log.info("findByUid : {}", username);
 
 		List<LdapPerson> peoples = ldapTemplate.search("",  "(&("+ldapLoginAttribute+"=" + username + "))", new PersonAttributesMapper());
 
-		return (peoples!=null && !peoples.isEmpty()) ? Optional.ofNullable(peoples.get(0)) : null ;
+		return (peoples!=null && !peoples.isEmpty()) ? Optional.ofNullable(peoples.get(0)) : Optional.empty();
 
 	}
-	
-
 
 	public String getStudentMailByCodeApprenant(String code) {
 		log.info("findStudentByCodeApprenant : {}", code);
@@ -126,4 +130,35 @@ public class LdapService implements Serializable {
 		}
 		return null;
 	}
+
+	public void refreshParameters() {
+		getLdapFiltreEtudiant();
+		getLdapFiltreGestionnaire();
+		getLdapDisplayNameAttribute();
+		getLdapMailAttribute();
+		getLdapCodEtuAttribute();
+	}
+
+	private void getLdapFiltreEtudiant() {
+		ldapFiltreEtudiant = configController.getLdapFiltreEtudiant();
+	}
+
+	private void getLdapFiltreGestionnaire() {
+		ldapFiltreGestionnaire = configController.getLdapFiltreGestionnaire();
+	}
+
+	private void getLdapDisplayNameAttribute() {
+		ldapDisplayNameAttribute = configController.getLdapDisplayNameAttribute();
+	}
+
+	private void getLdapMailAttribute() {
+		ldapMailAttribute = configController.getLdapMailAttribute();
+	}
+
+	private void getLdapCodEtuAttribute() {
+		ldapCodEtuAttribute = configController.getLdapCodEtuAttribute();
+	}
+
+
+
 }
