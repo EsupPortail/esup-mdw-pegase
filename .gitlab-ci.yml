@@ -20,7 +20,7 @@ build:
 prepare_variable:
   before_script:
 #    - *set_build_infos_variables_kaniko
-    - grep -Em1 "(?<=<revision>)[^<]+" "pom.xml"
+    - grep -oEm1 "(?<=<revision>)[^<]+" "pom.xml"
 #    - echo $build_properties_revision
 #    - export PROJECT_VERSION=$build_properties_revision
     - export PROJECT_VERSION=$(grep -Em1 "(?<=<revision>)[^<]+" "pom.xml")
