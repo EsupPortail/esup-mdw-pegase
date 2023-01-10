@@ -23,7 +23,7 @@ prepare_variable:
     - echo $build_properties_revision
     - export PROJECT_VERSION=$build_properties_revision
     - echo ${PROJECT_VERSION}
-  stage: build
+  stage: deploy
   script:
     - echo ${PROJECT_VERSION}
 
@@ -35,6 +35,7 @@ prepare_variable:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   stage: deploy
+  needs: ["prepare_variable"]
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
