@@ -9,9 +9,10 @@ build:
   before_script:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
-    - export PROJECT_VERSION=1.2.1
 
 .build_image:
+  before_script:
+    - export PROJECT_VERSION=1.2.1
   image : 
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
