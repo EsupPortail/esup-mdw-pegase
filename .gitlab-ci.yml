@@ -21,6 +21,7 @@ build:
     - echo $CI_PROJECT_DIR
     - echo $CI_REGISTRY
     - echo $CI_REGISTRY_IMAGE
+    - *set_build_infos_variables
     - echo $build_version
     - >-
       /kaniko/executor
