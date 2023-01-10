@@ -19,6 +19,8 @@ deploy:
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - export PROJECT_VERSION=$build_version
     - echo ${PROJECT_VERSION}
+  script:
+    - echo ${PROJECT_VERSION}
 
 .build_image:
 #  before_script:
