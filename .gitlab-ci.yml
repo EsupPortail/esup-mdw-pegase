@@ -9,8 +9,6 @@ build:
   before_script:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
-    - "VERSION=mvn $MAVEN_CLI_OPTS help:evaluate -Dexpression=project.version -q -DforceStdout"
-    - echo $VERSION
 
 .build_image:
   image : 
@@ -23,6 +21,7 @@ build:
     - echo $CI_PROJECT_DIR
     - echo $CI_REGISTRY
     - echo $CI_REGISTRY_IMAGE
+    - echo $build_version
     - >-
       /kaniko/executor
       --context "${CI_PROJECT_DIR}"
