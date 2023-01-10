@@ -9,6 +9,8 @@ build:
   before_script:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
+    - *set_build_infos_variables
+    - echo $build_version
 
 .build_image:
   image : 
@@ -16,8 +18,6 @@ build:
     entrypoint: [""]
   stage: deploy
   script:
-    - *set_build_infos_variables
-    - echo $build_version
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
     - echo $CI_PROJECT_DIR
