@@ -4,6 +4,7 @@ include:
 
 variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
+  PROJECT_VERSION: $build_version
 
 
 # extrait les infos de compilation de pom.xml
@@ -24,8 +25,8 @@ build:
   before_script:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
-    - *set_build_infos_variables_kaniko
-    - export PROJECT_VERSION=$build_version
+#    - *set_build_infos_variables_kaniko
+#    - export PROJECT_VERSION=$build_version
 
 .build_image:
 #  before_script:
