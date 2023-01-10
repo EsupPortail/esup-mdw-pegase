@@ -23,7 +23,8 @@ prepare_variable:
     - grep -oEm1 "(?<=<revision>)[^<]+" "pom.xml"
 #    - echo $build_properties_revision
 #    - export PROJECT_VERSION=$build_properties_revision
-    - export PROJECT_VERSION=$(grep -Em1 "(?<=<revision>)[^<]+" "pom.xml")
+#    - export PROJECT_VERSION=$(grep -Em1 "(?<=<revision>)[^<]+" "pom.xml")
+    - export PROJECT_VERSION=mvn $MAVEN_CLI_OPTS help:evaluate -Dexpression=project.version -q -DforceStdout
     - echo ${PROJECT_VERSION}
   stage: build
   script:
