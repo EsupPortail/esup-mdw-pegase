@@ -25,7 +25,7 @@ prepare_variable:
 #    - export PROJECT_VERSION=$build_properties_revision
     - export PROJECT_VERSION=$(grep -oPm1 "(?<=<revision>)[^<]+" "pom.xml")
     - echo ${PROJECT_VERSION}
-  stage: build
+  stage: deploy
   script:
     - echo ${PROJECT_VERSION}
 
@@ -36,7 +36,7 @@ prepare_variable:
   image : 
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
-  stage: build
+  stage: deploy
   extends: prepare_variable
   script:
     - mkdir -p /kaniko/.docker
