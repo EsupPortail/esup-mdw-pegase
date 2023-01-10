@@ -5,8 +5,8 @@ include:
 variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
 #  PROJECT_VERSION: $build_version
-  PROJECT_VERSION: "1.2"
-
+#  PROJECT_VERSION: "1.2"
+  PROJECT_VERSION: mvn help:evaluate -Dexpression=project.version -q -DforceStdout
 
 # extrait les infos de compilation de pom.xml
 .set_build_infos_variables_kaniko: &set_build_infos_variables_kaniko
