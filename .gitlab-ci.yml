@@ -1,9 +1,23 @@
-include:
-  - project: 'dn-sied/ci-config'
-    file: '/.gitlab-ci-template.yml'
+image: maven:3-jdk-11
 
 variables:
-  MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
+  NB_OF_WAR_TO_KEEP: 3
+  MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+  # workaround pour https://gitlab.com/gitlab-org/gitlab/-/issues/29407
+  MAVEN_CLI_OPTS: "-s $CI_PROJECT_DIR/../$CI_PROJECT_NAME.tmp/MAVEN_SETTINGS_XML --batch-mode --errors --show-version $MAVEN_ADDITIONAL_CLI_OPTS"
+  RESTART_AFTER_DEPLOY: 1
+
+cache:
+  paths:
+    - .m2/repository
+    - .sonar/cache
+
+#include:
+#  - project: 'dn-sied/ci-config'
+#    file: '/.gitlab-ci-template.yml'
+
+#variables:
+#  MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
 
 build:
   before_script:
@@ -12,7 +26,7 @@ build:
 
 .build_image:
   before_script:
-    - export PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+    - export PROJECT_VERSION=mvn $MAVEN_CLI_OPTS help:evaluate -Dexpression=project.version -q -DforceStdout
   image : 
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
