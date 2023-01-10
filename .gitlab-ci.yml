@@ -21,7 +21,7 @@ prepare_variable:
   before_script:
     - *set_build_infos_variables_kaniko
  #   - export PROJECT_VERSION=$build_version
-    - echo $build_version
+    - echo $build_properties_revision
     - echo ${PROJECT_VERSION}
   stage: build
   script:
