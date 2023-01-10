@@ -21,8 +21,7 @@ build:
     - echo $CI_PROJECT_DIR
     - echo $CI_REGISTRY
     - echo $CI_REGISTRY_IMAGE
-    - VERSION=$(mvn --non-recursive help:evaluate -Dexpression=project.version | grep -v '\[.*')
-    - echo $VERSION
+    - mvn help:evaluate -Dexpression=project.version -q -DforceStdout
     - >-
       /kaniko/executor
       --context "${CI_PROJECT_DIR}"
