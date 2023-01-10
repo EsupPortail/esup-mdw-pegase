@@ -12,6 +12,21 @@ cache:
     - .m2/repository
     - .sonar/cache
 
+# extrait les infos de compilation de pom.xml
+.set_build_infos_variables: &set_build_infos_variables
+  - build_group=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}groupId').text)")
+  - build_artifact=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}artifactId').text)")
+  - build_properties_revision=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}properties/{http://maven.apache.org/POM/4.0.0}revision').text)")
+  - build_properties_changelist=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}properties/{http://maven.apache.org/POM/4.0.0}changelist').text)")
+  - "[ -z $CI_COMMIT_TAG ] && build_version=$build_properties_revision.$CI_COMMIT_SHORT_SHA$build_properties_changelist || build_version=$build_properties_revision"
+  - build_packaging=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}packaging').text)")
+  - build_description=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}description').text)")
+  - build_name=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}name').text)")
+  - build_filename=$build_artifact-$build_version.$build_packaging
+  - repository_url=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}distributionManagement/{http://maven.apache.org/POM/4.0.0}repository/{http://maven.apache.org/POM/4.0.0}url').text)")
+  - "[ -z $CI_COMMIT_TAG ] && WAR_FILE=target/$build_filename || WAR_FILE=.m2/repository/${build_group//\\./\\/}/$build_artifact/$build_version/$build_filename"
+
+
 #include:
 #  - project: 'dn-sied/ci-config'
 #    file: '/.gitlab-ci-template.yml'
@@ -28,7 +43,7 @@ build:
 
 .build_image:
   before_script:
-    - export PROJECT_VERSION=$(mvn $MAVEN_CLI_OPTS help:evaluate -Dexpression=project.version -q -DforceStdout)
+    - export PROJECT_VERSION=$build_version
   image : 
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
