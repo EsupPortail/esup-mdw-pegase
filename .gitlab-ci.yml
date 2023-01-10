@@ -22,6 +22,7 @@ prepare_variable:
 #    - export PROJECT_VERSION=$build_properties_revision
 # Charlie   - export PROJECT_VERSION=$(grep -Em1 "(?<=<revision>)[^<]+" "pom.xml")
     - export PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+    - PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
     - echo ${PROJECT_VERSION}
   stage: build
   script:
