@@ -17,11 +17,13 @@ build:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
 
-deploy:
+prepare_variable:
   before_script:
     - *set_build_infos_variables_kaniko
-    - export PROJECT_VERSION=$build_version
+ #   - export PROJECT_VERSION=$build_version
+    - echo $build_version
     - echo ${PROJECT_VERSION}
+  stage: deploy
   script:
     - echo ${PROJECT_VERSION}
 
@@ -45,7 +47,7 @@ deploy:
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
       --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}"
-#  when: manual
+  when: manual
 
 build and push docker image:
   extends: .build_image
