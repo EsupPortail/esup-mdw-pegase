@@ -4,6 +4,7 @@ include:
 
 variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
+  PROJECT_VERSION: "1.0"
 
 # extrait les infos de compilation de pom.xml
 .set_build_infos_variables_kaniko: &set_build_infos_variables_kaniko
