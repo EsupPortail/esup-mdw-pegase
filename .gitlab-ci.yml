@@ -43,6 +43,7 @@ build:
 
 .build_image:
   before_script:
+    - *set_build_infos_variables
     - export PROJECT_VERSION=$build_version
   image : 
     name: gcr.io/kaniko-project/executor:debug
