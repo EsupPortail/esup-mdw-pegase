@@ -23,7 +23,7 @@ prepare_variable:
     - grep -oPm1 "(?<=<revision>)[^<]+" "pom.xml"
 #    - echo $build_properties_revision
 #    - export PROJECT_VERSION=$build_properties_revision
-    - export PROJECT_VERSION=grep -oPm1 "(?<=<revision>)[^<]+" "pom.xml"
+    - export PROJECT_VERSION=$(grep -oPm1 "(?<=<revision>)[^<]+" "pom.xml")
     - echo ${PROJECT_VERSION}
   stage: build
   script:
