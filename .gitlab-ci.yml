@@ -71,8 +71,11 @@ get-version:
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
       --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}"
   when: manual
-  dependencies:
-    - get-version
+#  dependencies:
+#    - get-version
+  needs:
+    - job: get-version
+      artifacts: true
 
 build and push docker image:
   extends: .build_image
