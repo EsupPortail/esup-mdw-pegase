@@ -4,7 +4,7 @@ include:
 
 variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
-  PROJECT_VERSION: "1.0"
+  VARIABLES_FILE: ./variables.txt  # "." is required for image that have sh not bash
 
 # extrait les infos de compilation de pom.xml
 .set_build_infos_variables_kaniko: &set_build_infos_variables_kaniko
@@ -30,8 +30,19 @@ prepare_variable:
   script:
     - echo ${PROJECT_VERSION}
 
+get-version:
+  stage: build
+  script:
+    - APP_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+    - echo "export APP_VERSION=$APP_VERSION" > $VARIABLES_FILE
+  artifacts:
+    paths:
+      - $VARIABLES_FILE
+
 .build_image:
-#  before_script:
+  before_script:
+    - source $VARIABLES_FILE
+    - echo "Use env var APP_VERSION here as you like ..."
 #    - *set_build_infos_variables_kaniko
 #    - export PROJECT_VERSION=$build_version
   image : 
