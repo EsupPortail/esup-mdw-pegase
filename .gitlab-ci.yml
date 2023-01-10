@@ -12,7 +12,7 @@ variables:
 .set_build_infos_variables_kaniko: &set_build_infos_variables_kaniko
   - build_properties_revision=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}properties/{http://maven.apache.org/POM/4.0.0}revision').text)")
 
-build:
+deploy:
   before_script:
     - *set_build_infos_variables_kaniko
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
