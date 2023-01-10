@@ -12,11 +12,14 @@ variables:
 .set_build_infos_variables_kaniko: &set_build_infos_variables_kaniko
   - build_properties_revision=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}properties/{http://maven.apache.org/POM/4.0.0}revision').text)")
 
+build:
+  before_script:
+    - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
+    - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
+
 deploy:
   before_script:
     - *set_build_infos_variables_kaniko
-    - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
-    - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - export PROJECT_VERSION=$build_version
     - echo ${PROJECT_VERSION}
   script:
@@ -42,6 +45,7 @@ deploy:
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
       --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}"
+#  when: manual
 
 build and push docker image:
   extends: .build_image
