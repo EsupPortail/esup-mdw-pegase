@@ -35,7 +35,8 @@ get-version:
   script:
     #- APP_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
     #- echo "export APP_VERSION=$APP_VERSION" > ${CI_PROJECT_DIR}/variables.txt
-    echo "BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> build.env
+    - echo "BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" # pour debug
+    - echo "BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> build.env
   #artifacts:
   #  paths:
   #    - ${CI_PROJECT_DIR}/variables.txt
@@ -46,6 +47,7 @@ get-version:
 
 .build_image:
   before_script:
+    - echo "$BUILD_VERSION"
 #    - source ${CI_PROJECT_DIR}/variables.txt
 #    - echo "Use env var APP_VERSION here as you like ..."
 #    - *set_build_infos_variables_kaniko
