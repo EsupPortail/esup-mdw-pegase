@@ -1,19 +1,13 @@
-image: maven:3-jdk-11
+include:
+  - project: 'dn-sied/ci-config'
+    file: '/.gitlab-ci-template.yml'
 
 variables:
-  NB_OF_WAR_TO_KEEP: 3
-  MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
-  # workaround pour https://gitlab.com/gitlab-org/gitlab/-/issues/29407
-  MAVEN_CLI_OPTS: "-s $CI_PROJECT_DIR/../$CI_PROJECT_NAME.tmp/MAVEN_SETTINGS_XML --batch-mode --errors --show-version $MAVEN_ADDITIONAL_CLI_OPTS"
-  RESTART_AFTER_DEPLOY: 1
+  MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
 
-cache:
-  paths:
-    - .m2/repository
-    - .sonar/cache
 
 # extrait les infos de compilation de pom.xml
-.set_build_infos_variables: &set_build_infos_variables
+.set_build_infos_variables_kaniko: &set_build_infos_variables_kaniko
   - build_group=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}groupId').text)")
   - build_artifact=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}artifactId').text)")
   - build_properties_revision=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}properties/{http://maven.apache.org/POM/4.0.0}revision').text)")
@@ -26,24 +20,14 @@ cache:
   - repository_url=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}distributionManagement/{http://maven.apache.org/POM/4.0.0}repository/{http://maven.apache.org/POM/4.0.0}url').text)")
   - "[ -z $CI_COMMIT_TAG ] && WAR_FILE=target/$build_filename || WAR_FILE=.m2/repository/${build_group//\\./\\/}/$build_artifact/$build_version/$build_filename"
 
-
-#include:
-#  - project: 'dn-sied/ci-config'
-#    file: '/.gitlab-ci-template.yml'
-
-#variables:
-#  MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
-
 build:
-  stage: build
   before_script:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
-  script: "echo test"  
 
 .build_image:
   before_script:
-    - *set_build_infos_variables
+    - *set_build_infos_variables_kaniko
     - export PROJECT_VERSION=$build_version
   image : 
     name: gcr.io/kaniko-project/executor:debug
