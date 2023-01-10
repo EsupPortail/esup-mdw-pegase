@@ -23,7 +23,7 @@ prepare_variable:
  #   - export PROJECT_VERSION=$build_version
     - echo $build_version
     - echo ${PROJECT_VERSION}
-  stage: deploy
+  stage: build
   script:
     - echo ${PROJECT_VERSION}
 
