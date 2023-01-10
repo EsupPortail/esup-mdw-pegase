@@ -27,8 +27,8 @@ build:
   script: "echo test"  
 
 .build_image:
-  #before_script:
-  #  - export PROJECT_VERSION=mvn $MAVEN_CLI_OPTS help:evaluate -Dexpression=project.version -q -DforceStdout
+  before_script:
+    - export PROJECT_VERSION=$(mvn $MAVEN_CLI_OPTS help:evaluate -Dexpression=project.version -q -DforceStdout)
   image : 
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
