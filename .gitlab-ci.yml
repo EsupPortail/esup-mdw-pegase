@@ -4,9 +4,6 @@ include:
 
 variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
-#  PROJECT_VERSION: $build_version
-#  PROJECT_VERSION: "1.2"
-#  PROJECT_VERSION: mvn help:evaluate -Dexpression=project.version -q -DforceStdout
 
 # extrait les infos de compilation de pom.xml
 .set_build_infos_variables_kaniko: &set_build_infos_variables_kaniko
@@ -20,10 +17,10 @@ build:
 prepare_variable:
   before_script:
 #    - *set_build_infos_variables_kaniko
-# a remettre    - grep -oEm1 "(?<=<revision>)[^<]+" "pom.xml"
+# Charlie    - grep -oEm1 "(?<=<revision>)[^<]+" "pom.xml"
 #    - echo $build_properties_revision
 #    - export PROJECT_VERSION=$build_properties_revision
-# a remettre   - export PROJECT_VERSION=$(grep -Em1 "(?<=<revision>)[^<]+" "pom.xml")
+# Charlie   - export PROJECT_VERSION=$(grep -Em1 "(?<=<revision>)[^<]+" "pom.xml")
     - export PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
     - echo ${PROJECT_VERSION}
   stage: build
@@ -45,7 +42,7 @@ prepare_variable:
     - echo $CI_PROJECT_DIR
     - echo $CI_REGISTRY
     - echo $CI_REGISTRY_IMAGE
-    - echo $PROJECT_VERSION
+    - echo ${PROJECT_VERSION}
     - >-
       /kaniko/executor
       --context "${CI_PROJECT_DIR}"
