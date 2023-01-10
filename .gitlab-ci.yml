@@ -19,7 +19,8 @@ build:
 
 prepare_variable:
   before_script:
-    - *set_build_infos_variables_kaniko
+#    - *set_build_infos_variables_kaniko
+    - grep -oPm1 "(?<=<version>)[^<]+" "pom.xml"
     - echo $build_properties_revision
     - export PROJECT_VERSION=$build_properties_revision
     - echo ${PROJECT_VERSION}
