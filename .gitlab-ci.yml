@@ -24,7 +24,7 @@ prepare_variable:
 #    - echo $build_properties_revision
 #    - export PROJECT_VERSION=$build_properties_revision
 # a remettre   - export PROJECT_VERSION=$(grep -Em1 "(?<=<revision>)[^<]+" "pom.xml")
-    - export PROJECT_VERSION=mvn $MAVEN_CLI_OPTS help:evaluate -Dexpression=project.version -q -DforceStdout
+    - export PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
     - echo ${PROJECT_VERSION}
   stage: build
   script:
