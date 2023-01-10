@@ -24,6 +24,7 @@ build:
   before_script:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
+  script: "mvn $MAVEN_CLI_OPTS -Dsha1=.$CI_COMMIT_SHORT_SHA verify"  
 
 .build_image:
   #before_script:
