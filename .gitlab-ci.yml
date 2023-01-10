@@ -4,7 +4,8 @@ include:
 
 variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
-  PROJECT_VERSION: $build_version
+#  PROJECT_VERSION: $build_version
+  PROJECT_VERSION: 1.2
 
 
 # extrait les infos de compilation de pom.xml
