@@ -6,7 +6,7 @@ variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
 #  PROJECT_VERSION: $build_version
 #  PROJECT_VERSION: "1.2"
-  PROJECT_VERSION: mvn help:evaluate -Dexpression=project.version -q -DforceStdout
+#  PROJECT_VERSION: mvn help:evaluate -Dexpression=project.version -q -DforceStdout
 
 # extrait les infos de compilation de pom.xml
 .set_build_infos_variables_kaniko: &set_build_infos_variables_kaniko
@@ -18,6 +18,7 @@ build:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - export PROJECT_VERSION=$build_version
+    - echo $PROJECT_VERSION
 
 .build_image:
 #  before_script:
