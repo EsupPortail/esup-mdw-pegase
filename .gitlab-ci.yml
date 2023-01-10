@@ -33,11 +33,16 @@ prepare_variable:
 get-version:
   stage: build
   script:
-    - APP_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-    - echo "export APP_VERSION=$APP_VERSION" > ${CI_PROJECT_DIR}/variables.txt
+    #- APP_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+    #- echo "export APP_VERSION=$APP_VERSION" > ${CI_PROJECT_DIR}/variables.txt
+    echo "BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> build.env
+  #artifacts:
+  #  paths:
+  #    - ${CI_PROJECT_DIR}/variables.txt
   artifacts:
-    paths:
-      - ${CI_PROJECT_DIR}/variables.txt
+    reports:
+      dotenv: build.env
+    
 
 .build_image:
   before_script:
@@ -63,6 +68,8 @@ get-version:
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
       --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}"
   when: manual
+  dependencies:
+    - get-version
 
 build and push docker image:
   extends: .build_image
