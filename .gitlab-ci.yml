@@ -56,6 +56,7 @@ get-version:
   stage: build
 # Charlie  extends: prepare_variable
   script:
+    - echo "$BUILD_VERSION" 
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
     - echo $CI_PROJECT_DIR
