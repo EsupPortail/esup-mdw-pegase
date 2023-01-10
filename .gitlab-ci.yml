@@ -16,13 +16,13 @@ build:
     entrypoint: [""]
   stage: deploy
   script:
+    - *set_build_infos_variables
+    - echo $build_version
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
     - echo $CI_PROJECT_DIR
     - echo $CI_REGISTRY
     - echo $CI_REGISTRY_IMAGE
-    - *set_build_infos_variables
-    - echo $build_version
     - >-
       /kaniko/executor
       --context "${CI_PROJECT_DIR}"
