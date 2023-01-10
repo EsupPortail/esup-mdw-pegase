@@ -4,75 +4,40 @@ include:
 
 variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
-#  VARIABLES_FILE: ./variables.txt  # "." is required for image that have sh not bash
-
-# extrait les infos de compilation de pom.xml
-.set_build_infos_variables_kaniko: &set_build_infos_variables_kaniko
-  - build_properties_revision=$(python3 -c "import xml.etree.cElementTree as ET; print(ET.parse('pom.xml').find('./{http://maven.apache.org/POM/4.0.0}properties/{http://maven.apache.org/POM/4.0.0}revision').text)")
 
 build:
   before_script:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
 
-prepare_variable:
-  before_script:
-#    - *set_build_infos_variables_kaniko
-# Charlie    - grep -oEm1 "(?<=<revision>)[^<]+" "pom.xml"
-#    - echo $build_properties_revision
-#    - export PROJECT_VERSION=$build_properties_revision
-# Charlie   - export PROJECT_VERSION=$(grep -Em1 "(?<=<revision>)[^<]+" "pom.xml")
-    - echo ${PROJECT_VERSION}
-    - export PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-    - PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-    - echo ${PROJECT_VERSION}
-  stage: build
-  script:
-    - echo ${PROJECT_VERSION}
-
+# https://dev.lutece.paris.fr/gitlab/help/ci/variables/README.md
 get-version:
   stage: build
   script:
-    #- APP_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-    #- echo "export APP_VERSION=$APP_VERSION" > ${CI_PROJECT_DIR}/variables.txt
     - echo "BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" # pour debug
     - echo "BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> build.env
-  #artifacts:
-  #  paths:
-  #    - ${CI_PROJECT_DIR}/variables.txt
   artifacts:
     reports:
       dotenv: build.env
-    
 
 .build_image:
-  before_script:
-    - echo "$BUILD_VERSION"
-#    - source ${CI_PROJECT_DIR}/variables.txt
-#    - echo "Use env var APP_VERSION here as you like ..."
-#    - *set_build_infos_variables_kaniko
-#    - export PROJECT_VERSION=$build_version
   image : 
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   stage: build
-# Charlie  extends: prepare_variable
   script:
-    - echo "$BUILD_VERSION" 
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
     - echo $CI_PROJECT_DIR
     - echo $CI_REGISTRY
     - echo $CI_REGISTRY_IMAGE
-    - echo ${PROJECT_VERSION}
+    - echo "$BUILD_VERSION"
     - >-
       /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
-      --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}"
+      --destination "${CI_REGISTRY_IMAGE}:${BUILD_VERSION}"
   when: manual
-#  dependencies:
-#    - get-version
   needs:
     - job: get-version
       artifacts: true
