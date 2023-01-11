@@ -10,16 +10,6 @@ build:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
 
-# https://dev.lutece.paris.fr/gitlab/help/ci/variables/README.md
-get_version:
-  stage: build
-  script:
-#    - echo "BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" # pour debug
-    - echo "BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> build.env
-  artifacts:
-    reports:
-      dotenv: build.env
-
 .build_image:
   image : 
     name: gcr.io/kaniko-project/executor:debug
