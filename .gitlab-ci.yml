@@ -11,10 +11,10 @@ build:
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
 
 # https://dev.lutece.paris.fr/gitlab/help/ci/variables/README.md
-get-version:
+get_version:
   stage: build
   script:
-    - echo "BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" # pour debug
+#    - echo "BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" # pour debug
     - echo "BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> build.env
   artifacts:
     reports:
@@ -31,7 +31,7 @@ get-version:
     - echo $CI_PROJECT_DIR
     - echo $CI_REGISTRY
     - echo $CI_REGISTRY_IMAGE
-    - echo "$BUILD_VERSION"
+    - echo $BUILD_VERSION
     - >-
       /kaniko/executor
       --context "${CI_PROJECT_DIR}"
@@ -39,7 +39,7 @@ get-version:
       --destination "${CI_REGISTRY_IMAGE}:${BUILD_VERSION}"
   when: manual
   needs:
-    - job: get-version
+    - job: get_version
       artifacts: true
 
 build and push docker image:
