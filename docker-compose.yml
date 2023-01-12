@@ -32,7 +32,7 @@ services:
       
   mdw-pegase:
     #image: registry.univ.fr/esup-mdw-pegase:1.0.5
-    image: esup-mdw-pegase:1.0.5
+    image: esup-mdw-pegase:1.5.1
     restart: always
     container_name: mdw-pegase_mdw-pegase
     ports:
