@@ -34,15 +34,11 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class PegaseController {
-	
-	Map<String,List<ObjetMaquetteDTO>> cursusMap = new HashMap<>();
 
-	Map<String,List<CheminDTO>> notesMap = new HashMap<>();
 
-	
 	@Autowired
 	private PegaseService pegaseService;
-	
+
 
 	/**
 	 * 
@@ -53,29 +49,18 @@ public class PegaseController {
 	 */
 	public List<ObjetMaquetteDTO> getCursus(String codeApprenant, String codeChemin, String codePeriode) {
 		List<ObjetMaquetteDTO> listObj;
-		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
-		// Gestion du cache des cursus en session
-		if(cursusMap.containsKey(insKey)) {
-			log.info("Récupération de la liste cursus dans la map");
-			//Récupération de l'arborescence dans la map
-			listObj = cursusMap.get(insKey);
-		}else {
-			log.info("Récupération de la liste cursus dans Pégase");
-			// Correction du chemin pour en replaçant le séparateur
-			String codeCheminChc = formatChemin(codeChemin);
-			// Récupération du cursus
-			listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
-			// suppression de la racine
-			if(listObj != null && !listObj.isEmpty()) {
-				listObj = listObj.get(0).getChildObjects();
-			}
-			log.info("sauvegarde de la liste cursus dans la map ({} elements)", listObj != null ? listObj.size() : 0 );
-			// On stocke l'arborescence dans la map
-			cursusMap.put(insKey, listObj);
+		log.info("Récupération de la liste cursus dans Pégase");
+		// Correction du chemin pour en replaçant le séparateur
+		String codeCheminChc = formatChemin(codeChemin);
+		// Récupération du cursus
+		listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
+		// suppression de la racine
+		if(listObj != null && !listObj.isEmpty()) {
+			listObj = listObj.get(0).getChildObjects();
 		}
 		return listObj;
 	}
-	
+
 
 	/**
 	 * 
@@ -86,27 +71,14 @@ public class PegaseController {
 	 * @return les notes de l'étudiant pour le codeApprenant, le chemin, la période en paramètre
 	 */
 	public List<CheminDTO> getNotes(String codeApprenant, String codeChemin, String codePeriode, boolean avecControle) {
-		
-		List<CheminDTO> listObj;
-		String insKey = codeApprenant + "|" + codePeriode + "|" + codeChemin;
-		// Gestion du cache des notes en session
-		if(notesMap.containsKey(insKey)) {
-			log.info("Récupération de la liste notes dans la map");
-			//Récupération de l'arborescence dans la map
-			listObj = notesMap.get(insKey);
-		}else {
-			log.info("Récupération de la liste notes dans Pégase");
-			// Correction du chemin pour en replaçant le séparateur
-			String codeCheminChc = formatChemin(codeChemin);
-			// Récupération des notes
-			listObj = Utils.convertCheminToDTO(pegaseService.getNotes(codeApprenant, codePeriode,codeCheminChc), codeCheminChc, avecControle);
-			log.info("sauvegarde de la liste notes dans la map ({} elements)", listObj.size());
-			// On stocke l'arborescence dans la map
-			notesMap.put(insKey, listObj);
-		}
-		return listObj;
+
+		log.info("Récupération de la liste notes dans Pégase");
+		// Correction du chemin pour en replaçant le séparateur
+		String codeCheminChc = formatChemin(codeChemin);
+		// Récupération des notes
+		return Utils.convertCheminToDTO(pegaseService.getNotes(codeApprenant, codePeriode,codeCheminChc), codeCheminChc, avecControle);
 	}
-	
+
 	/**
 	 * 
 	 * @param codeChemin
