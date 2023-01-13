@@ -407,7 +407,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						photoButton.addClickListener(c-> {
 							ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(),  Utils.getCodeVoeu(inscription));
 							if(photo != null) {
-								StreamResource resource = new StreamResource("photo_"+sessionController.getDossierConsulte()+".jpg", () -> photo);
+								StreamResource resource = new StreamResource("photo_"+sessionController.getCodeApprenant()+".jpg", () -> photo);
 								Image image = new Image(resource, "photographie");
 								image.setHeight("10em");
 								image.getStyle().set(CSSColorUtils.BORDER_RADIUS, "0.8em");

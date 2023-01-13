@@ -187,10 +187,6 @@ public class PegaseService implements Serializable {
 
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
 
-		// Si on a aucun codeApprenant en paramètre et qu'on a paramétré un code démo.
-		if(!StringUtils.hasText(codeApprenant) && StringUtils.hasText(codeApprenantDemo)) {
-			codeApprenant = codeApprenantDemo;
-		}
 
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
