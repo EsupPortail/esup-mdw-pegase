@@ -51,7 +51,7 @@
 		<file>${LOG_PATH}/${build.artifact}.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover daily -->
-			<fileNamePattern>${LOG_PATH}/${APP_ARTIFACT}-%d.%i.log</fileNamePattern>
+			<fileNamePattern>${LOG_PATH}/${build.artifact}-%d.%i.log</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<!-- or whenever the file size reaches 1MB -->
 				<maxFileSize>1MB</maxFileSize>

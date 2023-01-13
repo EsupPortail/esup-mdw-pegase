@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -66,27 +67,38 @@ public class SessionController {
 	 * 
 	 * @return Code apprenant du dossier en cours de consultation
 	 */
-	public String getDossierConsulte() {
+	public String getCodeApprenant() {
 		if(securityService != null) {
 			Optional<String> codeEtudiant = securityService.getCodeEtudiant();
 			// On a rien dans la Session Vaadin mais on a l'info dans le SecurityService (cas d'un étudiant qui vient de se connecter à l'application)
-			if(VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_CONSULTE_APPRENANT) == null 
+			if(getCodeApprenantEnSession() == null 
 				&& codeEtudiant.isPresent()) {
-				setDossierConsulte(codeEtudiant.get());
+				setCodeApprenantEnSession(codeEtudiant.get());
 			}
 		}
+		// récupération du code apprenant de démo (le dossier par défaut)
+		String codeApprenantDemo = pegaseService.getCodeApprenantDemo();
+		// Si on a aucun codeApprenant en session
+		if(getCodeApprenantEnSession() == null && StringUtils.hasText(codeApprenantDemo)
+			&& securityService.isAccessGrantedForStudent(codeApprenantDemo)) {
+				setCodeApprenantEnSession(codeApprenantDemo);
+		}
+
+		return getCodeApprenantEnSession();
+	}
+
+	private String getCodeApprenantEnSession() {
 		if(VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_CONSULTE_APPRENANT) != null) {
 			return (String) VaadinSession.getCurrent().getAttribute(Utils.DOSSIER_CONSULTE_APPRENANT);
-		} 
-
+		}
 		return null;
 	}
 
-	public void setDossierConsulte(String codeApprenant) {
+	public void setCodeApprenantEnSession(String codeApprenant) {
 		VaadinSession.getCurrent().setAttribute(Utils.DOSSIER_CONSULTE_APPRENANT, codeApprenant);
 	}
 
-	public void setDossier(ApprenantEtInscriptions dossier) {
+	public void setDossierEnSession(ApprenantEtInscriptions dossier) {
 		VaadinSession.getCurrent().setAttribute(Utils.DOSSIER_APPRENANT, dossier);
 	}
 
@@ -95,10 +107,10 @@ public class SessionController {
 	 */
 	public void checkDossier() {
 		// Si on n'a pas les informations sur l'étudiant consulté
-		if(getDossier() == null || !getDossier().getApprenant().getCode().equals(getDossierConsulte())) {
-			log.info("Mise à jour des données du dossier en session pour : {}", getDossierConsulte());
+		if(getDossier() == null || !getDossier().getApprenant().getCode().equals(getCodeApprenant())) {
+			log.info("Mise à jour des données du dossier en session pour : {}", getCodeApprenant());
 			// Met à jour les données du dossier en session
-			setDossier(pegaseService.recupererDossierApprenant(getDossierConsulte()));
+			setDossierEnSession(pegaseService.recupererDossierApprenant(getCodeApprenant()));
 		}
 		// Maj du nom/prenom dans le menu latéral
 		if(mainLayout!=null) {

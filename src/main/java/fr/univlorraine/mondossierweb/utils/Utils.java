@@ -138,14 +138,14 @@ public final class Utils {
 							// S'il s'agit de la racine
 							if(obj.getCodeChemin().equals(codeCheminRacine)) {
 								list.add(o);
-								log.info("Racine {} insérée", codeCheminRacine);
+								log.debug("Racine {} insérée", codeCheminRacine);
 							} else {
 								// Si l'étudiant est affecté à cet objet de formation ou qu'il l'a acquis
 								if((o.getAffecte()!=null && o.getAffecte().booleanValue()) ||
 									o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 									boolean insere = false;
 									String cheminParent = o.getCodeChemin();
-									log.info("Insertion de {} dans l'arborescence...", cheminParent);
+									log.debug("Insertion de {} dans l'arborescence...", cheminParent);
 									// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
 									while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
 										// On supprime le dernier élément du chemin
@@ -228,12 +228,12 @@ public final class Utils {
 					} else {
 						boolean insere = false;
 						String cheminParent = o.getCodeChemin();
-						log.info("Insertion de {} dans l'arborescence...", cheminParent);
+						log.debug("Insertion de {} dans l'arborescence...", cheminParent);
 						// tant qu'on n'a pas inséré l'élément dans l'arborescence ou que le chemin contient des éléments à ignorer
 						while(!insere && cheminParent.contains(SEPARATEUR_CHEMIN)) {
 							// On supprime le dernier élément du chemin
 							cheminParent = cheminParent.substring(0, cheminParent.lastIndexOf(SEPARATEUR_CHEMIN));
-							log.info("Recherche du parent : {}...", cheminParent);
+							log.debug("Recherche du parent : {}...", cheminParent);
 							insere = insertInList(list, cheminParent, o);
 						}
 						// Si element non insere
@@ -292,7 +292,7 @@ public final class Utils {
 			if(parent.getCodeChemin().equals(cheminParent)) {
 				//Ajout au parent
 				parent.getChildObjects().add(o);
-				log.info("Element inséré.");
+				log.debug("Element inséré.");
 				return true;
 			}
 			// Si l'élément a des enfants et que son chemin est moins profond que celui ce l'élément à insérer
@@ -340,7 +340,7 @@ public final class Utils {
 				chemin.append(SEPARATEUR_CHEMIN + c.getCode());
 			}
 		}
-		log.info("Chemin : {} pour Cible {} {}", chemin, cible.getFormation(), cible.getChemin());
+		log.debug("Chemin : {} pour Cible {} {}", chemin, cible.getFormation(), cible.getChemin());
 		return chemin.toString() ;
 	}
 
