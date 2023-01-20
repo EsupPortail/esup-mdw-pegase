@@ -77,9 +77,11 @@ html {
 @keyframes shrink {
     0% {
         transform: scaleY(1);
+        height: 100%;
     }
     100% {
         transform: scaleY(0);
+        height: 0%;
     	max-height: 0;
     }
 }
@@ -91,10 +93,12 @@ html {
 }
 @keyframes growDown {
     0% {
-        transform: scaleY(0);
+        transform: scaleY(0); 
+        height: 0%;
     }
     100% {
         transform: scaleY(1);
+		height: 100%;
     }
 }
 
