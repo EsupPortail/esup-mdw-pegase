@@ -69,19 +69,36 @@ html {
   }
 }
 
-.ddrop {
-	animation: growDown 300ms ease-in-out forwards;
+.hiddenpanel {
+	animation: shrink 170ms ease-out forwards;
 	transform-origin: top center;
+}
+
+@keyframes shrink {
+    0% {
+        transform: scaleY(1);
+        height: 100%;
+    }
+    100% {
+        transform: scaleY(0);
+        height: 0%;
+    	max-height: 0;
+    }
+}
+
+.diplayedpanel {
+	animation: growDown 170ms ease-in forwards;
+	transform-origin: top center;
+	display: flex;
 }
 @keyframes growDown {
     0% {
-        transform: scaleY(0);
-    }
-    80% {
-        transform: scaleY(1.1);
+        transform: scaleY(0); 
+        height: 0%;
     }
     100% {
         transform: scaleY(1);
+		height: 100%;
     }
 }
 
