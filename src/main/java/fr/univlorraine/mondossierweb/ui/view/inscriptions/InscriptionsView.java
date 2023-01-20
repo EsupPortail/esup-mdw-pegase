@@ -142,6 +142,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	transient List<Button> listButtonCursus = new LinkedList<> ();
 	transient List<Button> listButtonNotes = new LinkedList<> ();
 	transient List<Button> listButtonDetailInscription = new LinkedList<> ();
+	transient List<Button> listButtonMasquerInscription = new LinkedList<> ();
 
 
 
@@ -219,7 +220,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		for(Button b : listButtonDetailInscription ) {
 			b.setText(getTranslation("inscription.detail"));
 		}
-
+		for(Button b : listButtonMasquerInscription ) {
+			b.setText(getTranslation("inscription.masquer"));
+		}
+		
 
 
 	}
@@ -506,17 +510,33 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					if(afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE) || afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON) ) {
 						verticalInfoPhotoAndExportLayout.setVisible(false);
 						if(afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
-							verticalInfoPhotoAndExportLayout.setVisible(false);
-							verticalInfoPhotoAndExportLayout.addClassName("ddrop");
 							Button displayDetailButton=new Button("", VaadinIcon.ANGLE_DOWN.create());
 							displayDetailButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 							displayDetailButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+							
+							Button hideDetailButton=new Button("", VaadinIcon.ANGLE_UP.create());
+							hideDetailButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+							hideDetailButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+							
 							displayDetailButton.addClickListener(c-> {
-								flexDropDownButtonLayout.setVisible(false);
+								verticalInfoPhotoAndExportLayout.setClassName("diplayedpanel");
+								hideDetailButton.setVisible(true);
+								displayDetailButton.setVisible(false);
 								verticalInfoPhotoAndExportLayout.setVisible(true);
 							});
 							listButtonDetailInscription.add(displayDetailButton);
 							flexDropDownButtonLayout.add(displayDetailButton);
+							
+							hideDetailButton.addClickListener(c-> {
+								verticalInfoPhotoAndExportLayout.setClassName("hiddenpanel");
+								//flexDropDownButtonLayout.setVisible(true);
+								hideDetailButton.setVisible(false);
+								displayDetailButton.setVisible(true);
+								//verticalInfoPhotoAndExportLayout.setVisible(false);
+							});
+							hideDetailButton.setVisible(false);
+							listButtonMasquerInscription.add(hideDetailButton);
+							flexDropDownButtonLayout.add(hideDetailButton);
 							flexDropDownButtonLayout.setVisible(true);
 						}
 					}
