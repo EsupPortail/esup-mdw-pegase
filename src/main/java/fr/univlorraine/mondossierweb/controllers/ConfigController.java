@@ -84,6 +84,10 @@ public class ConfigController {
 	
 	private static final String BTN_ATTEST_PAI = "BTN_ATTEST_PAI";
 	
+	private static final String BTN_CURSUS = "BTN_CURSUS";
+	
+	private static final String BTN_NOTES = "BTN_NOTES";
+	
 	private static final String SHOW_SQL = "SHOW_SQL";
 
 	private static final String PEGASE_ETAB = "PEGASE_ETAB";
@@ -141,6 +145,12 @@ public class ConfigController {
 	}
 	public boolean isAttestationPaiementActif() {
 		return getBooleanValueForParameter(BTN_ATTEST_PAI);
+	}
+	public boolean isCursusActif() {
+		return getBooleanValueForParameter(BTN_CURSUS);
+	}
+	public boolean isNotesActif() {
+		return getBooleanValueForParameter(BTN_NOTES);
 	}
 	public boolean isShowSqlActif() {
 		return getBooleanValueForParameter(SHOW_SQL);
