@@ -79,6 +79,9 @@ public final class Utils {
 	public static String formatStringDateToDisplay(String date) {
 		if(StringUtils.hasText(date)) {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			if(date.contains("/")) {
+				formatter = new SimpleDateFormat("dd/MM/yyyy");
+			}
 			try {
 				Date d = formatter.parse(date);
 				return formatDateToDisplay(d);
