@@ -187,7 +187,7 @@ public final class Utils {
 
 
 
-
+/*
 	private static boolean insertInList(List<ObjetMaquetteDTO> list, String cheminParent, ObjetMaquetteDTO o) {
 		// On recherche l'élément parent de la liste.
 		for(ObjetMaquetteDTO parent : list) {
@@ -209,7 +209,7 @@ public final class Utils {
 		}
 		return false;
 	}
-
+*/
 
 	private static ObjetMaquetteDTO createObjetMaquetteDTO(String cheminParent, LignePedagogiqueDCA obj) {
 		ObjetMaquetteDTO o = new ObjetMaquetteDTO();
