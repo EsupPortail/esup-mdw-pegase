@@ -48,7 +48,7 @@ import fr.univlorraine.mondossierweb.controllers.PegaseController;
 import fr.univlorraine.mondossierweb.services.PegaseService;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
-import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
+import fr.univlorraine.pegase.model.chc.CursusDCA;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,7 +62,11 @@ public class TestPegaseController {
 	
 	private static final String CODE_APPRENANT_TEST = "000000001";
 	
-	private static final String CHEMIN_CURSUS_NON_FORMATE = "F-ING-HYD→F-ING-HYD-A4";
+	//private static final String CHEMIN_CURSUS_NON_FORMATE = "F-ING-HYD→F-ING-HYD-A4";
+	
+	private static final String FORMATION_CURSUS = "F-ING-HYD";
+	
+	private static final String RACINE_CURSUS = "F-ING-HYD-A4";
 	
 	private static final String CHEMIN_NOTES_NON_FORMATE = "F-ING-HYD→F-ING-HYD-A4";
 	
@@ -81,7 +85,7 @@ public class TestPegaseController {
 	@Resource
 	private PegaseController pegaseController;
 	
-	private static List<List<ObjetMaquetteExtension>> maquette1;
+	private static List<CursusDCA> maquette1;
 	
 	private static List<Chemin> notes1;
 	
@@ -93,7 +97,7 @@ public class TestPegaseController {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
 		try {
-			maquette1 = mapper.readValue(new File(FICHIER_CURSUS_JSON), new TypeReference<List<List<ObjetMaquetteExtension>>>() {});
+			maquette1 = mapper.readValue(new File(FICHIER_CURSUS_JSON), new TypeReference<List<CursusDCA>>() {});
 		} catch (IOException e) {
 			log.error("Erreur à la lecture de {} pour MonDossierWebServiceTest",FICHIER_CURSUS_JSON,e);
 		}
@@ -114,10 +118,10 @@ public class TestPegaseController {
 	void testGetCursus() {
 		log.debug("Test PegaseController getCursus");
 		given(pegaseService.getCursus(anyString(), anyString())).willReturn(maquette1);
-		List<ObjetMaquetteDTO> cursus = pegaseController.getCursus(CODE_APPRENANT_TEST,CHEMIN_CURSUS_NON_FORMATE,PERIODE_CURSUS_TEST);		
+		List<ObjetMaquetteDTO> cursus = pegaseController.getCursus(CODE_APPRENANT_TEST,FORMATION_CURSUS, RACINE_CURSUS, PERIODE_CURSUS_TEST);		
 		assertThat(cursus, is(notNullValue()));
 		assertThat(cursus, is(not(empty())));
-		List<ObjetMaquetteDTO> cursusFromMap = pegaseController.getCursus(CODE_APPRENANT_TEST,CHEMIN_CURSUS_NON_FORMATE,PERIODE_CURSUS_TEST);		
+		List<ObjetMaquetteDTO> cursusFromMap = pegaseController.getCursus(CODE_APPRENANT_TEST,FORMATION_CURSUS,RACINE_CURSUS, PERIODE_CURSUS_TEST);		
 		assertThat(cursusFromMap, is(notNullValue()));
 		assertThat(cursusFromMap, is(not(empty())));
 		assertEquals(cursusFromMap.size(), cursus.size());

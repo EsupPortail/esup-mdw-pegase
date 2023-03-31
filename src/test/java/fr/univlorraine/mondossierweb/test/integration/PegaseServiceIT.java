@@ -45,7 +45,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.services.AccessTokenService;
 import fr.univlorraine.mondossierweb.services.PegaseService;
-import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
+import fr.univlorraine.pegase.model.chc.CursusDCA;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
@@ -109,7 +109,7 @@ public class PegaseServiceIT {
 	@Test
 	void testGetCursus() {
 		log.info("Test PegaseService getCursus");
-		List<List<ObjetMaquetteExtension>> cursus = pegaseService.getCursus(codeApprenant, periode);
+		List<CursusDCA> cursus = pegaseService.getCursus(codeApprenant, periode);
 		log.debug("Cursus : {}",cursus);
 		assertThat(cursus, is(notNullValue()));
 		assertThat(cursus, is(not(empty())));

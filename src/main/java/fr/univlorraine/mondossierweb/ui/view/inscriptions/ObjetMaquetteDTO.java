@@ -20,13 +20,13 @@ package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 
 import java.util.List;
 
-import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
+import fr.univlorraine.pegase.model.chc.LignePedagogiqueDCA;
 import lombok.Data;
 
 @Data
 public class ObjetMaquetteDTO {
 
-	private ObjetMaquetteExtension objet;
+	private LignePedagogiqueDCA objet;
 	private String code;
 	private String codeChemin;
 	private String libelle;
