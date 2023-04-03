@@ -118,7 +118,7 @@ public class TestPegaseController {
 	@Test
 	void testGetCursus() {
 		log.debug("Test PegaseController getCursus");
-		given(pegaseService.getCursus(anyString(), anyString())).willReturn(maquette1);
+		given(pegaseService.getCursus(anyString())).willReturn(maquette1);
 		given(pegaseService.getEtablissement()).willReturn(CODE_ETAB_TEST);
 		List<ObjetMaquetteDTO> cursus = pegaseController.getCursus(CODE_APPRENANT_TEST,FORMATION_CURSUS, RACINE_CURSUS, PERIODE_CURSUS_TEST);		
 		assertThat(cursus, is(notNullValue()));

@@ -52,7 +52,7 @@ public class PegaseController {
 		// Correction du chemin pour en replaçant le séparateur
 		//String codeCheminChc = formatChemin(codeChemin);
 		// Récupération du cursus
-		listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeFormation, codeRacinePeda, codePeriode, pegaseService.getEtablissement());
+		listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant), codeFormation, codeRacinePeda, codePeriode, pegaseService.getEtablissement());
 		// suppression de la racine
 		if(listObj != null && !listObj.isEmpty()) {
 			listObj = listObj.get(0).getChildObjects();

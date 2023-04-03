@@ -109,7 +109,7 @@ public class PegaseServiceIT {
 	@Test
 	void testGetCursus() {
 		log.info("Test PegaseService getCursus");
-		List<CursusDCA> cursus = pegaseService.getCursus(codeApprenant, periode);
+		List<CursusDCA> cursus = pegaseService.getCursus(codeApprenant);
 		log.debug("Cursus : {}",cursus);
 		assertThat(cursus, is(notNullValue()));
 		assertThat(cursus, is(not(empty())));

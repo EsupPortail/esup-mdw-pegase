@@ -250,10 +250,10 @@ public class PegaseService implements Serializable {
 
 	}
 
-	public List<CursusDCA> getCursus(String codeApprenant, String codePeriode) {
+	public List<CursusDCA> getCursus(String codeApprenant) {
 
 		// Si les paramètres nécessaires sont valués
-		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
+		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
 			insApiChc.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
@@ -265,11 +265,11 @@ public class PegaseService implements Serializable {
 					log.info("Cursus de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
 					log.debug("Cursus de : {}", listObj);
 				} else {
-					log.info("Anomalie lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {}, periode {} et etablissement : {}", codeApprenant, codePeriode, etablissement);
+					log.info("Anomalie lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
 				}
 				return listObj;
 			} catch (ApiException e) {
-				log.error("Erreur lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codePeriode, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
+				log.error("Erreur lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
 			}
 		}
 		return null;
