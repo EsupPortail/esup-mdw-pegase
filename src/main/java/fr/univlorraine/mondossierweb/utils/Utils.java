@@ -136,7 +136,6 @@ public final class Utils {
 				if(!listObjMaquetteTrouvee) {
 					// On teste si on est sur la racine recherchée
 					listObjMaquetteTrouvee = cursusIdentifie(cursus,codeEtab, codePeriode, codeFormation, codeRacinePeda);
-
 					// Si on est sur un objet concerné par la racine
 					if(listObjMaquetteTrouvee) {
 						LignePedagogiqueDCA racine = cursus.getRacinePedagogique();
@@ -145,7 +144,7 @@ public final class Utils {
 						ObjetMaquetteDTO objRacine = createObjetMaquetteDTO(null,racine);
 						list.add(objRacine);
 						log.debug("Racine {} insérée", objRacine.getCodeChemin());
-
+						
 						ajouterLesEnfants(objRacine, racine.getEnfants());
 
 					}

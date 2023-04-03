@@ -60,9 +60,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TestPegaseController {
 	
-	private static final String CODE_APPRENANT_TEST = "000000001";
 	
-	//private static final String CHEMIN_CURSUS_NON_FORMATE = "F-ING-HYD→F-ING-HYD-A4";
+	private static final String CODE_ETAB_TEST = "ETAB00";
+	
+	private static final String CODE_APPRENANT_TEST = "000000001";
 	
 	private static final String FORMATION_CURSUS = "F-ING-HYD";
 	
@@ -118,6 +119,7 @@ public class TestPegaseController {
 	void testGetCursus() {
 		log.debug("Test PegaseController getCursus");
 		given(pegaseService.getCursus(anyString(), anyString())).willReturn(maquette1);
+		given(pegaseService.getEtablissement()).willReturn(CODE_ETAB_TEST);
 		List<ObjetMaquetteDTO> cursus = pegaseController.getCursus(CODE_APPRENANT_TEST,FORMATION_CURSUS, RACINE_CURSUS, PERIODE_CURSUS_TEST);		
 		assertThat(cursus, is(notNullValue()));
 		assertThat(cursus, is(not(empty())));
