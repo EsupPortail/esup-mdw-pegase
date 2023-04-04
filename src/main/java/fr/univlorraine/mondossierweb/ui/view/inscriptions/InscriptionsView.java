@@ -223,7 +223,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		for(Button b : listButtonMasquerInscription ) {
 			b.setText(getTranslation("inscription.masquer"));
 		}
-		
+
 
 
 	}
@@ -478,7 +478,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					buttonExportLayout.getStyle().set(CSSColorUtils.PADDING, "0");
 					buttonExportLayout.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 					buttonExportLayout.setFlexWrap(FlexWrap.WRAP);
-					
+
 					if(configController.isCertificatActif()) {
 						setAnchorStyle(exportCertificatAnchor);
 						buttonExportLayout.add(exportCertificatAnchor);
@@ -486,7 +486,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							exportCertificatAnchor.setVisible(false);
 						}
 					}
-					
+
 					if(configController.isAttestationPaiementActif()) {
 						setAnchorStyle(exportAttestationAnchor);
 						buttonExportLayout.add(exportAttestationAnchor);
@@ -513,11 +513,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							Button displayDetailButton=new Button("", VaadinIcon.ANGLE_DOWN.create());
 							displayDetailButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 							displayDetailButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
-							
+
 							Button hideDetailButton=new Button("", VaadinIcon.ANGLE_UP.create());
 							hideDetailButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 							hideDetailButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
-							
+
 							displayDetailButton.addClickListener(c-> {
 								verticalInfoPhotoAndExportLayout.setClassName("diplayedpanel");
 								hideDetailButton.setVisible(true);
@@ -526,7 +526,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							});
 							listButtonDetailInscription.add(displayDetailButton);
 							flexDropDownButtonLayout.add(displayDetailButton);
-							
+
 							hideDetailButton.addClickListener(c-> {
 								verticalInfoPhotoAndExportLayout.setClassName("hiddenpanel");
 								//flexDropDownButtonLayout.setVisible(true);
@@ -552,120 +552,124 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					}
 
 					// Cursus
-					Dialog cursusDialog = new Dialog();
-					cursusDialog.setWidthFull();
-					cursusDialog.setMaxWidth("50em");
 					Button cursusButton = new Button("", VaadinIcon.ARCHIVE.create());
-					cursusButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-					cursusButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
-					cursusButton.addClickListener(c-> {
-						// Si le cursus n'est pas visible
-						if(!cursusDialog.isOpened()) {
-							//Init dialog (a faire au clic car dépend de la taille de la fenêtre)
-							cursusDialog.removeAll();
-							FlexLayout dialogLayout = new FlexLayout();
-							dialogLayout.setFlexDirection(FlexDirection.COLUMN);
-							dialogLayout.setHeightFull();
-							VerticalLayout cursusLayout = new VerticalLayout();
-							cursusLayout.setPadding(false);
-							HorizontalLayout headerDialog= new HorizontalLayout();
-							headerDialog.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.VAR_LUMO_SPACE_L);
-							Label titreDialog = new Label(libelleInscription);
-							titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-							titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
-							Button closeButton = new Button(getTranslation("inscription.closedialog"));
-							closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
-							headerDialog.add(titreDialog);
-							dialogLayout.add(headerDialog);
-							dialogLayout.add(cursusLayout);
-							cursusDialog.add(dialogLayout);
-							// si écran de petite taille
-							if( windowWidth<=800) {
-								HorizontalLayout footerDialog= new HorizontalLayout();
-								footerDialog.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.VAR_LUMO_SPACE_L);
-								footerDialog.add(closeButton);
-								closeButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-								dialogLayout.add(footerDialog);
-								cursusDialog.setSizeFull();
+					if(configController.isCursusActif()) {
+						Dialog cursusDialog = new Dialog();
+						cursusDialog.setWidthFull();
+						cursusDialog.setMaxWidth("50em");
+						cursusButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+						cursusButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+						cursusButton.addClickListener(c-> {
+							// Si le cursus n'est pas visible
+							if(!cursusDialog.isOpened()) {
+								//Init dialog (a faire au clic car dépend de la taille de la fenêtre)
+								cursusDialog.removeAll();
+								FlexLayout dialogLayout = new FlexLayout();
+								dialogLayout.setFlexDirection(FlexDirection.COLUMN);
+								dialogLayout.setHeightFull();
+								VerticalLayout cursusLayout = new VerticalLayout();
+								cursusLayout.setPadding(false);
+								HorizontalLayout headerDialog= new HorizontalLayout();
+								headerDialog.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.VAR_LUMO_SPACE_L);
+								Label titreDialog = new Label(libelleInscription);
+								titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+								titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+								Button closeButton = new Button(getTranslation("inscription.closedialog"));
+								closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+								headerDialog.add(titreDialog);
+								dialogLayout.add(headerDialog);
+								dialogLayout.add(cursusLayout);
+								cursusDialog.add(dialogLayout);
+								// si écran de petite taille
+								if( windowWidth<=800) {
+									HorizontalLayout footerDialog= new HorizontalLayout();
+									footerDialog.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.VAR_LUMO_SPACE_L);
+									footerDialog.add(closeButton);
+									closeButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+									dialogLayout.add(footerDialog);
+									cursusDialog.setSizeFull();
+								} else {
+									cursusDialog.setHeight(CSSColorUtils.AUTO);
+									cursusDialog.setDraggable(true);
+									headerDialog.add(closeButton);
+								}
+
+								closeButton.addClickListener(cb -> cursusDialog.close());
+
+								// Mise à jour de l'affichage du cursus
+								displayCursus(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription),cursusLayout);
+								cursusDialog.open();
 							} else {
-								cursusDialog.setHeight(CSSColorUtils.AUTO);
-								cursusDialog.setDraggable(true);
-								headerDialog.add(closeButton);
+								// On masque le cursus
+								cursusDialog.close();
+								cursusDialog.removeAll();
 							}
-
-							closeButton.addClickListener(cb -> cursusDialog.close());
-
-							// Mise à jour de l'affichage du cursus
-							displayCursus(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription),cursusLayout);
-							cursusDialog.open();
-						} else {
-							// On masque le cursus
-							cursusDialog.close();
-							cursusDialog.removeAll();
-						}
-					});
-					// Ajout à la liste des boutons
-					listButtonCursus.add(cursusButton);
+						});
+						// Ajout à la liste des boutons
+						listButtonCursus.add(cursusButton);
+					}
 
 
 
 					// Notes et résultats
-					Dialog notesDialog = new Dialog();
-					notesDialog.setWidthFull();
-					notesDialog.setMaxWidth("70em");
 					Button notesButton = new Button("", VaadinIcon.DIPLOMA.create());
-					notesButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-					notesButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
-					notesButton.addClickListener(c-> {
-						// Si le notes n'est pas visible
-						if(!notesDialog.isOpened()) {
-							//Init dialog (a faire au clic car dépend de la taille de la fenêtre)
-							notesDialog.removeAll();
-							FlexLayout dialogLayout = new FlexLayout();
-							dialogLayout.setFlexDirection(FlexDirection.COLUMN);
-							dialogLayout.setHeightFull();
-							VerticalLayout notesLayout = new VerticalLayout();
-							notesLayout.setPadding(false);
-							HorizontalLayout headerDialog= new HorizontalLayout();
-							headerDialog.getStyle().set("margin-bottom", CSSColorUtils.VAR_LUMO_SPACE_L);
-							Label titreDialog = new Label(libelleInscription);
-							titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-							titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
-							Button closeButton = new Button(getTranslation("inscription.closedialog"));
-							closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
-							headerDialog.add(titreDialog);
-							dialogLayout.add(headerDialog);
-							dialogLayout.add(notesLayout);
-							notesDialog.add(dialogLayout);
-							// si écran de petite taille
-							boolean smallGrid=false;
-							if( windowWidth<=800) {
-								smallGrid=true;
-								HorizontalLayout footerDialog= new HorizontalLayout();
-								footerDialog.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.VAR_LUMO_SPACE_L);
-								footerDialog.add(closeButton);
-								closeButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-								dialogLayout.add(footerDialog);
-								notesDialog.setSizeFull();
+					if(configController.isNotesActif()) {
+						Dialog notesDialog = new Dialog();
+						notesDialog.setWidthFull();
+						notesDialog.setMaxWidth("70em");						
+						notesButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+						notesButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+						notesButton.addClickListener(c-> {
+							// Si le notes n'est pas visible
+							if(!notesDialog.isOpened()) {
+								//Init dialog (a faire au clic car dépend de la taille de la fenêtre)
+								notesDialog.removeAll();
+								FlexLayout dialogLayout = new FlexLayout();
+								dialogLayout.setFlexDirection(FlexDirection.COLUMN);
+								dialogLayout.setHeightFull();
+								VerticalLayout notesLayout = new VerticalLayout();
+								notesLayout.setPadding(false);
+								HorizontalLayout headerDialog= new HorizontalLayout();
+								headerDialog.getStyle().set("margin-bottom", CSSColorUtils.VAR_LUMO_SPACE_L);
+								Label titreDialog = new Label(libelleInscription);
+								titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+								titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+								Button closeButton = new Button(getTranslation("inscription.closedialog"));
+								closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+								headerDialog.add(titreDialog);
+								dialogLayout.add(headerDialog);
+								dialogLayout.add(notesLayout);
+								notesDialog.add(dialogLayout);
+								// si écran de petite taille
+								boolean smallGrid=false;
+								if( windowWidth<=800) {
+									smallGrid=true;
+									HorizontalLayout footerDialog= new HorizontalLayout();
+									footerDialog.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.VAR_LUMO_SPACE_L);
+									footerDialog.add(closeButton);
+									closeButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+									dialogLayout.add(footerDialog);
+									notesDialog.setSizeFull();
+								} else {
+									notesDialog.setHeight(CSSColorUtils.AUTO);
+									notesDialog.setDraggable(true);
+									headerDialog.add(closeButton);
+								}
+
+								closeButton.addClickListener(cb -> notesDialog.close());
+
+								// Mise à jour de l'affichage des notes
+								displayNotes(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription),notesLayout, smallGrid);
+								notesDialog.open();
 							} else {
-								notesDialog.setHeight(CSSColorUtils.AUTO);
-								notesDialog.setDraggable(true);
-								headerDialog.add(closeButton);
+								// On masque le notes
+								notesDialog.close();
+								notesDialog.removeAll();
 							}
-
-							closeButton.addClickListener(cb -> notesDialog.close());
-
-							// Mise à jour de l'affichage des notes
-							displayNotes(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription),notesLayout, smallGrid);
-							notesDialog.open();
-						} else {
-							// On masque le notes
-							notesDialog.close();
-							notesDialog.removeAll();
-						}
-					});
-					// Ajout à la liste des boutons
-					listButtonNotes.add(notesButton);
+						});
+						// Ajout à la liste des boutons
+						listButtonNotes.add(notesButton);
+					}
 
 					//Layout des boutons concernant le cursus et les notes
 					FlexLayout buttonLayout2 = new FlexLayout();
@@ -682,8 +686,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					notesBtnDiv.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 					cursusBtnDiv.add(cursusButton);
 					notesBtnDiv.add(notesButton);
-					buttonLayout2.add(cursusBtnDiv);
-					buttonLayout2.add(notesBtnDiv);
+					if(configController.isCursusActif()) {
+						buttonLayout2.add(cursusBtnDiv);
+					}
+					if(configController.isNotesActif()) {
+						buttonLayout2.add(notesBtnDiv);
+					}
 					verticalLayout.add(buttonLayout2);
 					cursusButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 					notesButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
