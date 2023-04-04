@@ -45,7 +45,7 @@
 	</parent>
 
 	<properties>
-		<revision>1.5.3</revision>
+		<revision>1.6.0</revision>
 		<sha1></sha1>
 		<changelist>-SNAPSHOT</changelist>
 		<java.version>11</java.version>
@@ -407,6 +407,7 @@
         		 <excludes>
             		<exclude>**/*.properties</exclude>
             		<exclude>.m2/**/*.*</exclude>
+            		<exclude>src/main/java/fr/univlorraine/pegase/**/*.*</exclude>
         		</excludes>
     			</configuration>
     			<executions>
