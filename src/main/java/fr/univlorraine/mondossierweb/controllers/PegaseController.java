@@ -18,9 +18,7 @@
  */
 package fr.univlorraine.mondossierweb.controllers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,6 +38,7 @@ public class PegaseController {
 	private PegaseService pegaseService;
 
 
+
 	/**
 	 * 
 	 * @param codeApprenant
@@ -47,13 +46,13 @@ public class PegaseController {
 	 * @param codePeriode
 	 * @return le cursus de l'apprenant pour le chemin et la période en paramètre
 	 */
-	public List<ObjetMaquetteDTO> getCursus(String codeApprenant, String codeChemin, String codePeriode) {
+	public List<ObjetMaquetteDTO> getCursus(String codeApprenant, String codeFormation, String codeRacinePeda, String codePeriode) {
 		List<ObjetMaquetteDTO> listObj;
 		log.info("Récupération de la liste cursus dans Pégase");
 		// Correction du chemin pour en replaçant le séparateur
-		String codeCheminChc = formatChemin(codeChemin);
+		//String codeCheminChc = formatChemin(codeChemin);
 		// Récupération du cursus
-		listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant, codePeriode), codeCheminChc);
+		listObj = Utils.convertObjetMaquetteListToDTO(pegaseService.getCursus(codeApprenant), codeFormation, codeRacinePeda, codePeriode, pegaseService.getEtablissement());
 		// suppression de la racine
 		if(listObj != null && !listObj.isEmpty()) {
 			listObj = listObj.get(0).getChildObjects();

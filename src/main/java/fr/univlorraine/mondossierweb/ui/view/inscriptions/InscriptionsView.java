@@ -74,8 +74,9 @@ import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
-import fr.univlorraine.pegase.model.chc.TypeAmenagement;
+import fr.univlorraine.pegase.model.chc.AmenagementDCA;
 import fr.univlorraine.pegase.model.coc.Absence;
+import fr.univlorraine.pegase.model.coc.TypeAmenagement;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
@@ -597,7 +598,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								closeButton.addClickListener(cb -> cursusDialog.close());
 
 								// Mise à jour de l'affichage du cursus
-								displayCursus(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription),cursusLayout);
+								displayCursus(dossier.getApprenant().getCode(), inscription.getCible().getFormation().getCode(), inscription.getCible().getCode(), Utils.getCodePeriode(inscription),cursusLayout);
 								cursusDialog.open();
 							} else {
 								// On masque le cursus
@@ -726,11 +727,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	}
 
 
-	private void displayCursus(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout cursusLayout) {
-		log.info("Récupération du cursus pour {} sur {}", codeApprenant, codeChemin);
+	private void displayCursus(String codeApprenant, String  codeFormation, String codeRacine, String codePeriode, VerticalLayout cursusLayout) {
+		log.info("Récupération du cursus pour {} sur {} > {}", codeApprenant, codeFormation, codeRacine);
 
 		//Récupération du cursus
-		List<ObjetMaquetteDTO> listObj = pegaseController.getCursus(codeApprenant, codeChemin, codePeriode);
+		List<ObjetMaquetteDTO> listObj = pegaseController.getCursus(codeApprenant, codeFormation, codeRacine, codePeriode);
 
 		// clean du layout
 		cursusLayout.removeAll();
@@ -798,7 +799,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 
 		// Si non obligatoire
-		if(facItalique.booleanValue() && o.getObjet() != null && o.getObjet().getCaractereObligatoire()!=null && !o.getObjet().getCaractereObligatoire().booleanValue()) {
+		if(facItalique.booleanValue() && o.getObjet() != null && o.getObjet().getEstObligatoire()!=null && !o.getObjet().getEstObligatoire().booleanValue()) {
 			// Le libellé est en italic
 			libLabel.getStyle().set(CSSColorUtils.FONT_STYLE, CSSColorUtils.ITALIC);
 		}
@@ -824,12 +825,12 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			l.add(bAcquis);
 		}
 		// Si il y a des aménagements
-		if(o!=null && o.getObjet()!=null && o.getObjet().getTypeAmenagementLst()!=null &&  !o.getObjet().getTypeAmenagementLst().isEmpty()) {
+		if(o!=null && o.getObjet()!=null && o.getObjet().getAmenagements()!=null &&  !o.getObjet().getAmenagements().isEmpty()) {
 			Button bAmenagement = new Button(VaadinIcon.INFO_CIRCLE_O.create());
 			bAmenagement.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
 			bAmenagement.setHeight(CSSColorUtils.EM_1_5);
 			bAmenagement.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
-			bAmenagement.addClickListener(e -> showDetailAmenagementDialog(o.getObjet().getTypeAmenagementLst()));
+			bAmenagement.addClickListener(e -> showDetailAmenagementDialog(o.getObjet().getAmenagements()));
 
 			l.add(bAmenagement);
 		}
@@ -856,7 +857,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	}
 
 
-	private void showDetailAmenagementDialog(List<TypeAmenagement> typeAmenagementLst) {
+	private void showDetailAmenagementDialog(List<AmenagementDCA> amenagements) {
 
 		// Création dialog avec le détail des aménagements
 		Dialog resultDialog = new Dialog();
@@ -867,10 +868,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		dialLayout.add(formationLabel);
 
 
-		for(TypeAmenagement ta : typeAmenagementLst) {
+		for(AmenagementDCA amenagement : amenagements) {
 			HorizontalLayout hl = new HorizontalLayout();
 			hl.setWidthFull();
-			Label libAmenagements = new Label(ta.getLibelleAffichage());
+			Label libAmenagements = new Label(amenagement.getLibelleAffichage());
 			libAmenagements.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 			hl.add(libAmenagements);
 			hl.add(libAmenagements);

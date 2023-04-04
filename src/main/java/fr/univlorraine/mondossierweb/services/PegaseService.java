@@ -34,13 +34,13 @@ import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
-import fr.univlorraine.pegase.api.chc.CursusApi;
+import fr.univlorraine.pegase.api.chc.CursusDcaApi;
 import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
 import fr.univlorraine.pegase.api.insgestion.InscriptionsApi;
 import fr.univlorraine.pegase.api.insgestion.PiecesApi;
 import fr.univlorraine.pegase.api.pai.PaiApi;
-import fr.univlorraine.pegase.model.chc.ObjetMaquetteExtension;
+import fr.univlorraine.pegase.model.chc.CursusDCA;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.Inscriptions;
@@ -88,7 +88,7 @@ public class PegaseService implements Serializable {
 
 	// CHC API
 	private transient ApiClient apiClientChc = new ApiClient();
-	private transient CursusApi insApiChc = new CursusApi();
+	private transient CursusDcaApi insApiChc = new CursusDcaApi();
 
 	// COC API
 	private transient ApiClient apiClientCoc = new ApiClient();
@@ -108,6 +108,9 @@ public class PegaseService implements Serializable {
 	}
 	private void setEtablissement() {
 		etablissement = configController.getEtablissement();
+	}
+	public String getEtablissement() {
+		return etablissement;
 	}
 	private void setCodeApprenantDemo() {
 		codeApprenantDemo = configController.getPegaseDemoApprenant();
@@ -247,25 +250,26 @@ public class PegaseService implements Serializable {
 
 	}
 
-	public List<List<ObjetMaquetteExtension>> getCursus(String codeApprenant, String codePeriode) {
+	public List<CursusDCA> getCursus(String codeApprenant) {
 
 		// Si les paramètres nécessaires sont valués
-		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
+		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
 			insApiChc.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
-				List<String> statutsInscription = List.of(Utils.STATUT_INSCRIPTION_VALIDE);
+				//List<String> statutsInscription = List.of(Utils.STATUT_INSCRIPTION_VALIDE);
 				// Appel de l'API Pégase
-				List<List<ObjetMaquetteExtension>> listObj = insApiChc.lireArbreCursusDesInscriptions(etablissement, codeApprenant, codePeriode, statutsInscription);
+				//List<List<ObjetMaquetteExtension>> listObj = insApiChc.lireArbreCursusDesInscriptions(etablissement, codeApprenant, codePeriode, statutsInscription);
+				List<CursusDCA> listObj = insApiChc.lireCusrsuApprenant(codeApprenant);
 				if(listObj != null) {
 					log.info("Cursus de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
 					log.debug("Cursus de : {}", listObj);
 				} else {
-					log.info("Anomalie lors de l'appel à la methode API : lireArbreCursusDesInscriptions pour le code apprenant : {}, periode {} et etablissement : {}", codeApprenant, codePeriode, etablissement);
+					log.info("Anomalie lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
 				}
 				return listObj;
 			} catch (ApiException e) {
-				log.error("Erreur lors de l'appel à la methode API : lireArbreCursusDesInscriptions pour le code apprenant : {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codePeriode, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
+				log.error("Erreur lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
 			}
 		}
 		return null;
