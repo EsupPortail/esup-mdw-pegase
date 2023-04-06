@@ -109,6 +109,7 @@ public class Card extends VerticalLayout {
 			this.getStyle().set("border", "0.1em solid");
  
 			this.getStyle().set("border-color", "lightgray");
+			this.getStyle().set("background-color", "white");
 			this.getStyle().set(CSSColorUtils.MARGIN, "0.5em auto 0.5em auto");
 			this.getStyle().set(CSSColorUtils.BORDER_RADIUS, CSSColorUtils.EM_0_5);
 			

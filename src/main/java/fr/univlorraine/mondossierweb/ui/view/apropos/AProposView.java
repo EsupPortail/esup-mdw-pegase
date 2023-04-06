@@ -73,7 +73,6 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 	@PostConstruct
 	private void init() {
 		getStyle().set(CSSColorUtils.PADDING, "1em");
-
 		initAppInfo();
 		initMessageInfo();
 		initUserInfo();

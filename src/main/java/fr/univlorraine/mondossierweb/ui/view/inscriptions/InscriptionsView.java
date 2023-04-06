@@ -76,7 +76,6 @@ import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.model.chc.AmenagementDCA;
 import fr.univlorraine.pegase.model.coc.Absence;
-import fr.univlorraine.pegase.model.coc.TypeAmenagement;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
@@ -153,6 +152,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		initParameters();
 
 		setSizeFull();
+		addClassName("view");
 
 		inscriptionsLayout.setWidthFull();
 		inscriptionsLayout.getStyle().set("max-width", "52em");

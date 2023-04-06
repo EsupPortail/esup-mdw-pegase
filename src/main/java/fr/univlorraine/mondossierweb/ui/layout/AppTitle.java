@@ -82,6 +82,7 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 		titleLayout.add(appNameTitle);
 		
 		titleLayout.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
 		titleLayout.setWidthFull();
 		titleLayout.getStyle().set("max-width", "16em");
 		titleLayout.getStyle().set(CSSColorUtils.PADDING_LEFT, "1em");

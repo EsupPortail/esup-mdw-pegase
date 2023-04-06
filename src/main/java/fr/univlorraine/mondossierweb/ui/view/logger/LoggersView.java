@@ -130,6 +130,7 @@ public class LoggersView extends VerticalLayout implements HasDynamicTitle, HasH
 		header.add(headerTitle);
 
 		setSizeFull();
+		setClassName("basicView");
 
 		/* Buttons */
 		final Div buttonsDiv = new Div();

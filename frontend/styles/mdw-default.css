@@ -1,5 +1,6 @@
 html {
-  --main-color: #0096ea;
+  --main-color: #233348;
+  background-color: var(--lumo-contrast-5pct);
 }
 
 .card-with-separator {
@@ -11,6 +12,7 @@ html {
 	border-bottom:1px solid;
 	border-image : linear-gradient(45deg,var(--main-color),#ffffff) 1;
 	width: 100%;
+	margin-bottom: 0.5em;
 	/*border-color:var(--main-color);*/
 }
 
@@ -72,6 +74,10 @@ html {
 .hiddenpanel {
 	animation: shrink 170ms ease-out forwards;
 	transform-origin: top center;
+}
+
+.basicView {
+	background-color: white;
 }
 
 @keyframes shrink {

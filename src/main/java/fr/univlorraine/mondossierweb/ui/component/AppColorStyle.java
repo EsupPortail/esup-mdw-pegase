@@ -46,6 +46,7 @@ public class AppColorStyle extends Component {
 		this.color = color;
 		CSSRGB rgbColor = CSSColorUtils.getRGBColor(color);
 		getElement().setText(String.format(STYLE_TEMPLATE, rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue()));
+		
 	}
 
 }

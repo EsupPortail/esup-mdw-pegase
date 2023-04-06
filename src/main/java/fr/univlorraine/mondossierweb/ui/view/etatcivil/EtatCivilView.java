@@ -97,6 +97,7 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 	@PostConstruct
 	private void init() {
 		setSizeFull();
+		addClassName("view");
 		initIdentite();
 		initNaissance();
 		etatcivilLayout.setWidthFull();

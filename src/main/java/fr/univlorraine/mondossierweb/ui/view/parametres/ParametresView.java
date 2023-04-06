@@ -139,7 +139,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	@PostConstruct
 	private void init() {
 		setSizeFull();
-
+		addClassName("view");
+		
 		parametresLayout.setWidthFull();
 		parametresLayout.getStyle().set("max-width", "52em");
 		parametresLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
