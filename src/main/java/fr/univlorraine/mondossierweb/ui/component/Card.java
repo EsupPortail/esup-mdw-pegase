@@ -59,7 +59,7 @@ public class Card extends VerticalLayout {
 			titre.setIcon(titleIcon);
 		}
 		titre.setText(libelle);
-		titre.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+		titre.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
 		titre.setClassName("card-title-bordered");
 		if(!hasAltVisibleComponent) {
 			useAlt = false;
@@ -67,7 +67,7 @@ public class Card extends VerticalLayout {
 		}else {
 			useAlt = true;
 			titreLayout.addAndExpand(titre);
-			altButton.getStyle().set(CSSColorUtils.COLOR,CSSColorUtils.MAIN_HEADER_COLOR);
+			altButton.getStyle().set(CSSColorUtils.COLOR,CSSColorUtils.SECOND_COLOR);
 			titreLayout.add(altButton);
 			this.add(titreLayout);
 			
@@ -113,7 +113,7 @@ public class Card extends VerticalLayout {
 			this.getStyle().set(CSSColorUtils.MARGIN, "0.5em auto 0.5em auto");
 			this.getStyle().set(CSSColorUtils.BORDER_RADIUS, CSSColorUtils.EM_0_5);
 			
-			this.getStyle().set(CSSColorUtils.COLOR, "#343a40");
+			this.getStyle().set(CSSColorUtils.COLOR, "var(--main-color)");
 			
 			this.getStyle().set(CSSColorUtils.PADDING, "1em 2em");
 			

@@ -89,7 +89,7 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 		titleLayout.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
 		titleLayout.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
 		
-		getStyle().set(CSSColorUtils.BACKGROUND_COLOR, "#343a40");
+		getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.MAIN_COLOR);
 		getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
 		
 		add(titleLayout);

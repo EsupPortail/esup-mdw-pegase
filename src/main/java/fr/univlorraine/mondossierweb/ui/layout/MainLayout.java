@@ -69,7 +69,6 @@ import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.services.CurrentUiService;
 import fr.univlorraine.mondossierweb.services.PreferencesService;
 import fr.univlorraine.mondossierweb.services.SecurityService;
-import fr.univlorraine.mondossierweb.ui.component.AppColorStyle;
 import fr.univlorraine.mondossierweb.ui.view.acces.AccesView;
 import fr.univlorraine.mondossierweb.ui.view.apropos.AProposView;
 import fr.univlorraine.mondossierweb.ui.view.connexions.ConnexionsView;
@@ -160,11 +159,11 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			.map(darkMode -> () -> getElement().executeJs("setDarkMode($0)", darkMode)));
 
 		/* Theme: Couleur principale */
-		AppColorStyle appColorStyle = new AppColorStyle();
+		/*AppColorStyle appColorStyle = new AppColorStyle();
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getAppColorFlux()
 			.map(appColor -> () -> appColorStyle.setColor(appColor)));
-		getElement().appendChild(appColorStyle.getElement());
+		getElement().appendChild(appColorStyle.getElement());*/
 
 		/* Menu au-dessus de la barre d'application */
 		setPrimarySection(Section.DRAWER);
@@ -339,7 +338,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 				dialogLayout.setPadding(false);
 				Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
 				infoIcon.getStyle().set(CSSColorUtils.MARGIN_RIGHT, "1em");
-				infoIcon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
+				infoIcon.setColor(CSSColorUtils.SECOND_COLOR);
 
 				Span info = new Span();
 				info.getElement().setProperty("innerHTML", getTranslation("connexion.info"));

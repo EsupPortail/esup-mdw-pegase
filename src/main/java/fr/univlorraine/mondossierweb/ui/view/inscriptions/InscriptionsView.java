@@ -368,7 +368,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						// Ajout bouton certificat de scolarité
 						Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
 						certButton.setWidth("15em");
-						certButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, "#343a40");
+						certButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.BTN_COLOR);
 						certButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
 						exportCertificatAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
 						exportCertificatAnchor.add(certButton);
@@ -386,7 +386,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						// Ajout bouton attestation de paiement
 						Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
 						attestationButton.setWidth("15em");
-						attestationButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, "#343a40");
+						attestationButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.BTN_COLOR);
 						attestationButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
 						exportAttestationAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
 						exportAttestationAnchor.add(attestationButton);
@@ -513,11 +513,11 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						if(afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
 							Button displayDetailButton=new Button("", VaadinIcon.ANGLE_DOWN.create());
 							displayDetailButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-							displayDetailButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+							displayDetailButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
 
 							Button hideDetailButton=new Button("", VaadinIcon.ANGLE_UP.create());
 							hideDetailButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-							hideDetailButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+							hideDetailButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
 
 							displayDetailButton.addClickListener(c-> {
 								verticalInfoPhotoAndExportLayout.setClassName("diplayedpanel");
@@ -559,7 +559,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						cursusDialog.setWidthFull();
 						cursusDialog.setMaxWidth("50em");
 						cursusButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-						cursusButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+						cursusButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
 						cursusButton.addClickListener(c-> {
 							// Si le cursus n'est pas visible
 							if(!cursusDialog.isOpened()) {
@@ -574,9 +574,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								headerDialog.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.VAR_LUMO_SPACE_L);
 								Label titreDialog = new Label(libelleInscription);
 								titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-								titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+								titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
 								Button closeButton = new Button(getTranslation("inscription.closedialog"));
-								closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+								closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
 								headerDialog.add(titreDialog);
 								dialogLayout.add(headerDialog);
 								dialogLayout.add(cursusLayout);
@@ -619,7 +619,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						notesDialog.setWidthFull();
 						notesDialog.setMaxWidth("70em");						
 						notesButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-						notesButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+						notesButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
 						notesButton.addClickListener(c-> {
 							// Si le notes n'est pas visible
 							if(!notesDialog.isOpened()) {
@@ -634,9 +634,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								headerDialog.getStyle().set("margin-bottom", CSSColorUtils.VAR_LUMO_SPACE_L);
 								Label titreDialog = new Label(libelleInscription);
 								titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-								titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+								titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
 								Button closeButton = new Button(getTranslation("inscription.closedialog"));
-								closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+								closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
 								headerDialog.add(titreDialog);
 								dialogLayout.add(headerDialog);
 								dialogLayout.add(notesLayout);
@@ -818,7 +818,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 		if(o!=null && o.getAcquis()!=null && o.getAcquis().booleanValue()) {
 			Button bAcquis = new Button(VaadinIcon.CHECK.create());
-			bAcquis.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+			bAcquis.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
 			bAcquis.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
 			bAcquis.setHeight(CSSColorUtils.EM_1_5);
 			bAcquis.addClickListener(e -> showInfoDialog(getTranslation("inscription.element.acquis")));
@@ -827,7 +827,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// Si il y a des aménagements
 		if(o!=null && o.getObjet()!=null && o.getObjet().getAmenagements()!=null &&  !o.getObjet().getAmenagements().isEmpty()) {
 			Button bAmenagement = new Button(VaadinIcon.INFO_CIRCLE_O.create());
-			bAmenagement.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+			bAmenagement.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
 			bAmenagement.setHeight(CSSColorUtils.EM_1_5);
 			bAmenagement.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
 			bAmenagement.addClickListener(e -> showDetailAmenagementDialog(o.getObjet().getAmenagements()));
@@ -864,7 +864,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		VerticalLayout dialLayout = new VerticalLayout();
 		Label formationLabel = new Label(getTranslation("inscription.element.amenagement"));
 		formationLabel.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-		formationLabel.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+		formationLabel.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
 		dialLayout.add(formationLabel);
 
 
@@ -972,9 +972,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		Label formationLabel = new Label(o.getLibelle());
 		Label formationLabelPere = new Label(o.getObjet().getObjetFeuille().getLibelleCourt());
 		formationLabel.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-		formationLabel.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+		formationLabel.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
 		formationLabelPere.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-		formationLabelPere.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+		formationLabelPere.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
 		// Si c'est un contrôle
 		if(o.getControle()!=null) {
 			// on affiche le libellé de l'élément parent
@@ -1253,7 +1253,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		Div result = new Div();
 		result.setHeight(CSSColorUtils.EM_1_5);
 		result.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO_AUTO_AUTO_1EM);
-		result.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.MAIN_HEADER_COLOR);
+		result.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.SECOND_COLOR);
 		result.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
 		result.getStyle().set(CSSColorUtils.PADDING_LEFT, CSSColorUtils.EM_0_5);
 		result.getStyle().set(CSSColorUtils.PADDING_RIGHT, CSSColorUtils.EM_0_5);

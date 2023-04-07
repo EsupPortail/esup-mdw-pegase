@@ -1,5 +1,9 @@
 html {
-  --main-color: #233348;
+  --main-color: #343a40; /* menu sélectionné et ligne card */
+  --header-card-separator-color : #343a40; /* séparateur du header des card */
+  --second-color : var(--_lumo-button-color, var(--lumo-primary-text-color)); /* entete card */
+  --btn-color: var(--_lumo-button-color, var(--lumo-primary-text-color)); /* bouton */
+  --txt-color: #343a40; /* labels */
   background-color: var(--lumo-contrast-5pct);
 }
 
@@ -10,7 +14,7 @@ html {
 
 .card-title-bordered {
 	border-bottom:1px solid;
-	border-image : linear-gradient(45deg,var(--main-color),#ffffff) 1;
+	border-image : linear-gradient(45deg,var(--header-card-separator-color),#ffffff) 1;
 	width: 100%;
 	margin-bottom: 0.5em;
 	/*border-color:var(--main-color);*/
@@ -18,7 +22,7 @@ html {
 
 .card-title-bordered-closed {
 	border-bottom:1px solid;
-	border-image : linear-gradient(45deg,var(--main-color),#ffffff) 0;
+	border-image : linear-gradient(45deg,var(--header-card-separator-color),#ffffff) 0;
 	width: 100%;
 }
 
@@ -36,13 +40,13 @@ html {
     font-size: .7rem;
     letter-spacing: .08em;
     text-transform: uppercase;
-    color: #343a40;
+    color: var(--txt-color);
 }
 
 .label-valeur {
 	font-weight: 700;
     padding: 0;
-    color: #343a40;
+    color: var(--txt-color);
     margin: 0;
 }
 

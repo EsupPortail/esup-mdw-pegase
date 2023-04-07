@@ -1,13 +1,10 @@
 
 :host([selected]) {
-	/*color: #343a40;*/
 	color: var(--main-color);
    background-color: #7b7b7b4a;
-   /*background-color: var(--main-color);*/
 }
 
 :host([focused]) {
-	/*color: #343a40;*/
 	color: var(--main-color);
     background-color: #7b7b7b4a;
 }

@@ -41,7 +41,7 @@ public class CardHeader extends HorizontalLayout {
 	}
 
 	public void setIcon(Icon icon) {
-		icon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
+		icon.setColor(CSSColorUtils.SECOND_COLOR);
 		icon.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
 		icon.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
 		add(icon);

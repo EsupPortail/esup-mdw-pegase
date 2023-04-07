@@ -5,8 +5,7 @@
 }
 
 [part="navbar"]::before {
-	/*background-color: var(--lumo-secondary-text-color);*/
-	background-color: #343a40!important;
+	background-color: var(--main-color)!important;
 	opacity: 1;
 }
 	
