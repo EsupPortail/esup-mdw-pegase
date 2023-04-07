@@ -66,9 +66,11 @@ import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
+import fr.univlorraine.mondossierweb.services.CssService;
 import fr.univlorraine.mondossierweb.services.CurrentUiService;
 import fr.univlorraine.mondossierweb.services.PreferencesService;
 import fr.univlorraine.mondossierweb.services.SecurityService;
+import fr.univlorraine.mondossierweb.ui.component.AppColorStyle;
 import fr.univlorraine.mondossierweb.ui.view.acces.AccesView;
 import fr.univlorraine.mondossierweb.ui.view.apropos.AProposView;
 import fr.univlorraine.mondossierweb.ui.view.connexions.ConnexionsView;
@@ -120,6 +122,8 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private transient SessionController mainController;
 	@Autowired
 	private transient ConfigController configController;
+	@Autowired
+	private transient CssService cssService;
 
 	
 	private transient String docUrl;
@@ -159,11 +163,12 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 			.map(darkMode -> () -> getElement().executeJs("setDarkMode($0)", darkMode)));
 
 		/* Theme: Couleur principale */
-		/*AppColorStyle appColorStyle = new AppColorStyle();
+		AppColorStyle appColorStyle = new AppColorStyle();
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getAppColorFlux()
-			.map(appColor -> () -> appColorStyle.setColor(appColor)));
-		getElement().appendChild(appColorStyle.getElement());*/
+			.map(appColor -> () -> appColorStyle.setColor(cssService.getMainColor(), cssService.getSecondColor(), cssService.getHeaderCardSepColor(),
+				cssService.getTxtColor(), cssService.getBtnColor(), cssService.getBackgroundColor())));
+		getElement().appendChild(appColorStyle.getElement());
 
 		/* Menu au-dessus de la barre d'application */
 		setPrimarySection(Section.DRAWER);

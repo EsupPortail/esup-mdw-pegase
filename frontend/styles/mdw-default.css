@@ -1,11 +1,3 @@
-html {
-  --main-color: #343a40; /* menu sélectionné et ligne card */
-  --header-card-separator-color : #343a40; /* séparateur du header des card */
-  --second-color : var(--_lumo-button-color, var(--lumo-primary-text-color)); /* entete card */
-  --btn-color: var(--_lumo-button-color, var(--lumo-primary-text-color)); /* bouton */
-  --txt-color: #343a40; /* labels */
-  background-color: var(--lumo-contrast-5pct);
-}
 
 .card-with-separator {
    border-bottom-width:0.1em;
