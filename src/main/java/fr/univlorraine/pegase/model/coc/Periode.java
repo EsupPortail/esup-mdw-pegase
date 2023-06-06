@@ -23,13 +23,13 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.time.LocalDate;
 
 /**
- * Le résultat obtenu lors des sessions pour les sessions ou les contrôles (paramétrage \&quot;Types de résultat\&quot; venant du référentiel).  Le résultat retenu pour l&#39;objet pour le résultat final. C&#39;est soit &#x60;resultatSession1&#x60; ou &#x60;resultatSession2&#x60; en fonction du paramétrage de consolidation du résultat. Voir aussi &#x60;numeroSessionRetenueResultat&#x60;. 
+ * Periode
  */
-@ApiModel(description = "Le résultat obtenu lors des sessions pour les sessions ou les contrôles (paramétrage \"Types de résultat\" venant du référentiel).  Le résultat retenu pour l'objet pour le résultat final. C'est soit `resultatSession1` ou `resultatSession2` en fonction du paramétrage de consolidation du résultat. Voir aussi `numeroSessionRetenueResultat`. ")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T11:03:30.102+02:00[Europe/Paris]")
-public class Resultat {
+public class Periode {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
   private String code;
@@ -46,21 +46,37 @@ public class Resultat {
   @SerializedName(SERIALIZED_NAME_LIBELLE_AFFICHAGE)
   private String libelleAffichage;
 
-  public Resultat() { 
+  public static final String SERIALIZED_NAME_DATE_DEBUT = "dateDebut";
+  @SerializedName(SERIALIZED_NAME_DATE_DEBUT)
+  private LocalDate dateDebut;
+
+  public static final String SERIALIZED_NAME_DATE_FIN = "dateFin";
+  @SerializedName(SERIALIZED_NAME_DATE_FIN)
+  private LocalDate dateFin;
+
+  public static final String SERIALIZED_NAME_ANNEE_UNIVERSITAIRE = "anneeUniversitaire";
+  @SerializedName(SERIALIZED_NAME_ANNEE_UNIVERSITAIRE)
+  private Integer anneeUniversitaire;
+
+  public static final String SERIALIZED_NAME_ACTIVE = "active";
+  @SerializedName(SERIALIZED_NAME_ACTIVE)
+  private Boolean active;
+
+  public Periode() { 
   }
 
-  public Resultat code(String code) {
+  public Periode code(String code) {
     
     this.code = code;
     return this;
   }
 
    /**
-   * Le code du résultat
+   * Le code de la période
    * @return code
   **/
   @javax.annotation.Nonnull
-  @ApiModelProperty(example = "TRE001", required = true, value = "Le code du résultat")
+  @ApiModelProperty(required = true, value = "Le code de la période")
 
   public String getCode() {
     return code;
@@ -72,18 +88,18 @@ public class Resultat {
   }
 
 
-  public Resultat libelleCourt(String libelleCourt) {
+  public Periode libelleCourt(String libelleCourt) {
     
     this.libelleCourt = libelleCourt;
     return this;
   }
 
    /**
-   * Le libellé court du résultat
+   * Le libellé court de la période à afficher
    * @return libelleCourt
   **/
   @javax.annotation.Nonnull
-  @ApiModelProperty(example = "ADMIS", required = true, value = "Le libellé court du résultat")
+  @ApiModelProperty(required = true, value = "Le libellé court de la période à afficher")
 
   public String getLibelleCourt() {
     return libelleCourt;
@@ -95,18 +111,18 @@ public class Resultat {
   }
 
 
-  public Resultat libelleLong(String libelleLong) {
+  public Periode libelleLong(String libelleLong) {
     
     this.libelleLong = libelleLong;
     return this;
   }
 
    /**
-   * Le libellé long du résultat
+   * Le libellé long de la période à afficher
    * @return libelleLong
   **/
   @javax.annotation.Nonnull
-  @ApiModelProperty(example = "ADMIS", required = true, value = "Le libellé long du résultat")
+  @ApiModelProperty(required = true, value = "Le libellé long de la période à afficher")
 
   public String getLibelleLong() {
     return libelleLong;
@@ -118,18 +134,18 @@ public class Resultat {
   }
 
 
-  public Resultat libelleAffichage(String libelleAffichage) {
+  public Periode libelleAffichage(String libelleAffichage) {
     
     this.libelleAffichage = libelleAffichage;
     return this;
   }
 
    /**
-   * Le libellé d&#39;affichage (celui présenté aux apprenants) du résultat
+   * Le libellé d&#39;affichage de la période à afficher
    * @return libelleAffichage
   **/
   @javax.annotation.Nonnull
-  @ApiModelProperty(example = "Admis", required = true, value = "Le libellé d'affichage (celui présenté aux apprenants) du résultat")
+  @ApiModelProperty(required = true, value = "Le libellé d'affichage de la période à afficher")
 
   public String getLibelleAffichage() {
     return libelleAffichage;
@@ -141,6 +157,98 @@ public class Resultat {
   }
 
 
+  public Periode dateDebut(LocalDate dateDebut) {
+    
+    this.dateDebut = dateDebut;
+    return this;
+  }
+
+   /**
+   * La date de début de la période
+   * @return dateDebut
+  **/
+  @javax.annotation.Nonnull
+  @ApiModelProperty(required = true, value = "La date de début de la période")
+
+  public LocalDate getDateDebut() {
+    return dateDebut;
+  }
+
+
+  public void setDateDebut(LocalDate dateDebut) {
+    this.dateDebut = dateDebut;
+  }
+
+
+  public Periode dateFin(LocalDate dateFin) {
+    
+    this.dateFin = dateFin;
+    return this;
+  }
+
+   /**
+   * La date de fin de la période
+   * @return dateFin
+  **/
+  @javax.annotation.Nonnull
+  @ApiModelProperty(required = true, value = "La date de fin de la période")
+
+  public LocalDate getDateFin() {
+    return dateFin;
+  }
+
+
+  public void setDateFin(LocalDate dateFin) {
+    this.dateFin = dateFin;
+  }
+
+
+  public Periode anneeUniversitaire(Integer anneeUniversitaire) {
+    
+    this.anneeUniversitaire = anneeUniversitaire;
+    return this;
+  }
+
+   /**
+   * L&#39;année universitaire sur laquelle débute la période
+   * @return anneeUniversitaire
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "L'année universitaire sur laquelle débute la période")
+
+  public Integer getAnneeUniversitaire() {
+    return anneeUniversitaire;
+  }
+
+
+  public void setAnneeUniversitaire(Integer anneeUniversitaire) {
+    this.anneeUniversitaire = anneeUniversitaire;
+  }
+
+
+  public Periode active(Boolean active) {
+    
+    this.active = active;
+    return this;
+  }
+
+   /**
+   * La période est-elle active ?
+   * @return active
+  **/
+  @javax.annotation.Nonnull
+  @ApiModelProperty(required = true, value = "La période est-elle active ?")
+
+  public Boolean getActive() {
+    return active;
+  }
+
+
+  public void setActive(Boolean active) {
+    this.active = active;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -149,26 +257,34 @@ public class Resultat {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Resultat resultat = (Resultat) o;
-    return Objects.equals(this.code, resultat.code) &&
-        Objects.equals(this.libelleCourt, resultat.libelleCourt) &&
-        Objects.equals(this.libelleLong, resultat.libelleLong) &&
-        Objects.equals(this.libelleAffichage, resultat.libelleAffichage);
+    Periode periode = (Periode) o;
+    return Objects.equals(this.code, periode.code) &&
+        Objects.equals(this.libelleCourt, periode.libelleCourt) &&
+        Objects.equals(this.libelleLong, periode.libelleLong) &&
+        Objects.equals(this.libelleAffichage, periode.libelleAffichage) &&
+        Objects.equals(this.dateDebut, periode.dateDebut) &&
+        Objects.equals(this.dateFin, periode.dateFin) &&
+        Objects.equals(this.anneeUniversitaire, periode.anneeUniversitaire) &&
+        Objects.equals(this.active, periode.active);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, libelleCourt, libelleLong, libelleAffichage);
+    return Objects.hash(code, libelleCourt, libelleLong, libelleAffichage, dateDebut, dateFin, anneeUniversitaire, active);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Resultat {\n");
+    sb.append("class Periode {\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    libelleCourt: ").append(toIndentedString(libelleCourt)).append("\n");
     sb.append("    libelleLong: ").append(toIndentedString(libelleLong)).append("\n");
     sb.append("    libelleAffichage: ").append(toIndentedString(libelleAffichage)).append("\n");
+    sb.append("    dateDebut: ").append(toIndentedString(dateDebut)).append("\n");
+    sb.append("    dateFin: ").append(toIndentedString(dateFin)).append("\n");
+    sb.append("    anneeUniversitaire: ").append(toIndentedString(anneeUniversitaire)).append("\n");
+    sb.append("    active: ").append(toIndentedString(active)).append("\n");
     sb.append("}");
     return sb.toString();
   }

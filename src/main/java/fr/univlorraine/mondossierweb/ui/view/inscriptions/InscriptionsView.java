@@ -935,6 +935,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				Component sessionfinalelayout = getSessionFinaleDetails(o, true);
 				Component session2layout = getSession2Details(o, true);
 				Component session1layout = getSession1Details(o, true);
+				Component capitalise = getCapitaliseDetails(o, true);
 
 				if(session1layout != null) {
 					l.add(session1layout);
@@ -947,6 +948,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				}
 				if(session1layout == null && session2layout == null && sessionfinalelayout == null) {
 					l.add(getAucunResultat());
+				}
+				if(capitalise != null) {
+					l.add(capitalise);
 				}
 
 			}
@@ -1003,6 +1007,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			Component sf = getSessionFinaleDetails(o, false);
 			Component s2 = getSession2Details(o, false);
 			Component s1 = getSession1Details(o, false);
+			Component ac = getCapitaliseDetails(o, false);
 
 			//Ajout du coeff principal
 			BigDecimal coeff=getCoeff(o);
@@ -1092,6 +1097,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				concerneSession2Layout.add(concerneSession2Div);
 				dialLayout.add(concerneSession2Layout);
 			}
+			// Si capitalisé
+			if(ac != null) {
+				HorizontalLayout hlac = new HorizontalLayout();
+				hlac.setWidthFull();
+				hlac.add(ac);
+				dialLayout.add(hlac);
+			}
 
 		}
 		resultDialog.add(dialLayout);
@@ -1156,12 +1168,42 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			if(o.getObjet().getNoteSession1()!=null || o.getObjet().getAbsenceSession1()!=null) {
 				l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteSession1(), o.getObjet().getAbsenceSession1(), compact));
 			}
+			// Si on a un résultat de session1
 			if(o.getObjet().getResultatSession1()!=null) {
 				l.add(createLabelResult(compact ? o.getObjet().getResultatSession1().getLibelleCourt() : o.getObjet().getResultatSession1().getLibelleAffichage()));
 			}
 		}
 		l.getStyle().set(CSSColorUtils.FLEW_FLOW, CSSColorUtils.ROW_WRAP);
 		l.getStyle().set(CSSColorUtils.FLEX_DIRECTION, CSSColorUtils.COLUMN);
+
+		if(l.getComponentCount()>0) {
+			return l;
+		}
+		return null;
+	}
+
+
+	/**
+	 * 
+	 * @param o
+	 * @param compact
+	 * @return Element "capitalise"
+	 */
+	private Component getCapitaliseDetails(CheminDTO o, boolean compact) {
+		FlexLayout l = new FlexLayout();
+		if(compact) {
+			l.setMaxWidth("7em");
+		}
+
+		// Si l'objet est capitalisé et qu'un libellé court est défini
+		if(o!=null && o.getObjet()!=null && o.getObjet().getAcquisCapitalise() != null && o.getObjet().getAcquisCapitalise().booleanValue() 
+			&& (compact ?  StringUtils.hasText(getTranslation("inscription.element.capitalise.court")) : StringUtils.hasText(getTranslation("inscription.element.capitalise.long")))) {
+			l.add(createLabelResult(compact ? getTranslation("inscription.element.capitalise.court") : getTranslation("inscription.element.capitalise.long")));
+		}
+
+		l.getStyle().set(CSSColorUtils.FLEW_FLOW, CSSColorUtils.ROW_WRAP);
+		l.getStyle().set(CSSColorUtils.FLEX_DIRECTION, CSSColorUtils.COLUMN);
+		l.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 
 		if(l.getComponentCount()>0) {
 			return l;
@@ -1237,7 +1279,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		if(compact) {
 			result.setWidth("5em");
 		}
-		result.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO_AUTO_AUTO_1EM);
+		result.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO_1EM);
 		if(note != null) {
 			result.setText(Utils.displayNote(note, bareme, avecBareme));
 		} else {
@@ -1252,7 +1294,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private Component createLabelResult(String libCourt) {
 		Div result = new Div();
 		result.setHeight(CSSColorUtils.EM_1_5);
-		result.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO_AUTO_AUTO_1EM);
+		result.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO_1EM);
 		result.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.SECOND_COLOR);
 		result.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
 		result.getStyle().set(CSSColorUtils.PADDING_LEFT, CSSColorUtils.EM_0_5);
