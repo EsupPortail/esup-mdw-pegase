@@ -20,70 +20,69 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.ContexteInscription;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * CalendrierAllOf
+ * Pageable
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
-public class CalendrierAllOf {
-  public static final String SERIALIZED_NAME_CODE = "code";
-  @SerializedName(SERIALIZED_NAME_CODE)
-  private String code;
+public class Pageable {
+  public static final String SERIALIZED_NAME_PAGE = "page";
+  @SerializedName(SERIALIZED_NAME_PAGE)
+  private Integer page = 0;
 
-  public static final String SERIALIZED_NAME_CONTEXTE = "contexte";
-  @SerializedName(SERIALIZED_NAME_CONTEXTE)
-  private ContexteInscription contexte;
+  public static final String SERIALIZED_NAME_TAILLE = "taille";
+  @SerializedName(SERIALIZED_NAME_TAILLE)
+  private Integer taille = 50;
 
-  public CalendrierAllOf() { 
+  public Pageable() { 
   }
 
-  public CalendrierAllOf code(String code) {
+  public Pageable page(Integer page) {
     
-    this.code = code;
+    this.page = page;
     return this;
   }
 
    /**
-   * Get code
-   * @return code
+   * numéro de page demandée (commence à 0)
+   * @return page
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "numéro de page demandée (commence à 0)")
 
-  public String getCode() {
-    return code;
+  public Integer getPage() {
+    return page;
   }
 
 
-  public void setCode(String code) {
-    this.code = code;
+  public void setPage(Integer page) {
+    this.page = page;
   }
 
 
-  public CalendrierAllOf contexte(ContexteInscription contexte) {
+  public Pageable taille(Integer taille) {
     
-    this.contexte = contexte;
+    this.taille = taille;
     return this;
   }
 
    /**
-   * Get contexte
-   * @return contexte
+   * nombre d&#39;élements par page
+   * @return taille
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "nombre d'élements par page")
 
-  public ContexteInscription getContexte() {
-    return contexte;
+  public Integer getTaille() {
+    return taille;
   }
 
 
-  public void setContexte(ContexteInscription contexte) {
-    this.contexte = contexte;
+  public void setTaille(Integer taille) {
+    this.taille = taille;
   }
 
 
@@ -95,22 +94,22 @@ public class CalendrierAllOf {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CalendrierAllOf calendrierAllOf = (CalendrierAllOf) o;
-    return Objects.equals(this.code, calendrierAllOf.code) &&
-        Objects.equals(this.contexte, calendrierAllOf.contexte);
+    Pageable pageable = (Pageable) o;
+    return Objects.equals(this.page, pageable.page) &&
+        Objects.equals(this.taille, pageable.taille);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, contexte);
+    return Objects.hash(page, taille);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CalendrierAllOf {\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    contexte: ").append(toIndentedString(contexte)).append("\n");
+    sb.append("class Pageable {\n");
+    sb.append("    page: ").append(toIndentedString(page)).append("\n");
+    sb.append("    taille: ").append(toIndentedString(taille)).append("\n");
     sb.append("}");
     return sb.toString();
   }

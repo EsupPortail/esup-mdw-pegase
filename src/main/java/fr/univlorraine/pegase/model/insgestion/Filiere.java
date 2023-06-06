@@ -20,39 +20,40 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.ContexteInscription;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.time.LocalDate;
 
 /**
- * CalendrierAllOf
+ * La filière du cursus parallèle de l&#39;apprenant. Codes de la nomenclature sur 6 caractères. Préfixe des codes : CUP 
  */
+@ApiModel(description = "La filière du cursus parallèle de l'apprenant. Codes de la nomenclature sur 6 caractères. Préfixe des codes : CUP ")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
-public class CalendrierAllOf {
+public class Filiere {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
   private String code;
 
-  public static final String SERIALIZED_NAME_CONTEXTE = "contexte";
-  @SerializedName(SERIALIZED_NAME_CONTEXTE)
-  private ContexteInscription contexte;
+  public static final String SERIALIZED_NAME_CONTEXTE_CONSOMMATION = "contexteConsommation";
+  @SerializedName(SERIALIZED_NAME_CONTEXTE_CONSOMMATION)
+  private LocalDate contexteConsommation;
 
-  public CalendrierAllOf() { 
+  public Filiere() { 
   }
 
-  public CalendrierAllOf code(String code) {
+  public Filiere code(String code) {
     
     this.code = code;
     return this;
   }
 
    /**
-   * Get code
+   * code de la nomenclature
    * @return code
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "code de la nomenclature")
 
   public String getCode() {
     return code;
@@ -64,26 +65,26 @@ public class CalendrierAllOf {
   }
 
 
-  public CalendrierAllOf contexte(ContexteInscription contexte) {
+  public Filiere contexteConsommation(LocalDate contexteConsommation) {
     
-    this.contexte = contexte;
+    this.contexteConsommation = contexteConsommation;
     return this;
   }
 
    /**
-   * Get contexte
-   * @return contexte
+   * Date contexte de consommation de la nomenclature
+   * @return contexteConsommation
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "Date contexte de consommation de la nomenclature")
 
-  public ContexteInscription getContexte() {
-    return contexte;
+  public LocalDate getContexteConsommation() {
+    return contexteConsommation;
   }
 
 
-  public void setContexte(ContexteInscription contexte) {
-    this.contexte = contexte;
+  public void setContexteConsommation(LocalDate contexteConsommation) {
+    this.contexteConsommation = contexteConsommation;
   }
 
 
@@ -95,22 +96,22 @@ public class CalendrierAllOf {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CalendrierAllOf calendrierAllOf = (CalendrierAllOf) o;
-    return Objects.equals(this.code, calendrierAllOf.code) &&
-        Objects.equals(this.contexte, calendrierAllOf.contexte);
+    Filiere filiere = (Filiere) o;
+    return Objects.equals(this.code, filiere.code) &&
+        Objects.equals(this.contexteConsommation, filiere.contexteConsommation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, contexte);
+    return Objects.hash(code, contexteConsommation);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CalendrierAllOf {\n");
+    sb.append("class Filiere {\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    contexte: ").append(toIndentedString(contexte)).append("\n");
+    sb.append("    contexteConsommation: ").append(toIndentedString(contexteConsommation)).append("\n");
     sb.append("}");
     return sb.toString();
   }

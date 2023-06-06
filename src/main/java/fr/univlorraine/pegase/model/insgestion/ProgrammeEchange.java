@@ -20,39 +20,43 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.ContexteInscription;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.time.LocalDate;
 
 /**
- * CalendrierAllOf
+ * ProgrammeEchange
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
-public class CalendrierAllOf {
+public class ProgrammeEchange {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
   private String code;
 
-  public static final String SERIALIZED_NAME_CONTEXTE = "contexte";
-  @SerializedName(SERIALIZED_NAME_CONTEXTE)
-  private ContexteInscription contexte;
+  public static final String SERIALIZED_NAME_CODE_PAYS = "codePays";
+  @SerializedName(SERIALIZED_NAME_CODE_PAYS)
+  private String codePays;
 
-  public CalendrierAllOf() { 
+  public static final String SERIALIZED_NAME_CONTEXTE_CONSOMMATION = "contexteConsommation";
+  @SerializedName(SERIALIZED_NAME_CONTEXTE_CONSOMMATION)
+  private LocalDate contexteConsommation;
+
+  public ProgrammeEchange() { 
   }
 
-  public CalendrierAllOf code(String code) {
+  public ProgrammeEchange code(String code) {
     
     this.code = code;
     return this;
   }
 
    /**
-   * Get code
+   * code de la nomenclature programme d&#39;échange
    * @return code
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "code de la nomenclature programme d'échange")
 
   public String getCode() {
     return code;
@@ -64,26 +68,49 @@ public class CalendrierAllOf {
   }
 
 
-  public CalendrierAllOf contexte(ContexteInscription contexte) {
+  public ProgrammeEchange codePays(String codePays) {
     
-    this.contexte = contexte;
+    this.codePays = codePays;
     return this;
   }
 
    /**
-   * Get contexte
-   * @return contexte
+   * code de la nomenclature du pays du programme d&#39;échange
+   * @return codePays
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "code de la nomenclature du pays du programme d'échange")
+
+  public String getCodePays() {
+    return codePays;
+  }
+
+
+  public void setCodePays(String codePays) {
+    this.codePays = codePays;
+  }
+
+
+  public ProgrammeEchange contexteConsommation(LocalDate contexteConsommation) {
+    
+    this.contexteConsommation = contexteConsommation;
+    return this;
+  }
+
+   /**
+   * Get contexteConsommation
+   * @return contexteConsommation
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public ContexteInscription getContexte() {
-    return contexte;
+  public LocalDate getContexteConsommation() {
+    return contexteConsommation;
   }
 
 
-  public void setContexte(ContexteInscription contexte) {
-    this.contexte = contexte;
+  public void setContexteConsommation(LocalDate contexteConsommation) {
+    this.contexteConsommation = contexteConsommation;
   }
 
 
@@ -95,22 +122,24 @@ public class CalendrierAllOf {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CalendrierAllOf calendrierAllOf = (CalendrierAllOf) o;
-    return Objects.equals(this.code, calendrierAllOf.code) &&
-        Objects.equals(this.contexte, calendrierAllOf.contexte);
+    ProgrammeEchange programmeEchange = (ProgrammeEchange) o;
+    return Objects.equals(this.code, programmeEchange.code) &&
+        Objects.equals(this.codePays, programmeEchange.codePays) &&
+        Objects.equals(this.contexteConsommation, programmeEchange.contexteConsommation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, contexte);
+    return Objects.hash(code, codePays, contexteConsommation);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CalendrierAllOf {\n");
+    sb.append("class ProgrammeEchange {\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    contexte: ").append(toIndentedString(contexte)).append("\n");
+    sb.append("    codePays: ").append(toIndentedString(codePays)).append("\n");
+    sb.append("    contexteConsommation: ").append(toIndentedString(contexteConsommation)).append("\n");
     sb.append("}");
     return sb.toString();
   }

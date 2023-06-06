@@ -37,6 +37,7 @@ import fr.univlorraine.pegase.api.ApiException;
 import fr.univlorraine.pegase.api.chc.CursusDcaApi;
 import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
+import fr.univlorraine.pegase.api.insgestion.FluxInscriptionsApi;
 import fr.univlorraine.pegase.api.insgestion.InscriptionsApi;
 import fr.univlorraine.pegase.api.insgestion.PiecesApi;
 import fr.univlorraine.pegase.api.pai.PaiApi;
@@ -44,10 +45,12 @@ import fr.univlorraine.pegase.model.chc.CursusDCA;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.Inscriptions;
+import fr.univlorraine.pegase.model.insgestion.Pageable;
 import fr.univlorraine.pegase.model.insgestion.StatutInscriptionVoeu;
 import fr.univlorraine.pegase.model.insgestion.StatutPaiementVoeu;
 import fr.univlorraine.pegase.model.insgestion.StatutPiecesVoeu;
 import fr.univlorraine.pegase.model.insgestion.TriInscription;
+import fr.univlorraine.pegase.model.insgestion.VueInscriptions;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -80,6 +83,7 @@ public class PegaseService implements Serializable {
 	private transient ApiClient apiClientIns = new ApiClient();
 	private transient ApprenantsApi appApiIns = new ApprenantsApi();
 	private transient InscriptionsApi insApiIns = new InscriptionsApi();
+	private transient FluxInscriptionsApi fluxInsApiIns = new FluxInscriptionsApi();
 	private transient PiecesApi insApiPieces = new PiecesApi();
 
 	// PAI API
@@ -167,6 +171,7 @@ public class PegaseService implements Serializable {
 		// Init INS
 		apiClientIns.setBasePath(apiInsUrl);
 		insApiIns.setApiClient(apiClientIns);
+		fluxInsApiIns.setApiClient(apiClientIns);
 		appApiIns.setApiClient(apiClientIns);
 		insApiPieces.setApiClient(apiClientIns);
 
@@ -188,9 +193,37 @@ public class PegaseService implements Serializable {
 		refreshParameters();
 	}
 
+	public VueInscriptions recupererFluxDossierApprenant(String codeApprenant) {
+		// Si les paramètres nécessaires sont valués
+		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
+			// Maj du token pour récupérer le dernier token valide
+			insApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
+			try {
+				Long depuis = null;
+				Long jusqua = null;
+				Boolean photo = Boolean.TRUE;
+				String codePeriode = null;
+				Pageable pageable = null;
+				// Appel de l'API Pégase
+				VueInscriptions vueIns = fluxInsApiIns.listerFluxInscriptionsPagine(depuis, jusqua, photo, codePeriode, pageable, codeApprenant);
+				if(vueIns != null) {
+					log.info("{}  recuperees", vueIns.getTotalElements());
+				} else {
+					log.info("Anomalie lors de l'appel à la methode API : listerFluxInscriptionsPagine pour le code apprenant : {} et etablissement : {} LE DOSSIER RECUPERE EST NULL", codeApprenant, etablissement);
+				}
+				return vueIns;
+			} catch (ApiException e) {
+				if(e.getCode() == 500 && e.getResponseBody()!=null && e.getResponseBody().contains(APPRENANT_NON_TROUVE)) {
+					log.warn("Apprenant non trouvé lors de l'appel à la methode API : listerFluxInscriptionsPagine pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
+				} else {
+					log.error("Erreur lors de l'appel à la methode API : listerFluxInscriptionsPagine pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(), e);
+				}
+			}
+		}
+		return null;
+	}
+
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
-
-
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
@@ -228,17 +261,20 @@ public class PegaseService implements Serializable {
 		List<StatutPiecesVoeu> statutsPieces = null;
 		List<StatutPaiementVoeu> statutsPaiement = null;
 		List<TriInscription> tri = null;
+		String rechercheIne = null;
 		String recherche = null;
 		String periode = null;
 		String objetMaquette = null;
 		String nomOuPrenom = null;
+		String nomDeNaissance = null;
+		String prenom = null;
 		String codeApprenant = null;
 		String ine = null;
 		int limit = 0;
 
 		try {
 			// Appel de l'API Pégase
-			Inscriptions response = insApiIns.listerInscriptionsValidees(etablissement, statutsInscription, statutsPieces, statutsPaiement, tri, recherche, periode, objetMaquette, nomOuPrenom, codeApprenant, ine, limit);
+			Inscriptions response = insApiIns.listerInscriptionsValidees(etablissement, statutsInscription, statutsPieces, statutsPaiement, tri, rechercheIne, recherche, periode, objetMaquette, nomOuPrenom, nomDeNaissance, prenom, codeApprenant, ine, limit);
 			if(response != null) {
 				log.info("{} listerInscriptionsValidees", response.getNombre());
 			} else {

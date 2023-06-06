@@ -20,70 +20,70 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.ContexteInscription;
+import fr.univlorraine.pegase.model.insgestion.Filiere;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * CalendrierAllOf
+ * CursusParallele
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
-public class CalendrierAllOf {
-  public static final String SERIALIZED_NAME_CODE = "code";
-  @SerializedName(SERIALIZED_NAME_CODE)
-  private String code;
+public class CursusParallele {
+  public static final String SERIALIZED_NAME_FILIERE = "filiere";
+  @SerializedName(SERIALIZED_NAME_FILIERE)
+  private Filiere filiere;
 
-  public static final String SERIALIZED_NAME_CONTEXTE = "contexte";
-  @SerializedName(SERIALIZED_NAME_CONTEXTE)
-  private ContexteInscription contexte;
+  public static final String SERIALIZED_NAME_CONVENTION = "convention";
+  @SerializedName(SERIALIZED_NAME_CONVENTION)
+  private Boolean convention;
 
-  public CalendrierAllOf() { 
+  public CursusParallele() { 
   }
 
-  public CalendrierAllOf code(String code) {
+  public CursusParallele filiere(Filiere filiere) {
     
-    this.code = code;
+    this.filiere = filiere;
     return this;
   }
 
    /**
-   * Get code
-   * @return code
+   * Get filiere
+   * @return filiere
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public String getCode() {
-    return code;
+  public Filiere getFiliere() {
+    return filiere;
   }
 
 
-  public void setCode(String code) {
-    this.code = code;
+  public void setFiliere(Filiere filiere) {
+    this.filiere = filiere;
   }
 
 
-  public CalendrierAllOf contexte(ContexteInscription contexte) {
+  public CursusParallele convention(Boolean convention) {
     
-    this.contexte = contexte;
+    this.convention = convention;
     return this;
   }
 
    /**
-   * Get contexte
-   * @return contexte
+   * L&#39;année d&#39;obtention du dernier diplôme au format AAAA
+   * @return convention
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "L'année d'obtention du dernier diplôme au format AAAA")
 
-  public ContexteInscription getContexte() {
-    return contexte;
+  public Boolean getConvention() {
+    return convention;
   }
 
 
-  public void setContexte(ContexteInscription contexte) {
-    this.contexte = contexte;
+  public void setConvention(Boolean convention) {
+    this.convention = convention;
   }
 
 
@@ -95,22 +95,22 @@ public class CalendrierAllOf {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CalendrierAllOf calendrierAllOf = (CalendrierAllOf) o;
-    return Objects.equals(this.code, calendrierAllOf.code) &&
-        Objects.equals(this.contexte, calendrierAllOf.contexte);
+    CursusParallele cursusParallele = (CursusParallele) o;
+    return Objects.equals(this.filiere, cursusParallele.filiere) &&
+        Objects.equals(this.convention, cursusParallele.convention);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, contexte);
+    return Objects.hash(filiere, convention);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CalendrierAllOf {\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    contexte: ").append(toIndentedString(contexte)).append("\n");
+    sb.append("class CursusParallele {\n");
+    sb.append("    filiere: ").append(toIndentedString(filiere)).append("\n");
+    sb.append("    convention: ").append(toIndentedString(convention)).append("\n");
     sb.append("}");
     return sb.toString();
   }

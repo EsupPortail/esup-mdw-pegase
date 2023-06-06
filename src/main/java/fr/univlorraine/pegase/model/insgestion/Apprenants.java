@@ -20,70 +20,53 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.ContexteInscription;
+import fr.univlorraine.pegase.model.insgestion.Apprenant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * CalendrierAllOf
+ * Apprenants
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
-public class CalendrierAllOf {
-  public static final String SERIALIZED_NAME_CODE = "code";
-  @SerializedName(SERIALIZED_NAME_CODE)
-  private String code;
+public class Apprenants {
+  public static final String SERIALIZED_NAME_ITEMS = "items";
+  @SerializedName(SERIALIZED_NAME_ITEMS)
+  private List<Apprenant> items = null;
 
-  public static final String SERIALIZED_NAME_CONTEXTE = "contexte";
-  @SerializedName(SERIALIZED_NAME_CONTEXTE)
-  private ContexteInscription contexte;
-
-  public CalendrierAllOf() { 
+  public Apprenants() { 
   }
 
-  public CalendrierAllOf code(String code) {
+  public Apprenants items(List<Apprenant> items) {
     
-    this.code = code;
+    this.items = items;
+    return this;
+  }
+
+  public Apprenants addItemsItem(Apprenant itemsItem) {
+    if (this.items == null) {
+      this.items = new ArrayList<>();
+    }
+    this.items.add(itemsItem);
     return this;
   }
 
    /**
-   * Get code
-   * @return code
+   * Get items
+   * @return items
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public String getCode() {
-    return code;
+  public List<Apprenant> getItems() {
+    return items;
   }
 
 
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-
-  public CalendrierAllOf contexte(ContexteInscription contexte) {
-    
-    this.contexte = contexte;
-    return this;
-  }
-
-   /**
-   * Get contexte
-   * @return contexte
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public ContexteInscription getContexte() {
-    return contexte;
-  }
-
-
-  public void setContexte(ContexteInscription contexte) {
-    this.contexte = contexte;
+  public void setItems(List<Apprenant> items) {
+    this.items = items;
   }
 
 
@@ -95,22 +78,20 @@ public class CalendrierAllOf {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CalendrierAllOf calendrierAllOf = (CalendrierAllOf) o;
-    return Objects.equals(this.code, calendrierAllOf.code) &&
-        Objects.equals(this.contexte, calendrierAllOf.contexte);
+    Apprenants apprenants = (Apprenants) o;
+    return Objects.equals(this.items, apprenants.items);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, contexte);
+    return Objects.hash(items);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CalendrierAllOf {\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    contexte: ").append(toIndentedString(contexte)).append("\n");
+    sb.append("class Apprenants {\n");
+    sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("}");
     return sb.toString();
   }
