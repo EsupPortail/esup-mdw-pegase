@@ -28,8 +28,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.Cookie;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Service;
@@ -38,6 +36,8 @@ import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.server.VaadinService;
+
+import jakarta.servlet.http.Cookie;
 
 /**
  * UI Cookie Service

@@ -13,34 +13,13 @@
 
 package fr.univlorraine.pegase.model.insgestion;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.AccordComplet;
-import fr.univlorraine.pegase.model.insgestion.Admission;
-import fr.univlorraine.pegase.model.insgestion.CibleInscription;
-import fr.univlorraine.pegase.model.insgestion.ContexteInscription;
-import fr.univlorraine.pegase.model.insgestion.CursusParallele;
-import fr.univlorraine.pegase.model.insgestion.Cvec;
-import fr.univlorraine.pegase.model.insgestion.EcoleDoctorale;
-import fr.univlorraine.pegase.model.insgestion.OccurrenceNomenclature;
-import fr.univlorraine.pegase.model.insgestion.Origine;
-import fr.univlorraine.pegase.model.insgestion.PieceComplete;
-import fr.univlorraine.pegase.model.insgestion.SituationPersonnelleInscription;
-import fr.univlorraine.pegase.model.insgestion.SituationPrecedente;
-import fr.univlorraine.pegase.model.insgestion.SituationUniversitaire;
-import fr.univlorraine.pegase.model.insgestion.StatutInscriptionVoeu;
-import fr.univlorraine.pegase.model.insgestion.StatutPaiementVoeu;
-import fr.univlorraine.pegase.model.insgestion.StatutPiecesVoeu;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * InscriptionComplete

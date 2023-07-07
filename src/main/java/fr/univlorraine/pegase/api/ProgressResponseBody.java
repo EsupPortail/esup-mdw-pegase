@@ -13,11 +13,10 @@
 
 package fr.univlorraine.pegase.api;
 
-import okhttp3.MediaType;
-import okhttp3.ResponseBody;
-
 import java.io.IOException;
 
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.ForwardingSource;

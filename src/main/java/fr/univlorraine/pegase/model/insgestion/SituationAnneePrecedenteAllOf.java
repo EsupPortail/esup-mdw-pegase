@@ -14,15 +14,11 @@
 package fr.univlorraine.pegase.model.insgestion;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
  * Nomenclature utilisée à l&#39;inscription, pour préciser la provenance d&#39;un apprenant, elle est également utilisée dans le cadre de l&#39;enquête SISE pour la variable SITUPRE

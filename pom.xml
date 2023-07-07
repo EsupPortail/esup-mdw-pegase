@@ -20,7 +20,7 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.univlorraine</groupId>
@@ -41,7 +41,7 @@
 	<parent>
     	<groupId>org.springframework.boot</groupId>
     	<artifactId>spring-boot-starter-parent</artifactId>
-    	<version>2.7.13</version>
+    	<version>3.0.8</version>
 	</parent>
 
 
@@ -49,8 +49,8 @@
 		<revision>1.6.0</revision>
 		<sha1></sha1>
 		<changelist>-SNAPSHOT</changelist>
-		<java.version>11</java.version>
-		<vaadin.version>14.9.7</vaadin.version>
+		<java.version>17</java.version>
+		<vaadin.version>24.0.5</vaadin.version>
 		<gson-fire-version>1.8.4</gson-fire-version>
         <swagger-core-version>1.5.24</swagger-core-version>
         <okhttp-version>4.9.3</okhttp-version> 
@@ -83,6 +83,18 @@
 	</distributionManagement>
 
 	<dependencies>
+		
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-cas</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+		</dependency>
+
+
 		<!-- Packaging (cf. https://docs.spring.io/spring-boot/docs/2.2.3.RELEASE/reference/html/howto.html#howto-create-a-deployable-war-file) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -93,50 +105,11 @@
 		<!-- Vaadin -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
-			<!-- Replace artifactId with vaadin-core to use only free components -->
-			<artifactId>vaadin-core</artifactId>
-			<exclusions>
-				<!-- Webjars are only needed when running in Vaadin 13 compatibility mode -->
-				<exclusion>
-					<groupId>com.vaadin.webjar</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.insites</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.polymer</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.polymerelements</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.vaadin</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.webcomponents</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
+			<artifactId>vaadin</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-spring-boot-starter</artifactId>
-			<exclusions>
-				<!-- Excluding so that webjars are not included. -->
-				<exclusion>
-					<groupId>com.vaadin</groupId>
-					<artifactId>vaadin-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<!-- Spring Security -->
@@ -151,6 +124,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-cas</artifactId>
+			<version>6.1.1</version>
 		</dependency>
 
 		<!-- LDAP -->
@@ -253,7 +227,6 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>4.1.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -304,8 +277,8 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
         <!--  FIN DES DEPENDANCES OPENAPI GENERATOR -->
         

@@ -13,20 +13,6 @@
 
 package fr.univlorraine.pegase.api;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParseException;
-import com.google.gson.TypeAdapter;
-import com.google.gson.internal.bind.util.ISO8601Utils;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import com.google.gson.JsonElement;
-import io.gsonfire.GsonFireBuilder;
-import io.gsonfire.TypeSelector;
-
-import fr.univlorraine.pegase.model.insgestion.*;
-import okio.ByteString;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Type;
@@ -37,9 +23,45 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapter;
+import com.google.gson.internal.bind.util.ISO8601Utils;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+
+import fr.univlorraine.pegase.model.insgestion.BourseOuAide;
+import fr.univlorraine.pegase.model.insgestion.Calendrier;
+import fr.univlorraine.pegase.model.insgestion.CibleInscription;
+import fr.univlorraine.pegase.model.insgestion.ContactAdresseComplet;
+import fr.univlorraine.pegase.model.insgestion.ContactComplet;
+import fr.univlorraine.pegase.model.insgestion.ContactMelComplet;
+import fr.univlorraine.pegase.model.insgestion.ContactTelephoneComplet;
+import fr.univlorraine.pegase.model.insgestion.DemandeDeContact;
+import fr.univlorraine.pegase.model.insgestion.DemandeDeContactSimple;
+import fr.univlorraine.pegase.model.insgestion.Formation;
+import fr.univlorraine.pegase.model.insgestion.Nomenclature;
+import fr.univlorraine.pegase.model.insgestion.ObjetAvecDates;
+import fr.univlorraine.pegase.model.insgestion.ObjetAvecLibelle;
+import fr.univlorraine.pegase.model.insgestion.ObjetFormationOuGroupement;
+import fr.univlorraine.pegase.model.insgestion.Periode;
+import fr.univlorraine.pegase.model.insgestion.RegimeInscription;
+import fr.univlorraine.pegase.model.insgestion.SituationAnneePrecedente;
+import fr.univlorraine.pegase.model.insgestion.Voeu;
+import fr.univlorraine.pegase.model.insgestion.VoeuBase;
+import fr.univlorraine.pegase.model.insgestion.VoeuInscription;
+import fr.univlorraine.pegase.model.insgestion.VueContact;
+import fr.univlorraine.pegase.model.insgestion.VueContactAdresse;
+import fr.univlorraine.pegase.model.insgestion.VueContactMel;
+import fr.univlorraine.pegase.model.insgestion.VueContactTelephone;
+import io.gsonfire.GsonFireBuilder;
+import io.gsonfire.TypeSelector;
+import okio.ByteString;
 
 public class JSON {
     private Gson gson;

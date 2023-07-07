@@ -14,15 +14,11 @@
 package fr.univlorraine.pegase.model.coc;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
  * Le résultat obtenu lors des sessions pour les sessions ou les contrôles (paramétrage \&quot;Types de résultat\&quot; venant du référentiel).  Le résultat retenu pour l&#39;objet pour le résultat final. C&#39;est soit &#x60;resultatSession1&#x60; ou &#x60;resultatSession2&#x60; en fonction du paramétrage de consolidation du résultat. Voir aussi &#x60;numeroSessionRetenueResultat&#x60;. 

@@ -14,25 +14,11 @@
 package fr.univlorraine.pegase.model.insgestion;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.CiblePourInscription;
-import fr.univlorraine.pegase.model.insgestion.MotifAnnulation;
-import fr.univlorraine.pegase.model.insgestion.Origine;
-import fr.univlorraine.pegase.model.insgestion.StatutInscriptionVoeu;
-import fr.univlorraine.pegase.model.insgestion.StatutPaiementVoeu;
-import fr.univlorraine.pegase.model.insgestion.StatutPiecesVoeu;
-import fr.univlorraine.pegase.model.insgestion.VoeuAllOf;
-import fr.univlorraine.pegase.model.insgestion.VoeuBase;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * L&#39;état d&#39;une voeu dans le formulaire, à définir

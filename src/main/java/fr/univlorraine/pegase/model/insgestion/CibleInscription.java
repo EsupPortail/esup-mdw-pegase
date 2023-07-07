@@ -13,23 +13,14 @@
 
 package fr.univlorraine.pegase.model.insgestion;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.CibleInscriptionAllOf;
-import fr.univlorraine.pegase.model.insgestion.Formation;
-import fr.univlorraine.pegase.model.insgestion.ObjetAvecLibelle;
-import fr.univlorraine.pegase.model.insgestion.ObjetFormationOuGroupement;
-import fr.univlorraine.pegase.model.insgestion.Periode;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * décrit la formation ou l&#39;objet de formation d&#39;une inscription

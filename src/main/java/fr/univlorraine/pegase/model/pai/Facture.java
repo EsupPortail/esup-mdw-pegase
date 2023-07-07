@@ -13,24 +13,15 @@
 
 package fr.univlorraine.pegase.model.pai;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.pai.Client;
-import fr.univlorraine.pegase.model.pai.ElementDeDroit;
-import fr.univlorraine.pegase.model.pai.Paiement;
-import fr.univlorraine.pegase.model.pai.StatutFacture;
-import fr.univlorraine.pegase.model.pai.StructureBudgetaire;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * La facture contenant les éléments de droit à payer. * La Structure n&#39;est pas à renseigner à la la creation * La Structure Budgétaire à renseigner à la modification * Le Client est à renseigner à la création * Le Client n&#39;est pas à renseigner à la la modification 

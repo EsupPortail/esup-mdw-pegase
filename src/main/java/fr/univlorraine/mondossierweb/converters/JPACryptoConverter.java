@@ -24,14 +24,14 @@ import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import lombok.extern.slf4j.Slf4j;
 
 @Converter

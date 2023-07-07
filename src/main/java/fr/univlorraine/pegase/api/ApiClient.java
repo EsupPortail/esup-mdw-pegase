@@ -13,16 +13,6 @@
 
 package fr.univlorraine.pegase.api;
 
-import okhttp3.*;
-import okhttp3.internal.http.HttpMethod;
-import okhttp3.internal.tls.OkHostnameVerifier;
-import okhttp3.logging.HttpLoggingInterceptor;
-import okhttp3.logging.HttpLoggingInterceptor.Level;
-import okio.Buffer;
-import okio.BufferedSink;
-import okio.Okio;
-
-import javax.net.ssl.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,21 +29,52 @@ import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+
+import fr.univlorraine.pegase.api.auth.ApiKeyAuth;
 import fr.univlorraine.pegase.api.auth.Authentication;
 import fr.univlorraine.pegase.api.auth.HttpBasicAuth;
 import fr.univlorraine.pegase.api.auth.HttpBearerAuth;
-import fr.univlorraine.pegase.api.auth.ApiKeyAuth;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Headers;
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.internal.http.HttpMethod;
+import okhttp3.internal.tls.OkHostnameVerifier;
+import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
+import okio.Buffer;
+import okio.BufferedSink;
+import okio.Okio;
 
 /**
  * <p>ApiClient class.</p>

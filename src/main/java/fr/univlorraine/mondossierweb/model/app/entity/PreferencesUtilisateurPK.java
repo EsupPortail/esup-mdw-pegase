@@ -19,7 +19,9 @@
 package fr.univlorraine.mondossierweb.model.app.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
  * The primary key class for the preferences_utilisateur database table.

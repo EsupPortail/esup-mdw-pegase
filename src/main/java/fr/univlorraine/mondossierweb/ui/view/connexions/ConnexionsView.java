@@ -18,8 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.connexions;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
@@ -41,6 +39,7 @@ import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 
 @Secured(SecurityUtils.ROLE_SUPERADMIN)

@@ -20,8 +20,6 @@ package fr.univlorraine.mondossierweb.ui.layout;
 
 import java.io.ByteArrayInputStream;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Component;
@@ -40,6 +38,7 @@ import fr.univlorraine.mondossierweb.services.CurrentUiService;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
+import jakarta.annotation.PostConstruct;
 
 @Component
 @UIScope

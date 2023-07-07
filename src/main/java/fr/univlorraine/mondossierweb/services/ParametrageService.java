@@ -21,9 +21,6 @@ package fr.univlorraine.mondossierweb.services;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Arrays;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
@@ -31,12 +28,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.net.SMTPAppender;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 

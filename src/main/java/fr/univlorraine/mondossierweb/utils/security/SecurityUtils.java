@@ -20,10 +20,10 @@ package fr.univlorraine.mondossierweb.utils.security;
 
 import java.util.stream.Stream;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.vaadin.flow.server.ServletHelper.RequestType;
+import com.vaadin.flow.server.HandlerHelper.RequestType;
 import com.vaadin.flow.shared.ApplicationConstants;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * SecurityUtils takes care of all such static operations that have to do with

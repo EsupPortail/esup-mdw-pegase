@@ -13,28 +13,14 @@
 
 package fr.univlorraine.pegase.model.coc;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.coc.Absence;
-import fr.univlorraine.pegase.model.coc.Controle;
-import fr.univlorraine.pegase.model.coc.MentionHonorifique;
-import fr.univlorraine.pegase.model.coc.NotationEcts;
-import fr.univlorraine.pegase.model.coc.NotationGpa;
-import fr.univlorraine.pegase.model.coc.ObjetFeuille;
-import fr.univlorraine.pegase.model.coc.Periode;
-import fr.univlorraine.pegase.model.coc.Resultat;
-import fr.univlorraine.pegase.model.coc.TypeAmenagement;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Chemin

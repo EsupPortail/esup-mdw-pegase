@@ -26,8 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
@@ -79,6 +77,7 @@ import fr.univlorraine.pegase.model.coc.Absence;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
