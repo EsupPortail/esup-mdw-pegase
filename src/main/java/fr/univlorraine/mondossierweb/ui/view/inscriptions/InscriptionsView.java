@@ -1272,7 +1272,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		return null;
 	}
 
-	private Component createLabelNote(int bareme, BigDecimal note, Absence absence, boolean compact) {
+	private Component createLabelNote(Integer bareme, BigDecimal note, Absence absence, boolean compact) {
 		Div result = new Div();
 		result.setHeight(CSSColorUtils.EM_1_5);
 		if(compact) {

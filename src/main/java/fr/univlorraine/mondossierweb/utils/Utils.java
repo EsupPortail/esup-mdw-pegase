@@ -352,10 +352,10 @@ public final class Utils {
 		return false;
 	}
 
-	public static String displayNote(BigDecimal note, int bareme, Boolean avecBareme) {
+	public static String displayNote(BigDecimal note, Integer bareme, Boolean avecBareme) {
 		String n = displayBigDecimal(note);
 
-		if(StringUtils.hasText(n) && avecBareme!=null && avecBareme.booleanValue()) {
+		if(StringUtils.hasText(n) && bareme != null && avecBareme != null && avecBareme.booleanValue()) {
 			n += "/" + bareme;
 		}
 		return n;
