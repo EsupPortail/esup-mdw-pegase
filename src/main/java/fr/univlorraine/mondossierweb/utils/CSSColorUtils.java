@@ -30,7 +30,9 @@ public final class CSSColorUtils {
 
 	private static final String PATTERN_HEX_COLOR_SHORT = "^#[0-9a-fA-F]{3}$";
 	private static final String PATTERN_HEX_COLOR_LONG = "^#[0-9a-fA-F]{6}$";
-	public static final String MAIN_HEADER_COLOR = "#0096ea";
+	public static final String SECOND_COLOR = "var(--second-color)";
+	public static final String MAIN_COLOR = "var(--main-color)";
+	public static final String BTN_COLOR = "var(--btn-color)";
 	public static final String COLOR = "color";
 	public static final String MARGIN_LEFT = "margin-left";
 	public static final String MARGIN_RIGHT = "margin-right";
@@ -58,7 +60,7 @@ public final class CSSColorUtils {
 	public static final String EM_1_5 = "1.5em";
 	public static final String EM_0_5 = "0.5em";
 	public static final String SOLID_LIGHTGRAY = "1px solid lightgray";
-	public static final String AUTO_AUTO_AUTO_1EM = "auto auto auto 1em";
+	public static final String AUTO_1EM = "0.1em auto 0.1em 1em";
 
 	private CSSColorUtils() {
 	}

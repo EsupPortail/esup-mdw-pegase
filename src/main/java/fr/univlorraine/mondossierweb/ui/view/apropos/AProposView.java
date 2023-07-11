@@ -73,7 +73,6 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 	@PostConstruct
 	private void init() {
 		getStyle().set(CSSColorUtils.PADDING, "1em");
-
 		initAppInfo();
 		initMessageInfo();
 		initUserInfo();
@@ -103,7 +102,7 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 		
 		add(message);
 		message.getStyle().set(CSSColorUtils.PADDING, "1em");
-		message.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, "var(--lumo-contrast-5pct)");
+		message.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.MAIN_COLOR);
 		message.getStyle().set(CSSColorUtils.BORDER_RADIUS, "1em");
 		
 		

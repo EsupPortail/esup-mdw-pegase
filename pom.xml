@@ -45,11 +45,11 @@
 	</parent>
 
 	<properties>
-		<revision>1.6.0</revision>
+		<revision>1.7.1</revision>
 		<sha1></sha1>
 		<changelist>-SNAPSHOT</changelist>
 		<java.version>11</java.version>
-		<vaadin.version>14.8.18</vaadin.version>
+		<vaadin.version>14.9.7</vaadin.version>
 		<gson-fire-version>1.8.4</gson-fire-version>
         <swagger-core-version>1.5.24</swagger-core-version>
         <okhttp-version>4.9.3</okhttp-version> 

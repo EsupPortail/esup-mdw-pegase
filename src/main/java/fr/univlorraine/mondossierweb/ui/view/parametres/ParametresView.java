@@ -66,6 +66,7 @@ import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCate
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
 import fr.univlorraine.mondossierweb.services.AccessTokenService;
 import fr.univlorraine.mondossierweb.services.AppUserDetailsService;
+import fr.univlorraine.mondossierweb.services.CssService;
 import fr.univlorraine.mondossierweb.services.LdapService;
 import fr.univlorraine.mondossierweb.services.ParametrageService;
 import fr.univlorraine.mondossierweb.services.PegaseService;
@@ -98,6 +99,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final Integer PEGASE_PARAM = 4;
 	private static final Integer ADMIN_PARAM = 8;
 	private static final Integer SMTP_PARAM = 9;
+	private static final Integer CSS_PARAM = 10;
 	private static final Integer AFFICHAGE_PARAM = 6;
 	private static final String PARAMETRES_BUTTON_SYNC = "parametres.button-sync";
 	private static final String REFRESH_PARAMETERS = "refreshParameters";
@@ -139,7 +141,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	@PostConstruct
 	private void init() {
 		setSizeFull();
-
+		addClassName("view");
+		
 		parametresLayout.setWidthFull();
 		parametresLayout.getStyle().set("max-width", "52em");
 		parametresLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
@@ -441,6 +444,13 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		if(categorieId.equals(SMTP_PARAM)) {
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
 			buttonSync.addClickListener(e -> syncServiceConfig(ParametrageService.class.getName(), "refreshSmtpParameters"));
+			layout.add(syncButtonLayout);
+		}
+		
+		//S'il s'agit de la catégorie CSS
+		if(categorieId.equals(CSS_PARAM)) {
+			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
+			buttonSync.addClickListener(e -> syncServiceConfig(CssService.class.getName(), "refreshCssParameters"));
 			layout.add(syncButtonLayout);
 		}
 	}

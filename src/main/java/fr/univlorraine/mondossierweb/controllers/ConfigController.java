@@ -121,8 +121,21 @@ public class ConfigController {
 	private static final String SMTP_FROM = "SMTP_FROM";
 	
 	private static final String LOG_MAIL_TO = "LOG_MAIL_TO";
-
+	
 	private static final String ADMINS = "ADMINS";
+
+	private static final String CSS_MAIN_COLOR = "CSS_MAIN_COLOR";
+	
+	private static final String CSS_SECOND_COLOR = "CSS_SECOND_COLOR";
+	
+	private static final String CSS_HEADER_CARD_SEP_COLOR = "CSS_HEADER_CARD_SEP_COLOR";
+	
+	private static final String CSS_TEXT_COLOR = "CSS_TEXT_COLOR";
+	
+	private static final String CSS_BTN_COLOR = "CSS_BTN_COLOR";
+	
+	private static final String CSS_BACKGROUND_COLOR = "CSS_BACKGROUND_COLOR";
+	
 
 
 	@Autowired
@@ -280,6 +293,24 @@ public class ConfigController {
 	}
 	public String getAdmins() {
 		return getStringValueForParameter(ADMINS);
+	}
+	public String getCssMainColor() {
+		return getStringValueForParameter(CSS_MAIN_COLOR);
+	}
+	public String getCssSecondColor() {
+		return getStringValueForParameter(CSS_SECOND_COLOR);
+	}
+	public String getCssHeaderCardSepColor() {
+		return getStringValueForParameter(CSS_HEADER_CARD_SEP_COLOR);
+	}
+	public String getCssTextColor() {
+		return getStringValueForParameter(CSS_TEXT_COLOR);
+	}
+	public String getCssBtnColor() {
+		return getStringValueForParameter(CSS_BTN_COLOR);
+	}
+	public String getCssBackgroundColor() {
+		return getStringValueForParameter(CSS_BACKGROUND_COLOR);
 	}
 	
 	

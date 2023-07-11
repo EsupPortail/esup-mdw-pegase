@@ -94,6 +94,7 @@ public class AccesView extends VerticalLayout implements HasDynamicTitle, HasHea
 	@PostConstruct
 	private void init() {
 		setSizeFull();
+		addClassName("view");
 		initBac();
 		initAnnees();
 		parcoursLayout.setWidthFull();

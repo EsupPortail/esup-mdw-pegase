@@ -66,6 +66,7 @@ import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
+import fr.univlorraine.mondossierweb.services.CssService;
 import fr.univlorraine.mondossierweb.services.CurrentUiService;
 import fr.univlorraine.mondossierweb.services.PreferencesService;
 import fr.univlorraine.mondossierweb.services.SecurityService;
@@ -103,6 +104,7 @@ import lombok.extern.slf4j.Slf4j;
 @CssImport(value = "./styles/vaadin-grid-cell-content.css", themeFor = "vaadin-grid-cell-content")
 @CssImport(value = "./styles/vaadin-dialog-overlay.css", themeFor = "vaadin-dialog-overlay")
 @CssImport(value = "./styles/vaadin-tab.css", themeFor = "vaadin-tab")
+@CssImport(value = "./styles/vaadin-tabs.css", themeFor = "vaadin-tabs")
 @CssImport(value = "./styles/vaadin-drawer-toggle.css", themeFor = "vaadin-drawer-toggle")
 @SuppressWarnings("serial")
 @Slf4j
@@ -120,6 +122,8 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private transient SessionController mainController;
 	@Autowired
 	private transient ConfigController configController;
+	@Autowired
+	private transient CssService cssService;
 
 	
 	private transient String docUrl;
@@ -162,7 +166,8 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		AppColorStyle appColorStyle = new AppColorStyle();
 		ReactiveUtils.subscribeWhenAttached(this,
 			currentUiService.getAppColorFlux()
-			.map(appColor -> () -> appColorStyle.setColor(appColor)));
+			.map(appColor -> () -> appColorStyle.setColor(cssService.getMainColor(), cssService.getSecondColor(), cssService.getHeaderCardSepColor(),
+				cssService.getTxtColor(), cssService.getBtnColor(), cssService.getBackgroundColor())));
 		getElement().appendChild(appColorStyle.getElement());
 
 		/* Menu au-dessus de la barre d'application */
@@ -177,9 +182,9 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		}
 
 		/* Menu */
-		tabs.getStyle().set("max-width", "16em");
+		/*tabs.getStyle().set("max-width", "16em");
 		tabs.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
-		tabs.getStyle().set("box-shadow", "none");
+		tabs.getStyle().set("box-shadow", "none");*/
 		tabs.setOrientation(Tabs.Orientation.VERTICAL);
 		tabs.addSelectedChangeListener(event -> {
 			/* Seules les actions de navigation doivent pouvoir changer la tab sélectionnée. */
@@ -232,19 +237,20 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		VerticalLayout nomPrenomLayout = new VerticalLayout();
 		nomPrenomLayout.getStyle().set("max-width", "16em");
 		nomPrenomLayout.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
+		nomPrenomLayout.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
 		nomPrenomLayout.getStyle().set("box-shadow", "none");
 		nomPrenomLayout.getStyle().set("padding-top", CSSColorUtils.EM_0_5);
 		nomPrenomLayout.getStyle().set("padding-bottom", "0");
 
 		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
 		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
-		nomPrenom.getStyle().set(CSSColorUtils.COLOR,"var(--lumo-contrast-60pct)");
+		nomPrenom.getStyle().set(CSSColorUtils.COLOR,"var(--lumo-contrast-80pct)");
 		nomPrenom.getStyle().set(CSSColorUtils.FONT_WEIGHT,"600");
 		nomPrenomLayout.add(nomPrenom);
 
 		numeroDossier.getStyle().set(CSSColorUtils.MARGIN, "0px auto 0px auto");
 		numeroDossier.getStyle().set("font-size", "smaller");
-		numeroDossier.getStyle().set("color","var(--lumo-contrast-60pct)");
+		numeroDossier.getStyle().set("color","var(--lumo-contrast-80pct)");
 		nomPrenomLayout.add(numeroDossier);
 
 		return nomPrenomLayout;
@@ -337,7 +343,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 				dialogLayout.setPadding(false);
 				Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
 				infoIcon.getStyle().set(CSSColorUtils.MARGIN_RIGHT, "1em");
-				infoIcon.setColor(CSSColorUtils.MAIN_HEADER_COLOR);
+				infoIcon.setColor(CSSColorUtils.SECOND_COLOR);
 
 				Span info = new Span();
 				info.getElement().setProperty("innerHTML", getTranslation("connexion.info"));

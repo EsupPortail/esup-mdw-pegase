@@ -18,34 +18,35 @@
  */
 package fr.univlorraine.mondossierweb.ui.component;
 
-import com.helger.css.decl.CSSRGB;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.CssImport;
 
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @CssImport(value = "./styles/app-color.css")
 @Tag("style")
 @NoArgsConstructor
+@Slf4j
 @SuppressWarnings("serial")
 public class AppColorStyle extends Component {
 
-	private static final String STYLE_TEMPLATE = "html {--app-color-rgb: %s,%s,%s;}";
+	private static final String STYLE_TEMPLATE = "html {--main-color: %s;--header-card-separator-color: %s;--second-color : %s;--btn-color: %s;--txt-color: %s;background-color:%s;}";
 
 	@Getter
 	private String color;
 
-	public AppColorStyle(final String color) {
-		setColor(color);
+	public AppColorStyle(final String mainColor, final String secondColor, final String headerCardSepColor, 
+		final String txtColor, final String btnColor, final String backgroundColor) {
+		setColor( mainColor,  secondColor, headerCardSepColor, btnColor,  txtColor, backgroundColor);
 	}
 
-	public void setColor(final String color) {
-		this.color = color;
-		CSSRGB rgbColor = CSSColorUtils.getRGBColor(color);
-		getElement().setText(String.format(STYLE_TEMPLATE, rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue()));
+	public void setColor(final String mainColor, final String secondColor, final String headerCardSepColor, 
+		final String txtColor, final String btnColor, final String backgroundColor) {
+		log.info("*** setColor ***");
+		getElement().setText(String.format(STYLE_TEMPLATE, mainColor,headerCardSepColor,secondColor,btnColor,txtColor,backgroundColor));
 	}
 
 }

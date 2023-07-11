@@ -1,7 +1,9 @@
 html, [theme~="dark"] {
+	/*
   --material-primary-color: rgb(var(--app-color-rgb));
   --lumo-primary-color: rgb(var(--app-color-rgb));
   --lumo-primary-color-50pct: rgba(var(--app-color-rgb), 0.5);
   --lumo-primary-color-10pct: rgba(var(--app-color-rgb), 0.1);
   --lumo-primary-text-color: var(--lumo-primary-color);
+  */
 }
