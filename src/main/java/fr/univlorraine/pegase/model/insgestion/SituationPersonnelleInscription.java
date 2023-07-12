@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * SituationPersonnelleInscription
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class SituationPersonnelleInscription {
   public static final String SERIALIZED_NAME_AMENAGEMENTS_SPECIFIQUES = "amenagementsSpecifiques";
   @SerializedName(SERIALIZED_NAME_AMENAGEMENTS_SPECIFIQUES)
@@ -49,7 +49,7 @@ public class SituationPersonnelleInscription {
 
   public SituationPersonnelleInscription addAmenagementsSpecifiquesItem(String amenagementsSpecifiquesItem) {
     if (this.amenagementsSpecifiques == null) {
-      this.amenagementsSpecifiques = new ArrayList<>();
+      this.amenagementsSpecifiques = new ArrayList<String>();
     }
     this.amenagementsSpecifiques.add(amenagementsSpecifiquesItem);
     return this;
@@ -103,7 +103,7 @@ public class SituationPersonnelleInscription {
 
   public SituationPersonnelleInscription addProfilsSpecifiquesItem(String profilsSpecifiquesItem) {
     if (this.profilsSpecifiques == null) {
-      this.profilsSpecifiques = new ArrayList<>();
+      this.profilsSpecifiques = new ArrayList<String>();
     }
     this.profilsSpecifiques.add(profilsSpecifiquesItem);
     return this;

@@ -25,7 +25,6 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Chemin
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T11:03:30.102+02:00[Europe/Paris]")
 public class Chemin {
   public static final String SERIALIZED_NAME_CODE_CHEMIN = "codeChemin";
   @SerializedName(SERIALIZED_NAME_CODE_CHEMIN)

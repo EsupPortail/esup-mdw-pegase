@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * La situation durant l&#39;année universitaire précédant l&#39;inscription en cours correspondante à la nomenclature Situations année précédente.  Codes de la nomenclature sur 6 caractères. Préfixe des codes : SAP 
  */
 @ApiModel(description = "La situation durant l'année universitaire précédant l'inscription en cours correspondante à la nomenclature Situations année précédente.  Codes de la nomenclature sur 6 caractères. Préfixe des codes : SAP ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class SituationAnneePrecedente extends Nomenclature {
   public static final String SERIALIZED_NAME_CODE_BCN = "codeBcn";
   @SerializedName(SERIALIZED_NAME_CODE_BCN)

@@ -22,7 +22,6 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * FormationDCA
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-03-31T11:35:39.228+02:00[Europe/Paris]")
 public class FormationDCA {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)

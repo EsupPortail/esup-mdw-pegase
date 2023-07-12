@@ -20,7 +20,6 @@ import java.util.Map;
 import fr.univlorraine.pegase.api.ApiException;
 import fr.univlorraine.pegase.api.Pair;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:46:47.317+02:00[Europe/Paris]")
 public class ApiKeyAuth implements Authentication {
   private final String location;
   private final String paramName;

@@ -34,19 +34,14 @@ import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
-import fr.univlorraine.mondossierweb.services.CurrentUiService;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
-import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import jakarta.annotation.PostConstruct;
 
 @Component
-@UIScope
 @SuppressWarnings("serial")
 public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 	
-	@Autowired
-	private transient CurrentUiService currentUiService;
 	@Autowired
 	private transient BuildProperties buildProperties;
 	@Autowired
@@ -66,12 +61,6 @@ public class AppTitle extends HorizontalLayout implements LocaleChangeObserver {
 		setAlignItems(Alignment.END);
 		getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
 		getStyle().set("height", "3.75em");
-		
-
-		ReactiveUtils.subscribeWhenAttached(this,
-			currentUiService.getDarkModeFlux()
-				.map(darkMode -> Boolean.TRUE.equals(darkMode) ? srcLogoDark : srcLogo)
-				.map(logoSrc -> () -> updateLogo(imgLogo)));
 
 		titleLayout.add(logo);
 

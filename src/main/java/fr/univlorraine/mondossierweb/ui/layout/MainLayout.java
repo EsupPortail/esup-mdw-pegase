@@ -48,6 +48,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -55,6 +56,7 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.shared.ui.Transport;
 
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
@@ -63,7 +65,6 @@ import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.services.CssService;
-import fr.univlorraine.mondossierweb.services.CurrentUiService;
 import fr.univlorraine.mondossierweb.services.PreferencesService;
 import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.AppColorStyle;
@@ -105,10 +106,8 @@ import lombok.extern.slf4j.Slf4j;
 @CssImport(value = "./styles/vaadin-drawer-toggle.css", themeFor = "vaadin-drawer-toggle")
 @SuppressWarnings("serial")
 @Slf4j
-public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnterObserver, LocaleChangeObserver {
+public class MainLayout extends AppLayout implements AppShellConfigurator, BeforeEnterObserver, LocaleChangeObserver {
 
-	@Autowired
-	private transient CurrentUiService currentUiService;
 	@Autowired
 	private transient AppTitle appTitle;
 	@Autowired
@@ -154,17 +153,10 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 		initParameters();
 
-		/* Theme: Mode sombre */
-		ReactiveUtils.subscribeWhenAttached(this,
-			currentUiService.getDarkModeFlux()
-			.map(darkMode -> () -> getElement().executeJs("setDarkMode($0)", darkMode)));
-
 		/* Theme: Couleur principale */
 		AppColorStyle appColorStyle = new AppColorStyle();
-		ReactiveUtils.subscribeWhenAttached(this,
-			currentUiService.getAppColorFlux()
-			.map(appColor -> () -> appColorStyle.setColor(cssService.getMainColor(), cssService.getSecondColor(), cssService.getHeaderCardSepColor(),
-				cssService.getTxtColor(), cssService.getBtnColor(), cssService.getBackgroundColor())));
+		appColorStyle.setColor(cssService.getMainColor(), cssService.getSecondColor(), cssService.getHeaderCardSepColor(),
+				cssService.getTxtColor(), cssService.getBtnColor(), cssService.getBackgroundColor());
 		getElement().appendChild(appColorStyle.getElement());
 
 		/* Menu au-dessus de la barre d'application */
@@ -276,17 +268,6 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	}
 
 	private MenuBar createUserMenu(final Utilisateur utilisateur) {
-
-		// Maj du darkMode en fonction des préférences de l'utilisateur
-		Optional<PreferencesUtilisateur> prefDarkMode =prefService.getPreference(utilisateur.getUsername(), PrefUtils.DARK_MODE);
-		// Si on a une préférence pour l'utilisateur
-		if(prefDarkMode.isPresent()) {
-			// Maj du skin en fonction de la préférence de l'utilisateur
-			currentUiService.setDarkMode(prefService.getBooleanValue(prefDarkMode.get()));
-		}else {
-			// Dark mode par défaut
-			currentUiService.setDarkMode(false);
-		}
 
 		MenuBar topMenu = new MenuBar();
 		topMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY);
@@ -405,7 +386,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	 * @see com.vaadin.flow.server.PageConfigurator#configurePage(com.vaadin.flow.server.InitialPageSettings)
 	 */
 	@Override
-	public void configurePage(final InitialPageSettings settings) {
+	public void configurePage(final AppShellSettings settings) {
 		// Parametrage des favicon
 		settings.addFavIcon("icon", "/"+configController.getUnivFavicon32Name(), "32x32");
 		settings.addFavIcon("icon", "/"+configController.getUnivFavicon16Name(), "16x16");

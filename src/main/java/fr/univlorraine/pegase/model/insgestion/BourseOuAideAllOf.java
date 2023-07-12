@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Bourse ou aide sur laquelle à ajouter potentiellement à une inscription sur une formation
  */
 @ApiModel(description = "Bourse ou aide sur laquelle à ajouter potentiellement à une inscription sur une formation")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class BourseOuAideAllOf {
   public static final String SERIALIZED_NAME_TYPE_BOURSE = "typeBourse";
   @SerializedName(SERIALIZED_NAME_TYPE_BOURSE)

@@ -22,9 +22,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
+import javax.naming.directory.Attributes;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.ldap.NamingException;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Service;
@@ -63,7 +64,7 @@ public class LdapService implements Serializable {
 	}
 	
 	private class StudentAttributesMapper implements AttributesMapper<LdapPerson> {
-		public LdapPerson mapFromAttributes(Attributes attrs) throws NamingException {
+		public LdapPerson mapFromAttributes(Attributes attrs) throws javax.naming.NamingException {
 			LdapPerson person = new LdapPerson();
 			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
 			person.setDisplayName((String)attrs.get(ldapDisplayNameAttribute).get());
@@ -75,7 +76,7 @@ public class LdapService implements Serializable {
 	}
 
 	private class PersonAttributesMapper implements AttributesMapper<LdapPerson> {
-		public LdapPerson mapFromAttributes(Attributes attrs) throws NamingException {
+		public LdapPerson mapFromAttributes(Attributes attrs) throws javax.naming.NamingException {
 			LdapPerson person = new LdapPerson();
 			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
 			try {

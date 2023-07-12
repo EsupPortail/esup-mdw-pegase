@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Le détail de l&#39;élément feuille (le plus à droite) du chemin
  */
 @ApiModel(description = "Le détail de l'élément feuille (le plus à droite) du chemin")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T11:03:30.102+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T11:03:30.102+02:00[Europe/Paris]")
 public class ObjetFeuille {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)

@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Le client de la facture
  */
 @ApiModel(description = "Le client de la facture")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
 public class Client {
   public static final String SERIALIZED_NAME_CODE_APPRENANT = "codeApprenant";
   @SerializedName(SERIALIZED_NAME_CODE_APPRENANT)

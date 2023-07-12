@@ -13,22 +13,22 @@
 
 package fr.univlorraine.pegase.api.insgestion;
 
-import java.io.File;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.google.gson.reflect.TypeToken;
-
 import fr.univlorraine.pegase.api.ApiCallback;
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
 import fr.univlorraine.pegase.api.ApiResponse;
 import fr.univlorraine.pegase.api.Configuration;
 import fr.univlorraine.pegase.api.Pair;
+import fr.univlorraine.pegase.api.ProgressRequestBody;
+import fr.univlorraine.pegase.api.ProgressResponseBody;
+
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+
+
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
+import java.io.File;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
 import fr.univlorraine.pegase.model.insgestion.Inscriptions;
 import fr.univlorraine.pegase.model.insgestion.MotifAnnulation;
@@ -40,6 +40,12 @@ import fr.univlorraine.pegase.model.insgestion.StatutPiecesVoeu;
 import fr.univlorraine.pegase.model.insgestion.TriInscription;
 import fr.univlorraine.pegase.model.insgestion.TypeEnqueteSise;
 import fr.univlorraine.pegase.model.insgestion.VoeuInscription;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InscriptionsApi {
     private ApiClient localVarApiClient;

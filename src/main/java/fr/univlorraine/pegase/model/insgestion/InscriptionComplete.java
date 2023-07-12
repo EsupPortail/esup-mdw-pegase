@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * InscriptionComplete
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class InscriptionComplete {
   public static final String SERIALIZED_NAME_CODE_ETABLISSEMENT = "codeEtablissement";
   @SerializedName(SERIALIZED_NAME_CODE_ETABLISSEMENT)
@@ -72,7 +72,7 @@ public class InscriptionComplete {
 
   public static final String SERIALIZED_NAME_BOURSES_ET_AIDES = "boursesEtAides";
   @SerializedName(SERIALIZED_NAME_BOURSES_ET_AIDES)
-  private List<OccurrenceNomenclature> boursesEtAides = new ArrayList<>();
+  private List<OccurrenceNomenclature> boursesEtAides = new ArrayList<OccurrenceNomenclature>();
 
   public static final String SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION = "situationPersonnelleInscription";
   @SerializedName(SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION)
@@ -104,11 +104,11 @@ public class InscriptionComplete {
 
   public static final String SERIALIZED_NAME_ACCORDS = "accords";
   @SerializedName(SERIALIZED_NAME_ACCORDS)
-  private List<AccordComplet> accords = new ArrayList<>();
+  private List<AccordComplet> accords = new ArrayList<AccordComplet>();
 
   public static final String SERIALIZED_NAME_PIECES = "pieces";
   @SerializedName(SERIALIZED_NAME_PIECES)
-  private List<PieceComplete> pieces = new ArrayList<>();
+  private List<PieceComplete> pieces = new ArrayList<PieceComplete>();
 
   public static final String SERIALIZED_NAME_DATE_INSCRIPTION = "dateInscription";
   @SerializedName(SERIALIZED_NAME_DATE_INSCRIPTION)

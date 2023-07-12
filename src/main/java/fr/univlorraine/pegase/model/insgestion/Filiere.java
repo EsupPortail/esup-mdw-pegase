@@ -13,7 +13,7 @@
 
 package fr.univlorraine.pegase.model.insgestion;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
 
 import com.google.gson.annotations.SerializedName;
@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
  * La filière du cursus parallèle de l&#39;apprenant. Codes de la nomenclature sur 6 caractères. Préfixe des codes : CUP 
  */
 @ApiModel(description = "La filière du cursus parallèle de l'apprenant. Codes de la nomenclature sur 6 caractères. Préfixe des codes : CUP ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class Filiere {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
@@ -33,7 +33,7 @@ public class Filiere {
 
   public static final String SERIALIZED_NAME_CONTEXTE_CONSOMMATION = "contexteConsommation";
   @SerializedName(SERIALIZED_NAME_CONTEXTE_CONSOMMATION)
-  private LocalDate contexteConsommation;
+  private Date contexteConsommation;
 
   public Filiere() { 
   }
@@ -61,7 +61,7 @@ public class Filiere {
   }
 
 
-  public Filiere contexteConsommation(LocalDate contexteConsommation) {
+  public Filiere contexteConsommation(Date contexteConsommation) {
     
     this.contexteConsommation = contexteConsommation;
     return this;
@@ -74,12 +74,12 @@ public class Filiere {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "Date contexte de consommation de la nomenclature")
 
-  public LocalDate getContexteConsommation() {
+  public Date getContexteConsommation() {
     return contexteConsommation;
   }
 
 
-  public void setContexteConsommation(LocalDate contexteConsommation) {
+  public void setContexteConsommation(Date contexteConsommation) {
     this.contexteConsommation = contexteConsommation;
   }
 

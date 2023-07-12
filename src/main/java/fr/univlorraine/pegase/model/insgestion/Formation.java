@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModel;
  * La formation
  */
 @ApiModel(description = "La formation")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class Formation extends ObjetAvecLibelle {
   public Formation() { 
     this.est1 = this.getClass().getSimpleName();

@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Une ligne de facture à payer correspondant à un élément de droit
  */
 @ApiModel(description = "Une ligne de facture à payer correspondant à un élément de droit")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
 public class ElementDeDroit {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)

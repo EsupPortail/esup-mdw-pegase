@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * CompteMarchandParametrageResult
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
 public class CompteMarchandParametrageResult {
   public static final String SERIALIZED_NAME_ID_COMPTE = "idCompte";
   @SerializedName(SERIALIZED_NAME_ID_COMPTE)

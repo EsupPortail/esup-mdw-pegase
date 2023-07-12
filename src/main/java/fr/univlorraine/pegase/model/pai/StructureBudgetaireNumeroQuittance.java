@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Une structure budgétaire associée à un numéro de quittance 
  */
 @ApiModel(description = "Une structure budgétaire associée à un numéro de quittance ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
 public class StructureBudgetaireNumeroQuittance {
   public static final String SERIALIZED_NAME_STRUCTURE_BUDGETAIRE = "structureBudgetaire";
   @SerializedName(SERIALIZED_NAME_STRUCTURE_BUDGETAIRE)

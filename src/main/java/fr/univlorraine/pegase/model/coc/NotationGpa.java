@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * La notation GPA (Grade Average Point) (paramétrage \&quot;Grade Point Average\&quot; venant du référentiel)
  */
 @ApiModel(description = "La notation GPA (Grade Average Point) (paramétrage \"Grade Point Average\" venant du référentiel)")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T11:03:30.102+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T11:03:30.102+02:00[Europe/Paris]")
 public class NotationGpa {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)

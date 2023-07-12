@@ -13,7 +13,7 @@
 
 package fr.univlorraine.pegase.model.insgestion;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
 
 import com.google.gson.annotations.SerializedName;
@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * EcoleDoctorale
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class EcoleDoctorale {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
@@ -31,7 +31,7 @@ public class EcoleDoctorale {
 
   public static final String SERIALIZED_NAME_CONTEXTE_CONSOMMATION = "contexteConsommation";
   @SerializedName(SERIALIZED_NAME_CONTEXTE_CONSOMMATION)
-  private LocalDate contexteConsommation;
+  private Date contexteConsommation;
 
   public EcoleDoctorale() { 
   }
@@ -59,7 +59,7 @@ public class EcoleDoctorale {
   }
 
 
-  public EcoleDoctorale contexteConsommation(LocalDate contexteConsommation) {
+  public EcoleDoctorale contexteConsommation(Date contexteConsommation) {
     
     this.contexteConsommation = contexteConsommation;
     return this;
@@ -72,12 +72,12 @@ public class EcoleDoctorale {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "date")
 
-  public LocalDate getContexteConsommation() {
+  public Date getContexteConsommation() {
     return contexteConsommation;
   }
 
 
-  public void setContexteConsommation(LocalDate contexteConsommation) {
+  public void setContexteConsommation(Date contexteConsommation) {
     this.contexteConsommation = contexteConsommation;
   }
 

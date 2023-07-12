@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Décrit une Formation ou un chemin depuis une Formation vers un ObjetFormation sur lequel on peut s&#39;inscrire
  */
 @ApiModel(description = "Décrit une Formation ou un chemin depuis une Formation vers un ObjetFormation sur lequel on peut s'inscrire")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class CiblePourInscription {
   public static final String SERIALIZED_NAME_CODE_STRUCTURE = "codeStructure";
   @SerializedName(SERIALIZED_NAME_CODE_STRUCTURE)
@@ -167,7 +167,7 @@ public class CiblePourInscription {
 
   public CiblePourInscription addCheminItem(ObjetFormationOuGroupement cheminItem) {
     if (this.chemin == null) {
-      this.chemin = new ArrayList<>();
+      this.chemin = new ArrayList<ObjetFormationOuGroupement>();
     }
     this.chemin.add(cheminItem);
     return this;
@@ -198,7 +198,7 @@ public class CiblePourInscription {
 
   public CiblePourInscription addRegimesInscriptionItem(RegimeInscription regimesInscriptionItem) {
     if (this.regimesInscription == null) {
-      this.regimesInscription = new ArrayList<>();
+      this.regimesInscription = new ArrayList<RegimeInscription>();
     }
     this.regimesInscription.add(regimesInscriptionItem);
     return this;
@@ -229,7 +229,7 @@ public class CiblePourInscription {
 
   public CiblePourInscription addBoursesOuAidesItem(BourseOuAide boursesOuAidesItem) {
     if (this.boursesOuAides == null) {
-      this.boursesOuAides = new ArrayList<>();
+      this.boursesOuAides = new ArrayList<BourseOuAide>();
     }
     this.boursesOuAides.add(boursesOuAidesItem);
     return this;

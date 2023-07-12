@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Régime sur lequel réaliser une inscription sur une formation
  */
 @ApiModel(description = "Régime sur lequel réaliser une inscription sur une formation")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class RegimeInscriptionAllOf {
   public static final String SERIALIZED_NAME_TEMOIN_C_V_E_C = "temoinCVEC";
   @SerializedName(SERIALIZED_NAME_TEMOIN_C_V_E_C)

@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Les comptes d&#39;imputation associés à une modalité de paiement. 
  */
 @ApiModel(description = "Les comptes d'imputation associés à une modalité de paiement. ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
 public class CompteImputation {
   public static final String SERIALIZED_NAME_NUMERO_COMPTE = "numeroCompte";
   @SerializedName(SERIALIZED_NAME_NUMERO_COMPTE)

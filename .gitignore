@@ -1,17 +1,30 @@
 # build
 node/
 node_modules/
+frontend/generated/
+src/main/dev-bundle/
 /target/
 webpack.generated.js
+drivers/
+/config/
+
 
 # IDE
 .classpath
+.factorypath
 .project
 .settings
 .idea/
+*.iml
+.DS_Store
+
 
 # local dev
 **/application.properties
+**/application.yml
+**/~*.docx
+**/~*.tmp
+
 
 # local dev test
 **/test.properties

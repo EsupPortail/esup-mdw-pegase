@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Objet avec dates de début et de fin
  */
 @ApiModel(description = "Objet avec dates de début et de fin")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class ObjetAvecDates {
   public static final String SERIALIZED_NAME_EST1 = "est1";
   @SerializedName(SERIALIZED_NAME_EST1)

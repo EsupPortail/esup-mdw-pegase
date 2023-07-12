@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * L&#39;état du paiement
  */
 @ApiModel(description = "L'état du paiement")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
 public class EtatPaiement {
   public static final String SERIALIZED_NAME_NUMERO_AUTORISATION = "numeroAutorisation";
   @SerializedName(SERIALIZED_NAME_NUMERO_AUTORISATION)

@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Le type de contrôle (paramétrage \&quot;Types de contrôle\&quot; venant du référentiel)
  */
 @ApiModel(description = "Le type de contrôle (paramétrage \"Types de contrôle\" venant du référentiel)")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T11:03:30.102+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T11:03:30.102+02:00[Europe/Paris]")
 public class TypeControle {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)

@@ -26,14 +26,12 @@
 		<resetJUL>true</resetJUL>
 	</contextListener>
 
-	<!-- Ajoute l'utilisateur connecté aux logs -->
-	<turboFilter class="fr.univlorraine.mondossierweb.utils.logging.UsernameTurboFilter" />
 	<property name="LOG_LEVEL_PATTERN" value="user:%-10X{username:-NO_USER} %5p" />
 
 	<!-- Configuration Spring Boot -->
 	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
 
-	<property resource="META-INF/build-info.properties" />
+	<!-- <property resource="META-INF/build-info.properties" /> -->
 
 	<springProperty scope="context" name="APP_URL" source="app.url" />
 	<springProperty scope="context" name="MAIL_HOST" source="spring.mail.host" />

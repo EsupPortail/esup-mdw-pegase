@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * la clef de la cible
  */
 @ApiModel(description = "la clef de la cible")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
 public class ClefCible {
   public static final String SERIALIZED_NAME_CODE_CHEMIN = "codeChemin";
   @SerializedName(SERIALIZED_NAME_CODE_CHEMIN)

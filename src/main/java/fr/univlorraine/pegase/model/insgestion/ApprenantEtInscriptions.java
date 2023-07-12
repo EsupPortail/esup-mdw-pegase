@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * ApprenantEtInscriptions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class ApprenantEtInscriptions {
   public static final String SERIALIZED_NAME_APPRENANT = "apprenant";
   @SerializedName(SERIALIZED_NAME_APPRENANT)
@@ -68,7 +68,7 @@ public class ApprenantEtInscriptions {
 
   public ApprenantEtInscriptions addInscriptionsItem(InscriptionComplete inscriptionsItem) {
     if (this.inscriptions == null) {
-      this.inscriptions = new ArrayList<>();
+      this.inscriptions = new ArrayList<InscriptionComplete>();
     }
     this.inscriptions.add(inscriptionsItem);
     return this;

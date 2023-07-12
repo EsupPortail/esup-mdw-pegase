@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiModelProperty;
  * La facture contenant les éléments de droit à payer. * La Structure n&#39;est pas à renseigner à la la creation * La Structure Budgétaire à renseigner à la modification * Le Client est à renseigner à la création * Le Client n&#39;est pas à renseigner à la la modification 
  */
 @ApiModel(description = "La facture contenant les éléments de droit à payer. * La Structure n'est pas à renseigner à la la creation * La Structure Budgétaire à renseigner à la modification * Le Client est à renseigner à la création * Le Client n'est pas à renseigner à la la modification ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
 public class Facture {
   public static final String SERIALIZED_NAME_STRUCTURE_BUDGETAIRE = "structureBudgetaire";
   @SerializedName(SERIALIZED_NAME_STRUCTURE_BUDGETAIRE)

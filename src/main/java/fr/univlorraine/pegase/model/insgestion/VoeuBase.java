@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Représentation basique d&#39;un voeu
  */
 @ApiModel(description = "Représentation basique d'un voeu")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class VoeuBase {
   public static final String SERIALIZED_NAME_EST1 = "est1";
   @SerializedName(SERIALIZED_NAME_EST1)
@@ -264,7 +264,7 @@ public class VoeuBase {
 
   public VoeuBase addBoursesEtAidesItem(String boursesEtAidesItem) {
     if (this.boursesEtAides == null) {
-      this.boursesEtAides = new ArrayList<>();
+      this.boursesEtAides = new ArrayList<String>();
     }
     this.boursesEtAides.add(boursesEtAidesItem);
     return this;

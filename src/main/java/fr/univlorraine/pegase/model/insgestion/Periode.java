@@ -24,11 +24,8 @@ import io.swagger.annotations.ApiModelProperty;
  * La période de mise en œuvre associée à la formation
  */
 @ApiModel(description = "La période de mise en œuvre associée à la formation")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class Periode extends ObjetAvecLibelle {
-  /*public static final String SERIALIZED_NAME_EST1 = "est1";
-  @SerializedName(SERIALIZED_NAME_EST1)
-  protected String est1;*/
 
   public static final String SERIALIZED_NAME_DATE_DEBUT = "dateDebut";
   @SerializedName(SERIALIZED_NAME_DATE_DEBUT)

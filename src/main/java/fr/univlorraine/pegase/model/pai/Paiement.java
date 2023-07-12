@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Le paiement - numeroFacture - numeroQuittance - reference - codeModaliteDePaiement - montantPaye - dateConsommation
  */
 @ApiModel(description = "Le paiement - numeroFacture - numeroQuittance - reference - codeModaliteDePaiement - montantPaye - dateConsommation")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
 public class Paiement {
   public static final String SERIALIZED_NAME_NUMERO_PAIEMENT = "numeroPaiement";
   @SerializedName(SERIALIZED_NAME_NUMERO_PAIEMENT)

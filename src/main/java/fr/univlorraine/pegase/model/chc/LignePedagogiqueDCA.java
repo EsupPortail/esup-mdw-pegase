@@ -26,7 +26,6 @@ import io.swagger.annotations.ApiModelProperty;
  * Informations pédagogiques pour un code chemin
  */
 @ApiModel(description = "Informations pédagogiques pour un code chemin")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-03-31T11:35:39.228+02:00[Europe/Paris]")
 public class LignePedagogiqueDCA {
   public static final String SERIALIZED_NAME_CODE_OBJET_MAQUETTE = "codeObjetMaquette";
   @SerializedName(SERIALIZED_NAME_CODE_OBJET_MAQUETTE)

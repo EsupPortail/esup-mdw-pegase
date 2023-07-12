@@ -17,19 +17,20 @@ import java.util.Objects;
 
 import com.google.gson.annotations.SerializedName;
 
+import fr.univlorraine.pegase.model.insgestion.ContactComplet.CanalCommunicationEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * ContactTelephoneComplet
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class ContactTelephoneComplet extends ContactComplet {
   public static final String SERIALIZED_NAME_TELEPHONE = "telephone";
   @SerializedName(SERIALIZED_NAME_TELEPHONE)
   private String telephone;
 
   public ContactTelephoneComplet() { 
-    this.canalCommunication = ContactComplet.CanalCommunicationEnum.fromValue(this.getClass().getSimpleName());
+    this.canalCommunication = CanalCommunicationEnum.fromValue(this.getClass().getSimpleName());
   }
 
   public ContactTelephoneComplet telephone(String telephone) {
