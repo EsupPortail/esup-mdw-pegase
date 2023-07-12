@@ -1,7 +1,7 @@
 # build
 node/
 node_modules/
-frontend/generated/
+#frontend/generated/
 src/main/dev-bundle/
 /target/
 webpack.generated.js
