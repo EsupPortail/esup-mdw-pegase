@@ -230,6 +230,7 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
+		updateLogo();
 		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
 		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
 			log.info("Affichage popup info ?");
@@ -465,8 +466,6 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		if( userMenuParametresItem != null) {
 			userMenuParametresItem.setText(getTranslation("parametres.title"));
 		}
-
-		updateLogo();
 
 		/* Initialise les messages indiquant la perte de connexion. */
 		getUI().map(UI::getReconnectDialogConfiguration)
