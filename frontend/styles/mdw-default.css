@@ -8,8 +8,8 @@
 	border-bottom:1px solid;
 	border-image : linear-gradient(45deg,var(--header-card-separator-color),#ffffff) 1;
 	width: 100%;
-	margin-bottom: 0.5em;
-	/*border-color:var(--main-color);*/
+	/* margin-bottom: 0.5em; */
+	/* border-color:var(--main-color); */
 }
 
 .card-title-bordered-closed {

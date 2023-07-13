@@ -299,6 +299,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					CmpUtils.valueAndVisibleIfNotNull(formation,cible.getFormation().getLibelleLong());
 				}
 				formation.getStyle().set(CSSColorUtils.MARGIN_TOP, "var(--lumo-space-m)");
+				CmpUtils.deleteGap(formation);
 				listTextLabelFormation.add(formation);
 
 
@@ -321,6 +322,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				if(inscription.getRegimeInscription()!=null ) {
 					CmpUtils.valueAndVisibleIfNotNull(regime,inscription.getRegimeInscription().getLibelle());
 				}
+				CmpUtils.deleteGap(regime);
 				listTextLabelRegime.add(regime);
 
 				// STATUT INSCRIPTION
@@ -340,6 +342,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				// Si l'inscrition doit être affichée
 				if(inscriptionAffichee) {
 
+					CmpUtils.deleteGap(statut);
 					listTextLabelStatut.add(statut);
 
 					// STATUT PAIEMENT
@@ -351,6 +354,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							inscriptionPayee =  true;
 						}
 					}
+					CmpUtils.deleteGap(paiement);
 					listTextLabelPaiement.add(paiement);
 
 					// STATUT PIECES JUSTIFICATIVES
@@ -359,6 +363,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					if(inscription.getStatutPieces()!=null) {
 						CmpUtils.valueAndVisibleIfNotNull(pieces,formatEtat(inscription.getStatutPieces().getValue()));
 					}
+					CmpUtils.deleteGap(pieces);
 					listTextLabelPieces.add(pieces);
 
 

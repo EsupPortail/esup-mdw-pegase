@@ -3,6 +3,7 @@
 	align-items: baseline;
 	background-color: var(--main-color)!important;
 	color: white;
+	min-height: var(--lumo-size-l) !important;
 }
 
 [part="navbar"]::before {

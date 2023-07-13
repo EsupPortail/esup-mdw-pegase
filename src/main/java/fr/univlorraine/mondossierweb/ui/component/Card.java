@@ -27,6 +27,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import fr.univlorraine.mondossierweb.ui.layout.CardHeader;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import lombok.Getter;
 
 
@@ -55,6 +56,7 @@ public class Card extends VerticalLayout {
 	public Card(Icon titleIcon, String libelle, boolean hasAltVisibleComponent) {
 		super();
 		addClassName("flip");
+		CmpUtils.deleteGap(this);
 		if(titleIcon != null) {
 			titre.setIcon(titleIcon);
 		}

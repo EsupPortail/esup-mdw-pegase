@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.util.StringUtils;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.Text;
@@ -85,6 +86,7 @@ import fr.univlorraine.mondossierweb.ui.view.inscriptions.InscriptionsView;
 import fr.univlorraine.mondossierweb.ui.view.logger.LoggersView;
 import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.model.insgestion.Apprenant;
@@ -130,7 +132,7 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	@Autowired
 	private transient CssService cssService;
 
-	
+
 	private transient String docUrl;
 	private transient String helpUrl;
 
@@ -167,13 +169,13 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		/* Theme: Couleur principale */
 		AppColorStyle appColorStyle = new AppColorStyle();
 		appColorStyle.setColor(cssService.getMainColor(), cssService.getSecondColor(), cssService.getHeaderCardSepColor(),
-				cssService.getTxtColor(), cssService.getBtnColor(), cssService.getBackgroundColor());
+			cssService.getTxtColor(), cssService.getBtnColor(), cssService.getBackgroundColor());
 		getElement().appendChild(appColorStyle.getElement());
 
 		/* Menu au-dessus de la barre d'application */
 		setPrimarySection(Section.DRAWER);
 
-		
+
 		/* Titre et logo de l'application */
 		addToDrawer(getAppTitle());
 
@@ -222,6 +224,12 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		// On attache la mainLayout au component afin d'être notifié des changements de dossier
 		mainController.setMainLayout(this);
 
+
+	}
+
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
 		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
 		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
 			log.info("Affichage popup info ?");
@@ -230,18 +238,16 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	}
 
 
-
-
 	private Component getAppTitle() {
-		
+
 		imgLogo = configController.getUnivLogoImg();
-		
+
 		HorizontalLayout appTitleLayout = new HorizontalLayout();
 		appTitleLayout.setAlignItems(Alignment.END);
-		appTitleLayout.getStyle().set("height", "4.5em");
+		appTitleLayout.getStyle().set("height", "3.75em");
 		appTitleLayout.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.MAIN_COLOR);
 		appTitleLayout.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
-		
+
 		HorizontalLayout titleLayout = new HorizontalLayout();
 		titleLayout.add(logo);
 
@@ -249,7 +255,7 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		appNameTitle.getElement().getStyle().set("font-size", "var(--lumo-font-size-xl)");
 		appNameTitle.addClassName("tracking-in-expand");
 		titleLayout.add(appNameTitle);
-		
+
 		titleLayout.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
 		titleLayout.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
 		titleLayout.setWidthFull();
@@ -257,9 +263,9 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		titleLayout.getStyle().set(CSSColorUtils.PADDING_LEFT, "1em");
 		titleLayout.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
 		titleLayout.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
-		
+
 		appTitleLayout.add(titleLayout);
-		
+
 		return appTitleLayout;
 	}
 
@@ -272,7 +278,7 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		logo.setHeight(Utils.LARGEUR_LOGO);
 		logo.setWidth(Utils.HAUTEUR_LOGO);
 	}
-	
+
 	private Component getResumeLayout() {
 		VerticalLayout nomPrenomLayout = new VerticalLayout();
 		nomPrenomLayout.getStyle().set("max-width", "16em");
@@ -281,6 +287,7 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		nomPrenomLayout.getStyle().set("box-shadow", "none");
 		nomPrenomLayout.getStyle().set("padding-top", CSSColorUtils.EM_0_5);
 		nomPrenomLayout.getStyle().set("padding-bottom", "0");
+		CmpUtils.deleteGap(nomPrenomLayout);
 
 		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
 		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
@@ -381,9 +388,9 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 				HorizontalLayout infoLayout = new HorizontalLayout();
 				infoLayout.add(infoIcon);
 				infoLayout.add(info);
-				
+
 				dialogLayout.add(infoLayout);
-				
+
 				if(popupInfoDesactivable) {
 					Checkbox checkInfo =new Checkbox(getTranslation("connexion.check"));
 					checkInfo.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
@@ -399,7 +406,7 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 					btnLayout.add(checkInfo);
 					dialogLayout.add(btnLayout);
 				}
-				
+
 				infoDialog.add(dialogLayout);
 
 				infoDialog.open();
@@ -458,7 +465,7 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		if( userMenuParametresItem != null) {
 			userMenuParametresItem.setText(getTranslation("parametres.title"));
 		}
-		
+
 		updateLogo();
 
 		/* Initialise les messages indiquant la perte de connexion. */
