@@ -38,7 +38,7 @@ public class DrawerRouterLink extends RouterLink implements LocaleChangeObserver
 	private final String textKey;
 
 	public DrawerRouterLink(final VaadinIcon icon, final String textKey, final Class<? extends Component> navigationTarget) {
-		super(textKey, navigationTarget);
+		super(navigationTarget);
 		this.textKey = textKey;
 
 		HorizontalLayout linkLayout = new HorizontalLayout(new Icon(icon), text);

@@ -18,15 +18,18 @@
  */
 package fr.univlorraine.mondossierweb.ui.layout;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -38,12 +41,14 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -57,7 +62,10 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.AppShellSettings;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.shared.ui.Transport;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
@@ -78,13 +86,13 @@ import fr.univlorraine.mondossierweb.ui.view.logger.LoggersView;
 import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
-import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.model.insgestion.Apprenant;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 @Push(transport = Transport.WEBSOCKET_XHR)
-@JsModule("./src/set-dark-mode.js")
+//@JsModule("./src/set-dark-mode.js")
 @JsModule("./src/font-open-sans.js")
 @CssImport(value = "./styles/mdw-default.css")
 @CssImport(value = "./styles/mdw.css")
@@ -106,10 +114,9 @@ import lombok.extern.slf4j.Slf4j;
 @CssImport(value = "./styles/vaadin-drawer-toggle.css", themeFor = "vaadin-drawer-toggle")
 @SuppressWarnings("serial")
 @Slf4j
+@Theme(variant = Lumo.LIGHT)
 public class MainLayout extends AppLayout implements AppShellConfigurator, BeforeEnterObserver, LocaleChangeObserver {
 
-	@Autowired
-	private transient AppTitle appTitle;
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
@@ -118,6 +125,8 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	private transient SessionController mainController;
 	@Autowired
 	private transient ConfigController configController;
+	@Autowired
+	private transient BuildProperties buildProperties;
 	@Autowired
 	private transient CssService cssService;
 
@@ -139,6 +148,8 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	private MenuItem userMenuLogoutItem;
 	private Label nomPrenom = new Label();
 	private Label numeroDossier = new Label();
+	private final Image logo = new Image();
+	private byte[] imgLogo;
 
 	private void initParameters() {
 		docUrl = configController.getDocUrl();
@@ -162,8 +173,10 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		/* Menu au-dessus de la barre d'application */
 		setPrimarySection(Section.DRAWER);
 
-		/* Titre du menu */
-		addToDrawer(appTitle);
+		
+		/* Titre et logo de l'application */
+		addToDrawer(getAppTitle());
+
 
 		/* Nom, prénom et code apprenant*/
 		if(affichageResumeEtudiant) {
@@ -171,9 +184,6 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		}
 
 		/* Menu */
-		/*tabs.getStyle().set("max-width", "16em");
-		tabs.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
-		tabs.getStyle().set("box-shadow", "none");*/
 		tabs.setOrientation(Tabs.Orientation.VERTICAL);
 		tabs.addSelectedChangeListener(event -> {
 			/* Seules les actions de navigation doivent pouvoir changer la tab sélectionnée. */
@@ -222,6 +232,47 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 
 
 
+	private Component getAppTitle() {
+		
+		imgLogo = configController.getUnivLogoImg();
+		
+		HorizontalLayout appTitleLayout = new HorizontalLayout();
+		appTitleLayout.setAlignItems(Alignment.END);
+		appTitleLayout.getStyle().set("height", "4.5em");
+		appTitleLayout.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.MAIN_COLOR);
+		appTitleLayout.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
+		
+		HorizontalLayout titleLayout = new HorizontalLayout();
+		titleLayout.add(logo);
+
+		Div appNameTitle = new Div(new Text(buildProperties.getName()));
+		appNameTitle.getElement().getStyle().set("font-size", "var(--lumo-font-size-xl)");
+		appNameTitle.addClassName("tracking-in-expand");
+		titleLayout.add(appNameTitle);
+		
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
+		titleLayout.setWidthFull();
+		titleLayout.getStyle().set("max-width", "16em");
+		titleLayout.getStyle().set(CSSColorUtils.PADDING_LEFT, "1em");
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
+		
+		appTitleLayout.add(titleLayout);
+		
+		return appTitleLayout;
+	}
+
+	private void updateLogo() {
+		if(imgLogo != null) {
+			StreamResource resource = new StreamResource("", () -> new ByteArrayInputStream(imgLogo));
+			log.info("*** updateLogo ***");
+			logo.setSrc(resource);
+		}
+		logo.setHeight(Utils.LARGEUR_LOGO);
+		logo.setWidth(Utils.HAUTEUR_LOGO);
+	}
+	
 	private Component getResumeLayout() {
 		VerticalLayout nomPrenomLayout = new VerticalLayout();
 		nomPrenomLayout.getStyle().set("max-width", "16em");
@@ -305,6 +356,7 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		Icon icon = new Icon(VaadinIcon.USER);
 		icon.addClassName("user-image");
 		icon.getStyle().set("padding-top", "5px");
+		icon.getStyle().set("color", "white");
 		return icon;
 	}
 
@@ -406,6 +458,8 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		if( userMenuParametresItem != null) {
 			userMenuParametresItem.setText(getTranslation("parametres.title"));
 		}
+		
+		updateLogo();
 
 		/* Initialise les messages indiquant la perte de connexion. */
 		getUI().map(UI::getReconnectDialogConfiguration)

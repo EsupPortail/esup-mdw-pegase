@@ -118,8 +118,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private String pageTitle = "";
 	@Getter
 	private final TextHeader header = new TextHeader();
-
-	private final Checkbox darkModeCB = new Checkbox();
 	private final TextField docUrlTF = new TextField();
 	private final TextField assistanceUrlTF = new TextField();
 
@@ -630,7 +628,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 		docUrlTF.setLabel(getTranslation("parametres.doc-url"));
 		assistanceUrlTF.setLabel(getTranslation("parametres.assistance-url"));
-		darkModeCB.setLabel(getTranslation("parametres.dark-mode-label"));
 		buttonsEditer.forEach(b -> b.setText(getTranslation("parametres.button-editer-parametres")));
 		buttonsAnnuler.forEach(b -> b.setText(getTranslation("parametres.button-annuler-parametres")));
 		buttonsEnregistrer.forEach(b -> b.setText(getTranslation("parametres.button-enregistrer-parametres")));
