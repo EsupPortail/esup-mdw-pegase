@@ -375,6 +375,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
 							() -> exportService.getCertificat(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription))));
 						exportCertificatAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
+						exportCertificatAnchor.getElement().setAttribute("download", true);
 						exportCertificatAnchor.setTarget("_blank");
 
 						// Ajout à la liste des boutons
@@ -393,6 +394,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
 							() -> exportService.getAttestation(dossier.getApprenant().getCode(),  Utils.getCodePeriode(inscription))));
 						exportAttestationAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
+						exportAttestationAnchor.getElement().setAttribute("download", true);
 						exportAttestationAnchor.setTarget("_blank");
 
 						// Ajout à la liste des boutons
