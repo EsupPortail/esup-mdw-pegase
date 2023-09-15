@@ -47,3 +47,5 @@ pnpm-lock.yaml
 /.apt_generated_tests/
 /package-lock.json
 /bin/
+/.pnpmfile.cjs
+/.npmrc
