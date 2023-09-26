@@ -16,14 +16,14 @@ RUN mvn dependency:go-offline -Pproduction
 # Copy all needed project files to a folder
 COPY --chown=myuser:myuser src src
 COPY --chown=myuser:myuser frontend frontend
-COPY --chown=myuser:myuser package.json webpack.config.js ./
+COPY --chown=myuser:myuser package.json pnpm-lock.yaml webpack.config.js ./
 
 
 # Build the production package, assuming that we validated the version before so no need for running tests again
 RUN mvn clean package -DskipTests -Pproduction
 
 # Running stage: the part that is used for running the application
-FROM tomcat:10-openjdk17
+FROM tomcat:9-jdk17
 COPY --from=build /usr/src/app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 #RUN export JAVA_OPTS="$JAVA_OPTS -Dspring.config.location=/usr/local/application.properties"
 EXPOSE 8080
