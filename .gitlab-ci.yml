@@ -1,6 +1,6 @@
 include:
   - project: 'dn-sied/ci-config'
-    file: '/.gitlab-ci-template.yml'
+    file: '/.gitlab-ci-template-jdk17.yml'
 
 variables:
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
