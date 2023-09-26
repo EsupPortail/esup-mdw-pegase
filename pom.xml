@@ -373,6 +373,7 @@
             		<exclude>**/*.properties</exclude>
             		<exclude>.m2/**/*.*</exclude>
             		<exclude>src/main/java/fr/univlorraine/pegase/**/*.*</exclude>
+            		<exclude>node_modules/**/*.*</exclude>
         		</excludes>
     			</configuration>
     			<executions>
