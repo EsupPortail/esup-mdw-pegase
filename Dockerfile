@@ -1,5 +1,5 @@
 # Stage that builds the application, a prerequisite for the running stage
-FROM maven:3-jdk-17 as build
+FROM maven:3-openjdk-17 as build
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get update -qq && apt-get install -qq --no-install-recommends nodejs
 
@@ -23,7 +23,7 @@ COPY --chown=myuser:myuser package.json webpack.config.js ./
 RUN mvn clean package -DskipTests -Pproduction
 
 # Running stage: the part that is used for running the application
-FROM tomcat:10-jdk17
+FROM tomcat:10-openjdk17
 COPY --from=build /usr/src/app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 #RUN export JAVA_OPTS="$JAVA_OPTS -Dspring.config.location=/usr/local/application.properties"
 EXPOSE 8080
