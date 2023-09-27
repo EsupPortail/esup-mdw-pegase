@@ -1,7 +1,7 @@
 # Stage that builds the application, a prerequisite for the running stage
-FROM maven:3-openjdk-17 as build
+FROM maven:3.8.2-openjdk-17-slim as build
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
-RUN apk update -qq && apk add -qq --no-install-recommends nodejs
+RUN apt-get update -qq && apt-get add -qq --no-install-recommends nodejs
 
 # Stop running as root at this point
 RUN useradd -m myuser
