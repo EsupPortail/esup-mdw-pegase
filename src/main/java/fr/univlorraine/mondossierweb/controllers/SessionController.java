@@ -35,7 +35,6 @@ import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
-@UIScope
 @Slf4j
 public class SessionController {
 

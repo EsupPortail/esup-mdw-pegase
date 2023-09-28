@@ -18,13 +18,13 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.error;
 
-import javax.servlet.http.HttpServletResponse;
-
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.NotFoundException;
 import com.vaadin.flow.router.RouteNotFoundError;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * En cas de route non trouvée, renvoie vers la page d'accueil.

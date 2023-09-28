@@ -14,21 +14,17 @@
 package fr.univlorraine.pegase.model.coc;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
  * Le résultat obtenu lors des sessions pour les sessions ou les contrôles (paramétrage \&quot;Types de résultat\&quot; venant du référentiel).  Le résultat retenu pour l&#39;objet pour le résultat final. C&#39;est soit &#x60;resultatSession1&#x60; ou &#x60;resultatSession2&#x60; en fonction du paramétrage de consolidation du résultat. Voir aussi &#x60;numeroSessionRetenueResultat&#x60;. 
  */
 @ApiModel(description = "Le résultat obtenu lors des sessions pour les sessions ou les contrôles (paramétrage \"Types de résultat\" venant du référentiel).  Le résultat retenu pour l'objet pour le résultat final. C'est soit `resultatSession1` ou `resultatSession2` en fonction du paramétrage de consolidation du résultat. Voir aussi `numeroSessionRetenueResultat`. ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T11:03:30.102+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T11:03:30.102+02:00[Europe/Paris]")
 public class Resultat {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)

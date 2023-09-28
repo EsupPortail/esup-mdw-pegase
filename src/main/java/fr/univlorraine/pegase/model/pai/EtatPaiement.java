@@ -14,21 +14,17 @@
 package fr.univlorraine.pegase.model.pai;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
  * L&#39;état du paiement
  */
 @ApiModel(description = "L'état du paiement")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
 public class EtatPaiement {
   public static final String SERIALIZED_NAME_NUMERO_AUTORISATION = "numeroAutorisation";
   @SerializedName(SERIALIZED_NAME_NUMERO_AUTORISATION)

@@ -13,24 +13,18 @@
 
 package fr.univlorraine.pegase.model.insgestion;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.VoieAdmission;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
+import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Admission
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class Admission {
   public static final String SERIALIZED_NAME_VOIE = "voie";
   @SerializedName(SERIALIZED_NAME_VOIE)
@@ -62,7 +56,7 @@ public class Admission {
 
   public static final String SERIALIZED_NAME_CONTEXTE_CONSOMMATION_TYPE_PREPA = "contexteConsommationTypePrepa";
   @SerializedName(SERIALIZED_NAME_CONTEXTE_CONSOMMATION_TYPE_PREPA)
-  private LocalDate contexteConsommationTypePrepa;
+  private Date contexteConsommationTypePrepa;
 
   public static final String SERIALIZED_NAME_PUISSANCE_PREPA = "puissancePrepa";
   @SerializedName(SERIALIZED_NAME_PUISSANCE_PREPA)
@@ -252,7 +246,7 @@ public class Admission {
   }
 
 
-  public Admission contexteConsommationTypePrepa(LocalDate contexteConsommationTypePrepa) {
+  public Admission contexteConsommationTypePrepa(Date contexteConsommationTypePrepa) {
     
     this.contexteConsommationTypePrepa = contexteConsommationTypePrepa;
     return this;
@@ -265,12 +259,12 @@ public class Admission {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "date contexte admission type classe preparatoire")
 
-  public LocalDate getContexteConsommationTypePrepa() {
+  public Date getContexteConsommationTypePrepa() {
     return contexteConsommationTypePrepa;
   }
 
 
-  public void setContexteConsommationTypePrepa(LocalDate contexteConsommationTypePrepa) {
+  public void setContexteConsommationTypePrepa(Date contexteConsommationTypePrepa) {
     this.contexteConsommationTypePrepa = contexteConsommationTypePrepa;
   }
 

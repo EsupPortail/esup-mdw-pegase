@@ -23,8 +23,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 
@@ -47,6 +45,7 @@ import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 
 @Route(layout = MainLayout.class)
@@ -104,6 +103,7 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 		message.getStyle().set(CSSColorUtils.PADDING, "1em");
 		message.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.MAIN_COLOR);
 		message.getStyle().set(CSSColorUtils.BORDER_RADIUS, "1em");
+		message.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
 		
 		
 	}

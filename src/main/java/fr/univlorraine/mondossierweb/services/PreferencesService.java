@@ -22,9 +22,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -43,6 +40,8 @@ import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplication
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesServiceSyncRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesUtilisateurRepository;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
+import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Service

@@ -13,25 +13,20 @@
 
 package fr.univlorraine.pegase.model.pai;
 
+import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+import java.util.UUID;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.pai.PaysNationalite;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.UUID;
 
 /**
  * Le client de la facture
  */
 @ApiModel(description = "Le client de la facture")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-05-11T10:50:10.652+02:00[Europe/Paris]")
 public class Client {
   public static final String SERIALIZED_NAME_CODE_APPRENANT = "codeApprenant";
   @SerializedName(SERIALIZED_NAME_CODE_APPRENANT)

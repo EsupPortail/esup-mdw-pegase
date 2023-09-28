@@ -399,9 +399,6 @@ public final class Utils {
 		notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 	}
 
-
-
-
 	public static String getFileName(String fileName) {
 		int index = fileName.lastIndexOf('.');
 		if(index > 0) {

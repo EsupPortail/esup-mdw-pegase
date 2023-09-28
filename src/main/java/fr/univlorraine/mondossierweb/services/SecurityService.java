@@ -25,9 +25,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.security.RolesAllowed;
-
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.expression.BeanFactoryResolver;
@@ -56,6 +53,8 @@ import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.ui.view.error.AccessDeniedView;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.extern.slf4j.Slf4j;
 
 @Service

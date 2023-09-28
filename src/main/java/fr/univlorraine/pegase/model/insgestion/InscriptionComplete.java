@@ -13,39 +13,18 @@
 
 package fr.univlorraine.pegase.model.insgestion;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.AccordComplet;
-import fr.univlorraine.pegase.model.insgestion.Admission;
-import fr.univlorraine.pegase.model.insgestion.CibleInscription;
-import fr.univlorraine.pegase.model.insgestion.ContexteInscription;
-import fr.univlorraine.pegase.model.insgestion.CursusParallele;
-import fr.univlorraine.pegase.model.insgestion.Cvec;
-import fr.univlorraine.pegase.model.insgestion.EcoleDoctorale;
-import fr.univlorraine.pegase.model.insgestion.OccurrenceNomenclature;
-import fr.univlorraine.pegase.model.insgestion.Origine;
-import fr.univlorraine.pegase.model.insgestion.PieceComplete;
-import fr.univlorraine.pegase.model.insgestion.SituationPersonnelleInscription;
-import fr.univlorraine.pegase.model.insgestion.SituationPrecedente;
-import fr.univlorraine.pegase.model.insgestion.SituationUniversitaire;
-import fr.univlorraine.pegase.model.insgestion.StatutInscriptionVoeu;
-import fr.univlorraine.pegase.model.insgestion.StatutPaiementVoeu;
-import fr.univlorraine.pegase.model.insgestion.StatutPiecesVoeu;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * InscriptionComplete
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class InscriptionComplete {
   public static final String SERIALIZED_NAME_CODE_ETABLISSEMENT = "codeEtablissement";
   @SerializedName(SERIALIZED_NAME_CODE_ETABLISSEMENT)
@@ -93,7 +72,7 @@ public class InscriptionComplete {
 
   public static final String SERIALIZED_NAME_BOURSES_ET_AIDES = "boursesEtAides";
   @SerializedName(SERIALIZED_NAME_BOURSES_ET_AIDES)
-  private List<OccurrenceNomenclature> boursesEtAides = new ArrayList<>();
+  private List<OccurrenceNomenclature> boursesEtAides = new ArrayList<OccurrenceNomenclature>();
 
   public static final String SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION = "situationPersonnelleInscription";
   @SerializedName(SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION)
@@ -125,11 +104,11 @@ public class InscriptionComplete {
 
   public static final String SERIALIZED_NAME_ACCORDS = "accords";
   @SerializedName(SERIALIZED_NAME_ACCORDS)
-  private List<AccordComplet> accords = new ArrayList<>();
+  private List<AccordComplet> accords = new ArrayList<AccordComplet>();
 
   public static final String SERIALIZED_NAME_PIECES = "pieces";
   @SerializedName(SERIALIZED_NAME_PIECES)
-  private List<PieceComplete> pieces = new ArrayList<>();
+  private List<PieceComplete> pieces = new ArrayList<PieceComplete>();
 
   public static final String SERIALIZED_NAME_DATE_INSCRIPTION = "dateInscription";
   @SerializedName(SERIALIZED_NAME_DATE_INSCRIPTION)

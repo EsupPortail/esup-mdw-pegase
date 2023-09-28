@@ -13,16 +13,13 @@
 
 package fr.univlorraine.pegase.api.auth;
 
-import fr.univlorraine.pegase.api.Pair;
-import fr.univlorraine.pegase.api.ApiException;
-
-import okhttp3.Credentials;
-
 import java.net.URI;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
-import java.io.UnsupportedEncodingException;
+import fr.univlorraine.pegase.api.ApiException;
+import fr.univlorraine.pegase.api.Pair;
+import okhttp3.Credentials;
 
 public class HttpBasicAuth implements Authentication {
     private String username;

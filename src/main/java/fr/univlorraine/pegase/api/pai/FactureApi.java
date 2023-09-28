@@ -13,30 +13,24 @@
 
 package fr.univlorraine.pegase.api.pai;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.google.gson.reflect.TypeToken;
+
 import fr.univlorraine.pegase.api.ApiCallback;
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
 import fr.univlorraine.pegase.api.ApiResponse;
 import fr.univlorraine.pegase.api.Configuration;
 import fr.univlorraine.pegase.api.Pair;
-import fr.univlorraine.pegase.api.ProgressRequestBody;
-import fr.univlorraine.pegase.api.ProgressResponseBody;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-
-
 import fr.univlorraine.pegase.model.pai.Facture;
 import fr.univlorraine.pegase.model.pai.Pageable;
 import fr.univlorraine.pegase.model.pai.PagedFactures;
 import fr.univlorraine.pegase.model.pai.RechercheFactures;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class FactureApi {
     private ApiClient localVarApiClient;

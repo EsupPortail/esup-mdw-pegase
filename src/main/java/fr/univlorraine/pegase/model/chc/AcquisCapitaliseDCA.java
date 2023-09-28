@@ -14,20 +14,14 @@
 package fr.univlorraine.pegase.model.chc;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
+
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
  * AcquisCapitaliseDCA
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-03-31T11:35:39.228+02:00[Europe/Paris]")
 public class AcquisCapitaliseDCA {
   public static final String SERIALIZED_NAME_LIBELLE_AFFICHAGE_PERIODE_ACQUISITION = "libelleAffichagePeriodeAcquisition";
   @SerializedName(SERIALIZED_NAME_LIBELLE_AFFICHAGE_PERIODE_ACQUISITION)

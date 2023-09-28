@@ -13,26 +13,18 @@
 
 package fr.univlorraine.pegase.model.insgestion;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.Apprenant;
-import fr.univlorraine.pegase.model.insgestion.Apprenants;
-import fr.univlorraine.pegase.model.insgestion.Paging;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * PagedApprenant
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class PagedApprenant {
   public static final String SERIALIZED_NAME_ITEMS = "items";
   @SerializedName(SERIALIZED_NAME_ITEMS)
@@ -65,7 +57,7 @@ public class PagedApprenant {
 
   public PagedApprenant addItemsItem(Apprenant itemsItem) {
     if (this.items == null) {
-      this.items = new ArrayList<>();
+      this.items = new ArrayList<Apprenant>();
     }
     this.items.add(itemsItem);
     return this;

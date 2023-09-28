@@ -32,8 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,6 +48,7 @@ import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.pegase.model.chc.CursusDCA;
 import fr.univlorraine.pegase.model.coc.Chemin;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
 /** Tests du PegaseController.

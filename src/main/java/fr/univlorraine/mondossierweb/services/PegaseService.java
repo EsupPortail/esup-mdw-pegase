@@ -20,18 +20,14 @@ package fr.univlorraine.mondossierweb.services;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
-import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
 import fr.univlorraine.pegase.api.chc.CursusDcaApi;
@@ -51,6 +47,7 @@ import fr.univlorraine.pegase.model.insgestion.StatutPaiementVoeu;
 import fr.univlorraine.pegase.model.insgestion.StatutPiecesVoeu;
 import fr.univlorraine.pegase.model.insgestion.TriInscription;
 import fr.univlorraine.pegase.model.insgestion.VueInscriptions;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 

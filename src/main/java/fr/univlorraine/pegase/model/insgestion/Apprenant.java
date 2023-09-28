@@ -13,32 +13,21 @@
 
 package fr.univlorraine.pegase.model.insgestion;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.Bac;
-import fr.univlorraine.pegase.model.insgestion.ContactComplet;
-import fr.univlorraine.pegase.model.insgestion.EtatCivil;
-import fr.univlorraine.pegase.model.insgestion.Naissance;
-import fr.univlorraine.pegase.model.insgestion.PremieresInscriptions;
-import fr.univlorraine.pegase.model.insgestion.Profession;
-import fr.univlorraine.pegase.model.insgestion.SituationPersonnelleApprenant;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Les données de l&#39;apprenant
  */
 @ApiModel(description = "Les données de l'apprenant")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class Apprenant {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
@@ -74,7 +63,7 @@ public class Apprenant {
 
   public static final String SERIALIZED_NAME_DATE_CONTEXTE_APPRENANT = "dateContexteApprenant";
   @SerializedName(SERIALIZED_NAME_DATE_CONTEXTE_APPRENANT)
-  private LocalDateTime dateContexteApprenant;
+  private Date dateContexteApprenant;
 
   public Apprenant() { 
   }
@@ -202,7 +191,7 @@ public class Apprenant {
 
   public Apprenant addContactsItem(ContactComplet contactsItem) {
     if (this.contacts == null) {
-      this.contacts = new ArrayList<>();
+      this.contacts = new ArrayList<ContactComplet>();
     }
     this.contacts.add(contactsItem);
     return this;
@@ -271,7 +260,7 @@ public class Apprenant {
   }
 
 
-  public Apprenant dateContexteApprenant(LocalDateTime dateContexteApprenant) {
+  public Apprenant dateContexteApprenant(Date dateContexteApprenant) {
     
     this.dateContexteApprenant = dateContexteApprenant;
     return this;
@@ -284,12 +273,12 @@ public class Apprenant {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "date de contexte de l'apprenant")
 
-  public LocalDateTime getDateContexteApprenant() {
+  public Date getDateContexteApprenant() {
     return dateContexteApprenant;
   }
 
 
-  public void setDateContexteApprenant(LocalDateTime dateContexteApprenant) {
+  public void setDateContexteApprenant(Date dateContexteApprenant) {
     this.dateContexteApprenant = dateContexteApprenant;
   }
 

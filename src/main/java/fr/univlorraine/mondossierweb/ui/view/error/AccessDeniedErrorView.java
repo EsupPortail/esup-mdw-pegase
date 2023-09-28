@@ -18,8 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.error;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.security.access.AccessDeniedException;
 
 import com.vaadin.flow.component.Component;
@@ -27,6 +25,8 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.HasErrorParameter;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Tag(Tag.DIV)
 @SuppressWarnings("serial")

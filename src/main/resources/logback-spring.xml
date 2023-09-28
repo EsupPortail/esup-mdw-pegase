@@ -26,16 +26,15 @@
 		<resetJUL>true</resetJUL>
 	</contextListener>
 
-	<!-- Ajoute l'utilisateur connecté aux logs -->
-	<turboFilter class="fr.univlorraine.mondossierweb.utils.logging.UsernameTurboFilter" />
 	<property name="LOG_LEVEL_PATTERN" value="user:%-10X{username:-NO_USER} %5p" />
 
 	<!-- Configuration Spring Boot -->
 	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
 
-	<property resource="META-INF/build-info.properties" />
+	<!-- <property resource="META-INF/build-info.properties" /> -->
 
 	<springProperty scope="context" name="APP_URL" source="app.url" />
+	<springProperty scope="context" name="BUILD_ARTIFACT" source="build.artifact" />
 	<springProperty scope="context" name="MAIL_HOST" source="spring.mail.host" />
 	<springProperty scope="context" name="MAIL_PORT" source="spring.mail.port" />
 	<springProperty scope="context" name="MAIL_USERNAME" source="spring.mail.username" />
@@ -48,10 +47,10 @@
 	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_PATH}/${build.artifact}.log</file>
+		<file>${LOG_PATH}/${BUILD_ARTIFACT}.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover daily -->
-			<fileNamePattern>${LOG_PATH}/${build.artifact}-%d.%i.log</fileNamePattern>
+			<fileNamePattern>${LOG_PATH}/${BUILD_ARTIFACT}-%d.%i.log</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<!-- or whenever the file size reaches 1MB -->
 				<maxFileSize>1MB</maxFileSize>

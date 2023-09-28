@@ -24,8 +24,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -37,6 +35,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
+import jakarta.annotation.PostConstruct;
 import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 

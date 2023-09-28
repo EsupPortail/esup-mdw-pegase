@@ -18,17 +18,19 @@
  */
 package fr.univlorraine.mondossierweb.ui.layout;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.util.StringUtils;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -40,16 +42,19 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.menubar.MenuBarVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -57,9 +62,11 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.server.InitialPageSettings;
-import com.vaadin.flow.server.PageConfigurator;
+import com.vaadin.flow.server.AppShellSettings;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.shared.ui.Transport;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
@@ -67,7 +74,6 @@ import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
 import fr.univlorraine.mondossierweb.services.CssService;
-import fr.univlorraine.mondossierweb.services.CurrentUiService;
 import fr.univlorraine.mondossierweb.services.PreferencesService;
 import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.AppColorStyle;
@@ -80,13 +86,15 @@ import fr.univlorraine.mondossierweb.ui.view.inscriptions.InscriptionsView;
 import fr.univlorraine.mondossierweb.ui.view.logger.LoggersView;
 import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
-import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
+import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.model.insgestion.Apprenant;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 @Push(transport = Transport.WEBSOCKET_XHR)
-@JsModule("./src/set-dark-mode.js")
+//@JsModule("./src/set-dark-mode.js")
 @JsModule("./src/font-open-sans.js")
 @CssImport(value = "./styles/mdw-default.css")
 @CssImport(value = "./styles/mdw.css")
@@ -108,12 +116,9 @@ import lombok.extern.slf4j.Slf4j;
 @CssImport(value = "./styles/vaadin-drawer-toggle.css", themeFor = "vaadin-drawer-toggle")
 @SuppressWarnings("serial")
 @Slf4j
-public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnterObserver, LocaleChangeObserver {
+@Theme(variant = Lumo.LIGHT)
+public class MainLayout extends AppLayout implements AppShellConfigurator, BeforeEnterObserver, LocaleChangeObserver {
 
-	@Autowired
-	private transient CurrentUiService currentUiService;
-	@Autowired
-	private transient AppTitle appTitle;
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
@@ -123,9 +128,11 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	@Autowired
 	private transient ConfigController configController;
 	@Autowired
+	private transient BuildProperties buildProperties;
+	@Autowired
 	private transient CssService cssService;
 
-	
+
 	private transient String docUrl;
 	private transient String helpUrl;
 
@@ -143,6 +150,8 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	private MenuItem userMenuLogoutItem;
 	private Label nomPrenom = new Label();
 	private Label numeroDossier = new Label();
+	private final Image logo = new Image();
+	private byte[] imgLogo;
 
 	private void initParameters() {
 		docUrl = configController.getDocUrl();
@@ -157,24 +166,19 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 		initParameters();
 
-		/* Theme: Mode sombre */
-		ReactiveUtils.subscribeWhenAttached(this,
-			currentUiService.getDarkModeFlux()
-			.map(darkMode -> () -> getElement().executeJs("setDarkMode($0)", darkMode)));
-
 		/* Theme: Couleur principale */
 		AppColorStyle appColorStyle = new AppColorStyle();
-		ReactiveUtils.subscribeWhenAttached(this,
-			currentUiService.getAppColorFlux()
-			.map(appColor -> () -> appColorStyle.setColor(cssService.getMainColor(), cssService.getSecondColor(), cssService.getHeaderCardSepColor(),
-				cssService.getTxtColor(), cssService.getBtnColor(), cssService.getBackgroundColor())));
+		appColorStyle.setColor(cssService.getMainColor(), cssService.getSecondColor(), cssService.getHeaderCardSepColor(),
+			cssService.getTxtColor(), cssService.getBtnColor(), cssService.getBackgroundColor());
 		getElement().appendChild(appColorStyle.getElement());
 
 		/* Menu au-dessus de la barre d'application */
 		setPrimarySection(Section.DRAWER);
 
-		/* Titre du menu */
-		addToDrawer(appTitle);
+
+		/* Titre et logo de l'application */
+		addToDrawer(getAppTitle());
+
 
 		/* Nom, prénom et code apprenant*/
 		if(affichageResumeEtudiant) {
@@ -182,9 +186,6 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		}
 
 		/* Menu */
-		/*tabs.getStyle().set("max-width", "16em");
-		tabs.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
-		tabs.getStyle().set("box-shadow", "none");*/
 		tabs.setOrientation(Tabs.Orientation.VERTICAL);
 		tabs.addSelectedChangeListener(event -> {
 			/* Seules les actions de navigation doivent pouvoir changer la tab sélectionnée. */
@@ -223,6 +224,13 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		// On attache la mainLayout au component afin d'être notifié des changements de dossier
 		mainController.setMainLayout(this);
 
+
+	}
+
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		updateLogo();
 		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
 		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
 			log.info("Affichage popup info ?");
@@ -231,7 +239,46 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	}
 
 
+	private Component getAppTitle() {
 
+		imgLogo = configController.getUnivLogoImg();
+
+		HorizontalLayout appTitleLayout = new HorizontalLayout();
+		appTitleLayout.setAlignItems(Alignment.END);
+		appTitleLayout.getStyle().set("height", "3.75em");
+		appTitleLayout.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.MAIN_COLOR);
+		appTitleLayout.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
+
+		HorizontalLayout titleLayout = new HorizontalLayout();
+		titleLayout.add(logo);
+
+		Div appNameTitle = new Div(new Text(buildProperties.getName()));
+		appNameTitle.getElement().getStyle().set("font-size", "var(--lumo-font-size-xl)");
+		appNameTitle.addClassName("tracking-in-expand");
+		titleLayout.add(appNameTitle);
+
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
+		titleLayout.setWidthFull();
+		titleLayout.getStyle().set("max-width", "16em");
+		titleLayout.getStyle().set(CSSColorUtils.PADDING_LEFT, "1em");
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
+		titleLayout.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
+
+		appTitleLayout.add(titleLayout);
+
+		return appTitleLayout;
+	}
+
+	private void updateLogo() {
+		if(imgLogo != null) {
+			StreamResource resource = new StreamResource("", () -> new ByteArrayInputStream(imgLogo));
+			log.info("*** updateLogo ***");
+			logo.setSrc(resource);
+		}
+		logo.setHeight(Utils.LARGEUR_LOGO);
+		logo.setWidth(Utils.HAUTEUR_LOGO);
+	}
 
 	private Component getResumeLayout() {
 		VerticalLayout nomPrenomLayout = new VerticalLayout();
@@ -241,6 +288,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		nomPrenomLayout.getStyle().set("box-shadow", "none");
 		nomPrenomLayout.getStyle().set("padding-top", CSSColorUtils.EM_0_5);
 		nomPrenomLayout.getStyle().set("padding-bottom", "0");
+		CmpUtils.deleteGap(nomPrenomLayout);
 
 		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
 		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
@@ -280,17 +328,6 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 
 	private MenuBar createUserMenu(final Utilisateur utilisateur) {
 
-		// Maj du darkMode en fonction des préférences de l'utilisateur
-		Optional<PreferencesUtilisateur> prefDarkMode =prefService.getPreference(utilisateur.getUsername(), PrefUtils.DARK_MODE);
-		// Si on a une préférence pour l'utilisateur
-		if(prefDarkMode.isPresent()) {
-			// Maj du skin en fonction de la préférence de l'utilisateur
-			currentUiService.setDarkMode(prefService.getBooleanValue(prefDarkMode.get()));
-		}else {
-			// Dark mode par défaut
-			currentUiService.setDarkMode(false);
-		}
-
 		MenuBar topMenu = new MenuBar();
 		topMenu.addThemeVariants(MenuBarVariant.LUMO_TERTIARY);
 		topMenu.addClassName("user-menu");
@@ -327,6 +364,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 		Icon icon = new Icon(VaadinIcon.USER);
 		icon.addClassName("user-image");
 		icon.getStyle().set("padding-top", "5px");
+		icon.getStyle().set("color", "white");
 		return icon;
 	}
 
@@ -351,9 +389,9 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 				HorizontalLayout infoLayout = new HorizontalLayout();
 				infoLayout.add(infoIcon);
 				infoLayout.add(info);
-				
+
 				dialogLayout.add(infoLayout);
-				
+
 				if(popupInfoDesactivable) {
 					Checkbox checkInfo =new Checkbox(getTranslation("connexion.check"));
 					checkInfo.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
@@ -369,7 +407,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 					btnLayout.add(checkInfo);
 					dialogLayout.add(btnLayout);
 				}
-				
+
 				infoDialog.add(dialogLayout);
 
 				infoDialog.open();
@@ -408,7 +446,7 @@ public class MainLayout extends AppLayout implements PageConfigurator, BeforeEnt
 	 * @see com.vaadin.flow.server.PageConfigurator#configurePage(com.vaadin.flow.server.InitialPageSettings)
 	 */
 	@Override
-	public void configurePage(final InitialPageSettings settings) {
+	public void configurePage(final AppShellSettings settings) {
 		// Parametrage des favicon
 		settings.addFavIcon("icon", "/"+configController.getUnivFavicon32Name(), "32x32");
 		settings.addFavIcon("icon", "/"+configController.getUnivFavicon16Name(), "16x16");
