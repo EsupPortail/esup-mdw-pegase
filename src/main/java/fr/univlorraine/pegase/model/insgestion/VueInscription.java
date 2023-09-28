@@ -13,29 +13,24 @@
 
 package fr.univlorraine.pegase.model.insgestion;
 
-import java.util.Objects;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.VueBourse;
-import fr.univlorraine.pegase.model.insgestion.VueCheminCible;
-import fr.univlorraine.pegase.model.insgestion.VueContactAdresse;
-import fr.univlorraine.pegase.model.insgestion.VueContactMel;
-import fr.univlorraine.pegase.model.insgestion.VueContactTelephone;
-import fr.univlorraine.pegase.model.insgestion.VueProfilExonerant;
-import io.swagger.annotations.ApiModel;
+
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * VueInscription
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class VueInscription {
   public static final String SERIALIZED_NAME_U_A_I = "UAI";
   @SerializedName(SERIALIZED_NAME_U_A_I)
@@ -142,7 +137,7 @@ public class VueInscription {
 
   public static final String SERIALIZED_NAME_BOURSES = "bourses";
   @SerializedName(SERIALIZED_NAME_BOURSES)
-  private List<String> bourses = new ArrayList<>();
+  private List<String> bourses = new ArrayList<String>();
 
   public static final String SERIALIZED_NAME_BOURSES_COMPLETES = "boursesCompletes";
   @SerializedName(SERIALIZED_NAME_BOURSES_COMPLETES)
@@ -329,7 +324,7 @@ public class VueInscription {
 
   public static final String SERIALIZED_NAME_CHEMIN = "chemin";
   @SerializedName(SERIALIZED_NAME_CHEMIN)
-  private List<VueCheminCible> chemin = new ArrayList<>();
+  private List<VueCheminCible> chemin = new ArrayList<VueCheminCible>();
 
   public static final String SERIALIZED_NAME_UA_I_STRUCTURE_PRINCIPALE = "UAIStructurePrincipale";
   @SerializedName(SERIALIZED_NAME_UA_I_STRUCTURE_PRINCIPALE)
@@ -341,15 +336,15 @@ public class VueInscription {
 
   public static final String SERIALIZED_NAME_ADRESSES = "adresses";
   @SerializedName(SERIALIZED_NAME_ADRESSES)
-  private List<VueContactAdresse> adresses = new ArrayList<>();
+  private List<VueContactAdresse> adresses = new ArrayList<VueContactAdresse>();
 
   public static final String SERIALIZED_NAME_MELS = "mels";
   @SerializedName(SERIALIZED_NAME_MELS)
-  private List<VueContactMel> mels = new ArrayList<>();
+  private List<VueContactMel> mels = new ArrayList<VueContactMel>();
 
   public static final String SERIALIZED_NAME_TELEPHONES = "telephones";
   @SerializedName(SERIALIZED_NAME_TELEPHONES)
-  private List<VueContactTelephone> telephones = new ArrayList<>();
+  private List<VueContactTelephone> telephones = new ArrayList<VueContactTelephone>();
 
   public VueInscription() { 
   }
@@ -712,7 +707,7 @@ public class VueInscription {
 
   public VueInscription addBoursesCompletesItem(VueBourse boursesCompletesItem) {
     if (this.boursesCompletes == null) {
-      this.boursesCompletes = new ArrayList<>();
+      this.boursesCompletes = new ArrayList<VueBourse>();
     }
     this.boursesCompletes.add(boursesCompletesItem);
     return this;
@@ -743,7 +738,7 @@ public class VueInscription {
 
   public VueInscription addProfilsExonerantsItem(VueProfilExonerant profilsExonerantsItem) {
     if (this.profilsExonerants == null) {
-      this.profilsExonerants = new ArrayList<>();
+      this.profilsExonerants = new ArrayList<VueProfilExonerant>();
     }
     this.profilsExonerants.add(profilsExonerantsItem);
     return this;

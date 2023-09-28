@@ -22,9 +22,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,8 @@ import org.springframework.stereotype.Service;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.model.ldap.entity.LdapPerson;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -65,7 +64,7 @@ public class LdapService implements Serializable {
 	}
 	
 	private class StudentAttributesMapper implements AttributesMapper<LdapPerson> {
-		public LdapPerson mapFromAttributes(Attributes attrs) throws NamingException {
+		public LdapPerson mapFromAttributes(Attributes attrs) throws javax.naming.NamingException {
 			LdapPerson person = new LdapPerson();
 			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
 			person.setDisplayName((String)attrs.get(ldapDisplayNameAttribute).get());
@@ -77,7 +76,7 @@ public class LdapService implements Serializable {
 	}
 
 	private class PersonAttributesMapper implements AttributesMapper<LdapPerson> {
-		public LdapPerson mapFromAttributes(Attributes attrs) throws NamingException {
+		public LdapPerson mapFromAttributes(Attributes attrs) throws javax.naming.NamingException {
 			LdapPerson person = new LdapPerson();
 			person.setLogin((String)attrs.get(ldapLoginAttribute).get());
 			try {

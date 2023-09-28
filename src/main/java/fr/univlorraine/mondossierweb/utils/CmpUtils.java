@@ -22,6 +22,7 @@ package fr.univlorraine.mondossierweb.utils;
 
 import org.springframework.util.StringUtils;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;
 
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
@@ -42,6 +43,8 @@ public final class CmpUtils {
 	
 	public static void formatTextLabel(TextLabel tl) {
 		tl.getStyle().set(CSSColorUtils.MARGIN, "0em");
+		CmpUtils.deleteGap(tl);
+		tl.getStyle().set(CSSColorUtils.MARGIN_TOP, "var(--lumo-space-m)");
 	}
 	
 	public static void setLongTextField(TextField tf) {
@@ -83,6 +86,10 @@ public final class CmpUtils {
 			label.setVisible(false);
 		}
 		
+	}
+
+	public static void deleteGap(Component c) {
+		c.getStyle().set("gap", "0");
 	}
 
 

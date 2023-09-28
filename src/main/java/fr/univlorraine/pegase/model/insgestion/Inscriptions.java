@@ -13,26 +13,20 @@
 
 package fr.univlorraine.pegase.model.insgestion;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.Inscription;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Inscriptions
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class Inscriptions {
   public static final String SERIALIZED_NAME_NOMBRE = "nombre";
   @SerializedName(SERIALIZED_NAME_NOMBRE)
@@ -40,19 +34,19 @@ public class Inscriptions {
 
   public static final String SERIALIZED_NAME_RESULTATS = "resultats";
   @SerializedName(SERIALIZED_NAME_RESULTATS)
-  private List<Inscription> resultats = new ArrayList<>();
+  private List<Inscription> resultats = new ArrayList<Inscription>();
 
   public static final String SERIALIZED_NAME_STATUT_INSCRIPTION = "statutInscription";
   @SerializedName(SERIALIZED_NAME_STATUT_INSCRIPTION)
-  private Map<String, Long> statutInscription = new HashMap<>();
+  private Map<String, Long> statutInscription = new HashMap<String, Long>();
 
   public static final String SERIALIZED_NAME_STATUT_PIECES = "statutPieces";
   @SerializedName(SERIALIZED_NAME_STATUT_PIECES)
-  private Map<String, Long> statutPieces = new HashMap<>();
+  private Map<String, Long> statutPieces = new HashMap<String, Long>();
 
   public static final String SERIALIZED_NAME_STATUT_PAIEMENT = "statutPaiement";
   @SerializedName(SERIALIZED_NAME_STATUT_PAIEMENT)
-  private Map<String, Long> statutPaiement = new HashMap<>();
+  private Map<String, Long> statutPaiement = new HashMap<String, Long>();
 
   public static final String SERIALIZED_NAME_TOTAL_ELEMENTS = "totalElements";
   @SerializedName(SERIALIZED_NAME_TOTAL_ELEMENTS)

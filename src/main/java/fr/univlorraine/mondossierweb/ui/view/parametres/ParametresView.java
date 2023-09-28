@@ -30,8 +30,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
@@ -80,6 +78,7 @@ import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -119,8 +118,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private String pageTitle = "";
 	@Getter
 	private final TextHeader header = new TextHeader();
-
-	private final Checkbox darkModeCB = new Checkbox();
 	private final TextField docUrlTF = new TextField();
 	private final TextField assistanceUrlTF = new TextField();
 
@@ -631,7 +628,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 		docUrlTF.setLabel(getTranslation("parametres.doc-url"));
 		assistanceUrlTF.setLabel(getTranslation("parametres.assistance-url"));
-		darkModeCB.setLabel(getTranslation("parametres.dark-mode-label"));
 		buttonsEditer.forEach(b -> b.setText(getTranslation("parametres.button-editer-parametres")));
 		buttonsAnnuler.forEach(b -> b.setText(getTranslation("parametres.button-annuler-parametres")));
 		buttonsEnregistrer.forEach(b -> b.setText(getTranslation("parametres.button-enregistrer-parametres")));

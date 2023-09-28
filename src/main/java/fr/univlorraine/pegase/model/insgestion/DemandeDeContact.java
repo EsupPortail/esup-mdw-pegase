@@ -14,23 +14,15 @@
 package fr.univlorraine.pegase.model.insgestion;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.DemandeDeContactAllOf;
-import fr.univlorraine.pegase.model.insgestion.DemandeDeContactSimple;
-import fr.univlorraine.pegase.model.insgestion.TemoinSaisie;
-import io.swagger.annotations.ApiModel;
+
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
  * DemandeDeContact
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class DemandeDeContact extends DemandeDeContactSimple {
   public static final String SERIALIZED_NAME_DATE_DEBUT_VALIDITE = "dateDebutValidite";
   @SerializedName(SERIALIZED_NAME_DATE_DEBUT_VALIDITE)

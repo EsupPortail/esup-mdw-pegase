@@ -29,8 +29,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.security.access.annotation.Secured;
@@ -70,6 +68,7 @@ import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;

@@ -26,8 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
@@ -79,6 +77,7 @@ import fr.univlorraine.pegase.model.coc.Absence;
 import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.CibleInscription;
 import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -300,6 +299,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					CmpUtils.valueAndVisibleIfNotNull(formation,cible.getFormation().getLibelleLong());
 				}
 				formation.getStyle().set(CSSColorUtils.MARGIN_TOP, "var(--lumo-space-m)");
+				CmpUtils.deleteGap(formation);
 				listTextLabelFormation.add(formation);
 
 
@@ -322,6 +322,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				if(inscription.getRegimeInscription()!=null ) {
 					CmpUtils.valueAndVisibleIfNotNull(regime,inscription.getRegimeInscription().getLibelle());
 				}
+				CmpUtils.deleteGap(regime);
 				listTextLabelRegime.add(regime);
 
 				// STATUT INSCRIPTION
@@ -341,6 +342,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				// Si l'inscrition doit être affichée
 				if(inscriptionAffichee) {
 
+					CmpUtils.deleteGap(statut);
 					listTextLabelStatut.add(statut);
 
 					// STATUT PAIEMENT
@@ -352,6 +354,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 							inscriptionPayee =  true;
 						}
 					}
+					CmpUtils.deleteGap(paiement);
 					listTextLabelPaiement.add(paiement);
 
 					// STATUT PIECES JUSTIFICATIVES
@@ -360,6 +363,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					if(inscription.getStatutPieces()!=null) {
 						CmpUtils.valueAndVisibleIfNotNull(pieces,formatEtat(inscription.getStatutPieces().getValue()));
 					}
+					CmpUtils.deleteGap(pieces);
 					listTextLabelPieces.add(pieces);
 
 
@@ -375,6 +379,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
 							() -> exportService.getCertificat(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription))));
 						exportCertificatAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
+						exportCertificatAnchor.getElement().setAttribute("download", true);
 						exportCertificatAnchor.setTarget("_blank");
 
 						// Ajout à la liste des boutons
@@ -393,6 +398,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
 							() -> exportService.getAttestation(dossier.getApprenant().getCode(),  Utils.getCodePeriode(inscription))));
 						exportAttestationAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
+						exportAttestationAnchor.getElement().setAttribute("download", true);
 						exportAttestationAnchor.setTarget("_blank");
 
 						// Ajout à la liste des boutons

@@ -21,8 +21,6 @@ package fr.univlorraine.mondossierweb.ui.view.coordonnees;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
@@ -62,6 +60,7 @@ import fr.univlorraine.pegase.model.insgestion.ContactComplet;
 import fr.univlorraine.pegase.model.insgestion.ContactMelComplet;
 import fr.univlorraine.pegase.model.insgestion.ContactTelephoneComplet;
 import fr.univlorraine.pegase.model.insgestion.DemandeDeContactSimple;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

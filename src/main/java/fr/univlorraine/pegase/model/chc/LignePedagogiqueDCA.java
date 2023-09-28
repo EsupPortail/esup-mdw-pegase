@@ -13,26 +13,19 @@
 
 package fr.univlorraine.pegase.model.chc;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.chc.AcquisCapitaliseDCA;
-import fr.univlorraine.pegase.model.chc.AmenagementDCA;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Informations pédagogiques pour un code chemin
  */
 @ApiModel(description = "Informations pédagogiques pour un code chemin")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-03-31T11:35:39.228+02:00[Europe/Paris]")
 public class LignePedagogiqueDCA {
   public static final String SERIALIZED_NAME_CODE_OBJET_MAQUETTE = "codeObjetMaquette";
   @SerializedName(SERIALIZED_NAME_CODE_OBJET_MAQUETTE)

@@ -14,22 +14,17 @@
 package fr.univlorraine.pegase.model.insgestion;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.DocumentAApprouver;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
  * L&#39;état d&#39;un accord et sa référence
  */
 @ApiModel(description = "L'état d'un accord et sa référence")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class AccordComplet {
   public static final String SERIALIZED_NAME_DATE_VALIDATION = "dateValidation";
   @SerializedName(SERIALIZED_NAME_DATE_VALIDATION)

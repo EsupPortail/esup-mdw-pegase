@@ -13,24 +13,22 @@
 
 package fr.univlorraine.pegase.model.insgestion;
 
+import java.io.IOException;
 import java.util.Objects;
-import java.util.Arrays;
+
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.model.insgestion.VueContactAdresse;
-import fr.univlorraine.pegase.model.insgestion.VueContactMel;
-import fr.univlorraine.pegase.model.insgestion.VueContactTelephone;
-import io.swagger.annotations.ApiModel;
+
+import fr.univlorraine.pegase.model.insgestion.ContactComplet.CanalCommunicationEnum;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
  * VueContact
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-06-06T15:07:55.881+02:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-07-12T11:53:29.862+02:00[Europe/Paris]")
 public class VueContact {
   /**
    * type de contact
@@ -98,7 +96,7 @@ public class VueContact {
   private String proprietaire;
 
   public VueContact() { 
-	  this.canalCommunication = CanalCommunicationEnum.fromValue(this.getClass().getSimpleName());
+    this.canalCommunication = CanalCommunicationEnum.fromValue(this.getClass().getSimpleName());
   }
 
   public VueContact canalCommunication(CanalCommunicationEnum canalCommunication) {
