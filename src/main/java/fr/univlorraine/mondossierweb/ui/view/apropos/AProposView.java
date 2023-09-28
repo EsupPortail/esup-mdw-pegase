@@ -103,6 +103,7 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 		message.getStyle().set(CSSColorUtils.PADDING, "1em");
 		message.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.MAIN_COLOR);
 		message.getStyle().set(CSSColorUtils.BORDER_RADIUS, "1em");
+		message.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
 		
 		
 	}
