@@ -124,8 +124,8 @@ public class SecurityConfig {
 		}).addFilter(casAuthenticationFilter())
 			.addFilterAfter(new MDCAuthenticationFilter(), CasAuthenticationFilter.class)
 			.addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class)
-			.addFilterBefore(logoutFilter(), LogoutFilter.class)
-			.addFilterAfter(switchUserFilter(), AuthorizationFilter.class);
+			.addFilterBefore(logoutFilter(), LogoutFilter.class);
+			//.addFilterAfter(switchUserFilter(), AuthorizationFilter.class);
 
 		/* La protection Spring Security contre le Cross Scripting Request Forgery est désactivée, Vaadin implémente sa propre protection */
 		http.csrf(csrf -> csrf.disable());
