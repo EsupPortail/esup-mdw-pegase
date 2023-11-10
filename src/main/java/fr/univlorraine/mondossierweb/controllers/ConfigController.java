@@ -93,7 +93,9 @@ public class ConfigController {
 	private static final String PEGASE_ETAB = "PEGASE_ETAB";
 
 	private static final String PEGASE_API_INS_URL = "PEGASE_API_INS_URL";
-
+	
+	private static final String PEGASE_API_INS_EXT_URL = "PEGASE_API_INS_EXT_URL";
+	
 	private static final String PEGASE_API_CHC_URL = "PEGASE_API_CHC_URL";
 
 	private static final String PEGASE_API_COC_URL = "PEGASE_API_COC_URL";
@@ -248,6 +250,9 @@ public class ConfigController {
 	}
 	public String getApiInsUrl() {
 		return getStringValueForParameter(PEGASE_API_INS_URL);
+	}
+	public String getApiInsExtUrl() {
+		return getStringValueForParameter(PEGASE_API_INS_EXT_URL);
 	}
 	public String getApiChcUrl() {
 		return getStringValueForParameter(PEGASE_API_CHC_URL);

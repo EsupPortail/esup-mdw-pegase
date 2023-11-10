@@ -40,9 +40,9 @@ import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
-import fr.univlorraine.pegase.model.insgestion.CibleInscription;
-import fr.univlorraine.pegase.model.insgestion.Formation;
-import fr.univlorraine.pegase.model.insgestion.ObjetFormationOuGroupement;
+import fr.univlorraine.pegase.model.insext.CibleInscription;
+import fr.univlorraine.pegase.model.insext.Formation;
+import fr.univlorraine.pegase.model.insext.ObjetFormationOuGroupement;
 import lombok.extern.slf4j.Slf4j;
 
 /** Tests Utils.

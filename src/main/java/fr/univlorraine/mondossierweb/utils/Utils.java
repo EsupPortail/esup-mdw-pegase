@@ -39,9 +39,9 @@ import fr.univlorraine.pegase.model.chc.CursusDCA;
 import fr.univlorraine.pegase.model.chc.LignePedagogiqueDCA;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import fr.univlorraine.pegase.model.coc.Controle;
-import fr.univlorraine.pegase.model.insgestion.CibleInscription;
-import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
-import fr.univlorraine.pegase.model.insgestion.ObjetFormationOuGroupement;
+import fr.univlorraine.pegase.model.insext.CibleInscription;
+import fr.univlorraine.pegase.model.insext.InscriptionComplete;
+import fr.univlorraine.pegase.model.insext.ObjetFormationOuGroupement;
 import lombok.extern.slf4j.Slf4j;
 
 /**

@@ -74,9 +74,9 @@ import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.model.chc.AmenagementDCA;
 import fr.univlorraine.pegase.model.coc.Absence;
-import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
-import fr.univlorraine.pegase.model.insgestion.CibleInscription;
-import fr.univlorraine.pegase.model.insgestion.InscriptionComplete;
+import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.model.insext.CibleInscription;
+import fr.univlorraine.pegase.model.insext.InscriptionComplete;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -1030,13 +1030,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				dialLayout.add(hl);
 			}
 			// Ajout des crédits ECTS
-			if(o.getObjet().getCreditEcts()!=null && avecECTS) {
+			if(o.getObjet().getCreditsEctsFinaux()!=null && avecECTS) {
 				HorizontalLayout hl = new HorizontalLayout();
 				hl.setWidthFull();
 				Label libECTSLabel = new Label(getTranslation("notes.ects"));
 				libECTSLabel.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				hl.add(libECTSLabel);
-				Label ectsLabel = new Label(Utils.displayBigDecimal(o.getObjet().getCreditEcts()));
+				Label ectsLabel = new Label(Utils.displayBigDecimal(o.getObjet().getCreditsEctsFinaux()));
 				ectsLabel.setWidthFull();
 				hl.add(libECTSLabel);
 				hl.add(ectsLabel);
