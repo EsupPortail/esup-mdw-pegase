@@ -1030,13 +1030,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 				dialLayout.add(hl);
 			}
 			// Ajout des crédits ECTS
-			if(o.getObjet().getCreditEcts()!=null && avecECTS) {
+			if(o.getObjet().getCreditsEctsFinaux()!=null && avecECTS) {
 				HorizontalLayout hl = new HorizontalLayout();
 				hl.setWidthFull();
 				Label libECTSLabel = new Label(getTranslation("notes.ects"));
 				libECTSLabel.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				hl.add(libECTSLabel);
-				Label ectsLabel = new Label(Utils.displayBigDecimal(o.getObjet().getCreditEcts()));
+				Label ectsLabel = new Label(Utils.displayBigDecimal(o.getObjet().getCreditsEctsFinaux()));
 				ectsLabel.setWidthFull();
 				hl.add(libECTSLabel);
 				hl.add(ectsLabel);

@@ -46,7 +46,7 @@
 
 
 	<properties>
-		<revision>2.0.0</revision>
+		<revision>2.1.0</revision>
 		<sha1></sha1>
 		<changelist>-SNAPSHOT</changelist>
 		<java.version>17</java.version>
@@ -271,6 +271,12 @@
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
+		<dependency>
+    		<groupId>org.openapitools</groupId>
+    		<artifactId>jackson-databind-nullable</artifactId>
+    		<version>0.2.6</version>
+		</dependency>
+
         <!--  FIN DES DEPENDANCES OPENAPI GENERATOR -->
         
         <!-- https://mvnrepository.com/artifact/com.google.cloud.tools/jib-maven-plugin -->
