@@ -31,7 +31,7 @@ import fr.univlorraine.mondossierweb.services.PegaseService;
 import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.utils.Utils;
-import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
 
 @Component

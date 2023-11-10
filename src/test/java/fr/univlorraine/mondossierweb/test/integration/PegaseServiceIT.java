@@ -47,7 +47,7 @@ import fr.univlorraine.mondossierweb.services.AccessTokenService;
 import fr.univlorraine.mondossierweb.services.PegaseService;
 import fr.univlorraine.pegase.model.chc.CursusDCA;
 import fr.univlorraine.pegase.model.coc.Chemin;
-import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
 
 /** Tests du PegaseService.

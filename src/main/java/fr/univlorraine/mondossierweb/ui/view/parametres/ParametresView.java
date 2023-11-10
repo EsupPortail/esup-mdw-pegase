@@ -365,14 +365,14 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				// Maj des paramètres depuis la BDD
 				pegaseService.refreshParameters();
 				try {
-					// teste api INS
+					// teste api INS EXT
 					if(pegaseService.recupererDossierApprenant(pegaseService.getCodeApprenantTest()) != null) {
-						Utils.notifierSucces(getTranslation("api-ins.ok", pegaseService.getCodeApprenantTest()));
+						Utils.notifierSucces(getTranslation("api-ins-ext.ok", pegaseService.getCodeApprenantTest()));
 					} else {
-						Utils.notifierAnomalie(getTranslation("api-ins.error", pegaseService.getCodeApprenantTest()));
+						Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()));
 					}
 				}catch(Exception ex) {
-					Utils.notifierAnomalie(getTranslation("api-ins.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+					Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
 				try {
 					// teste api CHC

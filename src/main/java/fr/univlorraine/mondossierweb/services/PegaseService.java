@@ -20,7 +20,6 @@ package fr.univlorraine.mondossierweb.services;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,20 +31,14 @@ import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
 import fr.univlorraine.pegase.api.chc.CursusDcaApi;
 import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
+import fr.univlorraine.pegase.api.insext.InscriptionsApi;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
 import fr.univlorraine.pegase.api.insgestion.FluxInscriptionsApi;
-import fr.univlorraine.pegase.api.insgestion.InscriptionsApi;
-import fr.univlorraine.pegase.api.insgestion.PiecesApi;
 import fr.univlorraine.pegase.api.pai.PaiApi;
 import fr.univlorraine.pegase.model.chc.CursusDCA;
 import fr.univlorraine.pegase.model.coc.Chemin;
-import fr.univlorraine.pegase.model.insgestion.ApprenantEtInscriptions;
-import fr.univlorraine.pegase.model.insgestion.Inscriptions;
+import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.model.insgestion.Pageable;
-import fr.univlorraine.pegase.model.insgestion.StatutInscriptionVoeu;
-import fr.univlorraine.pegase.model.insgestion.StatutPaiementVoeu;
-import fr.univlorraine.pegase.model.insgestion.StatutPiecesVoeu;
-import fr.univlorraine.pegase.model.insgestion.TriInscription;
 import fr.univlorraine.pegase.model.insgestion.VueInscriptions;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +57,7 @@ public class PegaseService implements Serializable {
 
 	private transient String etablissement;	
 	private transient String apiInsUrl;	
+	private transient String apiInsExtUrl;
 	private transient String apiChcUrl;	
 	private transient String apiCocUrl;	
 	private transient String apiPaiUrl;
@@ -79,9 +73,12 @@ public class PegaseService implements Serializable {
 	// INS API
 	private transient ApiClient apiClientIns = new ApiClient();
 	private transient ApprenantsApi appApiIns = new ApprenantsApi();
-	private transient InscriptionsApi insApiIns = new InscriptionsApi();
+	private transient fr.univlorraine.pegase.api.insgestion.InscriptionsApi insApiIns = new fr.univlorraine.pegase.api.insgestion.InscriptionsApi();
 	private transient FluxInscriptionsApi fluxInsApiIns = new FluxInscriptionsApi();
-	private transient PiecesApi insApiPieces = new PiecesApi();
+
+	// INS-EXT API
+	private transient ApiClient apiClientInsExt = new ApiClient();
+	private transient InscriptionsApi insApiInsExt = new InscriptionsApi();
 
 	// PAI API
 	private transient ApiClient apiClientPai = new ApiClient();
@@ -145,6 +142,10 @@ public class PegaseService implements Serializable {
 		apiInsUrl = configController.getApiInsUrl();	
 	}
 
+	private void setApiInsExtUrl() {
+		apiInsExtUrl = configController.getApiInsExtUrl();	
+	}
+
 	public void refreshParameters() {
 		refreshPegaseParameters();
 		refreshApiParameters();
@@ -158,6 +159,7 @@ public class PegaseService implements Serializable {
 
 	public void refreshApiParameters() {
 		setApiInsUrl();
+		setApiInsExtUrl();
 		setApiChcUrl();
 		setApiCocUrl();
 		setApiPaiUrl();
@@ -170,7 +172,10 @@ public class PegaseService implements Serializable {
 		insApiIns.setApiClient(apiClientIns);
 		fluxInsApiIns.setApiClient(apiClientIns);
 		appApiIns.setApiClient(apiClientIns);
-		insApiPieces.setApiClient(apiClientIns);
+
+		// Init INS-EXT
+		apiClientInsExt.setBasePath(apiInsExtUrl);
+		insApiInsExt.setApiClient(apiClientInsExt);
 
 		// Init PAI
 		apiClientPai.setBasePath(apiPaiUrl);
@@ -190,11 +195,16 @@ public class PegaseService implements Serializable {
 		refreshParameters();
 	}
 
+	/**
+	 * Code démo (draft)
+	 * @param codeApprenant
+	 * @return
+	 */
 	public VueInscriptions recupererFluxDossierApprenant(String codeApprenant) {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
-			insApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
+			fluxInsApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				Long depuis = null;
 				Long jusqua = null;
@@ -224,10 +234,10 @@ public class PegaseService implements Serializable {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
-			insApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
+			insApiInsExt.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
-				ApprenantEtInscriptions dossier = insApiIns.lireInscriptions(etablissement, codeApprenant);
+				ApprenantEtInscriptions dossier = insApiInsExt.lireInscriptions(etablissement, codeApprenant);
 				if(dossier != null) {
 					log.info("Dossier de {} {} {} recupere", dossier.getApprenant().getEtatCivil().getPrenom(),dossier.getApprenant().getEtatCivil().getNomDeNaissance(), dossier.getApprenant().getEtatCivil().getNomUsuel());
 				} else {
@@ -240,47 +250,11 @@ public class PegaseService implements Serializable {
 				} else {
 					log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(), e);
 				}
+			} catch (RuntimeException rex) {
+				log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ",codeApprenant, etablissement,  rex);
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * méthode de test qui liste les inscriptions validées dans Pégase
-	 */
-	public void listerInscriptionsValidees() {
-		// Maj du token pour récupérer le dernier token valide
-		insApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
-
-		// Préparation des paramètres
-		List<StatutInscriptionVoeu> statutsInscription = new LinkedList<> ();
-		statutsInscription.add(StatutInscriptionVoeu.VALIDE);
-		List<StatutPiecesVoeu> statutsPieces = null;
-		List<StatutPaiementVoeu> statutsPaiement = null;
-		List<TriInscription> tri = null;
-		String rechercheIne = null;
-		String recherche = null;
-		String periode = null;
-		String objetMaquette = null;
-		String nomOuPrenom = null;
-		String nomDeNaissance = null;
-		String prenom = null;
-		String codeApprenant = null;
-		String ine = null;
-		int limit = 0;
-
-		try {
-			// Appel de l'API Pégase
-			Inscriptions response = insApiIns.listerInscriptionsValidees(etablissement, statutsInscription, statutsPieces, statutsPaiement, tri, rechercheIne, recherche, periode, objetMaquette, nomOuPrenom, nomDeNaissance, prenom, codeApprenant, ine, limit);
-			if(response != null) {
-				log.info("{} listerInscriptionsValidees", response.getNombre());
-			} else {
-				log.info("Anomalie lors de l'appel à la methode API : listerInscriptionsValidees");
-			}
-		} catch (ApiException e) {
-			log.error("Erreur lors de l'appel à la methode API : listerInscriptionsValidees => ({}) message: {} body : {} ",e.getCode(), e.getMessage(), e.getResponseBody(), e);
-		}
-
 	}
 
 	public List<CursusDCA> getCursus(String codeApprenant) {
@@ -303,6 +277,8 @@ public class PegaseService implements Serializable {
 				return listObj;
 			} catch (ApiException e) {
 				log.error("Erreur lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
+			} catch (RuntimeException rex) {
+				log.error("Erreur lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {} => ",codeApprenant, etablissement,  rex);
 			}
 		}
 		return null;
@@ -326,6 +302,8 @@ public class PegaseService implements Serializable {
 				return listObj;
 			} catch (ApiException e) {
 				log.error("Erreur lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codeChemin, codePeriode, etablissement, e.getCode(), e.getMessage(), e.getResponseBody(), e);
+			} catch (RuntimeException rex) {
+				log.error("Erreur lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {} => ",codeApprenant,codeChemin, codePeriode, etablissement,  rex);
 			}
 		}
 		return null;
@@ -340,10 +318,10 @@ public class PegaseService implements Serializable {
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)
 			&& StringUtils.hasText(cible)) {
 			// Maj du token pour récupérer le dernier token valide
-			insApiPieces.getApiClient().setBearerToken(accessTokenService.getToken());
+			insApiInsExt.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
-				File photo = insApiPieces.contenuPiece(etablissement, codeApprenant, cible, codePhoto);
+				File photo = insApiInsExt.contenuPiece(etablissement, codeApprenant, cible, codePhoto);
 				if(photo != null) {
 					log.info("Photo de {} recupere", codeApprenant);
 				} else {
@@ -353,6 +331,8 @@ public class PegaseService implements Serializable {
 			} catch (ApiException e) {
 				// Erreur lors de la récupération de la photo. Un simple warning
 				log.warn("Erreur lors de l'appel à la methode API : contenuPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {} => ({}) message: {} body : {}", codeApprenant, etablissement, cible, codePhoto,e.getCode(), e.getMessage(),e.getResponseBody());
+			} catch (RuntimeException rex) {
+				log.error("Erreur lors de l'appel à la methode API : contenuPiece pour le code apprenant : {} et etablissement : {}  et cible {} et codePhoto {} => ",codeApprenant, etablissement, cible, codePhoto, rex);
 			}
 		}
 		return null;
@@ -377,6 +357,8 @@ public class PegaseService implements Serializable {
 			return certificat;
 		} catch (ApiException e) {
 			log.error("Erreur lors de l'appel à la methode API : certificatDeScolarite => ({}) message: {} body : {}",e.getCode(), e.getMessage(), e.getResponseBody(), e);
+		} catch (RuntimeException rex) {
+			log.error("Erreur lors de l'appel à la methode API : certificatDeScolarite pour le code apprenant : {} et etablissement : {}  et cible {} => ",codeApprenant, etablissement, cible, rex);
 		}
 		return null;
 	}
@@ -400,6 +382,8 @@ public class PegaseService implements Serializable {
 			return null;
 		} catch (ApiException e) {
 			log.error("Erreur lors de l'appel à la methode API : attestationDePaiement => ({}) message: {} body : {}",e.getCode(), e.getMessage(), e.getResponseBody(), e);
+		} catch (RuntimeException rex) {
+			log.error("Erreur lors de l'appel à la methode API : attestationDePaiement pour le code apprenant : {} et etablissement : {}  et periode {} => ",codeApprenant, etablissement, periode, rex);
 		}
 		return null;
 	}
