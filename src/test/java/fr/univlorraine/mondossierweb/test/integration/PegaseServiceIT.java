@@ -90,6 +90,8 @@ public class PegaseServiceIT {
 	private String accessTokenUrl;
 	@Value("${apiIns.url}")
 	private String apiInsUrl;
+	@Value("${apiInsExt.url}")
+	private String apiInsExtUrl;
 	@Value("${apiChc.url}")
 	private String apiChcUrl;
 	@Value("${apiCoc.url}")
@@ -145,6 +147,7 @@ public class PegaseServiceIT {
 		given(configController.getAccesTokenUrl()).willReturn(accessTokenUrl);
 		accessTokenService.refreshParameters();
 		given(configController.getApiInsUrl()).willReturn(apiInsUrl);
+		given(configController.getApiInsExtUrl()).willReturn(apiInsExtUrl);
 		given(configController.getApiChcUrl()).willReturn(apiChcUrl);
 		given(configController.getApiCocUrl()).willReturn(apiCocUrl);
 		given(configController.getApiPaiUrl()).willReturn(apiPaiUrl);
