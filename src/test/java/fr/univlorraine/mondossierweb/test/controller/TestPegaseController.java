@@ -28,8 +28,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -39,8 +40,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 import fr.univlorraine.mondossierweb.controllers.PegaseController;
 import fr.univlorraine.mondossierweb.services.PegaseService;
@@ -78,6 +81,11 @@ public class TestPegaseController {
 	
 	private static final String FICHIER_NOTES_JSON = "src/test/resources/notes.json";
 
+	private static final Type LIST_CHEMIN_TYPE = new TypeToken<List<Chemin>>() {
+	}.getType();
+	
+	private static final Type LIST_CURSUS_DCA_TYPE = new TypeToken<List<CursusDCA>>() {
+	}.getType();
 
 	@MockBean
 	private PegaseService pegaseService;
@@ -97,7 +105,8 @@ public class TestPegaseController {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
 		try {
-			maquette1 = mapper.readValue(new File(FICHIER_CURSUS_JSON), new TypeReference<List<CursusDCA>>() {});
+			JsonReader reader = new JsonReader(new FileReader(FICHIER_CURSUS_JSON));
+			maquette1 = new Gson().fromJson(reader, LIST_CURSUS_DCA_TYPE);
 		} catch (IOException e) {
 			log.error("Erreur à la lecture de {} pour MonDossierWebServiceTest",FICHIER_CURSUS_JSON,e);
 		}
@@ -105,11 +114,11 @@ public class TestPegaseController {
 		
 		// Notes et résultats qui remplace le retour de l'API notes Pégase
 		try {
-			notes1 = mapper.readValue(new File(FICHIER_NOTES_JSON), new TypeReference<List<Chemin>>() {});
+			JsonReader reader = new JsonReader(new FileReader(FICHIER_NOTES_JSON));
+			notes1 = new Gson().fromJson(reader, LIST_CHEMIN_TYPE);
 		} catch (IOException e) {
 			log.error("Erreur à la lecture de {} pour MonDossierWebServiceTest",FICHIER_NOTES_JSON,e);
 		}
-		
 	}
 
 	

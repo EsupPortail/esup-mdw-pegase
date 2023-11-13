@@ -1,259 +1,280 @@
 [
-    {
-        "codeStructure": "ETAB00",
-        "periode": {
-            "code": "PER-2021",
-            "libelleAffichage": "Période d'inscription 2021/2022",
-            "dateDebut": "2021-09-01"
-        },
-        "formation": {
-            "code": "F-ING-HYD",
-            "libelleLong": "Formation ingénieur Hydraulique"
-        },
-        "racinePedagogique": {
-            "codeObjetMaquette": "F-ING-HYD-A5",
-            "libelleLongObjetMaquette": "3eme  année ingénieur hydraulique",
-            "libelleAffichageTypeObjetFormation": "Année",
-            "estObligatoire": true,
-            "creditEcts": 60.0,
-            "amenagements": null,
-            "acquisCapitalise": null,
-            "enfants": [
-                {
-                    "codeObjetMaquette": "F-ING-HYD-S09",
-                    "libelleLongObjetMaquette": "semestre 9 ingénieur Hydraulique",
-                    "libelleAffichageTypeObjetFormation": "Semestre",
-                    "estObligatoire": true,
-                    "creditEcts": null,
-                    "amenagements": [
-                        {
-                            "code": "TAM001",
-                            "libelleAffichage": "Validation - Dispense"
-                        }
-                    ],
-                    "acquisCapitalise": null,
-                    "enfants": []
-                },
-                {
-                    "codeObjetMaquette": "F-ING-HYD-S10",
-                    "libelleLongObjetMaquette": "semestre 10  ingénieur Hydraulique",
-                    "libelleAffichageTypeObjetFormation": "Semestre",
-                    "estObligatoire": true,
-                    "creditEcts": null,
-                    "amenagements": null,
-                    "acquisCapitalise": null,
-                    "enfants": []
-                }
-            ]
-        }
-    },
-    {
-        "codeStructure": "ETAB00",
-        "periode": {
-            "code": "PER-2019",
-            "libelleAffichage": "Période d'inscription 2019/2020",
-            "dateDebut": "2019-09-02"
-        },
-        "formation": {
-            "code": "F-ING-HYD",
-            "libelleLong": "Formation ingénieur Hydraulique"
-        },
-        "racinePedagogique": {
-            "codeObjetMaquette": "F-ING-HYD-A3",
-            "libelleLongObjetMaquette": "1ere année ingénieur hydraulique",
-            "libelleAffichageTypeObjetFormation": "Année",
-            "estObligatoire": true,
-            "creditEcts": 60.0,
-            "amenagements": null,
-            "acquisCapitalise": null,
-            "enfants": [
-                {
-                    "codeObjetMaquette": "F-ING-HYD-S06",
-                    "libelleLongObjetMaquette": "semestre 6 ingénieur Hydraulique",
-                    "libelleAffichageTypeObjetFormation": "Semestre",
-                    "estObligatoire": true,
-                    "creditEcts": 30.0,
-                    "amenagements": null,
-                    "acquisCapitalise": null,
-                    "enfants": []
-                },
-                {
-                    "codeObjetMaquette": "F-ING-HYD-S05",
-                    "libelleLongObjetMaquette": "semestre 5 ingénieur Hydraulique",
-                    "libelleAffichageTypeObjetFormation": "Semestre",
-                    "estObligatoire": true,
-                    "creditEcts": 30.0,
-                    "amenagements": null,
-                    "acquisCapitalise": null,
-                    "enfants": []
-                }
-            ]
-        }
-    },
-    {
-        "codeStructure": "ETAB00",
-        "periode": {
-            "code": "PER-2020",
-            "libelleAffichage": "Période d'inscription 2020/2021",
-            "dateDebut": "2020-09-01"
-        },
-        "formation": {
-            "code": "F-ING-HYD",
-            "libelleLong": "Formation ingénieur Hydraulique"
-        },
-        "racinePedagogique": {
-            "codeObjetMaquette": "F-ING-HYD-A4",
-            "libelleLongObjetMaquette": "2eme  année ingénieur hydraulique",
-            "libelleAffichageTypeObjetFormation": "Année",
-            "estObligatoire": true,
-            "creditEcts": 60.0,
-            "amenagements": null,
-            "acquisCapitalise": null,
-            "enfants": [
-                {
-                    "codeObjetMaquette": "F-ING-HYD-S07",
-                    "libelleLongObjetMaquette": "semestre 7 ingénieur Hydraulique",
-                    "libelleAffichageTypeObjetFormation": "Semestre",
-                    "estObligatoire": true,
-                    "creditEcts": 30.0,
-                    "amenagements": null,
-                    "acquisCapitalise": null,
-                    "enfants": [
-                        {
-                            "codeObjetMaquette": "F-ING-HYD-S7-TEU",
-                            "libelleLongObjetMaquette": "Traitement des eaux usées",
-                            "libelleAffichageTypeObjetFormation": "Unité d'enseignement",
-                            "estObligatoire": true,
-                            "creditEcts": 5.0,
-                            "amenagements": null,
-                            "acquisCapitalise": null,
-                            "enfants": []
-                        },
-                        {
-                            "codeObjetMaquette": "F-ING-HYD-CME",
-                            "libelleLongObjetMaquette": "Connaissance du monde de l’entreprise",
-                            "libelleAffichageTypeObjetFormation": "Unité d'enseignement",
-                            "estObligatoire": false,
-                            "creditEcts": null,
-                            "amenagements": null,
-                            "acquisCapitalise": null,
-                            "enfants": [
-                                {
-                                    "codeObjetMaquette": "F-ING-HYD-SSO",
-                                    "libelleLongObjetMaquette": "Sociologie des organisations",
-                                    "libelleAffichageTypeObjetFormation": "Enseignement",
-                                    "estObligatoire": false,
-                                    "creditEcts": null,
-                                    "amenagements": null,
-                                    "acquisCapitalise": null,
-                                    "enfants": []
-                                },
-                                {
-                                    "codeObjetMaquette": "F-ING-HYD-FRP",
-                                    "libelleLongObjetMaquette": "Forums professionnels",
-                                    "libelleAffichageTypeObjetFormation": "Enseignement",
-                                    "estObligatoire": false,
-                                    "creditEcts": null,
-                                    "amenagements": null,
-                                    "acquisCapitalise": null,
-                                    "enfants": []
-                                },
-                                {
-                                    "codeObjetMaquette": "F-ING-HYD-CHU",
-                                    "libelleLongObjetMaquette": "Carrière hydraulique urbaine",
-                                    "libelleAffichageTypeObjetFormation": "Conférence",
-                                    "estObligatoire": false,
-                                    "creditEcts": null,
-                                    "amenagements": null,
-                                    "acquisCapitalise": null,
-                                    "enfants": []
-                                },
-                                {
-                                    "codeObjetMaquette": "F-ING-HYD-RE",
-                                    "libelleLongObjetMaquette": "Rapport d'étonnement",
-                                    "libelleAffichageTypeObjetFormation": "Enseignement",
-                                    "estObligatoire": false,
-                                    "creditEcts": null,
-                                    "amenagements": null,
-                                    "acquisCapitalise": null,
-                                    "enfants": []
-                                }
-                            ]
-                        },
-                        {
-                            "codeObjetMaquette": "F-ING-HYD-S7-GC",
-                            "libelleLongObjetMaquette": "Génie civil",
-                            "libelleAffichageTypeObjetFormation": "Unité d'enseignement",
-                            "estObligatoire": true,
-                            "creditEcts": 5.0,
-                            "amenagements": null,
-                            "acquisCapitalise": null,
-                            "enfants": []
-                        },
-                        {
-                            "codeObjetMaquette": "F-ING-HYD-S7-TEC",
-                            "libelleLongObjetMaquette": "Traitement des eaux de consommation",
-                            "libelleAffichageTypeObjetFormation": "Unité d'enseignement",
-                            "estObligatoire": true,
-                            "creditEcts": 5.0,
-                            "amenagements": null,
-                            "acquisCapitalise": null,
-                            "enfants": []
-                        },
-                        {
-                            "codeObjetMaquette": "MST-CIEA-UE01-ANG",
-                            "libelleLongObjetMaquette": "Anglais",
-                            "libelleAffichageTypeObjetFormation": "Unité d'enseignement",
-                            "estObligatoire": true,
-                            "creditEcts": 3.5,
-                            "amenagements": null,
-                            "acquisCapitalise": null,
-                            "enfants": []
-                        },
-                        {
-                            "codeObjetMaquette": "F-ING-HYD-S7-OUT",
-                            "libelleLongObjetMaquette": "Metrologie",
-                            "libelleAffichageTypeObjetFormation": "Unité d'enseignement",
-                            "estObligatoire": true,
-                            "creditEcts": 5.0,
-                            "amenagements": null,
-                            "acquisCapitalise": null,
-                            "enfants": []
-                        },
-                        {
-                            "codeObjetMaquette": "JJXE7U50",
-                            "libelleLongObjetMaquette": "UE Entrepreneuriat et innovation",
-                            "libelleAffichageTypeObjetFormation": "Unité d'enseignement",
-                            "estObligatoire": true,
-                            "creditEcts": 1.5,
-                            "amenagements": null,
-                            "acquisCapitalise": null,
-                            "enfants": [
-                                {
-                                    "codeObjetMaquette": "JJXE7ME0",
-                                    "libelleLongObjetMaquette": "Méthode de créativité",
-                                    "libelleAffichageTypeObjetFormation": "Élément Constitutif",
-                                    "estObligatoire": true,
-                                    "creditEcts": 1.5,
-                                    "amenagements": null,
-                                    "acquisCapitalise": null,
-                                    "enfants": []
-                                }
-                            ]
-                        },
-                        {
-                            "codeObjetMaquette": "F-ING-HYD-S7-DROIT",
-                            "libelleLongObjetMaquette": "Réglementation – Droit de l’environnement et de l’urbanisme",
-                            "libelleAffichageTypeObjetFormation": "Unité d'enseignement",
-                            "estObligatoire": true,
-                            "creditEcts": 5.0,
-                            "amenagements": null,
-                            "acquisCapitalise": null,
-                            "enfants": []
-                        }
-                    ]
-                }
-            ]
-        }
-    }
+	{
+		"codeStructure": "ETAB00",
+		"periode": {
+			"code": "PER-2021",
+			"libelleAffichage": "Période d'inscription 2021/2022",
+			"dateDebut": "2021-09-01"
+		},
+		"formation": {
+			"code": "F-ING-HYD",
+			"libelleLong": "Formation ingénieur Hydraulique"
+		},
+		"racinePedagogique": {
+			"codeObjetMaquette": "F-ING-HYD-A5",
+			"libelleLongObjetMaquette": "3eme  année ingénieur hydraulique",
+			"libelleAffichageTypeObjetFormation": "Année",
+			"estObligatoire": true,
+			"creditEcts": 60.0,
+			"amenagements": null,
+			"acquisCapitalise": null,
+			"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+			"enfants": [
+				{
+					"codeObjetMaquette": "F-ING-HYD-S09",
+					"libelleLongObjetMaquette": "semestre 9 ingénieur Hydraulique",
+					"libelleAffichageTypeObjetFormation": "Semestre",
+					"estObligatoire": true,
+					"creditEcts": null,
+					"amenagements": [
+						{
+							"code": "TAM001",
+							"libelleAffichage": "Validation - Dispense"
+						}
+					],
+					"acquisCapitalise": null,
+					"typeChoixPedagogique": "ACQUIS",
+					"enfants": []
+				},
+				{
+					"codeObjetMaquette": "F-ING-HYD-S10",
+					"libelleLongObjetMaquette": "semestre 10  ingénieur Hydraulique",
+					"libelleAffichageTypeObjetFormation": "Semestre",
+					"estObligatoire": true,
+					"creditEcts": null,
+					"amenagements": null,
+					"acquisCapitalise": null,
+					"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+					"enfants": []
+				}
+			]
+		}
+	},
+	{
+		"codeStructure": "ETAB00",
+		"periode": {
+			"code": "PER-2019",
+			"libelleAffichage": "Période d'inscription 2019/2020",
+			"dateDebut": "2019-09-02"
+		},
+		"formation": {
+			"code": "F-ING-HYD",
+			"libelleLong": "Formation ingénieur Hydraulique"
+		},
+		"racinePedagogique": {
+			"codeObjetMaquette": "F-ING-HYD-A3",
+			"libelleLongObjetMaquette": "1ere année ingénieur hydraulique",
+			"libelleAffichageTypeObjetFormation": "Année",
+			"estObligatoire": true,
+			"creditEcts": 60.0,
+			"amenagements": null,
+			"acquisCapitalise": null,
+			"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+			"enfants": [
+				{
+					"codeObjetMaquette": "F-ING-HYD-S06",
+					"libelleLongObjetMaquette": "semestre 6 ingénieur Hydraulique",
+					"libelleAffichageTypeObjetFormation": "Semestre",
+					"estObligatoire": true,
+					"creditEcts": 30.0,
+					"amenagements": null,
+					"acquisCapitalise": null,
+					"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+					"enfants": []
+				},
+				{
+					"codeObjetMaquette": "F-ING-HYD-S05",
+					"libelleLongObjetMaquette": "semestre 5 ingénieur Hydraulique",
+					"libelleAffichageTypeObjetFormation": "Semestre",
+					"estObligatoire": true,
+					"creditEcts": 30.0,
+					"amenagements": null,
+					"acquisCapitalise": null,
+					"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+					"enfants": []
+				}
+			]
+		}
+	},
+	{
+		"codeStructure": "ETAB00",
+		"periode": {
+			"code": "PER-2020",
+			"libelleAffichage": "Période d'inscription 2020/2021",
+			"dateDebut": "2020-09-01"
+		},
+		"formation": {
+			"code": "F-ING-HYD",
+			"libelleLong": "Formation ingénieur Hydraulique"
+		},
+		"racinePedagogique": {
+			"codeObjetMaquette": "F-ING-HYD-A4",
+			"libelleLongObjetMaquette": "2eme  année ingénieur hydraulique",
+			"libelleAffichageTypeObjetFormation": "Année",
+			"estObligatoire": true,
+			"creditEcts": 60.0,
+			"amenagements": null,
+			"acquisCapitalise": null,
+			"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+			"enfants": [
+				{
+					"codeObjetMaquette": "F-ING-HYD-S07",
+					"libelleLongObjetMaquette": "semestre 7 ingénieur Hydraulique",
+					"libelleAffichageTypeObjetFormation": "Semestre",
+					"estObligatoire": true,
+					"creditEcts": 30.0,
+					"amenagements": null,
+					"acquisCapitalise": null,
+					"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+					"enfants": [
+						{
+							"codeObjetMaquette": "F-ING-HYD-S7-TEU",
+							"libelleLongObjetMaquette": "Traitement des eaux usées",
+							"libelleAffichageTypeObjetFormation": "Unité d'enseignement",
+							"estObligatoire": true,
+							"creditEcts": 5.0,
+							"amenagements": null,
+							"acquisCapitalise": null,
+							"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+							"enfants": []
+						},
+						{
+							"codeObjetMaquette": "F-ING-HYD-CME",
+							"libelleLongObjetMaquette": "Connaissance du monde de l’entreprise",
+							"libelleAffichageTypeObjetFormation": "Unité d'enseignement",
+							"estObligatoire": false,
+							"creditEcts": null,
+							"amenagements": null,
+							"acquisCapitalise": null,
+							"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+							"enfants": [
+								{
+									"codeObjetMaquette": "F-ING-HYD-SSO",
+									"libelleLongObjetMaquette": "Sociologie des organisations",
+									"libelleAffichageTypeObjetFormation": "Enseignement",
+									"estObligatoire": false,
+									"creditEcts": null,
+									"amenagements": null,
+									"acquisCapitalise": null,
+									"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+									"enfants": []
+								},
+								{
+									"codeObjetMaquette": "F-ING-HYD-FRP",
+									"libelleLongObjetMaquette": "Forums professionnels",
+									"libelleAffichageTypeObjetFormation": "Enseignement",
+									"estObligatoire": false,
+									"creditEcts": null,
+									"amenagements": null,
+									"acquisCapitalise": null,
+									"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+									"enfants": []
+								},
+								{
+									"codeObjetMaquette": "F-ING-HYD-CHU",
+									"libelleLongObjetMaquette": "Carrière hydraulique urbaine",
+									"libelleAffichageTypeObjetFormation": "Conférence",
+									"estObligatoire": false,
+									"creditEcts": null,
+									"amenagements": null,
+									"acquisCapitalise": null,
+									"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+									"enfants": []
+								},
+								{
+									"codeObjetMaquette": "F-ING-HYD-RE",
+									"libelleLongObjetMaquette": "Rapport d'étonnement",
+									"libelleAffichageTypeObjetFormation": "Enseignement",
+									"estObligatoire": false,
+									"creditEcts": null,
+									"amenagements": null,
+									"acquisCapitalise": null,
+									"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+									"enfants": []
+								}
+							]
+						},
+						{
+							"codeObjetMaquette": "F-ING-HYD-S7-GC",
+							"libelleLongObjetMaquette": "Génie civil",
+							"libelleAffichageTypeObjetFormation": "Unité d'enseignement",
+							"estObligatoire": true,
+							"creditEcts": 5.0,
+							"amenagements": null,
+							"acquisCapitalise": null,
+							"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+							"enfants": []
+						},
+						{
+							"codeObjetMaquette": "F-ING-HYD-S7-TEC",
+							"libelleLongObjetMaquette": "Traitement des eaux de consommation",
+							"libelleAffichageTypeObjetFormation": "Unité d'enseignement",
+							"estObligatoire": true,
+							"creditEcts": 5.0,
+							"amenagements": null,
+							"acquisCapitalise": null,
+							"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+							"enfants": []
+						},
+						{
+							"codeObjetMaquette": "MST-CIEA-UE01-ANG",
+							"libelleLongObjetMaquette": "Anglais",
+							"libelleAffichageTypeObjetFormation": "Unité d'enseignement",
+							"estObligatoire": true,
+							"creditEcts": 3.5,
+							"amenagements": null,
+							"acquisCapitalise": null,
+							"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+							"enfants": []
+						},
+						{
+							"codeObjetMaquette": "F-ING-HYD-S7-OUT",
+							"libelleLongObjetMaquette": "Metrologie",
+							"libelleAffichageTypeObjetFormation": "Unité d'enseignement",
+							"estObligatoire": true,
+							"creditEcts": 5.0,
+							"amenagements": null,
+							"acquisCapitalise": null,
+							"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+							"enfants": []
+						},
+						{
+							"codeObjetMaquette": "JJXE7U50",
+							"libelleLongObjetMaquette": "UE Entrepreneuriat et innovation",
+							"libelleAffichageTypeObjetFormation": "Unité d'enseignement",
+							"estObligatoire": true,
+							"creditEcts": 1.5,
+							"amenagements": null,
+							"acquisCapitalise": null,
+							"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+							"enfants": [
+								{
+									"codeObjetMaquette": "JJXE7ME0",
+									"libelleLongObjetMaquette": "Méthode de créativité",
+									"libelleAffichageTypeObjetFormation": "Élément Constitutif",
+									"estObligatoire": true,
+									"creditEcts": 1.5,
+									"amenagements": null,
+									"acquisCapitalise": null,
+									"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+									"enfants": []
+								}
+							]
+						},
+						{
+							"codeObjetMaquette": "F-ING-HYD-S7-DROIT",
+							"libelleLongObjetMaquette": "Réglementation – Droit de l’environnement et de l’urbanisme",
+							"libelleAffichageTypeObjetFormation": "Unité d'enseignement",
+							"estObligatoire": true,
+							"creditEcts": 5.0,
+							"amenagements": null,
+							"acquisCapitalise": null,
+							"typeChoixPedagogique": "AFFECTATION_CHOISIE",
+							"enfants": []
+						}
+					]
+				}
+			]
+		}
+	}
 ]
