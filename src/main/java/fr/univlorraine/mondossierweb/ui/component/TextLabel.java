@@ -18,7 +18,7 @@
  */
 package fr.univlorraine.mondossierweb.ui.component;
 
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import lombok.Getter;
@@ -28,9 +28,9 @@ import lombok.Getter;
 public class TextLabel extends VerticalLayout {
 
 	@Getter
-	private final Label label = new Label();
+	private final NativeLabel label = new NativeLabel();
 	@Getter
-	private final Label value = new Label();
+	private final NativeLabel value = new NativeLabel();
 
 
 	public TextLabel() {

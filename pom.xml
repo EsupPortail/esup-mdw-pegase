@@ -41,16 +41,18 @@
 	<parent>
     	<groupId>org.springframework.boot</groupId>
     	<artifactId>spring-boot-starter-parent</artifactId>
-    	<version>3.0.8</version>
+    	<version>3.2.1</version>
+    	<!-- <version>3.0.8</version> -->
 	</parent>
 
 
 	<properties>
-		<revision>2.1.1</revision>
+		<revision>2.2.0</revision>
 		<sha1></sha1>
 		<changelist>-SNAPSHOT</changelist>
 		<java.version>17</java.version>
-		<vaadin.version>24.0.5</vaadin.version>
+		<!-- <vaadin.version>24.0.5</vaadin.version> -->
+		<vaadin.version>24.3.3</vaadin.version>
 		<gson-fire-version>1.8.4</gson-fire-version>
         <swagger-core-version>1.5.24</swagger-core-version>
         <okhttp-version>4.9.3</okhttp-version>
@@ -96,7 +98,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-cas</artifactId>
-			<version>6.1.1</version>
+			<!-- <version>6.1.1</version> -->
 			<!-- <version>5.5.8</version> -->
 		</dependency>
 
@@ -125,11 +127,11 @@
 		</dependency>
 		
 		<!-- Surcharge snakeyaml -->
-		<dependency>
+		<!-- <dependency>
     		<groupId>org.yaml</groupId>
     		<artifactId>snakeyaml</artifactId>
     		<version>1.33</version>
-		</dependency>
+		</dependency> -->
 		
 		<!-- Surcharge jsoup -->
 		<dependency>

@@ -41,7 +41,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -193,7 +193,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 								} else {
 									// S'il s'agit d'une image
 									if(p.getType().getTypeId().equals(TYPE_IMG)){
-										Label labelImage = new Label(p.getPrefDesc());
+										NativeLabel labelImage = new NativeLabel(p.getPrefDesc());
 										categorieLayout.add(labelImage);
 										Image image = new Image();
 										StreamResource resource;

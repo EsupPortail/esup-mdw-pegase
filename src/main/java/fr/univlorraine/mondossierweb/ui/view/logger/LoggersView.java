@@ -46,7 +46,7 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.grid.HeaderRow.HeaderCell;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -98,7 +98,7 @@ public class LoggersView extends VerticalLayout implements HasDynamicTitle, HasH
 	@Getter
 	private final HorizontalLayout header = new HorizontalLayout();
 	private final TextHeader headerTitle = new TextHeader();
-	private final Label infoLabel = new Label();
+	private final NativeLabel infoLabel = new NativeLabel();
 
 	/* Grid */
 	private Grid<LoggerLevel> gridLoggers = new Grid<>();

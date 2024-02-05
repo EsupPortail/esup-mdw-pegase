@@ -25,7 +25,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -55,11 +55,11 @@ public class AccessDeniedView extends VerticalLayout implements HasDynamicTitle,
 	@Getter
 	private final TextHeader header = new TextHeader();
 
-	private final Label label = new Label();
+	private final NativeLabel label = new NativeLabel();
 
 
 	private transient String helpUrl;
-	private final Label helpLabel = new Label();
+	private final NativeLabel helpLabel = new NativeLabel();
 	private final Button helpButton = new Button(new Icon(VaadinIcon.LIFEBUOY));
 
 	@PostConstruct
