@@ -94,12 +94,18 @@ public class SecurityConfig {
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return web -> web.ignoring()
 			/* Vaadin Flow */
-			.requestMatchers("/VAADIN/static/**")
+			.requestMatchers("/VAADIN/**")
+			
 			/* Favicon */
 			.requestMatchers("/favicon.ico")
 			.requestMatchers("/favicon-*.png")
+			.requestMatchers(new AntPathRequestMatcher("/images/*.png"))
+			
 			/* Gestionnaire d'erreurs Spring */
-			.requestMatchers("/error");
+			.requestMatchers(new AntPathRequestMatcher("/error"))
+			/* Service Worker */
+			.requestMatchers(new AntPathRequestMatcher("/sw*.js"));
+
 
 	}
 
@@ -109,8 +115,8 @@ public class SecurityConfig {
 			.authorizeHttpRequests((requests) -> requests
 				.requestMatchers(SecurityUtil::isFrameworkInternalRequest).permitAll()
 				/* Autorise l'usurpation de compte pour les admins */
-				.requestMatchers(new AntPathRequestMatcher(SWITCH_USER_URL)).hasAuthority(Role.SWITCH_USER)
-				.requestMatchers(new AntPathRequestMatcher(SWITCH_USER_EXIT_URL)).hasAuthority(SwitchUserFilter.ROLE_PREVIOUS_ADMINISTRATOR)
+				/*.requestMatchers(new AntPathRequestMatcher(SWITCH_USER_URL)).hasAuthority(Role.SWITCH_USER)
+				.requestMatchers(new AntPathRequestMatcher(SWITCH_USER_EXIT_URL)).hasAuthority(SwitchUserFilter.ROLE_PREVIOUS_ADMINISTRATOR)*/
 				/* Les autres requêtes doivent être authentifiées */
 				.anyRequest().authenticated())
 			.httpBasic(Customizer.withDefaults());
@@ -121,7 +127,10 @@ public class SecurityConfig {
 		http.exceptionHandling(exceptionHandling -> {
 			exceptionHandling.authenticationEntryPoint(casAuthenticationEntryPoint())
 				.accessDeniedHandler(accessDeniedHandler);
-		}).addFilter(casAuthenticationFilter())
+		});
+		
+		/* Ajoute les filtres */
+		http.addFilter(casAuthenticationFilter())
 			.addFilterAfter(new MDCAuthenticationFilter(), CasAuthenticationFilter.class)
 			.addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class)
 			.addFilterBefore(logoutFilter(), LogoutFilter.class);

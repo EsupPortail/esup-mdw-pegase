@@ -84,6 +84,8 @@ public class ConfigController {
 	
 	private static final String BTN_ATTEST_PAI = "BTN_ATTEST_PAI";
 	
+	private static final String CTRL_ATTEST_PAI = "CTRL_ATTEST_PAI";
+	
 	private static final String BTN_CURSUS = "BTN_CURSUS";
 	
 	private static final String BTN_NOTES = "BTN_NOTES";
@@ -160,6 +162,9 @@ public class ConfigController {
 	}
 	public boolean isAttestationPaiementActif() {
 		return getBooleanValueForParameter(BTN_ATTEST_PAI);
+	}
+	public boolean isControlePaiementValideActif() {
+		return getBooleanValueForParameter(CTRL_ATTEST_PAI);
 	}
 	public boolean isCursusActif() {
 		return getBooleanValueForParameter(BTN_CURSUS);

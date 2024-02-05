@@ -21,6 +21,7 @@ package fr.univlorraine.mondossierweb;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -28,6 +29,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * Point d'entrée de l'application Spring Boot.
  */
 @SpringBootApplication
+@ConfigurationProperties
 @EnableScheduling
 public class Application extends SpringBootServletInitializer {
 

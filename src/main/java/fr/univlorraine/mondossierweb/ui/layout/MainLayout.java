@@ -43,7 +43,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -148,8 +148,8 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	private MenuItem userMenuAproposItem;
 	private MenuItem userMenuParametresItem;
 	private MenuItem userMenuLogoutItem;
-	private Label nomPrenom = new Label();
-	private Label numeroDossier = new Label();
+	private NativeLabel nomPrenom = new NativeLabel();
+	private NativeLabel numeroDossier = new NativeLabel();
 	private final Image logo = new Image();
 	private byte[] imgLogo;
 

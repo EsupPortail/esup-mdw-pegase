@@ -31,17 +31,22 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.NativeLabel;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
@@ -127,7 +132,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 	private final VerticalLayout inscriptionsLayout = new VerticalLayout();
 
 	// label d'erreur
-	private final Label errorLabel = new Label();
+	private final NativeLabel errorLabel = new NativeLabel();
 
 	transient List<TextLabel> listTextLabelFormation = new LinkedList<> ();
 	transient List<TextLabel> listTextLabelPeriode = new LinkedList<> ();
@@ -377,7 +382,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						exportCertificatAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
 						exportCertificatAnchor.add(certButton);
 						exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME +"-" + LocalDateTime.now() + CERT_FILE_EXT,
-							() -> exportService.getCertificat(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription))));
+								() -> exportService.getCertificat(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription))));
 						exportCertificatAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
 						exportCertificatAnchor.getElement().setAttribute("download", true);
 						exportCertificatAnchor.setTarget("_blank");
@@ -396,10 +401,35 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 						exportAttestationAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
 						exportAttestationAnchor.add(attestationButton);
 						exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME +"-" + LocalDateTime.now() + ATTEST_FILE_EXT,
-							() -> exportService.getAttestation(dossier.getApprenant().getCode(),  Utils.getCodePeriode(inscription))));
+								() -> exportService.getAttestation(dossier.getApprenant().getCode(),  Utils.getCodePeriode(inscription))));
 						exportAttestationAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
 						exportAttestationAnchor.getElement().setAttribute("download", true);
 						exportAttestationAnchor.setTarget("_blank");
+
+						if(StringUtils.hasText(getTranslation("inscription.attestation.message"))) {
+							attestationButton.addClickListener(e -> {
+								Notification notification = new Notification();
+								notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+								
+								
+								Div text = new Div(new Text(getTranslation("inscription.attestation.message")));
+								Button closeButton = new Button(new Icon("lumo", "cross"));
+								closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+								closeButton.setAriaLabel("Close");
+								closeButton.addClickListener(event -> {
+								    notification.close();
+								});
+
+								HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+								layout.setAlignItems(Alignment.CENTER);
+
+								notification.setPosition(Position.MIDDLE);
+								notification.add(layout);
+								notification.open();
+								
+								//notification.show(getTranslation("inscription.attestation.message"), 5000, Position.MIDDLE);
+							});
+						}
 
 						// Ajout à la liste des boutons
 						listButtonAttestation.add(attestationButton);
@@ -429,7 +459,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 							} else {
 								if(StringUtils.hasText(getTranslation("photo.aucune"))) {
-									Label noPhotoLabel=new Label(getTranslation("photo.aucune"));
+									NativeLabel noPhotoLabel=new NativeLabel(getTranslation("photo.aucune"));
 									photoLayout.getStyle().set(CSSColorUtils.FONT_STYLE, CSSColorUtils.ITALIC);
 									photoLayout.getStyle().set(CSSColorUtils.BORDER_RADIUS, "0.8em");
 									photoLayout.getStyle().set(CSSColorUtils.PADDING, "3em 1em 3em 1em");
@@ -497,7 +527,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 					if(configController.isAttestationPaiementActif()) {
 						setAnchorStyle(exportAttestationAnchor);
 						buttonExportLayout.add(exportAttestationAnchor);
-						if(inscriptionEnCours && !inscriptionPayee) {
+						// Si on doit controler que le paiement est valide et qu'il ne l'est pas
+						if(configController.isControlePaiementValideActif() && inscriptionEnCours && !inscriptionPayee) {
 							exportAttestationAnchor.setVisible(false);
 						}
 					}
@@ -578,7 +609,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								cursusLayout.setPadding(false);
 								HorizontalLayout headerDialog= new HorizontalLayout();
 								headerDialog.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.VAR_LUMO_SPACE_L);
-								Label titreDialog = new Label(libelleInscription);
+								NativeLabel titreDialog = new NativeLabel(libelleInscription);
 								titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 								titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
 								Button closeButton = new Button(getTranslation("inscription.closedialog"));
@@ -638,7 +669,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 								notesLayout.setPadding(false);
 								HorizontalLayout headerDialog= new HorizontalLayout();
 								headerDialog.getStyle().set("margin-bottom", CSSColorUtils.VAR_LUMO_SPACE_L);
-								Label titreDialog = new Label(libelleInscription);
+								NativeLabel titreDialog = new NativeLabel(libelleInscription);
 								titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 								titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
 								Button closeButton = new Button(getTranslation("inscription.closedialog"));
@@ -798,7 +829,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		FlexLayout l = new FlexLayout();
 		l.setWidthFull();
 
-		Label libLabel = new Label(o.getLibelle());
+		NativeLabel libLabel = new NativeLabel(o.getLibelle());
 		libLabel.getStyle().set(CSSColorUtils.WHITE_SPACE, "normal");
 		l.add(libLabel);
 		l.setFlexGrow(1, libLabel);
@@ -852,7 +883,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 		HorizontalLayout hl = new HorizontalLayout();
 		hl.setWidthFull();
-		Label libAmenagements = new Label(info);
+		NativeLabel libAmenagements = new NativeLabel(info);
 		libAmenagements.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 		hl.add(libAmenagements);
 		hl.add(libAmenagements);
@@ -868,7 +899,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// Création dialog avec le détail des aménagements
 		Dialog resultDialog = new Dialog();
 		VerticalLayout dialLayout = new VerticalLayout();
-		Label formationLabel = new Label(getTranslation("inscription.element.amenagement"));
+		NativeLabel formationLabel = new NativeLabel(getTranslation("inscription.element.amenagement"));
 		formationLabel.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 		formationLabel.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
 		dialLayout.add(formationLabel);
@@ -877,7 +908,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		for(AmenagementDCA amenagement : amenagements) {
 			HorizontalLayout hl = new HorizontalLayout();
 			hl.setWidthFull();
-			Label libAmenagements = new Label(amenagement.getLibelleAffichage());
+			NativeLabel libAmenagements = new NativeLabel(amenagement.getLibelleAffichage());
 			libAmenagements.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 			hl.add(libAmenagements);
 			hl.add(libAmenagements);
@@ -979,8 +1010,8 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 		// Création dialog avec le détail des notes et résultat pour l'objet de formation
 		Dialog resultDialog = new Dialog();
 		VerticalLayout dialLayout = new VerticalLayout();
-		Label formationLabel = new Label(o.getLibelle());
-		Label formationLabelPere = new Label(o.getObjet().getObjetFeuille().getLibelleCourt());
+		NativeLabel formationLabel = new NativeLabel(o.getLibelle());
+		NativeLabel formationLabelPere = new NativeLabel(o.getObjet().getObjetFeuille().getLibelleCourt());
 		formationLabel.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
 		formationLabel.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
 		formationLabelPere.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
@@ -999,7 +1030,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			if(controleLayout.getComponentCount()>0) {
 				HorizontalLayout session1 = new HorizontalLayout();
 				session1.setWidthFull();
-				Label labelS1 = new Label(getTranslation("notes.session."+o.getControle().getNumeroSession()));
+				NativeLabel labelS1 = new NativeLabel(getTranslation("notes.session."+o.getControle().getNumeroSession()));
 				labelS1.getStyle().set(CSSColorUtils.WHITE_SPACE, CSSColorUtils.NOWRAP);
 				labelS1.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				session1.add(labelS1);
@@ -1020,10 +1051,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			if(coeff!=null && avecCoeff!=null && avecCoeff.booleanValue()) {
 				HorizontalLayout hl = new HorizontalLayout();
 				hl.setWidthFull();
-				Label libCoeffLabel = new Label(getTranslation("notes.coeff"));
+				NativeLabel libCoeffLabel = new NativeLabel(getTranslation("notes.coeff"));
 				libCoeffLabel.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				hl.add(libCoeffLabel);
-				Label coeffLabel = new Label(Utils.displayBigDecimal(coeff));
+				NativeLabel coeffLabel = new NativeLabel(Utils.displayBigDecimal(coeff));
 				coeffLabel.setWidthFull();
 				hl.add(libCoeffLabel);
 				hl.add(coeffLabel);
@@ -1033,10 +1064,10 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			if(o.getObjet().getCreditsEctsFinaux()!=null && avecECTS) {
 				HorizontalLayout hl = new HorizontalLayout();
 				hl.setWidthFull();
-				Label libECTSLabel = new Label(getTranslation("notes.ects"));
+				NativeLabel libECTSLabel = new NativeLabel(getTranslation("notes.ects"));
 				libECTSLabel.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				hl.add(libECTSLabel);
-				Label ectsLabel = new Label(Utils.displayBigDecimal(o.getObjet().getCreditsEctsFinaux()));
+				NativeLabel ectsLabel = new NativeLabel(Utils.displayBigDecimal(o.getObjet().getCreditsEctsFinaux()));
 				ectsLabel.setWidthFull();
 				hl.add(libECTSLabel);
 				hl.add(ectsLabel);
@@ -1049,7 +1080,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			if(s1 != null) {
 				HorizontalLayout session1 = new HorizontalLayout();
 				session1.setWidthFull();
-				Label labelS1 = new Label(getTranslation("notes.session.1"));
+				NativeLabel labelS1 = new NativeLabel(getTranslation("notes.session.1"));
 				labelS1.getStyle().set(CSSColorUtils.WHITE_SPACE, CSSColorUtils.NOWRAP);
 				labelS1.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				session1.add(labelS1);
@@ -1061,7 +1092,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			if(s2 != null) {
 				HorizontalLayout session2 = new HorizontalLayout();
 				session2.setWidthFull();
-				Label labelS2 = new Label(getTranslation("notes.session.2"));
+				NativeLabel labelS2 = new NativeLabel(getTranslation("notes.session.2"));
 				labelS2.getStyle().set(CSSColorUtils.WHITE_SPACE, CSSColorUtils.NOWRAP);
 				labelS2.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				session2.add(labelS2);
@@ -1074,7 +1105,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 			if(sf != null) {
 				HorizontalLayout sessionFinale = new HorizontalLayout();
 				sessionFinale.setWidthFull();
-				Label labelSF = new Label(getTranslation("notes.session.finale"));
+				NativeLabel labelSF = new NativeLabel(getTranslation("notes.session.finale"));
 				labelSF.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
 				sessionFinale.add(labelSF);
 				sessionFinale.add(sf);
@@ -1203,7 +1234,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
 
 		// Si l'objet est capitalisé et qu'un libellé court est défini
 		if(o!=null && o.getObjet()!=null && o.getObjet().getAcquisCapitalise() != null && o.getObjet().getAcquisCapitalise().booleanValue() 
-			&& (compact ?  StringUtils.hasText(getTranslation("inscription.element.capitalise.court")) : StringUtils.hasText(getTranslation("inscription.element.capitalise.long")))) {
+				&& (compact ?  StringUtils.hasText(getTranslation("inscription.element.capitalise.court")) : StringUtils.hasText(getTranslation("inscription.element.capitalise.long")))) {
 			l.add(createLabelResult(compact ? getTranslation("inscription.element.capitalise.court") : getTranslation("inscription.element.capitalise.long")));
 		}
 
