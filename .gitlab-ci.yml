@@ -7,6 +7,11 @@ variables:
   MAVEN_IMAGE: maven:3-openjdk-17
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
 
+⚙️ verify:
+  before_script:
+    - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
+    - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties  
+
 # include:
 #   - project: 'dn-sied/ci-config'
 #     file: '/.gitlab-ci-template-jdk17.yml'
@@ -14,10 +19,10 @@ variables:
 # variables:
 #   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
 
-build:
-  before_script:
-    - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
-    - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
+# build:
+#   before_script:
+#     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
+#     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
 
 # .build_image:
 #   image : 
