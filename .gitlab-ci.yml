@@ -14,10 +14,10 @@ variables:
 # variables:
 #   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
 
-# build:
-#   before_script:
-#     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
-#     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
+build:
+  before_script:
+    - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
+    - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
 
 # .build_image:
 #   image : 
