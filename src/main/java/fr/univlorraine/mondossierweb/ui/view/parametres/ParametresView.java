@@ -216,6 +216,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 											log.info("Image {} mimeType : {} length : {}", fileName, event.getMIMEType(),event.getContentLength());
 											// Maj de l'image
+											
 											try {
 												blobValues.put(uploadImg.getId().get(), fileData.readAllBytes());
 												Timestamp timestamp = new Timestamp(System.currentTimeMillis());
