@@ -3,6 +3,7 @@ node/
 node_modules/
 frontend/generated/
 src/main/dev-bundle/
+src/main/bundles/
 /target/
 webpack.generated.js
 drivers/
