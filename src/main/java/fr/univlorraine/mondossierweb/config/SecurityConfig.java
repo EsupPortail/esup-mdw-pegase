@@ -17,7 +17,7 @@
  *
  */
 package fr.univlorraine.mondossierweb.config;
-
+ 
 import org.apereo.cas.client.session.SingleSignOutFilter;
 import org.apereo.cas.client.session.SingleSignOutHttpSessionListener;
 import org.apereo.cas.client.validation.Cas30ServiceTicketValidator;
@@ -97,6 +97,7 @@ public class SecurityConfig {
 
 				/* Gestionnaire d'erreurs Spring */
 				.requestMatchers(new AntPathRequestMatcher("/error"))
+				
 				/* Service Worker */
 				.requestMatchers(new AntPathRequestMatcher("/sw*.js"));
 
@@ -105,9 +106,8 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((requests) -> requests.requestMatchers(SecurityUtil::isFrameworkInternalRequest).permitAll()
-				/* sonde liveness */
+				/* sonde liveness et readiness*/
 				.requestMatchers(new AntPathRequestMatcher("/actuator/health/liveness")).permitAll()
-				/* sonde readiness */
 				.requestMatchers(new AntPathRequestMatcher("/actuator/health/readiness")).permitAll()
 				/* Les autres requêtes doivent être authentifiées */
 				.anyRequest().authenticated()).httpBasic(Customizer.withDefaults());
@@ -206,7 +206,7 @@ public class SecurityConfig {
 	}
 
 	/* Filtre permettant de prendre le rôle d'un autre utilisateur */
-
+	/*
 	@Bean
 	public SwitchUserFilter switchUserFilter() {
 		final SwitchUserFilter filter = new SwitchUserFilter();
@@ -218,11 +218,11 @@ public class SecurityConfig {
 		final RequestMatcher impersonateLogoutMatcher = new AntPathRequestMatcher(SWITCH_USER_EXIT_URL, null, true, new UrlPathHelper());
 		filter.setExitUserMatcher(impersonateLogoutMatcher);
 
-		/** TODO A modifier après résolution du bug --> https://github.com/spring-projects/spring-security/issues/12504 */
+		// TODO A modifier après résolution du bug --> https://github.com/spring-projects/spring-security/issues/12504 
 		filter.setSecurityContextRepository(new DelegatingSecurityContextRepository(new HttpSessionSecurityContextRepository(), new RequestAttributeSecurityContextRepository()));
 
 		filter.setTargetUrl("/");
 		return filter;
-	}
+	}*/
 
 }
