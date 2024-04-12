@@ -233,9 +233,9 @@ public class PegaseService implements Serializable {
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
-			// Maj du token pour récupérer le dernier token valide
-			insApiInsExt.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
+				// Maj du token pour récupérer le dernier token valide
+				insApiInsExt.getApiClient().setBearerToken(accessTokenService.getToken());
 				// Appel de l'API Pégase
 				ApprenantEtInscriptions dossier = insApiInsExt.lireInscriptions(etablissement, codeApprenant);
 				if(dossier != null) {
