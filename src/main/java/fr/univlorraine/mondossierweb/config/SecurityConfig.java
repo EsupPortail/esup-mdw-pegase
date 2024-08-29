@@ -17,7 +17,7 @@
  *
  */
 package fr.univlorraine.mondossierweb.config;
-
+ 
 import org.apereo.cas.client.session.SingleSignOutFilter;
 import org.apereo.cas.client.session.SingleSignOutHttpSessionListener;
 import org.apereo.cas.client.validation.Cas30ServiceTicketValidator;
@@ -41,7 +41,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
-import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -80,61 +79,50 @@ public class SecurityConfig {
 	@Autowired
 	private AuthenticationConfiguration configuration;
 
-
 	@Value("${app.url}")
 	private String appUrl;
 	@Value("${cas.url}")
 	private String casUrl;
 	@Value("${cas.key}")
 	private String casKey;
-	
-
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return web -> web.ignoring()
-			/* Vaadin Flow */
-			.requestMatchers("/VAADIN/**")
-			
-			/* Favicon */
-			.requestMatchers("/favicon.ico")
-			.requestMatchers("/favicon-*.png")
-			.requestMatchers(new AntPathRequestMatcher("/images/*.png"))
-			
-			/* Gestionnaire d'erreurs Spring */
-			.requestMatchers(new AntPathRequestMatcher("/error"))
-			/* Service Worker */
-			.requestMatchers(new AntPathRequestMatcher("/sw*.js"));
+				/* Vaadin Flow */
+				.requestMatchers("/VAADIN/**")
 
+				/* Favicon */
+				.requestMatchers("/favicon.ico").requestMatchers("/favicon-*.png").requestMatchers(new AntPathRequestMatcher("/images/*.png"))
+
+				/* Gestionnaire d'erreurs Spring */
+				.requestMatchers(new AntPathRequestMatcher("/error"))
+				
+				/* Service Worker */
+				.requestMatchers(new AntPathRequestMatcher("/sw*.js"));
 
 	}
 
 	@Bean
 	public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
-		http
-			.authorizeHttpRequests((requests) -> requests
-				.requestMatchers(SecurityUtil::isFrameworkInternalRequest).permitAll()
-				/* Autorise l'usurpation de compte pour les admins */
-				/*.requestMatchers(new AntPathRequestMatcher(SWITCH_USER_URL)).hasAuthority(Role.SWITCH_USER)
-				.requestMatchers(new AntPathRequestMatcher(SWITCH_USER_EXIT_URL)).hasAuthority(SwitchUserFilter.ROLE_PREVIOUS_ADMINISTRATOR)*/
+		http.authorizeHttpRequests((requests) -> requests.requestMatchers(SecurityUtil::isFrameworkInternalRequest).permitAll()
+				/* sonde liveness et readiness*/
+				.requestMatchers(new AntPathRequestMatcher("/actuator/health/liveness")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/actuator/health/readiness")).permitAll()
 				/* Les autres requêtes doivent être authentifiées */
-				.anyRequest().authenticated())
-			.httpBasic(Customizer.withDefaults());
+				.anyRequest().authenticated()).httpBasic(Customizer.withDefaults());
 
 		/* Configure les filtres */
 		final AccessDeniedHandlerImpl accessDeniedHandler = new AccessDeniedHandlerImpl();
 		accessDeniedHandler.setErrorPage("/unauthorized");
 		http.exceptionHandling(exceptionHandling -> {
-			exceptionHandling.authenticationEntryPoint(casAuthenticationEntryPoint())
-				.accessDeniedHandler(accessDeniedHandler);
+			exceptionHandling.authenticationEntryPoint(casAuthenticationEntryPoint()).accessDeniedHandler(accessDeniedHandler);
 		});
-		
+
 		/* Ajoute les filtres */
-		http.addFilter(casAuthenticationFilter())
-			.addFilterAfter(new MDCAuthenticationFilter(), CasAuthenticationFilter.class)
-			.addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class)
-			.addFilterBefore(logoutFilter(), LogoutFilter.class);
-			//.addFilterAfter(switchUserFilter(), AuthorizationFilter.class);
+		http.addFilter(casAuthenticationFilter()).addFilterAfter(new MDCAuthenticationFilter(), CasAuthenticationFilter.class).addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class)
+				.addFilterBefore(logoutFilter(), LogoutFilter.class);
+		// .addFilterAfter(switchUserFilter(), AuthorizationFilter.class);
 
 		/* La protection Spring Security contre le Cross Scripting Request Forgery est désactivée, Vaadin implémente sa propre protection */
 		http.csrf(csrf -> csrf.disable());
@@ -186,9 +174,7 @@ public class SecurityConfig {
 		return filter;
 	}
 
-	/**
-	 * N'enregistre pas les requêtes internes Vaadin.
-	 */
+	/** N'enregistre pas les requêtes internes Vaadin. */
 	@Bean
 	public RequestCache requestCache() {
 		final HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
@@ -200,11 +186,9 @@ public class SecurityConfig {
 
 	@Bean
 	public LogoutFilter logoutFilter() {
-		final LogoutFilter logoutFilter = new LogoutFilter(
-			casUrl + LOGOUT_URL,
-			new SecurityContextLogoutHandler(),
-			new CookieClearingLogoutHandler(AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY),
-			(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) -> VaadinSession.getAllSessions(request.getSession()).forEach(VaadinSession::close));
+		final LogoutFilter logoutFilter = new LogoutFilter(casUrl + LOGOUT_URL, new SecurityContextLogoutHandler(),
+				new CookieClearingLogoutHandler(AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY), (final HttpServletRequest request, final HttpServletResponse response,
+						final Authentication authentication) -> VaadinSession.getAllSessions(request.getSession()).forEach(VaadinSession::close));
 		logoutFilter.setFilterProcessesUrl(LOGOUT_URL);
 		return logoutFilter;
 	}
@@ -222,7 +206,7 @@ public class SecurityConfig {
 	}
 
 	/* Filtre permettant de prendre le rôle d'un autre utilisateur */
-
+	/*
 	@Bean
 	public SwitchUserFilter switchUserFilter() {
 		final SwitchUserFilter filter = new SwitchUserFilter();
@@ -234,12 +218,11 @@ public class SecurityConfig {
 		final RequestMatcher impersonateLogoutMatcher = new AntPathRequestMatcher(SWITCH_USER_EXIT_URL, null, true, new UrlPathHelper());
 		filter.setExitUserMatcher(impersonateLogoutMatcher);
 
-		/** TODO A modifier après résolution du bug --> https://github.com/spring-projects/spring-security/issues/12504 */
+		// TODO A modifier après résolution du bug --> https://github.com/spring-projects/spring-security/issues/12504 
 		filter.setSecurityContextRepository(new DelegatingSecurityContextRepository(new HttpSessionSecurityContextRepository(), new RequestAttributeSecurityContextRepository()));
 
 		filter.setTargetUrl("/");
 		return filter;
-	}
-
+	}*/
 
 }

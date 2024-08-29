@@ -18,14 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.services;
 
-import java.io.File;
-import java.io.Serializable;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
@@ -33,15 +25,19 @@ import fr.univlorraine.pegase.api.chc.CursusDcaApi;
 import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.api.insext.InscriptionsApi;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
-import fr.univlorraine.pegase.api.insgestion.FluxInscriptionsApi;
 import fr.univlorraine.pegase.api.pai.PaiApi;
 import fr.univlorraine.pegase.model.chc.CursusDCA;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
-import fr.univlorraine.pegase.model.insgestion.Pageable;
-import fr.univlorraine.pegase.model.insgestion.VueInscriptions;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.io.File;
+import java.io.Serializable;
+import java.util.List;
 
 
 @Service
@@ -74,7 +70,8 @@ public class PegaseService implements Serializable {
 	private transient ApiClient apiClientIns = new ApiClient();
 	private transient ApprenantsApi appApiIns = new ApprenantsApi();
 	private transient fr.univlorraine.pegase.api.insgestion.InscriptionsApi insApiIns = new fr.univlorraine.pegase.api.insgestion.InscriptionsApi();
-	private transient FluxInscriptionsApi fluxInsApiIns = new FluxInscriptionsApi();
+	// fluxInsApiIns en commentaire car non utilisé -> utilisation de insApiInsExt
+	//private transient FluxInscriptionsApi fluxInsApiIns = new FluxInscriptionsApi();
 
 	// INS-EXT API
 	private transient ApiClient apiClientInsExt = new ApiClient();
@@ -170,7 +167,7 @@ public class PegaseService implements Serializable {
 		// Init INS
 		apiClientIns.setBasePath(apiInsUrl);
 		insApiIns.setApiClient(apiClientIns);
-		fluxInsApiIns.setApiClient(apiClientIns);
+		//fluxInsApiIns.setApiClient(apiClientIns);
 		appApiIns.setApiClient(apiClientIns);
 
 		// Init INS-EXT
@@ -200,7 +197,7 @@ public class PegaseService implements Serializable {
 	 * @param codeApprenant
 	 * @return
 	 */
-	public VueInscriptions recupererFluxDossierApprenant(String codeApprenant) {
+	/*public VueInscriptions recupererFluxDossierApprenant(String codeApprenant) {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
@@ -228,14 +225,14 @@ public class PegaseService implements Serializable {
 			}
 		}
 		return null;
-	}
+	}*/
 
 	public ApprenantEtInscriptions recupererDossierApprenant(String codeApprenant) {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
-			// Maj du token pour récupérer le dernier token valide
-			insApiInsExt.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
+				// Maj du token pour récupérer le dernier token valide
+				insApiInsExt.getApiClient().setBearerToken(accessTokenService.getToken());
 				// Appel de l'API Pégase
 				ApprenantEtInscriptions dossier = insApiInsExt.lireInscriptions(etablissement, codeApprenant);
 				if(dossier != null) {

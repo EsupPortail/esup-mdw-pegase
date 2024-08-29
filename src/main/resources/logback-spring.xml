@@ -34,6 +34,7 @@
 	<!-- <property resource="META-INF/build-info.properties" /> -->
 
 	<springProperty scope="context" name="APP_URL" source="app.url" />
+	<springProperty scope="context" name="BUILD_NAME" source="build.name" />
 	<springProperty scope="context" name="BUILD_ARTIFACT" source="build.artifact" />
 	<springProperty scope="context" name="MAIL_HOST" source="spring.mail.host" />
 	<springProperty scope="context" name="MAIL_PORT" source="spring.mail.port" />
@@ -74,7 +75,7 @@
 
 		<from>${MAIL_FROM}</from>
 		<to>${MAIL_TO}</to>
-		<subject>[${build.name}] Alerte provenant de ${APP_URL}</subject>
+		<subject>[${BUILD_NAME}]  Alerte provenant de ${APP_URL}</subject>
 		<asynchronousSending>false</asynchronousSending>
 
 		<layout class="ch.qos.logback.classic.html.HTMLLayout" />
