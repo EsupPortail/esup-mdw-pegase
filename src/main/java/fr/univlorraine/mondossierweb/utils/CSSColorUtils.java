@@ -28,8 +28,6 @@ import com.helger.css.utils.CSSColorHelper;
  */
 public final class CSSColorUtils {
 
-	private static final String PATTERN_HEX_COLOR_SHORT = "^#[0-9a-fA-F]{3}$";
-	private static final String PATTERN_HEX_COLOR_LONG = "^#[0-9a-fA-F]{6}$";
 	public static final String SECOND_COLOR = "var(--second-color)";
 	public static final String MAIN_COLOR = "var(--main-color)";
 	public static final String BTN_COLOR = "var(--btn-color)";
@@ -52,6 +50,8 @@ public final class CSSColorUtils {
 	public static final String MARGIN_BOTTOM = "margin-bottom";
 	public static final String AUTO = "auto";
 	public static final String FONT_WEIGHT = "font-weight";
+	public static final String FONT_SIZE = "font-size";
+	public static final String FONT_SIZE_SMALL = "small";
 	public static final String NOWRAP = "nowrap";
 	public static final String FLEW_FLOW = "flex-flow";
 	public static final String ROW_WRAP = "row wrap";
@@ -61,6 +61,8 @@ public final class CSSColorUtils {
 	public static final String EM_0_5 = "0.5em";
 	public static final String SOLID_LIGHTGRAY = "1px solid lightgray";
 	public static final String AUTO_1EM = "0.1em auto 0.1em 1em";
+	private static final String PATTERN_HEX_COLOR_SHORT = "^#[0-9a-fA-F]{3}$";
+	private static final String PATTERN_HEX_COLOR_LONG = "^#[0-9a-fA-F]{6}$";
 
 	private CSSColorUtils() {
 	}

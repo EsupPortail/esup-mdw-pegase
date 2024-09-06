@@ -18,10 +18,13 @@
  */
 package fr.univlorraine.mondossierweb.controllers;
 
+import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
+import fr.univlorraine.mondossierweb.services.PreferencesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
-import fr.univlorraine.mondossierweb.services.PreferencesService;
+import java.util.*;
 
 @Component
 public class ConfigController {
@@ -48,13 +51,9 @@ public class ConfigController {
 
 	private static final String HELP_URL = "HELP_URL";
 
-	private static final String LDAP_CODETU_ATTRIBUTE = "LDAP_CODETU_ATTRIBUTE";
+	private static final String CAS_CODETU_ATTRIBUTE = "CAS_CODETU_ATTRIBUTE";
 
-	private static final String LDAP_FILTRE_ETUDIANT = "LDAP_FILTRE_ETUDIANT";
-
-	private static final String LDAP_FILTRE_GESTIONNAIRE = "LDAP_FILTRE_GESTIONNAIRE";
-
-	private static final String LDAP_MAIL_ATTRIBUTE = "LDAP_MAIL_ATTRIBUTE";
+	private static final String CAS_MAIL_ATTRIBUTE = "CAS_MAIL_ATTRIBUTE";
 	
 	private static final String UNIV_LOGO_IMG = "UNIV_LOGO_IMG";
 	
@@ -70,13 +69,13 @@ public class ConfigController {
 
 	private static final String INSCRIPTION_STATUTS = "INSCRIPTION_STATUTS";
 
-	private static final String LDAP_DISPLAYNAME_ATTRIBUTE = "LDAP_DISPLAYNAME_ATTRIBUTE";
+	private static final String CAS_DISPLAYNAME_ATTRIBUTE = "CAS_DISPLAYNAME_ATTRIBUTE";
 	
 	private static final String INFO_CONNEXION = "INFO_CONNEXION";
 	
 	private static final String INFO_CONNEXION_PREF = "INFO_CONNEXION_PREF";
 	
-	private static final String ETUDIANT_MAIL_LDAP = "ETUDIANT_MAIL_LDAP";
+	private static final String ETUDIANT_MAIL_CAS = "ETUDIANT_MAIL_CAS";
 	
 	private static final String ETUDIANT_RESUME = "ETUDIANT_RESUME";
 	
@@ -139,6 +138,10 @@ public class ConfigController {
 	private static final String CSS_BTN_COLOR = "CSS_BTN_COLOR";
 	
 	private static final String CSS_BACKGROUND_COLOR = "CSS_BACKGROUND_COLOR";
+
+	private static final String CAS_FILTRE_ETUDIANT = "CAS_FILTRE_ETUDIANT";
+
+	private static final String CAS_FILTRE_GESTIONNAIRE = "CAS_FILTRE_GESTIONNAIRE";
 	
 
 
@@ -151,8 +154,8 @@ public class ConfigController {
 	public boolean isInfoConnexionPrefActif() {
 		return getBooleanValueForParameter(INFO_CONNEXION_PREF);
 	}
-	public boolean isEtudiantMailLdapActif() {
-		return getBooleanValueForParameter(ETUDIANT_MAIL_LDAP);
+	public boolean isEtudiantMailCasActif() {
+		return getBooleanValueForParameter(ETUDIANT_MAIL_CAS);
 	}
 	public boolean isEtudiantResumeActif() {
 		return getBooleanValueForParameter(ETUDIANT_RESUME);
@@ -208,20 +211,14 @@ public class ConfigController {
 	public String getHelpUrl() {
 		return getStringValueForParameter(HELP_URL);
 	}
-	public String getLdapCodEtuAttribute() {
-		return getStringValueForParameter(LDAP_CODETU_ATTRIBUTE);
+	public String getCasCodEtuAttribute() {
+		return getStringValueForParameter(CAS_CODETU_ATTRIBUTE);
 	}
-	public String getLdapFiltreEtudiant() {
-		return getStringValueForParameter(LDAP_FILTRE_ETUDIANT);
+	public String getCasMailAttribute() {
+		return getStringValueForParameter(CAS_MAIL_ATTRIBUTE);
 	}
-	public String getLdapFiltreGestionnaire() {
-		return getStringValueForParameter(LDAP_FILTRE_GESTIONNAIRE);
-	}
-	public String getLdapMailAttribute() {
-		return getStringValueForParameter(LDAP_MAIL_ATTRIBUTE);
-	}
-	public String getLdapDisplayNameAttribute() {
-		return getStringValueForParameter(LDAP_DISPLAYNAME_ATTRIBUTE);
+	public String getCasDisplayNameAttribute() {
+		return getStringValueForParameter(CAS_DISPLAYNAME_ATTRIBUTE);
 	}
 	public byte[] getUnivLogoImg() {
 		return getByteValueForParameter(UNIV_LOGO_IMG);
@@ -322,11 +319,39 @@ public class ConfigController {
 	public String getCssBackgroundColor() {
 		return getStringValueForParameter(CSS_BACKGROUND_COLOR);
 	}
-	
-	
+	public Map<String, List<String>> getCasFiltreEtudiant() {
+		return getKeyValuesForParameter(CAS_FILTRE_ETUDIANT);
+	}
+	public Map<String, List<String>> getCasFiltreGestionnaire() {
+		return getKeyValuesForParameter(CAS_FILTRE_GESTIONNAIRE);
+	}
+
+
+	/**
+	 *
+	 * @param parametre
+	 * @return la map correspondant au paramètre de type Key->Values
+	 */
+	private Map<String, List<String>> getKeyValuesForParameter(String parametre){
+		Map<String, List<String>> kv = new HashMap<String, List<String>>();
+		PreferencesApplication pa = prefService.getPreferences(parametre);
+		if(pa != null && StringUtils.hasText(pa.getValeur()) && pa.getValeur().contains("=")) {
+			String key = pa.getValeur().split("=")[0];
+			String values = pa.getValeur().split("=")[1];
+			if(StringUtils.hasText(values)) {
+				String[] tvalues = values.split(";");
+				List<String> list = Arrays.asList(tvalues);
+				kv.put(key, list);
+			} else {
+				kv.put(key, new ArrayList<String>());
+			}
+		}
+		return kv;
+	}
+
 	/**
 	 * 
-	 * @param parameter
+	 * @param parametre
 	 * @return la valeur d'un parametre de type Secret
 	 */
 	private String getSecretValueForParameter(String parametre){
@@ -335,7 +360,7 @@ public class ConfigController {
 	
 	/**
 	 * 
-	 * @param parameter
+	 * @param parametre
 	 * @return la valeur d'un parametre de type Blob
 	 */
 	private byte[] getByteValueForParameter(String parametre){
@@ -344,7 +369,7 @@ public class ConfigController {
 	
 	/**
 	 * 
-	 * @param parameter
+	 * @param parametre
 	 * @return la valeur d'un parametre de type String
 	 */
 	private String getStringValueForParameter(String parametre){
@@ -353,7 +378,7 @@ public class ConfigController {
 	
 	/**
 	 * 
-	 * @param parameter
+	 * @param parametre
 	 * @return la valeur d'un parametre de type booleen
 	 */
 	private boolean getBooleanValueForParameter(String parametre){

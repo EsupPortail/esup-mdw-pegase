@@ -18,13 +18,16 @@
  */
 package fr.univlorraine.mondossierweb.services;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import com.vaadin.flow.server.ServiceInitEvent;
+import com.vaadin.flow.server.VaadinServiceInitListener;
+import com.vaadin.flow.server.VaadinSession;
+import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
+import fr.univlorraine.mondossierweb.ui.view.error.AccessDeniedView;
+import fr.univlorraine.mondossierweb.utils.Utils;
+import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.RolesAllowed;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.expression.BeanFactoryResolver;
@@ -45,28 +48,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.vaadin.flow.server.ServiceInitEvent;
-import com.vaadin.flow.server.VaadinServiceInitListener;
-import com.vaadin.flow.server.VaadinSession;
-
-import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
-import fr.univlorraine.mondossierweb.ui.view.error.AccessDeniedView;
-import fr.univlorraine.mondossierweb.utils.Utils;
-import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.security.RolesAllowed;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
 @SuppressWarnings("serial")
 public class SecurityService implements VaadinServiceInitListener {
 
-	@Autowired
-	private transient BeanFactory beanFactory;
-
 	private final transient SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
 	private final transient StandardEvaluationContext evaluationContext = new StandardEvaluationContext();
+	@Autowired
+	private transient BeanFactory beanFactory;
 
 	@PostConstruct
 	private void init() {
@@ -95,6 +92,9 @@ public class SecurityService implements VaadinServiceInitListener {
 
 	public Optional<String> getUsername() {
 		return getAuthentication().map(Authentication::getName);
+	}
+	public Optional<String> getMail() {
+		return  getPrincipal().map(Utilisateur::getMail);
 	}
 
 	public Optional<String> getCodeEtudiant() {

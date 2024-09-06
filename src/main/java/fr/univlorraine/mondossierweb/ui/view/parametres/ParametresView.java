@@ -18,30 +18,17 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.parametres;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.util.StringUtils;
-
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.NativeLabel;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -58,18 +45,10 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
-
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCategorie;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
-import fr.univlorraine.mondossierweb.services.AccessTokenService;
-import fr.univlorraine.mondossierweb.services.AppUserDetailsService;
-import fr.univlorraine.mondossierweb.services.CssService;
-import fr.univlorraine.mondossierweb.services.LdapService;
-import fr.univlorraine.mondossierweb.services.ParametrageService;
-import fr.univlorraine.mondossierweb.services.PegaseService;
-import fr.univlorraine.mondossierweb.services.PreferencesService;
-import fr.univlorraine.mondossierweb.services.SecurityService;
+import fr.univlorraine.mondossierweb.services.*;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
@@ -81,6 +60,17 @@ import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.util.StringUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Secured(SecurityUtils.ROLE_SUPERADMIN)
 @Route(layout = MainLayout.class)
@@ -90,6 +80,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 	private static final String TYPE_BOOLEAN = "BOOLEAN";
 	private static final String TYPE_LIST_STRING = "LIST_STRING";
+	private static final String TYPE_KEY_VALUES = "KEY_VALUES";
 	private static final String TYPE_IMG = "IMAGE";
 	private static final String TRUE_VALUE = "true";
 	private static final Integer LDAP_ID = 1;
@@ -101,8 +92,16 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final Integer CSS_PARAM = 10;
 	private static final Integer AFFICHAGE_PARAM = 6;
 	private static final String PARAMETRES_BUTTON_SYNC = "parametres.button-sync";
-	private static final String REFRESH_PARAMETERS = "refreshParameters";
+	private static final String PARAMETRES_BADGES_TEXTFIELD = "parametres.badges-tf";
+	private static final String PARAMETRES_BADGES_LABEL = "parametres.badges-label";
 
+	private static final String REFRESH_PARAMETERS = "refreshParameters";
+	private static final String PREFIX_SAISIE_BADGES = "_V";
+	@Getter
+	private final TextHeader header = new TextHeader();
+	private final TextField docUrlTF = new TextField();
+	private final TextField assistanceUrlTF = new TextField();
+	private final VerticalLayout parametresLayout = new VerticalLayout();
 	@Autowired
 	private transient PreferencesService prefService;
 	@Autowired
@@ -113,16 +112,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private transient PegaseService pegaseService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
-
 	@Getter
 	private String pageTitle = "";
-	@Getter
-	private final TextHeader header = new TextHeader();
-	private final TextField docUrlTF = new TextField();
-	private final TextField assistanceUrlTF = new TextField();
-
-	private final VerticalLayout parametresLayout = new VerticalLayout();
-
 	private List<Button> buttonsEditer = new LinkedList<> ();
 	private List<Button> buttonsAnnuler = new LinkedList<> ();
 	private List<Button> buttonsEnregistrer = new LinkedList<> ();
@@ -245,14 +236,54 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 										uploadImg.setVisible(false);
 										categorieLayout.add(uploadImg);
 									} else {
-										TextField tf = new TextField(p.getPrefDesc());
-										tf.setId(p.getPrefId());
-										tf.setWidthFull();
-										if(p.getValeur()!=null) {
-											tf.setValue(p.getValeur());
+										// S'il s'agit d'un couple clé -> liste de valeurs
+										if(p.getType().getTypeId().equals(TYPE_KEY_VALUES)){
+											TextField keytf = new TextField(p.getPrefDesc());
+											keytf.setWidthFull();
+											keytf.setId(p.getPrefId() + "_K");
+											if(p.getValeur() != null && p.getValeur().contains("=")) {
+												keytf.setValue(p.getValeur().split("=")[0]);
+											}
+											keytf.setReadOnly(true);
+											categorieLayout.add(keytf);
+
+											HorizontalLayout badges = new HorizontalLayout();
+											badges.getStyle().set("flex-wrap", "wrap");
+											TextField valuestf = new TextField();
+											valuestf.setWidthFull();
+											valuestf.setPlaceholder(getTranslation(PARAMETRES_BADGES_TEXTFIELD));
+											valuestf.setId(p.getPrefId() + PREFIX_SAISIE_BADGES);
+											valuestf.addKeyDownListener(Key.ENTER,e -> {
+												Span filterBadge = createBadge(valuestf.getValue());
+												badges.add(filterBadge);
+												valuestf.clear();
+											});
+											valuestf.setReadOnly(true);
+											valuestf.setVisible(false);
+											NativeLabel badgesLabel = new NativeLabel(getTranslation(PARAMETRES_BADGES_LABEL));
+											badgesLabel.getStyle().set(CSSColorUtils.FONT_SIZE, CSSColorUtils.FONT_SIZE_SMALL);
+											badgesLabel.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+											badges.add(badgesLabel);
+											// Initialisation des badges avec les valeurs en BDD
+											if(p.getValeur() != null && p.getValeur().contains("=")) {
+												String values = p.getValeur().split("=")[1];
+												for(String value : Arrays.asList(values.split(";"))){
+													badges.add(createBadge(value));
+												}
+											}
+											categorieLayout.add(badges);
+											categorieLayout.add(valuestf);
+
+										} else {
+											TextField tf = new TextField(p.getPrefDesc());
+											tf.setId(p.getPrefId());
+											tf.setWidthFull();
+											if (p.getValeur() != null) {
+												tf.setValue(p.getValeur());
+											}
+											tf.setReadOnly(true);
+											categorieLayout.add(tf);
 										}
-										tf.setReadOnly(true);
-										categorieLayout.add(tf);
 									}
 								}
 							}
@@ -268,6 +299,35 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		}
 
 
+	}
+
+	private Span createBadge(String value) {
+		Button clearButton = new Button(VaadinIcon.CLOSE_SMALL.create());
+		clearButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST,
+				ButtonVariant.LUMO_TERTIARY_INLINE);
+		clearButton.getStyle().set("margin-inline-start",
+				"var(--lumo-space-xs)");
+		// Accessible button name
+		clearButton.getElement().setAttribute("aria-label",
+				"Clear filter: " + value);
+		// Tooltip
+		clearButton.getElement().setAttribute("title",
+				"Clear filter: " + value);
+
+		Span badge = new Span(new Span(value), clearButton);
+		badge.getElement().getThemeList().add("badge contrast pill");
+
+		// Add handler for removing the badge
+		clearButton.addClickListener(event -> {
+			badge.getElement().removeFromParent();
+		});
+
+		badge.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.SECOND_COLOR);
+		badge.getStyle().set(CSSColorUtils.BORDER_RADIUS, "1em");
+		badge.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
+		badge.getStyle().set(CSSColorUtils.PADDING_LEFT, "0.5em");
+		clearButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
+		return badge;
 	}
 
 	private void initButtons(VerticalLayout layout, Integer categorieId) {
@@ -331,7 +391,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		//S'il s'agit de la catégorie LDAP
 		if(categorieId.equals(LDAP_ID)) {
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
-			buttonSync.addClickListener(e -> syncServiceConfig(LdapService.class.getName(),REFRESH_PARAMETERS));
+			buttonSync.addClickListener(e -> syncServiceConfig(CasService.class.getName(),REFRESH_PARAMETERS));
 			layout.add(syncButtonLayout);
 		}
 		//S'il s'agit de la catégorie Pégase Access-token
@@ -476,6 +536,10 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		}
 		if(c instanceof TextField) {
 			TextField tf = (TextField) c;
+			// Si c'est une tf de saisie de valeurs/badges
+			if(tf.getId().get().endsWith(PREFIX_SAISIE_BADGES)) {
+				tf.setVisible(!readonly);
+			}
 			tf.setReadOnly(readonly);
 		}
 		if(c instanceof PasswordField) {
