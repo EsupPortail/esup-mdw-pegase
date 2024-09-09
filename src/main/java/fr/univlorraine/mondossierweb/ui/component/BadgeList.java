@@ -19,11 +19,14 @@ public class BadgeList extends HorizontalLayout {
 
     public BadgeList(String value, String titre, Boolean closable) {
         super();
-        //badges = new LinkedList<Badge>();
-        label = new NativeLabel(titre);
-        label.getStyle().set(CSSColorUtils.FONT_SIZE, CSSColorUtils.FONT_SIZE_SMALL);
-        label.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-        label.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_TXT_COLOR);
+        if(titre != null) {
+            label = new NativeLabel(titre);
+            label.getStyle().set(CSSColorUtils.FONT_SIZE, CSSColorUtils.FONT_SIZE_SMALL);
+            label.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+            label.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_TXT_COLOR);
+        } else {
+            label = null;
+        }
         this.closable = closable;
         if(value != null) {
             setValue(value);
@@ -67,7 +70,9 @@ public class BadgeList extends HorizontalLayout {
     public void setValue(String value) {
         this.removeAll();
         // AJOUT DU LABEL ET DES BADGES
-        this.add(label);
+        if(label != null) {
+            this.add(label);
+        }
         // Initialisation des badges avec les valeurs en BDD
         if(StringUtils.hasText(value)) {
             for(String v : Arrays.asList(value.split(";"))){

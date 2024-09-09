@@ -48,6 +48,7 @@ import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationVale
 import fr.univlorraine.mondossierweb.services.*;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.KeyValuesLayout;
+import fr.univlorraine.mondossierweb.ui.component.ValuesLayout;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
@@ -79,6 +80,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final String TYPE_BOOLEAN = "BOOLEAN";
 	private static final String TYPE_LIST_STRING = "LIST_STRING";
 	private static final String TYPE_KEY_VALUES = "KEY_VALUES";
+	private static final String TYPE_VALUES = "VALUES";
 	private static final String TYPE_IMG = "IMAGE";
 	private static final String TRUE_VALUE = "true";
 	private static final Integer CAS_ID = 1;
@@ -235,14 +237,20 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 											KeyValuesLayout kvl = new KeyValuesLayout(p.getPrefId(), p.getPrefDesc(), p.getValeur());
 											categorieLayout.add(kvl);
 										} else {
-											TextField tf = new TextField(p.getPrefDesc());
-											tf.setId(p.getPrefId());
-											tf.setWidthFull();
-											if (p.getValeur() != null) {
-												tf.setValue(p.getValeur());
+											// S'il s'agit d'une liste de valeurs
+											if(p.getType().getTypeId().equals(TYPE_VALUES)){
+												ValuesLayout vl = new ValuesLayout(p.getPrefId(), p.getPrefDesc(), p.getValeur());
+												categorieLayout.add(vl);
+											} else {
+												TextField tf = new TextField(p.getPrefDesc());
+												tf.setId(p.getPrefId());
+												tf.setWidthFull();
+												if (p.getValeur() != null) {
+													tf.setValue(p.getValeur());
+												}
+												tf.setReadOnly(true);
+												categorieLayout.add(tf);
 											}
-											tf.setReadOnly(true);
-											categorieLayout.add(tf);
 										}
 									}
 								}
@@ -473,6 +481,10 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			KeyValuesLayout kvl = (KeyValuesLayout) c;
 			kvl.setReadOnly(readonly);
 		}
+		if(c instanceof ValuesLayout) {
+			ValuesLayout vl = (ValuesLayout) c;
+			vl.setReadOnly(readonly);
+		}
 		if(c instanceof PasswordField) {
 			PasswordField pf = (PasswordField) c;
 			pf.setReadOnly(readonly);
@@ -504,6 +516,11 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				KeyValuesLayout kvl = (KeyValuesLayout) c;
 				PreferencesApplication pa = prefService.savePref(componentId.get(), kvl.getValue());
 				kvl.setValue(pa.getValeur());
+			}
+			if(c instanceof ValuesLayout) {
+				ValuesLayout vl = (ValuesLayout) c;
+				PreferencesApplication pa = prefService.savePref(componentId.get(), vl.getValue());
+				vl.setValue(pa.getValeur());
 			}
 			if(c instanceof PasswordField) {
 				PasswordField pf = (PasswordField) c;
@@ -563,6 +580,14 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 					kvl.setValue(value);
 				} else {
 					backupValues.put(componentId.get(), kvl.getValue());
+				}
+			}
+			if(c instanceof ValuesLayout) {
+				ValuesLayout vl = (ValuesLayout) c;
+				if(rollback) {
+					vl.setValue(value);
+				} else {
+					backupValues.put(componentId.get(), vl.getValue());
 				}
 			}
 			if(c instanceof PasswordField) {
