@@ -98,7 +98,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	private transient ConfigController configController;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
-	private transient Boolean afficherMailLdap;
+	private transient Boolean afficherMailCas;
 	@Getter
 	private String pageTitle = "";
 	// Carte pour les contacts (mail, tel) personnels
@@ -107,7 +107,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	private Card contactsUrgence;
 
 	private void initParameters() {
-		afficherMailLdap = configController.isEtudiantMailCasActif();
+		afficherMailCas = configController.isEtudiantMailCasActif();
 	}
 	
 	@PostConstruct
@@ -129,7 +129,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	 */
 	@Override
 	public void localeChange(final LocaleChangeEvent event) {
-		log.info("localeChange");
 		setViewTitle(getTranslation("coordonnees.title"));
 
 		errorLabel.setText(getTranslation("error.unknown"));
@@ -250,7 +249,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	 */
 	private void updateData(Apprenant apprenant) {
 		resetData();
-		log.info("updateDate CoordonneesView...");
 		if(apprenant == null ) {
 			this.removeAll();
 			add(errorLabel);
@@ -287,9 +285,7 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 				}
 
 			}
-			if(Boolean.TRUE.equals(afficherMailLdap)) {
-				// récupération du mail dans le ldap
-				//String mail = ldapService.getStudentMailByCodeApprenant(apprenant.getCode());
+			if(Boolean.TRUE.equals(afficherMailCas)) {
 				Optional<String> mail = securityService.getMail();
 				// Si on a récupéré un mail
 				if(mail.isPresent() && StringUtils.hasText(mail.get())) {
@@ -320,7 +316,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 			coordPersoLayout.addComponentAsFirst(contacts);
 		}
 
-		log.info("updateDate CoordonneesView DONE");
 	}
 
 	private void ajouterInfoContactPerso(ContactComplet c) {

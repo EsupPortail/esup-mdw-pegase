@@ -19,16 +19,13 @@
 package fr.univlorraine.mondossierweb.ui.view.parametres;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.NativeLabel;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -50,6 +47,7 @@ import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCate
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
 import fr.univlorraine.mondossierweb.services.*;
 import fr.univlorraine.mondossierweb.ui.component.Card;
+import fr.univlorraine.mondossierweb.ui.component.KeyValuesLayout;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
@@ -83,7 +81,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final String TYPE_KEY_VALUES = "KEY_VALUES";
 	private static final String TYPE_IMG = "IMAGE";
 	private static final String TRUE_VALUE = "true";
-	private static final Integer LDAP_ID = 1;
+	private static final Integer CAS_ID = 1;
 	private static final Integer PEGASE_ACCESS_TOKEN_ID = 2;
 	private static final Integer PEGASE_API_ID = 3;
 	private static final Integer PEGASE_PARAM = 4;
@@ -92,11 +90,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final Integer CSS_PARAM = 10;
 	private static final Integer AFFICHAGE_PARAM = 6;
 	private static final String PARAMETRES_BUTTON_SYNC = "parametres.button-sync";
-	private static final String PARAMETRES_BADGES_TEXTFIELD = "parametres.badges-tf";
-	private static final String PARAMETRES_BADGES_LABEL = "parametres.badges-label";
-
 	private static final String REFRESH_PARAMETERS = "refreshParameters";
-	private static final String PREFIX_SAISIE_BADGES = "_V";
 	@Getter
 	private final TextHeader header = new TextHeader();
 	private final TextField docUrlTF = new TextField();
@@ -205,7 +199,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 											InputStream fileData = memoryBuffer.getInputStream();
 											String fileName = event.getFileName();
 
-											log.info("Image {} mimeType : {} length : {}", fileName, event.getMIMEType(),event.getContentLength());
+											log.debug("Image {} mimeType : {} length : {}", fileName, event.getMIMEType(),event.getContentLength());
 											// Maj de l'image
 											
 											try {
@@ -238,42 +232,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 									} else {
 										// S'il s'agit d'un couple clé -> liste de valeurs
 										if(p.getType().getTypeId().equals(TYPE_KEY_VALUES)){
-											TextField keytf = new TextField(p.getPrefDesc());
-											keytf.setWidthFull();
-											keytf.setId(p.getPrefId() + "_K");
-											if(p.getValeur() != null && p.getValeur().contains("=")) {
-												keytf.setValue(p.getValeur().split("=")[0]);
-											}
-											keytf.setReadOnly(true);
-											categorieLayout.add(keytf);
-
-											HorizontalLayout badges = new HorizontalLayout();
-											badges.getStyle().set("flex-wrap", "wrap");
-											TextField valuestf = new TextField();
-											valuestf.setWidthFull();
-											valuestf.setPlaceholder(getTranslation(PARAMETRES_BADGES_TEXTFIELD));
-											valuestf.setId(p.getPrefId() + PREFIX_SAISIE_BADGES);
-											valuestf.addKeyDownListener(Key.ENTER,e -> {
-												Span filterBadge = createBadge(valuestf.getValue());
-												badges.add(filterBadge);
-												valuestf.clear();
-											});
-											valuestf.setReadOnly(true);
-											valuestf.setVisible(false);
-											NativeLabel badgesLabel = new NativeLabel(getTranslation(PARAMETRES_BADGES_LABEL));
-											badgesLabel.getStyle().set(CSSColorUtils.FONT_SIZE, CSSColorUtils.FONT_SIZE_SMALL);
-											badgesLabel.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-											badges.add(badgesLabel);
-											// Initialisation des badges avec les valeurs en BDD
-											if(p.getValeur() != null && p.getValeur().contains("=")) {
-												String values = p.getValeur().split("=")[1];
-												for(String value : Arrays.asList(values.split(";"))){
-													badges.add(createBadge(value));
-												}
-											}
-											categorieLayout.add(badges);
-											categorieLayout.add(valuestf);
-
+											KeyValuesLayout kvl = new KeyValuesLayout(p.getPrefId(), p.getPrefDesc(), p.getValeur());
+											categorieLayout.add(kvl);
 										} else {
 											TextField tf = new TextField(p.getPrefDesc());
 											tf.setId(p.getPrefId());
@@ -299,35 +259,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		}
 
 
-	}
-
-	private Span createBadge(String value) {
-		Button clearButton = new Button(VaadinIcon.CLOSE_SMALL.create());
-		clearButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST,
-				ButtonVariant.LUMO_TERTIARY_INLINE);
-		clearButton.getStyle().set("margin-inline-start",
-				"var(--lumo-space-xs)");
-		// Accessible button name
-		clearButton.getElement().setAttribute("aria-label",
-				"Clear filter: " + value);
-		// Tooltip
-		clearButton.getElement().setAttribute("title",
-				"Clear filter: " + value);
-
-		Span badge = new Span(new Span(value), clearButton);
-		badge.getElement().getThemeList().add("badge contrast pill");
-
-		// Add handler for removing the badge
-		clearButton.addClickListener(event -> {
-			badge.getElement().removeFromParent();
-		});
-
-		badge.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.SECOND_COLOR);
-		badge.getStyle().set(CSSColorUtils.BORDER_RADIUS, "1em");
-		badge.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
-		badge.getStyle().set(CSSColorUtils.PADDING_LEFT, "0.5em");
-		clearButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
-		return badge;
 	}
 
 	private void initButtons(VerticalLayout layout, Integer categorieId) {
@@ -388,8 +319,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			buttonSync.setVisible(true);
 		});
 
-		//S'il s'agit de la catégorie LDAP
-		if(categorieId.equals(LDAP_ID)) {
+		//S'il s'agit de la catégorie CAS
+		if(categorieId.equals(CAS_ID)) {
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
 			buttonSync.addClickListener(e -> syncServiceConfig(CasService.class.getName(),REFRESH_PARAMETERS));
 			layout.add(syncButtonLayout);
@@ -536,11 +467,11 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		}
 		if(c instanceof TextField) {
 			TextField tf = (TextField) c;
-			// Si c'est une tf de saisie de valeurs/badges
-			if(tf.getId().get().endsWith(PREFIX_SAISIE_BADGES)) {
-				tf.setVisible(!readonly);
-			}
 			tf.setReadOnly(readonly);
+		}
+		if(c instanceof KeyValuesLayout) {
+			KeyValuesLayout kvl = (KeyValuesLayout) c;
+			kvl.setReadOnly(readonly);
 		}
 		if(c instanceof PasswordField) {
 			PasswordField pf = (PasswordField) c;
@@ -568,6 +499,11 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				TextField tf = (TextField) c;
 				PreferencesApplication pa = prefService.savePref(componentId.get(), tf.getValue());
 				tf.setValue(pa.getValeur());
+			}
+			if(c instanceof KeyValuesLayout) {
+				KeyValuesLayout kvl = (KeyValuesLayout) c;
+				PreferencesApplication pa = prefService.savePref(componentId.get(), kvl.getValue());
+				kvl.setValue(pa.getValeur());
 			}
 			if(c instanceof PasswordField) {
 				PasswordField pf = (PasswordField) c;
@@ -607,7 +543,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			// On récupère les anciennes valeurs
 			String value = null;
 			// Si on a une valeur sauvegardée pour le composant
-			if(backupValues.containsKey(componentId.get())) {
+			if(rollback && backupValues.containsKey(componentId.get())) {
 				// récupération de la valeur stockée
 				value = backupValues.get(componentId.get());
 				// suppression de la valeur sauvegardée dans la hashMap
@@ -619,6 +555,14 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 					tf.setValue(value);
 				} else {
 					backupValues.put(componentId.get(), tf.getValue());
+				}
+			}
+			if(c instanceof KeyValuesLayout) {
+				KeyValuesLayout kvl = (KeyValuesLayout) c;
+				if(rollback) {
+					kvl.setValue(value);
+				} else {
+					backupValues.put(componentId.get(), kvl.getValue());
 				}
 			}
 			if(c instanceof PasswordField) {

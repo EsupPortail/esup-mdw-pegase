@@ -37,11 +37,16 @@ public final class CSSColorUtils {
 	public static final String MARGIN = "margin";
 	public static final String MARGIN_TOP = "margin-top";
 	public static final String WHITE = "white";
+	public static final String THIN = "thin";
 	public static final String WHITE_SPACE = "white-space";
 	public static final String BACKGROUND_COLOR = "background-color";
 	public static final String PADDING_LEFT = "padding-left";
 	public static final String PADDING_RIGHT = "padding-right";
 	public static final String BORDER_RADIUS = "border-radius";
+	public static final String BORDER_STYLE = "border-style";
+	public static final String DOTTED = "dotted";
+	public static final String NONE = "none";
+	public static final String BORDER_WIDTH = "border-width";
 	public static final String PADDING = "padding";
 	public static final String ITALIC = "italic";
 	public static final String FONT_STYLE = "font-style";
@@ -61,6 +66,7 @@ public final class CSSColorUtils {
 	public static final String EM_0_5 = "0.5em";
 	public static final String SOLID_LIGHTGRAY = "1px solid lightgray";
 	public static final String AUTO_1EM = "0.1em auto 0.1em 1em";
+	public static final String SECOND_TXT_COLOR = "var(--lumo-secondary-text-color)";
 	private static final String PATTERN_HEX_COLOR_SHORT = "^#[0-9a-fA-F]{3}$";
 	private static final String PATTERN_HEX_COLOR_LONG = "^#[0-9a-fA-F]{6}$";
 

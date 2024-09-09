@@ -81,7 +81,7 @@ public class AppUserDetailsService implements AuthenticationUserDetailsService {
 				superAdmins.add(configController.getLogMailTo());
 			}
 		}
-		log.info("Admins : {}", superAdmins);
+		log.debug("Admins : {}", superAdmins);
 	}
 
 	@Transactional
@@ -91,14 +91,14 @@ public class AppUserDetailsService implements AuthenticationUserDetailsService {
 		AttributePrincipal principal = casAssertionAuthenticationToken.getAssertion().getPrincipal();
 		Map attributes = principal.getAttributes();
 
-		log.info("Map attributes : {}", attributes);
+		log.debug("Map attributes : {}", attributes);
 
 		String username = (String) attributes.get(casService.getCasLoginAttribute());
 		String mail = (String) attributes.get(casService.getCasMailAttribute());
 		String displayName = (String) attributes.get(casService.getCasDisplayNameAttribute());
 		String supannEtuId = (String) attributes.get(casService.getCasCodEtuAttribute());
 
-		log.info("username : {}, mail : {}, displayName : {}, supannEtuId : {}", username, mail, displayName, supannEtuId);
+		log.debug("username : {}, mail : {}, displayName : {}, supannEtuId : {}", username, mail, displayName, supannEtuId);
 
 		Assert.notNull(username, "Le nom d'utilisateur ne doit pas être nul.");
 		Utilisateur utilisateur = newUtilisateur(username);
@@ -151,7 +151,7 @@ public class AppUserDetailsService implements AuthenticationUserDetailsService {
 			// récupération de la valeur de l'attribut pour l'utilisateur
 			String casAttributeValue = (String) casAttributes.get(attributeToTest);
 
-			log.info("{} casAttributeValue : {}", attributeToTest, casAttributeValue);
+			log.debug("{} casAttributeValue : {}", attributeToTest, casAttributeValue);
 			// Si l'attribut ciblé est valué pour l'utilisateur
 			if(StringUtils.hasText(casAttributeValue)) {
 				// On découpe casAttributeValue en liste au cas où ce soit un attribut multivalué
@@ -161,7 +161,7 @@ public class AppUserDetailsService implements AuthenticationUserDetailsService {
 				if (casAttributeValues != null && !casAttributeValues.isEmpty()) {
 					// Pour chaque valeur à tester
 					for (String valueToTest : casFilter.get(attributeToTest)) {
-						log.info("valueToTest : {}", valueToTest);
+						log.debug("valueToTest : {}", valueToTest);
 						// Si la valeur de l'attribut vaut "*" ou si la valeur est contenu dans la liste des valeurs de l'attribut pour l'utilisateur
 						if (valueToTest.equals("*") || casAttributeValues.contains(valueToTest)) {
 							// On considère que la condition est remplie

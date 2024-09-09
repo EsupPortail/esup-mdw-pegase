@@ -336,14 +336,21 @@ public class ConfigController {
 		Map<String, List<String>> kv = new HashMap<String, List<String>>();
 		PreferencesApplication pa = prefService.getPreferences(parametre);
 		if(pa != null && StringUtils.hasText(pa.getValeur()) && pa.getValeur().contains("=")) {
-			String key = pa.getValeur().split("=")[0];
-			String values = pa.getValeur().split("=")[1];
-			if(StringUtils.hasText(values)) {
-				String[] tvalues = values.split(";");
-				List<String> list = Arrays.asList(tvalues);
-				kv.put(key, list);
-			} else {
-				kv.put(key, new ArrayList<String>());
+			String[] t = pa.getValeur().split("=");
+			String key = null;
+			String values = null;
+			if(t.length == 2) {
+				key = t[0];
+				values = t[1];
+			}
+			if(StringUtils.hasText(key)) {
+				if (StringUtils.hasText(values)) {
+					String[] tvalues = values.split(";");
+					List<String> list = Arrays.asList(tvalues);
+					kv.put(key, list);
+				} else {
+					kv.put(key, new ArrayList<String>());
+				}
 			}
 		}
 		return kv;
