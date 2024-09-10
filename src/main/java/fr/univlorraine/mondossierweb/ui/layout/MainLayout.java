@@ -18,20 +18,7 @@
  */
 package fr.univlorraine.mondossierweb.ui.layout;
 
-import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.util.StringUtils;
-
-import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HasElement;
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -40,11 +27,7 @@ import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.NativeLabel;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -67,7 +50,6 @@ import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.shared.ui.Transport;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.controllers.SessionController;
@@ -92,6 +74,14 @@ import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.model.insext.Apprenant;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.util.StringUtils;
+
+import java.io.ByteArrayInputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Push(transport = Transport.WEBSOCKET_XHR)
 //@JsModule("./src/set-dark-mode.js")
@@ -119,6 +109,10 @@ import lombok.extern.slf4j.Slf4j;
 @Theme(variant = Lumo.LIGHT)
 public class MainLayout extends AppLayout implements AppShellConfigurator, BeforeEnterObserver, LocaleChangeObserver {
 
+	private final Tabs tabs = new Tabs();
+	private final Map<Class<? extends Component>, Tab> navigationTargetToTab = new HashMap<>();
+	private final Div navBarHeader = new Div();
+	private final Image logo = new Image();
 	@Autowired
 	private transient SecurityService securityService;
 	@Autowired
@@ -131,26 +125,16 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	private transient BuildProperties buildProperties;
 	@Autowired
 	private transient CssService cssService;
-
-
 	private transient String docUrl;
 	private transient String helpUrl;
-
 	private transient boolean affichagePopupInfo;
 	private transient boolean popupInfoDesactivable;
-
 	private transient boolean affichageResumeEtudiant;
-
-	private final Tabs tabs = new Tabs();
-	private final Map<Class<? extends Component>, Tab> navigationTargetToTab = new HashMap<>();
-
-	private final Div navBarHeader = new Div();
 	private MenuItem userMenuAproposItem;
 	private MenuItem userMenuParametresItem;
 	private MenuItem userMenuLogoutItem;
 	private NativeLabel nomPrenom = new NativeLabel();
 	private NativeLabel numeroDossier = new NativeLabel();
-	private final Image logo = new Image();
 	private byte[] imgLogo;
 
 	private void initParameters() {
@@ -233,7 +217,6 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		updateLogo();
 		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
 		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
-			log.info("Affichage popup info ?");
 			createInfoPopUp(securityService.getPrincipal().orElse(null));
 		}
 	}
@@ -273,7 +256,6 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	private void updateLogo() {
 		if(imgLogo != null) {
 			StreamResource resource = new StreamResource("", () -> new ByteArrayInputStream(imgLogo));
-			log.info("*** updateLogo ***");
 			logo.setSrc(resource);
 		}
 		logo.setHeight(Utils.LARGEUR_LOGO);
@@ -373,7 +355,6 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 			Optional<PreferencesUtilisateur> pu = prefService.getPreference(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE);
 			// Si la pop-up n'est pas désactivable par l'utilisateur ou qu'il n'a pas demandé à la désactiver
 			if(!popupInfoDesactivable || pu.isEmpty() || !Boolean.parseBoolean(pu.get().getValeur())) {
-				log.info("Affichage popup info");
 				Dialog infoDialog = new Dialog();
 				infoDialog.setCloseOnOutsideClick(true);
 				infoDialog.setCloseOnEsc(false);
@@ -397,7 +378,7 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 					checkInfo.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
 					checkInfo.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
 					checkInfo.addClickListener(e-> {
-						log.info("Enregistrement parametre Masquer message bienvenu : {}",checkInfo.getValue());
+						log.debug("Enregistrement parametre Masquer message bienvenu : {}",checkInfo.getValue());
 						prefService.saveUserPref(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE, checkInfo.getValue());
 					});
 

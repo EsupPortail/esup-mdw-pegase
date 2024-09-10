@@ -17,7 +17,13 @@
  *
  */
 package fr.univlorraine.mondossierweb.config;
- 
+
+import com.vaadin.flow.server.VaadinSession;
+import fr.univlorraine.mondossierweb.services.AppUserDetailsService;
+import fr.univlorraine.mondossierweb.utils.logging.MDCAuthenticationFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSessionEvent;
 import org.apereo.cas.client.session.SingleSignOutFilter;
 import org.apereo.cas.client.session.SingleSignOutHttpSessionListener;
 import org.apereo.cas.client.validation.Cas30ServiceTicketValidator;
@@ -45,23 +51,9 @@ import org.springframework.security.web.authentication.logout.CookieClearingLogo
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
-import org.springframework.security.web.authentication.switchuser.SwitchUserFilter;
-import org.springframework.security.web.context.DelegatingSecurityContextRepository;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.web.util.UrlPathHelper;
-
-import com.vaadin.flow.server.VaadinSession;
-
-import fr.univlorraine.mondossierweb.services.AppUserDetailsService;
-import fr.univlorraine.mondossierweb.utils.logging.MDCAuthenticationFilter;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSessionEvent;
 
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
@@ -156,10 +148,14 @@ public class SecurityConfig {
 		final CasAuthenticationProvider provider = new CasAuthenticationProvider();
 		provider.setServiceProperties(serviceProperties());
 		provider.setTicketValidator(new Cas30ServiceTicketValidator(casUrl));
-		provider.setUserDetailsService(appUserDetailsService);
+
+		//provider.setUserDetailsService(appUserDetailsService);
+		provider.setAuthenticationUserDetailsService(appUserDetailsService);
+
 		provider.setKey(casKey);
 		return provider;
 	}
+
 
 	@Bean
 	AuthenticationManager authenticationManager() throws Exception {
@@ -204,25 +200,5 @@ public class SecurityConfig {
 	public SingleSignOutHttpSessionListener singleSignOutHttpSessionListener(final HttpSessionEvent event) {
 		return new SingleSignOutHttpSessionListener();
 	}
-
-	/* Filtre permettant de prendre le rôle d'un autre utilisateur */
-	/*
-	@Bean
-	public SwitchUserFilter switchUserFilter() {
-		final SwitchUserFilter filter = new SwitchUserFilter();
-		filter.setUserDetailsService(appUserDetailsService);
-
-		final RequestMatcher impersonateLoginMatcher = new AntPathRequestMatcher(SWITCH_USER_URL, null, true, new UrlPathHelper());
-		filter.setSwitchUserMatcher(impersonateLoginMatcher);
-
-		final RequestMatcher impersonateLogoutMatcher = new AntPathRequestMatcher(SWITCH_USER_EXIT_URL, null, true, new UrlPathHelper());
-		filter.setExitUserMatcher(impersonateLogoutMatcher);
-
-		// TODO A modifier après résolution du bug --> https://github.com/spring-projects/spring-security/issues/12504 
-		filter.setSecurityContextRepository(new DelegatingSecurityContextRepository(new HttpSessionSecurityContextRepository(), new RequestAttributeSecurityContextRepository()));
-
-		filter.setTargetUrl("/");
-		return filter;
-	}*/
 
 }
