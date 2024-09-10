@@ -18,22 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.parametres;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.util.StringUtils;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -58,19 +42,13 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
-
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCategorie;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
-import fr.univlorraine.mondossierweb.services.AccessTokenService;
-import fr.univlorraine.mondossierweb.services.AppUserDetailsService;
-import fr.univlorraine.mondossierweb.services.CssService;
-import fr.univlorraine.mondossierweb.services.LdapService;
-import fr.univlorraine.mondossierweb.services.ParametrageService;
-import fr.univlorraine.mondossierweb.services.PegaseService;
-import fr.univlorraine.mondossierweb.services.PreferencesService;
-import fr.univlorraine.mondossierweb.services.SecurityService;
+import fr.univlorraine.mondossierweb.services.*;
 import fr.univlorraine.mondossierweb.ui.component.Card;
+import fr.univlorraine.mondossierweb.ui.component.KeyValuesLayout;
+import fr.univlorraine.mondossierweb.ui.component.ValuesLayout;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
@@ -81,6 +59,17 @@ import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.util.StringUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Secured(SecurityUtils.ROLE_SUPERADMIN)
 @Route(layout = MainLayout.class)
@@ -90,9 +79,11 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 	private static final String TYPE_BOOLEAN = "BOOLEAN";
 	private static final String TYPE_LIST_STRING = "LIST_STRING";
+	private static final String TYPE_KEY_VALUES = "KEY_VALUES";
+	private static final String TYPE_VALUES = "VALUES";
 	private static final String TYPE_IMG = "IMAGE";
 	private static final String TRUE_VALUE = "true";
-	private static final Integer LDAP_ID = 1;
+	private static final Integer CAS_ID = 1;
 	private static final Integer PEGASE_ACCESS_TOKEN_ID = 2;
 	private static final Integer PEGASE_API_ID = 3;
 	private static final Integer PEGASE_PARAM = 4;
@@ -102,7 +93,11 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final Integer AFFICHAGE_PARAM = 6;
 	private static final String PARAMETRES_BUTTON_SYNC = "parametres.button-sync";
 	private static final String REFRESH_PARAMETERS = "refreshParameters";
-
+	@Getter
+	private final TextHeader header = new TextHeader();
+	private final TextField docUrlTF = new TextField();
+	private final TextField assistanceUrlTF = new TextField();
+	private final VerticalLayout parametresLayout = new VerticalLayout();
 	@Autowired
 	private transient PreferencesService prefService;
 	@Autowired
@@ -113,16 +108,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private transient PegaseService pegaseService;
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
-
 	@Getter
 	private String pageTitle = "";
-	@Getter
-	private final TextHeader header = new TextHeader();
-	private final TextField docUrlTF = new TextField();
-	private final TextField assistanceUrlTF = new TextField();
-
-	private final VerticalLayout parametresLayout = new VerticalLayout();
-
 	private List<Button> buttonsEditer = new LinkedList<> ();
 	private List<Button> buttonsAnnuler = new LinkedList<> ();
 	private List<Button> buttonsEnregistrer = new LinkedList<> ();
@@ -214,7 +201,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 											InputStream fileData = memoryBuffer.getInputStream();
 											String fileName = event.getFileName();
 
-											log.info("Image {} mimeType : {} length : {}", fileName, event.getMIMEType(),event.getContentLength());
+											log.debug("Image {} mimeType : {} length : {}", fileName, event.getMIMEType(),event.getContentLength());
 											// Maj de l'image
 											
 											try {
@@ -245,14 +232,26 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 										uploadImg.setVisible(false);
 										categorieLayout.add(uploadImg);
 									} else {
-										TextField tf = new TextField(p.getPrefDesc());
-										tf.setId(p.getPrefId());
-										tf.setWidthFull();
-										if(p.getValeur()!=null) {
-											tf.setValue(p.getValeur());
+										// S'il s'agit d'un couple clé -> liste de valeurs
+										if(p.getType().getTypeId().equals(TYPE_KEY_VALUES)){
+											KeyValuesLayout kvl = new KeyValuesLayout(p.getPrefId(), p.getPrefDesc(), p.getValeur());
+											categorieLayout.add(kvl);
+										} else {
+											// S'il s'agit d'une liste de valeurs
+											if(p.getType().getTypeId().equals(TYPE_VALUES)){
+												ValuesLayout vl = new ValuesLayout(p.getPrefId(), p.getPrefDesc(), p.getValeur());
+												categorieLayout.add(vl);
+											} else {
+												TextField tf = new TextField(p.getPrefDesc());
+												tf.setId(p.getPrefId());
+												tf.setWidthFull();
+												if (p.getValeur() != null) {
+													tf.setValue(p.getValeur());
+												}
+												tf.setReadOnly(true);
+												categorieLayout.add(tf);
+											}
 										}
-										tf.setReadOnly(true);
-										categorieLayout.add(tf);
 									}
 								}
 							}
@@ -328,10 +327,10 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			buttonSync.setVisible(true);
 		});
 
-		//S'il s'agit de la catégorie LDAP
-		if(categorieId.equals(LDAP_ID)) {
+		//S'il s'agit de la catégorie CAS
+		if(categorieId.equals(CAS_ID)) {
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
-			buttonSync.addClickListener(e -> syncServiceConfig(LdapService.class.getName(),REFRESH_PARAMETERS));
+			buttonSync.addClickListener(e -> syncServiceConfig(CasService.class.getName(),REFRESH_PARAMETERS));
 			layout.add(syncButtonLayout);
 		}
 		//S'il s'agit de la catégorie Pégase Access-token
@@ -478,6 +477,14 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			TextField tf = (TextField) c;
 			tf.setReadOnly(readonly);
 		}
+		if(c instanceof KeyValuesLayout) {
+			KeyValuesLayout kvl = (KeyValuesLayout) c;
+			kvl.setReadOnly(readonly);
+		}
+		if(c instanceof ValuesLayout) {
+			ValuesLayout vl = (ValuesLayout) c;
+			vl.setReadOnly(readonly);
+		}
 		if(c instanceof PasswordField) {
 			PasswordField pf = (PasswordField) c;
 			pf.setReadOnly(readonly);
@@ -504,6 +511,16 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				TextField tf = (TextField) c;
 				PreferencesApplication pa = prefService.savePref(componentId.get(), tf.getValue());
 				tf.setValue(pa.getValeur());
+			}
+			if(c instanceof KeyValuesLayout) {
+				KeyValuesLayout kvl = (KeyValuesLayout) c;
+				PreferencesApplication pa = prefService.savePref(componentId.get(), kvl.getValue());
+				kvl.setValue(pa.getValeur());
+			}
+			if(c instanceof ValuesLayout) {
+				ValuesLayout vl = (ValuesLayout) c;
+				PreferencesApplication pa = prefService.savePref(componentId.get(), vl.getValue());
+				vl.setValue(pa.getValeur());
 			}
 			if(c instanceof PasswordField) {
 				PasswordField pf = (PasswordField) c;
@@ -543,7 +560,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			// On récupère les anciennes valeurs
 			String value = null;
 			// Si on a une valeur sauvegardée pour le composant
-			if(backupValues.containsKey(componentId.get())) {
+			if(rollback && backupValues.containsKey(componentId.get())) {
 				// récupération de la valeur stockée
 				value = backupValues.get(componentId.get());
 				// suppression de la valeur sauvegardée dans la hashMap
@@ -555,6 +572,22 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 					tf.setValue(value);
 				} else {
 					backupValues.put(componentId.get(), tf.getValue());
+				}
+			}
+			if(c instanceof KeyValuesLayout) {
+				KeyValuesLayout kvl = (KeyValuesLayout) c;
+				if(rollback) {
+					kvl.setValue(value);
+				} else {
+					backupValues.put(componentId.get(), kvl.getValue());
+				}
+			}
+			if(c instanceof ValuesLayout) {
+				ValuesLayout vl = (ValuesLayout) c;
+				if(rollback) {
+					vl.setValue(value);
+				} else {
+					backupValues.put(componentId.get(), vl.getValue());
 				}
 			}
 			if(c instanceof PasswordField) {

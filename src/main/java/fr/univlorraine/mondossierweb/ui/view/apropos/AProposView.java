@@ -18,14 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.apropos;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.info.BuildProperties;
-
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
@@ -38,7 +30,6 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
-
 import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
@@ -47,27 +38,32 @@ import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 public class AProposView extends Div implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
 
-	@Autowired
-	private transient PageTitleFormatter pageTitleFormatter;
-	@Getter
-	private String pageTitle = "";
 	@Getter
 	private final TextHeader header = new TextHeader();
-
-	@Autowired
-	private transient SecurityService securityService;
-	@Autowired
-	private transient BuildProperties buildProperties;
-
 	private final TextField username = new TextField();
 	private final Paragraph message = new Paragraph();
 	private final TextField roles = new TextField();
 	private final Span info = new Span();
+	@Autowired
+	private transient PageTitleFormatter pageTitleFormatter;
+	@Getter
+	private String pageTitle = "";
+	@Autowired
+	private transient SecurityService securityService;
+	@Autowired
+	private transient BuildProperties buildProperties;
 	
 	@PostConstruct
 	private void init() {
@@ -87,7 +83,7 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 		Element buildTimeElement = new Element("small");
 		ZonedDateTime buildTime = buildProperties.getTime().atZone(ZoneId.systemDefault());
 		buildTimeElement.setText(' ' + DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(buildTime));
-		buildTimeElement.getStyle().set(CSSColorUtils.COLOR, "var(--lumo-secondary-text-color)");
+		buildTimeElement.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_TXT_COLOR);
 		getElement().appendChild(buildTimeElement);
 
 		Paragraph descriptionComp = new Paragraph(buildProperties.get("description"));

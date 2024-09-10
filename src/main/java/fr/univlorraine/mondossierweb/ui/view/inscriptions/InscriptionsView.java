@@ -165,9 +165,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
      */
     @Override
     public void localeChange(final LocaleChangeEvent event) {
-        log.info("localeChange");
         setViewTitle(getTranslation("inscriptions.title"));
-
         errorLabel.setText(getTranslation("error.unknown"));
 
         for (TextLabel tl : listTextLabelFormation) {

@@ -21,7 +21,6 @@ package fr.univlorraine.mondossierweb.ui.component;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.CssImport;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,6 @@ public class AppColorStyle extends Component {
 
 	public void setColor(final String mainColor, final String secondColor, final String headerCardSepColor, 
 		final String txtColor, final String btnColor, final String backgroundColor) {
-		log.info("*** setColor ***");
 		getElement().setText(String.format(STYLE_TEMPLATE, mainColor,headerCardSepColor,secondColor,btnColor,txtColor,backgroundColor));
 	}
 

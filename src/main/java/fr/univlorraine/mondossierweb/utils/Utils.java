@@ -18,21 +18,8 @@
  */
 package fr.univlorraine.mondossierweb.utils;
 
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.springframework.util.StringUtils;
-
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
-
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.pegase.model.chc.CursusDCA;
@@ -43,6 +30,17 @@ import fr.univlorraine.pegase.model.insext.CibleInscription;
 import fr.univlorraine.pegase.model.insext.InscriptionComplete;
 import fr.univlorraine.pegase.model.insext.ObjetFormationOuGroupement;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
+
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Outils pour la gestion des variables static
@@ -57,7 +55,6 @@ public final class Utils {
 	public static final String CANAL_CONTACT_TEL = "ContactTelephoneComplet";
 	public static final String TEM_INS_VALIDE = "valide";
 	public static final Object TEM_INS_PAYEE = "valide";
-	private static final String SEPARATEUR_CHEMIN = ">";
 	public static final Object DETAIL_INS_NON_AFFICHE = "false";
 	public static final Object DETAIL_INS_VIA_BOUTON = "button";
 	public static final Object DETAIL_INS_AFFICHE = "true";
@@ -67,6 +64,7 @@ public final class Utils {
 	public static final String LARGEUR_LOGO = "34px";
 	public static final String HAUTEUR_LOGO = "34px";
 	public static final String EXT_PDF = ".pdf";
+	private static final String SEPARATEUR_CHEMIN = ">";
 
 	private Utils() {
 		throw new IllegalStateException("Utility class");
@@ -269,7 +267,7 @@ public final class Utils {
 					// S'il s'agit de la racine
 					if(obj.getCodeChemin().equals(codeCheminRacine)) {
 						list.add(o);
-						log.info("Racine {} insérée", codeCheminRacine);
+						log.debug("Racine {} insérée", codeCheminRacine);
 					} else {
 						boolean insere = false;
 						String cheminParent = o.getCodeChemin();
@@ -285,7 +283,7 @@ public final class Utils {
 						if(!insere) {
 							// injecter l'élément à la fin de la liste
 							list.add(o);
-							log.info("Element {} inséré en fin de liste car sans parent", o.getCodeChemin());
+							log.debug("Element {} inséré en fin de liste car sans parent", o.getCodeChemin());
 						}
 					}
 				}
