@@ -2,39 +2,33 @@ version: "3.7"
 
 services:
 
-  php:
-    image: php:7.2-fpm
-    volumes:
-      - ./.docker/php/php.ini:/usr/local/etc/php/php.ini
-    container_name: mariadb_php
-    depends_on:
-      - mariadb
-
   mariadb:
     image: mariadb:10.4
     restart: always
-    container_name: mariadb_mariadb
+    container_name: mariadb
     volumes:
       - ./.docker/mariadb-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: mypass
+      MYSQL_DATABASE:  mdwpegase
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    container_name: mariadb_phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.2.1
+    container_name: phpmyadmin
     ports:
       - 8000:80
     environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=mariadb
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: mypass
     depends_on:
       - mariadb
       
   mdw-pegase:
-    #image: registry.univ.fr/esup-mdw-pegase:1.0.5
-    image: esup-mdw-pegase:1.5.1
+    #image: registry.univ.fr/esup-mdw-pegase:2.2.2
+    image: esup-mdw-pegase:2.2.2
     restart: always
-    container_name: mdw-pegase_mdw-pegase
+    container_name: mdw-pegase
     ports:
       - 8080:8080
     volumes:
@@ -43,4 +37,3 @@ services:
       JAVA_OPTS: -Dspring.config.location=file:/config/application.properties
     depends_on:
       - mariadb
-
