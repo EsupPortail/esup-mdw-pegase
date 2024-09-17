@@ -23,6 +23,7 @@ import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -33,8 +34,10 @@ public class ValuesLayout extends VerticalLayout {
     private static final String PARAMETRES_BADGES_TEXTFIELD = "parametres.badges-tf";
     private static final String PARAMETRES_BADGES_LABEL = "parametres.badges-label";
 
-    public BadgeList badges;
-    public TextField badgeField;
+    @Getter
+    private BadgeList badges;
+    @Getter
+    private TextField badgeField;
 
     public ValuesLayout(String id, String titre) {
         super();

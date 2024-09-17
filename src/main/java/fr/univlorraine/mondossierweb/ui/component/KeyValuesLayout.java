@@ -40,22 +40,25 @@ public class KeyValuesLayout extends ValuesLayout {
 
     }
 
+    @Override
     public void setReadOnly(boolean readOnly) {
         keyTextField.setReadOnly(readOnly);
-        badges.setReadOnly(readOnly);
-        badgeField.setReadOnly(readOnly);
-        badgeField.setVisible(!readOnly);
+        getBadges().setReadOnly(readOnly);
+        getBadgeField().setReadOnly(readOnly);
+        getBadgeField().setVisible(!readOnly);
     }
 
+    @Override
     public String getValue() {
-        if(StringUtils.hasText(keyTextField.getValue()) || StringUtils.hasText(badges.getValue())) {
+        if(StringUtils.hasText(keyTextField.getValue()) || StringUtils.hasText(getBadges().getValue())) {
             String k = StringUtils.hasText(keyTextField.getValue()) ? keyTextField.getValue() : "";
-            String v = StringUtils.hasText(badges.getValue()) ? badges.getValue() : "";
+            String v = StringUtils.hasText(getBadges().getValue()) ? getBadges().getValue() : "";
             return k + "=" + v;
         }
         return null;
     }
 
+    @Override
     public void setValue(String valeur) {
         if(StringUtils.hasText(valeur) && valeur.contains("=")) {
             String[] t = valeur.split("=");
@@ -65,9 +68,9 @@ public class KeyValuesLayout extends ValuesLayout {
                 keyTextField.setValue("");
             }
             if(t.length > 1) {
-                badges.setValue(t[1]);
+                getBadges().setValue(t[1]);
             } else {
-                badges.setValue("");
+                getBadges().setValue("");
             }
         }
     }
