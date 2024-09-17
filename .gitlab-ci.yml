@@ -1,6 +1,6 @@
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "develop"
 
 include:
   - project: 'dn-sied/ci-config'
@@ -14,6 +14,9 @@ variables:
   before_script:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties  
+
+container image:
+  when: manual
 
 # include:
 #   - project: 'dn-sied/ci-config'
