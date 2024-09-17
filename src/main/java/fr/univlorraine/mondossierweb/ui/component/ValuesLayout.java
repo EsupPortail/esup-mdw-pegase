@@ -33,23 +33,23 @@ public class ValuesLayout extends VerticalLayout {
     private static final String PARAMETRES_BADGES_TEXTFIELD = "parametres.badges-tf";
     private static final String PARAMETRES_BADGES_LABEL = "parametres.badges-label";
 
-    private BadgeList badges;
-    private TextField badgeField;
+    public BadgeList badges;
+    public TextField badgeField;
 
-    public ValuesLayout(String id, String titre, String valeur) {
+    public ValuesLayout(String id, String titre) {
         super();
         setId(id);
         this.getStyle().set(CSSColorUtils.PADDING, "0");
 
-        add(new NativeLabel(titre));
+        if(titre != null) {
+            add(new NativeLabel(titre));
+        }
 
         // La liste des badges
-        badges = new BadgeList(null,null, false);
+        badges = new BadgeList(null,titre != null ? null : getTranslation(PARAMETRES_BADGES_LABEL), false);
         badges.setId(id + PREFIX_BADGES);
         badges.getStyle().set("flex-wrap", "wrap");
         add(badges);
-
-        setValue(valeur);
 
         // Le champ de saisie des badges
         badgeField = new TextField();
