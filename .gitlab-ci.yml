@@ -1,6 +1,6 @@
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH == "saas"
+    - if: $CI_COMMIT_BRANCH == "master"
 
 include:
   - project: 'dn-sied/ci-config'
@@ -27,12 +27,12 @@ variables:
 #     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
 #     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
 
-# .build_image:
-#   image : 
-#     name: gcr.io/kaniko-project/executor:debug
-#     entrypoint: [""]
-#   stage: build
-#   script:
+# .buildd
+#   script:_image:
+##   image :
+##     name: gcr.io/kaniko-project/executor:debug
+##     entrypoint: [""]
+##   stage: buil
 #     - mkdir -p /kaniko/.docker
 #     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
 #     - echo $CI_PROJECT_DIR
