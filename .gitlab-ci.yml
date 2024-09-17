@@ -1,9 +1,12 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "saas"
+
 include:
   - project: 'dn-sied/ci-config'
     file: '/.gitlab-ci-template-container-image.yml'
 
 variables:
-  CI_RULES: $CI_COMMIT_BRANCH == "develop"
   MAVEN_IMAGE: maven:3-openjdk-17
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
 
