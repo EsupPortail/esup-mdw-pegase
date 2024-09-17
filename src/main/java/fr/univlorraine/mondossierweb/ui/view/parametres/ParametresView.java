@@ -234,12 +234,14 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 									} else {
 										// S'il s'agit d'un couple clé -> liste de valeurs
 										if(p.getType().getTypeId().equals(TYPE_KEY_VALUES)){
-											KeyValuesLayout kvl = new KeyValuesLayout(p.getPrefId(), p.getPrefDesc(), p.getValeur());
+											KeyValuesLayout kvl = new KeyValuesLayout(p.getPrefId(), p.getPrefDesc());
+											kvl.setValue(p.getValeur());
 											categorieLayout.add(kvl);
 										} else {
 											// S'il s'agit d'une liste de valeurs
 											if(p.getType().getTypeId().equals(TYPE_VALUES)){
-												ValuesLayout vl = new ValuesLayout(p.getPrefId(), p.getPrefDesc(), p.getValeur());
+												ValuesLayout vl = new ValuesLayout(p.getPrefId(), p.getPrefDesc());
+												vl.setValue(p.getValeur());
 												categorieLayout.add(vl);
 											} else {
 												TextField tf = new TextField(p.getPrefDesc());
