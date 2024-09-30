@@ -50,6 +50,8 @@ public class HasCodeApprenantUrlParameterView extends VerticalLayout implements 
 			updateData(sessionController.getDossier() != null ? sessionController.getDossier() : null);
 			//Force la maj des label
 			localeChange(null);
+		} else {
+			updateData(null);
 		}
 	}
 

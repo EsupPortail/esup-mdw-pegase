@@ -101,10 +101,5 @@ public class SessionController {
 			setDossierEnSession(pegaseService.recupererDossierApprenant(getCodeApprenant()));
 		}
 	}
-
-
-
-
-
-
+	
 }
