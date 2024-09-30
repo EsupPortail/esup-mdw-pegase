@@ -18,13 +18,12 @@
  */
 package fr.univlorraine.mondossierweb.services;
 
-import java.io.Serializable;
-
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import fr.univlorraine.mondossierweb.controllers.ConfigController;
-import lombok.extern.slf4j.Slf4j;
+import java.io.Serializable;
 
 
 @SuppressWarnings("serial")
@@ -43,7 +42,6 @@ public class CssService implements Serializable {
 	private String backgroundColor;
 
 	public void refreshCssParameters() {
-		log.info("refreshCssParameters");
 		mainColor = configController.getCssMainColor();
 		secondColor = configController.getCssSecondColor();
 		headerCardSepColor = configController.getCssHeaderCardSepColor();

@@ -91,7 +91,7 @@ public class AppUserDetailsService implements AuthenticationUserDetailsService {
 		AttributePrincipal principal = casAssertionAuthenticationToken.getAssertion().getPrincipal();
 		Map attributes = principal.getAttributes();
 
-		log.debug("Map attributes : {}", attributes);
+		log.info("Map attributes : {}", attributes);
 
 		String username = (String) attributes.get(casService.getCasLoginAttribute());
 		String mail = (String) attributes.get(casService.getCasMailAttribute());

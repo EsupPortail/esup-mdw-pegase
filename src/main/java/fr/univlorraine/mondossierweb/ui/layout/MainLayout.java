@@ -118,7 +118,7 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	@Autowired
 	private transient PreferencesService prefService;
 	@Autowired
-	private transient SessionController mainController;
+	private transient SessionController sessionController;
 	@Autowired
 	private transient ConfigController configController;
 	@Autowired
@@ -167,6 +167,8 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 		/* Nom, prénom et code apprenant*/
 		if(affichageResumeEtudiant) {
 			addToDrawer(getResumeLayout());
+		} else {
+			tabs.getStyle().set(CSSColorUtils.MARGIN_TOP, "0.8em");
 		}
 
 		/* Menu */
@@ -203,18 +205,21 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 			securityService.getPrincipal()
 			.map(this::createUserMenu)
 			.ifPresent(this::addToNavbar);
+
+			// Gérer le nom/prénom/num apprenant ICI
+
 		}
-
-		// On attache la mainLayout au component afin d'être notifié des changements de dossier
-		mainController.setMainLayout(this);
-
 
 	}
 
-
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
+		// maj du logo
 		updateLogo();
+
+		// maj du nom/prenom/numDossier en haut du menu latéral
+		updateData(sessionController.getDossier()!=null ? sessionController.getDossier().getApprenant() : null);
+
 		// Si on doit afficher la pop-up d'info à l'arrivée sur l'application
 		if(affichagePopupInfo && StringUtils.hasText(getTranslation("connexion.info"))) {
 			createInfoPopUp(securityService.getPrincipal().orElse(null));
@@ -292,13 +297,13 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	 */
 	public void updateData(Apprenant apprenant) {
 		if(apprenant!=null) {
+			log.info("********   UPDATE DATA MAINLAYOUT "+apprenant.getCode()+"  ********");
 			nomPrenom.setText(getInfoNomPrenom(apprenant));
 			numeroDossier.setText(apprenant.getCode());
 		} else {
 			nomPrenom.setText("");
 			numeroDossier.setText("");
 		}
-
 	}
 
 
