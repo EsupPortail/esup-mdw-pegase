@@ -49,7 +49,7 @@
 	<properties>
 		<revision>2.2.3</revision>
 		<sha1></sha1>
-		<changelist>-SNAPSHOT</changelist>
+		<changelist></changelist>
 		<java.version>17</java.version>
 		<!-- <vaadin.version>24.0.5</vaadin.version> -->
 		<vaadin.version>24.3.3</vaadin.version>
