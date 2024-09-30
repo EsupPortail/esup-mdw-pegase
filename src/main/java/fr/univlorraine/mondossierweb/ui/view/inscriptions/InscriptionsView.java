@@ -43,19 +43,15 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.HasDynamicTitle;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.controllers.PegaseController;
-import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.services.ExportService;
-import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
-import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
-import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
-import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
-import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.ui.layout.*;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
@@ -84,7 +80,7 @@ import java.util.stream.Collectors;
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
-public class InscriptionsView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
+public class InscriptionsView extends HasCodeApprenantUrlParameterView implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
 
     private static final String CERT_FILE_EXT = ".pdf";
     private static final String CERT_FILE_NAME = "certificat";
@@ -115,10 +111,6 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
     private transient String afficherDetailInscription;
     private transient Boolean facItalique;
     private transient List<String> listeStatutsInscriptionAffichees;
-    @Autowired
-    private transient SecurityService securityService;
-    @Autowired
-    private transient SessionController sessionController;
     @Autowired
     private transient PegaseController pegaseController;
     @Autowired
@@ -218,24 +210,9 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
         header.setText(viewTitle);
     }
 
-    @Override
-    public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String codeApprenant) {
-        // Sécurisation de l'accès au dossier en paramètre
-        if (!securityService.secureAccess(codeApprenant)) {
-            Notification.show(getTranslation("error.accesdossierrefuse"));
-        }
-        // Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-        sessionController.checkDossier();
-        // Mise à jour de l'affichage
-        updateData(sessionController.getDossier() != null ? sessionController.getDossier() : null);
-        //Force la maj des label
-        localeChange(null);
-    }
-
     /**
      * Reset toutes les données affichées
      *
-     * @param apprenant
      */
     private void resetData() {
         inscriptionsLayout.removeAll();
@@ -251,12 +228,13 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
         listButtonPhoto.clear();
     }
 
+    @Override
     /**
      * Mise à jour des données affichées
      *
-     * @param apprenant
+     * @param dossier
      */
-    private void updateData(ApprenantEtInscriptions dossier) {
+    public void updateData(ApprenantEtInscriptions dossier) {
         resetData();
         if (dossier == null) {
             this.removeAll();
@@ -429,7 +407,7 @@ public class InscriptionsView extends VerticalLayout implements HasDynamicTitle,
                         photoButton.addClickListener(c -> {
                             ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription));
                             if (photo != null) {
-                                StreamResource resource = new StreamResource("photo_" + sessionController.getCodeApprenant() + ".jpg", () -> photo);
+                                StreamResource resource = new StreamResource("photo_" + dossier.getApprenant().getCode() + ".jpg", () -> photo);
                                 Image image = new Image(resource, "photographie");
                                 image.setHeight("10em");
                                 image.getStyle().set(CSSColorUtils.BORDER_RADIUS, "0.8em");

@@ -18,21 +18,17 @@
  */
 package fr.univlorraine.mondossierweb.controllers;
 
-import java.util.Optional;
-
+import com.vaadin.flow.server.VaadinSession;
+import fr.univlorraine.mondossierweb.services.PegaseService;
+import fr.univlorraine.mondossierweb.services.SecurityService;
+import fr.univlorraine.mondossierweb.utils.Utils;
+import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.spring.annotation.UIScope;
-
-import fr.univlorraine.mondossierweb.services.PegaseService;
-import fr.univlorraine.mondossierweb.services.SecurityService;
-import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
-import fr.univlorraine.mondossierweb.utils.Utils;
-import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -43,13 +39,6 @@ public class SessionController {
 
 	@Autowired
 	private SecurityService securityService;
-
-	// Layout permettant la maj du menu latéral lors de la récupération dossier (cf méthode checkDossier)
-	private MainLayout mainLayout;
-
-	public void setMainLayout(MainLayout mainLayout) {
-		this.mainLayout = mainLayout;
-	}
 
 	/**
 	 * 
@@ -110,10 +99,6 @@ public class SessionController {
 			log.info("Mise à jour des données du dossier en session pour : {}", getCodeApprenant());
 			// Met à jour les données du dossier en session
 			setDossierEnSession(pegaseService.recupererDossierApprenant(getCodeApprenant()));
-		}
-		// Maj du nom/prenom dans le menu latéral
-		if(mainLayout!=null) {
-			mainLayout.updateData(getDossier()!=null ? getDossier().getApprenant() : null);
 		}
 	}
 

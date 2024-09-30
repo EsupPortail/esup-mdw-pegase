@@ -23,21 +23,17 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.HasDynamicTitle;
+import com.vaadin.flow.router.Route;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
-import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.services.CasService;
 import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
-import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
-import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
-import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
-import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.ui.layout.*;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
@@ -58,7 +54,7 @@ import java.util.stream.Collectors;
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
-public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
+public class CoordonneesView extends HasCodeApprenantUrlParameterView implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
 
 	private static final String NOM_TEL = "nomTel_";
 
@@ -92,8 +88,6 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 	protected transient CasService casService;
 	@Autowired
 	private transient SecurityService securityService;
-	@Autowired
-	private transient SessionController etudiantController;
 	@Autowired
 	private transient ConfigController configController;
 	@Autowired
@@ -243,16 +237,18 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		}
 	}
 
+	@Override
 	/**
 	 * Mise à jour des données affichées
 	 * @param apprenant
 	 */
-	private void updateData(Apprenant apprenant) {
+	public void updateData(ApprenantEtInscriptions dossier) {
 		resetData();
-		if(apprenant == null ) {
+		if(dossier == null || dossier.getApprenant() == null ) {
 			this.removeAll();
 			add(errorLabel);
 		}
+		Apprenant apprenant = dossier.getApprenant();
 		if(apprenant != null && apprenant.getContacts()!=null && !apprenant.getContacts().isEmpty()) {
 			int cpt=0;
 			// Pour chaque contact
@@ -476,19 +472,5 @@ public class CoordonneesView extends VerticalLayout implements HasDynamicTitle, 
 		}
 
 	}
-
-	@Override
-	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String codeApprenant) {
-		// Sécurisation de l'accès au dossier en paramètre
-		if(!securityService.secureAccess(codeApprenant)) {
-			Notification.show(getTranslation("error.accesdossierrefuse"));
-		}
-		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-		etudiantController.checkDossier();
-		// Mise à jour de l'affichage
-		updateData(etudiantController.getDossier()!=null ? etudiantController.getDossier().getApprenant() : null);
-		// Force la maj des label
-		localeChange(null);
-	}	
 
 }

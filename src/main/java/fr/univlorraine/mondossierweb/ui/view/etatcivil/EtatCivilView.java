@@ -18,80 +18,59 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.etatcivil;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
-import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasDynamicTitle;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
-
-import fr.univlorraine.mondossierweb.controllers.SessionController;
-import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
-import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
-import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
-import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
-import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
+import fr.univlorraine.mondossierweb.ui.layout.*;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.model.insext.Apprenant;
+import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 
 @Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_GESTIONNAIRE})
 @Route(layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
-public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, HasHeader, LocaleChangeObserver, HasUrlParameter<String> {
+public class EtatCivilView extends HasCodeApprenantUrlParameterView implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
 
-	@Autowired
-	private transient SecurityService securityService;
-	@Autowired
-	private transient SessionController etudiantController;
-	@Autowired
-	private transient PageTitleFormatter pageTitleFormatter;
-	@Getter
-	private String pageTitle = "";
 	@Getter
 	private final TextHeader header = new TextHeader();
-
 	// label d'erreur
 	private final NativeLabel errorLabel = new NativeLabel();
-	
 	private final Card identiteCard = new Card(VaadinIcon.USER.create(),"", false);
 	private final Card naissanceCard = new Card(VaadinIcon.GLOBE.create(),"", false);
 	private final VerticalLayout etatcivilLayout = new VerticalLayout(identiteCard, naissanceCard);
-
 	private final TextLabel nomFamille=new TextLabel();
 	private final TextLabel nomUsage=new TextLabel();
 	private final TextLabel prenom=new TextLabel();
 	private final TextLabel prenom2=new TextLabel();
 	private final TextLabel prenom3=new TextLabel();
-
-
 	private final TextLabel dateNaissance=new TextLabel();
 	private final TextLabel paysNaissance=new TextLabel();
 	private final TextLabel communeNaissance=new TextLabel();
 	private final TextLabel nationaliteNaissance=new TextLabel();
 	private final TextLabel nationaliteNaissance2=new TextLabel();
-
-
+	@Autowired
+	private transient PageTitleFormatter pageTitleFormatter;
+	@Getter
+	private String pageTitle = "";
 
 	@PostConstruct
 	private void init() {
@@ -189,28 +168,14 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 		header.setText(viewTitle);
 	}
 
-	//@Override
 	protected void updateStyle() {
 		identiteCard.updateStyle();
 		identiteCard.addClassName("card-with-separator");
 		naissanceCard.updateStyle();
 	}
 
-	@Override
-	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String codeApprenant) {
-		// Sécurisation de l'accès au dossier en paramètre
-		if(!securityService.secureAccess(codeApprenant)) {
-			Notification.show(getTranslation("error.accesdossierrefuse"));
-		}
-		// Vérification que les informations nécessaires à la vue (dossier) ont été récupérées
-		etudiantController.checkDossier();
-		// Mise à jour de l'affichage
-		updateData(etudiantController.getDossier()!=null ? etudiantController.getDossier().getApprenant() : null);
-	}
-
 	/**
 	 * Reset toutes les données affichées
-	 * @param apprenant
 	 */
 	private void resetData() {
 		nomFamille.setValue("");
@@ -225,16 +190,18 @@ public class EtatCivilView extends VerticalLayout implements HasDynamicTitle, Ha
 		nationaliteNaissance.setValue("");
 		nationaliteNaissance2.setValue("");
 	}
+	@Override
 	/**
 	 * Mise à jour des données affichées
-	 * @param apprenant
+	 * @param dossier
 	 */
-	private void updateData(Apprenant apprenant) {
+	public void updateData(ApprenantEtInscriptions dossier) {
 		resetData();
-		if(apprenant == null ) {
+		if(dossier == null || dossier.getApprenant() == null ) {
 			this.removeAll();
 			add(errorLabel);
 		} else {
+			Apprenant apprenant = dossier.getApprenant();
 			// Mise à jour de l'état-civil
 			CmpUtils.valueAndVisibleIfNotNull(nomFamille,apprenant.getEtatCivil().getNomDeNaissance());
 			CmpUtils.valueAndVisibleIfNotNull(nomUsage,apprenant.getEtatCivil().getNomUsuel());
