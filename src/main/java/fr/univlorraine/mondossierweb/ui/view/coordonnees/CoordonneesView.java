@@ -247,71 +247,71 @@ public class CoordonneesView extends HasCodeApprenantUrlParameterView implements
 		if(dossier == null || dossier.getApprenant() == null ) {
 			this.removeAll();
 			add(errorLabel);
-		}
-		Apprenant apprenant = dossier.getApprenant();
-		if(apprenant != null && apprenant.getContacts()!=null && !apprenant.getContacts().isEmpty()) {
-			int cpt=0;
-			// Pour chaque contact
-			for(ContactComplet c : apprenant.getContacts()) {
-				cpt++;
-				// En fonction du type de contact
-				switch(c.getCanalCommunication().getValue()) {
-				case Utils.CANAL_CONTACT_ADRESSE :
-					ajouterAdresse(c, cpt);
-					break;
-				case Utils.CANAL_CONTACT_MAIL :
-					// Si mail de contact d'urgence
-					if(StringUtils.hasText(c.getProprietaire())) {
-						ajouterInfoContactUrgence(c,getTranslation("mail.libelle"));
-					} else {
-						// mail de l'étudiant
+		} else {
+			Apprenant apprenant = dossier.getApprenant();
+			if (apprenant != null && apprenant.getContacts() != null && !apprenant.getContacts().isEmpty()) {
+				int cpt = 0;
+				// Pour chaque contact
+				for (ContactComplet c : apprenant.getContacts()) {
+					cpt++;
+					// En fonction du type de contact
+					switch (c.getCanalCommunication().getValue()) {
+						case Utils.CANAL_CONTACT_ADRESSE:
+							ajouterAdresse(c, cpt);
+							break;
+						case Utils.CANAL_CONTACT_MAIL:
+							// Si mail de contact d'urgence
+							if (StringUtils.hasText(c.getProprietaire())) {
+								ajouterInfoContactUrgence(c, getTranslation("mail.libelle"));
+							} else {
+								// mail de l'étudiant
+								ajouterInfoContactPerso(c);
+							}
+							break;
+						case Utils.CANAL_CONTACT_TEL:
+							// Si numéro du contact d'urgence
+							if (StringUtils.hasText(c.getProprietaire())) {
+								ajouterInfoContactUrgence(c, getTranslation("tel.libelle2"));
+							} else {
+								ajouterInfoContactPerso(c);
+							}
+							break;
+						default:
+							break;
+					}
+
+				}
+				if (Boolean.TRUE.equals(afficherMailCas)) {
+					Optional<String> mail = securityService.getMail();
+					// Si on a récupéré un mail
+					if (mail.isPresent() && StringUtils.hasText(mail.get())) {
+						// Création d'un contact correspondant au mail établissement
+						ContactMelComplet c = new ContactMelComplet();
+						DemandeDeContactSimple dmc = new DemandeDeContactSimple();
+						dmc.setLibelleAffichage(getTranslation("coordonnees.mail.etablissement"));
+						c.setDemandeDeContact(dmc);
+						c.setMail(mail.get());
+						// Ajout du mail dans la vue
 						ajouterInfoContactPerso(c);
 					}
-					break;
-				case Utils.CANAL_CONTACT_TEL :
-					// Si numéro du contact d'urgence
-					if(StringUtils.hasText(c.getProprietaire())) {
-						ajouterInfoContactUrgence(c, getTranslation("tel.libelle2"));
-					} else {
-						ajouterInfoContactPerso(c);
-					}
-					break;
-				default:
-					break;
 				}
-
+				updateStyle();
 			}
-			if(Boolean.TRUE.equals(afficherMailCas)) {
-				Optional<String> mail = securityService.getMail();
-				// Si on a récupéré un mail
-				if(mail.isPresent() && StringUtils.hasText(mail.get())) {
-					// Création d'un contact correspondant au mail établissement
-					ContactMelComplet c = new ContactMelComplet();
-					DemandeDeContactSimple dmc = new DemandeDeContactSimple();
-					dmc.setLibelleAffichage(getTranslation("coordonnees.mail.etablissement"));
-					c.setDemandeDeContact(dmc);
-					c.setMail(mail.get());
-					// Ajout du mail dans la vue
-					ajouterInfoContactPerso(c);
-				}
+			// Si on a une carte de contacts d'urgence
+			if (contactsUrgence != null) {
+				// On met à jour le titre
+				contactsUrgence.getTitre().setText(getTranslation("contacts.urgence"));
+				// On l'ajoute en haut de la vue
+				coordPersoLayout.addComponentAsFirst(contactsUrgence);
 			}
-			updateStyle();
+			// Si on a une carte de contacts personnels
+			if (contacts != null) {
+				// On met à jour le titre
+				contacts.getTitre().setText(getTranslation("contacts.perso"));
+				// On l'ajoute en haut de la vue
+				coordPersoLayout.addComponentAsFirst(contacts);
+			}
 		}
-		// Si on a une carte de contacts d'urgence
-		if(contactsUrgence!=null) {
-			// On met à jour le titre
-			contactsUrgence.getTitre().setText(getTranslation("contacts.urgence"));
-			// On l'ajoute en haut de la vue
-			coordPersoLayout.addComponentAsFirst(contactsUrgence);
-		}
-		// Si on a une carte de contacts personnels
-		if(contacts!=null) {
-			// On met à jour le titre
-			contacts.getTitre().setText(getTranslation("contacts.perso"));
-			// On l'ajoute en haut de la vue
-			coordPersoLayout.addComponentAsFirst(contacts);
-		}
-
 	}
 
 	private void ajouterInfoContactPerso(ContactComplet c) {
