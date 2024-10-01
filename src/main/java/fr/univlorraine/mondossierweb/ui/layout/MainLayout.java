@@ -38,7 +38,6 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.AppShellConfigurator;
-import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
@@ -47,7 +46,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.shared.ui.Transport;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
@@ -83,8 +81,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Push(transport = Transport.WEBSOCKET_XHR)
-//@JsModule("./src/set-dark-mode.js")
 @JsModule("./src/font-open-sans.js")
 @CssImport(value = "./styles/mdw-default.css")
 @CssImport(value = "./styles/mdw.css")
