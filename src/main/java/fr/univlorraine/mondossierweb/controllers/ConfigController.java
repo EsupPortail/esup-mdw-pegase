@@ -20,6 +20,7 @@ package fr.univlorraine.mondossierweb.controllers;
 
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.services.PreferencesService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -27,6 +28,7 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 
 @Component
+@Slf4j
 public class ConfigController {
 	
 	private static final String ACCES_ETUDIANT_ACTIF = "ACCES_ETUDIANT_ACTIF";
@@ -336,12 +338,12 @@ public class ConfigController {
 		Map<String, List<String>> kv = new HashMap<String, List<String>>();
 		PreferencesApplication pa = prefService.getPreferences(parametre);
 		if(pa != null && StringUtils.hasText(pa.getValeur()) && pa.getValeur().contains("=")) {
-			String[] t = pa.getValeur().split("=");
+			int equalPosition = pa.getValeur().indexOf("=");
 			String key = null;
 			String values = null;
-			if(t.length == 2) {
-				key = t[0];
-				values = t[1];
+			if(equalPosition > 0 && equalPosition < (pa.getValeur().length() - 1) ) {
+				key = pa.getValeur().substring(0, equalPosition);
+				values = pa.getValeur().substring(equalPosition + 1, pa.getValeur().length());
 			}
 			if(StringUtils.hasText(key)) {
 				if (StringUtils.hasText(values)) {
@@ -353,6 +355,7 @@ public class ConfigController {
 				}
 			}
 		}
+		log.debug("kv {} ", kv);
 		return kv;
 	}
 

@@ -61,14 +61,14 @@ public class KeyValuesLayout extends ValuesLayout {
     @Override
     public void setValue(String valeur) {
         if(StringUtils.hasText(valeur) && valeur.contains("=")) {
-            String[] t = valeur.split("=");
-            if(t.length > 0) {
-                keyTextField.setValue(t[0]);
+            int equalPosition = valeur.indexOf("=");
+            if(equalPosition > 0) {
+                keyTextField.setValue(valeur.substring(0, equalPosition));
             } else{
                 keyTextField.setValue("");
             }
-            if(t.length > 1) {
-                getBadges().setValue(t[1]);
+            if(equalPosition < (valeur.length() - 1)) {
+                getBadges().setValue(valeur.substring(equalPosition + 1, valeur.length()));
             } else {
                 getBadges().setValue("");
             }
