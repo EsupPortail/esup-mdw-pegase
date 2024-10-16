@@ -18,23 +18,23 @@
  */
 package fr.univlorraine.mondossierweb.services;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-
-import org.apache.commons.io.FileUtils;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.logging.LogLevel;
-import org.springframework.boot.logging.LoggingSystem;
-import org.springframework.stereotype.Service;
-
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.net.SMTPAppender;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.logging.LogLevel;
+import org.springframework.boot.logging.LoggingSystem;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 
 
 @Service
@@ -76,13 +76,15 @@ public class ParametrageService implements Serializable {
 		mailAppender.setFrom(configController.getSmtpFrom());
 		mailAppender.getToList().clear();
 		String mails = configController.getLogMailTo();
-		if(mails !=null && mails.contains(";")) {
+		if(mails != null && mails.contains(";")) {
 			String[] tmails = mails.split(";");
 			for (String m : tmails) {
 				mailAppender.addTo(m);
 			}
 		} else {
-			mailAppender.addTo(configController.getLogMailTo());
+			if(StringUtils.hasText(mails)) {
+				mailAppender.addTo(mails);
+			}
 		}
 		mailAppender.stop();
 		mailAppender.start();
