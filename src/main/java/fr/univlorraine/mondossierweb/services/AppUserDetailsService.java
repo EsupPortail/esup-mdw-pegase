@@ -42,6 +42,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -149,14 +150,21 @@ public class AppUserDetailsService implements AuthenticationUserDetailsService {
 			// récupération du nom de l'attribut à tester
 			String attributeToTest = (String) casFilter.keySet().toArray()[0];
 			// récupération de la valeur de l'attribut pour l'utilisateur
-			String casAttributeValue = (String) casAttributes.get(attributeToTest);
+			List<String> casAttributeValues = null;
+			if(casAttributes.get(attributeToTest) instanceof String) {
+				String casAttributeValue = (String) casAttributes.get(attributeToTest);
+				if(StringUtils.hasText(casAttributeValue)) {
+					// On découpe casAttributeValue en liste au cas où ce soit un attribut multivalué
+					casAttributeValues = Arrays.asList(casAttributeValue.split(";"));
+				}
+			}
+			if(casAttributes.get(attributeToTest) instanceof LinkedList) {
+				casAttributeValues = (LinkedList) casAttributes.get(attributeToTest);
+			}
 
-			log.debug("{} casAttributeValue : {}", attributeToTest, casAttributeValue);
+			log.debug("{} casAttributeValue : {}", attributeToTest, casAttributeValues);
 			// Si l'attribut ciblé est valué pour l'utilisateur
-			if(StringUtils.hasText(casAttributeValue)) {
-				// On découpe casAttributeValue en liste au cas où ce soit un attribut multivalué
-				List<String> casAttributeValues = Arrays.asList(casAttributeValue.split(";"));
-
+			if(casAttributeValues != null && !casAttributeValues.isEmpty()) {
 				// Si l'utilisateur a des valeurs pour l'attribut ciblé
 				if (casAttributeValues != null && !casAttributeValues.isEmpty()) {
 					// Pour chaque valeur à tester
