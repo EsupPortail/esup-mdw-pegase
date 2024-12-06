@@ -73,10 +73,13 @@ import fr.univlorraine.pegase.model.insext.Apprenant;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -121,6 +124,8 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	private transient BuildProperties buildProperties;
 	@Autowired
 	private transient CssService cssService;
+	@Value("${app.url}")
+	private String appUrl;
 	private transient String docUrl;
 	private transient String helpUrl;
 	private transient boolean affichagePopupInfo;
@@ -429,9 +434,17 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	 */
 	@Override
 	public void configurePage(final AppShellSettings settings) {
+		// Calcul du path pour les favicon
+		String path = "";
+		try {
+			path = new URL(appUrl).getPath();
+		} catch (MalformedURLException e) {
+			log.warn("Impossible de récupérer le path depuis l'URL de l'application : {}", appUrl);
+		}
+		log.debug("path : {}", path);
 		// Parametrage des favicon
-		settings.addFavIcon("icon", "/"+configController.getUnivFavicon32Name(), "32x32");
-		settings.addFavIcon("icon", "/"+configController.getUnivFavicon16Name(), "16x16");
+		settings.addFavIcon("icon", path + "/" + configController.getUnivFavicon32Name(), "32x32");
+		settings.addFavIcon("icon", path + "/" + configController.getUnivFavicon16Name(), "16x16");
 	}
 
 	/**
