@@ -51,8 +51,8 @@
 		<sha1></sha1>
 		<changelist></changelist>
 		<java.version>17</java.version>
-		<!-- <vaadin.version>24.0.5</vaadin.version> -->
-		<vaadin.version>24.3.3</vaadin.version>
+		<!-- <vaadin.version>24.3.3</vaadin.version> -->
+		<vaadin.version>24.5.7</vaadin.version>
 		<gson-fire-version>1.8.4</gson-fire-version>
         <swagger-core-version>1.5.24</swagger-core-version>
         <okhttp-version>4.9.3</okhttp-version>
