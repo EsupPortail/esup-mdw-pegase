@@ -1,10 +1,9 @@
 # Stage that builds the application, a prerequisite for the running stage
 FROM maven:3.9.9-eclipse-temurin-21-alpine as build
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
-RUN apt-get update -qq && apt-get install -qq --no-install-recommends nodejs
+RUN apk add --update nodejs-current npm
 
 # Stop running as root at this point
-RUN useradd -m myuser
+RUN adduser -D myuser
 WORKDIR /usr/src/app/
 RUN chown myuser:myuser /usr/src/app/
 USER myuser
