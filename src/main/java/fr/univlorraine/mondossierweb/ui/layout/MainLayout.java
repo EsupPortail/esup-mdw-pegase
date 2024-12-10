@@ -37,17 +37,13 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.controllers.SessionController;
@@ -73,13 +69,10 @@ import fr.univlorraine.pegase.model.insext.Apprenant;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -105,8 +98,7 @@ import java.util.Optional;
 @CssImport(value = "./styles/vaadin-drawer-toggle.css", themeFor = "vaadin-drawer-toggle")
 @SuppressWarnings("serial")
 @Slf4j
-@Theme(variant = Lumo.LIGHT)
-public class MainLayout extends AppLayout implements AppShellConfigurator, BeforeEnterObserver, LocaleChangeObserver {
+public class MainLayout extends AppLayout implements BeforeEnterObserver, LocaleChangeObserver {
 
 	private final Tabs tabs = new Tabs();
 	private final Map<Class<? extends Component>, Tab> navigationTargetToTab = new HashMap<>();
@@ -124,8 +116,6 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	private transient BuildProperties buildProperties;
 	@Autowired
 	private transient CssService cssService;
-	@Value("${app.url}")
-	private String appUrl;
 	private transient String docUrl;
 	private transient String helpUrl;
 	private transient boolean affichagePopupInfo;
@@ -427,24 +417,6 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	@Override
 	public void beforeEnter(final BeforeEnterEvent event) {
 		tabs.setSelectedTab(navigationTargetToTab.get(event.getNavigationTarget()));
-	}
-
-	/**
-	 * @see com.vaadin.flow.server.PageConfigurator#configurePage(com.vaadin.flow.server.InitialPageSettings)
-	 */
-	@Override
-	public void configurePage(final AppShellSettings settings) {
-		// Calcul du path pour les favicon
-		String path = "";
-		try {
-			path = new URL(appUrl).getPath();
-		} catch (MalformedURLException e) {
-			log.warn("Impossible de récupérer le path depuis l'URL de l'application : {}", appUrl);
-		}
-		log.debug("path : {}", path);
-		// Parametrage des favicon
-		settings.addFavIcon("icon", path + "/" + configController.getUnivFavicon32Name(), "32x32");
-		settings.addFavIcon("icon", path + "/" + configController.getUnivFavicon16Name(), "16x16");
 	}
 
 	/**

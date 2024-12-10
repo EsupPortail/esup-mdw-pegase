@@ -41,7 +41,7 @@
 	<parent>
     	<groupId>org.springframework.boot</groupId>
     	<artifactId>spring-boot-starter-parent</artifactId>
-    	<version>3.2.12</version>
+		<version>3.2.12</version>
     	<!-- <version>3.2.1</version> -->
 	</parent>
 
@@ -51,8 +51,8 @@
 		<sha1></sha1>
 		<changelist></changelist>
 		<java.version>17</java.version>
+		<vaadin.version>24.3.20</vaadin.version>
 		<!-- <vaadin.version>24.3.3</vaadin.version> -->
-		<vaadin.version>24.5.7</vaadin.version>
 		<gson-fire-version>1.8.4</gson-fire-version>
         <swagger-core-version>1.5.24</swagger-core-version>
         <okhttp-version>4.9.3</okhttp-version>
@@ -63,6 +63,8 @@
   		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
   		<skipITs>false</skipITs>
   		<flyway.version>8.5.13</flyway.version>
+		<!-- Évite d'embarquer le serveur d'application, pour avoir un .war plus léger. cf. https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#goals-repackage -->
+		<spring-boot.repackage.skip>true</spring-boot.repackage.skip>
 	</properties>
 
 	<dependencyManagement>
@@ -98,16 +100,12 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-cas</artifactId>
-			<!-- <version>6.1.1</version> -->
-			<!-- <version>5.5.8</version> -->
 		</dependency>
 		<!-- Actuator (kubernetes probes) -->
 		<dependency>
     		<groupId>org.springframework.boot</groupId>
     		<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-
-
 		<!-- Packaging (cf. https://docs.spring.io/spring-boot/docs/2.2.3.RELEASE/reference/html/howto.html#howto-create-a-deployable-war-file) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -125,13 +123,6 @@
 			<artifactId>vaadin-spring-boot-starter</artifactId>
 		</dependency>
 		
-		<!-- Surcharge snakeyaml -->
-		<!-- <dependency>
-    		<groupId>org.yaml</groupId>
-    		<artifactId>snakeyaml</artifactId>
-    		<version>1.33</version>
-		</dependency> -->
-		
 		<!-- Surcharge jsoup -->
 		<dependency>
     		<groupId>org.jsoup</groupId>
@@ -139,12 +130,12 @@
    		 	<version>1.15.3</version>
 		</dependency>
 
-
 		<!-- Base de données -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
 		<!--  MYSQL -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -152,12 +143,14 @@
 			<version>8.0.33</version>
 			<scope>runtime</scope>
 		</dependency>
+
 		<!--  H2 -->
 	 	<dependency>
     		<groupId>com.h2database</groupId>
     		<artifactId>h2</artifactId>
     		<scope>runtime</scope>
 		</dependency>
+
 		<!--  FLYWAY -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -284,13 +277,7 @@
 		</dependency>
 
         <!--  FIN DES DEPENDANCES OPENAPI GENERATOR -->
-        
-        <!-- https://mvnrepository.com/artifact/com.google.cloud.tools/jib-maven-plugin -->
-		<!-- <dependency>
-    		<groupId>com.google.cloud.tools</groupId>
-    		<artifactId>jib-maven-plugin</artifactId>
-    		<version>3.1.4</version>
-		</dependency>  -->
+
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
 		<dependency>
     		<groupId>com.fasterxml.jackson.datatype</groupId>
@@ -433,9 +420,7 @@
 					</dependency>
                 </dependencies>
 	    	</plugin>
-	    	
-	    	
-	    	 
+
 	    	<plugin>
         		<groupId>com.google.cloud.tools</groupId>
         		<artifactId>jib-maven-plugin</artifactId>
@@ -446,11 +431,8 @@
           			</to>
         		</configuration>
       		</plugin>
-      		
-			
-	    	 
-		</plugins>
 
+		</plugins>
 
 	</build>
 
