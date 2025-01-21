@@ -333,7 +333,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 
 		userMenuLogoutItem =
 			userMenu.addItem((String) null,
-				event -> getUI().map(UI::getPage).ifPresent(page -> page.executeJs("window.open('" + SecurityConfig.LOGOUT_URL + "', '_self')")));
+				event -> getUI().map(UI::getPage).ifPresent(page -> page.executeJs("window.open('." + SecurityConfig.LOGOUT_URL + "', '_self')")));
 
 		return topMenu;
 	}
