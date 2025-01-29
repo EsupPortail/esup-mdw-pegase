@@ -1,13 +1,13 @@
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH != "develop"
+    - if: $CI_COMMIT_BRANCH != "toto"
 
 include:
   - project: 'dn-sied/ci-config'
     file: '/.gitlab-ci-template-container-image.yml'
 
 variables:
-  MAVEN_IMAGE: maven:3-openjdk-17
+  MAVEN_IMAGE: maven:3.9.9-eclipse-temurin-17-alpine
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
 
 ⚙️ verify:
@@ -17,40 +17,3 @@ variables:
 
 🚀 container image:
   when: manual
-
-# include:
-#   - project: 'dn-sied/ci-config'
-#     file: '/.gitlab-ci-template-jdk17.yml'
-
-# variables:
-#   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
-
-# build:
-#   before_script:
-#     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
-#     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
-
-# .buildd
-#   script:_image:
-##   image :
-##     name: gcr.io/kaniko-project/executor:debug
-##     entrypoint: [""]
-##   stage: buil
-#     - mkdir -p /kaniko/.docker
-#     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
-#     - echo $CI_PROJECT_DIR
-#     - echo $CI_REGISTRY
-#     - echo $CI_REGISTRY_IMAGE
-#     - echo $BUILD_VERSION
-#     - >-
-#       /kaniko/executor
-#       --context "${CI_PROJECT_DIR}"
-#       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
-#       --destination "${CI_REGISTRY_IMAGE}:${BUILD_VERSION}"
-#   when: manual
-#   needs:
-#     - job: get_version
-#       artifacts: true
-
-# build and push docker image:
-#   extends: .build_image

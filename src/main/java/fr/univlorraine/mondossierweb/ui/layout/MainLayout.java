@@ -37,17 +37,13 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 import fr.univlorraine.mondossierweb.config.SecurityConfig;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.controllers.SessionController;
@@ -102,8 +98,7 @@ import java.util.Optional;
 @CssImport(value = "./styles/vaadin-drawer-toggle.css", themeFor = "vaadin-drawer-toggle")
 @SuppressWarnings("serial")
 @Slf4j
-@Theme(variant = Lumo.LIGHT)
-public class MainLayout extends AppLayout implements AppShellConfigurator, BeforeEnterObserver, LocaleChangeObserver {
+public class MainLayout extends AppLayout implements BeforeEnterObserver, LocaleChangeObserver {
 
 	private final Tabs tabs = new Tabs();
 	private final Map<Class<? extends Component>, Tab> navigationTargetToTab = new HashMap<>();
@@ -338,7 +333,7 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 
 		userMenuLogoutItem =
 			userMenu.addItem((String) null,
-				event -> getUI().map(UI::getPage).ifPresent(page -> page.executeJs("window.open('" + SecurityConfig.LOGOUT_URL + "', '_self')")));
+				event -> getUI().map(UI::getPage).ifPresent(page -> page.executeJs("window.open('." + SecurityConfig.LOGOUT_URL + "', '_self')")));
 
 		return topMenu;
 	}
@@ -422,16 +417,6 @@ public class MainLayout extends AppLayout implements AppShellConfigurator, Befor
 	@Override
 	public void beforeEnter(final BeforeEnterEvent event) {
 		tabs.setSelectedTab(navigationTargetToTab.get(event.getNavigationTarget()));
-	}
-
-	/**
-	 * @see com.vaadin.flow.server.PageConfigurator#configurePage(com.vaadin.flow.server.InitialPageSettings)
-	 */
-	@Override
-	public void configurePage(final AppShellSettings settings) {
-		// Parametrage des favicon
-		settings.addFavIcon("icon", "/"+configController.getUnivFavicon32Name(), "32x32");
-		settings.addFavIcon("icon", "/"+configController.getUnivFavicon16Name(), "16x16");
 	}
 
 	/**

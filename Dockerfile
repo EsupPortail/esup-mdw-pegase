@@ -1,10 +1,9 @@
 # Stage that builds the application, a prerequisite for the running stage
-FROM maven:3.8.5-openjdk-17-slim as build
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
-RUN apt-get update -qq && apt-get install -qq --no-install-recommends nodejs
+FROM maven:3.9.9-eclipse-temurin-21-alpine as build
+RUN apk add --update nodejs-current npm
 
 # Stop running as root at this point
-RUN useradd -m myuser
+RUN adduser -D myuser
 WORKDIR /usr/src/app/
 RUN chown myuser:myuser /usr/src/app/
 USER myuser
@@ -17,7 +16,6 @@ RUN mvn dependency:go-offline -Pproduction
 COPY --chown=myuser:myuser src src
 COPY --chown=myuser:myuser frontend frontend
 COPY --chown=myuser:myuser package.json ./
-
 
 # Build the production package, assuming that we validated the version before so no need for running tests again
 RUN mvn clean package -DskipTests -Pproduction
