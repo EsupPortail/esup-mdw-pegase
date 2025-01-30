@@ -64,7 +64,7 @@
   		<skipITs>false</skipITs>
   		<flyway.version>8.5.13</flyway.version>
 		<!-- Évite d'embarquer le serveur d'application, pour avoir un .war plus léger. cf. https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#goals-repackage -->
-		<spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+		<!-- <spring-boot.repackage.skip>true</spring-boot.repackage.skip>-->
 	</properties>
 
 	<dependencyManagement>
