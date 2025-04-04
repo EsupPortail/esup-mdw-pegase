@@ -18,17 +18,16 @@
  */
 package fr.univlorraine.mondossierweb.services;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @SuppressWarnings("serial")
@@ -40,8 +39,8 @@ public class ExportService implements Serializable {
 	private transient PegaseService pegaseService;
 
 	
-	public ByteArrayInputStream getPhoto(String codeApprenant, String codeFormation) {
-		File file = pegaseService.recuperePhoto(codeApprenant, codeFormation);
+	public ByteArrayInputStream getPhoto(String codeApprenant, String codeFormation, String codePeriode) {
+		File file = pegaseService.recuperePhoto(codeApprenant, codeFormation, codePeriode);
 
 		return getStream(file,codeApprenant, codeFormation, "Photo");
 	}

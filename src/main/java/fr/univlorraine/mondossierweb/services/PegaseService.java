@@ -26,6 +26,7 @@ import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.api.insext.InscriptionsApi;
 import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
 import fr.univlorraine.pegase.api.pai.PaiApi;
+import fr.univlorraine.pegase.api.pieceext.PiecesApi;
 import fr.univlorraine.pegase.model.chc.CursusDCA;
 import fr.univlorraine.pegase.model.coc.Chemin;
 import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
@@ -50,10 +51,10 @@ public class PegaseService implements Serializable {
 	@Autowired
 	private transient AccessTokenService accessTokenService;	
 
-
 	private transient String etablissement;	
 	private transient String apiInsUrl;	
 	private transient String apiInsExtUrl;
+	private transient String apiPieceExtUrl;
 	private transient String apiChcUrl;	
 	private transient String apiCocUrl;	
 	private transient String apiPaiUrl;
@@ -76,6 +77,10 @@ public class PegaseService implements Serializable {
 	// INS-EXT API
 	private transient ApiClient apiClientInsExt = new ApiClient();
 	private transient InscriptionsApi insApiInsExt = new InscriptionsApi();
+
+	// PIECE-EXT API
+	private transient ApiClient apiClientPieceExt = new ApiClient();
+	private transient PiecesApi insApiPieceExt = new PiecesApi();
 
 	// PAI API
 	private transient ApiClient apiClientPai = new ApiClient();
@@ -142,6 +147,7 @@ public class PegaseService implements Serializable {
 	private void setApiInsExtUrl() {
 		apiInsExtUrl = configController.getApiInsExtUrl();	
 	}
+	private void setApiPieceExtUrl() { apiPieceExtUrl = configController.getApiPieceExtUrl();}
 
 	public void refreshParameters() {
 		refreshPegaseParameters();
@@ -157,6 +163,7 @@ public class PegaseService implements Serializable {
 	public void refreshApiParameters() {
 		setApiInsUrl();
 		setApiInsExtUrl();
+		setApiPieceExtUrl();
 		setApiChcUrl();
 		setApiCocUrl();
 		setApiPaiUrl();
@@ -173,6 +180,10 @@ public class PegaseService implements Serializable {
 		// Init INS-EXT
 		apiClientInsExt.setBasePath(apiInsExtUrl);
 		insApiInsExt.setApiClient(apiClientInsExt);
+
+		// Init PIECE-EXT
+		apiClientPieceExt.setBasePath(apiPieceExtUrl);
+		insApiPieceExt.setApiClient(apiClientPieceExt);
 
 		// Init PAI
 		apiClientPai.setBasePath(apiPaiUrl);
@@ -307,6 +318,36 @@ public class PegaseService implements Serializable {
 
 	}
 
+	public File recuperePhoto(String codeApprenant, String cible, String codePeriode) {
+
+		log.info("recuperePhoto codeApprenant : {} - cible : {}", codeApprenant, cible);
+
+		// Si les paramètres nécessaires sont valués
+		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)
+				&& StringUtils.hasText(cible)) {
+			// Maj du token pour récupérer le dernier token valide
+			insApiPieceExt.getApiClient().setBearerToken(accessTokenService.getToken());
+			try {
+				// Appel de l'API Pégase
+				File photo = insApiPieceExt.recupererPiece(etablissement, codeApprenant, codePhoto, cible, codePeriode);
+
+				if(photo != null) {
+					log.info("Photo de {} recupere", codeApprenant);
+				} else {
+					log.info("Anomalie lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {} et codePeriode {}", codeApprenant, etablissement, codePhoto,cible, codePeriode);
+				}
+				return photo;
+			} catch (ApiException e) {
+				// Erreur lors de la récupération de la photo. Un simple warning
+				log.warn("Erreur lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {} codePeriode {} => ({}) message: {} body : {}", codeApprenant, etablissement, cible, codePhoto, codePeriode, e.getCode(), e.getMessage(),e.getResponseBody());
+			} catch (RuntimeException rex) {
+				log.error("Erreur lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {}  et cible {} et codePhoto {} codePeriode {} => ",codeApprenant, etablissement, cible, codePhoto, codePeriode, rex);
+			}
+		}
+		return null;
+	}
+
+	/*
 	public File recuperePhoto(String codeApprenant, String cible) {
 
 		log.info("recuperePhoto codeApprenant : {} - cible : {}", codeApprenant, cible);
@@ -333,7 +374,7 @@ public class PegaseService implements Serializable {
 			}
 		}
 		return null;
-	}
+	}*/
 
 
 	public File certificatDeScolarite(String codeApprenant, String cible) {

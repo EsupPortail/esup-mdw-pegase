@@ -51,7 +51,11 @@ import fr.univlorraine.mondossierweb.controllers.PegaseController;
 import fr.univlorraine.mondossierweb.services.ExportService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
-import fr.univlorraine.mondossierweb.ui.layout.*;
+import fr.univlorraine.mondossierweb.ui.layout.HasCodeApprenantUrlParameterView;
+import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
+import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
+import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
+import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
@@ -405,7 +409,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     photoLayout.getStyle().set(CSSColorUtils.PADDING, "0");
                     if (!afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE)) {
                         photoButton.addClickListener(c -> {
-                            ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription));
+                            ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription), cible.getPeriode().getCode());
                             if (photo != null) {
                                 StreamResource resource = new StreamResource("photo_" + dossier.getApprenant().getCode() + ".jpg", () -> photo);
                                 Image image = new Image(resource, "photographie");
