@@ -409,7 +409,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     photoLayout.getStyle().set(CSSColorUtils.PADDING, "0");
                     if (!afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE)) {
                         photoButton.addClickListener(c -> {
-                            ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription), cible.getPeriode().getCode());
+                            ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(), Utils.getCodeChemin(cible), cible.getPeriode().getCode());
                             if (photo != null) {
                                 StreamResource resource = new StreamResource("photo_" + dossier.getApprenant().getCode() + ".jpg", () -> photo);
                                 Image image = new Image(resource, "photographie");

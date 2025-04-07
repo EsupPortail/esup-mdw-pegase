@@ -40,7 +40,7 @@ public class ExportService implements Serializable {
 
 	
 	public ByteArrayInputStream getPhoto(String codeApprenant, String codeFormation, String codePeriode) {
-		File file = pegaseService.recuperePhoto(codeApprenant, codeFormation, codePeriode);
+		File file = pegaseService.getPhoto(codeApprenant, codeFormation, codePeriode);
 
 		return getStream(file,codeApprenant, codeFormation, "Photo");
 	}
@@ -54,7 +54,7 @@ public class ExportService implements Serializable {
 	 */
 	public ByteArrayInputStream  getCertificat(String codeApprenant, String codeFormation) {
 		
-		File file = pegaseService.certificatDeScolarite(codeApprenant, codeFormation);
+		File file = pegaseService.getCertificatDeScolarite(codeApprenant, codeFormation);
 
 		return getStream(file,codeApprenant, codeFormation, "certificat de scolarité");
 
@@ -68,7 +68,7 @@ public class ExportService implements Serializable {
 	 */
 	public ByteArrayInputStream  getAttestation(String codeApprenant, String codePeriode) {
 		
-		File file = pegaseService.attestationDePaiement(codeApprenant, codePeriode);
+		File file = pegaseService.getAttestationDePaiement(codeApprenant, codePeriode);
 
 		return getStream(file,codeApprenant, codePeriode, "attestation de paiement");
 

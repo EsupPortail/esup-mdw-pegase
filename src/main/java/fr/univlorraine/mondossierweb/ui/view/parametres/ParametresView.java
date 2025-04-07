@@ -379,7 +379,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				pegaseService.refreshParameters();
 				try {
 					// teste api INS EXT
-					if(pegaseService.recupererDossierApprenant(pegaseService.getCodeApprenantTest()) != null) {
+					if(pegaseService.getDossierApprenant(pegaseService.getCodeApprenantTest()) != null) {
 						Utils.notifierSucces(getTranslation("api-ins-ext.ok", pegaseService.getCodeApprenantTest()));
 					} else {
 						Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()));
@@ -398,8 +398,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 					Utils.notifierAnomalie(getTranslation("api-chc.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
 				try {
-					// teste api INS EXT
-					if(pegaseService.recuperePhoto(pegaseService.getCodeApprenantTest(), pegaseService.getCodeCheminTest(), pegaseService.getCodePeriodeTest()) != null) {
+					// teste api PIECE EXT
+					if(pegaseService.getPhoto(pegaseService.getCodeApprenantTest(), pegaseService.getCodeCheminTest(), pegaseService.getCodePeriodeTest()) != null) {
 						Utils.notifierSucces(getTranslation("api-piece-ext.ok", pegaseService.getCodeApprenantTest()));
 					} else {
 						Utils.notifierAnomalie(getTranslation("api-piece-ext.error", pegaseService.getCodeApprenantTest()));
@@ -419,7 +419,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}
 				try {
 					// teste api PAI
-					File pdf = pegaseService.attestationDePaiement(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest());
+					File pdf = pegaseService.getAttestationDePaiement(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest());
 					if(pdf != null && StringUtils.hasText(pdf.getName()) && pdf.getName().endsWith(Utils.EXT_PDF)) {
 						Utils.notifierSucces(getTranslation("api-pai.ok", pegaseService.getCodeApprenantTest()));
 					} else {
