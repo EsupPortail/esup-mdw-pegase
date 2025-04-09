@@ -45,7 +45,14 @@ import com.vaadin.flow.server.StreamResource;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCategorie;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
-import fr.univlorraine.mondossierweb.services.*;
+import fr.univlorraine.mondossierweb.services.AccessTokenService;
+import fr.univlorraine.mondossierweb.services.AppUserDetailsService;
+import fr.univlorraine.mondossierweb.services.CasService;
+import fr.univlorraine.mondossierweb.services.CssService;
+import fr.univlorraine.mondossierweb.services.ParametrageService;
+import fr.univlorraine.mondossierweb.services.PegaseService;
+import fr.univlorraine.mondossierweb.services.PreferencesService;
+import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.KeyValuesLayout;
 import fr.univlorraine.mondossierweb.ui.component.ValuesLayout;
@@ -68,7 +75,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Secured(SecurityUtils.ROLE_SUPERADMIN)
@@ -368,7 +379,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				pegaseService.refreshParameters();
 				try {
 					// teste api INS EXT
-					if(pegaseService.recupererDossierApprenant(pegaseService.getCodeApprenantTest()) != null) {
+					if(pegaseService.getDossierApprenant(pegaseService.getCodeApprenantTest()) != null) {
 						Utils.notifierSucces(getTranslation("api-ins-ext.ok", pegaseService.getCodeApprenantTest()));
 					} else {
 						Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()));
@@ -387,6 +398,16 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 					Utils.notifierAnomalie(getTranslation("api-chc.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
 				try {
+					// teste api PIECE EXT
+					if(pegaseService.getPhoto(pegaseService.getCodeApprenantTest(), pegaseService.getCodeCheminTest(), pegaseService.getCodePeriodeTest()) != null) {
+						Utils.notifierSucces(getTranslation("api-piece-ext.ok", pegaseService.getCodeApprenantTest()));
+					} else {
+						Utils.notifierAnomalie(getTranslation("api-piece-ext.error", pegaseService.getCodeApprenantTest()));
+					}
+				}catch(Exception ex) {
+					Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+				}
+				try {
 					// teste api COC
 					if(pegaseService.getNotes(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest(), pegaseService.getCodeCheminTest()) != null) {
 						Utils.notifierSucces(getTranslation("api-coc.ok", pegaseService.getCodeApprenantTest()));
@@ -398,7 +419,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}
 				try {
 					// teste api PAI
-					File pdf = pegaseService.attestationDePaiement(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest());
+					File pdf = pegaseService.getAttestationDePaiement(pegaseService.getCodeApprenantTest(), pegaseService.getCodePeriodeTest());
 					if(pdf != null && StringUtils.hasText(pdf.getName()) && pdf.getName().endsWith(Utils.EXT_PDF)) {
 						Utils.notifierSucces(getTranslation("api-pai.ok", pegaseService.getCodeApprenantTest()));
 					} else {

@@ -19,16 +19,13 @@
 package fr.univlorraine.mondossierweb.test.integration;
 
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.BDDMockito.given;
-
-import java.util.List;
-
+import fr.univlorraine.mondossierweb.controllers.ConfigController;
+import fr.univlorraine.mondossierweb.services.AccessTokenService;
+import fr.univlorraine.mondossierweb.services.PegaseService;
+import fr.univlorraine.pegase.model.chc.CursusDCA;
+import fr.univlorraine.pegase.model.coc.Chemin;
+import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -42,13 +39,15 @@ import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import fr.univlorraine.mondossierweb.controllers.ConfigController;
-import fr.univlorraine.mondossierweb.services.AccessTokenService;
-import fr.univlorraine.mondossierweb.services.PegaseService;
-import fr.univlorraine.pegase.model.chc.CursusDCA;
-import fr.univlorraine.pegase.model.coc.Chemin;
-import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.BDDMockito.given;
 
 /** Tests du PegaseService.
 *
@@ -131,7 +130,7 @@ public class PegaseServiceIT {
 	@Test
 	void testRecupererDossierApprenant() {
 		log.info("Test PegaseService recupererDossierApprenant");
-		ApprenantEtInscriptions dossier = pegaseService.recupererDossierApprenant(codeApprenant);
+		ApprenantEtInscriptions dossier = pegaseService.getDossierApprenant(codeApprenant);
 		log.debug("Dossier : {}",dossier);
 		assertThat(dossier, is(notNullValue()));
 		assertThat(dossier.getApprenant(), is(notNullValue()));

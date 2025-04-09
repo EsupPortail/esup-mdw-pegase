@@ -25,7 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -98,6 +102,8 @@ public class ConfigController {
 	private static final String PEGASE_API_INS_URL = "PEGASE_API_INS_URL";
 	
 	private static final String PEGASE_API_INS_EXT_URL = "PEGASE_API_INS_EXT_URL";
+
+	private static final String PEGASE_API_PIECE_EXT_URL = "PEGASE_API_PIECE_EXT_URL";
 	
 	private static final String PEGASE_API_CHC_URL = "PEGASE_API_CHC_URL";
 
@@ -257,6 +263,9 @@ public class ConfigController {
 	}
 	public String getApiInsExtUrl() {
 		return getStringValueForParameter(PEGASE_API_INS_EXT_URL);
+	}
+	public String getApiPieceExtUrl() {
+		return getStringValueForParameter(PEGASE_API_PIECE_EXT_URL);
 	}
 	public String getApiChcUrl() {
 		return getStringValueForParameter(PEGASE_API_CHC_URL);

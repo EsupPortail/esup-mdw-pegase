@@ -21,7 +21,7 @@ COPY --chown=myuser:myuser package.json ./
 RUN mvn clean package -DskipTests -Pproduction
 
 # Running stage: the part that is used for running the application
-FROM tomcat:jdk17
+FROM tomcat:jdk21-temurin
 COPY --from=build /usr/src/app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 #RUN export JAVA_OPTS="$JAVA_OPTS -Dspring.config.location=/usr/local/application.properties"
 EXPOSE 8080

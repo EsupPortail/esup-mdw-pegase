@@ -51,7 +51,11 @@ import fr.univlorraine.mondossierweb.controllers.PegaseController;
 import fr.univlorraine.mondossierweb.services.ExportService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
-import fr.univlorraine.mondossierweb.ui.layout.*;
+import fr.univlorraine.mondossierweb.ui.layout.HasCodeApprenantUrlParameterView;
+import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
+import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
+import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
+import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
@@ -405,7 +409,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     photoLayout.getStyle().set(CSSColorUtils.PADDING, "0");
                     if (!afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE)) {
                         photoButton.addClickListener(c -> {
-                            ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription));
+                            ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(), Utils.getCodeChemin(cible), cible.getPeriode().getCode());
                             if (photo != null) {
                                 StreamResource resource = new StreamResource("photo_" + dossier.getApprenant().getCode() + ".jpg", () -> photo);
                                 Image image = new Image(resource, "photographie");
@@ -732,8 +736,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         // Création de la TreeGrid contenant l'arborescence des objets de formation
         TreeGrid<ObjetMaquetteDTO> arbo = new TreeGrid<>();
         arbo.setItems(listObj, ObjetMaquetteDTO::getChildObjects);
-        arbo.addComponentHierarchyColumn(this::getObjetCursusLibelle).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
-        arbo.addComponentColumn(this::getObjetCursusDetails).setFlexGrow(0);
+        arbo.addComponentHierarchyColumn(this::getObjetCursusLibelle).setFlexGrow(2).setAutoWidth(true);
+        arbo.addComponentColumn(this::getObjetCursusDetails).setFlexGrow(1);
         arbo.expandRecursively(listObj, 10);
         arbo.setAllRowsVisible(false);
         // si écran de petite taille
@@ -806,6 +810,17 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     private Component getObjetCursusDetails(ObjetMaquetteDTO o) {
         FlexLayout l = new FlexLayout();
         l.setWidthFull();
+        l.setFlexWrap(FlexWrap.WRAP);
+
+        // Si facultatif
+        if (o != null && o.getObjet() != null && o.getObjet().getEstObligatoire() != null && !o.getObjet().getEstObligatoire().booleanValue()) {
+            Button bFacultatif = new Button(VaadinIcon.FUNCTION.create());
+            bFacultatif.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
+            bFacultatif.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
+            bFacultatif.setHeight(CSSColorUtils.EM_1_5);
+            bFacultatif.addClickListener(e -> showInfoDialog(getTranslation("inscription.element.facultatif")));
+            l.add(bFacultatif);
+        }
 
         if (o != null && o.getAcquis() != null && o.getAcquis().booleanValue()) {
             Button bAcquis = new Button(VaadinIcon.CHECK.create());
@@ -822,7 +837,6 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             bAmenagement.setHeight(CSSColorUtils.EM_1_5);
             bAmenagement.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
             bAmenagement.addClickListener(e -> showDetailAmenagementDialog(o.getObjet().getAmenagements()));
-
             l.add(bAmenagement);
         }
         return l;

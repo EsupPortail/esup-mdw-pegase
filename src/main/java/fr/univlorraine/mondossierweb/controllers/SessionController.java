@@ -98,7 +98,7 @@ public class SessionController {
 		if(getDossier() == null || !getDossier().getApprenant().getCode().equals(getCodeApprenant())) {
 			log.info("Mise à jour des données du dossier en session pour : {}", getCodeApprenant());
 			// Met à jour les données du dossier en session
-			setDossierEnSession(pegaseService.recupererDossierApprenant(getCodeApprenant()));
+			setDossierEnSession(pegaseService.getDossierApprenant(getCodeApprenant()));
 		}
 	}
 
