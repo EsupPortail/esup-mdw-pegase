@@ -736,8 +736,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         // Création de la TreeGrid contenant l'arborescence des objets de formation
         TreeGrid<ObjetMaquetteDTO> arbo = new TreeGrid<>();
         arbo.setItems(listObj, ObjetMaquetteDTO::getChildObjects);
-        arbo.addComponentHierarchyColumn(this::getObjetCursusLibelle).setFlexGrow(1).setAutoWidth(true).setWidth("100%");
-        arbo.addComponentColumn(this::getObjetCursusDetails).setFlexGrow(0);
+        arbo.addComponentHierarchyColumn(this::getObjetCursusLibelle).setFlexGrow(2).setAutoWidth(true);
+        arbo.addComponentColumn(this::getObjetCursusDetails).setFlexGrow(1);
         arbo.expandRecursively(listObj, 10);
         arbo.setAllRowsVisible(false);
         // si écran de petite taille
@@ -810,6 +810,17 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     private Component getObjetCursusDetails(ObjetMaquetteDTO o) {
         FlexLayout l = new FlexLayout();
         l.setWidthFull();
+        l.setFlexWrap(FlexWrap.WRAP);
+
+        // Si facultatif
+        if (o != null && o.getObjet() != null && o.getObjet().getEstObligatoire() != null && !o.getObjet().getEstObligatoire().booleanValue()) {
+            Button bFacultatif = new Button(VaadinIcon.FUNCTION.create());
+            bFacultatif.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
+            bFacultatif.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
+            bFacultatif.setHeight(CSSColorUtils.EM_1_5);
+            bFacultatif.addClickListener(e -> showInfoDialog(getTranslation("inscription.element.facultatif")));
+            l.add(bFacultatif);
+        }
 
         if (o != null && o.getAcquis() != null && o.getAcquis().booleanValue()) {
             Button bAcquis = new Button(VaadinIcon.CHECK.create());
@@ -826,7 +837,6 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             bAmenagement.setHeight(CSSColorUtils.EM_1_5);
             bAmenagement.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
             bAmenagement.addClickListener(e -> showDetailAmenagementDialog(o.getObjet().getAmenagements()));
-
             l.add(bAmenagement);
         }
         return l;
