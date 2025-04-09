@@ -58,7 +58,6 @@ public class PegaseService implements Serializable {
 	private transient String apiChcUrl;	
 	private transient String apiCocUrl;	
 	private transient String apiPaiUrl;
-	private transient String codePhoto;	
 	private transient String codeApprenantDemo;	
 	private transient String codeApprenantTest;	
 	private transient String codePeriodeTest;	
@@ -124,9 +123,6 @@ public class PegaseService implements Serializable {
 	private void setCodeApprenantTest() {
 		codeApprenantTest = configController.getPegaseTestApprenant();
 	}
-	private void setCodePhoto() {
-		codePhoto = configController.getIdPjPhoto();
-	}
 
 	private void setApiPaiUrl() {
 		apiPaiUrl = configController.getApiPaiUrl();
@@ -156,7 +152,6 @@ public class PegaseService implements Serializable {
 
 	public void refreshPegaseParameters() {
 		setEtablissement();
-		setCodePhoto();
 		setCodeApprenantDemo();
 	}
 
@@ -329,19 +324,19 @@ public class PegaseService implements Serializable {
 			insApiPieceExt.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
-				File photo = insApiPieceExt.recupererPiece(etablissement, codeApprenant, codePhoto, cible, codePeriode);
+				File photo = insApiPieceExt.visualiserPhoto(etablissement, codeApprenant, codePeriode, cible);
 
 				if(photo != null) {
-					log.info("Photo recuperee pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {} et codePeriode {}", codeApprenant, etablissement, cible, codePhoto, codePeriode);
+					log.info("Photo recuperee pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
 				} else {
-					log.info("Anomalie lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {} et codePeriode {}", codeApprenant, etablissement, cible, codePhoto, codePeriode);
+					log.info("Anomalie lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
 				}
 				return photo;
 			} catch (ApiException e) {
 				// Erreur lors de la récupération de la photo. Un simple warning
-				log.warn("Erreur (getPhoto) lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {} codePeriode {} => ({}) message: {} body : {}", codeApprenant, etablissement, cible, codePhoto, codePeriode, e.getCode(), e.getMessage(),e.getResponseBody());
+				log.warn("Erreur (getPhoto) lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {} => ({}) message: {} body : {}", codeApprenant, etablissement, cible, codePeriode, e.getCode(), e.getMessage(),e.getResponseBody());
 			} catch (RuntimeException rex) {
-				log.error("Erreur (getPhoto) lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {}  et cible {} et codePhoto {} codePeriode {} => ",codeApprenant, etablissement, cible, codePhoto, codePeriode, rex);
+				log.error("Erreur (getPhoto) lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {}  et cible {} et codePeriode {} => ",codeApprenant, etablissement, cible, codePeriode, rex);
 			}
 		}
 		return null;
