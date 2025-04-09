@@ -111,8 +111,6 @@ public class ConfigController {
 
 	private static final String PEGASE_API_PAI_URL = "PEGASE_API_PAI_URL";
 
-	private static final String PEGASE_ID_PJ_PHOTO = "PEGASE_ID_PJ_PHOTO";
-
 	private static final String PEGASE_DEMO_APPRENANT = "PEGASE_DEMO_APPRENANT";
 
 	private static final String PEGASE_TEST_PERIODE = "PEGASE_TEST_PERIODE";
@@ -275,9 +273,6 @@ public class ConfigController {
 	}
 	public String getApiPaiUrl() {
 		return getStringValueForParameter(PEGASE_API_PAI_URL);
-	}
-	public String getIdPjPhoto() {
-		return getStringValueForParameter(PEGASE_ID_PJ_PHOTO);
 	}
 	public String getPegaseDemoApprenant() {
 		return getStringValueForParameter(PEGASE_DEMO_APPRENANT);

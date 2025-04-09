@@ -152,7 +152,6 @@ public class PegaseServiceIT {
 		given(configController.getApiPaiUrl()).willReturn(apiPaiUrl);
 		pegaseService.refreshApiParameters();
 		given(configController.getEtablissement()).willReturn(codeEtab);
-		given(configController.getIdPjPhoto()).willReturn(codePjPhoto);
 		given(configController.getPegaseDemoApprenant()).willReturn(codeApprenant);
 		pegaseService.refreshPegaseParameters();
 		log.info("Test PegaseService getCursus token : {}",accessTokenService.getToken());
