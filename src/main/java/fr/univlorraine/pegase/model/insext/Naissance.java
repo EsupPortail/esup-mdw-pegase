@@ -1,8 +1,8 @@
 /*
- * INSCRIPTION Externe V1 [EXTERNE]
- * Liste l'ensemble des services et des opérations Ins (Module Inscription) marquées comme [EXTERNE].  Ils peuvent être utilisés par des outils externes à Pegase.  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers la documentation qui décrit l'authentification aux APIs de Pegase : [pdf](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1)  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  ### Code retour  * 200 - Ok : L'opération s'est déroulée avec succès * 201 - Created : L'opération a aboutie à la création d'une ressource * 400 - Bad request :   * Un ou des paramètres d'entrées sont erronées   * Une erreur fonctionnelle s'est produite * 401 - Unauthorized - Vous n'êtes pas authentifié   * Il n'y a pas de token passé dans le header HTTP `Authorization`   * Le token passé n'est pas au bon format (Bearer <[token-jwt](https://jwt.io/)>) * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération   * La signature du token est incorrecte / n'a pas pû être vérifiée   * Le token est expiré   * Les habilitations de l'utilisateur ne permettent pas d'exécuter cette opération. Vérifier les droits de l'utilisateur * 404 - Not Found : La ressource demandée n'est pas trouvé     * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide * 500 - Internal server error : Erreur inattendue et non gérés 
+ * INSCRIPTION Externe V2
+ *  # Introduction  Liste l'ensemble des services et des opérations Ins (Module Inscription) identifiés pour un usage externe.  La documentation d'intégration de Pégase est publiée par version dans  [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/).  Vous y retrouverez notamment des informations sur le modèle objet métier,  le versionning des APIs, les cas d'usage des APIs externes.  # Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.  # Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  # Gestion des erreurs  ## StatusCode  | Code    | Description                                | |---------|--------------------------------------------| | 200     | Opération effectuée                        | |         | Cas particulier: Dans le cas d'APIs de     | |         | type bulk, un 200 peut aussi être retourné | |         | si des données de la requête sont          | |         | considérées en erreur                      | | 201     | Ressource créée                            | | 400     | Données envoyées par le client invalides   | | 403     | Accès refusé                               | | 404     | Ressource inexistante                      | | 409     | donnée déjà existante                      | | 500     | Erreur technique rencontrée par le serveur |   ## Codes d'erreurs  | Code      | Description                                | |-----------|--------------------------------------------| | notNull   | la propriété est obligatoire               | | notBlank  | la propriété ne doit pas être vide         | | size      | la longueur de la propriété est invalide   | | pattern   | les caractères ou la syntaxe de            | |           | la propriété est invalide                  | | genre     | le genre de la personne est invalide       | | dateEntre | la date est invalide                       | | telephone | le téléphone est invalide                  | | email     | le mail est invalide                       | 
  *
- * The version of the OpenAPI document: 1.3.1
+ * The version of the OpenAPI document: 2.1.0-rc.20250404093138
  * 
  *
  * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
@@ -14,20 +14,41 @@
 package fr.univlorraine.pegase.model.insext;
 
 import java.util.Objects;
-import java.util.Arrays;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.util.Arrays;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.api.JSON;
 
 /**
  * Naissance
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-01-29T09:55:35.009513400+01:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-24T16:08:56.114878100+02:00[Europe/Paris]", comments = "Generator version: 7.11.0")
 public class Naissance {
   public static final String SERIALIZED_NAME_DATE_DE_NAISSANCE = "dateDeNaissance";
   public static final String SERIALIZED_NAME_PAYS_DE_NAISSANCE = "paysDeNaissance";
@@ -40,284 +61,329 @@ public class Naissance {
   public static final String SERIALIZED_NAME_DEUXIEME_NATIONALITE = "deuxiemeNationalite";
   public static final String SERIALIZED_NAME_LIBELLE_DEUXIEME_NATIONALITE = "libelleDeuxiemeNationalite";
   public static final String SERIALIZED_NAME_DATE_D_OBTENTION_DE_LA_DEUXIEME_NATIONALITE = "dateDObtentionDeLaDeuxiemeNationalite";
-  @SerializedName(SERIALIZED_NAME_DATE_DE_NAISSANCE)
-  private String dateDeNaissance;
-  @SerializedName(SERIALIZED_NAME_PAYS_DE_NAISSANCE)
-  private String paysDeNaissance;
-  @SerializedName(SERIALIZED_NAME_LIBELLE_PAYS_DE_NAISSANCE)
-  private String libellePaysDeNaissance;
-  @SerializedName(SERIALIZED_NAME_COMMUNE_DE_NAISSANCE)
-  private String communeDeNaissance;
-  @SerializedName(SERIALIZED_NAME_LIBELLE_COMMUNE_DE_NAISSANCE)
-  private String libelleCommuneDeNaissance;
-  @SerializedName(SERIALIZED_NAME_COMMUNE_DE_NAISSANCE_ETRANGER)
-  private String communeDeNaissanceEtranger;
-  @SerializedName(SERIALIZED_NAME_NATIONALITE)
-  private String nationalite;
-  @SerializedName(SERIALIZED_NAME_LIBELLE_NATIONALITE)
-  private String libelleNationalite;
-  @SerializedName(SERIALIZED_NAME_DEUXIEME_NATIONALITE)
-  private String deuxiemeNationalite;
-  @SerializedName(SERIALIZED_NAME_LIBELLE_DEUXIEME_NATIONALITE)
-  private String libelleDeuxiemeNationalite;
-  @SerializedName(SERIALIZED_NAME_DATE_D_OBTENTION_DE_LA_DEUXIEME_NATIONALITE)
-  private String dateDObtentionDeLaDeuxiemeNationalite;
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
 
-  public Naissance() { 
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>();
+    openapiFields.add("dateDeNaissance");
+    openapiFields.add("paysDeNaissance");
+    openapiFields.add("libellePaysDeNaissance");
+    openapiFields.add("communeDeNaissance");
+    openapiFields.add("libelleCommuneDeNaissance");
+    openapiFields.add("communeDeNaissanceEtranger");
+    openapiFields.add("nationalite");
+    openapiFields.add("libelleNationalite");
+    openapiFields.add("deuxiemeNationalite");
+    openapiFields.add("libelleDeuxiemeNationalite");
+    openapiFields.add("dateDObtentionDeLaDeuxiemeNationalite");
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>();
   }
 
-  public Naissance dateDeNaissance(String dateDeNaissance) {
-    
+  @SerializedName(SERIALIZED_NAME_DATE_DE_NAISSANCE)
+  @javax.annotation.Nullable
+  private String dateDeNaissance;
+  @SerializedName(SERIALIZED_NAME_PAYS_DE_NAISSANCE)
+  @javax.annotation.Nullable
+  private String paysDeNaissance;
+  @SerializedName(SERIALIZED_NAME_LIBELLE_PAYS_DE_NAISSANCE)
+  @javax.annotation.Nullable
+  private String libellePaysDeNaissance;
+  @SerializedName(SERIALIZED_NAME_COMMUNE_DE_NAISSANCE)
+  @javax.annotation.Nullable
+  private String communeDeNaissance;
+  @SerializedName(SERIALIZED_NAME_LIBELLE_COMMUNE_DE_NAISSANCE)
+  @javax.annotation.Nullable
+  private String libelleCommuneDeNaissance;
+  @SerializedName(SERIALIZED_NAME_COMMUNE_DE_NAISSANCE_ETRANGER)
+  @javax.annotation.Nullable
+  private String communeDeNaissanceEtranger;
+  @SerializedName(SERIALIZED_NAME_NATIONALITE)
+  @javax.annotation.Nullable
+  private String nationalite;
+  @SerializedName(SERIALIZED_NAME_LIBELLE_NATIONALITE)
+  @javax.annotation.Nullable
+  private String libelleNationalite;
+  @SerializedName(SERIALIZED_NAME_DEUXIEME_NATIONALITE)
+  @javax.annotation.Nullable
+  private String deuxiemeNationalite;
+  @SerializedName(SERIALIZED_NAME_LIBELLE_DEUXIEME_NATIONALITE)
+  @javax.annotation.Nullable
+  private String libelleDeuxiemeNationalite;
+  @SerializedName(SERIALIZED_NAME_DATE_D_OBTENTION_DE_LA_DEUXIEME_NATIONALITE)
+  @javax.annotation.Nullable
+  private String dateDObtentionDeLaDeuxiemeNationalite;
+
+  public Naissance() {
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to Naissance
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!Naissance.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format("The required field(s) %s in Naissance is not found in the empty JSON string", Naissance.openapiRequiredFields.toString()));
+        }
+      }
+
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!Naissance.openapiFields.contains(entry.getKey())) {
+          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `Naissance` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+        }
+      }
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("dateDeNaissance") != null && !jsonObj.get("dateDeNaissance").isJsonNull()) && !jsonObj.get("dateDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `dateDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateDeNaissance").toString()));
+      }
+      if ((jsonObj.get("paysDeNaissance") != null && !jsonObj.get("paysDeNaissance").isJsonNull()) && !jsonObj.get("paysDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `paysDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("paysDeNaissance").toString()));
+      }
+      if ((jsonObj.get("libellePaysDeNaissance") != null && !jsonObj.get("libellePaysDeNaissance").isJsonNull()) && !jsonObj.get("libellePaysDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `libellePaysDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libellePaysDeNaissance").toString()));
+      }
+      if ((jsonObj.get("communeDeNaissance") != null && !jsonObj.get("communeDeNaissance").isJsonNull()) && !jsonObj.get("communeDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `communeDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("communeDeNaissance").toString()));
+      }
+      if ((jsonObj.get("libelleCommuneDeNaissance") != null && !jsonObj.get("libelleCommuneDeNaissance").isJsonNull()) && !jsonObj.get("libelleCommuneDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `libelleCommuneDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleCommuneDeNaissance").toString()));
+      }
+      if ((jsonObj.get("communeDeNaissanceEtranger") != null && !jsonObj.get("communeDeNaissanceEtranger").isJsonNull()) && !jsonObj.get("communeDeNaissanceEtranger").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `communeDeNaissanceEtranger` to be a primitive type in the JSON string but got `%s`", jsonObj.get("communeDeNaissanceEtranger").toString()));
+      }
+      if ((jsonObj.get("nationalite") != null && !jsonObj.get("nationalite").isJsonNull()) && !jsonObj.get("nationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `nationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("nationalite").toString()));
+      }
+      if ((jsonObj.get("libelleNationalite") != null && !jsonObj.get("libelleNationalite").isJsonNull()) && !jsonObj.get("libelleNationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `libelleNationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleNationalite").toString()));
+      }
+      if ((jsonObj.get("deuxiemeNationalite") != null && !jsonObj.get("deuxiemeNationalite").isJsonNull()) && !jsonObj.get("deuxiemeNationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `deuxiemeNationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("deuxiemeNationalite").toString()));
+      }
+      if ((jsonObj.get("libelleDeuxiemeNationalite") != null && !jsonObj.get("libelleDeuxiemeNationalite").isJsonNull()) && !jsonObj.get("libelleDeuxiemeNationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `libelleDeuxiemeNationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleDeuxiemeNationalite").toString()));
+      }
+      if ((jsonObj.get("dateDObtentionDeLaDeuxiemeNationalite") != null && !jsonObj.get("dateDObtentionDeLaDeuxiemeNationalite").isJsonNull()) && !jsonObj.get("dateDObtentionDeLaDeuxiemeNationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `dateDObtentionDeLaDeuxiemeNationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateDObtentionDeLaDeuxiemeNationalite").toString()));
+      }
+  }
+
+  /**
+   * Create an instance of Naissance given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of Naissance
+   * @throws IOException if the JSON string is invalid with respect to Naissance
+   */
+  public static Naissance fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, Naissance.class);
+  }
+
+  public Naissance dateDeNaissance(@javax.annotation.Nullable String dateDeNaissance) {
     this.dateDeNaissance = dateDeNaissance;
     return this;
   }
 
-   /**
+  /**
    * La date de naissance au format AAAA-MM-JJ
    * @return dateDeNaissance
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "La date de naissance au format AAAA-MM-JJ")
-
   public String getDateDeNaissance() {
     return dateDeNaissance;
   }
 
-
-  public void setDateDeNaissance(String dateDeNaissance) {
+  public void setDateDeNaissance(@javax.annotation.Nullable String dateDeNaissance) {
     this.dateDeNaissance = dateDeNaissance;
   }
 
-
-  public Naissance paysDeNaissance(String paysDeNaissance) {
-    
+  public Naissance paysDeNaissance(@javax.annotation.Nullable String paysDeNaissance) {
     this.paysDeNaissance = paysDeNaissance;
     return this;
   }
 
-   /**
-   * Le code pays du pays de naissance issu de la nomenclature Pays et Nationalités Ex : 100 &#x3D; France 
+  /**
+   * Le code pays du pays de naissance issu de la nomenclature Pays et Nationalités Ex : 100 &#x3D; France
    * @return paysDeNaissance
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "100", value = "Le code pays du pays de naissance issu de la nomenclature Pays et Nationalités Ex : 100 = France ")
-
   public String getPaysDeNaissance() {
     return paysDeNaissance;
   }
 
-
-  public void setPaysDeNaissance(String paysDeNaissance) {
+  public void setPaysDeNaissance(@javax.annotation.Nullable String paysDeNaissance) {
     this.paysDeNaissance = paysDeNaissance;
   }
 
-
-  public Naissance libellePaysDeNaissance(String libellePaysDeNaissance) {
-    
+  public Naissance libellePaysDeNaissance(@javax.annotation.Nullable String libellePaysDeNaissance) {
     this.libellePaysDeNaissance = libellePaysDeNaissance;
     return this;
   }
 
-   /**
-   * Le libelle du pays de naissance issu de la nomenclature Pays et Nationalités Ex : 100 &#x3D; France 
+  /**
+   * Le libelle du pays de naissance issu de la nomenclature Pays et Nationalités Ex : 100 &#x3D; France
    * @return libellePaysDeNaissance
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "France", value = "Le libelle du pays de naissance issu de la nomenclature Pays et Nationalités Ex : 100 = France ")
-
   public String getLibellePaysDeNaissance() {
     return libellePaysDeNaissance;
   }
 
-
-  public void setLibellePaysDeNaissance(String libellePaysDeNaissance) {
+  public void setLibellePaysDeNaissance(@javax.annotation.Nullable String libellePaysDeNaissance) {
     this.libellePaysDeNaissance = libellePaysDeNaissance;
   }
 
-
-  public Naissance communeDeNaissance(String communeDeNaissance) {
-    
+  public Naissance communeDeNaissance(@javax.annotation.Nullable String communeDeNaissance) {
     this.communeDeNaissance = communeDeNaissance;
     return this;
   }
 
-   /**
-   * Le code INSEE de la commune de naissance en France Ex : 67482 &#x3D; Strasbourg 
+  /**
+   * Le code INSEE de la commune de naissance en France Ex : 67482 &#x3D; Strasbourg
    * @return communeDeNaissance
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "67482", value = "Le code INSEE de la commune de naissance en France Ex : 67482 = Strasbourg ")
-
   public String getCommuneDeNaissance() {
     return communeDeNaissance;
   }
 
-
-  public void setCommuneDeNaissance(String communeDeNaissance) {
+  public void setCommuneDeNaissance(@javax.annotation.Nullable String communeDeNaissance) {
     this.communeDeNaissance = communeDeNaissance;
   }
 
-
-  public Naissance libelleCommuneDeNaissance(String libelleCommuneDeNaissance) {
-    
+  public Naissance libelleCommuneDeNaissance(@javax.annotation.Nullable String libelleCommuneDeNaissance) {
     this.libelleCommuneDeNaissance = libelleCommuneDeNaissance;
     return this;
   }
 
-   /**
-   * Le code INSEE de la commune de naissance en France Ex : 67482 &#x3D; Strasbourg 
+  /**
+   * Le code INSEE de la commune de naissance en France Ex : 67482 &#x3D; Strasbourg
    * @return libelleCommuneDeNaissance
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "Strasbourg", value = "Le code INSEE de la commune de naissance en France Ex : 67482 = Strasbourg ")
-
   public String getLibelleCommuneDeNaissance() {
     return libelleCommuneDeNaissance;
   }
 
-
-  public void setLibelleCommuneDeNaissance(String libelleCommuneDeNaissance) {
+  public void setLibelleCommuneDeNaissance(@javax.annotation.Nullable String libelleCommuneDeNaissance) {
     this.libelleCommuneDeNaissance = libelleCommuneDeNaissance;
   }
 
-
-  public Naissance communeDeNaissanceEtranger(String communeDeNaissanceEtranger) {
-    
+  public Naissance communeDeNaissanceEtranger(@javax.annotation.Nullable String communeDeNaissanceEtranger) {
     this.communeDeNaissanceEtranger = communeDeNaissanceEtranger;
     return this;
   }
 
-   /**
+  /**
    * La commune de naissance à l&#39;étranger
    * @return communeDeNaissanceEtranger
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "La commune de naissance à l'étranger")
-
   public String getCommuneDeNaissanceEtranger() {
     return communeDeNaissanceEtranger;
   }
 
-
-  public void setCommuneDeNaissanceEtranger(String communeDeNaissanceEtranger) {
+  public void setCommuneDeNaissanceEtranger(@javax.annotation.Nullable String communeDeNaissanceEtranger) {
     this.communeDeNaissanceEtranger = communeDeNaissanceEtranger;
   }
 
-
-  public Naissance nationalite(String nationalite) {
-    
+  public Naissance nationalite(@javax.annotation.Nullable String nationalite) {
     this.nationalite = nationalite;
     return this;
   }
 
-   /**
+  /**
    * Le code pays associé à la nationalité issu de la nomenclature Pays et Nationalités
    * @return nationalite
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code pays associé à la nationalité issu de la nomenclature Pays et Nationalités")
-
   public String getNationalite() {
     return nationalite;
   }
 
-
-  public void setNationalite(String nationalite) {
+  public void setNationalite(@javax.annotation.Nullable String nationalite) {
     this.nationalite = nationalite;
   }
 
-
-  public Naissance libelleNationalite(String libelleNationalite) {
-    
+  public Naissance libelleNationalite(@javax.annotation.Nullable String libelleNationalite) {
     this.libelleNationalite = libelleNationalite;
     return this;
   }
 
-   /**
+  /**
    * Le libelle pays associé à la nationalité issu de la nomenclature Pays et Nationalités
    * @return libelleNationalite
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le libelle pays associé à la nationalité issu de la nomenclature Pays et Nationalités")
-
   public String getLibelleNationalite() {
     return libelleNationalite;
   }
 
-
-  public void setLibelleNationalite(String libelleNationalite) {
+  public void setLibelleNationalite(@javax.annotation.Nullable String libelleNationalite) {
     this.libelleNationalite = libelleNationalite;
   }
 
-
-  public Naissance deuxiemeNationalite(String deuxiemeNationalite) {
-    
+  public Naissance deuxiemeNationalite(@javax.annotation.Nullable String deuxiemeNationalite) {
     this.deuxiemeNationalite = deuxiemeNationalite;
     return this;
   }
 
-   /**
+  /**
    * Le code pays associé à la deuxième nationalité issu de la nomenclature Pays et Nationalités
    * @return deuxiemeNationalite
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code pays associé à la deuxième nationalité issu de la nomenclature Pays et Nationalités")
-
   public String getDeuxiemeNationalite() {
     return deuxiemeNationalite;
   }
 
-
-  public void setDeuxiemeNationalite(String deuxiemeNationalite) {
+  public void setDeuxiemeNationalite(@javax.annotation.Nullable String deuxiemeNationalite) {
     this.deuxiemeNationalite = deuxiemeNationalite;
   }
 
-
-  public Naissance libelleDeuxiemeNationalite(String libelleDeuxiemeNationalite) {
-    
+  public Naissance libelleDeuxiemeNationalite(@javax.annotation.Nullable String libelleDeuxiemeNationalite) {
     this.libelleDeuxiemeNationalite = libelleDeuxiemeNationalite;
     return this;
   }
 
-   /**
+  /**
    * Le libelle pays associé à la deuxième nationalité issu de la nomenclature Pays et Nationalités
    * @return libelleDeuxiemeNationalite
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le libelle pays associé à la deuxième nationalité issu de la nomenclature Pays et Nationalités")
-
   public String getLibelleDeuxiemeNationalite() {
     return libelleDeuxiemeNationalite;
   }
 
-
-  public void setLibelleDeuxiemeNationalite(String libelleDeuxiemeNationalite) {
+  public void setLibelleDeuxiemeNationalite(@javax.annotation.Nullable String libelleDeuxiemeNationalite) {
     this.libelleDeuxiemeNationalite = libelleDeuxiemeNationalite;
   }
 
-
-  public Naissance dateDObtentionDeLaDeuxiemeNationalite(String dateDObtentionDeLaDeuxiemeNationalite) {
-    
+  public Naissance dateDObtentionDeLaDeuxiemeNationalite(@javax.annotation.Nullable String dateDObtentionDeLaDeuxiemeNationalite) {
     this.dateDObtentionDeLaDeuxiemeNationalite = dateDObtentionDeLaDeuxiemeNationalite;
     return this;
   }
 
-   /**
+  /**
    * La date d&#39;obtention de la deuxième nationalité au format AAAA-MM-JJ
    * @return dateDObtentionDeLaDeuxiemeNationalite
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "La date d'obtention de la deuxième nationalité au format AAAA-MM-JJ")
-
   public String getDateDObtentionDeLaDeuxiemeNationalite() {
     return dateDObtentionDeLaDeuxiemeNationalite;
   }
 
-
-  public void setDateDObtentionDeLaDeuxiemeNationalite(String dateDObtentionDeLaDeuxiemeNationalite) {
+  public void setDateDObtentionDeLaDeuxiemeNationalite(@javax.annotation.Nullable String dateDObtentionDeLaDeuxiemeNationalite) {
     this.dateDObtentionDeLaDeuxiemeNationalite = dateDObtentionDeLaDeuxiemeNationalite;
   }
-
 
   @Override
   public boolean equals(Object o) {
@@ -376,5 +442,42 @@ public class Naissance {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert an instance of Naissance to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!Naissance.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'Naissance' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<Naissance> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(Naissance.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<Naissance>() {
+           @Override
+           public void write(JsonWriter out, Naissance value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public Naissance read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
 }
 

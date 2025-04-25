@@ -1,8 +1,8 @@
 /*
- * INSCRIPTION Externe V1 [EXTERNE]
- * Liste l'ensemble des services et des opérations Ins (Module Inscription) marquées comme [EXTERNE].  Ils peuvent être utilisés par des outils externes à Pegase.  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers la documentation qui décrit l'authentification aux APIs de Pegase : [pdf](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1)  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  ### Code retour  * 200 - Ok : L'opération s'est déroulée avec succès * 201 - Created : L'opération a aboutie à la création d'une ressource * 400 - Bad request :   * Un ou des paramètres d'entrées sont erronées   * Une erreur fonctionnelle s'est produite * 401 - Unauthorized - Vous n'êtes pas authentifié   * Il n'y a pas de token passé dans le header HTTP `Authorization`   * Le token passé n'est pas au bon format (Bearer <[token-jwt](https://jwt.io/)>) * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération   * La signature du token est incorrecte / n'a pas pû être vérifiée   * Le token est expiré   * Les habilitations de l'utilisateur ne permettent pas d'exécuter cette opération. Vérifier les droits de l'utilisateur * 404 - Not Found : La ressource demandée n'est pas trouvé     * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide * 500 - Internal server error : Erreur inattendue et non gérés 
+ * INSCRIPTION Externe V2
+ *  # Introduction  Liste l'ensemble des services et des opérations Ins (Module Inscription) identifiés pour un usage externe.  La documentation d'intégration de Pégase est publiée par version dans  [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/).  Vous y retrouverez notamment des informations sur le modèle objet métier,  le versionning des APIs, les cas d'usage des APIs externes.  # Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.  # Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  # Gestion des erreurs  ## StatusCode  | Code    | Description                                | |---------|--------------------------------------------| | 200     | Opération effectuée                        | |         | Cas particulier: Dans le cas d'APIs de     | |         | type bulk, un 200 peut aussi être retourné | |         | si des données de la requête sont          | |         | considérées en erreur                      | | 201     | Ressource créée                            | | 400     | Données envoyées par le client invalides   | | 403     | Accès refusé                               | | 404     | Ressource inexistante                      | | 409     | donnée déjà existante                      | | 500     | Erreur technique rencontrée par le serveur |   ## Codes d'erreurs  | Code      | Description                                | |-----------|--------------------------------------------| | notNull   | la propriété est obligatoire               | | notBlank  | la propriété ne doit pas être vide         | | size      | la longueur de la propriété est invalide   | | pattern   | les caractères ou la syntaxe de            | |           | la propriété est invalide                  | | genre     | le genre de la personne est invalide       | | dateEntre | la date est invalide                       | | telephone | le téléphone est invalide                  | | email     | le mail est invalide                       | 
  *
- * The version of the OpenAPI document: 1.3.1
+ * The version of the OpenAPI document: 2.1.0-rc.20250404093138
  * 
  *
  * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
@@ -28,7 +28,6 @@ import java.io.IOException;
 
 
 import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
-import java.io.File;
 import fr.univlorraine.pegase.model.insext.Pageable;
 import fr.univlorraine.pegase.model.insext.VueInscriptions;
 
@@ -76,177 +75,6 @@ public class InscriptionsApi {
     }
 
     /**
-     * Build call for contenuPiece
-     * @param codeStructure Le code de l&#39;établissement (required)
-     * @param codeApprenant Le code apprenant (required)
-     * @param codeCible Le code cible avec la période (required)
-     * @param codePiece Le code de la demande de pièce (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Fichier </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Pièce introuvable </td><td>  -  </td></tr>
-     </table>
-     * @deprecated
-     */
-    @Deprecated
-    public okhttp3.Call contenuPieceCall(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback _callback) throws ApiException {
-        String basePath = null;
-
-        // Operation Servers
-        String[] localBasePaths = new String[] {  };
-
-        // Determine Base Path to Use
-        if (localCustomBaseUrl != null){
-            basePath = localCustomBaseUrl;
-        } else if ( localBasePaths.length > 0 ) {
-            basePath = localBasePaths[localHostIndex];
-        } else {
-            basePath = null;
-        }
-
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/gestion/inscriptions/{codeStructure}/{codeApprenant}/{codeCible}/{codePiece}/contenu"
-            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()))
-            .replaceAll("\\{" + "codeApprenant" + "\\}", localVarApiClient.escapeString(codeApprenant.toString()))
-            .replaceAll("\\{" + "codeCible" + "\\}", localVarApiClient.escapeString(codeCible.toString()))
-            .replaceAll("\\{" + "codePiece" + "\\}", localVarApiClient.escapeString(codePiece.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "image/png", "image/jpg", "application/pdf"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        if (localVarContentType != null) {
-            localVarHeaderParams.put("Content-Type", localVarContentType);
-        }
-
-        String[] localVarAuthNames = new String[] { "idTokenAuth" };
-        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @Deprecated
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call contenuPieceValidateBeforeCall(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'codeStructure' is set
-        if (codeStructure == null) {
-            throw new ApiException("Missing the required parameter 'codeStructure' when calling contenuPiece(Async)");
-        }
-        
-        // verify the required parameter 'codeApprenant' is set
-        if (codeApprenant == null) {
-            throw new ApiException("Missing the required parameter 'codeApprenant' when calling contenuPiece(Async)");
-        }
-        
-        // verify the required parameter 'codeCible' is set
-        if (codeCible == null) {
-            throw new ApiException("Missing the required parameter 'codeCible' when calling contenuPiece(Async)");
-        }
-        
-        // verify the required parameter 'codePiece' is set
-        if (codePiece == null) {
-            throw new ApiException("Missing the required parameter 'codePiece' when calling contenuPiece(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = contenuPieceCall(codeStructure, codeApprenant, codeCible, codePiece, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * Contenu de la pièce
-     * Contenu de la pièce
-     * @param codeStructure Le code de l&#39;établissement (required)
-     * @param codeApprenant Le code apprenant (required)
-     * @param codeCible Le code cible avec la période (required)
-     * @param codePiece Le code de la demande de pièce (required)
-     * @return File
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Fichier </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Pièce introuvable </td><td>  -  </td></tr>
-     </table>
-     * @deprecated
-     */
-    @Deprecated
-    public File contenuPiece(String codeStructure, String codeApprenant, String codeCible, String codePiece) throws ApiException {
-        ApiResponse<File> localVarResp = contenuPieceWithHttpInfo(codeStructure, codeApprenant, codeCible, codePiece);
-        return localVarResp.getData();
-    }
-
-    /**
-     * Contenu de la pièce
-     * Contenu de la pièce
-     * @param codeStructure Le code de l&#39;établissement (required)
-     * @param codeApprenant Le code apprenant (required)
-     * @param codeCible Le code cible avec la période (required)
-     * @param codePiece Le code de la demande de pièce (required)
-     * @return ApiResponse&lt;File&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Fichier </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Pièce introuvable </td><td>  -  </td></tr>
-     </table>
-     * @deprecated
-     */
-    @Deprecated
-    public ApiResponse<File> contenuPieceWithHttpInfo(String codeStructure, String codeApprenant, String codeCible, String codePiece) throws ApiException {
-        okhttp3.Call localVarCall = contenuPieceValidateBeforeCall(codeStructure, codeApprenant, codeCible, codePiece, null);
-        Type localVarReturnType = new TypeToken<File>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * Contenu de la pièce (asynchronously)
-     * Contenu de la pièce
-     * @param codeStructure Le code de l&#39;établissement (required)
-     * @param codeApprenant Le code apprenant (required)
-     * @param codeCible Le code cible avec la période (required)
-     * @param codePiece Le code de la demande de pièce (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Fichier </td><td>  -  </td></tr>
-        <tr><td> 404 </td><td> Pièce introuvable </td><td>  -  </td></tr>
-     </table>
-     * @deprecated
-     */
-    @Deprecated
-    public okhttp3.Call contenuPieceAsync(String codeStructure, String codeApprenant, String codeCible, String codePiece, final ApiCallback<File> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = contenuPieceValidateBeforeCall(codeStructure, codeApprenant, codeCible, codePiece, _callback);
-        Type localVarReturnType = new TypeToken<File>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
      * Build call for lireInscriptions
      * @param codeStructure Le code de l&#39;établissement (required)
      * @param codeApprenant Le code de l&#39;apprenant (required)
@@ -254,7 +82,8 @@ public class InscriptionsApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
-     <table summary="Response Details" border="1">
+     <table border="1">
+       <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Données de l&#39;apprenant et ses inscriptions </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Apprenant introuvable </td><td>  -  </td></tr>
@@ -262,7 +91,6 @@ public class InscriptionsApi {
      */
     public okhttp3.Call lireInscriptionsCall(String codeStructure, String codeApprenant, final ApiCallback _callback) throws ApiException {
         String basePath = null;
-
         // Operation Servers
         String[] localBasePaths = new String[] {  };
 
@@ -279,8 +107,8 @@ public class InscriptionsApi {
 
         // create path and map variables
         String localVarPath = "/gestion/inscription/{codeStructure}/{codeApprenant}/"
-            .replaceAll("\\{" + "codeStructure" + "\\}", localVarApiClient.escapeString(codeStructure.toString()))
-            .replaceAll("\\{" + "codeApprenant" + "\\}", localVarApiClient.escapeString(codeApprenant.toString()));
+            .replace("{" + "codeStructure" + "}", localVarApiClient.escapeString(codeStructure.toString()))
+            .replace("{" + "codeApprenant" + "}", localVarApiClient.escapeString(codeApprenant.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -297,7 +125,6 @@ public class InscriptionsApi {
         }
 
         final String[] localVarContentTypes = {
-            
         };
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         if (localVarContentType != null) {
@@ -310,20 +137,17 @@ public class InscriptionsApi {
 
     @SuppressWarnings("rawtypes")
     private okhttp3.Call lireInscriptionsValidateBeforeCall(String codeStructure, String codeApprenant, final ApiCallback _callback) throws ApiException {
-        
         // verify the required parameter 'codeStructure' is set
         if (codeStructure == null) {
             throw new ApiException("Missing the required parameter 'codeStructure' when calling lireInscriptions(Async)");
         }
-        
+
         // verify the required parameter 'codeApprenant' is set
         if (codeApprenant == null) {
             throw new ApiException("Missing the required parameter 'codeApprenant' when calling lireInscriptions(Async)");
         }
-        
 
-        okhttp3.Call localVarCall = lireInscriptionsCall(codeStructure, codeApprenant, _callback);
-        return localVarCall;
+        return lireInscriptionsCall(codeStructure, codeApprenant, _callback);
 
     }
 
@@ -335,7 +159,8 @@ public class InscriptionsApi {
      * @return ApprenantEtInscriptions
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
-     <table summary="Response Details" border="1">
+     <table border="1">
+       <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Données de l&#39;apprenant et ses inscriptions </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Apprenant introuvable </td><td>  -  </td></tr>
@@ -354,7 +179,8 @@ public class InscriptionsApi {
      * @return ApiResponse&lt;ApprenantEtInscriptions&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
-     <table summary="Response Details" border="1">
+     <table border="1">
+       <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Données de l&#39;apprenant et ses inscriptions </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Apprenant introuvable </td><td>  -  </td></tr>
@@ -375,7 +201,8 @@ public class InscriptionsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
-     <table summary="Response Details" border="1">
+     <table border="1">
+       <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Données de l&#39;apprenant et ses inscriptions </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Apprenant introuvable </td><td>  -  </td></tr>
@@ -400,7 +227,8 @@ public class InscriptionsApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
-     <table summary="Response Details" border="1">
+     <table border="1">
+       <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Données de la carte multi-services récupérées </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Flux introuvable </td><td>  -  </td></tr>
@@ -408,7 +236,6 @@ public class InscriptionsApi {
      */
     public okhttp3.Call listerFluxInscriptionsPagineCall(Long depuis, Long jusqua, Boolean photo, String codePeriode, Pageable pageable, String codeApprenant, final ApiCallback _callback) throws ApiException {
         String basePath = null;
-
         // Operation Servers
         String[] localBasePaths = new String[] {  };
 
@@ -465,7 +292,6 @@ public class InscriptionsApi {
         }
 
         final String[] localVarContentTypes = {
-            
         };
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         if (localVarContentType != null) {
@@ -478,10 +304,7 @@ public class InscriptionsApi {
 
     @SuppressWarnings("rawtypes")
     private okhttp3.Call listerFluxInscriptionsPagineValidateBeforeCall(Long depuis, Long jusqua, Boolean photo, String codePeriode, Pageable pageable, String codeApprenant, final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = listerFluxInscriptionsPagineCall(depuis, jusqua, photo, codePeriode, pageable, codeApprenant, _callback);
-        return localVarCall;
+        return listerFluxInscriptionsPagineCall(depuis, jusqua, photo, codePeriode, pageable, codeApprenant, _callback);
 
     }
 
@@ -497,7 +320,8 @@ public class InscriptionsApi {
      * @return VueInscriptions
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
-     <table summary="Response Details" border="1">
+     <table border="1">
+       <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Données de la carte multi-services récupérées </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Flux introuvable </td><td>  -  </td></tr>
@@ -520,7 +344,8 @@ public class InscriptionsApi {
      * @return ApiResponse&lt;VueInscriptions&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
-     <table summary="Response Details" border="1">
+     <table border="1">
+       <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Données de la carte multi-services récupérées </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Flux introuvable </td><td>  -  </td></tr>
@@ -545,7 +370,8 @@ public class InscriptionsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
-     <table summary="Response Details" border="1">
+     <table border="1">
+       <caption>Response Details</caption>
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Données de la carte multi-services récupérées </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> Flux introuvable </td><td>  -  </td></tr>

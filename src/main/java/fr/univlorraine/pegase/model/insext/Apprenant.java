@@ -1,8 +1,8 @@
 /*
- * INSCRIPTION Externe V1 [EXTERNE]
- * Liste l'ensemble des services et des opérations Ins (Module Inscription) marquées comme [EXTERNE].  Ils peuvent être utilisés par des outils externes à Pegase.  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers la documentation qui décrit l'authentification aux APIs de Pegase : [pdf](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1)  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  ### Code retour  * 200 - Ok : L'opération s'est déroulée avec succès * 201 - Created : L'opération a aboutie à la création d'une ressource * 400 - Bad request :   * Un ou des paramètres d'entrées sont erronées   * Une erreur fonctionnelle s'est produite * 401 - Unauthorized - Vous n'êtes pas authentifié   * Il n'y a pas de token passé dans le header HTTP `Authorization`   * Le token passé n'est pas au bon format (Bearer <[token-jwt](https://jwt.io/)>) * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération   * La signature du token est incorrecte / n'a pas pû être vérifiée   * Le token est expiré   * Les habilitations de l'utilisateur ne permettent pas d'exécuter cette opération. Vérifier les droits de l'utilisateur * 404 - Not Found : La ressource demandée n'est pas trouvé     * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide * 500 - Internal server error : Erreur inattendue et non gérés 
+ * INSCRIPTION Externe V2
+ *  # Introduction  Liste l'ensemble des services et des opérations Ins (Module Inscription) identifiés pour un usage externe.  La documentation d'intégration de Pégase est publiée par version dans  [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/).  Vous y retrouverez notamment des informations sur le modèle objet métier,  le versionning des APIs, les cas d'usage des APIs externes.  # Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.  # Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  # Gestion des erreurs  ## StatusCode  | Code    | Description                                | |---------|--------------------------------------------| | 200     | Opération effectuée                        | |         | Cas particulier: Dans le cas d'APIs de     | |         | type bulk, un 200 peut aussi être retourné | |         | si des données de la requête sont          | |         | considérées en erreur                      | | 201     | Ressource créée                            | | 400     | Données envoyées par le client invalides   | | 403     | Accès refusé                               | | 404     | Ressource inexistante                      | | 409     | donnée déjà existante                      | | 500     | Erreur technique rencontrée par le serveur |   ## Codes d'erreurs  | Code      | Description                                | |-----------|--------------------------------------------| | notNull   | la propriété est obligatoire               | | notBlank  | la propriété ne doit pas être vide         | | size      | la longueur de la propriété est invalide   | | pattern   | les caractères ou la syntaxe de            | |           | la propriété est invalide                  | | genre     | le genre de la personne est invalide       | | dateEntre | la date est invalide                       | | telephone | le téléphone est invalide                  | | email     | le mail est invalide                       | 
  *
- * The version of the OpenAPI document: 1.3.1
+ * The version of the OpenAPI document: 2.1.0-rc.20250404093138
  * 
  *
  * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
@@ -13,20 +13,52 @@
 
 package fr.univlorraine.pegase.model.insext;
 
+import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insext.Bac;
+import fr.univlorraine.pegase.model.insext.ContactComplet;
+import fr.univlorraine.pegase.model.insext.EtatCivil;
+import fr.univlorraine.pegase.model.insext.Naissance;
+import fr.univlorraine.pegase.model.insext.PremieresInscriptions;
+import fr.univlorraine.pegase.model.insext.Profession;
+import fr.univlorraine.pegase.model.insext.SituationPersonnelleApprenant;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.api.JSON;
 
 /**
  * Les données de l&#39;apprenant
  */
-@ApiModel(description = "Les données de l'apprenant")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-01-29T09:55:35.009513400+01:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-24T16:08:56.114878100+02:00[Europe/Paris]", comments = "Generator version: 7.11.0")
 public class Apprenant {
   public static final String SERIALIZED_NAME_CODE = "code";
   public static final String SERIALIZED_NAME_ETAT_CIVIL = "etatCivil";
@@ -37,242 +69,301 @@ public class Apprenant {
   public static final String SERIALIZED_NAME_BAC = "bac";
   public static final String SERIALIZED_NAME_PREMIERES_INSCRIPTIONS = "premieresInscriptions";
   public static final String SERIALIZED_NAME_DATE_CONTEXTE_APPRENANT = "dateContexteApprenant";
-  @SerializedName(SERIALIZED_NAME_CODE)
-  private String code;
-  @SerializedName(SERIALIZED_NAME_ETAT_CIVIL)
-  private EtatCivil etatCivil;
-  @SerializedName(SERIALIZED_NAME_NAISSANCE)
-  private Naissance naissance;
-  @SerializedName(SERIALIZED_NAME_SITUATION_PERSONNELLE)
-  private SituationPersonnelleApprenant situationPersonnelle;
-  @SerializedName(SERIALIZED_NAME_PROFESSION)
-  private Profession profession;
-  @SerializedName(SERIALIZED_NAME_CONTACTS)
-  private List<ContactComplet> contacts = null;
-  @SerializedName(SERIALIZED_NAME_BAC)
-  private Bac bac;
-  @SerializedName(SERIALIZED_NAME_PREMIERES_INSCRIPTIONS)
-  private PremieresInscriptions premieresInscriptions;
-  @SerializedName(SERIALIZED_NAME_DATE_CONTEXTE_APPRENANT)
-  private Date dateContexteApprenant;
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
 
-  public Apprenant() { 
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>();
+    openapiFields.add("code");
+    openapiFields.add("etatCivil");
+    openapiFields.add("naissance");
+    openapiFields.add("situationPersonnelle");
+    openapiFields.add("profession");
+    openapiFields.add("contacts");
+    openapiFields.add("bac");
+    openapiFields.add("premieresInscriptions");
+    openapiFields.add("dateContexteApprenant");
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>();
   }
 
-  public Apprenant code(String code) {
-    
+  @SerializedName(SERIALIZED_NAME_CODE)
+  @javax.annotation.Nullable
+  private String code;
+  @SerializedName(SERIALIZED_NAME_ETAT_CIVIL)
+  @javax.annotation.Nullable
+  private EtatCivil etatCivil;
+  @SerializedName(SERIALIZED_NAME_NAISSANCE)
+  @javax.annotation.Nullable
+  private Naissance naissance;
+  @SerializedName(SERIALIZED_NAME_SITUATION_PERSONNELLE)
+  @javax.annotation.Nullable
+  private SituationPersonnelleApprenant situationPersonnelle;
+  @SerializedName(SERIALIZED_NAME_PROFESSION)
+  @javax.annotation.Nullable
+  private Profession profession;
+  @SerializedName(SERIALIZED_NAME_CONTACTS)
+  @javax.annotation.Nullable
+  private List<ContactComplet> contacts = new ArrayList<>();
+  @SerializedName(SERIALIZED_NAME_BAC)
+  @javax.annotation.Nullable
+  private Bac bac;
+  @SerializedName(SERIALIZED_NAME_PREMIERES_INSCRIPTIONS)
+  @javax.annotation.Nullable
+  private PremieresInscriptions premieresInscriptions;
+  @SerializedName(SERIALIZED_NAME_DATE_CONTEXTE_APPRENANT)
+  @javax.annotation.Nullable
+  private Date dateContexteApprenant;
+
+  public Apprenant() {
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to Apprenant
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!Apprenant.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format("The required field(s) %s in Apprenant is not found in the empty JSON string", Apprenant.openapiRequiredFields.toString()));
+        }
+      }
+
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!Apprenant.openapiFields.contains(entry.getKey())) {
+          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `Apprenant` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+        }
+      }
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("code") != null && !jsonObj.get("code").isJsonNull()) && !jsonObj.get("code").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `code` to be a primitive type in the JSON string but got `%s`", jsonObj.get("code").toString()));
+      }
+      // validate the optional field `etatCivil`
+      if (jsonObj.get("etatCivil") != null && !jsonObj.get("etatCivil").isJsonNull()) {
+        EtatCivil.validateJsonElement(jsonObj.get("etatCivil"));
+      }
+      // validate the optional field `naissance`
+      if (jsonObj.get("naissance") != null && !jsonObj.get("naissance").isJsonNull()) {
+        Naissance.validateJsonElement(jsonObj.get("naissance"));
+      }
+      // validate the optional field `situationPersonnelle`
+      if (jsonObj.get("situationPersonnelle") != null && !jsonObj.get("situationPersonnelle").isJsonNull()) {
+        SituationPersonnelleApprenant.validateJsonElement(jsonObj.get("situationPersonnelle"));
+      }
+      // validate the optional field `profession`
+      if (jsonObj.get("profession") != null && !jsonObj.get("profession").isJsonNull()) {
+        Profession.validateJsonElement(jsonObj.get("profession"));
+      }
+      if (jsonObj.get("contacts") != null && !jsonObj.get("contacts").isJsonNull()) {
+        JsonArray jsonArraycontacts = jsonObj.getAsJsonArray("contacts");
+        if (jsonArraycontacts != null) {
+          // ensure the json data is an array
+          if (!jsonObj.get("contacts").isJsonArray()) {
+            throw new IllegalArgumentException(String.format("Expected the field `contacts` to be an array in the JSON string but got `%s`", jsonObj.get("contacts").toString()));
+          }
+
+          // validate the optional field `contacts` (array)
+          for (int i = 0; i < jsonArraycontacts.size(); i++) {
+            ContactComplet.validateJsonElement(jsonArraycontacts.get(i));
+          };
+        }
+      }
+      // validate the optional field `bac`
+      if (jsonObj.get("bac") != null && !jsonObj.get("bac").isJsonNull()) {
+        Bac.validateJsonElement(jsonObj.get("bac"));
+      }
+      // validate the optional field `premieresInscriptions`
+      if (jsonObj.get("premieresInscriptions") != null && !jsonObj.get("premieresInscriptions").isJsonNull()) {
+        PremieresInscriptions.validateJsonElement(jsonObj.get("premieresInscriptions"));
+      }
+  }
+
+  /**
+   * Create an instance of Apprenant given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of Apprenant
+   * @throws IOException if the JSON string is invalid with respect to Apprenant
+   */
+  public static Apprenant fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, Apprenant.class);
+  }
+
+  public Apprenant code(@javax.annotation.Nullable String code) {
     this.code = code;
     return this;
   }
 
-   /**
+  /**
    * le code de l&#39;apprenant
    * @return code
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "le code de l'apprenant")
-
   public String getCode() {
     return code;
   }
 
-
-  public void setCode(String code) {
+  public void setCode(@javax.annotation.Nullable String code) {
     this.code = code;
   }
 
-
-  public Apprenant etatCivil(EtatCivil etatCivil) {
-    
+  public Apprenant etatCivil(@javax.annotation.Nullable EtatCivil etatCivil) {
     this.etatCivil = etatCivil;
     return this;
   }
 
-   /**
+  /**
    * Get etatCivil
    * @return etatCivil
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
   public EtatCivil getEtatCivil() {
     return etatCivil;
   }
 
-
-  public void setEtatCivil(EtatCivil etatCivil) {
+  public void setEtatCivil(@javax.annotation.Nullable EtatCivil etatCivil) {
     this.etatCivil = etatCivil;
   }
 
-
-  public Apprenant naissance(Naissance naissance) {
-    
+  public Apprenant naissance(@javax.annotation.Nullable Naissance naissance) {
     this.naissance = naissance;
     return this;
   }
 
-   /**
+  /**
    * Get naissance
    * @return naissance
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
   public Naissance getNaissance() {
     return naissance;
   }
 
-
-  public void setNaissance(Naissance naissance) {
+  public void setNaissance(@javax.annotation.Nullable Naissance naissance) {
     this.naissance = naissance;
   }
 
-
-  public Apprenant situationPersonnelle(SituationPersonnelleApprenant situationPersonnelle) {
-    
+  public Apprenant situationPersonnelle(@javax.annotation.Nullable SituationPersonnelleApprenant situationPersonnelle) {
     this.situationPersonnelle = situationPersonnelle;
     return this;
   }
 
-   /**
+  /**
    * Get situationPersonnelle
    * @return situationPersonnelle
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
   public SituationPersonnelleApprenant getSituationPersonnelle() {
     return situationPersonnelle;
   }
 
-
-  public void setSituationPersonnelle(SituationPersonnelleApprenant situationPersonnelle) {
+  public void setSituationPersonnelle(@javax.annotation.Nullable SituationPersonnelleApprenant situationPersonnelle) {
     this.situationPersonnelle = situationPersonnelle;
   }
 
-
-  public Apprenant profession(Profession profession) {
-    
+  public Apprenant profession(@javax.annotation.Nullable Profession profession) {
     this.profession = profession;
     return this;
   }
 
-   /**
+  /**
    * Get profession
    * @return profession
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
   public Profession getProfession() {
     return profession;
   }
 
-
-  public void setProfession(Profession profession) {
+  public void setProfession(@javax.annotation.Nullable Profession profession) {
     this.profession = profession;
   }
 
-
-  public Apprenant contacts(List<ContactComplet> contacts) {
-    
+  public Apprenant contacts(@javax.annotation.Nullable List<ContactComplet> contacts) {
     this.contacts = contacts;
     return this;
   }
 
   public Apprenant addContactsItem(ContactComplet contactsItem) {
     if (this.contacts == null) {
-      this.contacts = new ArrayList<ContactComplet>();
+      this.contacts = new ArrayList<>();
     }
     this.contacts.add(contactsItem);
     return this;
   }
 
-   /**
+  /**
    * Liste des contacts sous forme d&#39;objet, avec le code du contact pour clé principale
    * @return contacts
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Liste des contacts sous forme d'objet, avec le code du contact pour clé principale")
-
   public List<ContactComplet> getContacts() {
     return contacts;
   }
 
-
-  public void setContacts(List<ContactComplet> contacts) {
+  public void setContacts(@javax.annotation.Nullable List<ContactComplet> contacts) {
     this.contacts = contacts;
   }
 
-
-  public Apprenant bac(Bac bac) {
-    
+  public Apprenant bac(@javax.annotation.Nullable Bac bac) {
     this.bac = bac;
     return this;
   }
 
-   /**
+  /**
    * Get bac
    * @return bac
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
   public Bac getBac() {
     return bac;
   }
 
-
-  public void setBac(Bac bac) {
+  public void setBac(@javax.annotation.Nullable Bac bac) {
     this.bac = bac;
   }
 
-
-  public Apprenant premieresInscriptions(PremieresInscriptions premieresInscriptions) {
-    
+  public Apprenant premieresInscriptions(@javax.annotation.Nullable PremieresInscriptions premieresInscriptions) {
     this.premieresInscriptions = premieresInscriptions;
     return this;
   }
 
-   /**
+  /**
    * Get premieresInscriptions
    * @return premieresInscriptions
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
   public PremieresInscriptions getPremieresInscriptions() {
     return premieresInscriptions;
   }
 
-
-  public void setPremieresInscriptions(PremieresInscriptions premieresInscriptions) {
+  public void setPremieresInscriptions(@javax.annotation.Nullable PremieresInscriptions premieresInscriptions) {
     this.premieresInscriptions = premieresInscriptions;
   }
 
-
-  public Apprenant dateContexteApprenant(Date dateContexteApprenant) {
-    
+  public Apprenant dateContexteApprenant(@javax.annotation.Nullable Date dateContexteApprenant) {
     this.dateContexteApprenant = dateContexteApprenant;
     return this;
   }
 
-   /**
+  /**
    * date de contexte de l&#39;apprenant
    * @return dateContexteApprenant
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "date de contexte de l'apprenant")
-
   public Date getDateContexteApprenant() {
     return dateContexteApprenant;
   }
 
-
-  public void setDateContexteApprenant(Date dateContexteApprenant) {
+  public void setDateContexteApprenant(@javax.annotation.Nullable Date dateContexteApprenant) {
     this.dateContexteApprenant = dateContexteApprenant;
   }
-
 
   @Override
   public boolean equals(Object o) {
@@ -327,5 +418,42 @@ public class Apprenant {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert an instance of Apprenant to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!Apprenant.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'Apprenant' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<Apprenant> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(Apprenant.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<Apprenant>() {
+           @Override
+           public void write(JsonWriter out, Apprenant value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public Apprenant read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
 }
 

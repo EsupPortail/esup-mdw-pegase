@@ -1,8 +1,8 @@
 /*
- * INSCRIPTION Externe V1 [EXTERNE]
- * Liste l'ensemble des services et des opérations Ins (Module Inscription) marquées comme [EXTERNE].  Ils peuvent être utilisés par des outils externes à Pegase.  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers la documentation qui décrit l'authentification aux APIs de Pegase : [pdf](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1)  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  ### Code retour  * 200 - Ok : L'opération s'est déroulée avec succès * 201 - Created : L'opération a aboutie à la création d'une ressource * 400 - Bad request :   * Un ou des paramètres d'entrées sont erronées   * Une erreur fonctionnelle s'est produite * 401 - Unauthorized - Vous n'êtes pas authentifié   * Il n'y a pas de token passé dans le header HTTP `Authorization`   * Le token passé n'est pas au bon format (Bearer <[token-jwt](https://jwt.io/)>) * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération   * La signature du token est incorrecte / n'a pas pû être vérifiée   * Le token est expiré   * Les habilitations de l'utilisateur ne permettent pas d'exécuter cette opération. Vérifier les droits de l'utilisateur * 404 - Not Found : La ressource demandée n'est pas trouvé     * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide * 500 - Internal server error : Erreur inattendue et non gérés 
+ * INSCRIPTION Externe V2
+ *  # Introduction  Liste l'ensemble des services et des opérations Ins (Module Inscription) identifiés pour un usage externe.  La documentation d'intégration de Pégase est publiée par version dans  [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/).  Vous y retrouverez notamment des informations sur le modèle objet métier,  le versionning des APIs, les cas d'usage des APIs externes.  # Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.  # Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  # Gestion des erreurs  ## StatusCode  | Code    | Description                                | |---------|--------------------------------------------| | 200     | Opération effectuée                        | |         | Cas particulier: Dans le cas d'APIs de     | |         | type bulk, un 200 peut aussi être retourné | |         | si des données de la requête sont          | |         | considérées en erreur                      | | 201     | Ressource créée                            | | 400     | Données envoyées par le client invalides   | | 403     | Accès refusé                               | | 404     | Ressource inexistante                      | | 409     | donnée déjà existante                      | | 500     | Erreur technique rencontrée par le serveur |   ## Codes d'erreurs  | Code      | Description                                | |-----------|--------------------------------------------| | notNull   | la propriété est obligatoire               | | notBlank  | la propriété ne doit pas être vide         | | size      | la longueur de la propriété est invalide   | | pattern   | les caractères ou la syntaxe de            | |           | la propriété est invalide                  | | genre     | le genre de la personne est invalide       | | dateEntre | la date est invalide                       | | telephone | le téléphone est invalide                  | | email     | le mail est invalide                       | 
  *
- * The version of the OpenAPI document: 1.3.1
+ * The version of the OpenAPI document: 2.1.0-rc.20250404093138
  * 
  *
  * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
@@ -13,17 +13,45 @@
 
 package fr.univlorraine.pegase.model.insext;
 
-import com.google.gson.annotations.SerializedName;
-import io.swagger.annotations.ApiModelProperty;
-
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insext.VoieAdmission;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Date;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.api.JSON;
 
 /**
  * Admission
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-01-29T09:55:35.009513400+01:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-24T16:08:56.114878100+02:00[Europe/Paris]", comments = "Generator version: 7.11.0")
 public class Admission {
   public static final String SERIALIZED_NAME_VOIE = "voie";
   public static final String SERIALIZED_NAME_ANNEE_CONCOURS = "anneeConcours";
@@ -39,359 +67,390 @@ public class Admission {
   public static final String SERIALIZED_NAME_PAYS_ETABLISSEMENT_PRECEDENT = "paysEtablissementPrecedent";
   public static final String SERIALIZED_NAME_ETABLISSEMENT_PRECEDENT = "etablissementPrecedent";
   public static final String SERIALIZED_NAME_ETABLISSEMENT_PRECEDENT_ETRANGER = "etablissementPrecedentEtranger";
-  @SerializedName(SERIALIZED_NAME_VOIE)
-  private VoieAdmission voie;
-  @SerializedName(SERIALIZED_NAME_ANNEE_CONCOURS)
-  private BigDecimal anneeConcours;
-  @SerializedName(SERIALIZED_NAME_CONCOURS)
-  private String concours;
-  @SerializedName(SERIALIZED_NAME_RANG_CONCOURS)
-  private BigDecimal rangConcours;
-  @SerializedName(SERIALIZED_NAME_ANNEE_PRECEDENTE)
-  private BigDecimal anneePrecedente;
-  @SerializedName(SERIALIZED_NAME_TEMOIN_CLASSE_PREPA)
-  private Boolean temoinClassePrepa;
-  @SerializedName(SERIALIZED_NAME_TYPE_PREPA)
-  private String typePrepa;
-  @SerializedName(SERIALIZED_NAME_CONTEXTE_CONSOMMATION_TYPE_PREPA)
-  private Date contexteConsommationTypePrepa;
-  @SerializedName(SERIALIZED_NAME_PUISSANCE_PREPA)
-  private String puissancePrepa;
-  @SerializedName(SERIALIZED_NAME_TYPE_ETABLISSEMENT_PRECEDENT)
-  private String typeEtablissementPrecedent;
-  @SerializedName(SERIALIZED_NAME_DEPARTEMENT_ETABLISSEMENT_PRECEDENT)
-  private String departementEtablissementPrecedent;
-  @SerializedName(SERIALIZED_NAME_PAYS_ETABLISSEMENT_PRECEDENT)
-  private String paysEtablissementPrecedent;
-  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT_PRECEDENT)
-  private String etablissementPrecedent;
-  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT_PRECEDENT_ETRANGER)
-  private String etablissementPrecedentEtranger;
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
 
-  public Admission() { 
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>();
+    openapiFields.add("voie");
+    openapiFields.add("anneeConcours");
+    openapiFields.add("concours");
+    openapiFields.add("rangConcours");
+    openapiFields.add("anneePrecedente");
+    openapiFields.add("temoinClassePrepa");
+    openapiFields.add("typePrepa");
+    openapiFields.add("contexteConsommationTypePrepa");
+    openapiFields.add("puissancePrepa");
+    openapiFields.add("typeEtablissementPrecedent");
+    openapiFields.add("departementEtablissementPrecedent");
+    openapiFields.add("paysEtablissementPrecedent");
+    openapiFields.add("etablissementPrecedent");
+    openapiFields.add("etablissementPrecedentEtranger");
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>();
   }
 
-  public Admission voie(VoieAdmission voie) {
-    
+  @SerializedName(SERIALIZED_NAME_VOIE)
+  @javax.annotation.Nullable
+  private VoieAdmission voie;
+  @SerializedName(SERIALIZED_NAME_ANNEE_CONCOURS)
+  @javax.annotation.Nullable
+  private BigDecimal anneeConcours;
+  @SerializedName(SERIALIZED_NAME_CONCOURS)
+  @javax.annotation.Nullable
+  private String concours;
+  @SerializedName(SERIALIZED_NAME_RANG_CONCOURS)
+  @javax.annotation.Nullable
+  private BigDecimal rangConcours;
+  @SerializedName(SERIALIZED_NAME_ANNEE_PRECEDENTE)
+  @javax.annotation.Nullable
+  private BigDecimal anneePrecedente;
+  @SerializedName(SERIALIZED_NAME_TEMOIN_CLASSE_PREPA)
+  @javax.annotation.Nullable
+  private Boolean temoinClassePrepa;
+  @SerializedName(SERIALIZED_NAME_TYPE_PREPA)
+  @javax.annotation.Nullable
+  private String typePrepa;
+  @SerializedName(SERIALIZED_NAME_CONTEXTE_CONSOMMATION_TYPE_PREPA)
+  @javax.annotation.Nullable
+  private Date contexteConsommationTypePrepa;
+  @SerializedName(SERIALIZED_NAME_PUISSANCE_PREPA)
+  @javax.annotation.Nullable
+  private String puissancePrepa;
+  @SerializedName(SERIALIZED_NAME_TYPE_ETABLISSEMENT_PRECEDENT)
+  @javax.annotation.Nullable
+  private String typeEtablissementPrecedent;
+  @SerializedName(SERIALIZED_NAME_DEPARTEMENT_ETABLISSEMENT_PRECEDENT)
+  @javax.annotation.Nullable
+  private String departementEtablissementPrecedent;
+  @SerializedName(SERIALIZED_NAME_PAYS_ETABLISSEMENT_PRECEDENT)
+  @javax.annotation.Nullable
+  private String paysEtablissementPrecedent;
+  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT_PRECEDENT)
+  @javax.annotation.Nullable
+  private String etablissementPrecedent;
+  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT_PRECEDENT_ETRANGER)
+  @javax.annotation.Nullable
+  private String etablissementPrecedentEtranger;
+
+  public Admission() {
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to Admission
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!Admission.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format("The required field(s) %s in Admission is not found in the empty JSON string", Admission.openapiRequiredFields.toString()));
+        }
+      }
+
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!Admission.openapiFields.contains(entry.getKey())) {
+          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `Admission` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+        }
+      }
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      // validate the optional field `voie`
+      if (jsonObj.get("voie") != null && !jsonObj.get("voie").isJsonNull()) {
+        VoieAdmission.validateJsonElement(jsonObj.get("voie"));
+      }
+      if ((jsonObj.get("concours") != null && !jsonObj.get("concours").isJsonNull()) && !jsonObj.get("concours").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `concours` to be a primitive type in the JSON string but got `%s`", jsonObj.get("concours").toString()));
+      }
+      if ((jsonObj.get("typePrepa") != null && !jsonObj.get("typePrepa").isJsonNull()) && !jsonObj.get("typePrepa").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `typePrepa` to be a primitive type in the JSON string but got `%s`", jsonObj.get("typePrepa").toString()));
+      }
+      if ((jsonObj.get("puissancePrepa") != null && !jsonObj.get("puissancePrepa").isJsonNull()) && !jsonObj.get("puissancePrepa").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `puissancePrepa` to be a primitive type in the JSON string but got `%s`", jsonObj.get("puissancePrepa").toString()));
+      }
+      if ((jsonObj.get("typeEtablissementPrecedent") != null && !jsonObj.get("typeEtablissementPrecedent").isJsonNull()) && !jsonObj.get("typeEtablissementPrecedent").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `typeEtablissementPrecedent` to be a primitive type in the JSON string but got `%s`", jsonObj.get("typeEtablissementPrecedent").toString()));
+      }
+      if ((jsonObj.get("departementEtablissementPrecedent") != null && !jsonObj.get("departementEtablissementPrecedent").isJsonNull()) && !jsonObj.get("departementEtablissementPrecedent").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `departementEtablissementPrecedent` to be a primitive type in the JSON string but got `%s`", jsonObj.get("departementEtablissementPrecedent").toString()));
+      }
+      if ((jsonObj.get("paysEtablissementPrecedent") != null && !jsonObj.get("paysEtablissementPrecedent").isJsonNull()) && !jsonObj.get("paysEtablissementPrecedent").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `paysEtablissementPrecedent` to be a primitive type in the JSON string but got `%s`", jsonObj.get("paysEtablissementPrecedent").toString()));
+      }
+      if ((jsonObj.get("etablissementPrecedent") != null && !jsonObj.get("etablissementPrecedent").isJsonNull()) && !jsonObj.get("etablissementPrecedent").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `etablissementPrecedent` to be a primitive type in the JSON string but got `%s`", jsonObj.get("etablissementPrecedent").toString()));
+      }
+      if ((jsonObj.get("etablissementPrecedentEtranger") != null && !jsonObj.get("etablissementPrecedentEtranger").isJsonNull()) && !jsonObj.get("etablissementPrecedentEtranger").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `etablissementPrecedentEtranger` to be a primitive type in the JSON string but got `%s`", jsonObj.get("etablissementPrecedentEtranger").toString()));
+      }
+  }
+
+  /**
+   * Create an instance of Admission given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of Admission
+   * @throws IOException if the JSON string is invalid with respect to Admission
+   */
+  public static Admission fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, Admission.class);
+  }
+
+  public Admission voie(@javax.annotation.Nullable VoieAdmission voie) {
     this.voie = voie;
     return this;
   }
 
-   /**
+  /**
    * Get voie
    * @return voie
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
   public VoieAdmission getVoie() {
     return voie;
   }
 
-
-  public void setVoie(VoieAdmission voie) {
+  public void setVoie(@javax.annotation.Nullable VoieAdmission voie) {
     this.voie = voie;
   }
 
-
-  public Admission anneeConcours(BigDecimal anneeConcours) {
-    
+  public Admission anneeConcours(@javax.annotation.Nullable BigDecimal anneeConcours) {
     this.anneeConcours = anneeConcours;
     return this;
   }
 
-   /**
-   * L&#39;année de passage du concours d&#39;admission au format AAAA  Obligatoire si VoieAdmission &#x3D; concours 
+  /**
+   * L&#39;année de passage du concours d&#39;admission au format AAAA  Obligatoire si VoieAdmission &#x3D; concours
    * @return anneeConcours
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "L'année de passage du concours d'admission au format AAAA  Obligatoire si VoieAdmission = concours ")
-
   public BigDecimal getAnneeConcours() {
     return anneeConcours;
   }
 
-
-  public void setAnneeConcours(BigDecimal anneeConcours) {
+  public void setAnneeConcours(@javax.annotation.Nullable BigDecimal anneeConcours) {
     this.anneeConcours = anneeConcours;
   }
 
-
-  public Admission concours(String concours) {
-    
+  public Admission concours(@javax.annotation.Nullable String concours) {
     this.concours = concours;
     return this;
   }
 
-   /**
-   * Le code du concours d&#39;admission issu de la nomenclature Concours d&#39;admission.  Codes de la nomenclature sur 6 caractères. Préfixe des codes : CON Obligatoire si le champ anneeConcours est complété 
+  /**
+   * Le code du concours d&#39;admission issu de la nomenclature Concours d&#39;admission.  Codes de la nomenclature sur 6 caractères. Préfixe des codes : CON Obligatoire si le champ anneeConcours est complété
    * @return concours
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code du concours d'admission issu de la nomenclature Concours d'admission.  Codes de la nomenclature sur 6 caractères. Préfixe des codes : CON Obligatoire si le champ anneeConcours est complété ")
-
   public String getConcours() {
     return concours;
   }
 
-
-  public void setConcours(String concours) {
+  public void setConcours(@javax.annotation.Nullable String concours) {
     this.concours = concours;
   }
 
-
-  public Admission rangConcours(BigDecimal rangConcours) {
-    
+  public Admission rangConcours(@javax.annotation.Nullable BigDecimal rangConcours) {
     this.rangConcours = rangConcours;
     return this;
   }
 
-   /**
+  /**
    * Le rang obtenu au concours d&#39;admission
    * @return rangConcours
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le rang obtenu au concours d'admission")
-
   public BigDecimal getRangConcours() {
     return rangConcours;
   }
 
-
-  public void setRangConcours(BigDecimal rangConcours) {
+  public void setRangConcours(@javax.annotation.Nullable BigDecimal rangConcours) {
     this.rangConcours = rangConcours;
   }
 
-
-  public Admission anneePrecedente(BigDecimal anneePrecedente) {
-    
+  public Admission anneePrecedente(@javax.annotation.Nullable BigDecimal anneePrecedente) {
     this.anneePrecedente = anneePrecedente;
     return this;
   }
 
-   /**
+  /**
    * L&#39;année universitaire correspondant au cursus CPGE au format AAAA
    * @return anneePrecedente
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "L'année universitaire correspondant au cursus CPGE au format AAAA")
-
   public BigDecimal getAnneePrecedente() {
     return anneePrecedente;
   }
 
-
-  public void setAnneePrecedente(BigDecimal anneePrecedente) {
+  public void setAnneePrecedente(@javax.annotation.Nullable BigDecimal anneePrecedente) {
     this.anneePrecedente = anneePrecedente;
   }
 
-
-  public Admission temoinClassePrepa(Boolean temoinClassePrepa) {
-    
+  public Admission temoinClassePrepa(@javax.annotation.Nullable Boolean temoinClassePrepa) {
     this.temoinClassePrepa = temoinClassePrepa;
     return this;
   }
 
-   /**
-   * Le témoin indiquant que l&#39;étudiant a suivi un cursus en CPGE (classe préparatoire) l&#39;année dernière.  Obligatoire si le champ anneeConcours est complété. 
+  /**
+   * Le témoin indiquant que l&#39;étudiant a suivi un cursus en CPGE (classe préparatoire) l&#39;année dernière.  Obligatoire si le champ anneeConcours est complété.
    * @return temoinClassePrepa
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le témoin indiquant que l'étudiant a suivi un cursus en CPGE (classe préparatoire) l'année dernière.  Obligatoire si le champ anneeConcours est complété. ")
-
   public Boolean getTemoinClassePrepa() {
     return temoinClassePrepa;
   }
 
-
-  public void setTemoinClassePrepa(Boolean temoinClassePrepa) {
+  public void setTemoinClassePrepa(@javax.annotation.Nullable Boolean temoinClassePrepa) {
     this.temoinClassePrepa = temoinClassePrepa;
   }
 
-
-  public Admission typePrepa(String typePrepa) {
-    
+  public Admission typePrepa(@javax.annotation.Nullable String typePrepa) {
     this.typePrepa = typePrepa;
     return this;
   }
 
-   /**
-   * Le code du type de classe préparatoire fréquenté issu de la nomenclature Types de classe préparatoire Codes de la nomenclature sur 6 caractères. Préfixe des codes : TCP  Obligatoire si temoinClassePrepa &#x3D; true 
+  /**
+   * Le code du type de classe préparatoire fréquenté issu de la nomenclature Types de classe préparatoire Codes de la nomenclature sur 6 caractères. Préfixe des codes : TCP  Obligatoire si temoinClassePrepa &#x3D; true
    * @return typePrepa
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code du type de classe préparatoire fréquenté issu de la nomenclature Types de classe préparatoire Codes de la nomenclature sur 6 caractères. Préfixe des codes : TCP  Obligatoire si temoinClassePrepa = true ")
-
   public String getTypePrepa() {
     return typePrepa;
   }
 
-
-  public void setTypePrepa(String typePrepa) {
+  public void setTypePrepa(@javax.annotation.Nullable String typePrepa) {
     this.typePrepa = typePrepa;
   }
 
-
-  public Admission contexteConsommationTypePrepa(Date contexteConsommationTypePrepa) {
-    
+  public Admission contexteConsommationTypePrepa(@javax.annotation.Nullable Date contexteConsommationTypePrepa) {
     this.contexteConsommationTypePrepa = contexteConsommationTypePrepa;
     return this;
   }
 
-   /**
+  /**
    * date contexte admission type classe preparatoire
    * @return contexteConsommationTypePrepa
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "date contexte admission type classe preparatoire")
-
   public Date getContexteConsommationTypePrepa() {
     return contexteConsommationTypePrepa;
   }
 
-
-  public void setContexteConsommationTypePrepa(Date contexteConsommationTypePrepa) {
+  public void setContexteConsommationTypePrepa(@javax.annotation.Nullable Date contexteConsommationTypePrepa) {
     this.contexteConsommationTypePrepa = contexteConsommationTypePrepa;
   }
 
-
-  public Admission puissancePrepa(String puissancePrepa) {
-    
+  public Admission puissancePrepa(@javax.annotation.Nullable String puissancePrepa) {
     this.puissancePrepa = puissancePrepa;
     return this;
   }
 
-   /**
-   * La puissance de la classe préparatoire Les valeurs P1, P2, P22 et P32 sont acceptées 
+  /**
+   * La puissance de la classe préparatoire Les valeurs P1, P2, P22 et P32 sont acceptées
    * @return puissancePrepa
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "La puissance de la classe préparatoire Les valeurs P1, P2, P22 et P32 sont acceptées ")
-
   public String getPuissancePrepa() {
     return puissancePrepa;
   }
 
-
-  public void setPuissancePrepa(String puissancePrepa) {
+  public void setPuissancePrepa(@javax.annotation.Nullable String puissancePrepa) {
     this.puissancePrepa = puissancePrepa;
   }
 
-
-  public Admission typeEtablissementPrecedent(String typeEtablissementPrecedent) {
-    
+  public Admission typeEtablissementPrecedent(@javax.annotation.Nullable String typeEtablissementPrecedent) {
     this.typeEtablissementPrecedent = typeEtablissementPrecedent;
     return this;
   }
 
-   /**
-   * - F : français en France, - E : français à l&#39;étranger, - R : étranger Obligatoire si temoinClassePrepa &#x3D; true 
+  /**
+   * - F : français en France, - E : français à l&#39;étranger, - R : étranger Obligatoire si temoinClassePrepa &#x3D; true
    * @return typeEtablissementPrecedent
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "- F : français en France, - E : français à l'étranger, - R : étranger Obligatoire si temoinClassePrepa = true ")
-
   public String getTypeEtablissementPrecedent() {
     return typeEtablissementPrecedent;
   }
 
-
-  public void setTypeEtablissementPrecedent(String typeEtablissementPrecedent) {
+  public void setTypeEtablissementPrecedent(@javax.annotation.Nullable String typeEtablissementPrecedent) {
     this.typeEtablissementPrecedent = typeEtablissementPrecedent;
   }
 
-
-  public Admission departementEtablissementPrecedent(String departementEtablissementPrecedent) {
-    
+  public Admission departementEtablissementPrecedent(@javax.annotation.Nullable String departementEtablissementPrecedent) {
     this.departementEtablissementPrecedent = departementEtablissementPrecedent;
     return this;
   }
 
-   /**
-   * Le code du département de l&#39;établissement de la CPGE si &#39;français en France&#39; issu de la nomenclature Départements Obligatoire si typeEtablissementPrecedent &#x3D; F 
+  /**
+   * Le code du département de l&#39;établissement de la CPGE si &#39;français en France&#39; issu de la nomenclature Départements Obligatoire si typeEtablissementPrecedent &#x3D; F
    * @return departementEtablissementPrecedent
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code du département de l'établissement de la CPGE si 'français en France' issu de la nomenclature Départements Obligatoire si typeEtablissementPrecedent = F ")
-
   public String getDepartementEtablissementPrecedent() {
     return departementEtablissementPrecedent;
   }
 
-
-  public void setDepartementEtablissementPrecedent(String departementEtablissementPrecedent) {
+  public void setDepartementEtablissementPrecedent(@javax.annotation.Nullable String departementEtablissementPrecedent) {
     this.departementEtablissementPrecedent = departementEtablissementPrecedent;
   }
 
-
-  public Admission paysEtablissementPrecedent(String paysEtablissementPrecedent) {
-    
+  public Admission paysEtablissementPrecedent(@javax.annotation.Nullable String paysEtablissementPrecedent) {
     this.paysEtablissementPrecedent = paysEtablissementPrecedent;
     return this;
   }
 
-   /**
-   * Le code du pays de l&#39;établissement de la CPGE si &#39;français à l&#39;étranger&#39; ou &#39;étranger&#39; issu de la nomenclature Pays et Nationalités  Obligatoire si typeEtablissementPrecedent &#x3D; E ou R 
+  /**
+   * Le code du pays de l&#39;établissement de la CPGE si &#39;français à l&#39;étranger&#39; ou &#39;étranger&#39; issu de la nomenclature Pays et Nationalités  Obligatoire si typeEtablissementPrecedent &#x3D; E ou R
    * @return paysEtablissementPrecedent
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code du pays de l'établissement de la CPGE si 'français à l'étranger' ou 'étranger' issu de la nomenclature Pays et Nationalités  Obligatoire si typeEtablissementPrecedent = E ou R ")
-
   public String getPaysEtablissementPrecedent() {
     return paysEtablissementPrecedent;
   }
 
-
-  public void setPaysEtablissementPrecedent(String paysEtablissementPrecedent) {
+  public void setPaysEtablissementPrecedent(@javax.annotation.Nullable String paysEtablissementPrecedent) {
     this.paysEtablissementPrecedent = paysEtablissementPrecedent;
   }
 
-
-  public Admission etablissementPrecedent(String etablissementPrecedent) {
-    
+  public Admission etablissementPrecedent(@javax.annotation.Nullable String etablissementPrecedent) {
     this.etablissementPrecedent = etablissementPrecedent;
     return this;
   }
 
-   /**
-   * Le code de l&#39;établissement français de la CPGE si &#39;français en France&#39; ou &#39;français à l&#39;étranger&#39; issu de la nomenclature Etablissements français  Obligatoire 
+  /**
+   * Le code de l&#39;établissement français de la CPGE si &#39;français en France&#39; ou &#39;français à l&#39;étranger&#39; issu de la nomenclature Etablissements français  Obligatoire
    * @return etablissementPrecedent
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code de l'établissement français de la CPGE si 'français en France' ou 'français à l'étranger' issu de la nomenclature Etablissements français  Obligatoire ")
-
   public String getEtablissementPrecedent() {
     return etablissementPrecedent;
   }
 
-
-  public void setEtablissementPrecedent(String etablissementPrecedent) {
+  public void setEtablissementPrecedent(@javax.annotation.Nullable String etablissementPrecedent) {
     this.etablissementPrecedent = etablissementPrecedent;
   }
 
-
-  public Admission etablissementPrecedentEtranger(String etablissementPrecedentEtranger) {
-    
+  public Admission etablissementPrecedentEtranger(@javax.annotation.Nullable String etablissementPrecedentEtranger) {
     this.etablissementPrecedentEtranger = etablissementPrecedentEtranger;
     return this;
   }
 
-   /**
-   * Le code de l&#39;établissement étranger de la CPGE si &#39;étranger&#39; issu de la nomenclature Etablissements étrangers  Obligatoire 
+  /**
+   * Le code de l&#39;établissement étranger de la CPGE si &#39;étranger&#39; issu de la nomenclature Etablissements étrangers  Obligatoire
    * @return etablissementPrecedentEtranger
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code de l'établissement étranger de la CPGE si 'étranger' issu de la nomenclature Etablissements étrangers  Obligatoire ")
-
   public String getEtablissementPrecedentEtranger() {
     return etablissementPrecedentEtranger;
   }
 
-
-  public void setEtablissementPrecedentEtranger(String etablissementPrecedentEtranger) {
+  public void setEtablissementPrecedentEtranger(@javax.annotation.Nullable String etablissementPrecedentEtranger) {
     this.etablissementPrecedentEtranger = etablissementPrecedentEtranger;
   }
-
 
   @Override
   public boolean equals(Object o) {
@@ -456,5 +515,42 @@ public class Admission {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert an instance of Admission to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!Admission.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'Admission' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<Admission> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(Admission.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<Admission>() {
+           @Override
+           public void write(JsonWriter out, Admission value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public Admission read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
 }
 

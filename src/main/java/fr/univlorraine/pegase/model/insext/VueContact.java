@@ -1,8 +1,8 @@
 /*
- * INSCRIPTION Externe V1 [EXTERNE]
- * Liste l'ensemble des services et des opérations Ins (Module Inscription) marquées comme [EXTERNE].  Ils peuvent être utilisés par des outils externes à Pegase.  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers la documentation qui décrit l'authentification aux APIs de Pegase : [pdf](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1)  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  ### Code retour  * 200 - Ok : L'opération s'est déroulée avec succès * 201 - Created : L'opération a aboutie à la création d'une ressource * 400 - Bad request :   * Un ou des paramètres d'entrées sont erronées   * Une erreur fonctionnelle s'est produite * 401 - Unauthorized - Vous n'êtes pas authentifié   * Il n'y a pas de token passé dans le header HTTP `Authorization`   * Le token passé n'est pas au bon format (Bearer <[token-jwt](https://jwt.io/)>) * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération   * La signature du token est incorrecte / n'a pas pû être vérifiée   * Le token est expiré   * Les habilitations de l'utilisateur ne permettent pas d'exécuter cette opération. Vérifier les droits de l'utilisateur * 404 - Not Found : La ressource demandée n'est pas trouvé     * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide * 500 - Internal server error : Erreur inattendue et non gérés 
+ * INSCRIPTION Externe V2
+ *  # Introduction  Liste l'ensemble des services et des opérations Ins (Module Inscription) identifiés pour un usage externe.  La documentation d'intégration de Pégase est publiée par version dans  [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/).  Vous y retrouverez notamment des informations sur le modèle objet métier,  le versionning des APIs, les cas d'usage des APIs externes.  # Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.  # Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  # Gestion des erreurs  ## StatusCode  | Code    | Description                                | |---------|--------------------------------------------| | 200     | Opération effectuée                        | |         | Cas particulier: Dans le cas d'APIs de     | |         | type bulk, un 200 peut aussi être retourné | |         | si des données de la requête sont          | |         | considérées en erreur                      | | 201     | Ressource créée                            | | 400     | Données envoyées par le client invalides   | | 403     | Accès refusé                               | | 404     | Ressource inexistante                      | | 409     | donnée déjà existante                      | | 500     | Erreur technique rencontrée par le serveur |   ## Codes d'erreurs  | Code      | Description                                | |-----------|--------------------------------------------| | notNull   | la propriété est obligatoire               | | notBlank  | la propriété ne doit pas être vide         | | size      | la longueur de la propriété est invalide   | | pattern   | les caractères ou la syntaxe de            | |           | la propriété est invalide                  | | genre     | le genre de la personne est invalide       | | dateEntre | la date est invalide                       | | telephone | le téléphone est invalide                  | | email     | le mail est invalide                       | 
  *
- * The version of the OpenAPI document: 1.3.1
+ * The version of the OpenAPI document: 2.1.0-rc.20250404093138
  * 
  *
  * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
@@ -13,118 +13,190 @@
 
 package fr.univlorraine.pegase.model.insext;
 
+import java.util.Objects;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.io.IOException;
-import java.util.Objects;
+import java.util.Arrays;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.api.JSON;
 
 /**
  * VueContact
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-01-29T09:55:35.009513400+01:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-24T16:08:56.114878100+02:00[Europe/Paris]", comments = "Generator version: 7.11.0")
 public class VueContact {
   public static final String SERIALIZED_NAME_CANAL_COMMUNICATION = "canalCommunication";
   public static final String SERIALIZED_NAME_CODE = "code";
   public static final String SERIALIZED_NAME_LIBELLE = "libelle";
   public static final String SERIALIZED_NAME_PROPRIETAIRE = "proprietaire";
-  @SerializedName(SERIALIZED_NAME_CANAL_COMMUNICATION)
-  protected CanalCommunicationEnum canalCommunication;
-  @SerializedName(SERIALIZED_NAME_CODE)
-  private String code;
-  @SerializedName(SERIALIZED_NAME_LIBELLE)
-  private String libelle;
-  @SerializedName(SERIALIZED_NAME_PROPRIETAIRE)
-  private String proprietaire;
-  public VueContact() {
-    this.canalCommunication = CanalCommunicationEnum.fromValue(this.getClass().getSimpleName());
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>();
+    openapiFields.add("canalCommunication");
+    openapiFields.add("code");
+    openapiFields.add("libelle");
+    openapiFields.add("proprietaire");
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>();
+    openapiRequiredFields.add("canalCommunication");
+    openapiRequiredFields.add("code");
+    openapiRequiredFields.add("libelle");
   }
 
-  public VueContact canalCommunication(CanalCommunicationEnum canalCommunication) {
+  @SerializedName(SERIALIZED_NAME_CANAL_COMMUNICATION)
+  @javax.annotation.Nonnull
+  protected CanalCommunicationEnum canalCommunication;
+  @SerializedName(SERIALIZED_NAME_CODE)
+  @javax.annotation.Nonnull
+  private String code;
+  @SerializedName(SERIALIZED_NAME_LIBELLE)
+  @javax.annotation.Nonnull
+  private String libelle;
+  @SerializedName(SERIALIZED_NAME_PROPRIETAIRE)
+  @javax.annotation.Nullable
+  private String proprietaire;
 
+  public VueContact() {
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to VueContact
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!VueContact.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format("The required field(s) %s in VueContact is not found in the empty JSON string", VueContact.openapiRequiredFields.toString()));
+        }
+      }
+
+      String discriminatorValue = jsonElement.getAsJsonObject().get("canalCommunication").getAsString();
+      switch (discriminatorValue) {
+        case "VueContactAdresse":
+          VueContactAdresse.validateJsonElement(jsonElement);
+          break;
+        case "VueContactMel":
+          VueContactMel.validateJsonElement(jsonElement);
+          break;
+        case "VueContactTelephone":
+          VueContactTelephone.validateJsonElement(jsonElement);
+          break;
+        default:
+          throw new IllegalArgumentException(String.format("The value of the `canalCommunication` field `%s` does not match any key defined in the discriminator's mapping.", discriminatorValue));
+      }
+  }
+
+  /**
+   * Create an instance of VueContact given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of VueContact
+   * @throws IOException if the JSON string is invalid with respect to VueContact
+   */
+  public static VueContact fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, VueContact.class);
+  }
+
+  public VueContact canalCommunication(@javax.annotation.Nonnull CanalCommunicationEnum canalCommunication) {
     this.canalCommunication = canalCommunication;
     return this;
   }
 
-   /**
+  /**
    * type de contact
    * @return canalCommunication
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "type de contact")
-
   public CanalCommunicationEnum getCanalCommunication() {
     return canalCommunication;
   }
 
-  public void setCanalCommunication(CanalCommunicationEnum canalCommunication) {
+  public void setCanalCommunication(@javax.annotation.Nonnull CanalCommunicationEnum canalCommunication) {
     this.canalCommunication = canalCommunication;
   }
 
-  public VueContact code(String code) {
-
+  public VueContact code(@javax.annotation.Nonnull String code) {
     this.code = code;
     return this;
   }
 
-   /**
+  /**
    * Code de la demande de contact
    * @return code
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Code de la demande de contact")
-
   public String getCode() {
     return code;
   }
 
-  public void setCode(String code) {
+  public void setCode(@javax.annotation.Nonnull String code) {
     this.code = code;
   }
 
-  public VueContact libelle(String libelle) {
-
+  public VueContact libelle(@javax.annotation.Nonnull String libelle) {
     this.libelle = libelle;
     return this;
   }
 
-   /**
+  /**
    * Libellé d&#39;affichage de la demande de contact
    * @return libelle
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Libellé d'affichage de la demande de contact")
-
   public String getLibelle() {
     return libelle;
   }
 
-  public void setLibelle(String libelle) {
+  public void setLibelle(@javax.annotation.Nonnull String libelle) {
     this.libelle = libelle;
   }
 
-  public VueContact proprietaire(String proprietaire) {
-
+  public VueContact proprietaire(@javax.annotation.Nullable String proprietaire) {
     this.proprietaire = proprietaire;
     return this;
   }
 
-   /**
+  /**
    * Personne à contacter si différent de l&#39;apprenant
    * @return proprietaire
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Personne à contacter si différent de l'apprenant")
-
   public String getProprietaire() {
     return proprietaire;
   }
 
-  public void setProprietaire(String proprietaire) {
+  public void setProprietaire(@javax.annotation.Nullable String proprietaire) {
     this.proprietaire = proprietaire;
   }
 
@@ -172,15 +244,24 @@ public class VueContact {
   }
 
   /**
+   * Convert an instance of VueContact to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
+
+  /**
    * type de contact
    */
   @JsonAdapter(CanalCommunicationEnum.Adapter.class)
   public enum CanalCommunicationEnum {
-    VUECONTACTADRESSE("VueContactAdresse"),
+    VUE_CONTACT_ADRESSE("VueContactAdresse"),
 
-    VUECONTACTMEL("VueContactMel"),
+    VUE_CONTACT_MEL("VueContactMel"),
 
-    VUECONTACTTELEPHONE("VueContactTelephone");
+    VUE_CONTACT_TELEPHONE("VueContactTelephone");
 
     private String value;
 
@@ -195,6 +276,11 @@ public class VueContact {
         }
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      CanalCommunicationEnum.fromValue(value);
     }
 
     public String getValue() {
@@ -219,6 +305,5 @@ public class VueContact {
       }
     }
   }
-
 }
 

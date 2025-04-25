@@ -1,8 +1,8 @@
 /*
- * INSCRIPTION Externe V1 [EXTERNE]
- * Liste l'ensemble des services et des opérations Ins (Module Inscription) marquées comme [EXTERNE].  Ils peuvent être utilisés par des outils externes à Pegase.  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers la documentation qui décrit l'authentification aux APIs de Pegase : [pdf](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1)  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  ### Code retour  * 200 - Ok : L'opération s'est déroulée avec succès * 201 - Created : L'opération a aboutie à la création d'une ressource * 400 - Bad request :   * Un ou des paramètres d'entrées sont erronées   * Une erreur fonctionnelle s'est produite * 401 - Unauthorized - Vous n'êtes pas authentifié   * Il n'y a pas de token passé dans le header HTTP `Authorization`   * Le token passé n'est pas au bon format (Bearer <[token-jwt](https://jwt.io/)>) * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération   * La signature du token est incorrecte / n'a pas pû être vérifiée   * Le token est expiré   * Les habilitations de l'utilisateur ne permettent pas d'exécuter cette opération. Vérifier les droits de l'utilisateur * 404 - Not Found : La ressource demandée n'est pas trouvé     * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide * 500 - Internal server error : Erreur inattendue et non gérés 
+ * INSCRIPTION Externe V2
+ *  # Introduction  Liste l'ensemble des services et des opérations Ins (Module Inscription) identifiés pour un usage externe.  La documentation d'intégration de Pégase est publiée par version dans  [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/).  Vous y retrouverez notamment des informations sur le modèle objet métier,  le versionning des APIs, les cas d'usage des APIs externes.  # Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.  # Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  # Gestion des erreurs  ## StatusCode  | Code    | Description                                | |---------|--------------------------------------------| | 200     | Opération effectuée                        | |         | Cas particulier: Dans le cas d'APIs de     | |         | type bulk, un 200 peut aussi être retourné | |         | si des données de la requête sont          | |         | considérées en erreur                      | | 201     | Ressource créée                            | | 400     | Données envoyées par le client invalides   | | 403     | Accès refusé                               | | 404     | Ressource inexistante                      | | 409     | donnée déjà existante                      | | 500     | Erreur technique rencontrée par le serveur |   ## Codes d'erreurs  | Code      | Description                                | |-----------|--------------------------------------------| | notNull   | la propriété est obligatoire               | | notBlank  | la propriété ne doit pas être vide         | | size      | la longueur de la propriété est invalide   | | pattern   | les caractères ou la syntaxe de            | |           | la propriété est invalide                  | | genre     | le genre de la personne est invalide       | | dateEntre | la date est invalide                       | | telephone | le téléphone est invalide                  | | email     | le mail est invalide                       | 
  *
- * The version of the OpenAPI document: 1.3.1
+ * The version of the OpenAPI document: 2.1.0-rc.20250404093138
  * 
  *
  * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
@@ -14,7 +14,6 @@
 package fr.univlorraine.pegase.model.insext;
 
 import java.util.Objects;
-import java.util.Arrays;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -26,16 +25,38 @@ import fr.univlorraine.pegase.model.insext.VueContactAdresse;
 import fr.univlorraine.pegase.model.insext.VueContactMel;
 import fr.univlorraine.pegase.model.insext.VueContactTelephone;
 import fr.univlorraine.pegase.model.insext.VueProfilExonerant;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.api.JSON;
 
 /**
  * VueInscription
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-01-29T09:55:35.009513400+01:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-24T16:08:56.114878100+02:00[Europe/Paris]", comments = "Generator version: 7.11.0")
 public class VueInscription {
   public static final String SERIALIZED_NAME_U_A_I = "UAI";
   public static final String SERIALIZED_NAME_CODE_APPRENANT = "codeApprenant";
@@ -67,738 +88,933 @@ public class VueInscription {
   public static final String SERIALIZED_NAME_ADRESSES = "adresses";
   public static final String SERIALIZED_NAME_MELS = "mels";
   public static final String SERIALIZED_NAME_TELEPHONES = "telephones";
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>();
+    openapiFields.add("UAI");
+    openapiFields.add("codeApprenant");
+    openapiFields.add("dateInscription");
+    openapiFields.add("derniereModification");
+    openapiFields.add("INE");
+    openapiFields.add("civilite");
+    openapiFields.add("nomUsage");
+    openapiFields.add("nomFamille");
+    openapiFields.add("prenom");
+    openapiFields.add("dateDeNaissance");
+    openapiFields.add("nationalite");
+    openapiFields.add("droitPhoto");
+    openapiFields.add("photo");
+    openapiFields.add("regime");
+    openapiFields.add("bourses");
+    openapiFields.add("boursesCompletes");
+    openapiFields.add("profilsExonerants");
+    openapiFields.add("mobilite");
+    openapiFields.add("statutPaiement");
+    openapiFields.add("statutInscription");
+    openapiFields.add("inscriptionPrincipale");
+    openapiFields.add("formation");
+    openapiFields.add("anneeUniversitaire");
+    openapiFields.add("periode");
+    openapiFields.add("chemin");
+    openapiFields.add("UAIStructurePrincipale");
+    openapiFields.add("codeDiplomeSISE");
+    openapiFields.add("adresses");
+    openapiFields.add("mels");
+    openapiFields.add("telephones");
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>();
+    openapiRequiredFields.add("UAI");
+    openapiRequiredFields.add("codeApprenant");
+    openapiRequiredFields.add("dateInscription");
+    openapiRequiredFields.add("derniereModification");
+    openapiRequiredFields.add("civilite");
+    openapiRequiredFields.add("nomUsage");
+    openapiRequiredFields.add("nomFamille");
+    openapiRequiredFields.add("prenom");
+    openapiRequiredFields.add("dateDeNaissance");
+    openapiRequiredFields.add("nationalite");
+    openapiRequiredFields.add("droitPhoto");
+    openapiRequiredFields.add("regime");
+    openapiRequiredFields.add("bourses");
+    openapiRequiredFields.add("mobilite");
+    openapiRequiredFields.add("statutPaiement");
+    openapiRequiredFields.add("formation");
+    openapiRequiredFields.add("periode");
+    openapiRequiredFields.add("chemin");
+    openapiRequiredFields.add("adresses");
+    openapiRequiredFields.add("mels");
+    openapiRequiredFields.add("telephones");
+  }
+
   @SerializedName(SERIALIZED_NAME_U_A_I)
+  @javax.annotation.Nonnull
   private String UAI;
   @SerializedName(SERIALIZED_NAME_CODE_APPRENANT)
+  @javax.annotation.Nonnull
   private String codeApprenant;
   @SerializedName(SERIALIZED_NAME_DATE_INSCRIPTION)
+  @javax.annotation.Nonnull
   private String dateInscription;
   @SerializedName(SERIALIZED_NAME_DERNIERE_MODIFICATION)
+  @javax.annotation.Nonnull
   private Long derniereModification;
   @SerializedName(SERIALIZED_NAME_I_N_E)
+  @javax.annotation.Nullable
   private String INE;
   @SerializedName(SERIALIZED_NAME_CIVILITE)
+  @javax.annotation.Nonnull
   private CiviliteEnum civilite;
   @SerializedName(SERIALIZED_NAME_NOM_USAGE)
+  @javax.annotation.Nonnull
   private String nomUsage;
   @SerializedName(SERIALIZED_NAME_NOM_FAMILLE)
+  @javax.annotation.Nonnull
   private String nomFamille;
   @SerializedName(SERIALIZED_NAME_PRENOM)
+  @javax.annotation.Nonnull
   private String prenom;
   @SerializedName(SERIALIZED_NAME_DATE_DE_NAISSANCE)
+  @javax.annotation.Nonnull
   private String dateDeNaissance;
   @SerializedName(SERIALIZED_NAME_NATIONALITE)
+  @javax.annotation.Nonnull
   private String nationalite;
   @SerializedName(SERIALIZED_NAME_DROIT_PHOTO)
+  @javax.annotation.Nonnull
   private Boolean droitPhoto;
   @SerializedName(SERIALIZED_NAME_PHOTO)
+  @javax.annotation.Nullable
   private byte[] photo;
   @SerializedName(SERIALIZED_NAME_REGIME)
+  @javax.annotation.Nonnull
   private String regime;
   @SerializedName(SERIALIZED_NAME_BOURSES)
-  private List<String> bourses = new ArrayList<String>();
+  @javax.annotation.Nonnull
+  private List<String> bourses = new ArrayList<>();
   @SerializedName(SERIALIZED_NAME_BOURSES_COMPLETES)
-  private List<VueBourse> boursesCompletes = null;
+  @javax.annotation.Nullable
+  private List<VueBourse> boursesCompletes = new ArrayList<>();
   @SerializedName(SERIALIZED_NAME_PROFILS_EXONERANTS)
-  private List<VueProfilExonerant> profilsExonerants = null;
+  @javax.annotation.Nullable
+  private List<VueProfilExonerant> profilsExonerants = new ArrayList<>();
   @SerializedName(SERIALIZED_NAME_MOBILITE)
+  @javax.annotation.Nonnull
   private MobiliteEnum mobilite;
   @SerializedName(SERIALIZED_NAME_STATUT_PAIEMENT)
+  @javax.annotation.Nonnull
   private StatutPaiementEnum statutPaiement;
   @SerializedName(SERIALIZED_NAME_STATUT_INSCRIPTION)
+  @javax.annotation.Nullable
   private StatutInscriptionEnum statutInscription;
   @SerializedName(SERIALIZED_NAME_INSCRIPTION_PRINCIPALE)
+  @javax.annotation.Nullable
   private Boolean inscriptionPrincipale;
   @SerializedName(SERIALIZED_NAME_FORMATION)
+  @javax.annotation.Nonnull
   private String formation;
   @SerializedName(SERIALIZED_NAME_ANNEE_UNIVERSITAIRE)
+  @javax.annotation.Nullable
   private Integer anneeUniversitaire;
   @SerializedName(SERIALIZED_NAME_PERIODE)
+  @javax.annotation.Nonnull
   private String periode;
   @SerializedName(SERIALIZED_NAME_CHEMIN)
-  private List<VueCheminCible> chemin = new ArrayList<VueCheminCible>();
+  @javax.annotation.Nonnull
+  private List<VueCheminCible> chemin = new ArrayList<>();
   @SerializedName(SERIALIZED_NAME_UA_I_STRUCTURE_PRINCIPALE)
+  @javax.annotation.Nullable
   private String uaIStructurePrincipale;
   @SerializedName(SERIALIZED_NAME_CODE_DIPLOME_S_I_S_E)
+  @javax.annotation.Nullable
   private String codeDiplomeSISE;
   @SerializedName(SERIALIZED_NAME_ADRESSES)
-  private List<VueContactAdresse> adresses = new ArrayList<VueContactAdresse>();
+  @javax.annotation.Nonnull
+  private List<VueContactAdresse> adresses = new ArrayList<>();
   @SerializedName(SERIALIZED_NAME_MELS)
-  private List<VueContactMel> mels = new ArrayList<VueContactMel>();
+  @javax.annotation.Nonnull
+  private List<VueContactMel> mels = new ArrayList<>();
   @SerializedName(SERIALIZED_NAME_TELEPHONES)
-  private List<VueContactTelephone> telephones = new ArrayList<VueContactTelephone>();
-
+  @javax.annotation.Nonnull
+  private List<VueContactTelephone> telephones = new ArrayList<>();
   public VueInscription() {
   }
 
-  public VueInscription UAI(String UAI) {
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to VueInscription
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!VueInscription.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format("The required field(s) %s in VueInscription is not found in the empty JSON string", VueInscription.openapiRequiredFields.toString()));
+        }
+      }
 
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!VueInscription.openapiFields.contains(entry.getKey())) {
+          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `VueInscription` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+        }
+      }
+
+      // check to make sure all required properties/fields are present in the JSON string
+      for (String requiredField : VueInscription.openapiRequiredFields) {
+        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
+          throw new IllegalArgumentException(String.format("The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+        }
+      }
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if (!jsonObj.get("UAI").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `UAI` to be a primitive type in the JSON string but got `%s`", jsonObj.get("UAI").toString()));
+      }
+      if (!jsonObj.get("codeApprenant").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `codeApprenant` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codeApprenant").toString()));
+      }
+      if (!jsonObj.get("dateInscription").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `dateInscription` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateInscription").toString()));
+      }
+      if ((jsonObj.get("INE") != null && !jsonObj.get("INE").isJsonNull()) && !jsonObj.get("INE").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `INE` to be a primitive type in the JSON string but got `%s`", jsonObj.get("INE").toString()));
+      }
+      if (!jsonObj.get("civilite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `civilite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("civilite").toString()));
+      }
+      // validate the required field `civilite`
+      CiviliteEnum.validateJsonElement(jsonObj.get("civilite"));
+      if (!jsonObj.get("nomUsage").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `nomUsage` to be a primitive type in the JSON string but got `%s`", jsonObj.get("nomUsage").toString()));
+      }
+      if (!jsonObj.get("nomFamille").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `nomFamille` to be a primitive type in the JSON string but got `%s`", jsonObj.get("nomFamille").toString()));
+      }
+      if (!jsonObj.get("prenom").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `prenom` to be a primitive type in the JSON string but got `%s`", jsonObj.get("prenom").toString()));
+      }
+      if (!jsonObj.get("dateDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `dateDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateDeNaissance").toString()));
+      }
+      if (!jsonObj.get("nationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `nationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("nationalite").toString()));
+      }
+      if (!jsonObj.get("regime").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `regime` to be a primitive type in the JSON string but got `%s`", jsonObj.get("regime").toString()));
+      }
+      // ensure the required json array is present
+      if (jsonObj.get("bourses") == null) {
+        throw new IllegalArgumentException("Expected the field `linkedContent` to be an array in the JSON string but got `null`");
+      } else if (!jsonObj.get("bourses").isJsonArray()) {
+        throw new IllegalArgumentException(String.format("Expected the field `bourses` to be an array in the JSON string but got `%s`", jsonObj.get("bourses").toString()));
+      }
+      if (jsonObj.get("boursesCompletes") != null && !jsonObj.get("boursesCompletes").isJsonNull()) {
+        JsonArray jsonArrayboursesCompletes = jsonObj.getAsJsonArray("boursesCompletes");
+        if (jsonArrayboursesCompletes != null) {
+          // ensure the json data is an array
+          if (!jsonObj.get("boursesCompletes").isJsonArray()) {
+            throw new IllegalArgumentException(String.format("Expected the field `boursesCompletes` to be an array in the JSON string but got `%s`", jsonObj.get("boursesCompletes").toString()));
+          }
+
+          // validate the optional field `boursesCompletes` (array)
+          for (int i = 0; i < jsonArrayboursesCompletes.size(); i++) {
+            VueBourse.validateJsonElement(jsonArrayboursesCompletes.get(i));
+          };
+        }
+      }
+      if (jsonObj.get("profilsExonerants") != null && !jsonObj.get("profilsExonerants").isJsonNull()) {
+        JsonArray jsonArrayprofilsExonerants = jsonObj.getAsJsonArray("profilsExonerants");
+        if (jsonArrayprofilsExonerants != null) {
+          // ensure the json data is an array
+          if (!jsonObj.get("profilsExonerants").isJsonArray()) {
+            throw new IllegalArgumentException(String.format("Expected the field `profilsExonerants` to be an array in the JSON string but got `%s`", jsonObj.get("profilsExonerants").toString()));
+          }
+
+          // validate the optional field `profilsExonerants` (array)
+          for (int i = 0; i < jsonArrayprofilsExonerants.size(); i++) {
+            VueProfilExonerant.validateJsonElement(jsonArrayprofilsExonerants.get(i));
+          };
+        }
+      }
+      if (!jsonObj.get("mobilite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `mobilite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("mobilite").toString()));
+      }
+      // validate the required field `mobilite`
+      MobiliteEnum.validateJsonElement(jsonObj.get("mobilite"));
+      if (!jsonObj.get("statutPaiement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `statutPaiement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("statutPaiement").toString()));
+      }
+      // validate the required field `statutPaiement`
+      StatutPaiementEnum.validateJsonElement(jsonObj.get("statutPaiement"));
+      if ((jsonObj.get("statutInscription") != null && !jsonObj.get("statutInscription").isJsonNull()) && !jsonObj.get("statutInscription").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `statutInscription` to be a primitive type in the JSON string but got `%s`", jsonObj.get("statutInscription").toString()));
+      }
+      // validate the optional field `statutInscription`
+      if (jsonObj.get("statutInscription") != null && !jsonObj.get("statutInscription").isJsonNull()) {
+        StatutInscriptionEnum.validateJsonElement(jsonObj.get("statutInscription"));
+      }
+      if (!jsonObj.get("formation").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `formation` to be a primitive type in the JSON string but got `%s`", jsonObj.get("formation").toString()));
+      }
+      if (!jsonObj.get("periode").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `periode` to be a primitive type in the JSON string but got `%s`", jsonObj.get("periode").toString()));
+      }
+      // ensure the json data is an array
+      if (!jsonObj.get("chemin").isJsonArray()) {
+        throw new IllegalArgumentException(String.format("Expected the field `chemin` to be an array in the JSON string but got `%s`", jsonObj.get("chemin").toString()));
+      }
+
+      JsonArray jsonArraychemin = jsonObj.getAsJsonArray("chemin");
+      // validate the required field `chemin` (array)
+      for (int i = 0; i < jsonArraychemin.size(); i++) {
+        VueCheminCible.validateJsonElement(jsonArraychemin.get(i));
+      };
+      if ((jsonObj.get("UAIStructurePrincipale") != null && !jsonObj.get("UAIStructurePrincipale").isJsonNull()) && !jsonObj.get("UAIStructurePrincipale").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `UAIStructurePrincipale` to be a primitive type in the JSON string but got `%s`", jsonObj.get("UAIStructurePrincipale").toString()));
+      }
+      if ((jsonObj.get("codeDiplomeSISE") != null && !jsonObj.get("codeDiplomeSISE").isJsonNull()) && !jsonObj.get("codeDiplomeSISE").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `codeDiplomeSISE` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codeDiplomeSISE").toString()));
+      }
+      // ensure the json data is an array
+      if (!jsonObj.get("adresses").isJsonArray()) {
+        throw new IllegalArgumentException(String.format("Expected the field `adresses` to be an array in the JSON string but got `%s`", jsonObj.get("adresses").toString()));
+      }
+
+      JsonArray jsonArrayadresses = jsonObj.getAsJsonArray("adresses");
+      // validate the required field `adresses` (array)
+      for (int i = 0; i < jsonArrayadresses.size(); i++) {
+        VueContactAdresse.validateJsonElement(jsonArrayadresses.get(i));
+      };
+      // ensure the json data is an array
+      if (!jsonObj.get("mels").isJsonArray()) {
+        throw new IllegalArgumentException(String.format("Expected the field `mels` to be an array in the JSON string but got `%s`", jsonObj.get("mels").toString()));
+      }
+
+      JsonArray jsonArraymels = jsonObj.getAsJsonArray("mels");
+      // validate the required field `mels` (array)
+      for (int i = 0; i < jsonArraymels.size(); i++) {
+        VueContactMel.validateJsonElement(jsonArraymels.get(i));
+      };
+      // ensure the json data is an array
+      if (!jsonObj.get("telephones").isJsonArray()) {
+        throw new IllegalArgumentException(String.format("Expected the field `telephones` to be an array in the JSON string but got `%s`", jsonObj.get("telephones").toString()));
+      }
+
+      JsonArray jsonArraytelephones = jsonObj.getAsJsonArray("telephones");
+      // validate the required field `telephones` (array)
+      for (int i = 0; i < jsonArraytelephones.size(); i++) {
+        VueContactTelephone.validateJsonElement(jsonArraytelephones.get(i));
+      };
+  }
+
+  /**
+   * Create an instance of VueInscription given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of VueInscription
+   * @throws IOException if the JSON string is invalid with respect to VueInscription
+   */
+  public static VueInscription fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, VueInscription.class);
+  }
+
+  public VueInscription UAI(@javax.annotation.Nonnull String UAI) {
     this.UAI = UAI;
     return this;
   }
 
-   /**
+  /**
    * Le code UAI
    * @return UAI
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Le code UAI")
-
   public String getUAI() {
     return UAI;
   }
 
-  public void setUAI(String UAI) {
+  public void setUAI(@javax.annotation.Nonnull String UAI) {
     this.UAI = UAI;
   }
 
-  public VueInscription codeApprenant(String codeApprenant) {
-
+  public VueInscription codeApprenant(@javax.annotation.Nonnull String codeApprenant) {
     this.codeApprenant = codeApprenant;
     return this;
   }
 
-   /**
+  /**
    * Le code Pegase de l&#39;apprenant
    * @return codeApprenant
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Le code Pegase de l'apprenant")
-
   public String getCodeApprenant() {
     return codeApprenant;
   }
 
-  public void setCodeApprenant(String codeApprenant) {
+  public void setCodeApprenant(@javax.annotation.Nonnull String codeApprenant) {
     this.codeApprenant = codeApprenant;
   }
 
-  public VueInscription dateInscription(String dateInscription) {
-
+  public VueInscription dateInscription(@javax.annotation.Nonnull String dateInscription) {
     this.dateInscription = dateInscription;
     return this;
   }
 
-   /**
+  /**
    * La date de l&#39;inscription au format ISO-8601 (AAAA-MM-JJThh:mm)
    * @return dateInscription
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "La date de l'inscription au format ISO-8601 (AAAA-MM-JJThh:mm)")
-
   public String getDateInscription() {
     return dateInscription;
   }
 
-  public void setDateInscription(String dateInscription) {
+  public void setDateInscription(@javax.annotation.Nonnull String dateInscription) {
     this.dateInscription = dateInscription;
   }
 
-  public VueInscription derniereModification(Long derniereModification) {
-
+  public VueInscription derniereModification(@javax.annotation.Nonnull Long derniereModification) {
     this.derniereModification = derniereModification;
     return this;
   }
 
-   /**
+  /**
    * L&#39;horodatage de la dernière modification (Timestamp nombre de secondes depuis le 01/01/1970 à 00:00)
    * @return derniereModification
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "L'horodatage de la dernière modification (Timestamp nombre de secondes depuis le 01/01/1970 à 00:00)")
-
   public Long getDerniereModification() {
     return derniereModification;
   }
 
-  public void setDerniereModification(Long derniereModification) {
+  public void setDerniereModification(@javax.annotation.Nonnull Long derniereModification) {
     this.derniereModification = derniereModification;
   }
 
-  public VueInscription INE(String INE) {
-
+  public VueInscription INE(@javax.annotation.Nullable String INE) {
     this.INE = INE;
     return this;
   }
 
-   /**
+  /**
    * Le numéro INE de l&#39;apprenant si connu
    * @return INE
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le numéro INE de l'apprenant si connu")
-
   public String getINE() {
     return INE;
   }
 
-  public void setINE(String INE) {
+  public void setINE(@javax.annotation.Nullable String INE) {
     this.INE = INE;
   }
 
-  public VueInscription civilite(CiviliteEnum civilite) {
-
+  public VueInscription civilite(@javax.annotation.Nonnull CiviliteEnum civilite) {
     this.civilite = civilite;
     return this;
   }
 
-   /**
+  /**
    * La civilité M ou F de l&#39;apprenant⋅e
    * @return civilite
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "La civilité M ou F de l'apprenant⋅e")
-
   public CiviliteEnum getCivilite() {
     return civilite;
   }
 
-  public void setCivilite(CiviliteEnum civilite) {
+  public void setCivilite(@javax.annotation.Nonnull CiviliteEnum civilite) {
     this.civilite = civilite;
   }
 
-  public VueInscription nomUsage(String nomUsage) {
-
+  public VueInscription nomUsage(@javax.annotation.Nonnull String nomUsage) {
     this.nomUsage = nomUsage;
     return this;
   }
 
-   /**
+  /**
    * Le nom d&#39;usage de l&#39;apprenant⋅e
    * @return nomUsage
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Le nom d'usage de l'apprenant⋅e")
-
   public String getNomUsage() {
     return nomUsage;
   }
 
-  public void setNomUsage(String nomUsage) {
+  public void setNomUsage(@javax.annotation.Nonnull String nomUsage) {
     this.nomUsage = nomUsage;
   }
 
-  public VueInscription nomFamille(String nomFamille) {
-
+  public VueInscription nomFamille(@javax.annotation.Nonnull String nomFamille) {
     this.nomFamille = nomFamille;
     return this;
   }
 
-   /**
+  /**
    * Le nom patronymique de l&#39;apprenant⋅e
    * @return nomFamille
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Le nom patronymique de l'apprenant⋅e")
-
   public String getNomFamille() {
     return nomFamille;
   }
 
-  public void setNomFamille(String nomFamille) {
+  public void setNomFamille(@javax.annotation.Nonnull String nomFamille) {
     this.nomFamille = nomFamille;
   }
 
-  public VueInscription prenom(String prenom) {
-
+  public VueInscription prenom(@javax.annotation.Nonnull String prenom) {
     this.prenom = prenom;
     return this;
   }
 
-   /**
+  /**
    * Le prénom de l&#39;apprenant⋅e
    * @return prenom
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Le prénom de l'apprenant⋅e")
-
   public String getPrenom() {
     return prenom;
   }
 
-  public void setPrenom(String prenom) {
+  public void setPrenom(@javax.annotation.Nonnull String prenom) {
     this.prenom = prenom;
   }
 
-  public VueInscription dateDeNaissance(String dateDeNaissance) {
-
+  public VueInscription dateDeNaissance(@javax.annotation.Nonnull String dateDeNaissance) {
     this.dateDeNaissance = dateDeNaissance;
     return this;
   }
 
-   /**
+  /**
    * La date de naissance au format ISO-8601 (AAAA-MM-JJ)
    * @return dateDeNaissance
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "La date de naissance au format ISO-8601 (AAAA-MM-JJ)")
-
   public String getDateDeNaissance() {
     return dateDeNaissance;
   }
 
-  public void setDateDeNaissance(String dateDeNaissance) {
+  public void setDateDeNaissance(@javax.annotation.Nonnull String dateDeNaissance) {
     this.dateDeNaissance = dateDeNaissance;
   }
 
-  public VueInscription nationalite(String nationalite) {
-
+  public VueInscription nationalite(@javax.annotation.Nonnull String nationalite) {
     this.nationalite = nationalite;
     return this;
   }
 
-   /**
+  /**
    * Le code INSEE de la nationalité (100 pour française)
    * @return nationalite
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Le code INSEE de la nationalité (100 pour française)")
-
   public String getNationalite() {
     return nationalite;
   }
 
-  public void setNationalite(String nationalite) {
+  public void setNationalite(@javax.annotation.Nonnull String nationalite) {
     this.nationalite = nationalite;
   }
 
-  public VueInscription droitPhoto(Boolean droitPhoto) {
-
+  public VueInscription droitPhoto(@javax.annotation.Nonnull Boolean droitPhoto) {
     this.droitPhoto = droitPhoto;
     return this;
   }
 
-   /**
+  /**
    * Autorisation accordée ou non par l&#39;apprenant⋅e pour l&#39;utilisation de sa photo dans un trombinoscope
    * @return droitPhoto
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Autorisation accordée ou non par l'apprenant⋅e pour l'utilisation de sa photo dans un trombinoscope")
-
   public Boolean getDroitPhoto() {
     return droitPhoto;
   }
 
-  public void setDroitPhoto(Boolean droitPhoto) {
+  public void setDroitPhoto(@javax.annotation.Nonnull Boolean droitPhoto) {
     this.droitPhoto = droitPhoto;
   }
 
-  public VueInscription photo(byte[] photo) {
-
+  public VueInscription photo(@javax.annotation.Nullable byte[] photo) {
     this.photo = photo;
     return this;
   }
 
-   /**
+  /**
    * Si demandée en paramètre photo; La photographie d&#39;identité de l&#39;apprenant (Format binaire, png ou jpeg en ligne)
    * @return photo
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Si demandée en paramètre photo; La photographie d'identité de l'apprenant (Format binaire, png ou jpeg en ligne)")
-
   public byte[] getPhoto() {
     return photo;
   }
 
-  public void setPhoto(byte[] photo) {
+  public void setPhoto(@javax.annotation.Nullable byte[] photo) {
     this.photo = photo;
   }
 
-  public VueInscription regime(String regime) {
-
+  public VueInscription regime(@javax.annotation.Nonnull String regime) {
     this.regime = regime;
     return this;
   }
 
-   /**
+  /**
    * Le code BCN du regime d&#39;inscription
    * @return regime
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Le code BCN du regime d'inscription")
-
   public String getRegime() {
     return regime;
   }
 
-  public void setRegime(String regime) {
+  public void setRegime(@javax.annotation.Nonnull String regime) {
     this.regime = regime;
   }
 
-  public VueInscription bourses(List<String> bourses) {
-
+  public VueInscription bourses(@javax.annotation.Nonnull List<String> bourses) {
     this.bourses = bourses;
     return this;
   }
 
   public VueInscription addBoursesItem(String boursesItem) {
+    if (this.bourses == null) {
+      this.bourses = new ArrayList<>();
+    }
     this.bourses.add(boursesItem);
     return this;
   }
 
-   /**
+  /**
    * Déprécié -&gt; Les codes des bourses de l&#39;inscription
    * @return bourses
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Déprécié -> Les codes des bourses de l'inscription")
-
   public List<String> getBourses() {
     return bourses;
   }
 
-  public void setBourses(List<String> bourses) {
+  public void setBourses(@javax.annotation.Nonnull List<String> bourses) {
     this.bourses = bourses;
   }
 
-  public VueInscription boursesCompletes(List<VueBourse> boursesCompletes) {
-
+  public VueInscription boursesCompletes(@javax.annotation.Nullable List<VueBourse> boursesCompletes) {
     this.boursesCompletes = boursesCompletes;
     return this;
   }
 
   public VueInscription addBoursesCompletesItem(VueBourse boursesCompletesItem) {
     if (this.boursesCompletes == null) {
-      this.boursesCompletes = new ArrayList<VueBourse>();
+      this.boursesCompletes = new ArrayList<>();
     }
     this.boursesCompletes.add(boursesCompletesItem);
     return this;
   }
 
-   /**
+  /**
    * Les codes des bourses de l&#39;inscription
    * @return boursesCompletes
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Les codes des bourses de l'inscription")
-
   public List<VueBourse> getBoursesCompletes() {
     return boursesCompletes;
   }
 
-  public void setBoursesCompletes(List<VueBourse> boursesCompletes) {
+  public void setBoursesCompletes(@javax.annotation.Nullable List<VueBourse> boursesCompletes) {
     this.boursesCompletes = boursesCompletes;
   }
 
-  public VueInscription profilsExonerants(List<VueProfilExonerant> profilsExonerants) {
-
+  public VueInscription profilsExonerants(@javax.annotation.Nullable List<VueProfilExonerant> profilsExonerants) {
     this.profilsExonerants = profilsExonerants;
     return this;
   }
 
   public VueInscription addProfilsExonerantsItem(VueProfilExonerant profilsExonerantsItem) {
     if (this.profilsExonerants == null) {
-      this.profilsExonerants = new ArrayList<VueProfilExonerant>();
+      this.profilsExonerants = new ArrayList<>();
     }
     this.profilsExonerants.add(profilsExonerantsItem);
     return this;
   }
 
-   /**
+  /**
    * Les codes des profils exonerants
    * @return profilsExonerants
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Les codes des profils exonerants")
-
   public List<VueProfilExonerant> getProfilsExonerants() {
     return profilsExonerants;
   }
 
-  public void setProfilsExonerants(List<VueProfilExonerant> profilsExonerants) {
+  public void setProfilsExonerants(@javax.annotation.Nullable List<VueProfilExonerant> profilsExonerants) {
     this.profilsExonerants = profilsExonerants;
   }
 
-  public VueInscription mobilite(MobiliteEnum mobilite) {
-
+  public VueInscription mobilite(@javax.annotation.Nonnull MobiliteEnum mobilite) {
     this.mobilite = mobilite;
     return this;
   }
 
-   /**
+  /**
    * Le type de la mobilité étudiante (SANS si pas de mobilité ou soit ENTRANTE soit SORTANTE)
    * @return mobilite
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Le type de la mobilité étudiante (SANS si pas de mobilité ou soit ENTRANTE soit SORTANTE)")
-
   public MobiliteEnum getMobilite() {
     return mobilite;
   }
 
-  public void setMobilite(MobiliteEnum mobilite) {
+  public void setMobilite(@javax.annotation.Nonnull MobiliteEnum mobilite) {
     this.mobilite = mobilite;
   }
 
-  public VueInscription statutPaiement(StatutPaiementEnum statutPaiement) {
-
+  public VueInscription statutPaiement(@javax.annotation.Nonnull StatutPaiementEnum statutPaiement) {
     this.statutPaiement = statutPaiement;
     return this;
   }
 
-   /**
+  /**
    * Statut du paiement généré à la confirmation du paiement
    * @return statutPaiement
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Statut du paiement généré à la confirmation du paiement")
-
   public StatutPaiementEnum getStatutPaiement() {
     return statutPaiement;
   }
 
-  public void setStatutPaiement(StatutPaiementEnum statutPaiement) {
+  public void setStatutPaiement(@javax.annotation.Nonnull StatutPaiementEnum statutPaiement) {
     this.statutPaiement = statutPaiement;
   }
 
-  public VueInscription statutInscription(StatutInscriptionEnum statutInscription) {
-
+  public VueInscription statutInscription(@javax.annotation.Nullable StatutInscriptionEnum statutInscription) {
     this.statutInscription = statutInscription;
     return this;
   }
 
-   /**
+  /**
    * Statut validé ou annulé de l&#39;inscription
    * @return statutInscription
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Statut validé ou annulé de l'inscription")
-
   public StatutInscriptionEnum getStatutInscription() {
     return statutInscription;
   }
 
-  public void setStatutInscription(StatutInscriptionEnum statutInscription) {
+  public void setStatutInscription(@javax.annotation.Nullable StatutInscriptionEnum statutInscription) {
     this.statutInscription = statutInscription;
   }
 
-  public VueInscription inscriptionPrincipale(Boolean inscriptionPrincipale) {
-
+  public VueInscription inscriptionPrincipale(@javax.annotation.Nullable Boolean inscriptionPrincipale) {
     this.inscriptionPrincipale = inscriptionPrincipale;
     return this;
   }
 
-   /**
+  /**
    * Témoin indiquant s&#39;il s&#39;agit d&#39;une inscription principale (true) ou d&#39;une inscription complémentaire (false)
    * @return inscriptionPrincipale
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Témoin indiquant s'il s'agit d'une inscription principale (true) ou d'une inscription complémentaire (false)")
-
   public Boolean getInscriptionPrincipale() {
     return inscriptionPrincipale;
   }
 
-  public void setInscriptionPrincipale(Boolean inscriptionPrincipale) {
+  public void setInscriptionPrincipale(@javax.annotation.Nullable Boolean inscriptionPrincipale) {
     this.inscriptionPrincipale = inscriptionPrincipale;
   }
 
-  public VueInscription formation(String formation) {
-
+  public VueInscription formation(@javax.annotation.Nonnull String formation) {
     this.formation = formation;
     return this;
   }
 
-   /**
+  /**
    * Le code SISE de la formation
    * @return formation
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Le code SISE de la formation")
-
   public String getFormation() {
     return formation;
   }
 
-  public void setFormation(String formation) {
+  public void setFormation(@javax.annotation.Nonnull String formation) {
     this.formation = formation;
   }
 
-  public VueInscription anneeUniversitaire(Integer anneeUniversitaire) {
-
+  public VueInscription anneeUniversitaire(@javax.annotation.Nullable Integer anneeUniversitaire) {
     this.anneeUniversitaire = anneeUniversitaire;
     return this;
   }
 
-   /**
+  /**
    * L&#39;année universitaire si renseigné dans la période
    * @return anneeUniversitaire
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "L'année universitaire si renseigné dans la période")
-
   public Integer getAnneeUniversitaire() {
     return anneeUniversitaire;
   }
 
-  public void setAnneeUniversitaire(Integer anneeUniversitaire) {
+  public void setAnneeUniversitaire(@javax.annotation.Nullable Integer anneeUniversitaire) {
     this.anneeUniversitaire = anneeUniversitaire;
   }
 
-  public VueInscription periode(String periode) {
-
+  public VueInscription periode(@javax.annotation.Nonnull String periode) {
     this.periode = periode;
     return this;
   }
 
-   /**
+  /**
    * Le libelle de la période de mise en œuvre
    * @return periode
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Le libelle de la période de mise en œuvre")
-
   public String getPeriode() {
     return periode;
   }
 
-  public void setPeriode(String periode) {
+  public void setPeriode(@javax.annotation.Nonnull String periode) {
     this.periode = periode;
   }
 
-  public VueInscription chemin(List<VueCheminCible> chemin) {
-
+  public VueInscription chemin(@javax.annotation.Nonnull List<VueCheminCible> chemin) {
     this.chemin = chemin;
     return this;
   }
 
   public VueInscription addCheminItem(VueCheminCible cheminItem) {
+    if (this.chemin == null) {
+      this.chemin = new ArrayList<>();
+    }
     this.chemin.add(cheminItem);
     return this;
   }
 
-   /**
+  /**
    * Sous-liste avec le chemin cible de la formation racine jusqu&#39;à l&#39;objet de la maquette de formation sur lequel s&#39;est inscrit l&#39;étudiant
    * @return chemin
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Sous-liste avec le chemin cible de la formation racine jusqu'à l'objet de la maquette de formation sur lequel s'est inscrit l'étudiant")
-
   public List<VueCheminCible> getChemin() {
     return chemin;
   }
 
-  public void setChemin(List<VueCheminCible> chemin) {
+  public void setChemin(@javax.annotation.Nonnull List<VueCheminCible> chemin) {
     this.chemin = chemin;
   }
 
-  public VueInscription uaIStructurePrincipale(String uaIStructurePrincipale) {
-
+  public VueInscription uaIStructurePrincipale(@javax.annotation.Nullable String uaIStructurePrincipale) {
     this.uaIStructurePrincipale = uaIStructurePrincipale;
     return this;
   }
 
-   /**
+  /**
    * Le code UAI de la structure
    * @return uaIStructurePrincipale
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code UAI de la structure")
-
   public String getUaIStructurePrincipale() {
     return uaIStructurePrincipale;
   }
 
-  public void setUaIStructurePrincipale(String uaIStructurePrincipale) {
+  public void setUaIStructurePrincipale(@javax.annotation.Nullable String uaIStructurePrincipale) {
     this.uaIStructurePrincipale = uaIStructurePrincipale;
   }
 
-  public VueInscription codeDiplomeSISE(String codeDiplomeSISE) {
-
+  public VueInscription codeDiplomeSISE(@javax.annotation.Nullable String codeDiplomeSISE) {
     this.codeDiplomeSISE = codeDiplomeSISE;
     return this;
   }
 
-   /**
+  /**
    * Le code SISE du diplome
    * @return codeDiplomeSISE
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code SISE du diplome")
-
   public String getCodeDiplomeSISE() {
     return codeDiplomeSISE;
   }
 
-  public void setCodeDiplomeSISE(String codeDiplomeSISE) {
+  public void setCodeDiplomeSISE(@javax.annotation.Nullable String codeDiplomeSISE) {
     this.codeDiplomeSISE = codeDiplomeSISE;
   }
 
-  public VueInscription adresses(List<VueContactAdresse> adresses) {
-
+  public VueInscription adresses(@javax.annotation.Nonnull List<VueContactAdresse> adresses) {
     this.adresses = adresses;
     return this;
   }
 
   public VueInscription addAdressesItem(VueContactAdresse adressesItem) {
+    if (this.adresses == null) {
+      this.adresses = new ArrayList<>();
+    }
     this.adresses.add(adressesItem);
     return this;
   }
 
-   /**
+  /**
    * Adresses détaillées
    * @return adresses
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Adresses détaillées")
-
   public List<VueContactAdresse> getAdresses() {
     return adresses;
   }
 
-  public void setAdresses(List<VueContactAdresse> adresses) {
+  public void setAdresses(@javax.annotation.Nonnull List<VueContactAdresse> adresses) {
     this.adresses = adresses;
   }
 
-  public VueInscription mels(List<VueContactMel> mels) {
-
+  public VueInscription mels(@javax.annotation.Nonnull List<VueContactMel> mels) {
     this.mels = mels;
     return this;
   }
 
   public VueInscription addMelsItem(VueContactMel melsItem) {
+    if (this.mels == null) {
+      this.mels = new ArrayList<>();
+    }
     this.mels.add(melsItem);
     return this;
   }
 
-   /**
+  /**
    * Adresses mel détaillées
    * @return mels
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Adresses mel détaillées")
-
   public List<VueContactMel> getMels() {
     return mels;
   }
 
-  public void setMels(List<VueContactMel> mels) {
+  public void setMels(@javax.annotation.Nonnull List<VueContactMel> mels) {
     this.mels = mels;
   }
 
-  public VueInscription telephones(List<VueContactTelephone> telephones) {
-
+  public VueInscription telephones(@javax.annotation.Nonnull List<VueContactTelephone> telephones) {
     this.telephones = telephones;
     return this;
   }
 
   public VueInscription addTelephonesItem(VueContactTelephone telephonesItem) {
+    if (this.telephones == null) {
+      this.telephones = new ArrayList<>();
+    }
     this.telephones.add(telephonesItem);
     return this;
   }
 
-   /**
+  /**
    * Adresses téléphoniques détaillées
    * @return telephones
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Adresses téléphoniques détaillées")
-
   public List<VueContactTelephone> getTelephones() {
     return telephones;
   }
 
-  public void setTelephones(List<VueContactTelephone> telephones) {
+  public void setTelephones(@javax.annotation.Nonnull List<VueContactTelephone> telephones) {
     this.telephones = telephones;
   }
 
@@ -897,6 +1113,14 @@ public class VueInscription {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert an instance of VueInscription to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 
   /**
    * La civilité M ou F de l&#39;apprenant⋅e
@@ -920,6 +1144,11 @@ public class VueInscription {
         }
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      CiviliteEnum.fromValue(value);
     }
 
     public String getValue() {
@@ -969,6 +1198,11 @@ public class VueInscription {
         }
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      MobiliteEnum.fromValue(value);
     }
 
     public String getValue() {
@@ -1022,6 +1256,11 @@ public class VueInscription {
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
 
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      StatutPaiementEnum.fromValue(value);
+    }
+
     public String getValue() {
       return value;
     }
@@ -1069,6 +1308,11 @@ public class VueInscription {
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
 
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      StatutInscriptionEnum.fromValue(value);
+    }
+
     public String getValue() {
       return value;
     }
@@ -1092,5 +1336,33 @@ public class VueInscription {
     }
   }
 
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!VueInscription.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'VueInscription' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<VueInscription> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(VueInscription.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<VueInscription>() {
+           @Override
+           public void write(JsonWriter out, VueInscription value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public VueInscription read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
 }
 

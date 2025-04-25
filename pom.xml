@@ -48,7 +48,7 @@
 
 
 	<properties>
-		<revision>2.3.3</revision>
+		<revision>2.3.4</revision>
 		<sha1></sha1>
 		<changelist></changelist>
 		<java.version>17</java.version>

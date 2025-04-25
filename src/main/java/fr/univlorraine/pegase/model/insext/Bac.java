@@ -1,8 +1,8 @@
 /*
- * INSCRIPTION Externe V1 [EXTERNE]
- * Liste l'ensemble des services et des opérations Ins (Module Inscription) marquées comme [EXTERNE].  Ils peuvent être utilisés par des outils externes à Pegase.  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers la documentation qui décrit l'authentification aux APIs de Pegase : [pdf](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1)  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  ### Code retour  * 200 - Ok : L'opération s'est déroulée avec succès * 201 - Created : L'opération a aboutie à la création d'une ressource * 400 - Bad request :   * Un ou des paramètres d'entrées sont erronées   * Une erreur fonctionnelle s'est produite * 401 - Unauthorized - Vous n'êtes pas authentifié   * Il n'y a pas de token passé dans le header HTTP `Authorization`   * Le token passé n'est pas au bon format (Bearer <[token-jwt](https://jwt.io/)>) * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération   * La signature du token est incorrecte / n'a pas pû être vérifiée   * Le token est expiré   * Les habilitations de l'utilisateur ne permettent pas d'exécuter cette opération. Vérifier les droits de l'utilisateur * 404 - Not Found : La ressource demandée n'est pas trouvé     * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide * 500 - Internal server error : Erreur inattendue et non gérés 
+ * INSCRIPTION Externe V2
+ *  # Introduction  Liste l'ensemble des services et des opérations Ins (Module Inscription) identifiés pour un usage externe.  La documentation d'intégration de Pégase est publiée par version dans  [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/).  Vous y retrouverez notamment des informations sur le modèle objet métier,  le versionning des APIs, les cas d'usage des APIs externes.  # Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.  # Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  # Gestion des erreurs  ## StatusCode  | Code    | Description                                | |---------|--------------------------------------------| | 200     | Opération effectuée                        | |         | Cas particulier: Dans le cas d'APIs de     | |         | type bulk, un 200 peut aussi être retourné | |         | si des données de la requête sont          | |         | considérées en erreur                      | | 201     | Ressource créée                            | | 400     | Données envoyées par le client invalides   | | 403     | Accès refusé                               | | 404     | Ressource inexistante                      | | 409     | donnée déjà existante                      | | 500     | Erreur technique rencontrée par le serveur |   ## Codes d'erreurs  | Code      | Description                                | |-----------|--------------------------------------------| | notNull   | la propriété est obligatoire               | | notBlank  | la propriété ne doit pas être vide         | | size      | la longueur de la propriété est invalide   | | pattern   | les caractères ou la syntaxe de            | |           | la propriété est invalide                  | | genre     | le genre de la personne est invalide       | | dateEntre | la date est invalide                       | | telephone | le téléphone est invalide                  | | email     | le mail est invalide                       | 
  *
- * The version of the OpenAPI document: 1.3.1
+ * The version of the OpenAPI document: 2.1.0-rc.20250404093138
  * 
  *
  * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
@@ -13,16 +13,44 @@
 
 package fr.univlorraine.pegase.model.insext;
 
-import com.google.gson.annotations.SerializedName;
-import io.swagger.annotations.ApiModelProperty;
-
-import java.util.Date;
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insext.StatutIne;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Date;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.api.JSON;
 
 /**
  * Bac
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-01-29T09:55:35.009513400+01:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-24T16:08:56.114878100+02:00[Europe/Paris]", comments = "Generator version: 7.11.0")
 public class Bac {
   public static final String SERIALIZED_NAME_TITRE_ACCES = "titreAcces";
   public static final String SERIALIZED_NAME_ANNEE_OBTENTION = "anneeObtention";
@@ -47,584 +75,627 @@ public class Bac {
   public static final String SERIALIZED_NAME_DATE_DERNIER_APPEL_INES = "dateDernierAppelInes";
   public static final String SERIALIZED_NAME_ETABLISSEMENT_LIBRE = "etablissementLibre";
   public static final String SERIALIZED_NAME_DETAIL_TITRE = "detailTitre";
-  @SerializedName(SERIALIZED_NAME_TITRE_ACCES)
-  private String titreAcces;
-  @SerializedName(SERIALIZED_NAME_ANNEE_OBTENTION)
-  private String anneeObtention;
-  @SerializedName(SERIALIZED_NAME_SERIE)
-  private String serie;
-  @SerializedName(SERIALIZED_NAME_LIBELLE_SERIE)
-  private String libelleSerie;
-  @SerializedName(SERIALIZED_NAME_PREMIERE_SPECIALITE_BAC)
-  private String premiereSpecialiteBac;
-  @SerializedName(SERIALIZED_NAME_LIBELLE_PREMIERE_SPECIALITE_BAC)
-  private String libellePremiereSpecialiteBac;
-  @SerializedName(SERIALIZED_NAME_DEUXIEME_SPECIALITE_BAC)
-  private String deuxiemeSpecialiteBac;
-  @SerializedName(SERIALIZED_NAME_LIBELLE_DEUXIEME_SPECIALITE_BAC)
-  private String libelleDeuxiemeSpecialiteBac;
-  @SerializedName(SERIALIZED_NAME_MENTION)
-  private String mention;
-  @SerializedName(SERIALIZED_NAME_LIBELLE_MENTION)
-  private String libelleMention;
-  @SerializedName(SERIALIZED_NAME_TYPE_ETABLISSEMENT)
-  private String typeEtablissement;
-  @SerializedName(SERIALIZED_NAME_PAYS)
-  private String pays;
-  @SerializedName(SERIALIZED_NAME_LIBELLE_PAYS)
-  private String libellePays;
-  @SerializedName(SERIALIZED_NAME_DEPARTEMENT)
-  private String departement;
-  @SerializedName(SERIALIZED_NAME_LIBELLE_DEPARTEMENT)
-  private String libelleDepartement;
-  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT)
-  private String etablissement;
-  @SerializedName(SERIALIZED_NAME_INE)
-  private String ine;
-  @SerializedName(SERIALIZED_NAME_STATUT_INE)
-  private StatutIne statutIne;
-  @SerializedName(SERIALIZED_NAME_CODE_ERREUR_INE)
-  private String codeErreurIne;
-  @SerializedName(SERIALIZED_NAME_MESSAGE_ERREUR_INE)
-  private String messageErreurIne;
-  @SerializedName(SERIALIZED_NAME_DATE_DERNIER_APPEL_INES)
-  private Date dateDernierAppelInes;
-  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT_LIBRE)
-  private String etablissementLibre;
-  @SerializedName(SERIALIZED_NAME_DETAIL_TITRE)
-  private String detailTitre;
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
 
-  public Bac() { 
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>();
+    openapiFields.add("titreAcces");
+    openapiFields.add("anneeObtention");
+    openapiFields.add("serie");
+    openapiFields.add("libelleSerie");
+    openapiFields.add("premiereSpecialiteBac");
+    openapiFields.add("libellePremiereSpecialiteBac");
+    openapiFields.add("deuxiemeSpecialiteBac");
+    openapiFields.add("libelleDeuxiemeSpecialiteBac");
+    openapiFields.add("mention");
+    openapiFields.add("libelleMention");
+    openapiFields.add("typeEtablissement");
+    openapiFields.add("pays");
+    openapiFields.add("libellePays");
+    openapiFields.add("departement");
+    openapiFields.add("libelleDepartement");
+    openapiFields.add("etablissement");
+    openapiFields.add("ine");
+    openapiFields.add("statutIne");
+    openapiFields.add("codeErreurIne");
+    openapiFields.add("messageErreurIne");
+    openapiFields.add("dateDernierAppelInes");
+    openapiFields.add("etablissementLibre");
+    openapiFields.add("detailTitre");
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>();
   }
 
-  public Bac titreAcces(String titreAcces) {
-    
+  @SerializedName(SERIALIZED_NAME_TITRE_ACCES)
+  @javax.annotation.Nullable
+  private String titreAcces;
+  @SerializedName(SERIALIZED_NAME_ANNEE_OBTENTION)
+  @javax.annotation.Nullable
+  private String anneeObtention;
+  @SerializedName(SERIALIZED_NAME_SERIE)
+  @javax.annotation.Nullable
+  private String serie;
+  @SerializedName(SERIALIZED_NAME_LIBELLE_SERIE)
+  @javax.annotation.Nullable
+  private String libelleSerie;
+  @SerializedName(SERIALIZED_NAME_PREMIERE_SPECIALITE_BAC)
+  @javax.annotation.Nullable
+  private String premiereSpecialiteBac;
+  @SerializedName(SERIALIZED_NAME_LIBELLE_PREMIERE_SPECIALITE_BAC)
+  @javax.annotation.Nullable
+  private String libellePremiereSpecialiteBac;
+  @SerializedName(SERIALIZED_NAME_DEUXIEME_SPECIALITE_BAC)
+  @javax.annotation.Nullable
+  private String deuxiemeSpecialiteBac;
+  @SerializedName(SERIALIZED_NAME_LIBELLE_DEUXIEME_SPECIALITE_BAC)
+  @javax.annotation.Nullable
+  private String libelleDeuxiemeSpecialiteBac;
+  @SerializedName(SERIALIZED_NAME_MENTION)
+  @javax.annotation.Nullable
+  private String mention;
+  @SerializedName(SERIALIZED_NAME_LIBELLE_MENTION)
+  @javax.annotation.Nullable
+  private String libelleMention;
+  @SerializedName(SERIALIZED_NAME_TYPE_ETABLISSEMENT)
+  @javax.annotation.Nullable
+  private String typeEtablissement;
+  @SerializedName(SERIALIZED_NAME_PAYS)
+  @javax.annotation.Nullable
+  private String pays;
+  @SerializedName(SERIALIZED_NAME_LIBELLE_PAYS)
+  @javax.annotation.Nullable
+  private String libellePays;
+  @SerializedName(SERIALIZED_NAME_DEPARTEMENT)
+  @javax.annotation.Nullable
+  private String departement;
+  @SerializedName(SERIALIZED_NAME_LIBELLE_DEPARTEMENT)
+  @javax.annotation.Nullable
+  private String libelleDepartement;
+  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT)
+  @javax.annotation.Nullable
+  private String etablissement;
+  @SerializedName(SERIALIZED_NAME_INE)
+  @javax.annotation.Nullable
+  private String ine;
+  @SerializedName(SERIALIZED_NAME_STATUT_INE)
+  @javax.annotation.Nullable
+  private StatutIne statutIne;
+  @SerializedName(SERIALIZED_NAME_CODE_ERREUR_INE)
+  @javax.annotation.Nullable
+  private String codeErreurIne;
+  @SerializedName(SERIALIZED_NAME_MESSAGE_ERREUR_INE)
+  @javax.annotation.Nullable
+  private String messageErreurIne;
+  @SerializedName(SERIALIZED_NAME_DATE_DERNIER_APPEL_INES)
+  @javax.annotation.Nullable
+  private Date dateDernierAppelInes;
+  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT_LIBRE)
+  @javax.annotation.Nullable
+  private String etablissementLibre;
+  @SerializedName(SERIALIZED_NAME_DETAIL_TITRE)
+  @javax.annotation.Nullable
+  private String detailTitre;
+
+  public Bac() {
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to Bac
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!Bac.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format("The required field(s) %s in Bac is not found in the empty JSON string", Bac.openapiRequiredFields.toString()));
+        }
+      }
+
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!Bac.openapiFields.contains(entry.getKey())) {
+          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `Bac` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+        }
+      }
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("titreAcces") != null && !jsonObj.get("titreAcces").isJsonNull()) && !jsonObj.get("titreAcces").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `titreAcces` to be a primitive type in the JSON string but got `%s`", jsonObj.get("titreAcces").toString()));
+      }
+      if ((jsonObj.get("anneeObtention") != null && !jsonObj.get("anneeObtention").isJsonNull()) && !jsonObj.get("anneeObtention").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `anneeObtention` to be a primitive type in the JSON string but got `%s`", jsonObj.get("anneeObtention").toString()));
+      }
+      if ((jsonObj.get("serie") != null && !jsonObj.get("serie").isJsonNull()) && !jsonObj.get("serie").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `serie` to be a primitive type in the JSON string but got `%s`", jsonObj.get("serie").toString()));
+      }
+      if ((jsonObj.get("libelleSerie") != null && !jsonObj.get("libelleSerie").isJsonNull()) && !jsonObj.get("libelleSerie").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `libelleSerie` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleSerie").toString()));
+      }
+      if ((jsonObj.get("premiereSpecialiteBac") != null && !jsonObj.get("premiereSpecialiteBac").isJsonNull()) && !jsonObj.get("premiereSpecialiteBac").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `premiereSpecialiteBac` to be a primitive type in the JSON string but got `%s`", jsonObj.get("premiereSpecialiteBac").toString()));
+      }
+      if ((jsonObj.get("libellePremiereSpecialiteBac") != null && !jsonObj.get("libellePremiereSpecialiteBac").isJsonNull()) && !jsonObj.get("libellePremiereSpecialiteBac").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `libellePremiereSpecialiteBac` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libellePremiereSpecialiteBac").toString()));
+      }
+      if ((jsonObj.get("deuxiemeSpecialiteBac") != null && !jsonObj.get("deuxiemeSpecialiteBac").isJsonNull()) && !jsonObj.get("deuxiemeSpecialiteBac").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `deuxiemeSpecialiteBac` to be a primitive type in the JSON string but got `%s`", jsonObj.get("deuxiemeSpecialiteBac").toString()));
+      }
+      if ((jsonObj.get("libelleDeuxiemeSpecialiteBac") != null && !jsonObj.get("libelleDeuxiemeSpecialiteBac").isJsonNull()) && !jsonObj.get("libelleDeuxiemeSpecialiteBac").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `libelleDeuxiemeSpecialiteBac` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleDeuxiemeSpecialiteBac").toString()));
+      }
+      if ((jsonObj.get("mention") != null && !jsonObj.get("mention").isJsonNull()) && !jsonObj.get("mention").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `mention` to be a primitive type in the JSON string but got `%s`", jsonObj.get("mention").toString()));
+      }
+      if ((jsonObj.get("libelleMention") != null && !jsonObj.get("libelleMention").isJsonNull()) && !jsonObj.get("libelleMention").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `libelleMention` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleMention").toString()));
+      }
+      if ((jsonObj.get("typeEtablissement") != null && !jsonObj.get("typeEtablissement").isJsonNull()) && !jsonObj.get("typeEtablissement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `typeEtablissement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("typeEtablissement").toString()));
+      }
+      if ((jsonObj.get("pays") != null && !jsonObj.get("pays").isJsonNull()) && !jsonObj.get("pays").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `pays` to be a primitive type in the JSON string but got `%s`", jsonObj.get("pays").toString()));
+      }
+      if ((jsonObj.get("libellePays") != null && !jsonObj.get("libellePays").isJsonNull()) && !jsonObj.get("libellePays").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `libellePays` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libellePays").toString()));
+      }
+      if ((jsonObj.get("departement") != null && !jsonObj.get("departement").isJsonNull()) && !jsonObj.get("departement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `departement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("departement").toString()));
+      }
+      if ((jsonObj.get("libelleDepartement") != null && !jsonObj.get("libelleDepartement").isJsonNull()) && !jsonObj.get("libelleDepartement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `libelleDepartement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleDepartement").toString()));
+      }
+      if ((jsonObj.get("etablissement") != null && !jsonObj.get("etablissement").isJsonNull()) && !jsonObj.get("etablissement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `etablissement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("etablissement").toString()));
+      }
+      if ((jsonObj.get("ine") != null && !jsonObj.get("ine").isJsonNull()) && !jsonObj.get("ine").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `ine` to be a primitive type in the JSON string but got `%s`", jsonObj.get("ine").toString()));
+      }
+      // validate the optional field `statutIne`
+      if (jsonObj.get("statutIne") != null && !jsonObj.get("statutIne").isJsonNull()) {
+        StatutIne.validateJsonElement(jsonObj.get("statutIne"));
+      }
+      if ((jsonObj.get("codeErreurIne") != null && !jsonObj.get("codeErreurIne").isJsonNull()) && !jsonObj.get("codeErreurIne").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `codeErreurIne` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codeErreurIne").toString()));
+      }
+      if ((jsonObj.get("messageErreurIne") != null && !jsonObj.get("messageErreurIne").isJsonNull()) && !jsonObj.get("messageErreurIne").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `messageErreurIne` to be a primitive type in the JSON string but got `%s`", jsonObj.get("messageErreurIne").toString()));
+      }
+      if ((jsonObj.get("etablissementLibre") != null && !jsonObj.get("etablissementLibre").isJsonNull()) && !jsonObj.get("etablissementLibre").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `etablissementLibre` to be a primitive type in the JSON string but got `%s`", jsonObj.get("etablissementLibre").toString()));
+      }
+      if ((jsonObj.get("detailTitre") != null && !jsonObj.get("detailTitre").isJsonNull()) && !jsonObj.get("detailTitre").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `detailTitre` to be a primitive type in the JSON string but got `%s`", jsonObj.get("detailTitre").toString()));
+      }
+  }
+
+  /**
+   * Create an instance of Bac given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of Bac
+   * @throws IOException if the JSON string is invalid with respect to Bac
+   */
+  public static Bac fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, Bac.class);
+  }
+
+  public Bac titreAcces(@javax.annotation.Nullable String titreAcces) {
     this.titreAcces = titreAcces;
     return this;
   }
 
-   /**
+  /**
    * Le titre d&#39;accès du baccalaureat ou équivalent
    * @return titreAcces
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le titre d'accès du baccalaureat ou équivalent")
-
   public String getTitreAcces() {
     return titreAcces;
   }
 
-
-  public void setTitreAcces(String titreAcces) {
+  public void setTitreAcces(@javax.annotation.Nullable String titreAcces) {
     this.titreAcces = titreAcces;
   }
 
-
-  public Bac anneeObtention(String anneeObtention) {
-    
+  public Bac anneeObtention(@javax.annotation.Nullable String anneeObtention) {
     this.anneeObtention = anneeObtention;
     return this;
   }
 
-   /**
+  /**
    * L&#39;annee d&#39;obtention du baccalaureat ou équivalent
    * @return anneeObtention
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "L'annee d'obtention du baccalaureat ou équivalent")
-
   public String getAnneeObtention() {
     return anneeObtention;
   }
 
-
-  public void setAnneeObtention(String anneeObtention) {
+  public void setAnneeObtention(@javax.annotation.Nullable String anneeObtention) {
     this.anneeObtention = anneeObtention;
   }
 
-
-  public Bac serie(String serie) {
-    
+  public Bac serie(@javax.annotation.Nullable String serie) {
     this.serie = serie;
     return this;
   }
 
-   /**
-   * Le code de la série du baccalauréat ou équivalent issu de la nomenclature Séries du baccalauréat et équivalences  Codes de la nomenclature sur 6 caractères. Préfixe des codes : BAC 
+  /**
+   * Le code de la série du baccalauréat ou équivalent issu de la nomenclature Séries du baccalauréat et équivalences  Codes de la nomenclature sur 6 caractères. Préfixe des codes : BAC
    * @return serie
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code de la série du baccalauréat ou équivalent issu de la nomenclature Séries du baccalauréat et équivalences  Codes de la nomenclature sur 6 caractères. Préfixe des codes : BAC ")
-
   public String getSerie() {
     return serie;
   }
 
-
-  public void setSerie(String serie) {
+  public void setSerie(@javax.annotation.Nullable String serie) {
     this.serie = serie;
   }
 
-
-  public Bac libelleSerie(String libelleSerie) {
-    
+  public Bac libelleSerie(@javax.annotation.Nullable String libelleSerie) {
     this.libelleSerie = libelleSerie;
     return this;
   }
 
-   /**
-   * Le libelle de la série du baccalauréat ou équivalent issu de la nomenclature Séries du baccalauréat et équivalences 
+  /**
+   * Le libelle de la série du baccalauréat ou équivalent issu de la nomenclature Séries du baccalauréat et équivalences
    * @return libelleSerie
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le libelle de la série du baccalauréat ou équivalent issu de la nomenclature Séries du baccalauréat et équivalences ")
-
   public String getLibelleSerie() {
     return libelleSerie;
   }
 
-
-  public void setLibelleSerie(String libelleSerie) {
+  public void setLibelleSerie(@javax.annotation.Nullable String libelleSerie) {
     this.libelleSerie = libelleSerie;
   }
 
-
-  public Bac premiereSpecialiteBac(String premiereSpecialiteBac) {
-    
+  public Bac premiereSpecialiteBac(@javax.annotation.Nullable String premiereSpecialiteBac) {
     this.premiereSpecialiteBac = premiereSpecialiteBac;
     return this;
   }
 
-   /**
-   * Le code de la première spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général 
+  /**
+   * Le code de la première spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général
    * @return premiereSpecialiteBac
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code de la première spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général ")
-
   public String getPremiereSpecialiteBac() {
     return premiereSpecialiteBac;
   }
 
-
-  public void setPremiereSpecialiteBac(String premiereSpecialiteBac) {
+  public void setPremiereSpecialiteBac(@javax.annotation.Nullable String premiereSpecialiteBac) {
     this.premiereSpecialiteBac = premiereSpecialiteBac;
   }
 
-
-  public Bac libellePremiereSpecialiteBac(String libellePremiereSpecialiteBac) {
-    
+  public Bac libellePremiereSpecialiteBac(@javax.annotation.Nullable String libellePremiereSpecialiteBac) {
     this.libellePremiereSpecialiteBac = libellePremiereSpecialiteBac;
     return this;
   }
 
-   /**
-   * Le libelle de la première spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général 
+  /**
+   * Le libelle de la première spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général
    * @return libellePremiereSpecialiteBac
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le libelle de la première spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général ")
-
   public String getLibellePremiereSpecialiteBac() {
     return libellePremiereSpecialiteBac;
   }
 
-
-  public void setLibellePremiereSpecialiteBac(String libellePremiereSpecialiteBac) {
+  public void setLibellePremiereSpecialiteBac(@javax.annotation.Nullable String libellePremiereSpecialiteBac) {
     this.libellePremiereSpecialiteBac = libellePremiereSpecialiteBac;
   }
 
-
-  public Bac deuxiemeSpecialiteBac(String deuxiemeSpecialiteBac) {
-    
+  public Bac deuxiemeSpecialiteBac(@javax.annotation.Nullable String deuxiemeSpecialiteBac) {
     this.deuxiemeSpecialiteBac = deuxiemeSpecialiteBac;
     return this;
   }
 
-   /**
-   * Le code de la deuxième spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général 
+  /**
+   * Le code de la deuxième spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général
    * @return deuxiemeSpecialiteBac
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code de la deuxième spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général ")
-
   public String getDeuxiemeSpecialiteBac() {
     return deuxiemeSpecialiteBac;
   }
 
-
-  public void setDeuxiemeSpecialiteBac(String deuxiemeSpecialiteBac) {
+  public void setDeuxiemeSpecialiteBac(@javax.annotation.Nullable String deuxiemeSpecialiteBac) {
     this.deuxiemeSpecialiteBac = deuxiemeSpecialiteBac;
   }
 
-
-  public Bac libelleDeuxiemeSpecialiteBac(String libelleDeuxiemeSpecialiteBac) {
-    
+  public Bac libelleDeuxiemeSpecialiteBac(@javax.annotation.Nullable String libelleDeuxiemeSpecialiteBac) {
     this.libelleDeuxiemeSpecialiteBac = libelleDeuxiemeSpecialiteBac;
     return this;
   }
 
-   /**
-   * Le libelle de la deuxième spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général 
+  /**
+   * Le libelle de la deuxième spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général
    * @return libelleDeuxiemeSpecialiteBac
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le libelle de la deuxième spécialité du nouveau baccalaureat (NBGE) issu de la nomenclature Specialités Bac Général ")
-
   public String getLibelleDeuxiemeSpecialiteBac() {
     return libelleDeuxiemeSpecialiteBac;
   }
 
-
-  public void setLibelleDeuxiemeSpecialiteBac(String libelleDeuxiemeSpecialiteBac) {
+  public void setLibelleDeuxiemeSpecialiteBac(@javax.annotation.Nullable String libelleDeuxiemeSpecialiteBac) {
     this.libelleDeuxiemeSpecialiteBac = libelleDeuxiemeSpecialiteBac;
   }
 
-
-  public Bac mention(String mention) {
-    
+  public Bac mention(@javax.annotation.Nullable String mention) {
     this.mention = mention;
     return this;
   }
 
-   /**
-   * Le code de la mention du candidat issu de la nomenclature des Mentions obtenues au baccalauréat  Codes de la nomenclature sur 6 caractères. Préfixe des codes : MEN 
+  /**
+   * Le code de la mention du candidat issu de la nomenclature des Mentions obtenues au baccalauréat  Codes de la nomenclature sur 6 caractères. Préfixe des codes : MEN
    * @return mention
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code de la mention du candidat issu de la nomenclature des Mentions obtenues au baccalauréat  Codes de la nomenclature sur 6 caractères. Préfixe des codes : MEN ")
-
   public String getMention() {
     return mention;
   }
 
-
-  public void setMention(String mention) {
+  public void setMention(@javax.annotation.Nullable String mention) {
     this.mention = mention;
   }
 
-
-  public Bac libelleMention(String libelleMention) {
-    
+  public Bac libelleMention(@javax.annotation.Nullable String libelleMention) {
     this.libelleMention = libelleMention;
     return this;
   }
 
-   /**
-   * Le libelle de la mention du candidat issu de la nomenclature des Mentions obtenues au baccalauréat 
+  /**
+   * Le libelle de la mention du candidat issu de la nomenclature des Mentions obtenues au baccalauréat
    * @return libelleMention
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le libelle de la mention du candidat issu de la nomenclature des Mentions obtenues au baccalauréat ")
-
   public String getLibelleMention() {
     return libelleMention;
   }
 
-
-  public void setLibelleMention(String libelleMention) {
+  public void setLibelleMention(@javax.annotation.Nullable String libelleMention) {
     this.libelleMention = libelleMention;
   }
 
-
-  public Bac typeEtablissement(String typeEtablissement) {
-    
+  public Bac typeEtablissement(@javax.annotation.Nullable String typeEtablissement) {
     this.typeEtablissement = typeEtablissement;
     return this;
   }
 
-   /**
-   * Le type de l&#39;établissement dans lequel le diplôme a été obtenu  Les valeurs &#x60;F&#x60; ou &#x60;E&#x60; sont acceptées: * la valeur &#x60;F&#x60; correspond au type établissement d&#39;un établissement   français en France, * la valeur &#x60;E&#x60; correspond au type établissement d&#39;un établissement français   à l&#39;étranger ou d&#39;un établissement étranger. 
+  /**
+   * Le type de l&#39;établissement dans lequel le diplôme a été obtenu  Les valeurs &#x60;F&#x60; ou &#x60;E&#x60; sont acceptées: * la valeur &#x60;F&#x60; correspond au type établissement d&#39;un établissement   français en France, * la valeur &#x60;E&#x60; correspond au type établissement d&#39;un établissement français   à l&#39;étranger ou d&#39;un établissement étranger.
    * @return typeEtablissement
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le type de l'établissement dans lequel le diplôme a été obtenu  Les valeurs `F` ou `E` sont acceptées: * la valeur `F` correspond au type établissement d'un établissement   français en France, * la valeur `E` correspond au type établissement d'un établissement français   à l'étranger ou d'un établissement étranger. ")
-
   public String getTypeEtablissement() {
     return typeEtablissement;
   }
 
-
-  public void setTypeEtablissement(String typeEtablissement) {
+  public void setTypeEtablissement(@javax.annotation.Nullable String typeEtablissement) {
     this.typeEtablissement = typeEtablissement;
   }
 
-
-  public Bac pays(String pays) {
-    
+  public Bac pays(@javax.annotation.Nullable String pays) {
     this.pays = pays;
     return this;
   }
 
-   /**
-   * Le code du pays délivrant le diplôme issu de la nomenclature Pays et nationalités. 
+  /**
+   * Le code du pays délivrant le diplôme issu de la nomenclature Pays et nationalités.
    * @return pays
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code du pays délivrant le diplôme issu de la nomenclature Pays et nationalités. ")
-
   public String getPays() {
     return pays;
   }
 
-
-  public void setPays(String pays) {
+  public void setPays(@javax.annotation.Nullable String pays) {
     this.pays = pays;
   }
 
-
-  public Bac libellePays(String libellePays) {
-    
+  public Bac libellePays(@javax.annotation.Nullable String libellePays) {
     this.libellePays = libellePays;
     return this;
   }
 
-   /**
-   * Le libelle du pays délivrant le diplôme issu de la nomenclature Pays et nationalités. 
+  /**
+   * Le libelle du pays délivrant le diplôme issu de la nomenclature Pays et nationalités.
    * @return libellePays
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le libelle du pays délivrant le diplôme issu de la nomenclature Pays et nationalités. ")
-
   public String getLibellePays() {
     return libellePays;
   }
 
-
-  public void setLibellePays(String libellePays) {
+  public void setLibellePays(@javax.annotation.Nullable String libellePays) {
     this.libellePays = libellePays;
   }
 
-
-  public Bac departement(String departement) {
-    
+  public Bac departement(@javax.annotation.Nullable String departement) {
     this.departement = departement;
     return this;
   }
 
-   /**
-   * Le code du département de l&#39;établissement dans lequel le diplôme a été obtenu issu de la nomenclature Départements.  Codes de la nomenclature sur 3 caractères. Ex : 001 &#x3D; AIN 
+  /**
+   * Le code du département de l&#39;établissement dans lequel le diplôme a été obtenu issu de la nomenclature Départements.  Codes de la nomenclature sur 3 caractères. Ex : 001 &#x3D; AIN
    * @return departement
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code du département de l'établissement dans lequel le diplôme a été obtenu issu de la nomenclature Départements.  Codes de la nomenclature sur 3 caractères. Ex : 001 = AIN ")
-
   public String getDepartement() {
     return departement;
   }
 
-
-  public void setDepartement(String departement) {
+  public void setDepartement(@javax.annotation.Nullable String departement) {
     this.departement = departement;
   }
 
-
-  public Bac libelleDepartement(String libelleDepartement) {
-    
+  public Bac libelleDepartement(@javax.annotation.Nullable String libelleDepartement) {
     this.libelleDepartement = libelleDepartement;
     return this;
   }
 
-   /**
-   * Le libelle du département de l&#39;établissement dans lequel le diplôme a été obtenu issu de la nomenclature Départements. 
+  /**
+   * Le libelle du département de l&#39;établissement dans lequel le diplôme a été obtenu issu de la nomenclature Départements.
    * @return libelleDepartement
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le libelle du département de l'établissement dans lequel le diplôme a été obtenu issu de la nomenclature Départements. ")
-
   public String getLibelleDepartement() {
     return libelleDepartement;
   }
 
-
-  public void setLibelleDepartement(String libelleDepartement) {
+  public void setLibelleDepartement(@javax.annotation.Nullable String libelleDepartement) {
     this.libelleDepartement = libelleDepartement;
   }
 
-
-  public Bac etablissement(String etablissement) {
-    
+  public Bac etablissement(@javax.annotation.Nullable String etablissement) {
     this.etablissement = etablissement;
     return this;
   }
 
-   /**
-   * Le numéro UAI de l&#39;établissement dans lequel le diplôme a été obtenu issu de la nomenclature Etablissements français.  Codes de la nomenclature &#x3D; code UAI 
+  /**
+   * Le numéro UAI de l&#39;établissement dans lequel le diplôme a été obtenu issu de la nomenclature Etablissements français.  Codes de la nomenclature &#x3D; code UAI
    * @return etablissement
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le numéro UAI de l'établissement dans lequel le diplôme a été obtenu issu de la nomenclature Etablissements français.  Codes de la nomenclature = code UAI ")
-
   public String getEtablissement() {
     return etablissement;
   }
 
-
-  public void setEtablissement(String etablissement) {
+  public void setEtablissement(@javax.annotation.Nullable String etablissement) {
     this.etablissement = etablissement;
   }
 
-
-  public Bac ine(String ine) {
-    
+  public Bac ine(@javax.annotation.Nullable String ine) {
     this.ine = ine;
     return this;
   }
 
-   /**
+  /**
    * le code INE de l&#39;étudiant
    * @return ine
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "le code INE de l'étudiant")
-
   public String getIne() {
     return ine;
   }
 
-
-  public void setIne(String ine) {
+  public void setIne(@javax.annotation.Nullable String ine) {
     this.ine = ine;
   }
 
-
-  public Bac statutIne(StatutIne statutIne) {
-    
+  public Bac statutIne(@javax.annotation.Nullable StatutIne statutIne) {
     this.statutIne = statutIne;
     return this;
   }
 
-   /**
+  /**
    * Get statutIne
    * @return statutIne
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
   public StatutIne getStatutIne() {
     return statutIne;
   }
 
-
-  public void setStatutIne(StatutIne statutIne) {
+  public void setStatutIne(@javax.annotation.Nullable StatutIne statutIne) {
     this.statutIne = statutIne;
   }
 
-
-  public Bac codeErreurIne(String codeErreurIne) {
-    
+  public Bac codeErreurIne(@javax.annotation.Nullable String codeErreurIne) {
     this.codeErreurIne = codeErreurIne;
     return this;
   }
 
-   /**
-   * Valorisé si il y a eu une erreur lors de la vérification du numéro INE, et si un code erreur est disponible 
+  /**
+   * Valorisé si il y a eu une erreur lors de la vérification du numéro INE, et si un code erreur est disponible
    * @return codeErreurIne
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Valorisé si il y a eu une erreur lors de la vérification du numéro INE, et si un code erreur est disponible ")
-
   public String getCodeErreurIne() {
     return codeErreurIne;
   }
 
-
-  public void setCodeErreurIne(String codeErreurIne) {
+  public void setCodeErreurIne(@javax.annotation.Nullable String codeErreurIne) {
     this.codeErreurIne = codeErreurIne;
   }
 
-
-  public Bac messageErreurIne(String messageErreurIne) {
-    
+  public Bac messageErreurIne(@javax.annotation.Nullable String messageErreurIne) {
     this.messageErreurIne = messageErreurIne;
     return this;
   }
 
-   /**
-   * Valorisé si il y a eu une erreur lors de la vérification du numéro INE 
+  /**
+   * Valorisé si il y a eu une erreur lors de la vérification du numéro INE
    * @return messageErreurIne
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Valorisé si il y a eu une erreur lors de la vérification du numéro INE ")
-
   public String getMessageErreurIne() {
     return messageErreurIne;
   }
 
-
-  public void setMessageErreurIne(String messageErreurIne) {
+  public void setMessageErreurIne(@javax.annotation.Nullable String messageErreurIne) {
     this.messageErreurIne = messageErreurIne;
   }
 
-
-  public Bac dateDernierAppelInes(Date dateDernierAppelInes) {
-    
+  public Bac dateDernierAppelInes(@javax.annotation.Nullable Date dateDernierAppelInes) {
     this.dateDernierAppelInes = dateDernierAppelInes;
     return this;
   }
 
-   /**
-   * Date de la dernière vérification INES 
+  /**
+   * Date de la dernière vérification INES
    * @return dateDernierAppelInes
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Date de la dernière vérification INES ")
-
   public Date getDateDernierAppelInes() {
     return dateDernierAppelInes;
   }
 
-
-  public void setDateDernierAppelInes(Date dateDernierAppelInes) {
+  public void setDateDernierAppelInes(@javax.annotation.Nullable Date dateDernierAppelInes) {
     this.dateDernierAppelInes = dateDernierAppelInes;
   }
 
-
-  public Bac etablissementLibre(String etablissementLibre) {
-    
+  public Bac etablissementLibre(@javax.annotation.Nullable String etablissementLibre) {
     this.etablissementLibre = etablissementLibre;
     return this;
   }
 
-   /**
-   * Etablissement en saisie libre dans le cas - d&#39;un Titre admis en dispense, - ou par équivalence du baccalauréat, - ou d&#39;un Titre étranger, - ou baccalauréat international. 
+  /**
+   * Etablissement en saisie libre dans le cas - d&#39;un Titre admis en dispense, - ou par équivalence du baccalauréat, - ou d&#39;un Titre étranger, - ou baccalauréat international.
    * @return etablissementLibre
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Etablissement en saisie libre dans le cas - d'un Titre admis en dispense, - ou par équivalence du baccalauréat, - ou d'un Titre étranger, - ou baccalauréat international. ")
-
   public String getEtablissementLibre() {
     return etablissementLibre;
   }
 
-
-  public void setEtablissementLibre(String etablissementLibre) {
+  public void setEtablissementLibre(@javax.annotation.Nullable String etablissementLibre) {
     this.etablissementLibre = etablissementLibre;
   }
 
-
-  public Bac detailTitre(String detailTitre) {
-    
+  public Bac detailTitre(@javax.annotation.Nullable String detailTitre) {
     this.detailTitre = detailTitre;
     return this;
   }
 
-   /**
-   * Précision du titre admis en dispense du baccalauréat (texte libre).  Valeur demandée lorsque l’on choisit le type ou série « 0032/Titre français admis en dispense » pour un titre d’accès à l’enseignement supérieur « TITRE admis en dispense ou par équivalence du baccalauréat ». 
+  /**
+   * Précision du titre admis en dispense du baccalauréat (texte libre).  Valeur demandée lorsque l’on choisit le type ou série « 0032/Titre français admis en dispense » pour un titre d’accès à l’enseignement supérieur « TITRE admis en dispense ou par équivalence du baccalauréat ».
    * @return detailTitre
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Précision du titre admis en dispense du baccalauréat (texte libre).  Valeur demandée lorsque l’on choisit le type ou série « 0032/Titre français admis en dispense » pour un titre d’accès à l’enseignement supérieur « TITRE admis en dispense ou par équivalence du baccalauréat ». ")
-
   public String getDetailTitre() {
     return detailTitre;
   }
 
-
-  public void setDetailTitre(String detailTitre) {
+  public void setDetailTitre(@javax.annotation.Nullable String detailTitre) {
     this.detailTitre = detailTitre;
   }
-
 
   @Override
   public boolean equals(Object o) {
@@ -707,5 +778,42 @@ public class Bac {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert an instance of Bac to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!Bac.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'Bac' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<Bac> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(Bac.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<Bac>() {
+           @Override
+           public void write(JsonWriter out, Bac value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public Bac read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
 }
 

@@ -1,8 +1,8 @@
 /*
- * INSCRIPTION Externe V1 [EXTERNE]
- * Liste l'ensemble des services et des opérations Ins (Module Inscription) marquées comme [EXTERNE].  Ils peuvent être utilisés par des outils externes à Pegase.  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers la documentation qui décrit l'authentification aux APIs de Pegase : [pdf](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1)  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  ### Code retour  * 200 - Ok : L'opération s'est déroulée avec succès * 201 - Created : L'opération a aboutie à la création d'une ressource * 400 - Bad request :   * Un ou des paramètres d'entrées sont erronées   * Une erreur fonctionnelle s'est produite * 401 - Unauthorized - Vous n'êtes pas authentifié   * Il n'y a pas de token passé dans le header HTTP `Authorization`   * Le token passé n'est pas au bon format (Bearer <[token-jwt](https://jwt.io/)>) * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération   * La signature du token est incorrecte / n'a pas pû être vérifiée   * Le token est expiré   * Les habilitations de l'utilisateur ne permettent pas d'exécuter cette opération. Vérifier les droits de l'utilisateur * 404 - Not Found : La ressource demandée n'est pas trouvé     * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide * 500 - Internal server error : Erreur inattendue et non gérés 
+ * INSCRIPTION Externe V2
+ *  # Introduction  Liste l'ensemble des services et des opérations Ins (Module Inscription) identifiés pour un usage externe.  La documentation d'intégration de Pégase est publiée par version dans  [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/).  Vous y retrouverez notamment des informations sur le modèle objet métier,  le versionning des APIs, les cas d'usage des APIs externes.  # Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.  # Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  # Gestion des erreurs  ## StatusCode  | Code    | Description                                | |---------|--------------------------------------------| | 200     | Opération effectuée                        | |         | Cas particulier: Dans le cas d'APIs de     | |         | type bulk, un 200 peut aussi être retourné | |         | si des données de la requête sont          | |         | considérées en erreur                      | | 201     | Ressource créée                            | | 400     | Données envoyées par le client invalides   | | 403     | Accès refusé                               | | 404     | Ressource inexistante                      | | 409     | donnée déjà existante                      | | 500     | Erreur technique rencontrée par le serveur |   ## Codes d'erreurs  | Code      | Description                                | |-----------|--------------------------------------------| | notNull   | la propriété est obligatoire               | | notBlank  | la propriété ne doit pas être vide         | | size      | la longueur de la propriété est invalide   | | pattern   | les caractères ou la syntaxe de            | |           | la propriété est invalide                  | | genre     | le genre de la personne est invalide       | | dateEntre | la date est invalide                       | | telephone | le téléphone est invalide                  | | email     | le mail est invalide                       | 
  *
- * The version of the OpenAPI document: 1.3.1
+ * The version of the OpenAPI document: 2.1.0-rc.20250404093138
  * 
  *
  * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
@@ -14,7 +14,6 @@
 package fr.univlorraine.pegase.model.insext;
 
 import java.util.Objects;
-import java.util.Arrays;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -35,16 +34,38 @@ import fr.univlorraine.pegase.model.insext.SituationUniversitaire;
 import fr.univlorraine.pegase.model.insext.StatutGlobalPiece;
 import fr.univlorraine.pegase.model.insext.StatutInscriptionVoeu;
 import fr.univlorraine.pegase.model.insext.StatutPaiementVoeu;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.api.JSON;
 
 /**
  * InscriptionComplete
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-01-29T09:55:35.009513400+01:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-24T16:08:56.114878100+02:00[Europe/Paris]", comments = "Generator version: 7.11.0")
 public class InscriptionComplete {
   public static final String SERIALIZED_NAME_CODE_ETABLISSEMENT = "codeEtablissement";
   public static final String SERIALIZED_NAME_CIBLE = "cible";
@@ -68,569 +89,642 @@ public class InscriptionComplete {
   public static final String SERIALIZED_NAME_ACCORDS = "accords";
   public static final String SERIALIZED_NAME_DATE_INSCRIPTION = "dateInscription";
   public static final String SERIALIZED_NAME_DATE_DERNIERE_MODIFICATION = "dateDerniereModification";
-  @SerializedName(SERIALIZED_NAME_CODE_ETABLISSEMENT)
-  private String codeEtablissement;
-  @SerializedName(SERIALIZED_NAME_CIBLE)
-  private CibleInscription cible;
-  @SerializedName(SERIALIZED_NAME_NO_CANDIDAT)
-  private String noCandidat;
-  @SerializedName(SERIALIZED_NAME_ORIGINE)
-  private Origine origine;
-  @SerializedName(SERIALIZED_NAME_PRINCIPALE)
-  private Boolean principale;
-  @SerializedName(SERIALIZED_NAME_STATUT_INSCRIPTION)
-  private StatutInscriptionVoeu statutInscription;
-  @SerializedName(SERIALIZED_NAME_CONTEXTE_INSCRIPTION)
-  private ContexteInscription contexteInscription;
-  @SerializedName(SERIALIZED_NAME_ENSEIGNEMENT_A_DISTANCE_DEPUIS_LA_FRANCE)
-  private Boolean enseignementADistanceDepuisLaFrance;
-  @SerializedName(SERIALIZED_NAME_STATUT_PAIEMENT)
-  private StatutPaiementVoeu statutPaiement;
-  @SerializedName(SERIALIZED_NAME_STATUT_PIECES)
-  private StatutGlobalPiece statutPieces = StatutGlobalPiece.NON_DEPOSEES;
-  @SerializedName(SERIALIZED_NAME_REGIME_INSCRIPTION)
-  private OccurrenceNomenclature regimeInscription;
-  @SerializedName(SERIALIZED_NAME_BOURSES_ET_AIDES)
-  private List<OccurrenceNomenclature> boursesEtAides = new ArrayList<OccurrenceNomenclature>();
-  @SerializedName(SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION)
-  private SituationPersonnelleInscription situationPersonnelleInscription;
-  @SerializedName(SERIALIZED_NAME_CVEC)
-  private Cvec cvec;
-  @SerializedName(SERIALIZED_NAME_ADMISSION)
-  private Admission admission;
-  @SerializedName(SERIALIZED_NAME_SITUATION_UNIVERSITAIRE)
-  private SituationUniversitaire situationUniversitaire;
-  @SerializedName(SERIALIZED_NAME_SITUATION_PRECEDENTE)
-  private SituationPrecedente situationPrecedente;
-  @SerializedName(SERIALIZED_NAME_CURSUS_PARALLELE)
-  private CursusParallele cursusParallele;
-  @SerializedName(SERIALIZED_NAME_ECOLE_DOCTORALE)
-  private EcoleDoctorale ecoleDoctorale;
-  @SerializedName(SERIALIZED_NAME_ACCORDS)
-  private List<AccordComplet> accords = new ArrayList<AccordComplet>();
-  @SerializedName(SERIALIZED_NAME_DATE_INSCRIPTION)
-  private String dateInscription;
-  @SerializedName(SERIALIZED_NAME_DATE_DERNIERE_MODIFICATION)
-  private String dateDerniereModification;
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
 
-  public InscriptionComplete() { 
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>();
+    openapiFields.add("codeEtablissement");
+    openapiFields.add("cible");
+    openapiFields.add("noCandidat");
+    openapiFields.add("origine");
+    openapiFields.add("principale");
+    openapiFields.add("statutInscription");
+    openapiFields.add("contexteInscription");
+    openapiFields.add("enseignementADistanceDepuisLaFrance");
+    openapiFields.add("statutPaiement");
+    openapiFields.add("statutPieces");
+    openapiFields.add("regimeInscription");
+    openapiFields.add("boursesEtAides");
+    openapiFields.add("situationPersonnelleInscription");
+    openapiFields.add("cvec");
+    openapiFields.add("admission");
+    openapiFields.add("situationUniversitaire");
+    openapiFields.add("situationPrecedente");
+    openapiFields.add("cursusParallele");
+    openapiFields.add("ecoleDoctorale");
+    openapiFields.add("accords");
+    openapiFields.add("dateInscription");
+    openapiFields.add("dateDerniereModification");
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>();
+    openapiRequiredFields.add("codeEtablissement");
+    openapiRequiredFields.add("cible");
+    openapiRequiredFields.add("origine");
+    openapiRequiredFields.add("principale");
+    openapiRequiredFields.add("statutInscription");
+    openapiRequiredFields.add("contexteInscription");
+    openapiRequiredFields.add("statutPaiement");
+    openapiRequiredFields.add("statutPieces");
+    openapiRequiredFields.add("regimeInscription");
+    openapiRequiredFields.add("boursesEtAides");
+    openapiRequiredFields.add("situationPersonnelleInscription");
+    openapiRequiredFields.add("cvec");
+    openapiRequiredFields.add("situationUniversitaire");
+    openapiRequiredFields.add("situationPrecedente");
+    openapiRequiredFields.add("cursusParallele");
+    openapiRequiredFields.add("ecoleDoctorale");
+    openapiRequiredFields.add("accords");
+    openapiRequiredFields.add("dateInscription");
+    openapiRequiredFields.add("dateDerniereModification");
   }
 
-  public InscriptionComplete codeEtablissement(String codeEtablissement) {
-    
+  @SerializedName(SERIALIZED_NAME_CODE_ETABLISSEMENT)
+  @javax.annotation.Nonnull
+  private String codeEtablissement;
+  @SerializedName(SERIALIZED_NAME_CIBLE)
+  @javax.annotation.Nonnull
+  private CibleInscription cible;
+  @SerializedName(SERIALIZED_NAME_NO_CANDIDAT)
+  @javax.annotation.Nullable
+  private String noCandidat;
+  @SerializedName(SERIALIZED_NAME_ORIGINE)
+  @javax.annotation.Nonnull
+  private Origine origine;
+  @SerializedName(SERIALIZED_NAME_PRINCIPALE)
+  @javax.annotation.Nonnull
+  private Boolean principale;
+  @SerializedName(SERIALIZED_NAME_STATUT_INSCRIPTION)
+  @javax.annotation.Nonnull
+  private StatutInscriptionVoeu statutInscription;
+  @SerializedName(SERIALIZED_NAME_CONTEXTE_INSCRIPTION)
+  @javax.annotation.Nonnull
+  private ContexteInscription contexteInscription;
+  @SerializedName(SERIALIZED_NAME_ENSEIGNEMENT_A_DISTANCE_DEPUIS_LA_FRANCE)
+  @javax.annotation.Nullable
+  private Boolean enseignementADistanceDepuisLaFrance;
+  @SerializedName(SERIALIZED_NAME_STATUT_PAIEMENT)
+  @javax.annotation.Nonnull
+  private StatutPaiementVoeu statutPaiement;
+  @SerializedName(SERIALIZED_NAME_STATUT_PIECES)
+  @javax.annotation.Nonnull
+  private StatutGlobalPiece statutPieces = StatutGlobalPiece.NON_DEPOSEES;
+  @SerializedName(SERIALIZED_NAME_REGIME_INSCRIPTION)
+  @javax.annotation.Nonnull
+  private OccurrenceNomenclature regimeInscription;
+  @SerializedName(SERIALIZED_NAME_BOURSES_ET_AIDES)
+  @javax.annotation.Nonnull
+  private List<OccurrenceNomenclature> boursesEtAides = new ArrayList<>();
+  @SerializedName(SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION)
+  @javax.annotation.Nonnull
+  private SituationPersonnelleInscription situationPersonnelleInscription;
+  @SerializedName(SERIALIZED_NAME_CVEC)
+  @javax.annotation.Nonnull
+  private Cvec cvec;
+  @SerializedName(SERIALIZED_NAME_ADMISSION)
+  @javax.annotation.Nullable
+  private Admission admission;
+  @SerializedName(SERIALIZED_NAME_SITUATION_UNIVERSITAIRE)
+  @javax.annotation.Nonnull
+  private SituationUniversitaire situationUniversitaire;
+  @SerializedName(SERIALIZED_NAME_SITUATION_PRECEDENTE)
+  @javax.annotation.Nonnull
+  private SituationPrecedente situationPrecedente;
+  @SerializedName(SERIALIZED_NAME_CURSUS_PARALLELE)
+  @javax.annotation.Nonnull
+  private CursusParallele cursusParallele;
+  @SerializedName(SERIALIZED_NAME_ECOLE_DOCTORALE)
+  @javax.annotation.Nonnull
+  private EcoleDoctorale ecoleDoctorale;
+  @SerializedName(SERIALIZED_NAME_ACCORDS)
+  @javax.annotation.Nonnull
+  private List<AccordComplet> accords = new ArrayList<>();
+  @SerializedName(SERIALIZED_NAME_DATE_INSCRIPTION)
+  @javax.annotation.Nonnull
+  private String dateInscription;
+  @SerializedName(SERIALIZED_NAME_DATE_DERNIERE_MODIFICATION)
+  @javax.annotation.Nonnull
+  private String dateDerniereModification;
+
+  public InscriptionComplete() {
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to InscriptionComplete
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!InscriptionComplete.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format("The required field(s) %s in InscriptionComplete is not found in the empty JSON string", InscriptionComplete.openapiRequiredFields.toString()));
+        }
+      }
+
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!InscriptionComplete.openapiFields.contains(entry.getKey())) {
+          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `InscriptionComplete` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+        }
+      }
+
+      // check to make sure all required properties/fields are present in the JSON string
+      for (String requiredField : InscriptionComplete.openapiRequiredFields) {
+        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
+          throw new IllegalArgumentException(String.format("The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+        }
+      }
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if (!jsonObj.get("codeEtablissement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `codeEtablissement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codeEtablissement").toString()));
+      }
+      // validate the required field `cible`
+      CibleInscription.validateJsonElement(jsonObj.get("cible"));
+      if ((jsonObj.get("noCandidat") != null && !jsonObj.get("noCandidat").isJsonNull()) && !jsonObj.get("noCandidat").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `noCandidat` to be a primitive type in the JSON string but got `%s`", jsonObj.get("noCandidat").toString()));
+      }
+      // validate the required field `origine`
+      Origine.validateJsonElement(jsonObj.get("origine"));
+      // validate the required field `statutInscription`
+      StatutInscriptionVoeu.validateJsonElement(jsonObj.get("statutInscription"));
+      // validate the required field `contexteInscription`
+      ContexteInscription.validateJsonElement(jsonObj.get("contexteInscription"));
+      // validate the required field `statutPaiement`
+      StatutPaiementVoeu.validateJsonElement(jsonObj.get("statutPaiement"));
+      // validate the required field `statutPieces`
+      StatutGlobalPiece.validateJsonElement(jsonObj.get("statutPieces"));
+      // validate the required field `regimeInscription`
+      OccurrenceNomenclature.validateJsonElement(jsonObj.get("regimeInscription"));
+      // ensure the json data is an array
+      if (!jsonObj.get("boursesEtAides").isJsonArray()) {
+        throw new IllegalArgumentException(String.format("Expected the field `boursesEtAides` to be an array in the JSON string but got `%s`", jsonObj.get("boursesEtAides").toString()));
+      }
+
+      JsonArray jsonArrayboursesEtAides = jsonObj.getAsJsonArray("boursesEtAides");
+      // validate the required field `boursesEtAides` (array)
+      for (int i = 0; i < jsonArrayboursesEtAides.size(); i++) {
+        OccurrenceNomenclature.validateJsonElement(jsonArrayboursesEtAides.get(i));
+      };
+      // validate the required field `situationPersonnelleInscription`
+      SituationPersonnelleInscription.validateJsonElement(jsonObj.get("situationPersonnelleInscription"));
+      // validate the required field `cvec`
+      Cvec.validateJsonElement(jsonObj.get("cvec"));
+      // validate the optional field `admission`
+      if (jsonObj.get("admission") != null && !jsonObj.get("admission").isJsonNull()) {
+        Admission.validateJsonElement(jsonObj.get("admission"));
+      }
+      // validate the required field `situationUniversitaire`
+      SituationUniversitaire.validateJsonElement(jsonObj.get("situationUniversitaire"));
+      // validate the required field `situationPrecedente`
+      SituationPrecedente.validateJsonElement(jsonObj.get("situationPrecedente"));
+      // validate the required field `cursusParallele`
+      CursusParallele.validateJsonElement(jsonObj.get("cursusParallele"));
+      // validate the required field `ecoleDoctorale`
+      EcoleDoctorale.validateJsonElement(jsonObj.get("ecoleDoctorale"));
+      // ensure the json data is an array
+      if (!jsonObj.get("accords").isJsonArray()) {
+        throw new IllegalArgumentException(String.format("Expected the field `accords` to be an array in the JSON string but got `%s`", jsonObj.get("accords").toString()));
+      }
+
+      JsonArray jsonArrayaccords = jsonObj.getAsJsonArray("accords");
+      // validate the required field `accords` (array)
+      for (int i = 0; i < jsonArrayaccords.size(); i++) {
+        AccordComplet.validateJsonElement(jsonArrayaccords.get(i));
+      };
+      if (!jsonObj.get("dateInscription").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `dateInscription` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateInscription").toString()));
+      }
+      if (!jsonObj.get("dateDerniereModification").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `dateDerniereModification` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateDerniereModification").toString()));
+      }
+  }
+
+  /**
+   * Create an instance of InscriptionComplete given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of InscriptionComplete
+   * @throws IOException if the JSON string is invalid with respect to InscriptionComplete
+   */
+  public static InscriptionComplete fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, InscriptionComplete.class);
+  }
+
+  public InscriptionComplete codeEtablissement(@javax.annotation.Nonnull String codeEtablissement) {
     this.codeEtablissement = codeEtablissement;
     return this;
   }
 
-   /**
+  /**
    * Le code de l&#39;établissement dans lequel a été réalisée l&#39;inscription
    * @return codeEtablissement
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Le code de l'établissement dans lequel a été réalisée l'inscription")
-
   public String getCodeEtablissement() {
     return codeEtablissement;
   }
 
-
-  public void setCodeEtablissement(String codeEtablissement) {
+  public void setCodeEtablissement(@javax.annotation.Nonnull String codeEtablissement) {
     this.codeEtablissement = codeEtablissement;
   }
 
-
-  public InscriptionComplete cible(CibleInscription cible) {
-    
+  public InscriptionComplete cible(@javax.annotation.Nonnull CibleInscription cible) {
     this.cible = cible;
     return this;
   }
 
-   /**
+  /**
    * Get cible
    * @return cible
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public CibleInscription getCible() {
     return cible;
   }
 
-
-  public void setCible(CibleInscription cible) {
+  public void setCible(@javax.annotation.Nonnull CibleInscription cible) {
     this.cible = cible;
   }
 
-
-  public InscriptionComplete noCandidat(String noCandidat) {
-    
+  public InscriptionComplete noCandidat(@javax.annotation.Nullable String noCandidat) {
     this.noCandidat = noCandidat;
     return this;
   }
 
-   /**
+  /**
    * Le numéro de candidature
    * @return noCandidat
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le numéro de candidature")
-
   public String getNoCandidat() {
     return noCandidat;
   }
 
-
-  public void setNoCandidat(String noCandidat) {
+  public void setNoCandidat(@javax.annotation.Nullable String noCandidat) {
     this.noCandidat = noCandidat;
   }
 
-
-  public InscriptionComplete origine(Origine origine) {
-    
+  public InscriptionComplete origine(@javax.annotation.Nonnull Origine origine) {
     this.origine = origine;
     return this;
   }
 
-   /**
+  /**
    * Get origine
    * @return origine
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public Origine getOrigine() {
     return origine;
   }
 
-
-  public void setOrigine(Origine origine) {
+  public void setOrigine(@javax.annotation.Nonnull Origine origine) {
     this.origine = origine;
   }
 
-
-  public InscriptionComplete principale(Boolean principale) {
-    
+  public InscriptionComplete principale(@javax.annotation.Nonnull Boolean principale) {
     this.principale = principale;
     return this;
   }
 
-   /**
+  /**
    * le temoin indiquant si une inscription est principale ou pas
    * @return principale
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "le temoin indiquant si une inscription est principale ou pas")
-
   public Boolean getPrincipale() {
     return principale;
   }
 
-
-  public void setPrincipale(Boolean principale) {
+  public void setPrincipale(@javax.annotation.Nonnull Boolean principale) {
     this.principale = principale;
   }
 
-
-  public InscriptionComplete statutInscription(StatutInscriptionVoeu statutInscription) {
-    
+  public InscriptionComplete statutInscription(@javax.annotation.Nonnull StatutInscriptionVoeu statutInscription) {
     this.statutInscription = statutInscription;
     return this;
   }
 
-   /**
+  /**
    * Get statutInscription
    * @return statutInscription
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public StatutInscriptionVoeu getStatutInscription() {
     return statutInscription;
   }
 
-
-  public void setStatutInscription(StatutInscriptionVoeu statutInscription) {
+  public void setStatutInscription(@javax.annotation.Nonnull StatutInscriptionVoeu statutInscription) {
     this.statutInscription = statutInscription;
   }
 
-
-  public InscriptionComplete contexteInscription(ContexteInscription contexteInscription) {
-    
+  public InscriptionComplete contexteInscription(@javax.annotation.Nonnull ContexteInscription contexteInscription) {
     this.contexteInscription = contexteInscription;
     return this;
   }
 
-   /**
+  /**
    * Get contexteInscription
    * @return contexteInscription
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public ContexteInscription getContexteInscription() {
     return contexteInscription;
   }
 
-
-  public void setContexteInscription(ContexteInscription contexteInscription) {
+  public void setContexteInscription(@javax.annotation.Nonnull ContexteInscription contexteInscription) {
     this.contexteInscription = contexteInscription;
   }
 
-
-  public InscriptionComplete enseignementADistanceDepuisLaFrance(Boolean enseignementADistanceDepuisLaFrance) {
-    
+  public InscriptionComplete enseignementADistanceDepuisLaFrance(@javax.annotation.Nullable Boolean enseignementADistanceDepuisLaFrance) {
     this.enseignementADistanceDepuisLaFrance = enseignementADistanceDepuisLaFrance;
     return this;
   }
 
-   /**
+  /**
    * le temoin indiquant si un télé-enseignement a lieu depuis la France ou l&#39;étranger.
    * @return enseignementADistanceDepuisLaFrance
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "le temoin indiquant si un télé-enseignement a lieu depuis la France ou l'étranger.")
-
   public Boolean getEnseignementADistanceDepuisLaFrance() {
     return enseignementADistanceDepuisLaFrance;
   }
 
-
-  public void setEnseignementADistanceDepuisLaFrance(Boolean enseignementADistanceDepuisLaFrance) {
+  public void setEnseignementADistanceDepuisLaFrance(@javax.annotation.Nullable Boolean enseignementADistanceDepuisLaFrance) {
     this.enseignementADistanceDepuisLaFrance = enseignementADistanceDepuisLaFrance;
   }
 
-
-  public InscriptionComplete statutPaiement(StatutPaiementVoeu statutPaiement) {
-    
+  public InscriptionComplete statutPaiement(@javax.annotation.Nonnull StatutPaiementVoeu statutPaiement) {
     this.statutPaiement = statutPaiement;
     return this;
   }
 
-   /**
+  /**
    * Get statutPaiement
    * @return statutPaiement
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public StatutPaiementVoeu getStatutPaiement() {
     return statutPaiement;
   }
 
-
-  public void setStatutPaiement(StatutPaiementVoeu statutPaiement) {
+  public void setStatutPaiement(@javax.annotation.Nonnull StatutPaiementVoeu statutPaiement) {
     this.statutPaiement = statutPaiement;
   }
 
-
-  public InscriptionComplete statutPieces(StatutGlobalPiece statutPieces) {
-    
+  public InscriptionComplete statutPieces(@javax.annotation.Nonnull StatutGlobalPiece statutPieces) {
     this.statutPieces = statutPieces;
     return this;
   }
 
-   /**
+  /**
    * Get statutPieces
    * @return statutPieces
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public StatutGlobalPiece getStatutPieces() {
     return statutPieces;
   }
 
-
-  public void setStatutPieces(StatutGlobalPiece statutPieces) {
+  public void setStatutPieces(@javax.annotation.Nonnull StatutGlobalPiece statutPieces) {
     this.statutPieces = statutPieces;
   }
 
-
-  public InscriptionComplete regimeInscription(OccurrenceNomenclature regimeInscription) {
-    
+  public InscriptionComplete regimeInscription(@javax.annotation.Nonnull OccurrenceNomenclature regimeInscription) {
     this.regimeInscription = regimeInscription;
     return this;
   }
 
-   /**
+  /**
    * Get regimeInscription
    * @return regimeInscription
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public OccurrenceNomenclature getRegimeInscription() {
     return regimeInscription;
   }
 
-
-  public void setRegimeInscription(OccurrenceNomenclature regimeInscription) {
+  public void setRegimeInscription(@javax.annotation.Nonnull OccurrenceNomenclature regimeInscription) {
     this.regimeInscription = regimeInscription;
   }
 
-
-  public InscriptionComplete boursesEtAides(List<OccurrenceNomenclature> boursesEtAides) {
-    
+  public InscriptionComplete boursesEtAides(@javax.annotation.Nonnull List<OccurrenceNomenclature> boursesEtAides) {
     this.boursesEtAides = boursesEtAides;
     return this;
   }
 
   public InscriptionComplete addBoursesEtAidesItem(OccurrenceNomenclature boursesEtAidesItem) {
+    if (this.boursesEtAides == null) {
+      this.boursesEtAides = new ArrayList<>();
+    }
     this.boursesEtAides.add(boursesEtAidesItem);
     return this;
   }
 
-   /**
+  /**
    * Les bourses et aides financières
    * @return boursesEtAides
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Les bourses et aides financières")
-
   public List<OccurrenceNomenclature> getBoursesEtAides() {
     return boursesEtAides;
   }
 
-
-  public void setBoursesEtAides(List<OccurrenceNomenclature> boursesEtAides) {
+  public void setBoursesEtAides(@javax.annotation.Nonnull List<OccurrenceNomenclature> boursesEtAides) {
     this.boursesEtAides = boursesEtAides;
   }
 
-
-  public InscriptionComplete situationPersonnelleInscription(SituationPersonnelleInscription situationPersonnelleInscription) {
-    
+  public InscriptionComplete situationPersonnelleInscription(@javax.annotation.Nonnull SituationPersonnelleInscription situationPersonnelleInscription) {
     this.situationPersonnelleInscription = situationPersonnelleInscription;
     return this;
   }
 
-   /**
+  /**
    * Get situationPersonnelleInscription
    * @return situationPersonnelleInscription
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public SituationPersonnelleInscription getSituationPersonnelleInscription() {
     return situationPersonnelleInscription;
   }
 
-
-  public void setSituationPersonnelleInscription(SituationPersonnelleInscription situationPersonnelleInscription) {
+  public void setSituationPersonnelleInscription(@javax.annotation.Nonnull SituationPersonnelleInscription situationPersonnelleInscription) {
     this.situationPersonnelleInscription = situationPersonnelleInscription;
   }
 
-
-  public InscriptionComplete cvec(Cvec cvec) {
-    
+  public InscriptionComplete cvec(@javax.annotation.Nonnull Cvec cvec) {
     this.cvec = cvec;
     return this;
   }
 
-   /**
+  /**
    * Get cvec
    * @return cvec
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public Cvec getCvec() {
     return cvec;
   }
 
-
-  public void setCvec(Cvec cvec) {
+  public void setCvec(@javax.annotation.Nonnull Cvec cvec) {
     this.cvec = cvec;
   }
 
-
-  public InscriptionComplete admission(Admission admission) {
-    
+  public InscriptionComplete admission(@javax.annotation.Nullable Admission admission) {
     this.admission = admission;
     return this;
   }
 
-   /**
+  /**
    * Get admission
    * @return admission
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
   public Admission getAdmission() {
     return admission;
   }
 
-
-  public void setAdmission(Admission admission) {
+  public void setAdmission(@javax.annotation.Nullable Admission admission) {
     this.admission = admission;
   }
 
-
-  public InscriptionComplete situationUniversitaire(SituationUniversitaire situationUniversitaire) {
-    
+  public InscriptionComplete situationUniversitaire(@javax.annotation.Nonnull SituationUniversitaire situationUniversitaire) {
     this.situationUniversitaire = situationUniversitaire;
     return this;
   }
 
-   /**
+  /**
    * Get situationUniversitaire
    * @return situationUniversitaire
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public SituationUniversitaire getSituationUniversitaire() {
     return situationUniversitaire;
   }
 
-
-  public void setSituationUniversitaire(SituationUniversitaire situationUniversitaire) {
+  public void setSituationUniversitaire(@javax.annotation.Nonnull SituationUniversitaire situationUniversitaire) {
     this.situationUniversitaire = situationUniversitaire;
   }
 
-
-  public InscriptionComplete situationPrecedente(SituationPrecedente situationPrecedente) {
-    
+  public InscriptionComplete situationPrecedente(@javax.annotation.Nonnull SituationPrecedente situationPrecedente) {
     this.situationPrecedente = situationPrecedente;
     return this;
   }
 
-   /**
+  /**
    * Get situationPrecedente
    * @return situationPrecedente
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public SituationPrecedente getSituationPrecedente() {
     return situationPrecedente;
   }
 
-
-  public void setSituationPrecedente(SituationPrecedente situationPrecedente) {
+  public void setSituationPrecedente(@javax.annotation.Nonnull SituationPrecedente situationPrecedente) {
     this.situationPrecedente = situationPrecedente;
   }
 
-
-  public InscriptionComplete cursusParallele(CursusParallele cursusParallele) {
-    
+  public InscriptionComplete cursusParallele(@javax.annotation.Nonnull CursusParallele cursusParallele) {
     this.cursusParallele = cursusParallele;
     return this;
   }
 
-   /**
+  /**
    * Get cursusParallele
    * @return cursusParallele
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public CursusParallele getCursusParallele() {
     return cursusParallele;
   }
 
-
-  public void setCursusParallele(CursusParallele cursusParallele) {
+  public void setCursusParallele(@javax.annotation.Nonnull CursusParallele cursusParallele) {
     this.cursusParallele = cursusParallele;
   }
 
-
-  public InscriptionComplete ecoleDoctorale(EcoleDoctorale ecoleDoctorale) {
-    
+  public InscriptionComplete ecoleDoctorale(@javax.annotation.Nonnull EcoleDoctorale ecoleDoctorale) {
     this.ecoleDoctorale = ecoleDoctorale;
     return this;
   }
 
-   /**
+  /**
    * Get ecoleDoctorale
    * @return ecoleDoctorale
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public EcoleDoctorale getEcoleDoctorale() {
     return ecoleDoctorale;
   }
 
-
-  public void setEcoleDoctorale(EcoleDoctorale ecoleDoctorale) {
+  public void setEcoleDoctorale(@javax.annotation.Nonnull EcoleDoctorale ecoleDoctorale) {
     this.ecoleDoctorale = ecoleDoctorale;
   }
 
-
-  public InscriptionComplete accords(List<AccordComplet> accords) {
-    
+  public InscriptionComplete accords(@javax.annotation.Nonnull List<AccordComplet> accords) {
     this.accords = accords;
     return this;
   }
 
   public InscriptionComplete addAccordsItem(AccordComplet accordsItem) {
+    if (this.accords == null) {
+      this.accords = new ArrayList<>();
+    }
     this.accords.add(accordsItem);
     return this;
   }
 
-   /**
+  /**
    * les documents soumis à approbation lors de l&#39;inscription
    * @return accords
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "les documents soumis à approbation lors de l'inscription")
-
   public List<AccordComplet> getAccords() {
     return accords;
   }
 
-
-  public void setAccords(List<AccordComplet> accords) {
+  public void setAccords(@javax.annotation.Nonnull List<AccordComplet> accords) {
     this.accords = accords;
   }
 
-
-  public InscriptionComplete dateInscription(String dateInscription) {
-    
+  public InscriptionComplete dateInscription(@javax.annotation.Nonnull String dateInscription) {
     this.dateInscription = dateInscription;
     return this;
   }
 
-   /**
+  /**
    * La date de l&#39;inscription au format AAAA-MM-JJ
    * @return dateInscription
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "La date de l'inscription au format AAAA-MM-JJ")
-
   public String getDateInscription() {
     return dateInscription;
   }
 
-
-  public void setDateInscription(String dateInscription) {
+  public void setDateInscription(@javax.annotation.Nonnull String dateInscription) {
     this.dateInscription = dateInscription;
   }
 
-
-  public InscriptionComplete dateDerniereModification(String dateDerniereModification) {
-    
+  public InscriptionComplete dateDerniereModification(@javax.annotation.Nonnull String dateDerniereModification) {
     this.dateDerniereModification = dateDerniereModification;
     return this;
   }
 
-   /**
+  /**
    * la date de dernière modification de l&#39;inscription
    * @return dateDerniereModification
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "la date de dernière modification de l'inscription")
-
   public String getDateDerniereModification() {
     return dateDerniereModification;
   }
 
-
-  public void setDateDerniereModification(String dateDerniereModification) {
+  public void setDateDerniereModification(@javax.annotation.Nonnull String dateDerniereModification) {
     this.dateDerniereModification = dateDerniereModification;
   }
-
 
   @Override
   public boolean equals(Object o) {
@@ -711,5 +805,42 @@ public class InscriptionComplete {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert an instance of InscriptionComplete to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!InscriptionComplete.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'InscriptionComplete' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<InscriptionComplete> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(InscriptionComplete.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<InscriptionComplete>() {
+           @Override
+           public void write(JsonWriter out, InscriptionComplete value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public InscriptionComplete read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
 }
 

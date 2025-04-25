@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Service
 @SuppressWarnings("serial")
@@ -53,8 +54,11 @@ public class ExportService implements Serializable {
 	 * @return
 	 */
 	public ByteArrayInputStream  getCertificat(String codeApprenant, String codeFormation) {
-		
-		File file = pegaseService.getCertificatDeScolarite(codeApprenant, codeFormation);
+
+		// Récupération de l'uuid de l'apprenant à partir de son code apprenant
+		UUID uidApprenant = pegaseService.getUidApprenant(codeApprenant);
+		// Récupération du certificat de scolarité
+		File file = pegaseService.getCertificatDeScolarite(uidApprenant, codeFormation);
 
 		return getStream(file,codeApprenant, codeFormation, "certificat de scolarité");
 
@@ -63,7 +67,7 @@ public class ExportService implements Serializable {
 	/**
 	 * Génération d'un pdf
 	 * @param codeApprenant
-	 * @param codeFormation
+	 * @param codePeriode
 	 * @return
 	 */
 	public ByteArrayInputStream  getAttestation(String codeApprenant, String codePeriode) {

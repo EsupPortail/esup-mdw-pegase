@@ -23,12 +23,15 @@ import fr.univlorraine.pegase.api.ApiClient;
 import fr.univlorraine.pegase.api.ApiException;
 import fr.univlorraine.pegase.api.chc.CursusDcaApi;
 import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
+import fr.univlorraine.pegase.api.idt.ApprenantApi;
+import fr.univlorraine.pegase.api.ins.InscriptionApi;
 import fr.univlorraine.pegase.api.insext.InscriptionsApi;
-import fr.univlorraine.pegase.api.insgestion.ApprenantsApi;
 import fr.univlorraine.pegase.api.pai.PaiApi;
 import fr.univlorraine.pegase.api.pieceext.PiecesApi;
 import fr.univlorraine.pegase.model.chc.CursusDCA;
 import fr.univlorraine.pegase.model.coc.Chemin;
+import fr.univlorraine.pegase.model.idt.IdentiteApprenantSummary;
+import fr.univlorraine.pegase.model.idt.PagedIdentiteApprenantSummaries;
 import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +42,7 @@ import org.springframework.util.StringUtils;
 import java.io.File;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -58,6 +62,7 @@ public class PegaseService implements Serializable {
 	private transient String apiChcUrl;	
 	private transient String apiCocUrl;	
 	private transient String apiPaiUrl;
+	private transient String apiIdtUrl;
 	private transient String codeApprenantDemo;	
 	private transient String codeApprenantTest;	
 	private transient String codePeriodeTest;	
@@ -68,30 +73,33 @@ public class PegaseService implements Serializable {
 
 	// INS API
 	private transient ApiClient apiClientIns = new ApiClient();
-	private transient ApprenantsApi appApiIns = new ApprenantsApi();
-	private transient fr.univlorraine.pegase.api.insgestion.InscriptionsApi insApiIns = new fr.univlorraine.pegase.api.insgestion.InscriptionsApi();
+	private transient InscriptionApi apiIns = new InscriptionApi();
 	// fluxInsApiIns en commentaire car non utilisé -> utilisation de insApiInsExt
 	//private transient FluxInscriptionsApi fluxInsApiIns = new FluxInscriptionsApi();
 
 	// INS-EXT API
 	private transient ApiClient apiClientInsExt = new ApiClient();
-	private transient InscriptionsApi insApiInsExt = new InscriptionsApi();
+	private transient InscriptionsApi apiInsExt = new InscriptionsApi();
 
 	// PIECE-EXT API
 	private transient ApiClient apiClientPieceExt = new ApiClient();
-	private transient PiecesApi insApiPieceExt = new PiecesApi();
+	private transient PiecesApi apiPieceExt = new PiecesApi();
 
 	// PAI API
 	private transient ApiClient apiClientPai = new ApiClient();
-	private transient PaiApi insApiPai = new PaiApi();
+	private transient PaiApi apiPai = new PaiApi();
 
 	// CHC API
 	private transient ApiClient apiClientChc = new ApiClient();
-	private transient CursusDcaApi insApiChc = new CursusDcaApi();
+	private transient CursusDcaApi apiChc = new CursusDcaApi();
 
 	// COC API
 	private transient ApiClient apiClientCoc = new ApiClient();
-	private transient NotesEtResultatsPubliablesApi pubApiCoc = new NotesEtResultatsPubliablesApi();
+	private transient NotesEtResultatsPubliablesApi apiPubCoc = new NotesEtResultatsPubliablesApi();
+
+	// IDT API
+	private transient ApiClient apiClientIdt = new ApiClient();
+	private transient ApprenantApi apiIdt = new ApprenantApi();
 
 	public String getCodeApprenantDemo() {
 		return codeApprenantDemo;
@@ -135,6 +143,9 @@ public class PegaseService implements Serializable {
 	private void setApiChcUrl() {
 		apiChcUrl = configController.getApiChcUrl();
 	}
+	private void setApiIdtUrl() {
+		apiIdtUrl = configController.getApiIdtUrl();
+	}
 
 	private void setApiInsUrl() {
 		apiInsUrl = configController.getApiInsUrl();	
@@ -162,35 +173,39 @@ public class PegaseService implements Serializable {
 		setApiChcUrl();
 		setApiCocUrl();
 		setApiPaiUrl();
+		setApiIdtUrl();
 		setCodePeriodeTest();
 		setCodeApprenantTest();
 		setCodeCheminTest();
 
 		// Init INS
 		apiClientIns.setBasePath(apiInsUrl);
-		insApiIns.setApiClient(apiClientIns);
+		apiIns.setApiClient(apiClientIns);
 		//fluxInsApiIns.setApiClient(apiClientIns);
-		appApiIns.setApiClient(apiClientIns);
 
 		// Init INS-EXT
 		apiClientInsExt.setBasePath(apiInsExtUrl);
-		insApiInsExt.setApiClient(apiClientInsExt);
+		apiInsExt.setApiClient(apiClientInsExt);
 
 		// Init PIECE-EXT
 		apiClientPieceExt.setBasePath(apiPieceExtUrl);
-		insApiPieceExt.setApiClient(apiClientPieceExt);
+		apiPieceExt.setApiClient(apiClientPieceExt);
 
 		// Init PAI
 		apiClientPai.setBasePath(apiPaiUrl);
-		insApiPai.setApiClient(apiClientPai);
+		apiPai.setApiClient(apiClientPai);
 
 		// Init CHC
 		apiClientChc.setBasePath(apiChcUrl);
-		insApiChc.setApiClient(apiClientChc);
+		apiChc.setApiClient(apiClientChc);
 
 		// Init COC
 		apiClientCoc.setBasePath(apiCocUrl);
-		pubApiCoc.setApiClient(apiClientCoc);
+		apiPubCoc.setApiClient(apiClientCoc);
+
+		// Init IDT
+		apiClientIdt.setBasePath(apiIdtUrl);
+		apiIdt.setApiClient(apiClientIdt);
 	}
 
 	@PostConstruct
@@ -238,9 +253,9 @@ public class PegaseService implements Serializable {
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			try {
 				// Maj du token pour récupérer le dernier token valide
-				insApiInsExt.getApiClient().setBearerToken(accessTokenService.getToken());
+				apiInsExt.getApiClient().setBearerToken(accessTokenService.getToken());
 				// Appel de l'API Pégase
-				ApprenantEtInscriptions dossier = insApiInsExt.lireInscriptions(etablissement, codeApprenant);
+				ApprenantEtInscriptions dossier = apiInsExt.lireInscriptions(etablissement, codeApprenant);
 				if(dossier != null) {
 					log.info("Dossier de {} {} {} recupere", dossier.getApprenant().getEtatCivil().getPrenom(),dossier.getApprenant().getEtatCivil().getNomDeNaissance(), dossier.getApprenant().getEtatCivil().getNomUsuel());
 				} else {
@@ -265,12 +280,12 @@ public class PegaseService implements Serializable {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
-			insApiChc.getApiClient().setBearerToken(accessTokenService.getToken());
+			apiChc.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				//List<String> statutsInscription = List.of(Utils.STATUT_INSCRIPTION_VALIDE);
 				// Appel de l'API Pégase
 				//List<List<ObjetMaquetteExtension>> listObj = insApiChc.lireArbreCursusDesInscriptions(etablissement, codeApprenant, codePeriode, statutsInscription);
-				List<CursusDCA> listObj = insApiChc.lireCusrsuApprenant(codeApprenant);
+				List<CursusDCA> listObj = apiChc.lireCusrsuApprenant(codeApprenant);
 				if(listObj != null) {
 					log.info("Cursus de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
 					log.debug("Cursus de : {}", listObj);
@@ -292,10 +307,10 @@ public class PegaseService implements Serializable {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
-			pubApiCoc.getApiClient().setBearerToken(accessTokenService.getToken());
+			apiPubCoc.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
-				List<Chemin> listObj = pubApiCoc.listerCursusPubliableApprenant(etablissement, codePeriode,codeApprenant, codeChemin);
+				List<Chemin> listObj = apiPubCoc.listerCursusPubliableApprenant(etablissement, codePeriode,codeApprenant, codeChemin);
 				if(listObj != null) {
 					log.info("Notes de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
 					log.debug("Notes de : {}", listObj);
@@ -321,10 +336,10 @@ public class PegaseService implements Serializable {
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)
 				&& StringUtils.hasText(cible)) {
 			// Maj du token pour récupérer le dernier token valide
-			insApiPieceExt.getApiClient().setBearerToken(accessTokenService.getToken());
+			apiPieceExt.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
-				File photo = insApiPieceExt.visualiserPhoto(etablissement, codeApprenant, codePeriode, cible);
+				File photo = apiPieceExt.visualiserPhoto(etablissement, codeApprenant, codePeriode, cible);
 
 				if(photo != null) {
 					log.info("Photo recuperee pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
@@ -371,17 +386,45 @@ public class PegaseService implements Serializable {
 		return null;
 	}*/
 
-
-	public File getCertificatDeScolarite(String codeApprenant, String cible) {
-
-		log.info("certificatDeScolarite codeApprenant : {} - cible : {}", codeApprenant, cible);
+	public UUID getUidApprenant(String codeApprenant) {
+		log.info("GET UidApprenant codeApprenant : {} ", codeApprenant);
 
 		// Maj du token pour récupérer le dernier token valide
-		insApiIns.getApiClient().setBearerToken(accessTokenService.getToken());
+		apiIdt.getApiClient().setBearerToken(accessTokenService.getToken());
 
 		try {
 			// Appel de l'API Pégase
-			File certificat = insApiIns.imprimerCertificatDeScolarite(etablissement, codeApprenant, cible);
+			PagedIdentiteApprenantSummaries ids = apiIdt.rechercherIdentiteApprenant(etablissement, null, null, null,codeApprenant, null, null, null, null, null);
+			if(ids != null && ids.getItems() != null && ids.getItems().size() == 1) {
+				IdentiteApprenantSummary id = ids.getItems().get(0);
+				if (id != null) {
+					UUID uuid = UUID.fromString(id.getId());
+					log.info("rechercherIdentiteApprenant OK {} => {}", codeApprenant, uuid);
+					return uuid;
+				}
+				return null;
+			} else {
+				log.info("Anomalie lors de l'appel à la methode API : rechercherIdentiteApprenant");
+			}
+			return null;
+		} catch (ApiException e) {
+			log.error("Erreur lors de l'appel à la methode API : rechercherIdentiteApprenant => ({}) message: {} body : {}",e.getCode(), e.getMessage(), e.getResponseBody(), e);
+		} catch (RuntimeException rex) {
+			log.error("Erreur lors de l'appel à la methode API : rechercherIdentiteApprenant pour le code apprenant : {} et etablissement : {}   => ",codeApprenant, etablissement, rex);
+		}
+		return null;
+	}
+
+	public File getCertificatDeScolarite(UUID uidApprenant, String cible) {
+
+		log.info("certificatDeScolarite codeApprenant : {} - cible : {}", uidApprenant, cible);
+
+		// Maj du token pour récupérer le dernier token valide
+		apiIns.getApiClient().setBearerToken(accessTokenService.getToken());
+
+		try {
+			// Appel de l'API Pégase
+			File certificat = apiIns.genererCertificatDeScolarite(etablissement, uidApprenant, cible);
 			if(certificat != null) {
 				log.info("certificatDeScolarite OK");
 			} else {
@@ -391,7 +434,7 @@ public class PegaseService implements Serializable {
 		} catch (ApiException e) {
 			log.error("Erreur lors de l'appel à la methode API : certificatDeScolarite => ({}) message: {} body : {}",e.getCode(), e.getMessage(), e.getResponseBody(), e);
 		} catch (RuntimeException rex) {
-			log.error("Erreur lors de l'appel à la methode API : certificatDeScolarite pour le code apprenant : {} et etablissement : {}  et cible {} => ",codeApprenant, etablissement, cible, rex);
+			log.error("Erreur lors de l'appel à la methode API : certificatDeScolarite pour le code apprenant : {} et etablissement : {}  et cible {} => ", uidApprenant, etablissement, cible, rex);
 		}
 		return null;
 	}
@@ -401,11 +444,11 @@ public class PegaseService implements Serializable {
 		log.info("attestationDePaiement codeApprenant : {} - cible : {}", codeApprenant, periode);
 
 		// Maj du token pour récupérer le dernier token valide
-		insApiPai.getApiClient().setBearerToken(accessTokenService.getToken());
+		apiPai.getApiClient().setBearerToken(accessTokenService.getToken());
 
 		try {
 			// Appel de l'API Pégase
-			File certificat = insApiPai.imprimerAttestationDePaiement(etablissement, codeApprenant, periode);
+			File certificat = apiPai.imprimerAttestationDePaiement(etablissement, codeApprenant, periode);
 			if(certificat != null ) {
 				log.info("attestationDePaiement OK :  {}", certificat.getName());
 				return certificat;

@@ -1,8 +1,8 @@
 /*
- * INSCRIPTION Externe V1 [EXTERNE]
- * Liste l'ensemble des services et des opérations Ins (Module Inscription) marquées comme [EXTERNE].  Ils peuvent être utilisés par des outils externes à Pegase.  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers la documentation qui décrit l'authentification aux APIs de Pegase : [pdf](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1)  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  ### Code retour  * 200 - Ok : L'opération s'est déroulée avec succès * 201 - Created : L'opération a aboutie à la création d'une ressource * 400 - Bad request :   * Un ou des paramètres d'entrées sont erronées   * Une erreur fonctionnelle s'est produite * 401 - Unauthorized - Vous n'êtes pas authentifié   * Il n'y a pas de token passé dans le header HTTP `Authorization`   * Le token passé n'est pas au bon format (Bearer <[token-jwt](https://jwt.io/)>) * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération   * La signature du token est incorrecte / n'a pas pû être vérifiée   * Le token est expiré   * Les habilitations de l'utilisateur ne permettent pas d'exécuter cette opération. Vérifier les droits de l'utilisateur * 404 - Not Found : La ressource demandée n'est pas trouvé     * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide * 500 - Internal server error : Erreur inattendue et non gérés 
+ * INSCRIPTION Externe V2
+ *  # Introduction  Liste l'ensemble des services et des opérations Ins (Module Inscription) identifiés pour un usage externe.  La documentation d'intégration de Pégase est publiée par version dans  [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/).  Vous y retrouverez notamment des informations sur le modèle objet métier,  le versionning des APIs, les cas d'usage des APIs externes.  # Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.  # Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  # Gestion des erreurs  ## StatusCode  | Code    | Description                                | |---------|--------------------------------------------| | 200     | Opération effectuée                        | |         | Cas particulier: Dans le cas d'APIs de     | |         | type bulk, un 200 peut aussi être retourné | |         | si des données de la requête sont          | |         | considérées en erreur                      | | 201     | Ressource créée                            | | 400     | Données envoyées par le client invalides   | | 403     | Accès refusé                               | | 404     | Ressource inexistante                      | | 409     | donnée déjà existante                      | | 500     | Erreur technique rencontrée par le serveur |   ## Codes d'erreurs  | Code      | Description                                | |-----------|--------------------------------------------| | notNull   | la propriété est obligatoire               | | notBlank  | la propriété ne doit pas être vide         | | size      | la longueur de la propriété est invalide   | | pattern   | les caractères ou la syntaxe de            | |           | la propriété est invalide                  | | genre     | le genre de la personne est invalide       | | dateEntre | la date est invalide                       | | telephone | le téléphone est invalide                  | | email     | le mail est invalide                       | 
  *
- * The version of the OpenAPI document: 1.3.1
+ * The version of the OpenAPI document: 2.1.0-rc.20250404093138
  * 
  *
  * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
@@ -13,99 +13,174 @@
 
 package fr.univlorraine.pegase.model.insext;
 
-import com.google.gson.annotations.SerializedName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.model.insext.DocumentAApprouver;
+import java.io.IOException;
+import java.util.Arrays;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.api.JSON;
 
 /**
  * L&#39;état d&#39;un accord et sa référence
  */
-@ApiModel(description = "L'état d'un accord et sa référence")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-01-29T09:55:35.009513400+01:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-24T16:08:56.114878100+02:00[Europe/Paris]", comments = "Generator version: 7.11.0")
 public class AccordComplet {
   public static final String SERIALIZED_NAME_DATE_VALIDATION = "dateValidation";
   public static final String SERIALIZED_NAME_EST_ACCEPTE = "estAccepte";
   public static final String SERIALIZED_NAME_DOCUMENT_A_APPROUVER = "documentAApprouver";
-  @SerializedName(SERIALIZED_NAME_DATE_VALIDATION)
-  private String dateValidation;
-  @SerializedName(SERIALIZED_NAME_EST_ACCEPTE)
-  private Boolean estAccepte;
-  @SerializedName(SERIALIZED_NAME_DOCUMENT_A_APPROUVER)
-  private DocumentAApprouver documentAApprouver;
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
 
-  public AccordComplet() { 
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>();
+    openapiFields.add("dateValidation");
+    openapiFields.add("estAccepte");
+    openapiFields.add("documentAApprouver");
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>();
+    openapiRequiredFields.add("documentAApprouver");
   }
 
-  public AccordComplet dateValidation(String dateValidation) {
-    
+  @SerializedName(SERIALIZED_NAME_DATE_VALIDATION)
+  @javax.annotation.Nullable
+  private String dateValidation;
+  @SerializedName(SERIALIZED_NAME_EST_ACCEPTE)
+  @javax.annotation.Nullable
+  private Boolean estAccepte;
+  @SerializedName(SERIALIZED_NAME_DOCUMENT_A_APPROUVER)
+  @javax.annotation.Nonnull
+  private DocumentAApprouver documentAApprouver;
+
+  public AccordComplet() {
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to AccordComplet
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!AccordComplet.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format("The required field(s) %s in AccordComplet is not found in the empty JSON string", AccordComplet.openapiRequiredFields.toString()));
+        }
+      }
+
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!AccordComplet.openapiFields.contains(entry.getKey())) {
+          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `AccordComplet` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+        }
+      }
+
+      // check to make sure all required properties/fields are present in the JSON string
+      for (String requiredField : AccordComplet.openapiRequiredFields) {
+        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
+          throw new IllegalArgumentException(String.format("The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+        }
+      }
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("dateValidation") != null && !jsonObj.get("dateValidation").isJsonNull()) && !jsonObj.get("dateValidation").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `dateValidation` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateValidation").toString()));
+      }
+      // validate the required field `documentAApprouver`
+      DocumentAApprouver.validateJsonElement(jsonObj.get("documentAApprouver"));
+  }
+
+  /**
+   * Create an instance of AccordComplet given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of AccordComplet
+   * @throws IOException if the JSON string is invalid with respect to AccordComplet
+   */
+  public static AccordComplet fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, AccordComplet.class);
+  }
+
+  public AccordComplet dateValidation(@javax.annotation.Nullable String dateValidation) {
     this.dateValidation = dateValidation;
     return this;
   }
 
-   /**
+  /**
    * Date de validation de l&#39;accord
    * @return dateValidation
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Date de validation de l'accord")
-
   public String getDateValidation() {
     return dateValidation;
   }
 
-
-  public void setDateValidation(String dateValidation) {
+  public void setDateValidation(@javax.annotation.Nullable String dateValidation) {
     this.dateValidation = dateValidation;
   }
 
-
-  public AccordComplet estAccepte(Boolean estAccepte) {
-    
+  public AccordComplet estAccepte(@javax.annotation.Nullable Boolean estAccepte) {
     this.estAccepte = estAccepte;
     return this;
   }
 
-   /**
+  /**
    * Témoin pour savoir si le document a été accepté ou refusé
    * @return estAccepte
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Témoin pour savoir si le document a été accepté ou refusé")
-
   public Boolean getEstAccepte() {
     return estAccepte;
   }
 
-
-  public void setEstAccepte(Boolean estAccepte) {
+  public void setEstAccepte(@javax.annotation.Nullable Boolean estAccepte) {
     this.estAccepte = estAccepte;
   }
 
-
-  public AccordComplet documentAApprouver(DocumentAApprouver documentAApprouver) {
-    
+  public AccordComplet documentAApprouver(@javax.annotation.Nonnull DocumentAApprouver documentAApprouver) {
     this.documentAApprouver = documentAApprouver;
     return this;
   }
 
-   /**
+  /**
    * Get documentAApprouver
    * @return documentAApprouver
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "")
-
   public DocumentAApprouver getDocumentAApprouver() {
     return documentAApprouver;
   }
 
-
-  public void setDocumentAApprouver(DocumentAApprouver documentAApprouver) {
+  public void setDocumentAApprouver(@javax.annotation.Nonnull DocumentAApprouver documentAApprouver) {
     this.documentAApprouver = documentAApprouver;
   }
-
 
   @Override
   public boolean equals(Object o) {
@@ -148,5 +223,42 @@ public class AccordComplet {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert an instance of AccordComplet to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!AccordComplet.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'AccordComplet' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<AccordComplet> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(AccordComplet.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<AccordComplet>() {
+           @Override
+           public void write(JsonWriter out, AccordComplet value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public AccordComplet read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
 }
 

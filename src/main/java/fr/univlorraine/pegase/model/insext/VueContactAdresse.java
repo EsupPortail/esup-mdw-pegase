@@ -1,8 +1,8 @@
 /*
- * INSCRIPTION Externe V1 [EXTERNE]
- * Liste l'ensemble des services et des opérations Ins (Module Inscription) marquées comme [EXTERNE].  Ils peuvent être utilisés par des outils externes à Pegase.  ### Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers la documentation qui décrit l'authentification aux APIs de Pegase : [pdf](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1)  ### Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  ### Code retour  * 200 - Ok : L'opération s'est déroulée avec succès * 201 - Created : L'opération a aboutie à la création d'une ressource * 400 - Bad request :   * Un ou des paramètres d'entrées sont erronées   * Une erreur fonctionnelle s'est produite * 401 - Unauthorized - Vous n'êtes pas authentifié   * Il n'y a pas de token passé dans le header HTTP `Authorization`   * Le token passé n'est pas au bon format (Bearer <[token-jwt](https://jwt.io/)>) * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération   * La signature du token est incorrecte / n'a pas pû être vérifiée   * Le token est expiré   * Les habilitations de l'utilisateur ne permettent pas d'exécuter cette opération. Vérifier les droits de l'utilisateur * 404 - Not Found : La ressource demandée n'est pas trouvé     * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide * 500 - Internal server error : Erreur inattendue et non gérés 
+ * INSCRIPTION Externe V2
+ *  # Introduction  Liste l'ensemble des services et des opérations Ins (Module Inscription) identifiés pour un usage externe.  La documentation d'intégration de Pégase est publiée par version dans  [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/).  Vous y retrouverez notamment des informations sur le modèle objet métier,  le versionning des APIs, les cas d'usage des APIs externes.  # Authentification/autorisation obligatoire  Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/). Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.  Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.  Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.  # Type de données  Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :   * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)     * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés     * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)   * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))   * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)   * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)   * boolean - Un booléen représenté par `true` ou `false`  # Gestion des erreurs  ## StatusCode  | Code    | Description                                | |---------|--------------------------------------------| | 200     | Opération effectuée                        | |         | Cas particulier: Dans le cas d'APIs de     | |         | type bulk, un 200 peut aussi être retourné | |         | si des données de la requête sont          | |         | considérées en erreur                      | | 201     | Ressource créée                            | | 400     | Données envoyées par le client invalides   | | 403     | Accès refusé                               | | 404     | Ressource inexistante                      | | 409     | donnée déjà existante                      | | 500     | Erreur technique rencontrée par le serveur |   ## Codes d'erreurs  | Code      | Description                                | |-----------|--------------------------------------------| | notNull   | la propriété est obligatoire               | | notBlank  | la propriété ne doit pas être vide         | | size      | la longueur de la propriété est invalide   | | pattern   | les caractères ou la syntaxe de            | |           | la propriété est invalide                  | | genre     | le genre de la personne est invalide       | | dateEntre | la date est invalide                       | | telephone | le téléphone est invalide                  | | email     | le mail est invalide                       | 
  *
- * The version of the OpenAPI document: 1.3.1
+ * The version of the OpenAPI document: 2.1.0-rc.20250404093138
  * 
  *
  * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
@@ -13,15 +13,27 @@
 
 package fr.univlorraine.pegase.model.insext;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.SerializedName;
-import io.swagger.annotations.ApiModelProperty;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.api.JSON;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * VueContactAdresse
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-01-29T09:55:35.009513400+01:00[Europe/Paris]")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-24T16:08:56.114878100+02:00[Europe/Paris]", comments = "Generator version: 7.11.0")
 public class VueContactAdresse extends VueContact {
   public static final String SERIALIZED_NAME_PAYS = "pays";
   public static final String SERIALIZED_NAME_LIGNE1_OU_ETAGE = "ligne1OuEtage";
@@ -31,210 +43,245 @@ public class VueContactAdresse extends VueContact {
   public static final String SERIALIZED_NAME_LIGNE5_ETRANGER = "ligne5Etranger";
   public static final String SERIALIZED_NAME_CODE_POSTAL = "codePostal";
   public static final String SERIALIZED_NAME_COMMUNE = "commune";
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>();
+    openapiFields.add("canalCommunication");
+    openapiFields.add("code");
+    openapiFields.add("libelle");
+    openapiFields.add("proprietaire");
+    openapiFields.add("pays");
+    openapiFields.add("ligne1OuEtage");
+    openapiFields.add("ligne2OuBatiment");
+    openapiFields.add("ligne3OuVoie");
+    openapiFields.add("ligne4OuComplement");
+    openapiFields.add("ligne5Etranger");
+    openapiFields.add("codePostal");
+    openapiFields.add("commune");
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>();
+    openapiRequiredFields.add("pays");
+    openapiRequiredFields.add("canalCommunication");
+    openapiRequiredFields.add("code");
+    openapiRequiredFields.add("libelle");
+  }
+
   @SerializedName(SERIALIZED_NAME_PAYS)
+  @javax.annotation.Nonnull
   private String pays;
   @SerializedName(SERIALIZED_NAME_LIGNE1_OU_ETAGE)
+  @javax.annotation.Nullable
   private String ligne1OuEtage;
   @SerializedName(SERIALIZED_NAME_LIGNE2_OU_BATIMENT)
+  @javax.annotation.Nullable
   private String ligne2OuBatiment;
   @SerializedName(SERIALIZED_NAME_LIGNE3_OU_VOIE)
+  @javax.annotation.Nullable
   private String ligne3OuVoie;
   @SerializedName(SERIALIZED_NAME_LIGNE4_OU_COMPLEMENT)
+  @javax.annotation.Nullable
   private String ligne4OuComplement;
   @SerializedName(SERIALIZED_NAME_LIGNE5_ETRANGER)
+  @javax.annotation.Nullable
   private String ligne5Etranger;
   @SerializedName(SERIALIZED_NAME_CODE_POSTAL)
+  @javax.annotation.Nullable
   private String codePostal;
   @SerializedName(SERIALIZED_NAME_COMMUNE)
+  @javax.annotation.Nullable
   private String commune;
 
-  public VueContactAdresse() { 
+  public VueContactAdresse() {
     this.canalCommunication = CanalCommunicationEnum.fromValue(this.getClass().getSimpleName());
   }
 
-  public VueContactAdresse pays(String pays) {
-    
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to VueContactAdresse
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!VueContactAdresse.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format("The required field(s) %s in VueContactAdresse is not found in the empty JSON string", VueContactAdresse.openapiRequiredFields.toString()));
+        }
+      }
+
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!VueContactAdresse.openapiFields.contains(entry.getKey())) {
+          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `VueContactAdresse` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+        }
+      }
+
+      // check to make sure all required properties/fields are present in the JSON string
+      for (String requiredField : VueContactAdresse.openapiRequiredFields) {
+        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
+          throw new IllegalArgumentException(String.format("The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+        }
+      }
+  }
+
+  /**
+   * Create an instance of VueContactAdresse given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of VueContactAdresse
+   * @throws IOException if the JSON string is invalid with respect to VueContactAdresse
+   */
+  public static VueContactAdresse fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, VueContactAdresse.class);
+  }
+
+  public VueContactAdresse pays(@javax.annotation.Nonnull String pays) {
     this.pays = pays;
     return this;
   }
 
-   /**
+  /**
    * Code INSEE du pays (100 pour la France, sinon l&#39;adresse est à l&#39;étranger)
    * @return pays
-  **/
+   */
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Code INSEE du pays (100 pour la France, sinon l'adresse est à l'étranger)")
-
   public String getPays() {
     return pays;
   }
 
-
-  public void setPays(String pays) {
+  public void setPays(@javax.annotation.Nonnull String pays) {
     this.pays = pays;
   }
 
-
-  public VueContactAdresse ligne1OuEtage(String ligne1OuEtage) {
-    
+  public VueContactAdresse ligne1OuEtage(@javax.annotation.Nullable String ligne1OuEtage) {
     this.ligne1OuEtage = ligne1OuEtage;
     return this;
   }
 
-   /**
+  /**
    * Le n°app/étage/couloir/esc/chez ou ligne 1 de l&#39;adresse étrangère
    * @return ligne1OuEtage
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le n°app/étage/couloir/esc/chez ou ligne 1 de l'adresse étrangère")
-
   public String getLigne1OuEtage() {
     return ligne1OuEtage;
   }
 
-
-  public void setLigne1OuEtage(String ligne1OuEtage) {
+  public void setLigne1OuEtage(@javax.annotation.Nullable String ligne1OuEtage) {
     this.ligne1OuEtage = ligne1OuEtage;
   }
 
-
-  public VueContactAdresse ligne2OuBatiment(String ligne2OuBatiment) {
-    
+  public VueContactAdresse ligne2OuBatiment(@javax.annotation.Nullable String ligne2OuBatiment) {
     this.ligne2OuBatiment = ligne2OuBatiment;
     return this;
   }
 
-   /**
+  /**
    * L&#39;entrée/bâtiment/immeuble/résidence ou ligne 2 de l&#39;adresse étrangère
    * @return ligne2OuBatiment
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "L'entrée/bâtiment/immeuble/résidence ou ligne 2 de l'adresse étrangère")
-
   public String getLigne2OuBatiment() {
     return ligne2OuBatiment;
   }
 
-
-  public void setLigne2OuBatiment(String ligne2OuBatiment) {
+  public void setLigne2OuBatiment(@javax.annotation.Nullable String ligne2OuBatiment) {
     this.ligne2OuBatiment = ligne2OuBatiment;
   }
 
-
-  public VueContactAdresse ligne3OuVoie(String ligne3OuVoie) {
-    
+  public VueContactAdresse ligne3OuVoie(@javax.annotation.Nullable String ligne3OuVoie) {
     this.ligne3OuVoie = ligne3OuVoie;
     return this;
   }
 
-   /**
+  /**
    * Le numéro et le libellé de la voie ou ligne 3 de l&#39;adresse étrangère
    * @return ligne3OuVoie
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le numéro et le libellé de la voie ou ligne 3 de l'adresse étrangère")
-
   public String getLigne3OuVoie() {
     return ligne3OuVoie;
   }
 
-
-  public void setLigne3OuVoie(String ligne3OuVoie) {
+  public void setLigne3OuVoie(@javax.annotation.Nullable String ligne3OuVoie) {
     this.ligne3OuVoie = ligne3OuVoie;
   }
 
-
-  public VueContactAdresse ligne4OuComplement(String ligne4OuComplement) {
-    
+  public VueContactAdresse ligne4OuComplement(@javax.annotation.Nullable String ligne4OuComplement) {
     this.ligne4OuComplement = ligne4OuComplement;
     return this;
   }
 
-   /**
+  /**
    * Le lieu-dit ou service particulier de distribution ou ligne 4 de l&#39;adresse étrangère
    * @return ligne4OuComplement
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le lieu-dit ou service particulier de distribution ou ligne 4 de l'adresse étrangère")
-
   public String getLigne4OuComplement() {
     return ligne4OuComplement;
   }
 
-
-  public void setLigne4OuComplement(String ligne4OuComplement) {
+  public void setLigne4OuComplement(@javax.annotation.Nullable String ligne4OuComplement) {
     this.ligne4OuComplement = ligne4OuComplement;
   }
 
-
-  public VueContactAdresse ligne5Etranger(String ligne5Etranger) {
-    
+  public VueContactAdresse ligne5Etranger(@javax.annotation.Nullable String ligne5Etranger) {
     this.ligne5Etranger = ligne5Etranger;
     return this;
   }
 
-   /**
+  /**
    * Ligne 5 de l&#39;adresse étrangère (vide si adresse en France)
    * @return ligne5Etranger
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Ligne 5 de l'adresse étrangère (vide si adresse en France)")
-
   public String getLigne5Etranger() {
     return ligne5Etranger;
   }
 
-
-  public void setLigne5Etranger(String ligne5Etranger) {
+  public void setLigne5Etranger(@javax.annotation.Nullable String ligne5Etranger) {
     this.ligne5Etranger = ligne5Etranger;
   }
 
-
-  public VueContactAdresse codePostal(String codePostal) {
-    
+  public VueContactAdresse codePostal(@javax.annotation.Nullable String codePostal) {
     this.codePostal = codePostal;
     return this;
   }
 
-   /**
+  /**
    * Le code postal de l&#39;adresse en France (vide si adresse étrangère)
    * @return codePostal
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code postal de l'adresse en France (vide si adresse étrangère)")
-
   public String getCodePostal() {
     return codePostal;
   }
 
-
-  public void setCodePostal(String codePostal) {
+  public void setCodePostal(@javax.annotation.Nullable String codePostal) {
     this.codePostal = codePostal;
   }
 
-
-  public VueContactAdresse commune(String commune) {
-    
+  public VueContactAdresse commune(@javax.annotation.Nullable String commune) {
     this.commune = commune;
     return this;
   }
 
-   /**
+  /**
    * Le code INSEE de la commune de l&#39;adresse en France (vide si adresse étrangère)
    * @return commune
-  **/
+   */
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Le code INSEE de la commune de l'adresse en France (vide si adresse étrangère)")
-
   public String getCommune() {
     return commune;
   }
 
-
-  public void setCommune(String commune) {
+  public void setCommune(@javax.annotation.Nullable String commune) {
     this.commune = commune;
   }
-
 
   @Override
   public boolean equals(Object o) {
@@ -289,5 +336,42 @@ public class VueContactAdresse extends VueContact {
     return o.toString().replace("\n", "\n    ");
   }
 
+  /**
+   * Convert an instance of VueContactAdresse to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!VueContactAdresse.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'VueContactAdresse' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<VueContactAdresse> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(VueContactAdresse.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<VueContactAdresse>() {
+           @Override
+           public void write(JsonWriter out, VueContactAdresse value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public VueContactAdresse read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
 }
 

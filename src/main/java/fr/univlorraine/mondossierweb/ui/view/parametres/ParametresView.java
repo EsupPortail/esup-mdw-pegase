@@ -80,6 +80,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Secured(SecurityUtils.ROLE_SUPERADMIN)
@@ -378,11 +379,32 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				// Maj des paramètres depuis la BDD
 				pegaseService.refreshParameters();
 				try {
+					// teste api IDT
+					UUID uuidApprenant = pegaseService.getUidApprenant(pegaseService.getCodeApprenantTest());
+					if(uuidApprenant != null) {
+						Utils.notifierSucces(getTranslation("api-idt.ok", pegaseService.getCodeApprenantTest()));
+					} else {
+						Utils.notifierAnomalie(getTranslation("api-idt.error", pegaseService.getCodeApprenantTest()));
+					}
+				}catch(Exception ex) {
+					Utils.notifierAnomalie(getTranslation("api-idt.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+				}
+				try {
 					// teste api INS EXT
 					if(pegaseService.getDossierApprenant(pegaseService.getCodeApprenantTest()) != null) {
 						Utils.notifierSucces(getTranslation("api-ins-ext.ok", pegaseService.getCodeApprenantTest()));
 					} else {
 						Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()));
+					}
+				}catch(Exception ex) {
+					Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+				}
+				try {
+					// teste api PIECE EXT
+					if(pegaseService.getPhoto(pegaseService.getCodeApprenantTest(), pegaseService.getCodeCheminTest(), pegaseService.getCodePeriodeTest()) != null) {
+						Utils.notifierSucces(getTranslation("api-piece-ext.ok", pegaseService.getCodeApprenantTest()));
+					} else {
+						Utils.notifierAnomalie(getTranslation("api-piece-ext.error", pegaseService.getCodeApprenantTest()));
 					}
 				}catch(Exception ex) {
 					Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
@@ -396,16 +418,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 					}
 				}catch(Exception ex) {
 					Utils.notifierAnomalie(getTranslation("api-chc.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
-				}
-				try {
-					// teste api PIECE EXT
-					if(pegaseService.getPhoto(pegaseService.getCodeApprenantTest(), pegaseService.getCodeCheminTest(), pegaseService.getCodePeriodeTest()) != null) {
-						Utils.notifierSucces(getTranslation("api-piece-ext.ok", pegaseService.getCodeApprenantTest()));
-					} else {
-						Utils.notifierAnomalie(getTranslation("api-piece-ext.error", pegaseService.getCodeApprenantTest()));
-					}
-				}catch(Exception ex) {
-					Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
 				try {
 					// teste api COC
@@ -428,6 +440,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}catch(Exception ex) {
 					Utils.notifierAnomalie(getTranslation("api-pai.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
+
 			});
 			layout.add(testButtonLayout);
 
