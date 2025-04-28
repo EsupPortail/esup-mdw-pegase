@@ -18,10 +18,10 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 
-import java.util.List;
-
-import fr.univlorraine.pegase.model.chc.LignePedagogiqueDCA;
+import fr.univlorraine.pegase.chc.model.LignePedagogiqueDCA;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class ObjetMaquetteDTO {

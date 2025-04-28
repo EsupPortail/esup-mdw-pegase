@@ -18,10 +18,18 @@
  */
 package fr.univlorraine.mondossierweb.test.utils;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.vaadin.flow.component.textfield.TextField;
+import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.PrefUtils;
+import fr.univlorraine.mondossierweb.utils.Utils;
+import fr.univlorraine.pegase.insext.model.CibleInscription;
+import fr.univlorraine.pegase.insext.model.Formation;
+import fr.univlorraine.pegase.insext.model.ObjetFormationOuGroupement;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,20 +38,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import com.vaadin.flow.component.textfield.TextField;
-
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
-import fr.univlorraine.mondossierweb.utils.CmpUtils;
-import fr.univlorraine.mondossierweb.utils.PrefUtils;
-import fr.univlorraine.mondossierweb.utils.Utils;
-import fr.univlorraine.pegase.model.insext.CibleInscription;
-import fr.univlorraine.pegase.model.insext.Formation;
-import fr.univlorraine.pegase.model.insext.ObjetFormationOuGroupement;
-import lombok.extern.slf4j.Slf4j;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Tests Utils.
 *

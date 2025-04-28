@@ -18,11 +18,11 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 
-import java.util.List;
-
-import fr.univlorraine.pegase.model.coc.Chemin;
-import fr.univlorraine.pegase.model.coc.Controle;
+import fr.univlorraine.pegase.coc.model.Chemin;
+import fr.univlorraine.pegase.coc.model.Controle;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class CheminDTO {

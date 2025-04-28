@@ -19,20 +19,18 @@
 package fr.univlorraine.mondossierweb.services;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
-import fr.univlorraine.pegase.api.ApiClient;
-import fr.univlorraine.pegase.api.ApiException;
-import fr.univlorraine.pegase.api.chc.CursusDcaApi;
-import fr.univlorraine.pegase.api.coc.NotesEtResultatsPubliablesApi;
-import fr.univlorraine.pegase.api.idt.ApprenantApi;
-import fr.univlorraine.pegase.api.ins.InscriptionApi;
-import fr.univlorraine.pegase.api.insext.InscriptionsApi;
-import fr.univlorraine.pegase.api.pai.PaiApi;
-import fr.univlorraine.pegase.api.pieceext.PiecesApi;
-import fr.univlorraine.pegase.model.chc.CursusDCA;
-import fr.univlorraine.pegase.model.coc.Chemin;
-import fr.univlorraine.pegase.model.idt.IdentiteApprenantSummary;
-import fr.univlorraine.pegase.model.idt.PagedIdentiteApprenantSummaries;
-import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.chc.api.CursusDcaApi;
+import fr.univlorraine.pegase.chc.model.CursusDCA;
+import fr.univlorraine.pegase.coc.api.NotesEtResultatsPubliablesApi;
+import fr.univlorraine.pegase.coc.model.Chemin;
+import fr.univlorraine.pegase.idt.api.ApprenantApi;
+import fr.univlorraine.pegase.idt.model.IdentiteApprenantSummary;
+import fr.univlorraine.pegase.idt.model.PagedIdentiteApprenantSummaries;
+import fr.univlorraine.pegase.ins.api.InscriptionApi;
+import fr.univlorraine.pegase.insext.api.InscriptionsApi;
+import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.pai.api.PaiApi;
+import fr.univlorraine.pegase.pieceext.api.PiecesApi;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,33 +70,33 @@ public class PegaseService implements Serializable {
 	private transient ConfigController configController;
 
 	// INS API
-	private transient ApiClient apiClientIns = new ApiClient();
+	private transient fr.univlorraine.pegase.ins.invoker.ApiClient apiClientIns = new fr.univlorraine.pegase.ins.invoker.ApiClient();
 	private transient InscriptionApi apiIns = new InscriptionApi();
 	// fluxInsApiIns en commentaire car non utilisé -> utilisation de insApiInsExt
 	//private transient FluxInscriptionsApi fluxInsApiIns = new FluxInscriptionsApi();
 
 	// INS-EXT API
-	private transient ApiClient apiClientInsExt = new ApiClient();
+	private transient fr.univlorraine.pegase.insext.invoker.ApiClient apiClientInsExt = new fr.univlorraine.pegase.insext.invoker.ApiClient();
 	private transient InscriptionsApi apiInsExt = new InscriptionsApi();
 
 	// PIECE-EXT API
-	private transient ApiClient apiClientPieceExt = new ApiClient();
+	private transient fr.univlorraine.pegase.pieceext.invoker.ApiClient apiClientPieceExt = new fr.univlorraine.pegase.pieceext.invoker.ApiClient();
 	private transient PiecesApi apiPieceExt = new PiecesApi();
 
 	// PAI API
-	private transient ApiClient apiClientPai = new ApiClient();
+	private transient fr.univlorraine.pegase.pai.invoker.ApiClient apiClientPai = new fr.univlorraine.pegase.pai.invoker.ApiClient();
 	private transient PaiApi apiPai = new PaiApi();
 
 	// CHC API
-	private transient ApiClient apiClientChc = new ApiClient();
+	private transient fr.univlorraine.pegase.chc.invoker.ApiClient apiClientChc = new fr.univlorraine.pegase.chc.invoker.ApiClient();
 	private transient CursusDcaApi apiChc = new CursusDcaApi();
 
 	// COC API
-	private transient ApiClient apiClientCoc = new ApiClient();
+	private transient fr.univlorraine.pegase.coc.invoker.ApiClient apiClientCoc = new fr.univlorraine.pegase.coc.invoker.ApiClient();
 	private transient NotesEtResultatsPubliablesApi apiPubCoc = new NotesEtResultatsPubliablesApi();
 
 	// IDT API
-	private transient ApiClient apiClientIdt = new ApiClient();
+	private transient fr.univlorraine.pegase.idt.invoker.ApiClient apiClientIdt = new fr.univlorraine.pegase.idt.invoker.ApiClient();
 	private transient ApprenantApi apiIdt = new ApprenantApi();
 
 	public String getCodeApprenantDemo() {
@@ -262,7 +260,7 @@ public class PegaseService implements Serializable {
 					log.info("Anomalie lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} LE DOSSIER RECUPERE EST NULL", codeApprenant, etablissement);
 				}
 				return dossier;
-			} catch (ApiException e) {
+			} catch (fr.univlorraine.pegase.insext.invoker.ApiException e) {
 				if(e.getCode() == 500 && e.getResponseBody()!=null && e.getResponseBody().contains(APPRENANT_NON_TROUVE)) {
 					log.warn("Apprenant non trouvé lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
 				} else {
@@ -293,7 +291,7 @@ public class PegaseService implements Serializable {
 					log.info("Anomalie lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
 				}
 				return listObj;
-			} catch (ApiException e) {
+			} catch (fr.univlorraine.pegase.chc.invoker.ApiException e) {
 				log.error("Erreur lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
 			} catch (RuntimeException rex) {
 				log.error("Erreur lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {} => ",codeApprenant, etablissement,  rex);
@@ -318,7 +316,7 @@ public class PegaseService implements Serializable {
 					log.info("Anomalie lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {}", codeApprenant, codeChemin, codePeriode, etablissement);
 				}
 				return listObj;
-			} catch (ApiException e) {
+			} catch (fr.univlorraine.pegase.coc.invoker.ApiException e) {
 				log.error("Erreur lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codeChemin, codePeriode, etablissement, e.getCode(), e.getMessage(), e.getResponseBody(), e);
 			} catch (RuntimeException rex) {
 				log.error("Erreur lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {} => ",codeApprenant,codeChemin, codePeriode, etablissement,  rex);
@@ -347,7 +345,7 @@ public class PegaseService implements Serializable {
 					log.info("Anomalie lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
 				}
 				return photo;
-			} catch (ApiException e) {
+			} catch (fr.univlorraine.pegase.pieceext.invoker.ApiException e) {
 				// Erreur lors de la récupération de la photo. Un simple warning
 				log.warn("Erreur (getPhoto) lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {} => ({}) message: {} body : {}", codeApprenant, etablissement, cible, codePeriode, e.getCode(), e.getMessage(),e.getResponseBody());
 			} catch (RuntimeException rex) {
@@ -407,12 +405,12 @@ public class PegaseService implements Serializable {
 				log.info("Anomalie lors de l'appel à la methode API : rechercherIdentiteApprenant");
 			}
 			return null;
-		} catch (ApiException e) {
+		} catch (fr.univlorraine.pegase.idt.invoker.ApiException e) {
 			log.error("Erreur lors de l'appel à la methode API : rechercherIdentiteApprenant => ({}) message: {} body : {}",e.getCode(), e.getMessage(), e.getResponseBody(), e);
 		} catch (RuntimeException rex) {
-			log.error("Erreur lors de l'appel à la methode API : rechercherIdentiteApprenant pour le code apprenant : {} et etablissement : {}   => ",codeApprenant, etablissement, rex);
+			log.error("Erreur lors de l'appel à la methode API : rechercherIdentiteApprenant pour le code apprenant : {} et etablissement : {}   => ", codeApprenant, etablissement, rex);
 		}
-		return null;
+        return null;
 	}
 
 	public File getCertificatDeScolarite(UUID uidApprenant, String cible) {
@@ -431,7 +429,7 @@ public class PegaseService implements Serializable {
 				log.info("Anomalie lors de l'appel à la methode API : certificatDeScolarite");
 			}
 			return certificat;
-		} catch (ApiException e) {
+		} catch (fr.univlorraine.pegase.ins.invoker.ApiException e) {
 			log.error("Erreur lors de l'appel à la methode API : certificatDeScolarite => ({}) message: {} body : {}",e.getCode(), e.getMessage(), e.getResponseBody(), e);
 		} catch (RuntimeException rex) {
 			log.error("Erreur lors de l'appel à la methode API : certificatDeScolarite pour le code apprenant : {} et etablissement : {}  et cible {} => ", uidApprenant, etablissement, cible, rex);
@@ -456,7 +454,7 @@ public class PegaseService implements Serializable {
 				log.info("Anomalie lors de l'appel à la methode API : attestationDePaiement");
 			}
 			return null;
-		} catch (ApiException e) {
+		} catch (fr.univlorraine.pegase.pai.invoker.ApiException e) {
 			log.error("Erreur lors de l'appel à la methode API : attestationDePaiement => ({}) message: {} body : {}",e.getCode(), e.getMessage(), e.getResponseBody(), e);
 		} catch (RuntimeException rex) {
 			log.error("Erreur lors de l'appel à la methode API : attestationDePaiement pour le code apprenant : {} et etablissement : {}  et periode {} => ",codeApprenant, etablissement, periode, rex);

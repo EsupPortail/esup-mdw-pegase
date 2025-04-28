@@ -19,6 +19,30 @@
 package fr.univlorraine.mondossierweb.test.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import fr.univlorraine.mondossierweb.controllers.PegaseController;
+import fr.univlorraine.mondossierweb.services.PegaseService;
+import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
+import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
+import fr.univlorraine.pegase.chc.model.CursusDCA;
+import fr.univlorraine.pegase.coc.model.Chemin;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
@@ -27,32 +51,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-
-import fr.univlorraine.mondossierweb.controllers.PegaseController;
-import fr.univlorraine.mondossierweb.services.PegaseService;
-import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
-import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
-import fr.univlorraine.pegase.model.chc.CursusDCA;
-import fr.univlorraine.pegase.model.coc.Chemin;
-import jakarta.annotation.Resource;
-import lombok.extern.slf4j.Slf4j;
 
 /** Tests du PegaseController.
 *
@@ -86,16 +84,12 @@ public class TestPegaseController {
 	
 	private static final Type LIST_CURSUS_DCA_TYPE = new TypeToken<List<CursusDCA>>() {
 	}.getType();
-
+	private static List<CursusDCA> maquette1;
+	private static List<Chemin> notes1;
 	@MockBean
 	private PegaseService pegaseService;
-
 	@Resource
 	private PegaseController pegaseController;
-	
-	private static List<CursusDCA> maquette1;
-	
-	private static List<Chemin> notes1;
 	
 	/** Initialisation. */
 	@BeforeAll
