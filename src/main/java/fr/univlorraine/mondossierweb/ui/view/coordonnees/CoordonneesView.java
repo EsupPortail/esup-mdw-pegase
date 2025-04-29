@@ -120,6 +120,8 @@ public class CoordonneesView extends HasCodeApprenantUrlParameterView implements
 		
 		setSizeFull();
 		addClassName("view");
+		getStyle().set("padding","0");
+		errorLabel.getStyle().set("padding", "1em");
 		
 		coordPersoLayout.setWidthFull();
 		coordPersoLayout.getStyle().set("max-width", "52em");

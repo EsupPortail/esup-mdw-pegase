@@ -77,6 +77,8 @@ public class AccesView extends HasCodeApprenantUrlParameterView implements HasDy
 	private void init() {
 		setSizeFull();
 		addClassName("view");
+		getStyle().set("padding","0");
+		errorLabel.getStyle().set("padding", "1em");
 		initBac();
 		initAnnees();
 		parcoursLayout.setWidthFull();

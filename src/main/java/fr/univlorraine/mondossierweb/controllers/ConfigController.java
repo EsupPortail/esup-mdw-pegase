@@ -94,6 +94,8 @@ public class ConfigController {
 	private static final String BTN_CURSUS = "BTN_CURSUS";
 	
 	private static final String BTN_NOTES = "BTN_NOTES";
+
+	private static final String BTN_RELEVES = "BTN_RELEVES";
 	
 	private static final String SHOW_SQL = "SHOW_SQL";
 
@@ -182,6 +184,10 @@ public class ConfigController {
 	}
 	public boolean isNotesActif() {
 		return getBooleanValueForParameter(BTN_NOTES);
+	}
+
+	public boolean isRelevesActif() {
+		return getBooleanValueForParameter(BTN_RELEVES);
 	}
 	public boolean isShowSqlActif() {
 		return getBooleanValueForParameter(SHOW_SQL);

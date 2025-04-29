@@ -22,7 +22,9 @@ import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.pegase.chc.api.CursusDcaApi;
 import fr.univlorraine.pegase.chc.model.CursusDCA;
 import fr.univlorraine.pegase.coc.api.NotesEtResultatsPubliablesApi;
+import fr.univlorraine.pegase.coc.api.RelevesDeNotesPubliablesApi;
 import fr.univlorraine.pegase.coc.model.Chemin;
+import fr.univlorraine.pegase.coc.model.ReleveDeNotePublie;
 import fr.univlorraine.pegase.idt.api.ApprenantApi;
 import fr.univlorraine.pegase.idt.model.IdentiteApprenantSummary;
 import fr.univlorraine.pegase.idt.model.PagedIdentiteApprenantSummaries;
@@ -93,7 +95,8 @@ public class PegaseService implements Serializable {
 
 	// COC API
 	private transient fr.univlorraine.pegase.coc.invoker.ApiClient apiClientCoc = new fr.univlorraine.pegase.coc.invoker.ApiClient();
-	private transient NotesEtResultatsPubliablesApi apiPubCoc = new NotesEtResultatsPubliablesApi();
+	private transient NotesEtResultatsPubliablesApi apiPubNotesCoc = new NotesEtResultatsPubliablesApi();
+	private transient RelevesDeNotesPubliablesApi apiPubRelevesCoc = new RelevesDeNotesPubliablesApi();
 
 	// IDT API
 	private transient fr.univlorraine.pegase.idt.invoker.ApiClient apiClientIdt = new fr.univlorraine.pegase.idt.invoker.ApiClient();
@@ -199,7 +202,8 @@ public class PegaseService implements Serializable {
 
 		// Init COC
 		apiClientCoc.setBasePath(apiCocUrl);
-		apiPubCoc.setApiClient(apiClientCoc);
+		apiPubNotesCoc.setApiClient(apiClientCoc);
+		apiPubRelevesCoc.setApiClient(apiClientCoc);
 
 		// Init IDT
 		apiClientIdt.setBasePath(apiIdtUrl);
@@ -305,10 +309,10 @@ public class PegaseService implements Serializable {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
 			// Maj du token pour récupérer le dernier token valide
-			apiPubCoc.getApiClient().setBearerToken(accessTokenService.getToken());
+			apiPubNotesCoc.getApiClient().setBearerToken(accessTokenService.getToken());
 			try {
 				// Appel de l'API Pégase
-				List<Chemin> listObj = apiPubCoc.listerCursusPubliableApprenant(etablissement, codePeriode,codeApprenant, codeChemin);
+				List<Chemin> listObj = apiPubNotesCoc.listerCursusPubliableApprenant(etablissement, codePeriode,codeApprenant, codeChemin);
 				if(listObj != null) {
 					log.info("Notes de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
 					log.debug("Notes de : {}", listObj);
@@ -324,6 +328,55 @@ public class PegaseService implements Serializable {
 		}
 		return null;
 
+	}
+
+
+	public List<ReleveDeNotePublie> getListeReleves(String codeApprenant, String codePeriode, String codeChemin) {
+		// Si les paramètres nécessaires sont valués
+		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codePeriode) && StringUtils.hasText(codeApprenant)) {
+			// Maj du token pour récupérer le dernier token valide
+			apiPubRelevesCoc.getApiClient().setBearerToken(accessTokenService.getToken());
+			try {
+				// Appel de l'API Pégase
+				List<ReleveDeNotePublie> listObj = apiPubRelevesCoc.listerReleveDeNotePubliableApprenant(etablissement, codePeriode,codeApprenant, codeChemin);
+				if(listObj != null) {
+					log.info("Relevés de notes {} recupérés: {} objets concernés", codeApprenant,listObj.size());
+					log.debug("Relevés de notes de : {}", listObj);
+				} else {
+					log.info("Anomalie lors de l'appel à la methode API : listerReleveDeNotePubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {}", codeApprenant, codeChemin, codePeriode, etablissement);
+				}
+				return listObj;
+			} catch (fr.univlorraine.pegase.coc.invoker.ApiException e) {
+				log.error("Erreur lors de l'appel à la methode API : listerReleveDeNotePubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant,codeChemin, codePeriode, etablissement, e.getCode(), e.getMessage(), e.getResponseBody(), e);
+			} catch (RuntimeException rex) {
+				log.error("Erreur lors de l'appel à la methode API : listerReleveDeNotePubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {} => ",codeApprenant,codeChemin, codePeriode, etablissement,  rex);
+			}
+		}
+		return null;
+
+	}
+
+	public File getReleveDeNote(String codeApprenant, String codeChemin, UUID uuidReleve) {
+		// Si les paramètres nécessaires sont valués
+		if(StringUtils.hasText(etablissement) && uuidReleve != null && StringUtils.hasText(codeApprenant)) {
+			// Maj du token pour récupérer le dernier token valide
+			apiPubRelevesCoc.getApiClient().setBearerToken(accessTokenService.getToken());
+			try {
+				// Appel de l'API Pégase
+				File releve = apiPubRelevesCoc.genererRelevesDeNotesEtResultatsPubliableApprenant(uuidReleve,codeApprenant, codeChemin);
+				if(releve != null) {
+					log.info("Relevé de notes {} récupéré pour {} et cible {} ", uuidReleve, codeApprenant, codeChemin);
+				} else {
+					log.info("Anomalie lors de l'appel à la methode API : genererRelevesDeNotesEtResultatsPubliableApprenant pour le code apprenant : {}, chemin {}, et uuidReleve : {}", codeApprenant, codeChemin, uuidReleve);
+				}
+				return releve;
+			} catch (fr.univlorraine.pegase.coc.invoker.ApiException e) {
+				log.error("Erreur lors de l'appel à la methode API : genererRelevesDeNotesEtResultatsPubliableApprenant pour le code apprenant : {}, chemin {} et uuidReleve : {} => ({}) message: {} body : {}", codeApprenant,codeChemin, uuidReleve, e.getCode(), e.getMessage(), e.getResponseBody(), e);
+			} catch (RuntimeException rex) {
+				log.error("Erreur lors de l'appel à la methode API : genererRelevesDeNotesEtResultatsPubliableApprenant pour le code apprenant : {}, chemin {} et uuidReleve : {} => ",codeApprenant,codeChemin, uuidReleve,  rex);
+			}
+		}
+		return null;
 	}
 
 	public File getPhoto(String codeApprenant, String cible, String codePeriode) {

@@ -24,7 +24,6 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
 import fr.univlorraine.mondossierweb.ui.layout.CardHeader;
 import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
@@ -36,18 +35,14 @@ public class Card extends VerticalLayout {
 
 	@Getter
 	private final CardHeader titre = new CardHeader();
-	
-	@Getter
-	private boolean useAlt = false;
-	
 	@Getter
 	private final VerticalLayout alt = new VerticalLayout();
-	
 	@Getter
 	private final HorizontalLayout titreLayout = new HorizontalLayout();
-	
 	@Getter
 	private final Button altButton = new Button("", VaadinIcon.ANGLE_DOWN.create());
+	@Getter
+	private boolean useAlt = false;
 
 	public Card() {
 		super();
@@ -112,7 +107,7 @@ public class Card extends VerticalLayout {
  
 			this.getStyle().set("border-color", "lightgray");
 			this.getStyle().set("background-color", "white");
-			this.getStyle().set(CSSColorUtils.MARGIN, "0.5em auto 0.5em auto");
+			this.getStyle().set(CSSColorUtils.MARGIN, "0 auto 0 auto");
 			this.getStyle().set(CSSColorUtils.BORDER_RADIUS, CSSColorUtils.EM_0_5);
 			
 			this.getStyle().set(CSSColorUtils.COLOR, "var(--main-color)");

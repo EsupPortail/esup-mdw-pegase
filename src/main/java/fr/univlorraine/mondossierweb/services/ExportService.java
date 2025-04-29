@@ -63,6 +63,12 @@ public class ExportService implements Serializable {
 		return getStream(file,codeApprenant, codeFormation, "certificat de scolarité");
 
 	}
+
+
+	public ByteArrayInputStream getReleveDeNotes(String codeApprenant, String codeChemin, UUID uidReleve) {
+		File file = pegaseService.getReleveDeNote(codeApprenant, codeChemin, uidReleve);
+		return getStream(file,codeApprenant, codeChemin, "relevé de notes");
+	}
 	
 	/**
 	 * Génération d'un pdf
@@ -71,14 +77,11 @@ public class ExportService implements Serializable {
 	 * @return
 	 */
 	public ByteArrayInputStream  getAttestation(String codeApprenant, String codePeriode) {
-		
 		File file = pegaseService.getAttestationDePaiement(codeApprenant, codePeriode);
-
 		return getStream(file,codeApprenant, codePeriode, "attestation de paiement");
-
 	}
 
-	private ByteArrayInputStream getStream(File file, String codeApprenant, String codeFormation, String document) {
+	private ByteArrayInputStream getStream(File file, String codeApprenant, String info, String document) {
 		if(file!=null) {
 			try {
 
@@ -87,13 +90,13 @@ public class ExportService implements Serializable {
 				try (BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream)){
 					bufferedInputStream.read(data,0,data.length);
 				}
-				log.info("PDF generated {} {} ", codeApprenant, codeFormation);
+				log.info("PDF generated {} {} ", codeApprenant, info);
 				return new ByteArrayInputStream(data);
 			} catch (IOException e) {
-				log.info("Erreur à la génération du {} pour : {} {}",document, codeApprenant, codeFormation, e);
+				log.info("Erreur à la génération du {} pour : {} {}",document, codeApprenant, info, e);
 			}
 		} else {
-			log.info("Erreur à la génération du {} pour : {} {}", document, codeApprenant, codeFormation);
+			log.info("Erreur à la génération du {} pour : {} {}", document, codeApprenant, info);
 		}
 		return null;
 	}

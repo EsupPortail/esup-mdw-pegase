@@ -80,6 +80,8 @@ public class EtatCivilView extends HasCodeApprenantUrlParameterView implements H
 	private void init() {
 		setSizeFull();
 		addClassName("view");
+		getStyle().set("padding","0");
+		errorLabel.getStyle().set("padding", "1em");
 		initIdentite();
 		initNaissance();
 		etatcivilLayout.setWidthFull();

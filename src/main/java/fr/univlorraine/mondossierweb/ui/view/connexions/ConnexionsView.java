@@ -18,9 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.connexions;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
@@ -30,7 +27,6 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
-
 import fr.univlorraine.mondossierweb.services.UiService;
 import fr.univlorraine.mondossierweb.services.UiService.UiInfo;
 import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
@@ -41,28 +37,21 @@ import fr.univlorraine.mondossierweb.utils.ReactiveUtils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 
 @Secured(SecurityUtils.ROLE_SUPERADMIN)
 @Route(layout = MainLayout.class)
 @SuppressWarnings("serial")
 public class ConnexionsView extends Grid<UiInfo> implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
 
-	@Autowired
-	private transient PageTitleFormatter pageTitleFormatter;
-	@Getter
-	private String pageTitle = "";
 	@Getter
 	private final TextHeader header = new TextHeader();
-
-	@Autowired
-	private transient UiService uiService;
-
 	private final SerializableFunction<UiInfo, String> currentUIClassNameGenerator =
 		uiInfo -> getUI().map(System::identityHashCode)
 			.filter(uiId -> uiId == uiInfo.getId())
 			.map(uiId -> "row-highlighted")
 			.orElse(null);
-
 	private final Column<UiInfo> usernameColumn = addColumn(UiInfo::getUsername)
 		.setSortable(true)
 		.setWidth("8rem")
@@ -83,6 +72,12 @@ public class ConnexionsView extends Grid<UiInfo> implements HasDynamicTitle, Has
 		.setSortable(true)
 		.setFlexGrow(1)
 		.setClassNameGenerator(currentUIClassNameGenerator);
+	@Autowired
+	private transient PageTitleFormatter pageTitleFormatter;
+	@Getter
+	private String pageTitle = "";
+	@Autowired
+	private transient UiService uiService;
 
 	@PostConstruct
 	private void init() {

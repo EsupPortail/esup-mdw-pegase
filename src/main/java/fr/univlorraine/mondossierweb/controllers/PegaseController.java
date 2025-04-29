@@ -18,16 +18,16 @@
  */
 package fr.univlorraine.mondossierweb.controllers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import fr.univlorraine.mondossierweb.services.PegaseService;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.mondossierweb.utils.Utils;
+import fr.univlorraine.pegase.coc.model.ReleveDeNotePublie;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Slf4j
@@ -73,9 +73,9 @@ public class PegaseController {
 
 		log.info("Récupération de la liste notes dans Pégase");
 		// Correction du chemin pour en replaçant le séparateur
-		String codeCheminChc = formatChemin(codeChemin);
+		String codeCheminCoc = formatChemin(codeChemin);
 		// Récupération des notes
-		return Utils.convertCheminToDTO(pegaseService.getNotes(codeApprenant, codePeriode,codeCheminChc), codeCheminChc, avecControle);
+		return Utils.convertCheminToDTO(pegaseService.getNotes(codeApprenant, codePeriode,codeCheminCoc), codeCheminCoc, avecControle);
 	}
 
 	/**
@@ -87,4 +87,20 @@ public class PegaseController {
 		return codeChemin.replace("→", ">");
 	}
 
+
+	/**
+	 *
+	 * @param codeApprenant
+	 * @param codeChemin
+	 * @param codePeriode
+	 * @return les notes de l'étudiant pour le codeApprenant, le chemin, la période en paramètre
+	 */
+	public List<ReleveDeNotePublie> getListeReleves(String codeApprenant, String codeChemin, String codePeriode) {
+
+		log.info("Récupération de la liste des relevés de notes dans Pégase");
+		// Correction du chemin pour en replaçant le séparateur
+		String codeCheminCoc = formatChemin(codeChemin);
+		// Récupération des notes
+		return pegaseService.getListeReleves(codeApprenant, codePeriode,codeCheminCoc);
+	}
 }

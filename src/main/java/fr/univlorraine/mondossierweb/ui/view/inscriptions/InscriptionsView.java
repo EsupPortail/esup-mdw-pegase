@@ -1,20 +1,18 @@
 /**
- *
- *  ESUP-Portail ESUP-MONDOSSIERWEB-PEGASE - Copyright (c) 2021 ESUP-Portail consortium
- *
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
+ * ESUP-Portail ESUP-MONDOSSIERWEB-PEGASE - Copyright (c) 2021 ESUP-Portail consortium
+ * <p>
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 
@@ -62,6 +60,7 @@ import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.chc.model.AmenagementDCA;
 import fr.univlorraine.pegase.coc.model.Absence;
+import fr.univlorraine.pegase.coc.model.ReleveDeNotePublie;
 import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.insext.model.CibleInscription;
 import fr.univlorraine.pegase.insext.model.InscriptionComplete;
@@ -78,6 +77,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Secured({SecurityUtils.ROLE_SUPERADMIN, SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_GESTIONNAIRE})
@@ -106,6 +106,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     transient List<Button> listButtonPhoto = new LinkedList<>();
     transient List<Button> listButtonCursus = new LinkedList<>();
     transient List<Button> listButtonNotes = new LinkedList<>();
+    transient List<Button> listButtonReleves = new LinkedList<>();
+    transient List<Button> listButtonReleve = new LinkedList<>();
     transient List<Button> listButtonDetailInscription = new LinkedList<>();
     transient List<Button> listButtonMasquerInscription = new LinkedList<>();
     private transient Boolean avecBareme;
@@ -134,6 +136,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
 
         setSizeFull();
         addClassName("view");
+        getStyle().set("padding","0");
+        errorLabel.getStyle().set("padding", "1em");
 
         inscriptionsLayout.setWidthFull();
         inscriptionsLayout.getStyle().set("max-width", "52em");
@@ -196,6 +200,12 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         }
         for (Button b : listButtonNotes) {
             b.setText(getTranslation("inscription.notes"));
+        }
+        for (Button b : listButtonReleves) {
+            b.setText(getTranslation("inscription.releves"));
+        }
+        for (Button b : listButtonReleve) {
+            b.setText(getTranslation("inscription.releve"));
         }
         for (Button b : listButtonDetailInscription) {
             b.setText(getTranslation("inscription.detail"));
@@ -670,6 +680,74 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                         listButtonNotes.add(notesButton);
                     }
 
+
+                    // Relevés de notes
+                    Button relevesButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
+                    if (configController.isRelevesActif()) {
+                        Dialog relevesDialog = new Dialog();
+                        relevesDialog.setWidthFull();
+                        relevesDialog.setMaxWidth("70em");
+                        relevesButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                        relevesButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
+                        relevesButton.addClickListener(c -> {
+
+                            // TODO Si un seul relevé, lancer le téléchargement immédiatement
+
+                            // Si le notes n'est pas visible
+                            if (!relevesDialog.isOpened()) {
+                                //Init dialog (a faire au clic car dépend de la taille de la fenêtre)
+                                relevesDialog.removeAll();
+                                FlexLayout dialogLayout = new FlexLayout();
+                                dialogLayout.setFlexDirection(FlexDirection.COLUMN);
+                                dialogLayout.setHeightFull();
+                                VerticalLayout notesLayout = new VerticalLayout();
+                                notesLayout.setPadding(false);
+                                HorizontalLayout headerDialog = new HorizontalLayout();
+                                headerDialog.getStyle().set("margin-bottom", CSSColorUtils.VAR_LUMO_SPACE_L);
+                                NativeLabel titreDialog = new NativeLabel(getTranslation("releves.title"));
+                                titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                                titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
+                                Button closeButton = new Button(getTranslation("releves.closedialog"));
+                                closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
+                                headerDialog.add(titreDialog);
+                                dialogLayout.add(headerDialog);
+
+                                NativeLabel messageReleves = new NativeLabel(getTranslation("releves.message"));
+                                dialogLayout.add(messageReleves);
+
+                                dialogLayout.add(notesLayout);
+                                relevesDialog.add(dialogLayout);
+                                // si écran de petite taille
+                                boolean smallGrid = false;
+                                if (windowWidth <= 800) {
+                                    smallGrid = true;
+                                    HorizontalLayout footerDialog = new HorizontalLayout();
+                                    footerDialog.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.VAR_LUMO_SPACE_L);
+                                    footerDialog.add(closeButton);
+                                    closeButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                                    dialogLayout.add(footerDialog);
+                                    relevesDialog.setSizeFull();
+                                } else {
+                                    relevesDialog.setHeight(CSSColorUtils.AUTO);
+                                    relevesDialog.setDraggable(true);
+                                    headerDialog.add(closeButton);
+                                }
+
+                                closeButton.addClickListener(cb -> relevesDialog.close());
+
+                                // Mise à jour de l'affichage des relevés disponibles au téléchargement
+                                displayReleves(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription), notesLayout, smallGrid);
+                                relevesDialog.open();
+                            } else {
+                                // On masque le notes
+                                relevesDialog.close();
+                                relevesDialog.removeAll();
+                            }
+                        });
+                        // Ajout à la liste des boutons
+                        listButtonReleves.add(relevesButton);
+                    }
+
                     //Layout des boutons concernant le cursus et les notes
                     FlexLayout buttonLayout2 = new FlexLayout();
                     buttonLayout2.setWidthFull();
@@ -748,9 +826,49 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         cursusLayout.add(arbo);
     }
 
+    private void displayReleves(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout, boolean small) {
+        log.info("Récupération des releves pour {} ({}) sur {}", codeApprenant, codePeriode, codeChemin);
+
+        // Récupération des notes
+        List<ReleveDeNotePublie> listReleves = pegaseController.getListeReleves(codeApprenant, codeChemin, codePeriode);
+
+        if (listReleves != null && !listReleves.isEmpty()) {
+            listReleves.forEach(rnp -> notesLayout.add(getLayoutReleve(codeApprenant, codeChemin, rnp)));
+        }
+    }
+
+    private Component getLayoutReleve(String codeApprenant, String codeChemin, ReleveDeNotePublie rnp) {
+        VerticalLayout layout = new VerticalLayout();
+        NativeLabel labLib = new NativeLabel(rnp.getDescription());
+        layout.add(labLib);
+        NativeLabel labDesc = new NativeLabel(rnp.getDescription());
+        layout.add(labDesc);
+        layout.addClickListener(e -> downloadReleve(codeApprenant, codeChemin, rnp.getUuid()));
+        return layout;
+    }
+
+    private void downloadReleve(String codeApprenant, String codeChemin, UUID uuidReleve) {
+        // TODO Télécharger le relevé en paramètre
+        Anchor exportReleveAnchor = new Anchor();
+        // Ajout bouton certificat de scolarité
+        Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
+        certButton.setWidth("15em");
+        certButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.BTN_COLOR);
+        certButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
+        exportReleveAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
+        exportReleveAnchor.add(certButton);
+        exportReleveAnchor.setHref(new StreamResource(CERT_FILE_NAME + "-" + LocalDateTime.now() + CERT_FILE_EXT,
+                () -> exportService.getReleveDeNotes(codeApprenant, codeChemin, uuidReleve)));
+        exportReleveAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
+        exportReleveAnchor.getElement().setAttribute("download", true);
+        exportReleveAnchor.setTarget("_blank");
+
+        // Ajout à la liste des boutons
+        listButtonReleve.add(certButton);
+    }
 
     private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout, boolean smallGrid) {
-        log.info("Récupération des notes pour {} sur {}", codeApprenant, codeChemin);
+        log.info("Récupération des notes pour {} ({}) sur {}", codeApprenant, codePeriode, codeChemin);
 
         // Récupération des notes
         List<CheminDTO> listObj = pegaseController.getNotes(codeApprenant, codeChemin, codePeriode, avecControle);
