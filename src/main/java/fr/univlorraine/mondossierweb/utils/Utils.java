@@ -377,7 +377,7 @@ public final class Utils {
 		// la racine est le code de la formation
 		StringBuilder chemin = new StringBuilder();
 		chemin.append(cible.getFormation().getCode());
-		if(cible.getChemin()!=null && !cible.getChemin().isEmpty()) {
+		if(cible.getChemin() != null && !cible.getChemin().isEmpty()) {
 			for(ObjetFormationOuGroupement c : cible.getChemin()) {
 				// Ajout des éléments au chemin
 				chemin.append(SEPARATEUR_CHEMIN + c.getCode());

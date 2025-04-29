@@ -13,19 +13,11 @@
 
 package fr.univlorraine.pegase.insext.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.insext.model.ObjetAvecDates;
-import fr.univlorraine.pegase.insext.model.ObjetAvecLibelle;
-import fr.univlorraine.pegase.insext.model.PeriodeAllOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+
+import java.util.Objects;
 
 /**
  * La période de mise en œuvre associée à la formation
@@ -33,13 +25,10 @@ import java.io.IOException;
 @ApiModel(description = "La période de mise en œuvre associée à la formation")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-28T10:16:41.240949500+02:00[Europe/Paris]")
 public class Periode extends ObjetAvecLibelle {
-  public static final String SERIALIZED_NAME_EST1 = "est1";
   public static final String SERIALIZED_NAME_DATE_DEBUT = "dateDebut";
   public static final String SERIALIZED_NAME_DATE_FIN = "dateFin";
   public static final String SERIALIZED_NAME_ANNEE_UNIVERSITAIRE = "anneeUniversitaire";
   public static final String SERIALIZED_NAME_LIBELLE_AFFICHAGE = "libelleAffichage";
-  @SerializedName(SERIALIZED_NAME_EST1)
-  protected String est1;
   @SerializedName(SERIALIZED_NAME_DATE_DEBUT)
   private String dateDebut;
   @SerializedName(SERIALIZED_NAME_DATE_FIN)

@@ -239,6 +239,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         listButtonCertificat.clear();
         listButtonAttestation.clear();
         listButtonCursus.clear();
+        listButtonReleves.clear();
+        listButtonReleve.clear();
         listButtonPhoto.clear();
     }
 
@@ -344,71 +346,60 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     CmpUtils.deleteGap(pieces);
                     listTextLabelPieces.add(pieces);
 
-
+                    // CERTIFICAT DE SCOLARITE
                     Anchor exportCertificatAnchor = new Anchor();
                     if (configController.isCertificatActif()) {
                         // Ajout bouton certificat de scolarité
-                        Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
-                        certButton.setWidth("15em");
-                        certButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.BTN_COLOR);
-                        certButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
-                        exportCertificatAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
-                        exportCertificatAnchor.add(certButton);
+                        Button certButton = new Button("");
+                        setDownloadButton(exportCertificatAnchor, certButton);
                         exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME + "-" + LocalDateTime.now() + CERT_FILE_EXT,
                                 () -> exportService.getCertificat(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription))));
-                        exportCertificatAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
-                        exportCertificatAnchor.getElement().setAttribute("download", true);
-                        exportCertificatAnchor.setTarget("_blank");
-
                         // Ajout à la liste des boutons
                         listButtonCertificat.add(certButton);
                     }
 
+                    // ATTESTATION DE PAIEMENT
                     Anchor exportAttestationAnchor = new Anchor();
                     if (configController.isAttestationPaiementActif()) {
                         // Ajout bouton attestation de paiement
-                        Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
-                        attestationButton.setWidth("15em");
-                        attestationButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.BTN_COLOR);
-                        attestationButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
-                        exportAttestationAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
-                        exportAttestationAnchor.add(attestationButton);
+                        Button attestationButton = new Button("");
+                        setDownloadButton(exportAttestationAnchor, attestationButton);
                         exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME + "-" + LocalDateTime.now() + ATTEST_FILE_EXT,
                                 () -> exportService.getAttestation(dossier.getApprenant().getCode(), Utils.getCodePeriode(inscription))));
-                        exportAttestationAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
-                        exportAttestationAnchor.getElement().setAttribute("download", true);
-                        exportAttestationAnchor.setTarget("_blank");
-
                         if (StringUtils.hasText(getTranslation("inscription.attestation.message"))) {
                             attestationButton.addClickListener(e -> {
-                                Notification notification = new Notification();
-                                notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
-
-
-                                Div text = new Div(new Text(getTranslation("inscription.attestation.message")));
-                                Button closeButton = new Button(new Icon("lumo", "cross"));
-                                closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-                                closeButton.setAriaLabel("Close");
-                                closeButton.addClickListener(event -> {
-                                    notification.close();
-                                });
-
-                                HorizontalLayout layout = new HorizontalLayout(text, closeButton);
-                                layout.setAlignItems(Alignment.CENTER);
-
-                                notification.setPosition(Position.MIDDLE);
-                                notification.add(layout);
-                                notification.open();
-
-                                //notification.show(getTranslation("inscription.attestation.message"), 5000, Position.MIDDLE);
+                                showNotification(getTranslation("inscription.attestation.message"));
                             });
                         }
-
                         // Ajout à la liste des boutons
                         listButtonAttestation.add(attestationButton);
                     }
 
-                    // Ajout bouton photo
+                    /*
+                    // RELEVES DE NOTES
+                    Button relevesButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
+                    if (configController.isRelevesActif()) {
+                        Dialog relevesDialog = new Dialog();
+                        relevesDialog.setWidthFull();
+                        relevesDialog.setMaxWidth("70em");
+                        relevesButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                        relevesButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
+                        relevesButton.addClickListener(c -> {
+                            // Si le notes n'est pas visible
+                            if (!relevesDialog.isOpened()) {
+                                createRelevesDialog(relevesDialog, dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription));
+                                relevesDialog.open();
+                            } else {
+                                // On masque le notes
+                                relevesDialog.close();
+                                relevesDialog.removeAll();
+                            }
+                        });
+                        // Ajout à la liste des boutons
+                        listButtonReleves.add(relevesButton);
+                    }
+                    */
+                    // PHOTO
                     Button photoButton = new Button("", VaadinIcon.USER.create());
                     photoButton.setWidth("7em");
                     photoButton.setHeight("8em");
@@ -443,14 +434,11 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                                 photoButton.setVisible(false);
                             }
                         });
-
                         //Récupération de la photo automatiquement
                         photoButton.click();
                     }
-
                     // Ajout à la liste des boutons
                     listButtonPhoto.add(photoButton);
-
 
                     VerticalLayout verticalLayout = new VerticalLayout();
                     verticalLayout.getStyle().set(CSSColorUtils.PADDING, "0");
@@ -504,6 +492,10 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                             exportAttestationAnchor.setVisible(false);
                         }
                     }
+
+                    /*if (configController.isRelevesActif()) {
+                        buttonExportLayout.add(relevesButton);
+                    }*/
                     if (configController.isCertificatActif() && configController.isAttestationPaiementActif()) {
                         buttonExportLayout.setFlexBasis("15em", exportCertificatAnchor, exportAttestationAnchor);
                     }
@@ -680,74 +672,6 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                         listButtonNotes.add(notesButton);
                     }
 
-
-                    // Relevés de notes
-                    Button relevesButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
-                    if (configController.isRelevesActif()) {
-                        Dialog relevesDialog = new Dialog();
-                        relevesDialog.setWidthFull();
-                        relevesDialog.setMaxWidth("70em");
-                        relevesButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-                        relevesButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
-                        relevesButton.addClickListener(c -> {
-
-                            // TODO Si un seul relevé, lancer le téléchargement immédiatement
-
-                            // Si le notes n'est pas visible
-                            if (!relevesDialog.isOpened()) {
-                                //Init dialog (a faire au clic car dépend de la taille de la fenêtre)
-                                relevesDialog.removeAll();
-                                FlexLayout dialogLayout = new FlexLayout();
-                                dialogLayout.setFlexDirection(FlexDirection.COLUMN);
-                                dialogLayout.setHeightFull();
-                                VerticalLayout notesLayout = new VerticalLayout();
-                                notesLayout.setPadding(false);
-                                HorizontalLayout headerDialog = new HorizontalLayout();
-                                headerDialog.getStyle().set("margin-bottom", CSSColorUtils.VAR_LUMO_SPACE_L);
-                                NativeLabel titreDialog = new NativeLabel(getTranslation("releves.title"));
-                                titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-                                titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
-                                Button closeButton = new Button(getTranslation("releves.closedialog"));
-                                closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
-                                headerDialog.add(titreDialog);
-                                dialogLayout.add(headerDialog);
-
-                                NativeLabel messageReleves = new NativeLabel(getTranslation("releves.message"));
-                                dialogLayout.add(messageReleves);
-
-                                dialogLayout.add(notesLayout);
-                                relevesDialog.add(dialogLayout);
-                                // si écran de petite taille
-                                boolean smallGrid = false;
-                                if (windowWidth <= 800) {
-                                    smallGrid = true;
-                                    HorizontalLayout footerDialog = new HorizontalLayout();
-                                    footerDialog.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.VAR_LUMO_SPACE_L);
-                                    footerDialog.add(closeButton);
-                                    closeButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-                                    dialogLayout.add(footerDialog);
-                                    relevesDialog.setSizeFull();
-                                } else {
-                                    relevesDialog.setHeight(CSSColorUtils.AUTO);
-                                    relevesDialog.setDraggable(true);
-                                    headerDialog.add(closeButton);
-                                }
-
-                                closeButton.addClickListener(cb -> relevesDialog.close());
-
-                                // Mise à jour de l'affichage des relevés disponibles au téléchargement
-                                displayReleves(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription), notesLayout, smallGrid);
-                                relevesDialog.open();
-                            } else {
-                                // On masque le notes
-                                relevesDialog.close();
-                                relevesDialog.removeAll();
-                            }
-                        });
-                        // Ajout à la liste des boutons
-                        listButtonReleves.add(relevesButton);
-                    }
-
                     //Layout des boutons concernant le cursus et les notes
                     FlexLayout buttonLayout2 = new FlexLayout();
                     buttonLayout2.setWidthFull();
@@ -781,8 +705,78 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     inscriptionsLayout.add(insCard);
                 }
             }
+            updateStyle();
+        } else {
+            inscriptionsLayout.add(new NativeLabel(getTranslation("inscription.aucune")));
         }
-        updateStyle();
+    }
+
+    private void setDownloadButton(Anchor downloadAnchor, Button downloadButton) {
+        downloadButton.setIcon(VaadinIcon.FILE_TEXT_O.create());
+        downloadButton.setWidth("15em");
+        downloadButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.BTN_COLOR);
+        downloadButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
+        downloadAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
+        downloadAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
+        downloadAnchor.getElement().setAttribute("download", true);
+        downloadAnchor.setTarget("_blank");
+        downloadAnchor.add(downloadButton);
+    }
+
+    private void showNotification(String message) {
+        Notification notification = new Notification();
+        notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+        Div text = new Div(new Text(message));
+        Button closeButton = new Button(new Icon("lumo", "cross"));
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        closeButton.setAriaLabel("Close");
+        closeButton.addClickListener(event -> {
+            notification.close();
+        });
+        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+        layout.setAlignItems(Alignment.CENTER);
+        notification.setPosition(Position.MIDDLE);
+        notification.add(layout);
+        notification.open();
+    }
+
+    private void createRelevesDialog(Dialog relevesDialog, String codeApprenant, String chemin, String periode) {
+        relevesDialog.removeAll();
+        FlexLayout dialogLayout = new FlexLayout();
+        dialogLayout.setFlexDirection(FlexDirection.COLUMN);
+        dialogLayout.setHeightFull();
+        VerticalLayout relevesLayout = new VerticalLayout();
+        relevesLayout.setPadding(false);
+        HorizontalLayout headerDialog = new HorizontalLayout();
+        headerDialog.getStyle().set("margin-bottom", CSSColorUtils.VAR_LUMO_SPACE_L);
+        NativeLabel titreDialog = new NativeLabel(getTranslation("releves.title"));
+        titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+        titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
+        Button closeButton = new Button(getTranslation("releves.closedialog"));
+        closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
+        headerDialog.add(titreDialog);
+        dialogLayout.add(headerDialog);
+
+        NativeLabel messageReleves = new NativeLabel(getTranslation("releves.message"));
+        dialogLayout.add(messageReleves);
+
+        dialogLayout.add(relevesLayout);
+        relevesDialog.add(dialogLayout);
+        if (windowWidth <= 800) {
+            HorizontalLayout footerDialog = new HorizontalLayout();
+            footerDialog.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.VAR_LUMO_SPACE_L);
+            footerDialog.add(closeButton);
+            closeButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+            dialogLayout.add(footerDialog);
+            relevesDialog.setSizeFull();
+        } else {
+            relevesDialog.setHeight(CSSColorUtils.AUTO);
+            relevesDialog.setDraggable(true);
+            headerDialog.add(closeButton);
+        }
+        closeButton.addClickListener(cb -> relevesDialog.close());
+        // Mise à jour de l'affichage des relevés disponibles au téléchargement
+        displayReleves(codeApprenant, chemin, periode, relevesLayout);
     }
 
 
@@ -826,14 +820,14 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         cursusLayout.add(arbo);
     }
 
-    private void displayReleves(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout, boolean small) {
+    private void displayReleves(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout relevesLayout) {
         log.info("Récupération des releves pour {} ({}) sur {}", codeApprenant, codePeriode, codeChemin);
 
         // Récupération des notes
         List<ReleveDeNotePublie> listReleves = pegaseController.getListeReleves(codeApprenant, codeChemin, codePeriode);
 
         if (listReleves != null && !listReleves.isEmpty()) {
-            listReleves.forEach(rnp -> notesLayout.add(getLayoutReleve(codeApprenant, codeChemin, rnp)));
+            listReleves.forEach(rnp -> relevesLayout.add(getLayoutReleve(codeApprenant, codeChemin, rnp)));
         }
     }
 
@@ -851,20 +845,12 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         // TODO Télécharger le relevé en paramètre
         Anchor exportReleveAnchor = new Anchor();
         // Ajout bouton certificat de scolarité
-        Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
-        certButton.setWidth("15em");
-        certButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.BTN_COLOR);
-        certButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
-        exportReleveAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
-        exportReleveAnchor.add(certButton);
+        Button releveButton = new Button("");
+        setDownloadButton(exportReleveAnchor, releveButton);
         exportReleveAnchor.setHref(new StreamResource(CERT_FILE_NAME + "-" + LocalDateTime.now() + CERT_FILE_EXT,
                 () -> exportService.getReleveDeNotes(codeApprenant, codeChemin, uuidReleve)));
-        exportReleveAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
-        exportReleveAnchor.getElement().setAttribute("download", true);
-        exportReleveAnchor.setTarget("_blank");
-
         // Ajout à la liste des boutons
-        listButtonReleve.add(certButton);
+        listButtonReleve.add(releveButton);
     }
 
     private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout, boolean smallGrid) {
