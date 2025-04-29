@@ -379,8 +379,11 @@ public final class Utils {
 		chemin.append(cible.getFormation().getCode());
 		if(cible.getChemin() != null && !cible.getChemin().isEmpty()) {
 			for(ObjetFormationOuGroupement c : cible.getChemin()) {
+				if(!chemin.isEmpty()) {
+					chemin.append(SEPARATEUR_CHEMIN);
+				}
 				// Ajout des éléments au chemin
-				chemin.append(SEPARATEUR_CHEMIN + c.getCode());
+				chemin.append(c.getCode());
 			}
 		}
 		log.debug("Chemin : {} pour Cible {} {}", chemin, cible.getFormation(), cible.getChemin());
