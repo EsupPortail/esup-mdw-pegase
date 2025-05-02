@@ -77,7 +77,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Secured({SecurityUtils.ROLE_SUPERADMIN, SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_GESTIONNAIRE})
@@ -375,13 +374,12 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                         listButtonAttestation.add(attestationButton);
                     }
 
-                    /*
                     // RELEVES DE NOTES
                     Button relevesButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
                     if (configController.isRelevesActif()) {
                         Dialog relevesDialog = new Dialog();
                         relevesDialog.setWidthFull();
-                        relevesDialog.setMaxWidth("70em");
+                        relevesDialog.setMaxWidth("25em");
                         relevesButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
                         relevesButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
                         relevesButton.addClickListener(c -> {
@@ -398,7 +396,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                         // Ajout à la liste des boutons
                         listButtonReleves.add(relevesButton);
                     }
-                    */
+
                     // PHOTO
                     Button photoButton = new Button("", VaadinIcon.USER.create());
                     photoButton.setWidth("7em");
@@ -477,7 +475,6 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     buttonExportLayout.setFlexWrap(FlexWrap.WRAP);
 
                     if (configController.isCertificatActif()) {
-                        setAnchorStyle(exportCertificatAnchor);
                         buttonExportLayout.add(exportCertificatAnchor);
                         if (inscriptionEnCours && !inscriptionValide) {
                             exportCertificatAnchor.setVisible(false);
@@ -485,7 +482,6 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     }
 
                     if (configController.isAttestationPaiementActif()) {
-                        setAnchorStyle(exportAttestationAnchor);
                         buttonExportLayout.add(exportAttestationAnchor);
                         // Si on doit controler que le paiement est valide et qu'il ne l'est pas
                         if (configController.isControlePaiementValideActif() && inscriptionEnCours && !inscriptionPayee) {
@@ -493,12 +489,17 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                         }
                     }
 
-                    /*if (configController.isRelevesActif()) {
+                    if (configController.isRelevesActif()) {
                         buttonExportLayout.add(relevesButton);
-                    }*/
-                    if (configController.isCertificatActif() && configController.isAttestationPaiementActif()) {
-                        buttonExportLayout.setFlexBasis("15em", exportCertificatAnchor, exportAttestationAnchor);
                     }
+
+                    /*if (configController.isCertificatActif() && configController.isAttestationPaiementActif()) {
+                        if(configController.isRelevesActif()) {
+                            buttonExportLayout.setFlexBasis("10em", exportCertificatAnchor, exportAttestationAnchor, relevesButton);
+                        } else {
+                            buttonExportLayout.setFlexBasis("15em", exportCertificatAnchor, exportAttestationAnchor);
+                        }
+                    }*/
 
                     flexInfoAndPhotoLayout.getStyle().set(CSSColorUtils.BORDER_TOP, CSSColorUtils.SOLID_LIGHTGRAY);
                     flexInfoAndPhotoLayout.add(detailInscriptionLayout);
@@ -716,10 +717,13 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         downloadButton.setWidth("15em");
         downloadButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.BTN_COLOR);
         downloadButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
-        downloadAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
+        //downloadAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
         downloadAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
         downloadAnchor.getElement().setAttribute("download", true);
         downloadAnchor.setTarget("_blank");
+        downloadAnchor.setMinWidth("15em");
+        downloadAnchor.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+        downloadAnchor.getStyle().set(CSSColorUtils.PADDING, "1em");
         downloadAnchor.add(downloadButton);
     }
 
@@ -757,9 +761,6 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         headerDialog.add(titreDialog);
         dialogLayout.add(headerDialog);
 
-        NativeLabel messageReleves = new NativeLabel(getTranslation("releves.message"));
-        dialogLayout.add(messageReleves);
-
         dialogLayout.add(relevesLayout);
         relevesDialog.add(dialogLayout);
         if (windowWidth <= 800) {
@@ -777,13 +778,6 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         closeButton.addClickListener(cb -> relevesDialog.close());
         // Mise à jour de l'affichage des relevés disponibles au téléchargement
         displayReleves(codeApprenant, chemin, periode, relevesLayout);
-    }
-
-
-    private void setAnchorStyle(Anchor anchor) {
-        anchor.setMinWidth("15em");
-        anchor.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-        anchor.getStyle().set(CSSColorUtils.PADDING, "1em");
     }
 
 
@@ -832,25 +826,35 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     }
 
     private Component getLayoutReleve(String codeApprenant, String codeChemin, ReleveDeNotePublie rnp) {
-        VerticalLayout layout = new VerticalLayout();
-        NativeLabel labLib = new NativeLabel(rnp.getDescription());
-        layout.add(labLib);
-        NativeLabel labDesc = new NativeLabel(rnp.getDescription());
-        layout.add(labDesc);
-        layout.addClickListener(e -> downloadReleve(codeApprenant, codeChemin, rnp.getUuid()));
-        return layout;
-    }
+        log.info("Relevé {} ({}) disponible",rnp.getLibelleAffichageMDW(), rnp.getDescription() );
+        FlexLayout releveLayout = new FlexLayout();
+        VerticalLayout infoLayout = new VerticalLayout();
+        NativeLabel labLib = new NativeLabel(rnp.getLibelleAffichageMDW());
+        labLib.getStyle().setMargin(CSSColorUtils.AUTO);
+        infoLayout.add(labLib);
 
-    private void downloadReleve(String codeApprenant, String codeChemin, UUID uuidReleve) {
-        // TODO Télécharger le relevé en paramètre
+        if(StringUtils.hasText(rnp.getDescription())) {
+            NativeLabel labDesc = new NativeLabel(rnp.getDescription());
+            labDesc.getStyle().setMargin(CSSColorUtils.AUTO);
+            infoLayout.add(labDesc);
+        }
+
         Anchor exportReleveAnchor = new Anchor();
         // Ajout bouton certificat de scolarité
         Button releveButton = new Button("");
         setDownloadButton(exportReleveAnchor, releveButton);
         exportReleveAnchor.setHref(new StreamResource(CERT_FILE_NAME + "-" + LocalDateTime.now() + CERT_FILE_EXT,
-                () -> exportService.getReleveDeNotes(codeApprenant, codeChemin, uuidReleve)));
+                () -> exportService.getReleveDeNotes(codeApprenant, codeChemin, rnp.getUuid())));
         // Ajout à la liste des boutons
         listButtonReleve.add(releveButton);
+        releveButton.getStyle().setMaxWidth("3em");
+        releveLayout.getStyle().setMargin(CSSColorUtils.AUTO);
+        exportReleveAnchor.getStyle().setMargin(CSSColorUtils.AUTO);
+
+        releveLayout.add(infoLayout);
+        releveLayout.add(exportReleveAnchor);
+
+        return releveLayout;
     }
 
     private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout, boolean smallGrid) {
