@@ -20,7 +20,7 @@ package fr.univlorraine.mondossierweb.ui.component;
 
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -39,9 +39,9 @@ public class BadgeList extends HorizontalLayout {
         super();
         if(titre != null) {
             label = new NativeLabel(titre);
-            label.getStyle().set(CSSColorUtils.FONT_SIZE, CSSColorUtils.FONT_SIZE_SMALL);
-            label.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-            label.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_TXT_COLOR);
+            label.getStyle().set(CssUtils.FONT_SIZE, CssUtils.FONT_SIZE_SMALL);
+            label.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+            label.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_TXT_COLOR);
         } else {
             label = null;
         }

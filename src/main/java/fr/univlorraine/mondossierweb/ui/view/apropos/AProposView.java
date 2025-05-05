@@ -35,7 +35,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +67,7 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 	
 	@PostConstruct
 	private void init() {
-		getStyle().set(CSSColorUtils.PADDING, "1em");
+		getStyle().set(CssUtils.PADDING, "1em");
 		initAppInfo();
 		initMessageInfo();
 		initUserInfo();
@@ -83,11 +83,11 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 		Element buildTimeElement = new Element("small");
 		ZonedDateTime buildTime = buildProperties.getTime().atZone(ZoneId.systemDefault());
 		buildTimeElement.setText(' ' + DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(buildTime));
-		buildTimeElement.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_TXT_COLOR);
+		buildTimeElement.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_TXT_COLOR);
 		getElement().appendChild(buildTimeElement);
 
 		Paragraph descriptionComp = new Paragraph(buildProperties.get("description"));
-		descriptionComp.getStyle().set(CSSColorUtils.FONT_STYLE, CSSColorUtils.ITALIC);
+		descriptionComp.getStyle().set(CssUtils.FONT_STYLE, CssUtils.ITALIC);
 		add(descriptionComp);
 
 	}
@@ -96,10 +96,10 @@ public class AProposView extends Div implements HasDynamicTitle, HasHeader, Loca
 		add(info);
 		
 		add(message);
-		message.getStyle().set(CSSColorUtils.PADDING, "1em");
-		message.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.MAIN_COLOR);
-		message.getStyle().set(CSSColorUtils.BORDER_RADIUS, "1em");
-		message.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
+		message.getStyle().set(CssUtils.PADDING, "1em");
+		message.getStyle().set(CssUtils.BACKGROUND_COLOR, CssUtils.MAIN_COLOR);
+		message.getStyle().set(CssUtils.BORDER_RADIUS, "1em");
+		message.getStyle().set(CssUtils.COLOR, CssUtils.WHITE);
 		
 		
 	}

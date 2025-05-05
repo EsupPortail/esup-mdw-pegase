@@ -21,8 +21,7 @@ package fr.univlorraine.mondossierweb.ui.layout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 
 @SuppressWarnings("serial")
 public class CardHeader extends HorizontalLayout {
@@ -30,8 +29,8 @@ public class CardHeader extends HorizontalLayout {
 	
 	public CardHeader() {
 		libDiv.getStyle().set("font-size", "var(--lumo-font-size-xl)");
-		libDiv.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
-		libDiv.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
+		libDiv.getStyle().set(CssUtils.MARGIN_TOP, CssUtils.AUTO);
+		libDiv.getStyle().set(CssUtils.MARGIN_BOTTOM, CssUtils.AUTO);
 		getStyle().set("min-height", "2.5em");
 	}
 
@@ -41,9 +40,9 @@ public class CardHeader extends HorizontalLayout {
 	}
 
 	public void setIcon(Icon icon) {
-		icon.setColor(CSSColorUtils.SECOND_COLOR);
-		icon.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
-		icon.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
+		icon.setColor(CssUtils.SECOND_COLOR);
+		icon.getStyle().set(CssUtils.MARGIN_TOP, CssUtils.AUTO);
+		icon.getStyle().set(CssUtils.MARGIN_BOTTOM, CssUtils.AUTO);
 		add(icon);
 	}
 

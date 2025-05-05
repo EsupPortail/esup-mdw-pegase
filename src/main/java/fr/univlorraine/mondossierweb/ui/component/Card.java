@@ -25,8 +25,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import fr.univlorraine.mondossierweb.ui.layout.CardHeader;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import lombok.Getter;
 
 
@@ -56,7 +56,7 @@ public class Card extends VerticalLayout {
 			titre.setIcon(titleIcon);
 		}
 		titre.setText(libelle);
-		titre.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
+		titre.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_COLOR);
 		titre.setClassName("card-title-bordered");
 		if(!hasAltVisibleComponent) {
 			useAlt = false;
@@ -64,12 +64,12 @@ public class Card extends VerticalLayout {
 		}else {
 			useAlt = true;
 			titreLayout.addAndExpand(titre);
-			altButton.getStyle().set(CSSColorUtils.COLOR,CSSColorUtils.SECOND_COLOR);
+			altButton.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_COLOR);
 			titreLayout.add(altButton);
 			this.add(titreLayout);
 			
 			this.add(alt);
-			alt.getStyle().set(CSSColorUtils.PADDING, "0");
+			alt.getStyle().set(CssUtils.PADDING, "0");
 			alt.setVisible(false);
 			altButton.addClickListener(e -> changeAlt());
 			titre.addClickListener(e -> changeAlt());
@@ -107,12 +107,12 @@ public class Card extends VerticalLayout {
  
 			this.getStyle().set("border-color", "lightgray");
 			this.getStyle().set("background-color", "white");
-			this.getStyle().set(CSSColorUtils.MARGIN, "0 auto 0 auto");
-			this.getStyle().set(CSSColorUtils.BORDER_RADIUS, CSSColorUtils.EM_0_5);
+			this.getStyle().set(CssUtils.MARGIN, "0 auto 0 auto");
+			this.getStyle().set(CssUtils.BORDER_RADIUS, CssUtils.EM_0_5);
 			
-			this.getStyle().set(CSSColorUtils.COLOR, "var(--main-color)");
+			this.getStyle().set(CssUtils.COLOR, "var(--main-color)");
 			
-			this.getStyle().set(CSSColorUtils.PADDING, "1em 2em");
+			this.getStyle().set(CssUtils.PADDING, "1em 2em");
 			
 			this.setHeight("fit-content");
 			

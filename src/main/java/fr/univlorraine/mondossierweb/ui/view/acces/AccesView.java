@@ -34,8 +34,8 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.insext.model.Apprenant;
@@ -90,7 +90,7 @@ public class AccesView extends HasCodeApprenantUrlParameterView implements HasDy
 
 	private void initBac() {
 		FormLayout bacLayout = new FormLayout();
-		bacLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+		bacLayout.getStyle().set(CssUtils.MARGIN, "0");
 		bacCard.add(bacLayout);
 
 		bacLayout.add(codeIneBac);
@@ -117,7 +117,7 @@ public class AccesView extends HasCodeApprenantUrlParameterView implements HasDy
 	private void initAnnees() {
 
 		FormLayout anneesLayout = new FormLayout();
-		anneesLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+		anneesLayout.getStyle().set(CssUtils.MARGIN, "0");
 		anneesCard.add(anneesLayout);
 		
 		anneesLayout.add(anneeSupFr);

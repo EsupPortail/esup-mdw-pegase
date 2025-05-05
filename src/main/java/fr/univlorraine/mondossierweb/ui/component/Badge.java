@@ -22,7 +22,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 
 public class Badge extends Span {
 
@@ -46,7 +46,7 @@ public class Badge extends Span {
 
         // Visible si closable
         clearButton.setVisible(closable);
-        clearButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_TXT_COLOR);
+        clearButton.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_TXT_COLOR);
 
         valueSpan = new Span(value);
         this.value = value;
@@ -65,13 +65,13 @@ public class Badge extends Span {
     }
 
     private void updateStyle() {
-        this.getStyle().set(CSSColorUtils.PADDING_LEFT, "0.5em");
-        this.getStyle().set(CSSColorUtils.PADDING_RIGHT, "0.5em");
-        this.getStyle().set(CSSColorUtils.BORDER_WIDTH, CSSColorUtils.THIN);
-        this.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_TXT_COLOR);
-        this.getStyle().set(CSSColorUtils.BORDER_RADIUS, "0.4em");
-        this.getStyle().set(CSSColorUtils.BORDER_STYLE, CSSColorUtils.DOTTED);
-        this.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.WHITE);
+        this.getStyle().set(CssUtils.PADDING_LEFT, "0.5em");
+        this.getStyle().set(CssUtils.PADDING_RIGHT, "0.5em");
+        this.getStyle().set(CssUtils.BORDER_WIDTH, CssUtils.THIN);
+        this.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_TXT_COLOR);
+        this.getStyle().set(CssUtils.BORDER_RADIUS, "0.4em");
+        this.getStyle().set(CssUtils.BORDER_STYLE, CssUtils.DOTTED);
+        this.getStyle().set(CssUtils.BACKGROUND_COLOR, CssUtils.WHITE);
     }
 
     public void setReadOnly(boolean readOnly) {

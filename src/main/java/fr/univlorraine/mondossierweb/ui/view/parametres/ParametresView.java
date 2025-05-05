@@ -60,7 +60,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import jakarta.annotation.PostConstruct;
@@ -297,21 +297,21 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		bl.add(buttonEditer);
 		bl.add(buttonAnnuler);
 		bl.add(buttonEnregistrer);
-		buttonEditer.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-		buttonAnnuler.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-		buttonEnregistrer.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+		buttonEditer.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+		buttonAnnuler.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+		buttonEnregistrer.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
 		layout.add(bl);
 
 		HorizontalLayout testButtonLayout = new HorizontalLayout();
 		testButtonLayout.setWidthFull();
 		Button buttonTester = new Button();
-		buttonTester.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+		buttonTester.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
 		testButtonLayout.add(buttonTester);
 
 		HorizontalLayout syncButtonLayout = new HorizontalLayout();
 		syncButtonLayout.setWidthFull();
 		Button buttonSync = new Button();
-		buttonSync.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+		buttonSync.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
 		syncButtonLayout.add(buttonSync);
 
 		buttonEditer.addClickListener(e -> {

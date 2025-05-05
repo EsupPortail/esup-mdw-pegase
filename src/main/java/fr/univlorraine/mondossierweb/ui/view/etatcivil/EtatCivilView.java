@@ -35,8 +35,8 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.insext.model.Apprenant;
@@ -94,7 +94,7 @@ public class EtatCivilView extends HasCodeApprenantUrlParameterView implements H
 	private void initIdentite() {
 
 		FormLayout identiteLayout = new FormLayout();
-		identiteLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+		identiteLayout.getStyle().set(CssUtils.MARGIN, "0");
 		
 		identiteLayout.add(nomFamille);
 		identiteLayout.add(nomUsage);
@@ -119,7 +119,7 @@ public class EtatCivilView extends HasCodeApprenantUrlParameterView implements H
 	private void initNaissance() {
 		FormLayout naissanceLayout = new FormLayout();
 		naissanceLayout.addClassName("card-layout");
-		naissanceLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+		naissanceLayout.getStyle().set(CssUtils.MARGIN, "0");
 
 		naissanceLayout.add(dateNaissance);
 		naissanceLayout.add(paysNaissance);

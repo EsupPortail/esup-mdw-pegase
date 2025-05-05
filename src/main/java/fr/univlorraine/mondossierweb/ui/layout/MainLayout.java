@@ -69,8 +69,8 @@ import fr.univlorraine.mondossierweb.ui.view.etatcivil.EtatCivilView;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.InscriptionsView;
 import fr.univlorraine.mondossierweb.ui.view.logger.LoggersView;
 import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.insext.model.Apprenant;
@@ -167,7 +167,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 		if(affichageResumeEtudiant) {
 			addToDrawer(getResumeLayout());
 		} else {
-			tabs.getStyle().set(CSSColorUtils.MARGIN_TOP, "0.8em");
+			tabs.getStyle().set(CssUtils.MARGIN_TOP, "0.8em");
 		}
 
 		/* Menu */
@@ -197,7 +197,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 
 		navBarHeader.getStyle()
 		.set("flex", "1")
-		.set(CSSColorUtils.MARGIN, "0 var(--lumo-space-s) 0 0");
+		.set(CssUtils.MARGIN, "0 var(--lumo-space-s) 0 0");
 		addToNavbar(navBarHeader);
 
 		if (securityService.isUserLoggedIn()) {
@@ -233,8 +233,8 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 		HorizontalLayout appTitleLayout = new HorizontalLayout();
 		appTitleLayout.setAlignItems(Alignment.END);
 		appTitleLayout.getStyle().set("height", "3.75em");
-		appTitleLayout.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.MAIN_COLOR);
-		appTitleLayout.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
+		appTitleLayout.getStyle().set(CssUtils.BACKGROUND_COLOR, CssUtils.MAIN_COLOR);
+		appTitleLayout.getStyle().set(CssUtils.COLOR, CssUtils.WHITE);
 
 		HorizontalLayout titleLayout = new HorizontalLayout();
 		titleLayout.add(logo);
@@ -244,13 +244,13 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 		appNameTitle.addClassName("tracking-in-expand");
 		titleLayout.add(appNameTitle);
 
-		titleLayout.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
-		titleLayout.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
+		titleLayout.getStyle().set(CssUtils.MARGIN_LEFT, CssUtils.AUTO);
+		titleLayout.getStyle().set(CssUtils.MARGIN_RIGHT, CssUtils.AUTO);
 		titleLayout.setWidthFull();
 		titleLayout.getStyle().set("max-width", "16em");
-		titleLayout.getStyle().set(CSSColorUtils.PADDING_LEFT, "1em");
-		titleLayout.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
-		titleLayout.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
+		titleLayout.getStyle().set(CssUtils.PADDING_LEFT, "1em");
+		titleLayout.getStyle().set(CssUtils.MARGIN_TOP, CssUtils.AUTO);
+		titleLayout.getStyle().set(CssUtils.MARGIN_BOTTOM, CssUtils.AUTO);
 
 		appTitleLayout.add(titleLayout);
 
@@ -269,20 +269,20 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 	private Component getResumeLayout() {
 		VerticalLayout nomPrenomLayout = new VerticalLayout();
 		nomPrenomLayout.getStyle().set("max-width", "16em");
-		nomPrenomLayout.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
-		nomPrenomLayout.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
+		nomPrenomLayout.getStyle().set(CssUtils.MARGIN_LEFT, CssUtils.AUTO);
+		nomPrenomLayout.getStyle().set(CssUtils.MARGIN_RIGHT, CssUtils.AUTO);
 		nomPrenomLayout.getStyle().set("box-shadow", "none");
-		nomPrenomLayout.getStyle().set("padding-top", CSSColorUtils.EM_0_5);
+		nomPrenomLayout.getStyle().set("padding-top", CssUtils.EM_0_5);
 		nomPrenomLayout.getStyle().set("padding-bottom", "0");
 		CmpUtils.deleteGap(nomPrenomLayout);
 
-		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_LEFT, CSSColorUtils.AUTO);
-		nomPrenom.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.AUTO);
-		nomPrenom.getStyle().set(CSSColorUtils.COLOR,"var(--lumo-contrast-80pct)");
-		nomPrenom.getStyle().set(CSSColorUtils.FONT_WEIGHT,"600");
+		nomPrenom.getStyle().set(CssUtils.MARGIN_LEFT, CssUtils.AUTO);
+		nomPrenom.getStyle().set(CssUtils.MARGIN_RIGHT, CssUtils.AUTO);
+		nomPrenom.getStyle().set(CssUtils.COLOR,"var(--lumo-contrast-80pct)");
+		nomPrenom.getStyle().set(CssUtils.FONT_WEIGHT,"600");
 		nomPrenomLayout.add(nomPrenom);
 
-		numeroDossier.getStyle().set(CSSColorUtils.MARGIN, "0px auto 0px auto");
+		numeroDossier.getStyle().set(CssUtils.MARGIN, "0px auto 0px auto");
 		numeroDossier.getStyle().set("font-size", "smaller");
 		numeroDossier.getStyle().set("color","var(--lumo-contrast-80pct)");
 		nomPrenomLayout.add(numeroDossier);
@@ -328,7 +328,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 		usernameItem.setEnabled(false);
 		usernameItem.getElement()
 		.getStyle()
-		.set(CSSColorUtils.COLOR, "var(--lumo-primary-color)")
+		.set(CssUtils.COLOR, "var(--lumo-primary-color)")
 		.set("text-align", "center");
 
 		userMenu.add(new Hr());
@@ -365,8 +365,8 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 				VerticalLayout dialogLayout = new VerticalLayout();
 				dialogLayout.setPadding(false);
 				Icon infoIcon = VaadinIcon.INFO_CIRCLE_O.create();
-				infoIcon.getStyle().set(CSSColorUtils.MARGIN_RIGHT, "1em");
-				infoIcon.setColor(CSSColorUtils.SECOND_COLOR);
+				infoIcon.getStyle().set(CssUtils.MARGIN_RIGHT, "1em");
+				infoIcon.setColor(CssUtils.SECOND_COLOR);
 
 				Span info = new Span();
 				info.getElement().setProperty("innerHTML", getTranslation("connexion.info"));
@@ -379,15 +379,15 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 
 				if(popupInfoDesactivable) {
 					Checkbox checkInfo =new Checkbox(getTranslation("connexion.check"));
-					checkInfo.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.AUTO);
-					checkInfo.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.AUTO);
+					checkInfo.getStyle().set(CssUtils.MARGIN_TOP, CssUtils.AUTO);
+					checkInfo.getStyle().set(CssUtils.MARGIN_BOTTOM, CssUtils.AUTO);
 					checkInfo.addClickListener(e-> {
 						log.debug("Enregistrement parametre Masquer message bienvenu : {}",checkInfo.getValue());
 						prefService.saveUserPref(utilisateur.getUsername(), PrefUtils.HIDE_WELCOME_MESSAGE, checkInfo.getValue());
 					});
 
 					FlexLayout btnLayout = new FlexLayout();
-					btnLayout.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+					btnLayout.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
 					btnLayout.setFlexWrap(FlexWrap.WRAP);
 					btnLayout.add(checkInfo);
 					dialogLayout.add(btnLayout);

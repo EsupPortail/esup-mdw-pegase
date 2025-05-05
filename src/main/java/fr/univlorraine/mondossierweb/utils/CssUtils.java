@@ -26,7 +26,7 @@ import com.helger.css.utils.CSSColorHelper;
  * Outils pour la gestion des couleurs CSS.
  * @author Adrien Colson
  */
-public final class CSSColorUtils {
+public final class CssUtils {
 
 	public static final String SECOND_COLOR = "var(--second-color)";
 	public static final String MAIN_COLOR = "var(--main-color)";
@@ -35,15 +35,19 @@ public final class CSSColorUtils {
 	public static final String MARGIN_LEFT = "margin-left";
 	public static final String MARGIN_RIGHT = "margin-right";
 	public static final String MARGIN = "margin";
+	public static final String GAP = "gap";
 	public static final String MARGIN_TOP = "margin-top";
 	public static final String WHITE = "white";
 	public static final String THIN = "thin";
 	public static final String WHITE_SPACE = "white-space";
 	public static final String BACKGROUND_COLOR = "background-color";
+	public static final String BACKGROUND = "background";
+	public static final String PADDING_TOP = "padding-top";
 	public static final String PADDING_LEFT = "padding-left";
 	public static final String PADDING_RIGHT = "padding-right";
 	public static final String BORDER_RADIUS = "border-radius";
 	public static final String BORDER_STYLE = "border-style";
+	public static final String BORDER = "border";
 	public static final String DOTTED = "dotted";
 	public static final String NONE = "none";
 	public static final String BORDER_WIDTH = "border-width";
@@ -62,15 +66,17 @@ public final class CSSColorUtils {
 	public static final String ROW_WRAP = "row wrap";
 	public static final String COLUMN = "column";
 	public static final String FLEX_DIRECTION = "flex-direction";
+	public static final String REM = "1rem";
+	public static final String EM = "1em";
 	public static final String EM_1_5 = "1.5em";
 	public static final String EM_0_5 = "0.5em";
 	public static final String SOLID_LIGHTGRAY = "1px solid lightgray";
-	public static final String AUTO_1EM = "0.1em auto 0.1em 1em";
+	public static final String EM_AUTO = "0.1em auto 0.1em 1em";
 	public static final String SECOND_TXT_COLOR = "var(--lumo-secondary-text-color)";
 	private static final String PATTERN_HEX_COLOR_SHORT = "^#[0-9a-fA-F]{3}$";
 	private static final String PATTERN_HEX_COLOR_LONG = "^#[0-9a-fA-F]{6}$";
 
-	private CSSColorUtils() {
+	private CssUtils() {
 	}
 
 	/**

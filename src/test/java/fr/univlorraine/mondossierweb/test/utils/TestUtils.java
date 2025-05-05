@@ -19,8 +19,8 @@
 package fr.univlorraine.mondossierweb.test.utils;
 
 import com.vaadin.flow.component.textfield.TextField;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.insext.model.CibleInscription;
@@ -55,14 +55,14 @@ class TestUtils {
 	void testFormatTextField() {
 		TextField tf = new TextField();
 		CmpUtils.formatTextField(tf);
-		assertThat(tf.getStyle().get(CSSColorUtils.MARGIN), is(equalTo("0em")));
+		assertThat(tf.getStyle().get(CssUtils.MARGIN), is(equalTo("0em")));
 	}
 	
 	@Test
 	void testShortTextField() {
 		TextField tf = new TextField();
 		CmpUtils.setShortTextField(tf);
-		assertThat(tf.getStyle().get(CSSColorUtils.MARGIN), is(equalTo("0em")));
+		assertThat(tf.getStyle().get(CssUtils.MARGIN), is(equalTo("0em")));
 		assertEquals("100%",tf.getWidth());
 		assertEquals("15em",tf.getMaxWidth());
 	}
