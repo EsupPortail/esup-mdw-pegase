@@ -43,6 +43,7 @@ public final class CssUtils {
 	public static final String BACKGROUND_COLOR = "background-color";
 	public static final String BACKGROUND = "background";
 	public static final String PADDING_TOP = "padding-top";
+	public static final String PADDING_BOTTOM = "padding-bottom";
 	public static final String PADDING_LEFT = "padding-left";
 	public static final String PADDING_RIGHT = "padding-right";
 	public static final String BORDER_RADIUS = "border-radius";

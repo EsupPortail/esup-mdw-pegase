@@ -272,8 +272,8 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 		nomPrenomLayout.getStyle().set(CssUtils.MARGIN_LEFT, CssUtils.AUTO);
 		nomPrenomLayout.getStyle().set(CssUtils.MARGIN_RIGHT, CssUtils.AUTO);
 		nomPrenomLayout.getStyle().set("box-shadow", "none");
-		nomPrenomLayout.getStyle().set("padding-top", CssUtils.EM_0_5);
-		nomPrenomLayout.getStyle().set("padding-bottom", "0");
+		nomPrenomLayout.getStyle().set(CssUtils.PADDING_TOP, CssUtils.EM_0_5);
+		nomPrenomLayout.getStyle().set(CssUtils.PADDING_BOTTOM, CssUtils.EM_0_5);
 		CmpUtils.deleteGap(nomPrenomLayout);
 
 		nomPrenom.getStyle().set(CssUtils.MARGIN_LEFT, CssUtils.AUTO);
