@@ -73,8 +73,6 @@ public class PegaseServiceIT {
 	private String codeApprenant;
 	@Value("${etablissement}")
 	private String codeEtab;
-	@Value("${pj.photo}")
-	private String codePjPhoto;
 	@Value("${chemin}")
 	private String chemin;
 	@Value("${periode}")
