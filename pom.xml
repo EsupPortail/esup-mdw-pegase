@@ -57,7 +57,6 @@
         <gson-version>2.8.6</gson-version>
         <commons-lang3-version>3.10</commons-lang3-version>
         <javax-annotation-version>1.3.2</javax-annotation-version>
-        <!--<h2.version>2.1.210</h2.version>-->
 		<h2.version>2.3.232</h2.version>
   		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
   		<skipITs>false</skipITs>
@@ -217,7 +216,6 @@
 		<dependency>
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
-			<!--<version>4.4.3</version>-->
 			<version>6.1.0</version>
 			<scope>test</scope>
 		</dependency>
@@ -253,12 +251,6 @@
             <artifactId>gson-fire</artifactId>
             <version>${gson-fire-version}</version>
         </dependency>
-		<!--<dependency>
-            <groupId>org.apache.oltu.oauth2</groupId>
-            <artifactId>org.apache.oltu.oauth2.client</artifactId>
-            <version>1.0.2</version>
-             <version>1.0.1</version>
-        </dependency>-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -266,7 +258,6 @@
           <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
-		<!--  <version>2.15.1</version> -->
         <version>2.19.0</version>
     </dependency>
         <dependency>

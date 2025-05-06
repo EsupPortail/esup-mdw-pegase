@@ -22,7 +22,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.function.SerializableFunction;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
@@ -47,31 +46,22 @@ public class ConnexionsView extends Grid<UiInfo> implements HasDynamicTitle, Has
 
 	@Getter
 	private final TextHeader header = new TextHeader();
-	private final SerializableFunction<UiInfo, String> currentUIClassNameGenerator =
-		uiInfo -> getUI().map(System::identityHashCode)
-			.filter(uiId -> uiId == uiInfo.getId())
-			.map(uiId -> "row-highlighted")
-			.orElse(null);
 	private final Column<UiInfo> usernameColumn = addColumn(UiInfo::getUsername)
 		.setSortable(true)
 		.setWidth("8rem")
-		.setFlexGrow(0)
-		.setClassNameGenerator(currentUIClassNameGenerator);
+		.setFlexGrow(0);
 	private final Column<UiInfo> ipColumn = addColumn(UiInfo::getIp)
 		.setSortable(true)
 		.setTextAlign(ColumnTextAlign.END)
 		.setWidth("9rem")
-		.setFlexGrow(0)
-		.setClassNameGenerator(currentUIClassNameGenerator);
+		.setFlexGrow(0);
 	private final Column<UiInfo> browserColumn = addColumn(UiInfo::getBrowser)
 		.setSortable(true)
 		.setWidth("8rem")
-		.setFlexGrow(0)
-		.setClassNameGenerator(currentUIClassNameGenerator);
+		.setFlexGrow(0);
 	private final Column<UiInfo> locationColumn = addColumn(UiInfo::getLocation)
 		.setSortable(true)
-		.setFlexGrow(1)
-		.setClassNameGenerator(currentUIClassNameGenerator);
+		.setFlexGrow(1);
 	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
