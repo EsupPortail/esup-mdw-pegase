@@ -30,13 +30,17 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
-import fr.univlorraine.mondossierweb.ui.layout.*;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.ui.layout.HasCodeApprenantUrlParameterView;
+import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
+import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
+import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
+import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
-import fr.univlorraine.pegase.model.insext.Apprenant;
-import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.insext.model.Apprenant;
+import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -76,6 +80,8 @@ public class EtatCivilView extends HasCodeApprenantUrlParameterView implements H
 	private void init() {
 		setSizeFull();
 		addClassName("view");
+		getStyle().set("padding","0");
+		errorLabel.getStyle().set("padding", "1em");
 		initIdentite();
 		initNaissance();
 		etatcivilLayout.setWidthFull();
@@ -88,7 +94,7 @@ public class EtatCivilView extends HasCodeApprenantUrlParameterView implements H
 	private void initIdentite() {
 
 		FormLayout identiteLayout = new FormLayout();
-		identiteLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+		identiteLayout.getStyle().set(CssUtils.MARGIN, "0");
 		
 		identiteLayout.add(nomFamille);
 		identiteLayout.add(nomUsage);
@@ -113,7 +119,7 @@ public class EtatCivilView extends HasCodeApprenantUrlParameterView implements H
 	private void initNaissance() {
 		FormLayout naissanceLayout = new FormLayout();
 		naissanceLayout.addClassName("card-layout");
-		naissanceLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+		naissanceLayout.getStyle().set(CssUtils.MARGIN, "0");
 
 		naissanceLayout.add(dateNaissance);
 		naissanceLayout.add(paysNaissance);

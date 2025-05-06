@@ -60,7 +60,7 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import jakarta.annotation.PostConstruct;
@@ -80,6 +80,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Secured(SecurityUtils.ROLE_SUPERADMIN)
@@ -137,7 +138,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private void init() {
 		setSizeFull();
 		addClassName("view");
-		
+
 		parametresLayout.setWidthFull();
 		parametresLayout.getStyle().set("max-width", "52em");
 		parametresLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
@@ -296,21 +297,21 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		bl.add(buttonEditer);
 		bl.add(buttonAnnuler);
 		bl.add(buttonEnregistrer);
-		buttonEditer.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-		buttonAnnuler.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-		buttonEnregistrer.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+		buttonEditer.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+		buttonAnnuler.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+		buttonEnregistrer.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
 		layout.add(bl);
 
 		HorizontalLayout testButtonLayout = new HorizontalLayout();
 		testButtonLayout.setWidthFull();
 		Button buttonTester = new Button();
-		buttonTester.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+		buttonTester.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
 		testButtonLayout.add(buttonTester);
 
 		HorizontalLayout syncButtonLayout = new HorizontalLayout();
 		syncButtonLayout.setWidthFull();
 		Button buttonSync = new Button();
-		buttonSync.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+		buttonSync.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
 		syncButtonLayout.add(buttonSync);
 
 		buttonEditer.addClickListener(e -> {
@@ -378,11 +379,32 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				// Maj des paramètres depuis la BDD
 				pegaseService.refreshParameters();
 				try {
+					// teste api IDT
+					UUID uuidApprenant = pegaseService.getUidApprenant(pegaseService.getCodeApprenantTest());
+					if(uuidApprenant != null) {
+						Utils.notifierSucces(getTranslation("api-idt.ok", pegaseService.getCodeApprenantTest()));
+					} else {
+						Utils.notifierAnomalie(getTranslation("api-idt.error", pegaseService.getCodeApprenantTest()));
+					}
+				}catch(Exception ex) {
+					Utils.notifierAnomalie(getTranslation("api-idt.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+				}
+				try {
 					// teste api INS EXT
 					if(pegaseService.getDossierApprenant(pegaseService.getCodeApprenantTest()) != null) {
 						Utils.notifierSucces(getTranslation("api-ins-ext.ok", pegaseService.getCodeApprenantTest()));
 					} else {
 						Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()));
+					}
+				}catch(Exception ex) {
+					Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+				}
+				try {
+					// teste api PIECE EXT
+					if(pegaseService.getPhoto(pegaseService.getCodeApprenantTest(), pegaseService.getCodeCheminTest(), pegaseService.getCodePeriodeTest()) != null) {
+						Utils.notifierSucces(getTranslation("api-piece-ext.ok", pegaseService.getCodeApprenantTest()));
+					} else {
+						Utils.notifierAnomalie(getTranslation("api-piece-ext.error", pegaseService.getCodeApprenantTest()));
 					}
 				}catch(Exception ex) {
 					Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
@@ -396,16 +418,6 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 					}
 				}catch(Exception ex) {
 					Utils.notifierAnomalie(getTranslation("api-chc.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
-				}
-				try {
-					// teste api PIECE EXT
-					if(pegaseService.getPhoto(pegaseService.getCodeApprenantTest(), pegaseService.getCodeCheminTest(), pegaseService.getCodePeriodeTest()) != null) {
-						Utils.notifierSucces(getTranslation("api-piece-ext.ok", pegaseService.getCodeApprenantTest()));
-					} else {
-						Utils.notifierAnomalie(getTranslation("api-piece-ext.error", pegaseService.getCodeApprenantTest()));
-					}
-				}catch(Exception ex) {
-					Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
 				try {
 					// teste api COC
@@ -428,6 +440,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}catch(Exception ex) {
 					Utils.notifierAnomalie(getTranslation("api-pai.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
+
 			});
 			layout.add(testButtonLayout);
 

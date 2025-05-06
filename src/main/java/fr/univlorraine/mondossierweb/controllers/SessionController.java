@@ -22,7 +22,7 @@ import com.vaadin.flow.server.VaadinSession;
 import fr.univlorraine.mondossierweb.services.PegaseService;
 import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.utils.Utils;
-import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

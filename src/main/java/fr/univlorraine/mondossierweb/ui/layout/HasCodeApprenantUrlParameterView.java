@@ -26,7 +26,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import fr.univlorraine.mondossierweb.controllers.SessionController;
 import fr.univlorraine.mondossierweb.services.SecurityService;
-import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 

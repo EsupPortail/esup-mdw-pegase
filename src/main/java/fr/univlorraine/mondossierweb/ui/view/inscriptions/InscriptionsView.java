@@ -56,15 +56,16 @@ import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
 import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
 import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
-import fr.univlorraine.pegase.model.chc.AmenagementDCA;
-import fr.univlorraine.pegase.model.coc.Absence;
-import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
-import fr.univlorraine.pegase.model.insext.CibleInscription;
-import fr.univlorraine.pegase.model.insext.InscriptionComplete;
+import fr.univlorraine.pegase.chc.model.AmenagementDCA;
+import fr.univlorraine.pegase.coc.model.Absence;
+import fr.univlorraine.pegase.coc.model.ReleveDeNotePublie;
+import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.insext.model.CibleInscription;
+import fr.univlorraine.pegase.insext.model.InscriptionComplete;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -106,6 +107,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     transient List<Button> listButtonPhoto = new LinkedList<>();
     transient List<Button> listButtonCursus = new LinkedList<>();
     transient List<Button> listButtonNotes = new LinkedList<>();
+    transient List<Button> listButtonReleves = new LinkedList<>();
+    transient List<Button> listButtonReleve = new LinkedList<>();
     transient List<Button> listButtonDetailInscription = new LinkedList<>();
     transient List<Button> listButtonMasquerInscription = new LinkedList<>();
     private transient Boolean avecBareme;
@@ -134,6 +137,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
 
         setSizeFull();
         addClassName("view");
+        getStyle().set("padding","0");
+        errorLabel.getStyle().set("padding", CssUtils.EM);
 
         inscriptionsLayout.setWidthFull();
         inscriptionsLayout.getStyle().set("max-width", "52em");
@@ -197,6 +202,12 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         for (Button b : listButtonNotes) {
             b.setText(getTranslation("inscription.notes"));
         }
+        for (Button b : listButtonReleves) {
+            b.setText(getTranslation("inscription.releves"));
+        }
+        for (Button b : listButtonReleve) {
+            b.setText(getTranslation("inscription.releve"));
+        }
         for (Button b : listButtonDetailInscription) {
             b.setText(getTranslation("inscription.detail"));
         }
@@ -229,6 +240,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         listButtonCertificat.clear();
         listButtonAttestation.clear();
         listButtonCursus.clear();
+        listButtonReleves.clear();
+        listButtonReleve.clear();
         listButtonPhoto.clear();
     }
 
@@ -266,7 +279,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 if (cible.getFormation() != null) {
                     CmpUtils.valueAndVisibleIfNotNull(formation, cible.getFormation().getLibelleLong());
                 }
-                formation.getStyle().set(CSSColorUtils.MARGIN_TOP, "var(--lumo-space-m)");
+                formation.getStyle().set(CssUtils.MARGIN_TOP, "var(--lumo-space-m)");
                 CmpUtils.deleteGap(formation);
                 listTextLabelFormation.add(formation);
 
@@ -281,7 +294,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     }
                 }
                 CmpUtils.setModerateTextLabel(periode);
-                periode.getStyle().set(CSSColorUtils.MARGIN_TOP, "var(--lumo-space-m)");
+                periode.getStyle().set(CssUtils.MARGIN_TOP, "var(--lumo-space-m)");
                 listTextLabelPeriode.add(periode);
 
                 // REGIME
@@ -334,79 +347,68 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     CmpUtils.deleteGap(pieces);
                     listTextLabelPieces.add(pieces);
 
-
+                    // CERTIFICAT DE SCOLARITE
                     Anchor exportCertificatAnchor = new Anchor();
                     if (configController.isCertificatActif()) {
                         // Ajout bouton certificat de scolarité
-                        Button certButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
-                        certButton.setWidth("15em");
-                        certButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.BTN_COLOR);
-                        certButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
-                        exportCertificatAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
-                        exportCertificatAnchor.add(certButton);
+                        Button certButton = new Button("");
+                        setDownloadButton(exportCertificatAnchor, certButton);
                         exportCertificatAnchor.setHref(new StreamResource(CERT_FILE_NAME + "-" + LocalDateTime.now() + CERT_FILE_EXT,
                                 () -> exportService.getCertificat(dossier.getApprenant().getCode(), Utils.getCodeVoeu(inscription))));
-                        exportCertificatAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
-                        exportCertificatAnchor.getElement().setAttribute("download", true);
-                        exportCertificatAnchor.setTarget("_blank");
-
                         // Ajout à la liste des boutons
                         listButtonCertificat.add(certButton);
                     }
 
+                    // ATTESTATION DE PAIEMENT
                     Anchor exportAttestationAnchor = new Anchor();
                     if (configController.isAttestationPaiementActif()) {
                         // Ajout bouton attestation de paiement
-                        Button attestationButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
-                        attestationButton.setWidth("15em");
-                        attestationButton.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.BTN_COLOR);
-                        attestationButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
-                        exportAttestationAnchor.getStyle().set(CSSColorUtils.MARGIN_LEFT, "0");
-                        exportAttestationAnchor.add(attestationButton);
+                        Button attestationButton = new Button("");
+                        setDownloadButton(exportAttestationAnchor, attestationButton);
                         exportAttestationAnchor.setHref(new StreamResource(ATTEST_FILE_NAME + "-" + LocalDateTime.now() + ATTEST_FILE_EXT,
                                 () -> exportService.getAttestation(dossier.getApprenant().getCode(), Utils.getCodePeriode(inscription))));
-                        exportAttestationAnchor.getElement().getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
-                        exportAttestationAnchor.getElement().setAttribute("download", true);
-                        exportAttestationAnchor.setTarget("_blank");
-
                         if (StringUtils.hasText(getTranslation("inscription.attestation.message"))) {
                             attestationButton.addClickListener(e -> {
-                                Notification notification = new Notification();
-                                notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
-
-
-                                Div text = new Div(new Text(getTranslation("inscription.attestation.message")));
-                                Button closeButton = new Button(new Icon("lumo", "cross"));
-                                closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-                                closeButton.setAriaLabel("Close");
-                                closeButton.addClickListener(event -> {
-                                    notification.close();
-                                });
-
-                                HorizontalLayout layout = new HorizontalLayout(text, closeButton);
-                                layout.setAlignItems(Alignment.CENTER);
-
-                                notification.setPosition(Position.MIDDLE);
-                                notification.add(layout);
-                                notification.open();
-
-                                //notification.show(getTranslation("inscription.attestation.message"), 5000, Position.MIDDLE);
+                                showNotification(getTranslation("inscription.attestation.message"));
                             });
                         }
-
                         // Ajout à la liste des boutons
                         listButtonAttestation.add(attestationButton);
                     }
 
-                    // Ajout bouton photo
+                    // RELEVES DE NOTES
+                    Button relevesButton = new Button("", VaadinIcon.FILE_TEXT_O.create());
+                    if (configController.isRelevesActif()) {
+                        Dialog relevesDialog = new Dialog();
+                        relevesDialog.setWidthFull();
+                        relevesDialog.setMaxWidth("25em");
+                        relevesButton.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+                        relevesButton.getStyle().set(CssUtils.BACKGROUND_COLOR, CssUtils.BTN_COLOR);
+                        relevesButton.getStyle().set(CssUtils.COLOR, CssUtils.WHITE);
+                        relevesButton.addClickListener(c -> {
+                            // Si le notes n'est pas visible
+                            if (!relevesDialog.isOpened()) {
+                                createRelevesDialog(relevesDialog, dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription));
+                                relevesDialog.open();
+                            } else {
+                                // On masque le notes
+                                relevesDialog.close();
+                                relevesDialog.removeAll();
+                            }
+                        });
+                        // Ajout à la liste des boutons
+                        listButtonReleves.add(relevesButton);
+                    }
+
+                    // PHOTO
                     Button photoButton = new Button("", VaadinIcon.USER.create());
                     photoButton.setWidth("7em");
                     photoButton.setHeight("8em");
                     VerticalLayout photoLayout = new VerticalLayout();
                     photoLayout.setSizeUndefined();
-                    photoLayout.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-                    photoLayout.getStyle().set(CSSColorUtils.MARGIN_TOP, "0");
-                    photoLayout.getStyle().set(CSSColorUtils.PADDING, "0");
+                    photoLayout.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+                    photoLayout.getStyle().set(CssUtils.MARGIN_TOP, "0");
+                    photoLayout.getStyle().set(CssUtils.PADDING, "0");
                     if (!afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE)) {
                         photoButton.addClickListener(c -> {
                             ByteArrayInputStream photo = exportService.getPhoto(dossier.getApprenant().getCode(), Utils.getCodeChemin(cible), cible.getPeriode().getCode());
@@ -414,7 +416,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                                 StreamResource resource = new StreamResource("photo_" + dossier.getApprenant().getCode() + ".jpg", () -> photo);
                                 Image image = new Image(resource, "photographie");
                                 image.setHeight("10em");
-                                image.getStyle().set(CSSColorUtils.BORDER_RADIUS, "0.8em");
+                                image.getStyle().set(CssUtils.BORDER_RADIUS, "0.8em");
                                 image.getStyle().set("border", "0.1em solid lightgray");
                                 photoLayout.removeAll();
                                 photoLayout.add(image);
@@ -423,9 +425,9 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                             } else {
                                 if (StringUtils.hasText(getTranslation("photo.aucune"))) {
                                     NativeLabel noPhotoLabel = new NativeLabel(getTranslation("photo.aucune"));
-                                    photoLayout.getStyle().set(CSSColorUtils.FONT_STYLE, CSSColorUtils.ITALIC);
-                                    photoLayout.getStyle().set(CSSColorUtils.BORDER_RADIUS, "0.8em");
-                                    photoLayout.getStyle().set(CSSColorUtils.PADDING, "3em 1em 3em 1em");
+                                    photoLayout.getStyle().set(CssUtils.FONT_STYLE, CssUtils.ITALIC);
+                                    photoLayout.getStyle().set(CssUtils.BORDER_RADIUS, "0.8em");
+                                    photoLayout.getStyle().set(CssUtils.PADDING, "3em 1em 3em 1em");
                                     photoLayout.getStyle().set("border", "0.1em dashed lightgray");
                                     photoLayout.removeAll();
                                     photoLayout.add(noPhotoLabel);
@@ -433,53 +435,51 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                                 photoButton.setVisible(false);
                             }
                         });
-
                         //Récupération de la photo automatiquement
                         photoButton.click();
                     }
-
                     // Ajout à la liste des boutons
                     listButtonPhoto.add(photoButton);
 
-
                     VerticalLayout verticalLayout = new VerticalLayout();
-                    verticalLayout.getStyle().set(CSSColorUtils.PADDING, "0");
+                    verticalLayout.getStyle().set(CssUtils.PADDING, "0");
                     verticalLayout.setSizeFull();
 
                     FormLayout infoLayout = new FormLayout();
-                    infoLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+                    infoLayout.getStyle().set(CssUtils.MARGIN, "0");
                     infoLayout.add(formation);
                     infoLayout.add(periode);
                     verticalLayout.add(infoLayout);
 
                     VerticalLayout verticalInfoPhotoAndExportLayout = new VerticalLayout();
-                    verticalInfoPhotoAndExportLayout.getStyle().set(CSSColorUtils.PADDING, "0");
+                    verticalInfoPhotoAndExportLayout.getStyle().set(CssUtils.PADDING, "0");
 
                     FlexLayout flexInfoAndPhotoLayout = new FlexLayout();
                     if (afficherDetailInscription.equals(Utils.DETAIL_INS_AFFICHE)) {
-                        flexInfoAndPhotoLayout.getStyle().set(CSSColorUtils.BORDER_TOP, CSSColorUtils.SOLID_LIGHTGRAY);
+                        flexInfoAndPhotoLayout.getStyle().set(CssUtils.BORDER_TOP, CssUtils.SOLID_LIGHTGRAY);
                     }
-                    flexInfoAndPhotoLayout.getStyle().set("padding-top", "1em");
+                    flexInfoAndPhotoLayout.getStyle().set(CssUtils.PADDING_TOP, CssUtils.EM);
+                    flexInfoAndPhotoLayout.getStyle().set(CssUtils.GAP, CssUtils.REM);
                     VerticalLayout detailInscriptionLayout = new VerticalLayout();
-                    detailInscriptionLayout.getStyle().set(CSSColorUtils.PADDING, "0");
+                    detailInscriptionLayout.getStyle().set(CssUtils.PADDING, "0");
                     detailInscriptionLayout.add(regime);
                     detailInscriptionLayout.add(statut);
                     detailInscriptionLayout.add(paiement);
                     detailInscriptionLayout.add(pieces);
 
                     // Layout photo
-                    photoButton.getStyle().set(CSSColorUtils.MARGIN_LEFT, "1em");
+                    photoButton.getStyle().set(CssUtils.MARGIN_LEFT, CssUtils.EM);
                     photoLayout.addComponentAsFirst(photoButton);
 
                     //Layout des boutons
                     FlexLayout buttonExportLayout = new FlexLayout();
                     buttonExportLayout.setSizeUndefined();
-                    buttonExportLayout.getStyle().set(CSSColorUtils.PADDING, "0");
-                    buttonExportLayout.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                    buttonExportLayout.getStyle().set(CssUtils.PADDING, "0");
+                    buttonExportLayout.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
                     buttonExportLayout.setFlexWrap(FlexWrap.WRAP);
+                    buttonExportLayout.getStyle().set(CssUtils.GAP, CssUtils.REM);
 
                     if (configController.isCertificatActif()) {
-                        setAnchorStyle(exportCertificatAnchor);
                         buttonExportLayout.add(exportCertificatAnchor);
                         if (inscriptionEnCours && !inscriptionValide) {
                             exportCertificatAnchor.setVisible(false);
@@ -487,36 +487,30 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     }
 
                     if (configController.isAttestationPaiementActif()) {
-                        setAnchorStyle(exportAttestationAnchor);
                         buttonExportLayout.add(exportAttestationAnchor);
                         // Si on doit controler que le paiement est valide et qu'il ne l'est pas
                         if (configController.isControlePaiementValideActif() && inscriptionEnCours && !inscriptionPayee) {
                             exportAttestationAnchor.setVisible(false);
                         }
                     }
-                    if (configController.isCertificatActif() && configController.isAttestationPaiementActif()) {
-                        buttonExportLayout.setFlexBasis("15em", exportCertificatAnchor, exportAttestationAnchor);
+
+                    if (configController.isRelevesActif()) {
+                        buttonExportLayout.add(relevesButton);
                     }
 
-                    flexInfoAndPhotoLayout.getStyle().set(CSSColorUtils.BORDER_TOP, CSSColorUtils.SOLID_LIGHTGRAY);
+                    flexInfoAndPhotoLayout.getStyle().set(CssUtils.BORDER_TOP, CssUtils.SOLID_LIGHTGRAY);
                     flexInfoAndPhotoLayout.add(detailInscriptionLayout);
                     flexInfoAndPhotoLayout.add(photoLayout);
 
                     FlexLayout flexDropDownButtonLayout = new FlexLayout();
                     flexDropDownButtonLayout.setVisible(false);
-                    flexDropDownButtonLayout.getStyle().set("padding-bottom", "1em");
                     flexDropDownButtonLayout.setWidthFull();
 
                     if (afficherDetailInscription.equals(Utils.DETAIL_INS_NON_AFFICHE) || afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
                         verticalInfoPhotoAndExportLayout.setVisible(false);
                         if (afficherDetailInscription.equals(Utils.DETAIL_INS_VIA_BOUTON)) {
-                            Button displayDetailButton = new Button("", VaadinIcon.ANGLE_DOWN.create());
-                            displayDetailButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-                            displayDetailButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
-
-                            Button hideDetailButton = new Button("", VaadinIcon.ANGLE_UP.create());
-                            hideDetailButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-                            hideDetailButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
+                            Button displayDetailButton = getNewDisplayButton(VaadinIcon.ANGLE_DOWN.create());
+                            Button hideDetailButton = getNewDisplayButton(VaadinIcon.ANGLE_UP.create());
 
                             displayDetailButton.addClickListener(c -> {
                                 verticalInfoPhotoAndExportLayout.setClassName("diplayedpanel");
@@ -529,10 +523,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
 
                             hideDetailButton.addClickListener(c -> {
                                 verticalInfoPhotoAndExportLayout.setClassName("hiddenpanel");
-                                //flexDropDownButtonLayout.setVisible(true);
                                 hideDetailButton.setVisible(false);
                                 displayDetailButton.setVisible(true);
-                                //verticalInfoPhotoAndExportLayout.setVisible(false);
                             });
                             hideDetailButton.setVisible(false);
                             listButtonMasquerInscription.add(hideDetailButton);
@@ -557,8 +549,9 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                         Dialog cursusDialog = new Dialog();
                         cursusDialog.setWidthFull();
                         cursusDialog.setMaxWidth("50em");
-                        cursusButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-                        cursusButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
+                        cursusButton.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+                        cursusButton.getStyle().set(CssUtils.COLOR, CssUtils.BTN_COLOR);
+                        // cursusButton.getStyle().set(CSSColorUtils.BORDER,CSSColorUtils.FINE_BORDER);
                         cursusButton.addClickListener(c -> {
                             // Si le cursus n'est pas visible
                             if (!cursusDialog.isOpened()) {
@@ -570,12 +563,12 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                                 VerticalLayout cursusLayout = new VerticalLayout();
                                 cursusLayout.setPadding(false);
                                 HorizontalLayout headerDialog = new HorizontalLayout();
-                                headerDialog.getStyle().set(CSSColorUtils.MARGIN_BOTTOM, CSSColorUtils.VAR_LUMO_SPACE_L);
+                                headerDialog.getStyle().set(CssUtils.MARGIN_BOTTOM, CssUtils.VAR_LUMO_SPACE_L);
                                 NativeLabel titreDialog = new NativeLabel(libelleInscription);
-                                titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-                                titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
+                                titreDialog.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+                                titreDialog.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_COLOR);
                                 Button closeButton = new Button(getTranslation("inscription.closedialog"));
-                                closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
+                                closeButton.getStyle().set(CssUtils.COLOR, CssUtils.BTN_COLOR);
                                 headerDialog.add(titreDialog);
                                 dialogLayout.add(headerDialog);
                                 dialogLayout.add(cursusLayout);
@@ -583,13 +576,13 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                                 // si écran de petite taille
                                 if (windowWidth <= 800) {
                                     HorizontalLayout footerDialog = new HorizontalLayout();
-                                    footerDialog.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.VAR_LUMO_SPACE_L);
+                                    footerDialog.getStyle().set(CssUtils.MARGIN_TOP, CssUtils.VAR_LUMO_SPACE_L);
                                     footerDialog.add(closeButton);
-                                    closeButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                                    closeButton.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
                                     dialogLayout.add(footerDialog);
                                     cursusDialog.setSizeFull();
                                 } else {
-                                    cursusDialog.setHeight(CSSColorUtils.AUTO);
+                                    cursusDialog.setHeight(CssUtils.AUTO);
                                     cursusDialog.setDraggable(true);
                                     headerDialog.add(closeButton);
                                 }
@@ -616,8 +609,9 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                         Dialog notesDialog = new Dialog();
                         notesDialog.setWidthFull();
                         notesDialog.setMaxWidth("70em");
-                        notesButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-                        notesButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
+                        notesButton.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+                        notesButton.getStyle().set(CssUtils.COLOR, CssUtils.BTN_COLOR);
+                        // notesButton.getStyle().set(CSSColorUtils.BORDER,CSSColorUtils.FINE_BORDER);
                         notesButton.addClickListener(c -> {
                             // Si le notes n'est pas visible
                             if (!notesDialog.isOpened()) {
@@ -629,12 +623,12 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                                 VerticalLayout notesLayout = new VerticalLayout();
                                 notesLayout.setPadding(false);
                                 HorizontalLayout headerDialog = new HorizontalLayout();
-                                headerDialog.getStyle().set("margin-bottom", CSSColorUtils.VAR_LUMO_SPACE_L);
+                                headerDialog.getStyle().set("margin-bottom", CssUtils.VAR_LUMO_SPACE_L);
                                 NativeLabel titreDialog = new NativeLabel(libelleInscription);
-                                titreDialog.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-                                titreDialog.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
+                                titreDialog.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+                                titreDialog.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_COLOR);
                                 Button closeButton = new Button(getTranslation("inscription.closedialog"));
-                                closeButton.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
+                                closeButton.getStyle().set(CssUtils.COLOR, CssUtils.BTN_COLOR);
                                 headerDialog.add(titreDialog);
                                 dialogLayout.add(headerDialog);
                                 dialogLayout.add(notesLayout);
@@ -644,13 +638,13 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                                 if (windowWidth <= 800) {
                                     smallGrid = true;
                                     HorizontalLayout footerDialog = new HorizontalLayout();
-                                    footerDialog.getStyle().set(CSSColorUtils.MARGIN_TOP, CSSColorUtils.VAR_LUMO_SPACE_L);
+                                    footerDialog.getStyle().set(CssUtils.MARGIN_TOP, CssUtils.VAR_LUMO_SPACE_L);
                                     footerDialog.add(closeButton);
-                                    closeButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                                    closeButton.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
                                     dialogLayout.add(footerDialog);
                                     notesDialog.setSizeFull();
                                 } else {
-                                    notesDialog.setHeight(CSSColorUtils.AUTO);
+                                    notesDialog.setHeight(CssUtils.AUTO);
                                     notesDialog.setDraggable(true);
                                     headerDialog.add(closeButton);
                                 }
@@ -670,19 +664,19 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                         listButtonNotes.add(notesButton);
                     }
 
-                    //Layout des boutons concernant le cursus et les notes
+                    // Layout des boutons concernant le cursus et les notes
                     FlexLayout buttonLayout2 = new FlexLayout();
                     buttonLayout2.setWidthFull();
-                    buttonLayout2.getStyle().set(CSSColorUtils.PADDING, "0");
-                    buttonLayout2.getStyle().set("padding-top", "1em");
-                    buttonLayout2.getStyle().set(CSSColorUtils.BORDER_TOP, CSSColorUtils.SOLID_LIGHTGRAY);
-                    buttonLayout2.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                    buttonLayout2.getStyle().set(CssUtils.PADDING, "0");
+                    buttonLayout2.getStyle().set(CssUtils.PADDING_TOP, CssUtils.EM);
+                    buttonLayout2.getStyle().set(CssUtils.BORDER_TOP, CssUtils.SOLID_LIGHTGRAY);
+                    buttonLayout2.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
                     Div cursusBtnDiv = new Div();
-                    cursusBtnDiv.getStyle().set(CSSColorUtils.PADDING, "0.3em 1em 0.3em 1em");
-                    cursusBtnDiv.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                    cursusBtnDiv.getStyle().set(CssUtils.PADDING, "0.3em 1em 0.3em 1em");
+                    cursusBtnDiv.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
                     Div notesBtnDiv = new Div();
-                    notesBtnDiv.getStyle().set(CSSColorUtils.PADDING, "0.3em 1em 0.3em 1em");
-                    notesBtnDiv.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                    notesBtnDiv.getStyle().set(CssUtils.PADDING, "0.3em 1em 0.3em 1em");
+                    notesBtnDiv.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
                     cursusBtnDiv.add(cursusButton);
                     notesBtnDiv.add(notesButton);
                     if (configController.isCursusActif()) {
@@ -692,26 +686,82 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                         buttonLayout2.add(notesBtnDiv);
                     }
                     verticalLayout.add(buttonLayout2);
-                    cursusButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-                    notesButton.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                    cursusButton.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+                    notesButton.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
                     buttonLayout2.setFlexWrap(FlexWrap.WRAP);
 
-
                     insCard.addAlt(verticalLayout);
-
                     insCard.displayAlt();
                     inscriptionsLayout.add(insCard);
                 }
             }
+            updateStyle();
+        } else {
+            inscriptionsLayout.add(new NativeLabel(getTranslation("inscription.aucune")));
         }
-        updateStyle();
     }
 
+    private Button getNewDisplayButton(Icon icon) {
+        Button b = new Button("", icon);
+        b.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+        b.getStyle().set(CssUtils.COLOR, CssUtils.BTN_COLOR);
+        b.getStyle().set(CssUtils.BACKGROUND, CssUtils.NONE);
+        return b;
+    }
 
-    private void setAnchorStyle(Anchor anchor) {
-        anchor.setMinWidth("15em");
-        anchor.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-        anchor.getStyle().set(CSSColorUtils.PADDING, "1em");
+    private void setDownloadButton(Anchor downloadAnchor, Button downloadButton) {
+        downloadButton.setIcon(VaadinIcon.FILE_TEXT_O.create());
+        downloadButton.getStyle().set(CssUtils.BACKGROUND_COLOR, CssUtils.BTN_COLOR);
+        downloadButton.getStyle().set(CssUtils.COLOR, CssUtils.WHITE);
+        downloadAnchor.getElement().getStyle().set(CssUtils.MARGIN_LEFT, CssUtils.EM);
+        downloadAnchor.getElement().setAttribute("download", true);
+        downloadAnchor.setTarget("_blank");
+        downloadAnchor.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+        downloadAnchor.add(downloadButton);
+    }
+
+    private void showNotification(String message) {
+        Notification notification = new Notification();
+        notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+        Div text = new Div(new Text(message));
+        Button closeButton = new Button(new Icon("lumo", "cross"));
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        closeButton.setAriaLabel("Close");
+        closeButton.addClickListener(event -> {
+            notification.close();
+        });
+        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+        layout.setAlignItems(Alignment.CENTER);
+        notification.setPosition(Position.MIDDLE);
+        notification.add(layout);
+        notification.open();
+    }
+
+    private void createRelevesDialog(Dialog relevesDialog, String codeApprenant, String chemin, String periode) {
+        relevesDialog.removeAll();
+        FlexLayout dialogLayout = new FlexLayout();
+        dialogLayout.setFlexDirection(FlexDirection.COLUMN);
+        dialogLayout.setHeightFull();
+        VerticalLayout relevesLayout = new VerticalLayout();
+        relevesLayout.setPadding(false);
+        HorizontalLayout headerDialog = new HorizontalLayout();
+        NativeLabel titreDialog = new NativeLabel(getTranslation("releves.title"));
+        titreDialog.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+        titreDialog.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_COLOR);
+        Button closeButton = new Button(getTranslation("releves.closedialog"));
+        closeButton.getStyle().set(CssUtils.COLOR, CssUtils.BTN_COLOR);
+        headerDialog.add(titreDialog);
+        dialogLayout.add(headerDialog);
+
+        dialogLayout.add(relevesLayout);
+        relevesDialog.add(dialogLayout);
+        relevesDialog.setHeight(CssUtils.AUTO);
+        relevesDialog.setDraggable(true);
+        headerDialog.add(closeButton);
+        closeButton.addClickListener(cb -> relevesDialog.close());
+
+        // Mise à jour de l'affichage des relevés disponibles au téléchargement
+        displayReleves(codeApprenant, chemin, periode, titreDialog, relevesLayout);
     }
 
 
@@ -748,9 +798,54 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         cursusLayout.add(arbo);
     }
 
+    private void displayReleves(String codeApprenant, String codeChemin, String codePeriode, NativeLabel titreDialog, VerticalLayout relevesLayout) {
+        log.info("Récupération des releves pour {} ({}) sur {}", codeApprenant, codePeriode, codeChemin);
+
+        // Récupération des notes
+        List<ReleveDeNotePublie> listReleves = pegaseController.getListeReleves(codeApprenant, codeChemin, codePeriode);
+
+        if (listReleves != null && !listReleves.isEmpty()) {
+            relevesLayout.getStyle().set("margin-top", CssUtils.VAR_LUMO_SPACE_L);
+            listReleves.forEach(rnp -> relevesLayout.add(getLayoutReleve(codeApprenant, codeChemin, rnp)));
+        } else {
+            titreDialog.setText(getTranslation("inscription.releve.aucun"));
+        }
+    }
+
+    private Component getLayoutReleve(String codeApprenant, String codeChemin, ReleveDeNotePublie rnp) {
+        log.info("Relevé {} ({}) disponible",rnp.getLibelleAffichageMDW(), rnp.getDescription() );
+        FlexLayout releveLayout = new FlexLayout();
+        VerticalLayout infoLayout = new VerticalLayout();
+        NativeLabel labLib = new NativeLabel(rnp.getLibelleAffichageMDW());
+        labLib.getStyle().setMargin(CssUtils.AUTO);
+        infoLayout.add(labLib);
+
+        if(StringUtils.hasText(rnp.getDescription())) {
+            NativeLabel labDesc = new NativeLabel(rnp.getDescription());
+            labDesc.getStyle().setMargin(CssUtils.AUTO);
+            infoLayout.add(labDesc);
+        }
+
+        Anchor exportReleveAnchor = new Anchor();
+        // Ajout bouton certificat de scolarité
+        Button releveButton = new Button("");
+        setDownloadButton(exportReleveAnchor, releveButton);
+        exportReleveAnchor.setHref(new StreamResource(CERT_FILE_NAME + "-" + LocalDateTime.now() + CERT_FILE_EXT,
+                () -> exportService.getReleveDeNotes(codeApprenant, codeChemin, rnp.getUuid())));
+        // Ajout à la liste des boutons
+        listButtonReleve.add(releveButton);
+        releveButton.getStyle().setMaxWidth("3em");
+        releveLayout.getStyle().setMargin(CssUtils.AUTO);
+        exportReleveAnchor.getStyle().setMargin(CssUtils.AUTO);
+
+        releveLayout.add(infoLayout);
+        releveLayout.add(exportReleveAnchor);
+
+        return releveLayout;
+    }
 
     private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout, boolean smallGrid) {
-        log.info("Récupération des notes pour {} sur {}", codeApprenant, codeChemin);
+        log.info("Récupération des notes pour {} ({}) sur {}", codeApprenant, codePeriode, codeChemin);
 
         // Récupération des notes
         List<CheminDTO> listObj = pegaseController.getNotes(codeApprenant, codeChemin, codePeriode, avecControle);
@@ -789,7 +884,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         l.setWidthFull();
 
         NativeLabel libLabel = new NativeLabel(o.getLibelle());
-        libLabel.getStyle().set(CSSColorUtils.WHITE_SPACE, "normal");
+        libLabel.getStyle().set(CssUtils.WHITE_SPACE, "normal");
         l.add(libLabel);
         l.setFlexGrow(1, libLabel);
 
@@ -797,7 +892,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         // Si non obligatoire
         if (facItalique.booleanValue() && o.getObjet() != null && o.getObjet().getEstObligatoire() != null && !o.getObjet().getEstObligatoire().booleanValue()) {
             // Le libellé est en italic
-            libLabel.getStyle().set(CSSColorUtils.FONT_STYLE, CSSColorUtils.ITALIC);
+            libLabel.getStyle().set(CssUtils.FONT_STYLE, CssUtils.ITALIC);
         }
 
         return l;
@@ -815,27 +910,27 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         // Si facultatif
         if (o != null && o.getObjet() != null && o.getObjet().getEstObligatoire() != null && !o.getObjet().getEstObligatoire().booleanValue()) {
             Button bFacultatif = new Button(VaadinIcon.FUNCTION.create());
-            bFacultatif.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
-            bFacultatif.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
-            bFacultatif.setHeight(CSSColorUtils.EM_1_5);
+            bFacultatif.getStyle().set(CssUtils.COLOR, CssUtils.BTN_COLOR);
+            bFacultatif.getStyle().set(CssUtils.MARGIN_RIGHT, CssUtils.EM_0_5);
+            bFacultatif.setHeight(CssUtils.EM_1_5);
             bFacultatif.addClickListener(e -> showInfoDialog(getTranslation("inscription.element.facultatif")));
             l.add(bFacultatif);
         }
 
         if (o != null && o.getAcquis() != null && o.getAcquis().booleanValue()) {
             Button bAcquis = new Button(VaadinIcon.CHECK.create());
-            bAcquis.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
-            bAcquis.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
-            bAcquis.setHeight(CSSColorUtils.EM_1_5);
+            bAcquis.getStyle().set(CssUtils.COLOR, CssUtils.BTN_COLOR);
+            bAcquis.getStyle().set(CssUtils.MARGIN_RIGHT, CssUtils.EM_0_5);
+            bAcquis.setHeight(CssUtils.EM_1_5);
             bAcquis.addClickListener(e -> showInfoDialog(getTranslation("inscription.element.acquis")));
             l.add(bAcquis);
         }
         // Si il y a des aménagements
         if (o != null && o.getObjet() != null && o.getObjet().getAmenagements() != null && !o.getObjet().getAmenagements().isEmpty()) {
             Button bAmenagement = new Button(VaadinIcon.INFO_CIRCLE_O.create());
-            bAmenagement.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.BTN_COLOR);
-            bAmenagement.setHeight(CSSColorUtils.EM_1_5);
-            bAmenagement.getStyle().set(CSSColorUtils.MARGIN_RIGHT, CSSColorUtils.EM_0_5);
+            bAmenagement.getStyle().set(CssUtils.COLOR, CssUtils.BTN_COLOR);
+            bAmenagement.setHeight(CssUtils.EM_1_5);
+            bAmenagement.getStyle().set(CssUtils.MARGIN_RIGHT, CssUtils.EM_0_5);
             bAmenagement.addClickListener(e -> showDetailAmenagementDialog(o.getObjet().getAmenagements()));
             l.add(bAmenagement);
         }
@@ -852,7 +947,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         HorizontalLayout hl = new HorizontalLayout();
         hl.setWidthFull();
         NativeLabel libAmenagements = new NativeLabel(info);
-        libAmenagements.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
+        libAmenagements.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
         hl.add(libAmenagements);
         hl.add(libAmenagements);
         dialLayout.add(hl);
@@ -868,17 +963,15 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         Dialog resultDialog = new Dialog();
         VerticalLayout dialLayout = new VerticalLayout();
         NativeLabel formationLabel = new NativeLabel(getTranslation("inscription.element.amenagement"));
-        formationLabel.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-        formationLabel.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
+        formationLabel.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+        formationLabel.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_COLOR);
         dialLayout.add(formationLabel);
-
 
         for (AmenagementDCA amenagement : amenagements) {
             HorizontalLayout hl = new HorizontalLayout();
             hl.setWidthFull();
             NativeLabel libAmenagements = new NativeLabel(amenagement.getLibelleAffichage());
-            libAmenagements.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
-            hl.add(libAmenagements);
+            libAmenagements.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
             hl.add(libAmenagements);
             dialLayout.add(hl);
         }
@@ -898,7 +991,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
 
         Div libLabel = new Div();
         libLabel.setText(o.getLibelle());
-        libLabel.getStyle().set(CSSColorUtils.WHITE_SPACE, "normal");
+        libLabel.getStyle().set(CssUtils.WHITE_SPACE, "normal");
         l.add(libLabel);
         l.setFlexGrow(1, libLabel);
 
@@ -964,9 +1057,9 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     private Component getAucunResultat() {
         Div aucunResultat = new Div();
         aucunResultat.setText(getTranslation("notes.aucune"));
-        aucunResultat.getStyle().set(CSSColorUtils.FONT_STYLE, CSSColorUtils.ITALIC);
+        aucunResultat.getStyle().set(CssUtils.FONT_STYLE, CssUtils.ITALIC);
         aucunResultat.getStyle().set("font-size", "smaller");
-        aucunResultat.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+        aucunResultat.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
         return aucunResultat;
     }
 
@@ -977,10 +1070,10 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         VerticalLayout dialLayout = new VerticalLayout();
         NativeLabel formationLabel = new NativeLabel(o.getLibelle());
         NativeLabel formationLabelPere = new NativeLabel(o.getObjet().getObjetFeuille().getLibelleCourt());
-        formationLabel.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-        formationLabel.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
-        formationLabelPere.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
-        formationLabelPere.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.SECOND_COLOR);
+        formationLabel.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+        formationLabel.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_COLOR);
+        formationLabelPere.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+        formationLabelPere.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_COLOR);
         // Si c'est un contrôle
         if (o.getControle() != null) {
             // on affiche le libellé de l'élément parent
@@ -996,8 +1089,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 HorizontalLayout session1 = new HorizontalLayout();
                 session1.setWidthFull();
                 NativeLabel labelS1 = new NativeLabel(getTranslation("notes.session." + o.getControle().getNumeroSession()));
-                labelS1.getStyle().set(CSSColorUtils.WHITE_SPACE, CSSColorUtils.NOWRAP);
-                labelS1.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
+                labelS1.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
+                labelS1.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
                 session1.add(labelS1);
                 session1.add(controleLayout);
                 dialLayout.add(session1);
@@ -1017,7 +1110,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 HorizontalLayout hl = new HorizontalLayout();
                 hl.setWidthFull();
                 NativeLabel libCoeffLabel = new NativeLabel(getTranslation("notes.coeff"));
-                libCoeffLabel.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
+                libCoeffLabel.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
                 hl.add(libCoeffLabel);
                 NativeLabel coeffLabel = new NativeLabel(Utils.displayBigDecimal(coeff));
                 coeffLabel.setWidthFull();
@@ -1030,7 +1123,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 HorizontalLayout hl = new HorizontalLayout();
                 hl.setWidthFull();
                 NativeLabel libECTSLabel = new NativeLabel(getTranslation("notes.ects"));
-                libECTSLabel.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
+                libECTSLabel.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
                 hl.add(libECTSLabel);
                 NativeLabel ectsLabel = new NativeLabel(Utils.displayBigDecimal(o.getObjet().getCreditsEctsFinaux()));
                 ectsLabel.setWidthFull();
@@ -1046,8 +1139,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 HorizontalLayout session1 = new HorizontalLayout();
                 session1.setWidthFull();
                 NativeLabel labelS1 = new NativeLabel(getTranslation("notes.session.1"));
-                labelS1.getStyle().set(CSSColorUtils.WHITE_SPACE, CSSColorUtils.NOWRAP);
-                labelS1.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
+                labelS1.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
+                labelS1.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
                 session1.add(labelS1);
                 session1.add(s1);
                 dialLayout.add(session1);
@@ -1058,8 +1151,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 HorizontalLayout session2 = new HorizontalLayout();
                 session2.setWidthFull();
                 NativeLabel labelS2 = new NativeLabel(getTranslation("notes.session.2"));
-                labelS2.getStyle().set(CSSColorUtils.WHITE_SPACE, CSSColorUtils.NOWRAP);
-                labelS2.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
+                labelS2.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
+                labelS2.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
                 session2.add(labelS2);
                 session2.add(s2);
                 dialLayout.add(session2);
@@ -1071,7 +1164,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 HorizontalLayout sessionFinale = new HorizontalLayout();
                 sessionFinale.setWidthFull();
                 NativeLabel labelSF = new NativeLabel(getTranslation("notes.session.finale"));
-                labelSF.getStyle().set(CSSColorUtils.FONT_WEIGHT, "bold");
+                labelSF.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
                 sessionFinale.add(labelSF);
                 sessionFinale.add(sf);
                 dialLayout.add(sessionFinale);
@@ -1084,8 +1177,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 aucunResLayout.setWidthFull();
                 Div aucunResDiv = new Div();
                 aucunResDiv.setText(getTranslation("notes.aucune"));
-                aucunResDiv.getStyle().set(CSSColorUtils.FONT_STYLE, CSSColorUtils.ITALIC);
-                aucunResDiv.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+                aucunResDiv.getStyle().set(CssUtils.FONT_STYLE, CssUtils.ITALIC);
+                aucunResDiv.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
                 aucunResLayout.add(aucunResDiv);
                 dialLayout.add(aucunResLayout);
             }
@@ -1095,7 +1188,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 concerneSession2Layout.setWidthFull();
                 Div concerneSession2Div = new Div();
                 concerneSession2Div.setText(getTranslation("notes.concerne.session2"));
-                concerneSession2Div.getStyle().set(CSSColorUtils.FONT_STYLE, CSSColorUtils.ITALIC);
+                concerneSession2Div.getStyle().set(CssUtils.FONT_STYLE, CssUtils.ITALIC);
                 concerneSession2Layout.add(concerneSession2Div);
                 dialLayout.add(concerneSession2Layout);
             }
@@ -1148,7 +1241,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 l.add(createLabelResult(compact ? o.getControle().getResultat().getLibelleCourt() : o.getControle().getResultat().getLibelleAffichage()));
             }
         }
-        l.getStyle().set(CSSColorUtils.FLEW_FLOW, CSSColorUtils.ROW_WRAP);
+        l.getStyle().set(CssUtils.FLEW_FLOW, CssUtils.ROW_WRAP);
         return l;
     }
 
@@ -1173,8 +1266,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 l.add(createLabelResult(compact ? o.getObjet().getResultatSession1().getLibelleCourt() : o.getObjet().getResultatSession1().getLibelleAffichage()));
             }
         }
-        l.getStyle().set(CSSColorUtils.FLEW_FLOW, CSSColorUtils.ROW_WRAP);
-        l.getStyle().set(CSSColorUtils.FLEX_DIRECTION, CSSColorUtils.COLUMN);
+        l.getStyle().set(CssUtils.FLEW_FLOW, CssUtils.ROW_WRAP);
+        l.getStyle().set(CssUtils.FLEX_DIRECTION, CssUtils.COLUMN);
 
         if (l.getComponentCount() > 0) {
             return l;
@@ -1200,9 +1293,9 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             l.add(createLabelResult(compact ? getTranslation("inscription.element.capitalise.court") : getTranslation("inscription.element.capitalise.long")));
         }
 
-        l.getStyle().set(CSSColorUtils.FLEW_FLOW, CSSColorUtils.ROW_WRAP);
-        l.getStyle().set(CSSColorUtils.FLEX_DIRECTION, CSSColorUtils.COLUMN);
-        l.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO);
+        l.getStyle().set(CssUtils.FLEW_FLOW, CssUtils.ROW_WRAP);
+        l.getStyle().set(CssUtils.FLEX_DIRECTION, CssUtils.COLUMN);
+        l.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
 
         if (l.getComponentCount() > 0) {
             return l;
@@ -1229,17 +1322,10 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             if (o.getObjet().getResultatSession2() != null) {
                 l.add(createLabelResult(compact ? o.getObjet().getResultatSession2().getLibelleCourt() : o.getObjet().getResultatSession2().getLibelleAffichage()));
             }
-        } else {
-            // test aléatoire session 2
-            /*
-            if (Math.random() > 0.5) {
-                l.add(createLabelNote(20, new BigDecimal(10), null, false));
-                l.add(createLabelResult("ADM"));
-            }*/
         }
 
-        l.getStyle().set(CSSColorUtils.FLEW_FLOW, CSSColorUtils.ROW_WRAP);
-        l.getStyle().set(CSSColorUtils.FLEX_DIRECTION, CSSColorUtils.COLUMN);
+        l.getStyle().set(CssUtils.FLEW_FLOW, CssUtils.ROW_WRAP);
+        l.getStyle().set(CssUtils.FLEX_DIRECTION, CssUtils.COLUMN);
 
         if (l.getComponentCount() > 0) {
             return l;
@@ -1268,8 +1354,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             }
         }
 
-        l.getStyle().set(CSSColorUtils.FLEW_FLOW, CSSColorUtils.ROW_WRAP);
-        l.getStyle().set(CSSColorUtils.FLEX_DIRECTION, CSSColorUtils.COLUMN);
+        l.getStyle().set(CssUtils.FLEW_FLOW, CssUtils.ROW_WRAP);
+        l.getStyle().set(CssUtils.FLEX_DIRECTION, CssUtils.COLUMN);
 
         if (l.getComponentCount() > 0) {
             return l;
@@ -1279,11 +1365,11 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
 
     private Component createLabelNote(Integer bareme, BigDecimal note, Absence absence, boolean compact) {
         Div result = new Div();
-        result.setHeight(CSSColorUtils.EM_1_5);
+        result.setHeight(CssUtils.EM_1_5);
         if (compact) {
             result.setWidth("5em");
         }
-        result.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO_1EM);
+        result.getStyle().set(CssUtils.MARGIN, CssUtils.EM_AUTO);
         if (note != null) {
             result.setText(Utils.displayNote(note, bareme, avecBareme));
         } else {
@@ -1297,13 +1383,13 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
 
     private Component createLabelResult(String libCourt) {
         Div result = new Div();
-        result.setHeight(CSSColorUtils.EM_1_5);
-        result.getStyle().set(CSSColorUtils.MARGIN, CSSColorUtils.AUTO_1EM);
-        result.getStyle().set(CSSColorUtils.BACKGROUND_COLOR, CSSColorUtils.SECOND_COLOR);
-        result.getStyle().set(CSSColorUtils.COLOR, CSSColorUtils.WHITE);
-        result.getStyle().set(CSSColorUtils.PADDING_LEFT, CSSColorUtils.EM_0_5);
-        result.getStyle().set(CSSColorUtils.PADDING_RIGHT, CSSColorUtils.EM_0_5);
-        result.getStyle().set(CSSColorUtils.BORDER_RADIUS, "0.7em");
+        result.setHeight(CssUtils.EM_1_5);
+        result.getStyle().set(CssUtils.MARGIN, CssUtils.EM_AUTO);
+        result.getStyle().set(CssUtils.BACKGROUND_COLOR, CssUtils.SECOND_COLOR);
+        result.getStyle().set(CssUtils.COLOR, CssUtils.WHITE);
+        result.getStyle().set(CssUtils.PADDING_LEFT, CssUtils.EM_0_5);
+        result.getStyle().set(CssUtils.PADDING_RIGHT, CssUtils.EM_0_5);
+        result.getStyle().set(CssUtils.BORDER_RADIUS, "0.7em");
 
         if (StringUtils.hasText(libCourt)) {
             result.setText(libCourt);

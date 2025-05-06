@@ -18,7 +18,7 @@
  */
 package fr.univlorraine.mondossierweb.ui.layout;
 
-import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
 
 public interface ApprenantView {
     void updateData(ApprenantEtInscriptions dossier);

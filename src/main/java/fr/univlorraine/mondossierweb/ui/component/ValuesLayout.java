@@ -22,7 +22,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -42,7 +42,7 @@ public class ValuesLayout extends VerticalLayout {
     public ValuesLayout(String id, String titre) {
         super();
         setId(id);
-        this.getStyle().set(CSSColorUtils.PADDING, "0");
+        this.getStyle().set(CssUtils.PADDING, "0");
 
         if(titre != null) {
             add(new NativeLabel(titre));

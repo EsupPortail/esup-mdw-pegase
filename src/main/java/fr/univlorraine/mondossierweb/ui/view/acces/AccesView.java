@@ -29,13 +29,17 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
-import fr.univlorraine.mondossierweb.ui.layout.*;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.ui.layout.HasCodeApprenantUrlParameterView;
+import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
+import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
+import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
+import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
-import fr.univlorraine.pegase.model.insext.Apprenant;
-import fr.univlorraine.pegase.model.insext.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.insext.model.Apprenant;
+import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -73,6 +77,8 @@ public class AccesView extends HasCodeApprenantUrlParameterView implements HasDy
 	private void init() {
 		setSizeFull();
 		addClassName("view");
+		getStyle().set("padding","0");
+		errorLabel.getStyle().set("padding", "1em");
 		initBac();
 		initAnnees();
 		parcoursLayout.setWidthFull();
@@ -84,7 +90,7 @@ public class AccesView extends HasCodeApprenantUrlParameterView implements HasDy
 
 	private void initBac() {
 		FormLayout bacLayout = new FormLayout();
-		bacLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+		bacLayout.getStyle().set(CssUtils.MARGIN, "0");
 		bacCard.add(bacLayout);
 
 		bacLayout.add(codeIneBac);
@@ -111,7 +117,7 @@ public class AccesView extends HasCodeApprenantUrlParameterView implements HasDy
 	private void initAnnees() {
 
 		FormLayout anneesLayout = new FormLayout();
-		anneesLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+		anneesLayout.getStyle().set(CssUtils.MARGIN, "0");
 		anneesCard.add(anneesLayout);
 		
 		anneesLayout.add(anneeSupFr);

@@ -22,13 +22,13 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
-import fr.univlorraine.pegase.model.chc.CursusDCA;
-import fr.univlorraine.pegase.model.chc.LignePedagogiqueDCA;
-import fr.univlorraine.pegase.model.coc.Chemin;
-import fr.univlorraine.pegase.model.coc.Controle;
-import fr.univlorraine.pegase.model.insext.CibleInscription;
-import fr.univlorraine.pegase.model.insext.InscriptionComplete;
-import fr.univlorraine.pegase.model.insext.ObjetFormationOuGroupement;
+import fr.univlorraine.pegase.chc.model.CursusDCA;
+import fr.univlorraine.pegase.chc.model.LignePedagogiqueDCA;
+import fr.univlorraine.pegase.coc.model.Chemin;
+import fr.univlorraine.pegase.coc.model.Controle;
+import fr.univlorraine.pegase.insext.model.CibleInscription;
+import fr.univlorraine.pegase.insext.model.InscriptionComplete;
+import fr.univlorraine.pegase.insext.model.ObjetFormationOuGroupement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -377,10 +377,13 @@ public final class Utils {
 		// la racine est le code de la formation
 		StringBuilder chemin = new StringBuilder();
 		chemin.append(cible.getFormation().getCode());
-		if(cible.getChemin()!=null && !cible.getChemin().isEmpty()) {
+		if(cible.getChemin() != null && !cible.getChemin().isEmpty()) {
 			for(ObjetFormationOuGroupement c : cible.getChemin()) {
+				if(!chemin.isEmpty()) {
+					chemin.append(SEPARATEUR_CHEMIN);
+				}
 				// Ajout des éléments au chemin
-				chemin.append(SEPARATEUR_CHEMIN + c.getCode());
+				chemin.append(c.getCode());
 			}
 		}
 		log.debug("Chemin : {} pour Cible {} {}", chemin, cible.getFormation(), cible.getChemin());

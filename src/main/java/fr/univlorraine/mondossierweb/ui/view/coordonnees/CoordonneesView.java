@@ -33,12 +33,22 @@ import fr.univlorraine.mondossierweb.services.CasService;
 import fr.univlorraine.mondossierweb.services.SecurityService;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
-import fr.univlorraine.mondossierweb.ui.layout.*;
-import fr.univlorraine.mondossierweb.utils.CSSColorUtils;
+import fr.univlorraine.mondossierweb.ui.layout.HasCodeApprenantUrlParameterView;
+import fr.univlorraine.mondossierweb.ui.layout.HasHeader;
+import fr.univlorraine.mondossierweb.ui.layout.MainLayout;
+import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
+import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
+import fr.univlorraine.mondossierweb.utils.CssUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
-import fr.univlorraine.pegase.model.insext.*;
+import fr.univlorraine.pegase.insext.model.Apprenant;
+import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
+import fr.univlorraine.pegase.insext.model.ContactAdresseComplet;
+import fr.univlorraine.pegase.insext.model.ContactComplet;
+import fr.univlorraine.pegase.insext.model.ContactMelComplet;
+import fr.univlorraine.pegase.insext.model.ContactTelephoneComplet;
+import fr.univlorraine.pegase.insext.model.DemandeDeContactSimple;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -110,6 +120,8 @@ public class CoordonneesView extends HasCodeApprenantUrlParameterView implements
 		
 		setSizeFull();
 		addClassName("view");
+		getStyle().set("padding","0");
+		errorLabel.getStyle().set("padding", "1em");
 		
 		coordPersoLayout.setWidthFull();
 		coordPersoLayout.getStyle().set("max-width", "52em");
@@ -322,7 +334,7 @@ public class CoordonneesView extends HasCodeApprenantUrlParameterView implements
 		}
 
 		FormLayout contactLayout = new FormLayout();
-		contactLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+		contactLayout.getStyle().set(CssUtils.MARGIN, "0");
 		contacts.addAlt(contactLayout);
 
 		TextLabel contact=new TextLabel();
@@ -342,7 +354,7 @@ public class CoordonneesView extends HasCodeApprenantUrlParameterView implements
 		}
 
 		FormLayout contactLayout = new FormLayout();
-		contactLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+		contactLayout.getStyle().set(CssUtils.MARGIN, "0");
 		contactsUrgence.addAlt(contactLayout);
 
 		TextLabel contact=new TextLabel();
@@ -376,7 +388,7 @@ public class CoordonneesView extends HasCodeApprenantUrlParameterView implements
 		adresseCard.getTitre().setText(cac.getDemandeDeContact().getLibelleAffichage());
 
 		FormLayout adresseLayout = new FormLayout();
-		adresseLayout.getStyle().set(CSSColorUtils.MARGIN, "0");
+		adresseLayout.getStyle().set(CssUtils.MARGIN, "0");
 		adresseCard.addAlt(adresseLayout);
 
 		TextLabel nomAdresse=new TextLabel();

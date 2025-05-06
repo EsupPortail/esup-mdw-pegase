@@ -19,13 +19,10 @@
 package fr.univlorraine.mondossierweb.utils;
 
 
-
-import org.springframework.util.StringUtils;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;
-
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
+import org.springframework.util.StringUtils;
 
 /**
  * Outils pour la gestion des préférences de l'application
@@ -38,13 +35,13 @@ public final class CmpUtils {
 	}
 
 	public static void formatTextField(TextField tf) {
-		tf.getStyle().set(CSSColorUtils.MARGIN, "0em");
+		tf.getStyle().set(CssUtils.MARGIN, "0em");
 	}
 	
 	public static void formatTextLabel(TextLabel tl) {
-		tl.getStyle().set(CSSColorUtils.MARGIN, "0em");
+		tl.getStyle().set(CssUtils.MARGIN, "0em");
 		CmpUtils.deleteGap(tl);
-		tl.getStyle().set(CSSColorUtils.MARGIN_TOP, "var(--lumo-space-m)");
+		tl.getStyle().set(CssUtils.MARGIN_TOP, "var(--lumo-space-m)");
 	}
 	
 	public static void setLongTextField(TextField tf) {
