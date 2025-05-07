@@ -341,8 +341,9 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     // STATUT PIECES JUSTIFICATIVES
                     TextLabel pieces = new TextLabel();
                     pieces.setVisible(false);
-                    if (inscription.getStatutPieces() != null) {
-                        CmpUtils.valueAndVisibleIfNotNull(pieces, formatEtat(inscription.getStatutPieces().getValue()));
+                    String statutPieces = pegaseController.getStatutPieces(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription));
+                    if (StringUtils.hasText(statutPieces)) {
+                        CmpUtils.valueAndVisibleIfNotNull(pieces, formatEtat(statutPieces));
                     }
                     CmpUtils.deleteGap(pieces);
                     listTextLabelPieces.add(pieces);

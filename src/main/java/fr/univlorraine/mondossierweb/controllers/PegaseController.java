@@ -23,6 +23,7 @@ import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.coc.model.ReleveDeNotePublie;
+import fr.univlorraine.pegase.pieceext.model.StatutGlobalPieceParInscription;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -103,4 +104,16 @@ public class PegaseController {
 		// Récupération des notes
 		return pegaseService.getListeReleves(codeApprenant, codePeriode,codeCheminCoc);
 	}
+
+    public String getStatutPieces(String codeApprenant, String codeChemin, String codePeriode) {
+		log.info("Récupération du statut des pieces dans Pégase");
+		List<StatutGlobalPieceParInscription> listeStatuts = pegaseService.getStatutPiece(codeApprenant, codeChemin, codePeriode);
+		if (listeStatuts != null && !listeStatuts.isEmpty()) {
+			StatutGlobalPieceParInscription statut = listeStatuts.get(0);
+			if (statut != null) {
+				return statut.getStatutGlobal().getValue();
+			}
+		}
+		return null;
+    }
 }
