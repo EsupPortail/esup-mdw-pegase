@@ -33,6 +33,8 @@ import fr.univlorraine.pegase.insext.api.InscriptionsApi;
 import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
 import fr.univlorraine.pegase.pai.api.PaiApi;
 import fr.univlorraine.pegase.pieceext.api.PiecesApi;
+import fr.univlorraine.pegase.pieceext.model.StatutGlobalPieceParInscription;
+import fr.univlorraine.pegase.pieceext.model.StatutGlobalPieceParInscriptionCommand;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -515,4 +518,39 @@ public class PegaseService implements Serializable {
 		return null;
 	}
 
+	public List<StatutGlobalPieceParInscription> getStatutPiece(String codeApprenant, String cible, String codePeriode) {
+
+		log.info("recuperePhoto codeApprenant : {} - cible : {} - periode : {}", codeApprenant, cible, codePeriode);
+
+		// Si les paramètres nécessaires sont valués
+		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)
+				&& StringUtils.hasText(cible)) {
+			// Maj du token pour récupérer le dernier token valide
+			apiPieceExt.getApiClient().setBearerToken(accessTokenService.getToken());
+			try {
+				List<StatutGlobalPieceParInscriptionCommand> listparam = new ArrayList<>();
+				StatutGlobalPieceParInscriptionCommand param = new StatutGlobalPieceParInscriptionCommand();
+				param.setCodeApprenant(codeApprenant);
+				param.setCodeChemin(cible);
+				param.setCodePeriode(codePeriode);
+				param.setSourceInscription(StatutGlobalPieceParInscriptionCommand.SourceInscriptionEnum.GESTION);
+				listparam.add(param);
+				// Appel de l'API Pégase
+				List<StatutGlobalPieceParInscription> statuts = apiPieceExt.listerStatutGlobalPieceParInscription(etablissement, listparam);
+
+				if(statuts != null) {
+					log.info("Statuts des pieces recupere pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
+				} else {
+					log.info("Anomalie lors de l'appel à la methode API : listerStatutGlobalPieceParInscription pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
+				}
+				return statuts;
+			} catch (fr.univlorraine.pegase.pieceext.invoker.ApiException e) {
+				// Erreur lors de la récupération de la photo. Un simple warning
+				log.warn("Erreur (getStatutPiece) lors de l'appel à la methode API : listerStatutGlobalPieceParInscription pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {} => ({}) message: {} body : {}", codeApprenant, etablissement, cible, codePeriode, e.getCode(), e.getMessage(),e.getResponseBody());
+			} catch (RuntimeException rex) {
+				log.error("Erreur (getStatutPiece) lors de l'appel à la methode API : listerStatutGlobalPieceParInscription pour le code apprenant : {} et etablissement : {}  et cible {} et codePeriode {} => ",codeApprenant, etablissement, cible, codePeriode, rex);
+			}
+		}
+		return null;
+	}
 }
