@@ -533,7 +533,7 @@ public class PegaseService implements Serializable {
 				param.setCodeApprenant(codeApprenant);
 				param.setCodeChemin(cible);
 				param.setCodePeriode(codePeriode);
-				param.setSourceInscription(StatutGlobalPieceParInscriptionCommand.SourceInscriptionEnum.ADM);
+				param.setSourceInscription(StatutGlobalPieceParInscriptionCommand.SourceInscriptionEnum.GESTION);
 				listparam.add(param);
 				// Appel de l'API Pégase
 				List<StatutGlobalPieceParInscription> statuts = apiPieceExt.listerStatutGlobalPieceParInscription(etablissement, listparam);
