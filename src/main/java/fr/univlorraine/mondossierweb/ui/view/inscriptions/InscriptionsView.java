@@ -909,7 +909,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         l.setFlexWrap(FlexWrap.WRAP);
 
         // Si facultatif
-        if (o != null && o.getObjet() != null && o.getObjet().getEstObligatoire() != null && !o.getObjet().getEstObligatoire().booleanValue()) {
+        if (configController.isAffichageCursusFacButton() && o != null && o.getObjet() != null && o.getObjet().getEstObligatoire() != null && !o.getObjet().getEstObligatoire().booleanValue()) {
             Button bFacultatif = new Button(VaadinIcon.FUNCTION.create());
             bFacultatif.getStyle().set(CssUtils.COLOR, CssUtils.BTN_COLOR);
             bFacultatif.getStyle().set(CssUtils.MARGIN_RIGHT, CssUtils.EM_0_5);
