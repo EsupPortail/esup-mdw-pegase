@@ -378,9 +378,10 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			buttonTester.addClickListener(e -> {
 				// Maj des paramètres depuis la BDD
 				pegaseService.refreshParameters();
+				UUID uuidApprenant = null;
 				try {
 					// teste api IDT
-					UUID uuidApprenant = pegaseService.getUidApprenant(pegaseService.getCodeApprenantTest());
+					uuidApprenant = pegaseService.getUidApprenant(pegaseService.getCodeApprenantTest());
 					if(uuidApprenant != null) {
 						Utils.notifierSucces(getTranslation("api-idt.ok", pegaseService.getCodeApprenantTest()));
 					} else {
@@ -407,7 +408,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 						Utils.notifierAnomalie(getTranslation("api-piece-ext.error", pegaseService.getCodeApprenantTest()));
 					}
 				}catch(Exception ex) {
-					Utils.notifierAnomalie(getTranslation("api-ins-ext.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+					Utils.notifierAnomalie(getTranslation("api-piece-ext.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
 				try {
 					// teste api CHC
@@ -440,7 +441,21 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 				}catch(Exception ex) {
 					Utils.notifierAnomalie(getTranslation("api-pai.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
 				}
-
+				if (uuidApprenant == null) {
+					Utils.notifierAnomalie(getTranslation("api-ins.untestable", pegaseService.getCodeApprenantTest()));
+				} else {
+					try {
+						// teste api INS
+						File pdf = pegaseService.getCertificatDeScolarite(uuidApprenant, Utils.getCodeVoeu(pegaseService.getCodeCheminTest(), pegaseService.getCodePeriodeTest()));
+						if (pdf != null && StringUtils.hasText(pdf.getName()) && pdf.getName().endsWith(Utils.EXT_PDF)) {
+							Utils.notifierSucces(getTranslation("api-ins.ok", pegaseService.getCodeApprenantTest()));
+						} else {
+							Utils.notifierAnomalie(getTranslation("api-ins.error", pegaseService.getCodeApprenantTest()));
+						}
+					} catch (Exception ex) {
+						Utils.notifierAnomalie(getTranslation("api-ins.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+					}
+				}
 			});
 			layout.add(testButtonLayout);
 

@@ -125,9 +125,8 @@ public class ParametrageService implements Serializable {
 		if(favicon != null) {
 			ClassLoader classLoader = getClass().getClassLoader();
 			File outputFile = new File(classLoader.getResource(".").getFile() + "/static/" + name);
-			log.info("Ecriture du favicon dans {}", outputFile.getAbsolutePath());
 			try {
-				log.error("Ecriture du favicon dans {}", outputFile.getAbsolutePath());
+				log.info("Ecriture du favicon dans {}", outputFile.getAbsolutePath());
 				FileUtils.writeByteArrayToFile(outputFile, favicon);
 			} catch (IOException e) {
 				log.error("Erreur lors de l'écriture du favicon dans le répertoire ressources", e);
