@@ -36,121 +36,64 @@ import java.util.Map;
 public class ConfigController {
 	
 	private static final String ACCES_ETUDIANT_ACTIF = "ACCES_ETUDIANT_ACTIF";
-
 	private static final String ACCES_GESTIONNAIRE_ACTIF = "ACCES_GESTIONNAIRE_ACTIF";
-
 	private static final String NOTE_COEFF = "NOTE_COEFF";
-
 	private static final String NOTE_CONTROLE = "NOTE_CONTROLE";
-
 	private static final String NOTE_ECTS = "NOTE_ECTS";
-
 	private static final String ACCESSTOKEN_URL = "ACCESSTOKEN_URL";
-
 	private static final String ACCESSTOKEN_PASSWORD = "ACCESSTOKEN_PASSWORD";
-
 	private static final String ACCESSTOKEN_USERNAME = "ACCESSTOKEN_USERNAME";
-	
 	private static final String ACCESSTOKEN_DURATION = "ACCESSTOKEN_DURATION";
-
 	private static final String DOC_URL = "DOC_URL";
-
 	private static final String HELP_URL = "HELP_URL";
-
 	private static final String CAS_CODETU_ATTRIBUTE = "CAS_CODETU_ATTRIBUTE";
-
 	private static final String CAS_MAIL_ATTRIBUTE = "CAS_MAIL_ATTRIBUTE";
-	
 	private static final String UNIV_LOGO_IMG = "UNIV_LOGO_IMG";
-	
 	private static final String UNIV_FAVICON_32 = "UNIV_FAVICON_32";
-	
 	private static final String UNIV_FAVICON_16 = "UNIV_FAVICON_16";
-	
 	private static final String INSCRIPTION_DETAIL = "INSCRIPTION_DETAIL";
-
 	private static final String NOTE_BAREME = "NOTE_BAREME";
-	
 	private static final String CURSUS_FAC_ITALIQUE = "CURSUS_FAC_ITALIQUE";
-
+	private static final String CURSUS_FAC_BUTTON = "CURSUS_FAC_BUTTON";
 	private static final String INSCRIPTION_STATUTS = "INSCRIPTION_STATUTS";
-
 	private static final String CAS_DISPLAYNAME_ATTRIBUTE = "CAS_DISPLAYNAME_ATTRIBUTE";
-	
 	private static final String INFO_CONNEXION = "INFO_CONNEXION";
-	
 	private static final String INFO_CONNEXION_PREF = "INFO_CONNEXION_PREF";
-	
 	private static final String ETUDIANT_MAIL_CAS = "ETUDIANT_MAIL_CAS";
-	
 	private static final String ETUDIANT_RESUME = "ETUDIANT_RESUME";
-	
 	private static final String BTN_CERT = "BTN_CERT";
-	
 	private static final String BTN_ATTEST_PAI = "BTN_ATTEST_PAI";
-	
 	private static final String CTRL_ATTEST_PAI = "CTRL_ATTEST_PAI";
-	
 	private static final String BTN_CURSUS = "BTN_CURSUS";
-	
 	private static final String BTN_NOTES = "BTN_NOTES";
-
 	private static final String BTN_RELEVES = "BTN_RELEVES";
-	
 	private static final String SHOW_SQL = "SHOW_SQL";
-
 	private static final String PEGASE_ETAB = "PEGASE_ETAB";
-
 	private static final String PEGASE_API_INS_URL = "PEGASE_API_INS_URL";
-	
 	private static final String PEGASE_API_INS_EXT_URL = "PEGASE_API_INS_EXT_URL";
-
 	private static final String PEGASE_API_PIECE_EXT_URL = "PEGASE_API_PIECE_EXT_URL";
-	
 	private static final String PEGASE_API_CHC_URL = "PEGASE_API_CHC_URL";
-
 	private static final String PEGASE_API_COC_URL = "PEGASE_API_COC_URL";
-
 	private static final String PEGASE_API_PAI_URL = "PEGASE_API_PAI_URL";
-
 	private static final String PEGASE_API_IDT_URL = "PEGASE_API_IDT_URL";
-
 	private static final String PEGASE_DEMO_APPRENANT = "PEGASE_DEMO_APPRENANT";
-
 	private static final String PEGASE_TEST_PERIODE = "PEGASE_TEST_PERIODE";
-	
 	private static final String PEGASE_TEST_APPRENANT = "PEGASE_TEST_APPRENANT";
-	
 	private static final String PEGASE_TEST_CHEMIN = "PEGASE_TEST_CHEMIN";
-	
 	private static final String SMTP_HOST = "SMTP_HOST";
-	
 	private static final String SMTP_PORT = "SMTP_PORT";
-	
 	private static final String SMTP_USERNAME = "SMTP_USERNAME";
-	
 	private static final String SMTP_PASSWORD = "SMTP_PASSWORD";
-	
 	private static final String SMTP_FROM = "SMTP_FROM";
-	
 	private static final String LOG_MAIL_TO = "LOG_MAIL_TO";
-	
 	private static final String ADMINS = "ADMINS";
-
 	private static final String CSS_MAIN_COLOR = "CSS_MAIN_COLOR";
-	
 	private static final String CSS_SECOND_COLOR = "CSS_SECOND_COLOR";
-	
 	private static final String CSS_HEADER_CARD_SEP_COLOR = "CSS_HEADER_CARD_SEP_COLOR";
-	
 	private static final String CSS_TEXT_COLOR = "CSS_TEXT_COLOR";
-	
 	private static final String CSS_BTN_COLOR = "CSS_BTN_COLOR";
-	
 	private static final String CSS_BACKGROUND_COLOR = "CSS_BACKGROUND_COLOR";
-
 	private static final String CAS_FILTRE_ETUDIANT = "CAS_FILTRE_ETUDIANT";
-
 	private static final String CAS_FILTRE_GESTIONNAIRE = "CAS_FILTRE_GESTIONNAIRE";
 	
 
@@ -198,6 +141,7 @@ public class ConfigController {
 	public boolean isAffichageCursusFacItalique() {
 		return getBooleanValueForParameter(CURSUS_FAC_ITALIQUE);
 	}
+	public boolean isAffichageCursusFacButton() { return getBooleanValueForParameter(CURSUS_FAC_BUTTON);	}
 	public boolean isAffichageNoteBaremeActif() {
 		return getBooleanValueForParameter(NOTE_BAREME);
 	}
@@ -409,7 +353,5 @@ public class ConfigController {
 	private boolean getBooleanValueForParameter(String parametre){
 		return prefService.getBooleanValue(prefService.getPreferences(parametre));
 	}
-	
-
 
 }

@@ -65,6 +65,7 @@ public final class Utils {
 	public static final String HAUTEUR_LOGO = "34px";
 	public static final String EXT_PDF = ".pdf";
 	private static final String SEPARATEUR_CHEMIN = ">";
+	private static final String SEPARATEUR_CHEMIN_PERIODE = "@";
 
 	private Utils() {
 		throw new IllegalStateException("Utility class");
@@ -121,7 +122,12 @@ public final class Utils {
 	/** Retour le code voeu de l'inscription */
 	public static String getCodeVoeu(InscriptionComplete inscription) {
 		log.info("code chemin :"+getCodeChemin(inscription.getCible()));
-		return getCodeChemin(inscription.getCible())+"@"+inscription.getCible().getPeriode().getCode();
+		return getCodeChemin(inscription.getCible()) + SEPARATEUR_CHEMIN_PERIODE + inscription.getCible().getPeriode().getCode();
+	}
+
+	/** Retour le code voeu de l'inscription */
+	public static String getCodeVoeu(String codeChemin, String codePeriode) {
+		return codeChemin + SEPARATEUR_CHEMIN_PERIODE + codePeriode;
 	}
 
 	/** Converti une liste de ObjetMaquetteExtension en hiérarchie de ObjetMaquetteDTO */

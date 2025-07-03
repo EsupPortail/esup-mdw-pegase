@@ -502,10 +502,10 @@ public class PegaseService implements Serializable {
 
 		try {
 			// Appel de l'API Pégase
-			File certificat = apiPai.imprimerAttestationDePaiement(etablissement, codeApprenant, periode);
-			if(certificat != null ) {
-				log.info("attestationDePaiement OK :  {}", certificat.getName());
-				return certificat;
+			File attestationDePaiement = apiPai.imprimerAttestationDePaiement(etablissement, codeApprenant, periode);
+			if(attestationDePaiement != null ) {
+				log.info("attestationDePaiement OK :  {}", attestationDePaiement.getName());
+				return attestationDePaiement;
 			} else {
 				log.info("Anomalie lors de l'appel à la methode API : attestationDePaiement");
 			}
