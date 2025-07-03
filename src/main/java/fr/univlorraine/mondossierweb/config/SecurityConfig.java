@@ -59,10 +59,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
-	/** URL permettant de prendre le rôle d'un autre utilisateur. */
-	public static final String SWITCH_USER_URL = "/impersonate/login";
-	/** URL permettant de quitter le rôle d'un autre utilisateur. */
-	public static final String SWITCH_USER_EXIT_URL = "/impersonate/logout";
 	/** URL permettant de se déconnecter. */
 	public static final String LOGOUT_URL = "/logout";
 
