@@ -18,15 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.services;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplication;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationCategorie;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesApplicationValeurs;
@@ -43,6 +34,14 @@ import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -218,4 +217,13 @@ public class PreferencesService {
 		return new String(c);
 	}
 
+    public boolean cleanDbFromUsersData() {
+		try {
+			preferencesUtilisateurRepository.truncateTable();
+			return true;
+		}catch(Exception e) {
+			log.error("Erreur lors du nettoyage des données utilisateurs", e);
+			return false;
+		}
+    }
 }

@@ -23,6 +23,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.NativeLabel;
@@ -104,7 +105,11 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final Integer CSS_PARAM = 10;
 	private static final Integer AFFICHAGE_PARAM = 6;
 	private static final String PARAMETRES_BUTTON_SYNC = "parametres.button-sync";
+	private static final String PARAMETRES_BUTTON_CLEAN = "parametres.button-cleandb";
 	private static final String REFRESH_PARAMETERS = "refreshParameters";
+	private static final String PARAMETRES_DIALOG_CLEAN_HEADER = "parametres.dialog-cleandb.header";
+	private static final String PARAMETRES_DIALOG_CLEAN_TEXT = "parametres.dialog-cleandb.txt";
+	private static final String PARAMETRES_DIALOG_CLEAN_BUTTON = "parametres.dialog-cleandb.button";
 	@Getter
 	private final TextHeader header = new TextHeader();
 	private final TextField docUrlTF = new TextField();
@@ -483,9 +488,17 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 		//S'il s'agit de la catégorie Affichage
 		if(categorieId.equals(AFFICHAGE_PARAM)) {
+			// Ajout bouton "Synchroniser la configuration"
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
 			buttonSync.addClickListener(e -> syncServiceConfig(ParametrageService.class.getName(), "refreshFavIconParameters"));
 			layout.add(syncButtonLayout);
+
+			// Ajout bouton "Supprimer les données des utilisateurs de la base de données"
+			Button buttonClean = new Button();
+			buttonClean.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
+			buttonClean.setText(getTranslation(PARAMETRES_BUTTON_CLEAN));
+			buttonClean.addClickListener(e -> cleanDbFromUsersData());
+			layout.add(buttonClean);
 		}
 
 		//S'il s'agit de la catégorie SMTP
@@ -500,6 +513,29 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
 			buttonSync.addClickListener(e -> syncServiceConfig(CssService.class.getName(), "refreshCssParameters"));
 			layout.add(syncButtonLayout);
+		}
+	}
+
+	private void cleanDbFromUsersData() {
+		try {
+			// Ajout pop-up de confirmation
+			ConfirmDialog dialog = new ConfirmDialog();
+			dialog.setHeader(getTranslation(PARAMETRES_DIALOG_CLEAN_HEADER));
+			dialog.setText(getTranslation(PARAMETRES_DIALOG_CLEAN_TEXT));
+			dialog.setCancelable(true);
+			dialog.setConfirmText(getTranslation(PARAMETRES_DIALOG_CLEAN_BUTTON));
+			dialog.setConfirmButtonTheme("error primary");
+			dialog.addConfirmListener(event -> {
+				// Demander la maj des services des instances via la BDD
+				if(prefService.cleanDbFromUsersData()) {
+					Utils.notifierSucces(getTranslation("cleandb.ok"));
+				} else {
+					Utils.notifierAnomalie(getTranslation("cleandb.error"));
+				}
+			});
+			dialog.open();
+		}catch(Exception ex) {
+			Utils.notifierAnomalie(getTranslation("cleandb.error") + " : " + ex.getLocalizedMessage());
 		}
 	}
 
