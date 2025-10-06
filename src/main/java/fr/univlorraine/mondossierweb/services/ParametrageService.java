@@ -107,10 +107,12 @@ public class ParametrageService implements Serializable {
 			log.info("Activation des traces SQL");
 			loggingSystem.setLogLevel("org.hibernate.SQL", LogLevel.DEBUG);
 			loggingSystem.setLogLevel("org.hibernate.type", LogLevel.TRACE);
+			loggingSystem.setLogLevel("org.hibernate.orm.jdbc.bind", LogLevel.TRACE);
 		} else {
 			log.info("Désactivation des traces SQL");
 			loggingSystem.setLogLevel("org.hibernate.SQL", LogLevel.ERROR);
 			loggingSystem.setLogLevel("org.hibernate.type", LogLevel.ERROR);
+			loggingSystem.setLogLevel("org.hibernate.orm.jdbc.bind", LogLevel.ERROR);
 		}
 	}
 
