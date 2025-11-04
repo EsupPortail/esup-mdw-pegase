@@ -89,8 +89,10 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
 
     private static final String CERT_FILE_EXT = ".pdf";
     private static final String CERT_FILE_NAME = "certificat";
-    private static final String ATTEST_FILE_NAME = "attestation";
+    private static final String RELEVE_FILE_EXT = ".pdf";
+    private static final String RELEVE_FILE_NAME = "releve_notes";
     private static final String ATTEST_FILE_EXT = ".pdf";
+    private static final String ATTEST_FILE_NAME = "attestation";
     @Getter
     private final TextHeader header = new TextHeader();
     private final VerticalLayout inscriptionsLayout = new VerticalLayout();
@@ -831,7 +833,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         // Ajout bouton certificat de scolarité
         Button releveButton = new Button("");
         setDownloadButton(exportReleveAnchor, releveButton);
-        exportReleveAnchor.setHref(new StreamResource(CERT_FILE_NAME + "-" + LocalDateTime.now() + CERT_FILE_EXT,
+        exportReleveAnchor.setHref(new StreamResource(RELEVE_FILE_NAME + "-" + LocalDateTime.now() + RELEVE_FILE_EXT,
                 () -> exportService.getReleveDeNotes(codeApprenant, codeChemin, rnp.getUuid())));
         // Ajout à la liste des boutons
         listButtonReleve.add(releveButton);
