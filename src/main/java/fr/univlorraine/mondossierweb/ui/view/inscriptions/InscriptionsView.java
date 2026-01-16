@@ -636,10 +636,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                                 dialogLayout.add(headerDialog);
                                 dialogLayout.add(notesLayout);
                                 notesDialog.add(dialogLayout);
-                                // si écran de petite taille
-                                boolean smallGrid = false;
+
                                 if (windowWidth <= 800) {
-                                    smallGrid = true;
                                     HorizontalLayout footerDialog = new HorizontalLayout();
                                     footerDialog.getStyle().set(CssUtils.MARGIN_TOP, CssUtils.VAR_LUMO_SPACE_L);
                                     footerDialog.add(closeButton);
@@ -655,7 +653,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                                 closeButton.addClickListener(cb -> notesDialog.close());
 
                                 // Mise à jour de l'affichage des notes
-                                displayNotes(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription), notesLayout, smallGrid);
+                                displayNotes(dossier.getApprenant().getCode(), Utils.getCodeChemin(inscription.getCible()), Utils.getCodePeriode(inscription), notesLayout);
                                 notesDialog.open();
                             } else {
                                 // On masque le notes
@@ -847,7 +845,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         return releveLayout;
     }
 
-    private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout, boolean smallGrid) {
+    private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout) {
         log.info("Récupération des notes pour {} ({}) sur {}", codeApprenant, codePeriode, codeChemin);
 
         // Récupération des notes
@@ -863,10 +861,6 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         arbo.setSelectionMode(SelectionMode.SINGLE);
         arbo.addItemClickListener(o -> showDetailNoteDialog(o.getItem()));
 
-        if (smallGrid) {
-            arbo.setThemeName("mobile");
-            arbo.addClassName("mdw-small-grid");
-        }
         arbo.expandRecursively(listObj, 10);
         arbo.setAllRowsVisible(false);
         // si écran de petite taille
