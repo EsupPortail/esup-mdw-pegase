@@ -1,3 +1,26 @@
 .row-highlighted {
 	color: var(--lumo-primary-text-color, var(--material-primary-color));
 }
+
+:host {
+	--level-spacer-coefficient: 0.2;
+}
+
+@media (min-width: 650px) and (max-width: 799px) {
+	:host {
+		--level-spacer-coefficient: 0.5;
+	}
+}
+
+@media (min-width: 800px) and (max-width: 1099px) {
+	:host {
+		--level-spacer-coefficient: 0.7;
+	}
+}
+
+@media (min-width: 1100px) {
+	:host {
+		--level-spacer-coefficient: 1;
+	}
+}
+
