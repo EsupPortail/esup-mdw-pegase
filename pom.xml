@@ -41,7 +41,7 @@
 	<parent>
     	<groupId>org.springframework.boot</groupId>
     	<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.5</version>
+		<version>3.4.13</version>
 	</parent>
 
 
@@ -50,7 +50,8 @@
 		<sha1/>
 		<changelist/>
 		<java.version>17</java.version>
-		<vaadin.version>24.7.3</vaadin.version>
+		<!-- <vaadin.version>24.7.3</vaadin.version> -->
+		<vaadin.version>24.7.14</vaadin.version>
 		<gson-fire-version>1.8.4</gson-fire-version>
         <swagger-core-version>1.5.24</swagger-core-version>
         <!--<okhttp-version>4.9.3</okhttp-version>-->
