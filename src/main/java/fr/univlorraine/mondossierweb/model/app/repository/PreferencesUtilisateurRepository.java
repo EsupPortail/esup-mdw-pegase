@@ -18,12 +18,17 @@
  */
 package fr.univlorraine.mondossierweb.model.app.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateur;
 import fr.univlorraine.mondossierweb.model.app.entity.PreferencesUtilisateurPK;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface PreferencesUtilisateurRepository extends JpaRepository<PreferencesUtilisateur, PreferencesUtilisateurPK> {
-	
 
+    @Modifying
+    @Transactional
+    @Query(value = "TRUNCATE TABLE preferences_utilisateur", nativeQuery = true)
+    void truncateTable();
 }
