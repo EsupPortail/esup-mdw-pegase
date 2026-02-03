@@ -54,6 +54,7 @@ import java.util.UUID;
 public class PegaseService implements Serializable {
 
 	private static final String APPRENANT_NON_TROUVE = "apprenant non trouve";
+	private static final int TIMEOUT_PEGASE = 30000;
 
 	@Autowired
 	private transient AccessTokenService accessTokenService;	
@@ -185,32 +186,48 @@ public class PegaseService implements Serializable {
 		// Init INS
 		apiClientIns.setBasePath(apiInsUrl);
 		apiIns.setApiClient(apiClientIns);
-		//fluxInsApiIns.setApiClient(apiClientIns);
+		apiIns.getApiClient().setReadTimeout(TIMEOUT_PEGASE);
+		apiIns.getApiClient().setWriteTimeout(TIMEOUT_PEGASE);
 
 		// Init INS-EXT
 		apiClientInsExt.setBasePath(apiInsExtUrl);
 		apiInsExt.setApiClient(apiClientInsExt);
+		apiInsExt.getApiClient().setReadTimeout(TIMEOUT_PEGASE);
+		apiInsExt.getApiClient().setWriteTimeout(TIMEOUT_PEGASE);
 
 		// Init PIECE-EXT
 		apiClientPieceExt.setBasePath(apiPieceExtUrl);
 		apiPieceExt.setApiClient(apiClientPieceExt);
+		apiPieceExt.getApiClient().setReadTimeout(TIMEOUT_PEGASE);
+		apiPieceExt.getApiClient().setWriteTimeout(TIMEOUT_PEGASE);
 
 		// Init PAI
 		apiClientPai.setBasePath(apiPaiUrl);
 		apiPai.setApiClient(apiClientPai);
+		apiPai.getApiClient().setReadTimeout(TIMEOUT_PEGASE);
+		apiPai.getApiClient().setWriteTimeout(TIMEOUT_PEGASE);
 
 		// Init CHC
 		apiClientChc.setBasePath(apiChcUrl);
 		apiChc.setApiClient(apiClientChc);
+		apiChc.getApiClient().setReadTimeout(TIMEOUT_PEGASE);
+		apiChc.getApiClient().setWriteTimeout(TIMEOUT_PEGASE);
 
 		// Init COC
 		apiClientCoc.setBasePath(apiCocUrl);
 		apiPubNotesCoc.setApiClient(apiClientCoc);
 		apiPubRelevesCoc.setApiClient(apiClientCoc);
+		apiPubNotesCoc.getApiClient().setReadTimeout(TIMEOUT_PEGASE);
+		apiPubNotesCoc.getApiClient().setWriteTimeout(TIMEOUT_PEGASE);
+		// timeout plus long pour les appels COC (génération relevés de notes)
+		apiPubRelevesCoc.getApiClient().setReadTimeout(TIMEOUT_PEGASE);
+		apiPubRelevesCoc.getApiClient().setWriteTimeout(TIMEOUT_PEGASE);
 
 		// Init IDT
 		apiClientIdt.setBasePath(apiIdtUrl);
 		apiIdt.setApiClient(apiClientIdt);
+		apiIdt.getApiClient().setReadTimeout(TIMEOUT_PEGASE);
+		apiIdt.getApiClient().setWriteTimeout(TIMEOUT_PEGASE);
 	}
 
 	@PostConstruct
