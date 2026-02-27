@@ -1,0 +1,1107 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: CHC Externe v1 - API Externe choix du cursus
+  description: "### Introduction\nL’API répertorie l'ensemble des services et des\
+    \ opérations disponibles dans le module CHC (Choix du Cursus).\n\n### Authentification/autorisation\
+    \ obligatoire\nPour tout appel à une opération, vous devez être authentifié/autorisé\
+    \ à l’aide d’un token JWT. Ainsi, chaque requête HTTP doit contenir un token valide\
+    \ dans le header HTTP `Authorization`.\n#### Répertoire de partage contenant la\
+    \ documentation décrivant l'authentification Pégase\nhttps://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1\n\
+    \nLe format est `Authorization: Bearer <token-jwt>`. Par exemple : `Authorization:\
+    \ Bearer xxxx.yyyy.zzzz`.\nVous pouvez recevoir l'un de ces codes retour si vous\
+    \ n’êtes pas authentifié ou autorisé :\n* 401 - Unauthorized - Vous n’êtes pas\
+    \ authentifié\n    * Il n’y a pas de token passé dans le header HTTP `Authorization`\n\
+    \    * Le token passé n’est pas au bon format (Bearer <token-jwt>)\n* 403 - Forbidden\
+    \ - Vous êtes authentifié mais pas autorisé à exécuter cette opération\n    *\
+    \ La signature du token est incorrecte / n’a pas pu être vérifiée\n    * Le token\
+    \ est expiré\n    * Vérifier les droits de l’utilisateur\n* 500 - Internal Server\
+    \ Error\n    * Il n’est pas encore actif\n\n### Type de données\nSauf indications\
+    \ spécifiques données au niveau de l'opération, les types de données utilisés\
+    \ dans cette API sont les suivants :\n * string - Chaîne de caractères encodé\
+    e en UTF8 (ex : `Une chaîne de caractère`)\n   * Dans le cas des descripteurs\
+    \ de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont\
+    \ autorisés\n * string($date) - Une date sous la forme d'une chaîne de caractè\
+    res (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))\n\
+    \ * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9\
+    \ 223 372 036 854 775 807) (ex : `2542`)\n * integer($int32) - Un entier sur 32\
+    \ bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)\n * number($double) -\
+    \ Un nombre à virgule flottante en double précision\n * boolean - Un booléen repré\
+    senté par `true` ou `false`\n\n### Code retour\n\n    | Code    | Description\
+    \                                                                            \
+    \                             |\n    |---------|---------------------------------------------------------------------------------------------------------------------|\n\
+    \    | 200     | L'opération s'est déroulée avec succès                      \
+    \                                                        |\n    | 201     | L'opé\
+    ration a abouti à la création d'une ressource                                \
+    \                                  |\n    | 400     | Un ou des paramètres d'entré\
+    e sont erronés                                                               \
+    \           |\n    |         | Une erreur fonctionnelle s'est produite       \
+    \                                                                      |\n   \
+    \ | 404     | La ressource demandée n'est pas trouvée                        \
+    \                                                     |\n    |         | Remarque\
+    \ : Dans le cas des opérations retournant une liste, on recevra un code 200 avec\
+    \ en résultat une liste vide  |\n    | 500     | Erreur technique rencontrée par\
+    \ le serveur                                                                 \
+    \         |\n\n\n## Notions métiers\n\n### Objet Maquette (OM)\nUn objet maquette\
+    \ représente n'importe quel nœud d'un arbre de formation : Formation, objet de\
+    \ formation ou groupement. \nUn objet maquette est identifié par le codeChemin\
+    \ (chemin pédagogique), le codePeriode et le codeStructure.\n\n### Formation\n\
+    Une formation est un arbre dont les nœuds sont des objets de formation et dont\
+    \ la racine est la formation elle-même. \nPour apparaître dans le module CHC,\
+    \ la formation doit être validée dans ODF. \nPour l'utiliser dans les différents\
+    \ actes métiers, il faut que chaque noeud et sa descendance soit ouvert au choix\
+    \ du cursus et qu'au moins une inscription administrative soit validée sur un\
+    \ objet maquette de l’arbre de la formation.\n\n### Objet formation\nUn objet\
+    \ de formation est l’un des nœuds de l’arbre de formation : année, semestre, UE,\
+    \ EC, enseignement, etc. (hors groupement). \nPour apparaître dans le Module CHC,\
+    \ un objet de formation doit être validé dans ODF.\n\n### Groupement\nUn groupement\
+    \ est une possibilité de structurer et d'organiser une formation. Il peut contenir\
+    \ des objets de formations de tous les types, être lié pour décomposer des objets\
+    \ pères de tous les types, être avec ou sans plage de choix.\n\n### Plage de choix\n\
+    Une plage de choix permet de contraindre l’apprenant lorsqu’il effectue son CHC\
+    \ dans Pégase. Cette plage de choix est matérialisée par un nombre minimum et\
+    \ un nombre maximum d’objets de formation à sélectionner. La plage de choix est\
+    \ contrôlée au cours du CHC.\n\n### Groupe\nUn Groupe est une entité permettant\
+    \ de diviser une population d’étudiants ou d'identifier une population spécifique\
+    \ d’étudiants inscrits administrativement et pédagogiquement.\n\n### Composition\n\
+    Une composition est une entité permettant de rassembler des groupes. Une composition\
+    \ contient obligatoirement au moins un groupe.\n\n### Période\nUne période de\
+    \ mise en œuvre correspond à la période pendant laquelle se déroule la formation.\
+    \ \nElle est le point d’entrée pour chaque acte métier du module CHC.\n\n### Apprenant\n\
+    Un apprenant est un usager qui suit un cursus et pour lequel des choix pédagogiques\
+    \ devront être réalisés.\n\n### Inscription\nL’inscription est l’ensemble des\
+    \ étapes de saisie des données concernant l’apprenant : état-civil, coordonné\
+    es, situation précédente, cursus, montant de l’inscription, mode de paiement.\
+    \ Cette saisie peut être faite par le gestionnaire ou l’apprenant. \nElle doit\
+    \ être vérifiée et validée par le gestionnaire.\nUne inscription n'est prise en\
+    \ compte dans CHC qu'à partir du moment où elle est validée ou annulée.\n\n###\
+    \ Cursus\nLe cursus est un arbre (une arborescence) composé d'objets maquette\
+    \ pour lequel des choix pédagogiques doivent être réalisés à chaque période de\
+    \ mise en oeuvre. \nUn cursus est défini par le code de l’apprenant, un objet\
+    \ maquette lui-même identifié par le codeChemin (chemin pédagogique), le codePeriode\
+    \ et le codeStructure.\nUn choix pédagogique est une association entre un objet\
+    \ maquette et un apprenant. On recense parmi les choix pédagogiques des affectations,\
+    \ des aménagements et des acquis capitalisés.\n\n### Acquis capitalisé\nUn acquis\
+    \ capitalisé est un objet de formation dont les modalités de contrôle des connaissances\
+    \ sont capitalisables et dont le résultat positif a été obtenu sur une période\
+    \ antérieure. L'acquis capitalisé est créé et stocké dans CHC après délibération\
+    \ de jury du module COC. Il est utilisable sur une période postérieure à son acquisition\n\
+    \n### Chemin pédagogique\nUn chemin pédagogique identifie le lien d'un objet maquette\
+    \ à un autre objet maquette de sa descendance.\n\n**Exemple**\n``` MASTER-RH>MASTER-1>SEMESTRE-1>UE-OPTIONS>ESPAGNOL\
+    \ ```\n\n### Règles communes pour réaliser un choix de cursus\n* L’affectation\
+    \ est possible à partir de l'objet maquette porteur du point d'inscription administrative\
+    \ et sur les objets maquette de sa descendance à condition que l'inscription administrative\
+    \ soit validée dans le module INS.\n* Un choix du cursus sur un objet maquette\
+    \ est réalisable si le témoin ouvertChoixCursus est  à true.\n* La désaffectation\
+    \ d’un apprenant à un objet maquette provoque sa désaffectation automatique à\
+    \ tous les objets maquette de la descendance.\n* Pour chaque apprenant, il est\
+    \ possible de réaliser un choix du cursus sur un objet maquette dans un groupement\
+    \ à plage de choix tant que le nombre maximum autorisé (de la plage de choix)\
+    \ n'est pas atteint. La valeur minimum de plage de choix n'est  pas contrôlée.\n\
+    * Un choix pédagogique sur un objet maquette présent plusieurs fois dans un arbre\
+    \ de formation ne peut être réalisée qu’une fois pour un même cursus.\n* La capacité\
+    \ d’accueil d’un objet maquette n’est pas contrôlée dans l'API car non bloquante.\
+    \ Les capacités d’accueil dépassées sont négatives.\n* Les aménagements avec prise\
+    \ en compte acquis et aucun ne sont pas décomptés de la capacité d’accueil d’\
+    un objet maquette.\n* L'utilisation d'un acquis capitalisé empêche son affectation\
+    \ et supprime la branche de sa descendance."
+servers:
+- url: http://localhost:8091/api/ext/chc/v1
+- url: https://chc.dev-dev-1-6005c.pc-scol.fr/api/ext/chc/v1
+tags:
+- name: extractions
+  description: 'Cet endpoint gère : * la liste des affectations aux choix de cursus
+    selon le code de l''objet de formation pour une période donnée * la liste des
+    affectations aux choix de cursus selon le code du type de l''objet de formation
+    pour une période donnée * la liste des affectations aux groupes selon le ou les
+    codes de la composition pour une période donnée'
+- name: cursus
+  description: '* la liste des cursus de l''apprenant pour toutes les périodes et
+    structures    '
+security:
+- idTokenAuth: []
+paths:
+  /objet-formation/{codeStructure}/{codePeriode}/{codeObjetFormation}/cursus:
+    get:
+      tags:
+      - extractions
+      summary: Extraire les affectations au cursus pour un objet de formation sur
+        la période donnée pour un établissement
+      operationId: extraireCursusObjetFormationPeriode
+      parameters:
+      - $ref: '#/components/parameters/codeStructure'
+      - $ref: '#/components/parameters/codePeriode'
+      - name: codeObjetFormation
+        in: path
+        description: Le code de l'objet de formation
+        required: true
+        schema:
+          type: string
+        example: MASTER-RH
+      responses:
+        200:
+          description: Liste des affectations au cursus pour une période donnée sur
+            l'objet de formation et pour la liste des apprenants rattachés, triés
+            par nom de famille de l'apprenant
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CursusPourext'
+        401:
+          description: Si l'utilisateur n'est pas authentifié.
+        403:
+          description: Si l'utilisateur n'a pas les droits d'extraction des objets
+            formation.
+  /type-objet-formation/{codeStructure}/{codePeriode}/{typeObjet}/cursus:
+    get:
+      tags:
+      - extractions
+      summary: Extraire les affectations au cursus pour un type d'objet de formation
+        sur la période donnée pour un établissement
+      operationId: extraireCursusTypeObjetFormationPeriode
+      parameters:
+      - $ref: '#/components/parameters/codeStructure'
+      - $ref: '#/components/parameters/codePeriode'
+      - name: typeObjet
+        in: path
+        description: Le code du type de l'objet de formation
+        required: true
+        schema:
+          type: string
+        example: SEMESTRE-1
+      responses:
+        200:
+          description: Liste des affectations au cursus pour une période donnée selon
+            le type d'objet de formation et pour la liste des apprenants rattachés,
+            triés par nom de famille de l'apprenant
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CursusPourext'
+        401:
+          description: Si l'utilisateur n'est pas authentifié.
+        403:
+          description: Si l'utilisateur n'a pas les droits d'extraction des types
+            d'objet formation.
+  /groupes/{codeStructure}/{codePeriode}:
+    post:
+      tags:
+      - extractions
+      summary: Extraire les affectations aux groupes des compositions renseignées,
+        de toutes les compositions sinon, pour la formation sur la période donnée
+        pour un établissement
+      operationId: extraireGroupesDansCompositionsPourPeriode
+      parameters:
+      - $ref: '#/components/parameters/codeStructure'
+      - $ref: '#/components/parameters/codePeriode'
+      - name: planification
+        in: query
+        description: Est-ce que le groupe est planifiable?
+        schema:
+          type: boolean
+          enum:
+          - true
+          - false
+      requestBody:
+        description: La liste des codes de compositions à extraire ou vide si on extrait
+          toutes les compositions
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              example:
+              - TD-UE-CREATIVITE
+              - ANGLAIS-A
+              - TD-L1-HYD-S7-GC
+      responses:
+        200:
+          description: Liste des affectations aux groupes dans les compositions pour
+            une période donnée selon la formation et pour la liste des apprenants
+            rattachés, triés par nom de famille de l'apprenant
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Composition'
+        401:
+          description: Si l'utilisateur n'est pas authentifié.
+        403:
+          description: Si l'utilisateur n'a pas les droits d'extraction des groupes.
+  /cursus:
+    get:
+      tags:
+      - cursus
+      summary: Liste des cursus de l'apprenant
+      operationId: lireCursusApprenant
+      parameters:
+      - name: codeApprenant
+        in: query
+        required: true
+        description: Le code de l'apprenant
+        schema:
+          type: string
+        example: '000000150'
+      responses:
+        '200':
+          description: Les cursus ont été récupérés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cursus'
+  /extractions/{codeStructureEtablissement}/periodes/{codePeriode}/compositions:
+    get:
+      parameters:
+      - $ref: '#/components/parameters/codeStructureEtablissementPath'
+      - $ref: '#/components/parameters/codePeriode'
+      - in: query
+        name: codeFormation
+        required: false
+        description: Paramètre optionnel qui limite la liste à certaines formations
+          du code fourni
+        schema:
+          type: array
+          items:
+            type: string
+        example: DUT-INFO,LIC-MATH
+      - in: query
+        name: uniquementEmploiDuTemps
+        required: false
+        description: Se limite aux compositions contenant des groupes planifiables
+          pour les emplois du temps
+        schema:
+          type: boolean
+      tags:
+      - extractions
+      summary: Extraire les compositions et les groupes associés à des formations
+        mises en œuvre sur la période donnée pour un établissement
+      operationId: extraireCompositionsPourUnePeriode
+      responses:
+        200:
+          description: Si tous les codes de formation sont trouvés alors on retourne
+            pour chaque code les compositions associées à la formation et ses objets
+            de formation. Si aucun code n'est spécifié alors on retourne toutes les
+            compositions associées à des formations ou des objets de formation existantes
+            sur la période.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompositionPourExtraction'
+        401:
+          description: Si l'utilisateur n'est pas authentifié.
+        403:
+          description: Si l'utilisateur n'a pas les droits d'extraction des compositions.
+components:
+  parameters:
+    codeStructure:
+      name: codeStructure
+      in: path
+      required: true
+      description: Le code structure de l'établissement
+      schema:
+        type: string
+      example: 0310152X
+    codePeriode:
+      name: codePeriode
+      in: path
+      required: true
+      description: Le code de la période
+      schema:
+        type: string
+      example: PERIODE-2021
+    codeStructureEtablissementPath:
+      name: codeStructureEtablissement
+      in: path
+      required: true
+      description: Le code structure de l'établissement
+      schema:
+        type: string
+        maxLength: 6
+        pattern: ^[A-Z0-9-]*$
+      example: ETAB00
+  schemas:
+    CursusPourext:
+      description: Une affectation aux choix du cursus sur la période demandée
+      type: object
+      required:
+      - objetFormation
+      - listeApprenants
+      properties:
+        objetFormation:
+          description: La période de mise en œuvre de la formation
+          $ref: '#/components/schemas/ObjetFormationPourext'
+        listeApprenants:
+          description: liste des apprenants
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprenantPourext'
+      example:
+        objetFormation:
+          code: F-ING-HYD-S8-GC2
+          libelleCourt: Génie civil niveau 2
+          libelleLong: Génie civil niveau 2
+          caractereObligatoire: true
+          capaciteAccueil: null
+          chemin: F-ING-HYD>F-ING-HYD-A4>F-ING-HYD-S08>F-ING-HYD-S8-GC2
+          typeObjetFormation:
+            code: UE
+            libelleCourt: UNITE D'ENSEIGNEMENT
+            libelleLong: UNITE D'ENSEIGNEMENT
+          listeApprenants:
+          - codeApprenant: '20909090'
+            nomFamille: Bernard
+            prenom: Sam
+            dateNaissance: '2001-01-06'
+            amenagements:
+            - code: TAM007
+              libelleAffichage: Dispense Assiduité
+              motif: Décision aménagement
+              priseEnCompte: Affectation
+          - codeApprenant: '20909091'
+            nomFamille: Bernardo
+            prenom: Samy
+            dateNaissance: '2002-07-06'
+            amenagements:
+            - code: TAM003
+              libelleAffichage: Crédit
+              motif: Décision aménagement
+              priseEnCompte: Affectation
+    ObjetFormationPourext:
+      description: Un objet de formation
+      type: object
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - chemin
+      - typeObjetFormation
+      - caractereObligatoire
+      properties:
+        code:
+          description: Le code de l'objet de formation
+          type: string
+        libelleCourt:
+          description: Le libellé court de l'objet de formation
+          type: string
+        libelleLong:
+          description: Le libellé long de l'objet de formation
+          type: string
+        typeObjetFormation:
+          description: le type de l'objet de formation
+          $ref: '#/components/schemas/TypeObjetFormation'
+        caractereObligatoire:
+          type: boolean
+          description: L'objet de formation est-il obligatoire au choix du cursus
+            ?
+        capaciteAccueil:
+          description: La capacité d'accueil de l'objet de formation
+          nullable: true
+          type: integer
+        chemin:
+          description: Le code chemin de l'objet de formation
+          type: string
+      example:
+        code: F-ING-HYD-S8-GC2
+        libelleCourt: Génie civil niveau 2
+        libelleLong: Génie civil niveau 2
+        caractereObligatoire: true
+        capaciteAccueil: null
+        chemin: F-ING-HYD>F-ING-HYD-A4>F-ING-HYD-S08>F-ING-HYD-S8-GC2
+        typeObjetFormation:
+          code: UE
+          libelleCourt: UNITE D'ENSEIGNEMENT
+          libelleLong: UNITE D'ENSEIGNEMENT
+    ApprenantPourext:
+      type: object
+      required:
+      - codeApprenant
+      - nomFamille
+      - prenom
+      - dateNaissance
+      - amenagements
+      properties:
+        codeApprenant:
+          type: string
+          description: Le code de l'apprenant
+        nomFamille:
+          type: string
+          description: Le nom patronymique de l'apprenant
+        prenom:
+          type: string
+          description: Le prénom de l'apprenant
+        dateNaissance:
+          type: string
+          format: date
+          description: La date de naissance de l'apprenant
+        amenagements:
+          description: La liste des aménagements de l'apprenant de l'objet de formation
+          type: array
+          items:
+            $ref: '#/components/schemas/TypeAmenagement'
+      example:
+        codeApprenant: '20909090'
+        nomFamille: Bernardo
+        prenom: Samy
+        dateNaissance: '2002-07-06'
+        amenagements:
+        - code: TAM003
+          libelleAffichage: Crédit
+          motif: Décision aménagement
+          priseEnCompte: Affectation
+    TypeObjetFormation:
+      description: Un type d'objet de formation
+      type: object
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      properties:
+        code:
+          description: Le code du type de l'objet de formation
+          type: string
+        libelleCourt:
+          description: Le libellé court du type de l'objet de formation
+          type: string
+        libelleLong:
+          description: Le libellé long du type de l'objet de formation
+          type: string
+      example:
+        code: UE
+        libelleCourt: UNITE D'ENSEIGNEMENT
+        libelleLong: UNITE D'ENSEIGNEMENT
+    TypeAmenagement:
+      description: Un type d'aménagement
+      type: object
+      required:
+      - code
+      - priseEnCompte
+      properties:
+        code:
+          type: string
+          description: Le code de l'aménagement
+        libelleAffichage:
+          type: string
+          description: Le libellé affichage du type d'aménagament
+          nullable: true
+        motif:
+          type: string
+          description: Le motif de type aménagament
+          nullable: true
+        priseEnCompte:
+          type: string
+          description: La prise en compte du type d'aménagement
+      example:
+        code: TAM003
+        libelleAffichage: Crédit
+        motif: Décision aménagement
+        priseEnCompte: Affectation
+    Composition:
+      description: Une composition
+      type: object
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - groupes
+      - formationsAssociees
+      - objetFormationsAssocies
+      properties:
+        code:
+          description: Le code de la composition
+          type: string
+        libelleCourt:
+          description: Le libellé court de la composition
+          type: string
+        libelleLong:
+          description: Le libellé long de la composition
+          type: string
+        groupes:
+          description: La liste des groupes de la composition
+          type: array
+          items:
+            $ref: '#/components/schemas/Groupe'
+        formationsAssociees:
+          description: La liste des formations associées
+          type: array
+          items:
+            $ref: '#/components/schemas/FormationAssociee'
+        objetFormationsAssocies:
+          description: La liste des objets de formation associés
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjetFormationAssocie'
+      example:
+        code: ANGLAIS-A
+        libelleCourt: ANGLAIS-A1-A2
+        libelleLong: ANGLAIS-A1-A2
+        groupes:
+        - code: ANGLAIS-A1
+          libelleCourt: ANGLAIS-A1
+          libelleLong: ANGLAIS-A1
+          planifiable: true
+          typeGroupe:
+            code: TGR004
+            libelleCourt: LANGUE
+            libelleLong: LANGUE
+          apprenants:
+          - codeApprenant: '20909090'
+            nomFamille: Bernardo
+            prenom: Samy
+            dateNaissance: '2002-07-06'
+          - codeApprenant: '20901111'
+            nomFamille: Sernardi
+            prenom: Violette
+            dateNaissance: '2004-12-03'
+        formationsAssociees:
+        - code: F-ING-BIOSC
+          libelleCourt: Formation Ingénieur biosciences ingénierie santé
+          libelleLong: Formation Ingénieur biosciences ingénierie santé
+        - code: JJ-M-ENT
+          libelleCourt: MASTER ENTREPRENEURIAT
+          libelleLong: MASTER (LMD) MANAGEMENT ET GESTION DES ORGANISATIONS
+        objetFormationsAssocies:
+        - code: FING-BIOSC-A5
+          libelleCourt: 3eme  année ingénieur hydraulique
+          libelleLong: 3eme  année ingénieur hydraulique
+          typeObjetFormation:
+            code: UE
+            libelleCourt: UNITE D'ENSEIGNEMENT
+            libelleLong: UNITE D'ENSEIGNEMENT
+          chemin: F-ING-BIOSC>FING-BIOSC-A5
+          mutualise: false
+        - code: MST-EEI-SEM1-UE1
+          libelleCourt: Relation internationale
+          libelleLong: Relation internationale
+          typeObjetFormation:
+            code: UE
+            libelleCourt: UNITE D'ENSEIGNEMENT
+            libelleLong: UNITE D'ENSEIGNEMENT
+          chemin: MST-EEI>MST-EEI-PRCS1>MST-EEI-A1>MST-EEI-SEM1>MST-EEI-SEM1-UE1
+          mutualise: true
+    TypeGroupe:
+      description: Un type de groupe de la composition
+      type: object
+      required:
+      - code
+      properties:
+        code:
+          description: Le code du type de groupe
+          type: string
+        libelleCourt:
+          description: Le libellé court du type de groupe
+          type: string
+          nullable: true
+        libelleLong:
+          description: Le libellé long du type de groupe
+          type: string
+          nullable: true
+      example:
+        code: TGR004
+        libelleCourt: LANGUE
+        libelleLong: LANGUE
+    Groupe:
+      description: Un groupe de la composition
+      type: object
+      required:
+      - code
+      - typeGroupe
+      - planifiable
+      - apprenants
+      properties:
+        code:
+          description: Le code du groupe
+          type: string
+        libelleCourt:
+          description: Le libellé court du groupe
+          type: string
+          nullable: true
+        libelleLong:
+          description: Le libellé long du groupe
+          type: string
+          nullable: true
+        typeGroupe:
+          $ref: '#/components/schemas/TypeGroupe'
+        planifiable:
+          type: boolean
+          description: Indique si le groupe est planifiable
+        apprenants:
+          description: La liste des apprenants du groupe
+          type: array
+          items:
+            $ref: '#/components/schemas/Apprenant'
+      example:
+        code: ANGLAIS-A1
+        libelleCourt: ANGLAIS-A1
+        libelleLong: ANGLAIS-A1
+        planifiable: true
+        typeGroupe:
+          code: TGR004
+          libelleCourt: LANGUE
+          libelleLong: LANGUE
+        apprenants:
+        - codeApprenant: '20909090'
+          nomFamille: Bernardo
+          prenom: Samy
+          dateNaissance: '2002-07-06'
+        - codeApprenant: '20901111'
+          nomFamille: Sernardi
+          prenom: Violette
+          dateNaissance: '2004-12-03'
+    Apprenant:
+      description: Un apprenant du groupe
+      type: object
+      required:
+      - codeApprenant
+      - nomFamille
+      - prenom
+      - dateNaissance
+      properties:
+        codeApprenant:
+          type: string
+          description: Le code de l'apprenant
+        nomFamille:
+          type: string
+          description: Le nom patronymique de l'apprenant
+        prenom:
+          type: string
+          description: Le prénom de l'apprenant
+        dateNaissance:
+          type: string
+          format: date
+          description: La date de naissance de l'apprenant
+      example:
+        codeApprenant: '20909090'
+        nomFamille: Bernardo
+        prenom: Samy
+        dateNaissance: '2002-07-06'
+    FormationAssociee:
+      description: La formation associée à la composition
+      type: object
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      properties:
+        code:
+          description: Le code de la formation
+          type: string
+        libelleCourt:
+          description: Le libellé court de la formation
+          type: string
+        libelleLong:
+          description: Le libellé long de la formation
+          type: string
+      example:
+        code: JJ-M-ENT
+        libelleCourt: MASTER ENTREPRENEURIAT
+        libelleLong: MASTER (LMD) MANAGEMENT ET GESTION DES ORGANISATIONS
+    ObjetFormationAssocie:
+      description: L'objet de formation dont la composition est rattachée
+      type: object
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - typeObjetFormation
+      - chemin
+      - mutualise
+      properties:
+        code:
+          description: Le code  de l'objet de formation
+          type: string
+        libelleCourt:
+          description: Le libellé court de l'objet formation
+          type: string
+        libelleLong:
+          description: Le libellé long de l'objet de formation
+          type: string
+        typeObjetFormation:
+          description: le type l'objet de formation
+          $ref: '#/components/schemas/TypeObjetFormation'
+        chemin:
+          description: Le code chemin de l'objet de formation
+          type: string
+        mutualise:
+          description: Est-ce que l'objet de formation est mutualisé ?
+          type: boolean
+          default: false
+      example:
+        code: MST-EEI-SEM1-UE1
+        libelleCourt: Relation internationale
+        libelleLong: Relation internationale
+        typeObjetFormation:
+          code: UE
+          libelleCourt: UNITE D'ENSEIGNEMENT
+          libelleLong: UNITE D'ENSEIGNEMENT
+        chemin: MST-EEI>MST-EEI-PRCS1>MST-EEI-A1>MST-EEI-SEM1>MST-EEI-SEM1-UE1
+        mutualise: true
+    Cursus:
+      type: object
+      nullable: true
+      required:
+      - codeStructure
+      - periode
+      - formation
+      properties:
+        codeStructure:
+          description: Le code de la structure
+          type: string
+        periode:
+          description: La période du cursus
+          $ref: '#/components/schemas/Periode'
+        formation:
+          description: La formation du cursus
+          $ref: '#/components/schemas/Formation'
+        racinePedagogique:
+          description: Informations pédagogiques de la racine de l'inscription
+          $ref: '#/components/schemas/LignePedagogique'
+    LignePedagogique:
+      type: object
+      description: Informations pédagogiques pour un code chemin
+      nullable: true
+      required:
+      - codeObjetMaquette
+      - libelleLongObjetMaquette
+      - libelleAffichageTypeObjetFormation
+      - estObligatoire
+      - amenagements
+      - typeChoixPedagogique
+      - enfants
+      properties:
+        codeObjetMaquette:
+          type: string
+          description: Le code de l'objet maquette (formation, objet formation ou
+            groupement)
+        libelleLongObjetMaquette:
+          type: string
+          description: Le libellé long de l'objet maquette (formation, objet formation
+            ou groupement)
+        libelleAffichageTypeObjetFormation:
+          type: string
+          description: Le libellé d'affichage du type d'objet de formation
+        estObligatoire:
+          type: boolean
+          description: Si l'objet maquette est obligatoire pour ce code chemin
+        creditEcts:
+          type: number
+          format: double
+          description: Le nombre de crédits ECTS de l'objet maquette pour ce code
+            chemin
+          nullable: true
+        amenagements:
+          description: La liste des aménagements du choix pédagogique
+          type: array
+          items:
+            $ref: '#/components/schemas/Amenagement'
+        acquisCapitalise:
+          description: L'acquis capitalisé du choix pédagogique
+          $ref: '#/components/schemas/AcquisCapitalise'
+        typeChoixPedagogique:
+          description: Enumération des différents types de choix pédagogique
+          type: string
+          enum:
+          - PAS_DE_CHC
+          - DISPENSE_CHOISIE
+          - AFFECTATION_CHOISIE
+          - ACQUIS
+          - CAPITALISE_CHOISI
+          - RENONCIATION_CHOISIE
+        enfants:
+          type: array
+          items:
+            $ref: '#/components/schemas/LignePedagogique'
+          description: Les branches pédagogiques dans l'arbre
+    Formation:
+      type: object
+      required:
+      - code
+      - libelleLong
+      properties:
+        code:
+          type: string
+          description: Le code de la formation
+        libelleLong:
+          type: string
+          description: Le libellé long de la formation
+    Amenagement:
+      type: object
+      nullable: true
+      required:
+      - code
+      - libelleAffichage
+      properties:
+        code:
+          type: string
+          description: Le code de l'aménagement
+        libelleAffichage:
+          type: string
+          description: Le libellé de l'aménagement
+      description: Un aménagement
+    AcquisCapitalise:
+      type: object
+      nullable: true
+      required:
+      - libelleAffichagePeriodeAcquisition
+      - codeObjetFormationAcquisition
+      - trouveViaLienCorrespondancePourCalcul
+      - libelleResultatFinal
+      properties:
+        libelleAffichagePeriodeAcquisition:
+          type: string
+          description: Code de la période à laquelle il y a eu l'acquisition
+        codeObjetFormationAcquisition:
+          type: string
+          description: L'objet sur lequel il y a eu l'acquisition (différent de l'objet
+            du chemin dans le cas des LCC par exemple)
+        trouveViaLienCorrespondancePourCalcul:
+          type: boolean
+          description: Vrai si le code de l'OF acquis est différent du code OM
+        noteFinale:
+          type: string
+          description: La note finale
+          nullable: true
+          example: 12.456
+        bareme:
+          type: integer
+          format: int32
+          nullable: true
+          description: Le barème (le maximum) de la note Obligatoirement renseigné
+            si la note finale est présente.
+          example: 20
+        libelleResultatFinal:
+          type: string
+          description: Le libellé long du résultat final
+    Periode:
+      type: object
+      required:
+      - code
+      - libelleAffichage
+      - dateDebut
+      properties:
+        code:
+          type: string
+          description: Code de la période (identifiant unique)
+        libelleAffichage:
+          type: string
+          description: Le libellé long de la période
+        dateDebut:
+          type: string
+          format: date
+          description: La date de début de la période
+    CompositionPourExtraction:
+      description: Une composition avec ses groupes, formations et objets de formations
+        associés
+      type: object
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - periode
+      - listeGroupes
+      - listeFormations
+      - listeObjetsFormation
+      properties:
+        code:
+          description: Le code de la maquette de formation
+          type: string
+        libelleCourt:
+          description: Le libellé court de la maquette de formation
+          type: string
+        libelleLong:
+          description: Le libellé long de la maquette de formation
+          type: string
+        periode:
+          description: La période de mise en œuvre de la composition
+          $ref: '#/components/schemas/PeriodePourExtraction'
+        listeGroupes:
+          description: La liste des groupes associés à la composition
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupePourExtraction'
+        listeFormations:
+          description: La liste des formations associées à la composition
+          type: array
+          items:
+            $ref: '#/components/schemas/FormationPourExtraction'
+        listeObjetsFormation:
+          description: La liste des objets de formation associés à la composition
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjetFormationPourExtraction'
+    GroupePourExtraction:
+      description: Un groupe dans la composition
+      type: object
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - type
+      - planifiable
+      properties:
+        code:
+          description: Le code du groupe
+          type: string
+        libelleCourt:
+          description: Le libellé court du groupe
+          type: string
+        libelleLong:
+          description: Le libellé long du groupe
+          type: string
+        type:
+          description: Le type du groupe
+          $ref: '#/components/schemas/ObjetLibellePourExtraction'
+        capacite:
+          description: La capacité du groupe
+          type: integer
+          format: int32
+          nullable: true
+        placesReservees:
+          description: Le nombre de places réservées dans le groupe
+          type: integer
+          format: int32
+          nullable: true
+        planifiable:
+          description: Indique si le groupe est planifiable
+          type: boolean
+      example:
+        code: GRP-A1
+        libelleCourt: Groupe A1
+        libelleLong: Groupe A1 pour la composition A1
+        type:
+          code: TP
+          libelleCourt: Travaux Pratiques
+          libelleLong: Travaux Pratiques
+        capacite: 30
+        placesReservees: 5
+        planifiable: true
+    FormationPourExtraction:
+      description: Une formation liée à la composition
+      type: object
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      properties:
+        code:
+          description: Le code de la formation
+          type: string
+        libelleCourt:
+          description: Le libellé court de la formation
+          type: string
+        libelleLong:
+          description: Le libellé long de la formation
+          type: string
+      example:
+        code: FRM-A
+        libelleCourt: Formation A
+        libelleLong: Formation A pour la composition A1
+    ObjetFormationPourExtraction:
+      description: Un objet de formation associé à la composition
+      type: object
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - type
+      - mutualise
+      - listeChemins
+      properties:
+        code:
+          description: Le code de l'objet de formation
+          type: string
+        libelleCourt:
+          description: Le libellé court de l'objet de formation
+          type: string
+        libelleLong:
+          description: Le libellé long de l'objet de formation
+          type: string
+        type:
+          description: Le type de l'objet de formation
+          $ref: '#/components/schemas/ObjetLibellePourExtraction'
+        mutualise:
+          description: Indique si l'objet de formation est mutualisé
+          type: boolean
+        listeChemins:
+          description: Liste des chemins associés à l'objet de formation
+          type: array
+          items:
+            type: string
+      example:
+        code: OBJ-A1
+        libelleCourt: Objet de Formation A1
+        libelleLong: Objet de Formation A1 pour la composition A1
+        type:
+          code: CM
+          libelleCourt: Cours Magistral
+          libelleLong: Cours Magistral
+        mutualise: false
+        listeChemins:
+        - CHE-A1
+        - CHE-A2
+    PeriodePourExtraction:
+      description: La période de mise en œuvre de la formation
+      type: object
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - dateDebut
+      - dateFin
+      properties:
+        code:
+          type: string
+          description: Le code de la période
+        libelleCourt:
+          type: string
+          description: Le libellé court de la période
+        libelleLong:
+          type: string
+          description: Le libellé long de la période
+        dateDebut:
+          type: string
+          format: date
+          description: La date de début de la période
+        dateFin:
+          type: string
+          format: date
+          description: La date de fin de la période
+      example:
+        code: PER-S1
+        libelleCourt: Semestre 1
+        libelleLong: Semestre de septembre à janvier
+        dateDebut: '2024-09-01'
+        dateFin: '2025-01-31'
+    ObjetLibellePourExtraction:
+      type: object
+      properties:
+        code:
+          type: string
+          nullable: true
+          description: Le code de l'objet
+        libelleCourt:
+          type: string
+          nullable: true
+          description: Le libellé court de l'objet
+        libelleLong:
+          type: string
+          nullable: true
+          description: Le libellé long de l'objet
+      example:
+        code: OBJ-A1
+        libelleCourt: Objet de Formation A1
+        libelleLong: Objet de Formation A1 pour la composition A1
+  securitySchemes:
+    idTokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

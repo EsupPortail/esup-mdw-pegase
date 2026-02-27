@@ -19,12 +19,8 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.chc.model.Apprenant;
-import fr.univlorraine.pegase.chc.model.TypeGroupe;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 import com.google.gson.Gson;
@@ -51,162 +47,154 @@ import java.util.Set;
 import fr.univlorraine.pegase.chc.invoker.JSON;
 
 /**
- * Un groupe de la composition
+ * AcquisCapitalise
  */
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-02-27T16:57:51.872239500+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
-public class Groupe {
-  public static final String SERIALIZED_NAME_CODE = "code";
-  @SerializedName(SERIALIZED_NAME_CODE)
+public class AcquisCapitalise {
+  public static final String SERIALIZED_NAME_LIBELLE_AFFICHAGE_PERIODE_ACQUISITION = "libelleAffichagePeriodeAcquisition";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_AFFICHAGE_PERIODE_ACQUISITION)
   @jakarta.annotation.Nonnull
-  private String code;
+  private String libelleAffichagePeriodeAcquisition;
 
-  public static final String SERIALIZED_NAME_LIBELLE_COURT = "libelleCourt";
-  @SerializedName(SERIALIZED_NAME_LIBELLE_COURT)
+  public static final String SERIALIZED_NAME_CODE_OBJET_FORMATION_ACQUISITION = "codeObjetFormationAcquisition";
+  @SerializedName(SERIALIZED_NAME_CODE_OBJET_FORMATION_ACQUISITION)
+  @jakarta.annotation.Nonnull
+  private String codeObjetFormationAcquisition;
+
+  public static final String SERIALIZED_NAME_TROUVE_VIA_LIEN_CORRESPONDANCE_POUR_CALCUL = "trouveViaLienCorrespondancePourCalcul";
+  @SerializedName(SERIALIZED_NAME_TROUVE_VIA_LIEN_CORRESPONDANCE_POUR_CALCUL)
+  @jakarta.annotation.Nonnull
+  private Boolean trouveViaLienCorrespondancePourCalcul;
+
+  public static final String SERIALIZED_NAME_NOTE_FINALE = "noteFinale";
+  @SerializedName(SERIALIZED_NAME_NOTE_FINALE)
   @jakarta.annotation.Nullable
-  private String libelleCourt;
+  private String noteFinale;
 
-  public static final String SERIALIZED_NAME_LIBELLE_LONG = "libelleLong";
-  @SerializedName(SERIALIZED_NAME_LIBELLE_LONG)
+  public static final String SERIALIZED_NAME_BAREME = "bareme";
+  @SerializedName(SERIALIZED_NAME_BAREME)
   @jakarta.annotation.Nullable
-  private String libelleLong;
+  private Integer bareme;
 
-  public static final String SERIALIZED_NAME_TYPE_GROUPE = "typeGroupe";
-  @SerializedName(SERIALIZED_NAME_TYPE_GROUPE)
+  public static final String SERIALIZED_NAME_LIBELLE_RESULTAT_FINAL = "libelleResultatFinal";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_RESULTAT_FINAL)
   @jakarta.annotation.Nonnull
-  private TypeGroupe typeGroupe;
+  private String libelleResultatFinal;
 
-  public static final String SERIALIZED_NAME_PLANIFIABLE = "planifiable";
-  @SerializedName(SERIALIZED_NAME_PLANIFIABLE)
-  @jakarta.annotation.Nonnull
-  private Boolean planifiable;
-
-  public static final String SERIALIZED_NAME_APPRENANTS = "apprenants";
-  @SerializedName(SERIALIZED_NAME_APPRENANTS)
-  @jakarta.annotation.Nonnull
-  private List<Apprenant> apprenants = new ArrayList<>();
-
-  public Groupe() {
+  public AcquisCapitalise() {
   }
 
-  public Groupe code(@jakarta.annotation.Nonnull String code) {
-    this.code = code;
+  public AcquisCapitalise libelleAffichagePeriodeAcquisition(@jakarta.annotation.Nonnull String libelleAffichagePeriodeAcquisition) {
+    this.libelleAffichagePeriodeAcquisition = libelleAffichagePeriodeAcquisition;
     return this;
   }
 
   /**
-   * Le code du groupe
-   * @return code
+   * Code de la période à laquelle il y a eu l&#39;acquisition
+   * @return libelleAffichagePeriodeAcquisition
    */
   @jakarta.annotation.Nonnull
-  public String getCode() {
-    return code;
+  public String getLibelleAffichagePeriodeAcquisition() {
+    return libelleAffichagePeriodeAcquisition;
   }
 
-  public void setCode(@jakarta.annotation.Nonnull String code) {
-    this.code = code;
+  public void setLibelleAffichagePeriodeAcquisition(@jakarta.annotation.Nonnull String libelleAffichagePeriodeAcquisition) {
+    this.libelleAffichagePeriodeAcquisition = libelleAffichagePeriodeAcquisition;
   }
 
 
-  public Groupe libelleCourt(@jakarta.annotation.Nullable String libelleCourt) {
-    this.libelleCourt = libelleCourt;
+  public AcquisCapitalise codeObjetFormationAcquisition(@jakarta.annotation.Nonnull String codeObjetFormationAcquisition) {
+    this.codeObjetFormationAcquisition = codeObjetFormationAcquisition;
     return this;
   }
 
   /**
-   * Le libellé court du groupe
-   * @return libelleCourt
+   * L&#39;objet sur lequel il y a eu l&#39;acquisition (différent de l&#39;objet du chemin dans le cas des LCC par exemple)
+   * @return codeObjetFormationAcquisition
+   */
+  @jakarta.annotation.Nonnull
+  public String getCodeObjetFormationAcquisition() {
+    return codeObjetFormationAcquisition;
+  }
+
+  public void setCodeObjetFormationAcquisition(@jakarta.annotation.Nonnull String codeObjetFormationAcquisition) {
+    this.codeObjetFormationAcquisition = codeObjetFormationAcquisition;
+  }
+
+
+  public AcquisCapitalise trouveViaLienCorrespondancePourCalcul(@jakarta.annotation.Nonnull Boolean trouveViaLienCorrespondancePourCalcul) {
+    this.trouveViaLienCorrespondancePourCalcul = trouveViaLienCorrespondancePourCalcul;
+    return this;
+  }
+
+  /**
+   * Vrai si le code de l&#39;OF acquis est différent du code OM
+   * @return trouveViaLienCorrespondancePourCalcul
+   */
+  @jakarta.annotation.Nonnull
+  public Boolean getTrouveViaLienCorrespondancePourCalcul() {
+    return trouveViaLienCorrespondancePourCalcul;
+  }
+
+  public void setTrouveViaLienCorrespondancePourCalcul(@jakarta.annotation.Nonnull Boolean trouveViaLienCorrespondancePourCalcul) {
+    this.trouveViaLienCorrespondancePourCalcul = trouveViaLienCorrespondancePourCalcul;
+  }
+
+
+  public AcquisCapitalise noteFinale(@jakarta.annotation.Nullable String noteFinale) {
+    this.noteFinale = noteFinale;
+    return this;
+  }
+
+  /**
+   * La note finale
+   * @return noteFinale
    */
   @jakarta.annotation.Nullable
-  public String getLibelleCourt() {
-    return libelleCourt;
+  public String getNoteFinale() {
+    return noteFinale;
   }
 
-  public void setLibelleCourt(@jakarta.annotation.Nullable String libelleCourt) {
-    this.libelleCourt = libelleCourt;
+  public void setNoteFinale(@jakarta.annotation.Nullable String noteFinale) {
+    this.noteFinale = noteFinale;
   }
 
 
-  public Groupe libelleLong(@jakarta.annotation.Nullable String libelleLong) {
-    this.libelleLong = libelleLong;
+  public AcquisCapitalise bareme(@jakarta.annotation.Nullable Integer bareme) {
+    this.bareme = bareme;
     return this;
   }
 
   /**
-   * Le libellé long du groupe
-   * @return libelleLong
+   * Le barème (le maximum) de la note Obligatoirement renseigné si la note finale est présente.
+   * @return bareme
    */
   @jakarta.annotation.Nullable
-  public String getLibelleLong() {
-    return libelleLong;
+  public Integer getBareme() {
+    return bareme;
   }
 
-  public void setLibelleLong(@jakarta.annotation.Nullable String libelleLong) {
-    this.libelleLong = libelleLong;
+  public void setBareme(@jakarta.annotation.Nullable Integer bareme) {
+    this.bareme = bareme;
   }
 
 
-  public Groupe typeGroupe(@jakarta.annotation.Nonnull TypeGroupe typeGroupe) {
-    this.typeGroupe = typeGroupe;
+  public AcquisCapitalise libelleResultatFinal(@jakarta.annotation.Nonnull String libelleResultatFinal) {
+    this.libelleResultatFinal = libelleResultatFinal;
     return this;
   }
 
   /**
-   * Get typeGroupe
-   * @return typeGroupe
+   * Le libellé long du résultat final
+   * @return libelleResultatFinal
    */
   @jakarta.annotation.Nonnull
-  public TypeGroupe getTypeGroupe() {
-    return typeGroupe;
+  public String getLibelleResultatFinal() {
+    return libelleResultatFinal;
   }
 
-  public void setTypeGroupe(@jakarta.annotation.Nonnull TypeGroupe typeGroupe) {
-    this.typeGroupe = typeGroupe;
-  }
-
-
-  public Groupe planifiable(@jakarta.annotation.Nonnull Boolean planifiable) {
-    this.planifiable = planifiable;
-    return this;
-  }
-
-  /**
-   * Indique si le groupe est planifiable
-   * @return planifiable
-   */
-  @jakarta.annotation.Nonnull
-  public Boolean getPlanifiable() {
-    return planifiable;
-  }
-
-  public void setPlanifiable(@jakarta.annotation.Nonnull Boolean planifiable) {
-    this.planifiable = planifiable;
-  }
-
-
-  public Groupe apprenants(@jakarta.annotation.Nonnull List<Apprenant> apprenants) {
-    this.apprenants = apprenants;
-    return this;
-  }
-
-  public Groupe addApprenantsItem(Apprenant apprenantsItem) {
-    if (this.apprenants == null) {
-      this.apprenants = new ArrayList<>();
-    }
-    this.apprenants.add(apprenantsItem);
-    return this;
-  }
-
-  /**
-   * La liste des apprenants du groupe
-   * @return apprenants
-   */
-  @jakarta.annotation.Nonnull
-  public List<Apprenant> getApprenants() {
-    return apprenants;
-  }
-
-  public void setApprenants(@jakarta.annotation.Nonnull List<Apprenant> apprenants) {
-    this.apprenants = apprenants;
+  public void setLibelleResultatFinal(@jakarta.annotation.Nonnull String libelleResultatFinal) {
+    this.libelleResultatFinal = libelleResultatFinal;
   }
 
   /**
@@ -222,9 +210,9 @@ public class Groupe {
    *
    * @param key name of the property
    * @param value value of the property
-   * @return the Groupe instance itself
+   * @return the AcquisCapitalise instance itself
    */
-  public Groupe putAdditionalProperty(String key, Object value) {
+  public AcquisCapitalise putAdditionalProperty(String key, Object value) {
     if (this.additionalProperties == null) {
         this.additionalProperties = new HashMap<String, Object>();
     }
@@ -263,14 +251,14 @@ public class Groupe {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Groupe groupe = (Groupe) o;
-    return Objects.equals(this.code, groupe.code) &&
-        Objects.equals(this.libelleCourt, groupe.libelleCourt) &&
-        Objects.equals(this.libelleLong, groupe.libelleLong) &&
-        Objects.equals(this.typeGroupe, groupe.typeGroupe) &&
-        Objects.equals(this.planifiable, groupe.planifiable) &&
-        Objects.equals(this.apprenants, groupe.apprenants)&&
-        Objects.equals(this.additionalProperties, groupe.additionalProperties);
+    AcquisCapitalise acquisCapitalise = (AcquisCapitalise) o;
+    return Objects.equals(this.libelleAffichagePeriodeAcquisition, acquisCapitalise.libelleAffichagePeriodeAcquisition) &&
+        Objects.equals(this.codeObjetFormationAcquisition, acquisCapitalise.codeObjetFormationAcquisition) &&
+        Objects.equals(this.trouveViaLienCorrespondancePourCalcul, acquisCapitalise.trouveViaLienCorrespondancePourCalcul) &&
+        Objects.equals(this.noteFinale, acquisCapitalise.noteFinale) &&
+        Objects.equals(this.bareme, acquisCapitalise.bareme) &&
+        Objects.equals(this.libelleResultatFinal, acquisCapitalise.libelleResultatFinal)&&
+        Objects.equals(this.additionalProperties, acquisCapitalise.additionalProperties);
   }
 
   private static <T> boolean equalsNullable(JsonNullable<T> a, JsonNullable<T> b) {
@@ -279,7 +267,7 @@ public class Groupe {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, libelleCourt, libelleLong, typeGroupe, planifiable, apprenants, additionalProperties);
+    return Objects.hash(libelleAffichagePeriodeAcquisition, codeObjetFormationAcquisition, trouveViaLienCorrespondancePourCalcul, noteFinale, bareme, libelleResultatFinal, additionalProperties);
   }
 
   private static <T> int hashCodeNullable(JsonNullable<T> a) {
@@ -292,13 +280,13 @@ public class Groupe {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Groupe {\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    libelleCourt: ").append(toIndentedString(libelleCourt)).append("\n");
-    sb.append("    libelleLong: ").append(toIndentedString(libelleLong)).append("\n");
-    sb.append("    typeGroupe: ").append(toIndentedString(typeGroupe)).append("\n");
-    sb.append("    planifiable: ").append(toIndentedString(planifiable)).append("\n");
-    sb.append("    apprenants: ").append(toIndentedString(apprenants)).append("\n");
+    sb.append("class AcquisCapitalise {\n");
+    sb.append("    libelleAffichagePeriodeAcquisition: ").append(toIndentedString(libelleAffichagePeriodeAcquisition)).append("\n");
+    sb.append("    codeObjetFormationAcquisition: ").append(toIndentedString(codeObjetFormationAcquisition)).append("\n");
+    sb.append("    trouveViaLienCorrespondancePourCalcul: ").append(toIndentedString(trouveViaLienCorrespondancePourCalcul)).append("\n");
+    sb.append("    noteFinale: ").append(toIndentedString(noteFinale)).append("\n");
+    sb.append("    bareme: ").append(toIndentedString(bareme)).append("\n");
+    sb.append("    libelleResultatFinal: ").append(toIndentedString(libelleResultatFinal)).append("\n");
     sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -321,52 +309,43 @@ public class Groupe {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("code", "libelleCourt", "libelleLong", "typeGroupe", "planifiable", "apprenants"));
+    openapiFields = new HashSet<String>(Arrays.asList("libelleAffichagePeriodeAcquisition", "codeObjetFormationAcquisition", "trouveViaLienCorrespondancePourCalcul", "noteFinale", "bareme", "libelleResultatFinal"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("code", "typeGroupe", "planifiable", "apprenants"));
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("libelleAffichagePeriodeAcquisition", "codeObjetFormationAcquisition", "trouveViaLienCorrespondancePourCalcul", "libelleResultatFinal"));
   }
 
   /**
    * Validates the JSON Element and throws an exception if issues found
    *
    * @param jsonElement JSON Element
-   * @throws IOException if the JSON Element is invalid with respect to Groupe
+   * @throws IOException if the JSON Element is invalid with respect to AcquisCapitalise
    */
   public static void validateJsonElement(JsonElement jsonElement) throws IOException {
       if (jsonElement == null) {
-        if (!Groupe.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
-          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in Groupe is not found in the empty JSON string", Groupe.openapiRequiredFields.toString()));
+        if (!AcquisCapitalise.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in AcquisCapitalise is not found in the empty JSON string", AcquisCapitalise.openapiRequiredFields.toString()));
         }
       }
 
       // check to make sure all required properties/fields are present in the JSON string
-      for (String requiredField : Groupe.openapiRequiredFields) {
+      for (String requiredField : AcquisCapitalise.openapiRequiredFields) {
         if (jsonElement.getAsJsonObject().get(requiredField) == null) {
           throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
         }
       }
         JsonObject jsonObj = jsonElement.getAsJsonObject();
-      if (!jsonObj.get("code").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `code` to be a primitive type in the JSON string but got `%s`", jsonObj.get("code").toString()));
+      if (!jsonObj.get("libelleAffichagePeriodeAcquisition").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleAffichagePeriodeAcquisition` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleAffichagePeriodeAcquisition").toString()));
       }
-      if ((jsonObj.get("libelleCourt") != null && !jsonObj.get("libelleCourt").isJsonNull()) && !jsonObj.get("libelleCourt").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleCourt` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleCourt").toString()));
+      if (!jsonObj.get("codeObjetFormationAcquisition").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `codeObjetFormationAcquisition` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codeObjetFormationAcquisition").toString()));
       }
-      if ((jsonObj.get("libelleLong") != null && !jsonObj.get("libelleLong").isJsonNull()) && !jsonObj.get("libelleLong").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleLong` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleLong").toString()));
+      if ((jsonObj.get("noteFinale") != null && !jsonObj.get("noteFinale").isJsonNull()) && !jsonObj.get("noteFinale").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `noteFinale` to be a primitive type in the JSON string but got `%s`", jsonObj.get("noteFinale").toString()));
       }
-      // validate the required field `typeGroupe`
-      TypeGroupe.validateJsonElement(jsonObj.get("typeGroupe"));
-      if (jsonObj.get("apprenants") != null) {
-        if (!jsonObj.get("apprenants").isJsonArray()) {
-          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `apprenants` to be an array in the JSON string but got `%s`", jsonObj.get("apprenants").toString()));
-        }
-        JsonArray jsonArrayapprenants = jsonObj.getAsJsonArray("apprenants");
-        // validate the required field `apprenants` (array)
-        for (int i = 0; i < jsonArrayapprenants.size(); i++) {
-          Apprenant.validateJsonElement(jsonArrayapprenants.get(i));
-        }
+      if (!jsonObj.get("libelleResultatFinal").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleResultatFinal` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleResultatFinal").toString()));
       }
   }
 
@@ -374,16 +353,16 @@ public class Groupe {
     @SuppressWarnings("unchecked")
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-       if (!Groupe.class.isAssignableFrom(type.getRawType())) {
-         return null; // this class only serializes 'Groupe' and its subtypes
+       if (!AcquisCapitalise.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'AcquisCapitalise' and its subtypes
        }
        final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
-       final TypeAdapter<Groupe> thisAdapter
-                        = gson.getDelegateAdapter(this, TypeToken.get(Groupe.class));
+       final TypeAdapter<AcquisCapitalise> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(AcquisCapitalise.class));
 
-       return (TypeAdapter<T>) new TypeAdapter<Groupe>() {
+       return (TypeAdapter<T>) new TypeAdapter<AcquisCapitalise>() {
            @Override
-           public void write(JsonWriter out, Groupe value) throws IOException {
+           public void write(JsonWriter out, AcquisCapitalise value) throws IOException {
              JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
              obj.remove("additionalProperties");
              // serialize additional properties
@@ -411,12 +390,12 @@ public class Groupe {
            }
 
            @Override
-           public Groupe read(JsonReader in) throws IOException {
+           public AcquisCapitalise read(JsonReader in) throws IOException {
              JsonElement jsonElement = elementAdapter.read(in);
              validateJsonElement(jsonElement);
              JsonObject jsonObj = jsonElement.getAsJsonObject();
              // store additional fields in the deserialized instance
-             Groupe instance = thisAdapter.fromJsonTree(jsonObj);
+             AcquisCapitalise instance = thisAdapter.fromJsonTree(jsonObj);
              for (Map.Entry<String, JsonElement> entry : jsonObj.entrySet()) {
                if (!openapiFields.contains(entry.getKey())) {
                  if (entry.getValue().isJsonPrimitive()) { // primitive type
@@ -443,18 +422,18 @@ public class Groupe {
   }
 
   /**
-   * Create an instance of Groupe given an JSON string
+   * Create an instance of AcquisCapitalise given an JSON string
    *
    * @param jsonString JSON string
-   * @return An instance of Groupe
-   * @throws IOException if the JSON string is invalid with respect to Groupe
+   * @return An instance of AcquisCapitalise
+   * @throws IOException if the JSON string is invalid with respect to AcquisCapitalise
    */
-  public static Groupe fromJson(String jsonString) throws IOException {
-    return JSON.getGson().fromJson(jsonString, Groupe.class);
+  public static AcquisCapitalise fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, AcquisCapitalise.class);
   }
 
   /**
-   * Convert an instance of Groupe to an JSON string
+   * Convert an instance of AcquisCapitalise to an JSON string
    *
    * @return JSON string
    */

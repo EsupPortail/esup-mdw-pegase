@@ -19,12 +19,11 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.chc.model.Apprenant;
-import fr.univlorraine.pegase.chc.model.TypeGroupe;
+import fr.univlorraine.pegase.chc.model.Formation;
+import fr.univlorraine.pegase.chc.model.LignePedagogique;
+import fr.univlorraine.pegase.chc.model.Periode;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 import com.google.gson.Gson;
@@ -51,162 +50,106 @@ import java.util.Set;
 import fr.univlorraine.pegase.chc.invoker.JSON;
 
 /**
- * Un groupe de la composition
+ * Cursus
  */
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-02-27T16:57:51.872239500+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
-public class Groupe {
-  public static final String SERIALIZED_NAME_CODE = "code";
-  @SerializedName(SERIALIZED_NAME_CODE)
+public class Cursus {
+  public static final String SERIALIZED_NAME_CODE_STRUCTURE = "codeStructure";
+  @SerializedName(SERIALIZED_NAME_CODE_STRUCTURE)
   @jakarta.annotation.Nonnull
-  private String code;
+  private String codeStructure;
 
-  public static final String SERIALIZED_NAME_LIBELLE_COURT = "libelleCourt";
-  @SerializedName(SERIALIZED_NAME_LIBELLE_COURT)
+  public static final String SERIALIZED_NAME_PERIODE = "periode";
+  @SerializedName(SERIALIZED_NAME_PERIODE)
+  @jakarta.annotation.Nonnull
+  private Periode periode;
+
+  public static final String SERIALIZED_NAME_FORMATION = "formation";
+  @SerializedName(SERIALIZED_NAME_FORMATION)
+  @jakarta.annotation.Nonnull
+  private Formation formation;
+
+  public static final String SERIALIZED_NAME_RACINE_PEDAGOGIQUE = "racinePedagogique";
+  @SerializedName(SERIALIZED_NAME_RACINE_PEDAGOGIQUE)
   @jakarta.annotation.Nullable
-  private String libelleCourt;
+  private LignePedagogique racinePedagogique;
 
-  public static final String SERIALIZED_NAME_LIBELLE_LONG = "libelleLong";
-  @SerializedName(SERIALIZED_NAME_LIBELLE_LONG)
+  public Cursus() {
+  }
+
+  public Cursus codeStructure(@jakarta.annotation.Nonnull String codeStructure) {
+    this.codeStructure = codeStructure;
+    return this;
+  }
+
+  /**
+   * Le code de la structure
+   * @return codeStructure
+   */
+  @jakarta.annotation.Nonnull
+  public String getCodeStructure() {
+    return codeStructure;
+  }
+
+  public void setCodeStructure(@jakarta.annotation.Nonnull String codeStructure) {
+    this.codeStructure = codeStructure;
+  }
+
+
+  public Cursus periode(@jakarta.annotation.Nonnull Periode periode) {
+    this.periode = periode;
+    return this;
+  }
+
+  /**
+   * Get periode
+   * @return periode
+   */
+  @jakarta.annotation.Nonnull
+  public Periode getPeriode() {
+    return periode;
+  }
+
+  public void setPeriode(@jakarta.annotation.Nonnull Periode periode) {
+    this.periode = periode;
+  }
+
+
+  public Cursus formation(@jakarta.annotation.Nonnull Formation formation) {
+    this.formation = formation;
+    return this;
+  }
+
+  /**
+   * Get formation
+   * @return formation
+   */
+  @jakarta.annotation.Nonnull
+  public Formation getFormation() {
+    return formation;
+  }
+
+  public void setFormation(@jakarta.annotation.Nonnull Formation formation) {
+    this.formation = formation;
+  }
+
+
+  public Cursus racinePedagogique(@jakarta.annotation.Nullable LignePedagogique racinePedagogique) {
+    this.racinePedagogique = racinePedagogique;
+    return this;
+  }
+
+  /**
+   * Get racinePedagogique
+   * @return racinePedagogique
+   */
   @jakarta.annotation.Nullable
-  private String libelleLong;
-
-  public static final String SERIALIZED_NAME_TYPE_GROUPE = "typeGroupe";
-  @SerializedName(SERIALIZED_NAME_TYPE_GROUPE)
-  @jakarta.annotation.Nonnull
-  private TypeGroupe typeGroupe;
-
-  public static final String SERIALIZED_NAME_PLANIFIABLE = "planifiable";
-  @SerializedName(SERIALIZED_NAME_PLANIFIABLE)
-  @jakarta.annotation.Nonnull
-  private Boolean planifiable;
-
-  public static final String SERIALIZED_NAME_APPRENANTS = "apprenants";
-  @SerializedName(SERIALIZED_NAME_APPRENANTS)
-  @jakarta.annotation.Nonnull
-  private List<Apprenant> apprenants = new ArrayList<>();
-
-  public Groupe() {
+  public LignePedagogique getRacinePedagogique() {
+    return racinePedagogique;
   }
 
-  public Groupe code(@jakarta.annotation.Nonnull String code) {
-    this.code = code;
-    return this;
-  }
-
-  /**
-   * Le code du groupe
-   * @return code
-   */
-  @jakarta.annotation.Nonnull
-  public String getCode() {
-    return code;
-  }
-
-  public void setCode(@jakarta.annotation.Nonnull String code) {
-    this.code = code;
-  }
-
-
-  public Groupe libelleCourt(@jakarta.annotation.Nullable String libelleCourt) {
-    this.libelleCourt = libelleCourt;
-    return this;
-  }
-
-  /**
-   * Le libellé court du groupe
-   * @return libelleCourt
-   */
-  @jakarta.annotation.Nullable
-  public String getLibelleCourt() {
-    return libelleCourt;
-  }
-
-  public void setLibelleCourt(@jakarta.annotation.Nullable String libelleCourt) {
-    this.libelleCourt = libelleCourt;
-  }
-
-
-  public Groupe libelleLong(@jakarta.annotation.Nullable String libelleLong) {
-    this.libelleLong = libelleLong;
-    return this;
-  }
-
-  /**
-   * Le libellé long du groupe
-   * @return libelleLong
-   */
-  @jakarta.annotation.Nullable
-  public String getLibelleLong() {
-    return libelleLong;
-  }
-
-  public void setLibelleLong(@jakarta.annotation.Nullable String libelleLong) {
-    this.libelleLong = libelleLong;
-  }
-
-
-  public Groupe typeGroupe(@jakarta.annotation.Nonnull TypeGroupe typeGroupe) {
-    this.typeGroupe = typeGroupe;
-    return this;
-  }
-
-  /**
-   * Get typeGroupe
-   * @return typeGroupe
-   */
-  @jakarta.annotation.Nonnull
-  public TypeGroupe getTypeGroupe() {
-    return typeGroupe;
-  }
-
-  public void setTypeGroupe(@jakarta.annotation.Nonnull TypeGroupe typeGroupe) {
-    this.typeGroupe = typeGroupe;
-  }
-
-
-  public Groupe planifiable(@jakarta.annotation.Nonnull Boolean planifiable) {
-    this.planifiable = planifiable;
-    return this;
-  }
-
-  /**
-   * Indique si le groupe est planifiable
-   * @return planifiable
-   */
-  @jakarta.annotation.Nonnull
-  public Boolean getPlanifiable() {
-    return planifiable;
-  }
-
-  public void setPlanifiable(@jakarta.annotation.Nonnull Boolean planifiable) {
-    this.planifiable = planifiable;
-  }
-
-
-  public Groupe apprenants(@jakarta.annotation.Nonnull List<Apprenant> apprenants) {
-    this.apprenants = apprenants;
-    return this;
-  }
-
-  public Groupe addApprenantsItem(Apprenant apprenantsItem) {
-    if (this.apprenants == null) {
-      this.apprenants = new ArrayList<>();
-    }
-    this.apprenants.add(apprenantsItem);
-    return this;
-  }
-
-  /**
-   * La liste des apprenants du groupe
-   * @return apprenants
-   */
-  @jakarta.annotation.Nonnull
-  public List<Apprenant> getApprenants() {
-    return apprenants;
-  }
-
-  public void setApprenants(@jakarta.annotation.Nonnull List<Apprenant> apprenants) {
-    this.apprenants = apprenants;
+  public void setRacinePedagogique(@jakarta.annotation.Nullable LignePedagogique racinePedagogique) {
+    this.racinePedagogique = racinePedagogique;
   }
 
   /**
@@ -222,9 +165,9 @@ public class Groupe {
    *
    * @param key name of the property
    * @param value value of the property
-   * @return the Groupe instance itself
+   * @return the Cursus instance itself
    */
-  public Groupe putAdditionalProperty(String key, Object value) {
+  public Cursus putAdditionalProperty(String key, Object value) {
     if (this.additionalProperties == null) {
         this.additionalProperties = new HashMap<String, Object>();
     }
@@ -263,14 +206,12 @@ public class Groupe {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Groupe groupe = (Groupe) o;
-    return Objects.equals(this.code, groupe.code) &&
-        Objects.equals(this.libelleCourt, groupe.libelleCourt) &&
-        Objects.equals(this.libelleLong, groupe.libelleLong) &&
-        Objects.equals(this.typeGroupe, groupe.typeGroupe) &&
-        Objects.equals(this.planifiable, groupe.planifiable) &&
-        Objects.equals(this.apprenants, groupe.apprenants)&&
-        Objects.equals(this.additionalProperties, groupe.additionalProperties);
+    Cursus cursus = (Cursus) o;
+    return Objects.equals(this.codeStructure, cursus.codeStructure) &&
+        Objects.equals(this.periode, cursus.periode) &&
+        Objects.equals(this.formation, cursus.formation) &&
+        Objects.equals(this.racinePedagogique, cursus.racinePedagogique)&&
+        Objects.equals(this.additionalProperties, cursus.additionalProperties);
   }
 
   private static <T> boolean equalsNullable(JsonNullable<T> a, JsonNullable<T> b) {
@@ -279,7 +220,7 @@ public class Groupe {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, libelleCourt, libelleLong, typeGroupe, planifiable, apprenants, additionalProperties);
+    return Objects.hash(codeStructure, periode, formation, racinePedagogique, additionalProperties);
   }
 
   private static <T> int hashCodeNullable(JsonNullable<T> a) {
@@ -292,13 +233,11 @@ public class Groupe {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Groupe {\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    libelleCourt: ").append(toIndentedString(libelleCourt)).append("\n");
-    sb.append("    libelleLong: ").append(toIndentedString(libelleLong)).append("\n");
-    sb.append("    typeGroupe: ").append(toIndentedString(typeGroupe)).append("\n");
-    sb.append("    planifiable: ").append(toIndentedString(planifiable)).append("\n");
-    sb.append("    apprenants: ").append(toIndentedString(apprenants)).append("\n");
+    sb.append("class Cursus {\n");
+    sb.append("    codeStructure: ").append(toIndentedString(codeStructure)).append("\n");
+    sb.append("    periode: ").append(toIndentedString(periode)).append("\n");
+    sb.append("    formation: ").append(toIndentedString(formation)).append("\n");
+    sb.append("    racinePedagogique: ").append(toIndentedString(racinePedagogique)).append("\n");
     sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -321,52 +260,42 @@ public class Groupe {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("code", "libelleCourt", "libelleLong", "typeGroupe", "planifiable", "apprenants"));
+    openapiFields = new HashSet<String>(Arrays.asList("codeStructure", "periode", "formation", "racinePedagogique"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("code", "typeGroupe", "planifiable", "apprenants"));
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("codeStructure", "periode", "formation"));
   }
 
   /**
    * Validates the JSON Element and throws an exception if issues found
    *
    * @param jsonElement JSON Element
-   * @throws IOException if the JSON Element is invalid with respect to Groupe
+   * @throws IOException if the JSON Element is invalid with respect to Cursus
    */
   public static void validateJsonElement(JsonElement jsonElement) throws IOException {
       if (jsonElement == null) {
-        if (!Groupe.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
-          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in Groupe is not found in the empty JSON string", Groupe.openapiRequiredFields.toString()));
+        if (!Cursus.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in Cursus is not found in the empty JSON string", Cursus.openapiRequiredFields.toString()));
         }
       }
 
       // check to make sure all required properties/fields are present in the JSON string
-      for (String requiredField : Groupe.openapiRequiredFields) {
+      for (String requiredField : Cursus.openapiRequiredFields) {
         if (jsonElement.getAsJsonObject().get(requiredField) == null) {
           throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
         }
       }
         JsonObject jsonObj = jsonElement.getAsJsonObject();
-      if (!jsonObj.get("code").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `code` to be a primitive type in the JSON string but got `%s`", jsonObj.get("code").toString()));
+      if (!jsonObj.get("codeStructure").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `codeStructure` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codeStructure").toString()));
       }
-      if ((jsonObj.get("libelleCourt") != null && !jsonObj.get("libelleCourt").isJsonNull()) && !jsonObj.get("libelleCourt").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleCourt` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleCourt").toString()));
-      }
-      if ((jsonObj.get("libelleLong") != null && !jsonObj.get("libelleLong").isJsonNull()) && !jsonObj.get("libelleLong").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleLong` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleLong").toString()));
-      }
-      // validate the required field `typeGroupe`
-      TypeGroupe.validateJsonElement(jsonObj.get("typeGroupe"));
-      if (jsonObj.get("apprenants") != null) {
-        if (!jsonObj.get("apprenants").isJsonArray()) {
-          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `apprenants` to be an array in the JSON string but got `%s`", jsonObj.get("apprenants").toString()));
-        }
-        JsonArray jsonArrayapprenants = jsonObj.getAsJsonArray("apprenants");
-        // validate the required field `apprenants` (array)
-        for (int i = 0; i < jsonArrayapprenants.size(); i++) {
-          Apprenant.validateJsonElement(jsonArrayapprenants.get(i));
-        }
+      // validate the required field `periode`
+      Periode.validateJsonElement(jsonObj.get("periode"));
+      // validate the required field `formation`
+      Formation.validateJsonElement(jsonObj.get("formation"));
+      // validate the optional field `racinePedagogique`
+      if (jsonObj.get("racinePedagogique") != null && !jsonObj.get("racinePedagogique").isJsonNull()) {
+        LignePedagogique.validateJsonElement(jsonObj.get("racinePedagogique"));
       }
   }
 
@@ -374,16 +303,16 @@ public class Groupe {
     @SuppressWarnings("unchecked")
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-       if (!Groupe.class.isAssignableFrom(type.getRawType())) {
-         return null; // this class only serializes 'Groupe' and its subtypes
+       if (!Cursus.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'Cursus' and its subtypes
        }
        final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
-       final TypeAdapter<Groupe> thisAdapter
-                        = gson.getDelegateAdapter(this, TypeToken.get(Groupe.class));
+       final TypeAdapter<Cursus> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(Cursus.class));
 
-       return (TypeAdapter<T>) new TypeAdapter<Groupe>() {
+       return (TypeAdapter<T>) new TypeAdapter<Cursus>() {
            @Override
-           public void write(JsonWriter out, Groupe value) throws IOException {
+           public void write(JsonWriter out, Cursus value) throws IOException {
              JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
              obj.remove("additionalProperties");
              // serialize additional properties
@@ -411,12 +340,12 @@ public class Groupe {
            }
 
            @Override
-           public Groupe read(JsonReader in) throws IOException {
+           public Cursus read(JsonReader in) throws IOException {
              JsonElement jsonElement = elementAdapter.read(in);
              validateJsonElement(jsonElement);
              JsonObject jsonObj = jsonElement.getAsJsonObject();
              // store additional fields in the deserialized instance
-             Groupe instance = thisAdapter.fromJsonTree(jsonObj);
+             Cursus instance = thisAdapter.fromJsonTree(jsonObj);
              for (Map.Entry<String, JsonElement> entry : jsonObj.entrySet()) {
                if (!openapiFields.contains(entry.getKey())) {
                  if (entry.getValue().isJsonPrimitive()) { // primitive type
@@ -443,18 +372,18 @@ public class Groupe {
   }
 
   /**
-   * Create an instance of Groupe given an JSON string
+   * Create an instance of Cursus given an JSON string
    *
    * @param jsonString JSON string
-   * @return An instance of Groupe
-   * @throws IOException if the JSON string is invalid with respect to Groupe
+   * @return An instance of Cursus
+   * @throws IOException if the JSON string is invalid with respect to Cursus
    */
-  public static Groupe fromJson(String jsonString) throws IOException {
-    return JSON.getGson().fromJson(jsonString, Groupe.class);
+  public static Cursus fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, Cursus.class);
   }
 
   /**
-   * Convert an instance of Groupe to an JSON string
+   * Convert an instance of Cursus to an JSON string
    *
    * @return JSON string
    */

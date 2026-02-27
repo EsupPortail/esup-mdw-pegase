@@ -22,8 +22,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
-import fr.univlorraine.pegase.chc.model.CursusDCA;
-import fr.univlorraine.pegase.chc.model.LignePedagogiqueDCA;
+import fr.univlorraine.pegase.chc.model.Cursus;
+import fr.univlorraine.pegase.chc.model.LignePedagogique;
 import fr.univlorraine.pegase.coc.model.Chemin;
 import fr.univlorraine.pegase.coc.model.Controle;
 import fr.univlorraine.pegase.insext.model.CibleInscription;
@@ -131,18 +131,18 @@ public final class Utils {
 	}
 
 	/** Converti une liste de ObjetMaquetteExtension en hiérarchie de ObjetMaquetteDTO */
-	public static List<ObjetMaquetteDTO> convertObjetMaquetteListToDTO(List<CursusDCA> listeCursus, String codeFormation, String codeRacinePeda, String codePeriode, String codeEtab) {
+	public static List<ObjetMaquetteDTO> convertObjetMaquetteListToDTO(List<Cursus> listeCursus, String codeFormation, String codeRacinePeda, String codePeriode, String codeEtab) {
 		List<ObjetMaquetteDTO> list = new LinkedList<>();
 		boolean listObjMaquetteTrouvee = false;
 		if(listeCursus != null) {
-			for(CursusDCA cursus : listeCursus) {
+			for(Cursus cursus : listeCursus) {
 				// Si on a pas déjà trouvé la liste des objets de maquette recherchés dans un élément précédent de la liste
 				if(!listObjMaquetteTrouvee) {
 					// On teste si on est sur la racine recherchée
 					listObjMaquetteTrouvee = cursusIdentifie(cursus,codeEtab, codePeriode, codeFormation, codeRacinePeda);
 					// Si on est sur un objet concerné par la racine
 					if(listObjMaquetteTrouvee) {
-						LignePedagogiqueDCA racine = cursus.getRacinePedagogique();
+						LignePedagogique racine = cursus.getRacinePedagogique();
 
 						// Ajout de la racine dans la liste
 						ObjetMaquetteDTO objRacine = createObjetMaquetteDTO(null,racine);
@@ -158,10 +158,10 @@ public final class Utils {
 		return list;
 	}
 
-	private static void ajouterLesEnfants(ObjetMaquetteDTO objParent, List<LignePedagogiqueDCA> enfants) {
+	private static void ajouterLesEnfants(ObjetMaquetteDTO objParent, List<LignePedagogique> enfants) {
 		if(enfants != null && !enfants.isEmpty()) {
 			// On parcourt les enfants de la racine
-			for(LignePedagogiqueDCA enfant : enfants) {
+			for(LignePedagogique enfant : enfants) {
 				ObjetMaquetteDTO o = createObjetMaquetteDTO(objParent.getCodeChemin(), enfant);
 				objParent.getChildObjects().add(o);
 				log.debug("Insertion de {} dans l'arborescence...", o.getCodeChemin());
@@ -174,7 +174,7 @@ public final class Utils {
 
 
 
-	private static boolean cursusIdentifie(CursusDCA cursus, String codeEtab, String codePeriode, String codeFormation, String codeRacinePeda) {
+	private static boolean cursusIdentifie(Cursus cursus, String codeEtab, String codePeriode, String codeFormation, String codeRacinePeda) {
 		// Si le cursus et ses attributs sont non null
 		if(cursus!=null && cursus.getCodeStructure() != null 
 			&& cursus.getFormation()!=null && cursus.getFormation().getCode()!=null
@@ -217,7 +217,7 @@ public final class Utils {
 	}
 */
 
-	private static ObjetMaquetteDTO createObjetMaquetteDTO(String cheminParent, LignePedagogiqueDCA obj) {
+	private static ObjetMaquetteDTO createObjetMaquetteDTO(String cheminParent, LignePedagogique obj) {
 		ObjetMaquetteDTO o = new ObjetMaquetteDTO();
 		o.setCode(obj.getCodeObjetMaquette());
 		o.setCodeChemin((cheminParent != null ? cheminParent + SEPARATEUR_CHEMIN : "") + obj.getCodeObjetMaquette());

@@ -11,60 +11,195 @@
  */
 
 
-package fr.univlorraine.pegase.chc.invoker;
+package fr.univlorraine.pegase.chc.api;
 
-import okhttp3.MediaType;
-import okhttp3.ResponseBody;
+import fr.univlorraine.pegase.chc.invoker.ApiCallback;
+import fr.univlorraine.pegase.chc.invoker.ApiClient;
+import fr.univlorraine.pegase.chc.invoker.ApiException;
+import fr.univlorraine.pegase.chc.invoker.ApiResponse;
+import fr.univlorraine.pegase.chc.invoker.Configuration;
+import fr.univlorraine.pegase.chc.invoker.Pair;
+import fr.univlorraine.pegase.chc.invoker.ProgressRequestBody;
+import fr.univlorraine.pegase.chc.invoker.ProgressResponseBody;
+
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 
-import okio.Buffer;
-import okio.BufferedSource;
-import okio.ForwardingSource;
-import okio.Okio;
-import okio.Source;
 
-public class ProgressResponseBody extends ResponseBody {
+import fr.univlorraine.pegase.chc.model.Cursus;
 
-    private final ResponseBody responseBody;
-    private final ApiCallback callback;
-    private BufferedSource bufferedSource;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-    public ProgressResponseBody(ResponseBody responseBody, ApiCallback callback) {
-        this.responseBody = responseBody;
-        this.callback = callback;
+public class CursusApi {
+    private ApiClient localVarApiClient;
+    private int localHostIndex;
+    private String localCustomBaseUrl;
+
+    public CursusApi() {
+        this(Configuration.getDefaultApiClient());
     }
 
-    @Override
-    public MediaType contentType() {
-        return responseBody.contentType();
+    public CursusApi(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
     }
 
-    @Override
-    public long contentLength() {
-        return responseBody.contentLength();
+    public ApiClient getApiClient() {
+        return localVarApiClient;
     }
 
-    @Override
-    public BufferedSource source() {
-        if (bufferedSource == null) {
-            bufferedSource = Okio.buffer(source(responseBody.source()));
+    public void setApiClient(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
+    }
+
+    public int getHostIndex() {
+        return localHostIndex;
+    }
+
+    public void setHostIndex(int hostIndex) {
+        this.localHostIndex = hostIndex;
+    }
+
+    public String getCustomBaseUrl() {
+        return localCustomBaseUrl;
+    }
+
+    public void setCustomBaseUrl(String customBaseUrl) {
+        this.localCustomBaseUrl = customBaseUrl;
+    }
+
+    /**
+     * Build call for lireCursusApprenant
+     * @param codeApprenant Le code de l&#39;apprenant (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Les cursus ont été récupérés </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call lireCursusApprenantCall(@jakarta.annotation.Nonnull String codeApprenant, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
         }
-        return bufferedSource;
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/cursus";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        if (codeApprenant != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("codeApprenant", codeApprenant));
+        }
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "idTokenAuth" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
-    private Source source(Source source) {
-        return new ForwardingSource(source) {
-            long totalBytesRead = 0L;
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call lireCursusApprenantValidateBeforeCall(@jakarta.annotation.Nonnull String codeApprenant, final ApiCallback _callback) throws ApiException {
+        // verify the required parameter 'codeApprenant' is set
+        if (codeApprenant == null) {
+            throw new ApiException("Missing the required parameter 'codeApprenant' when calling lireCursusApprenant(Async)");
+        }
 
-            @Override
-            public long read(Buffer sink, long byteCount) throws IOException {
-                long bytesRead = super.read(sink, byteCount);
-                // read() returns the number of bytes read, or -1 if this source is exhausted.
-                totalBytesRead += bytesRead != -1 ? bytesRead : 0;
-                callback.onDownloadProgress(totalBytesRead, responseBody.contentLength(), bytesRead == -1);
-                return bytesRead;
-            }
-        };
+        return lireCursusApprenantCall(codeApprenant, _callback);
+
+    }
+
+    /**
+     * Liste des cursus de l&#39;apprenant
+     * 
+     * @param codeApprenant Le code de l&#39;apprenant (required)
+     * @return List&lt;Cursus&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Les cursus ont été récupérés </td><td>  -  </td></tr>
+     </table>
+     */
+    public List<Cursus> lireCursusApprenant(@jakarta.annotation.Nonnull String codeApprenant) throws ApiException {
+        ApiResponse<List<Cursus>> localVarResp = lireCursusApprenantWithHttpInfo(codeApprenant);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Liste des cursus de l&#39;apprenant
+     * 
+     * @param codeApprenant Le code de l&#39;apprenant (required)
+     * @return ApiResponse&lt;List&lt;Cursus&gt;&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Les cursus ont été récupérés </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<List<Cursus>> lireCursusApprenantWithHttpInfo(@jakarta.annotation.Nonnull String codeApprenant) throws ApiException {
+        okhttp3.Call localVarCall = lireCursusApprenantValidateBeforeCall(codeApprenant, null);
+        Type localVarReturnType = new TypeToken<List<Cursus>>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Liste des cursus de l&#39;apprenant (asynchronously)
+     * 
+     * @param codeApprenant Le code de l&#39;apprenant (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Les cursus ont été récupérés </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call lireCursusApprenantAsync(@jakarta.annotation.Nonnull String codeApprenant, final ApiCallback<List<Cursus>> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = lireCursusApprenantValidateBeforeCall(codeApprenant, _callback);
+        Type localVarReturnType = new TypeToken<List<Cursus>>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
     }
 }

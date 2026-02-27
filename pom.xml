@@ -301,10 +301,15 @@
 					<apiPackage>fr.univlorraine.pegase.idt.api</apiPackage>
 					<modelPackage>fr.univlorraine.pegase.idt.model</modelPackage>-->
 
-					<inputSpec>${project.basedir}/src/main/resources/YML/coc-publication-api-v2-2.3.0.yml</inputSpec>
+					<!--<inputSpec>${project.basedir}/src/main/resources/YML/coc-publication-api-v2-2.3.0.yml</inputSpec>
 					<invokerPackage>fr.univlorraine.pegase.coc.invoker</invokerPackage>
 					<apiPackage>fr.univlorraine.pegase.coc.api</apiPackage>
-					<modelPackage>fr.univlorraine.pegase.coc.model</modelPackage>
+					<modelPackage>fr.univlorraine.pegase.coc.model</modelPackage>-->
+
+					<inputSpec>${project.basedir}/src/main/resources/YML/chc-ext-api-v1-1.4.1.yml</inputSpec>
+					<invokerPackage>fr.univlorraine.pegase.chc.invoker</invokerPackage>
+					<apiPackage>fr.univlorraine.pegase.chc.api</apiPackage>
+					<modelPackage>fr.univlorraine.pegase.chc.model</modelPackage>
 
 					<generatorName>java</generatorName>
 					<output>${project.build.directory}/generated-sources/openapi</output>

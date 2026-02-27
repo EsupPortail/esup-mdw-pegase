@@ -22,7 +22,7 @@ package fr.univlorraine.mondossierweb.test.integration;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.services.AccessTokenService;
 import fr.univlorraine.mondossierweb.services.PegaseService;
-import fr.univlorraine.pegase.chc.model.CursusDCA;
+import fr.univlorraine.pegase.chc.model.Cursus;
 import fr.univlorraine.pegase.coc.model.Chemin;
 import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
@@ -108,7 +108,7 @@ public class PegaseServiceIT {
 	@Test
 	void testGetCursus() {
 		log.info("Test PegaseService getCursus");
-		List<CursusDCA> cursus = pegaseService.getCursus(codeApprenant);
+		List<Cursus> cursus = pegaseService.getCursus(codeApprenant);
 		log.debug("Cursus : {}",cursus);
 		assertThat(cursus, is(notNullValue()));
 		assertThat(cursus, is(not(empty())));

@@ -11,60 +11,136 @@
  */
 
 
-package fr.univlorraine.pegase.chc.invoker;
+package fr.univlorraine.pegase.chc.model;
 
-import okhttp3.MediaType;
-import okhttp3.ResponseBody;
+import fr.univlorraine.pegase.chc.invoker.ApiException;
+import java.util.Objects;
+import java.lang.reflect.Type;
+import java.util.Map;
 
-import java.io.IOException;
+/**
+ * Abstract class for oneOf,anyOf schemas defined in OpenAPI spec
+ */
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-02-27T16:57:51.872239500+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+public abstract class AbstractOpenApiSchema {
 
-import okio.Buffer;
-import okio.BufferedSource;
-import okio.ForwardingSource;
-import okio.Okio;
-import okio.Source;
+    // store the actual instance of the schema/object
+    private Object instance;
 
-public class ProgressResponseBody extends ResponseBody {
+    // is nullable
+    private Boolean isNullable;
 
-    private final ResponseBody responseBody;
-    private final ApiCallback callback;
-    private BufferedSource bufferedSource;
+    // schema type (e.g. oneOf, anyOf)
+    private final String schemaType;
 
-    public ProgressResponseBody(ResponseBody responseBody, ApiCallback callback) {
-        this.responseBody = responseBody;
-        this.callback = callback;
+    public AbstractOpenApiSchema(String schemaType, Boolean isNullable) {
+        this.schemaType = schemaType;
+        this.isNullable = isNullable;
     }
 
-    @Override
-    public MediaType contentType() {
-        return responseBody.contentType();
+    /**
+     * Get the list of oneOf/anyOf composed schemas allowed to be stored in this object
+     *
+     * @return an instance of the actual schema/object
+     */
+    public abstract Map<String, Class<?>> getSchemas();
+
+    /**
+     * Get the actual instance
+     *
+     * @return an instance of the actual schema/object
+     */
+    //@JsonValue
+    public Object getActualInstance() {return instance;}
+
+    /**
+     * Set the actual instance
+     *
+     * @param instance the actual instance of the schema/object
+     */
+    public void setActualInstance(Object instance) {this.instance = instance;}
+
+    /**
+     * Get the instant recursively when the schemas defined in oneOf/anyof happen to be oneOf/anyOf schema as well
+     *
+     * @return an instance of the actual schema/object
+     */
+    public Object getActualInstanceRecursively() {
+        return getActualInstanceRecursively(this);
     }
 
-    @Override
-    public long contentLength() {
-        return responseBody.contentLength();
-    }
-
-    @Override
-    public BufferedSource source() {
-        if (bufferedSource == null) {
-            bufferedSource = Okio.buffer(source(responseBody.source()));
+    private Object getActualInstanceRecursively(AbstractOpenApiSchema object) {
+        if (object.getActualInstance() == null) {
+            return null;
+        } else if (object.getActualInstance() instanceof AbstractOpenApiSchema) {
+            return getActualInstanceRecursively((AbstractOpenApiSchema)object.getActualInstance());
+        } else {
+            return object.getActualInstance();
         }
-        return bufferedSource;
     }
 
-    private Source source(Source source) {
-        return new ForwardingSource(source) {
-            long totalBytesRead = 0L;
-
-            @Override
-            public long read(Buffer sink, long byteCount) throws IOException {
-                long bytesRead = super.read(sink, byteCount);
-                // read() returns the number of bytes read, or -1 if this source is exhausted.
-                totalBytesRead += bytesRead != -1 ? bytesRead : 0;
-                callback.onDownloadProgress(totalBytesRead, responseBody.contentLength(), bytesRead == -1);
-                return bytesRead;
-            }
-        };
+    /**
+     * Get the schema type (e.g. anyOf, oneOf)
+     *
+     * @return the schema type
+     */
+    public String getSchemaType() {
+        return schemaType;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class ").append(getClass()).append(" {\n");
+        sb.append("    instance: ").append(toIndentedString(instance)).append("\n");
+        sb.append("    isNullable: ").append(toIndentedString(isNullable)).append("\n");
+        sb.append("    schemaType: ").append(toIndentedString(schemaType)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString(Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AbstractOpenApiSchema a = (AbstractOpenApiSchema) o;
+        return Objects.equals(this.instance, a.instance) &&
+            Objects.equals(this.isNullable, a.isNullable) &&
+            Objects.equals(this.schemaType, a.schemaType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(instance, isNullable, schemaType);
+    }
+
+    /**
+     * Is nullable
+     *
+     * @return true if it's nullable
+     */
+    public Boolean isNullable() {
+        if (Boolean.TRUE.equals(isNullable)) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
+
+
+
 }

@@ -19,8 +19,8 @@
 package fr.univlorraine.mondossierweb.services;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
-import fr.univlorraine.pegase.chc.api.CursusDcaApi;
-import fr.univlorraine.pegase.chc.model.CursusDCA;
+import fr.univlorraine.pegase.chc.api.CursusApi;
+import fr.univlorraine.pegase.chc.model.Cursus;
 import fr.univlorraine.pegase.coc.api.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.coc.api.RelevesDeNotesPubliablesApi;
 import fr.univlorraine.pegase.coc.model.Chemin;
@@ -95,7 +95,7 @@ public class PegaseService implements Serializable {
 
 	// CHC API
 	private transient fr.univlorraine.pegase.chc.invoker.ApiClient apiClientChc = new fr.univlorraine.pegase.chc.invoker.ApiClient();
-	private transient CursusDcaApi apiChc = new CursusDcaApi();
+	private transient CursusApi apiChc = new CursusApi();
 
 	// COC API
 	private transient fr.univlorraine.pegase.coc.invoker.ApiClient apiClientCoc = new fr.univlorraine.pegase.coc.invoker.ApiClient();
@@ -297,7 +297,7 @@ public class PegaseService implements Serializable {
 		return null;
 	}
 
-	public List<CursusDCA> getCursus(String codeApprenant) {
+	public List<Cursus> getCursus(String codeApprenant) {
 
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
@@ -307,7 +307,7 @@ public class PegaseService implements Serializable {
 				//List<String> statutsInscription = List.of(Utils.STATUT_INSCRIPTION_VALIDE);
 				// Appel de l'API Pégase
 				//List<List<ObjetMaquetteExtension>> listObj = insApiChc.lireArbreCursusDesInscriptions(etablissement, codeApprenant, codePeriode, statutsInscription);
-				List<CursusDCA> listObj = apiChc.lireCusrsuApprenant(codeApprenant);
+				List<Cursus> listObj = apiChc.lireCursusApprenant(codeApprenant);
 				if(listObj != null) {
 					log.info("Cursus de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
 					log.debug("Cursus de : {}", listObj);
