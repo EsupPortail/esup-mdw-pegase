@@ -289,6 +289,29 @@
     			<artifactId>maven-resources-plugin</artifactId>
     			<version>3.1.0</version>
 			</plugin>
+			<!-- openapi-generator -->
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>7.20.0</version>
+				<!-- On place la configuration directement ici pour la commande manuelle -->
+				<configuration>
+					<inputSpec>${project.basedir}/src/main/resources/YML/pegase20260226/idt-ext-api-v1-1.4.0.yaml</inputSpec>
+					<generatorName>java</generatorName>
+					<!-- Vous pouvez garder target/generated-sources/openapi ou le dossier de votre choix -->
+					<output>${project.build.directory}/generated-sources/openapi</output>
+					<invokerPackage>fr.univlorraine.pegase.idt.invoker</invokerPackage>
+					<apiPackage>fr.univlorraine.pegase.idt.api</apiPackage>
+					<modelPackage>fr.univlorraine.pegase.idt.model</modelPackage>
+					<configOptions>
+						<dateLibrary>java17-localdatetime</dateLibrary>
+						<useJakartaEe>true</useJakartaEe>
+						<disallowAdditionalPropertiesIfNotPresent>false</disallowAdditionalPropertiesIfNotPresent>
+						<discriminatorCaseSensitive>false</discriminatorCaseSensitive>
+					</configOptions>
+				</configuration>
+			</plugin>
+			<!-- MAVEN WAR PLUGIN -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>

@@ -25,7 +25,7 @@ import fr.univlorraine.pegase.coc.api.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.coc.api.RelevesDeNotesPubliablesApi;
 import fr.univlorraine.pegase.coc.model.Chemin;
 import fr.univlorraine.pegase.coc.model.ReleveDeNotePublie;
-import fr.univlorraine.pegase.idt.api.ApprenantApi;
+import fr.univlorraine.pegase.idt.api.ApprenantExterneApi;
 import fr.univlorraine.pegase.idt.model.IdentiteApprenantSummary;
 import fr.univlorraine.pegase.idt.model.PagedIdentiteApprenantSummaries;
 import fr.univlorraine.pegase.ins.api.InscriptionApi;
@@ -104,7 +104,7 @@ public class PegaseService implements Serializable {
 
 	// IDT API
 	private transient fr.univlorraine.pegase.idt.invoker.ApiClient apiClientIdt = new fr.univlorraine.pegase.idt.invoker.ApiClient();
-	private transient ApprenantApi apiIdt = new ApprenantApi();
+	private transient ApprenantExterneApi apiIdt = new ApprenantExterneApi();
 
 	public String getCodeApprenantDemo() {
 		return codeApprenantDemo;
