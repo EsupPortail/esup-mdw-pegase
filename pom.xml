@@ -293,7 +293,7 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>7.11.0</version>
+				<version>7.20.0</version>
 				<!-- On place la configuration directement ici pour la commande manuelle -->
 				<configuration>
 					<inputSpec>${project.basedir}/src/main/resources/YML/pegase20260226/idt-ext-api-v1-1.4.0.yaml</inputSpec>
