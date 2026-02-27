@@ -1,0 +1,757 @@
+openapi: 3.0.1
+info:
+  version: "1.5.0"
+  title: PIE - Pièce Externe API - V1
+  license:
+    name: © Copyright 2024. Cocktail - Amue.
+  description: |
+
+    # Introduction
+
+    Liste l'ensemble des services et des opérations externes disponibles dans le module Piece
+
+    La documentation d'intégration de Pégase est publiée par version dans 
+    [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/). 
+    Vous y retrouverez notamment des informations sur le modèle objet métier, 
+    le versionning des APIs, les cas d'usage des APIs externes.
+    
+    # Authentification/autorisation obligatoire
+
+    Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/).
+    Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.
+
+    Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.
+
+    Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.
+
+    # Type de données
+
+    Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :
+      * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)
+        * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés
+        * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)
+      * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))
+      * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))
+      * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)
+      * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)
+      * boolean - Un booléen représenté par `true` ou `false`
+
+    # Gestion des erreurs
+
+    ## StatusCode
+
+    | Code    | Description                                |
+    |---------|--------------------------------------------|
+    | 200     | Opération effectuée                        |
+    |         | Cas particulier: Dans le cas d'APIs de     |
+    |         | type bulk, un 200 peut aussi être retourné |
+    |         | si des données de la requête sont          |
+    |         | considérées en erreur                      |
+    | 201     | Ressource créée                            |
+    | 400     | Données envoyées par le client invalides   |
+    | 403     | Accès refusé                               |
+    | 404     | Ressource inexistante                      |
+    | 409     | donnée déjà existante                      |
+    | 500     | Erreur technique rencontrée par le serveur |
+
+
+    ## Codes d'erreurs
+    
+    | Code      | Description                                |
+    |-----------|--------------------------------------------|
+    | notNull   | la propriété est obligatoire               |
+    | notBlank  | la propriété ne doit pas être vide         |
+    | size      | la longueur de la propriété est invalide   |
+    | pattern   | les caractères ou la syntaxe de            |
+    |           | la propriété est invalide                  |
+    | genre     | le genre de la personne est invalide       |
+    | dateEntre | la date est invalide                       |
+    | telephone | le téléphone est invalide                  |
+    | email     | le mail est invalide                       |
+
+servers:
+  - url: 'http://localhost:3002/api/pie/ext/v1'
+  - url: 'https://piece.{env}.pc-scol.fr/api/pie/ext/v1'
+    variables:
+      env:
+        default: dev
+        enum: [ dev, test-sxb, po-sxb, test-tls, po-tls, test-nte, po-nte, test-gnb, po-gnb ]
+
+tags:
+  - name: pieces
+    description: Données des pièces justificatives et des dépots
+
+paths:
+  /etablissements/{codeStructure}/pieces-justificatives:
+    get:
+      tags:
+        - pieces
+      summary: Rechercher les résumés de demandes de pièces d'un établissement
+      operationId: rechercherDemandesPieces
+      security:
+        - idTokenAuth: [ ]
+      parameters:
+        - $ref: "#/components/parameters/Structure"
+        - $ref: "#/components/parameters/Pageable"
+        - name: recherche
+          required: false
+          in: query
+          description: texte recherché dans le libellé ou le code de la pièce justificative
+          schema:
+            type: string
+        - name: periodeId
+          required: false
+          in: query
+          description: id de la période
+          schema:
+            type: string
+      responses:
+        200:
+          description: Liste des résumés de demandes de pièces
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DemandePieceElementResume'
+        default:
+          description: Erreur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erreurs'
+
+
+  /etablissements/{codeStructure}/codeApprenant/{codeApprenant}/codePeriode/{codePeriode}/codeChemin/{codeChemin}/photo:
+    get:
+      tags:
+        - pieces
+      summary: Visualiser la photo d'un apprenant pour une période donnée
+      operationId: visualiserPhoto
+      parameters:
+        - $ref: "#/components/parameters/Structure"
+        - in: path
+          name: codeApprenant
+          description: code de la pièce justificative
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: codePeriode
+          description: code de la période
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: codeChemin
+          description: code du chemin de l'inscription
+          required: true
+          schema:
+            type: string
+      security:
+        - idTokenAuth: [ ]
+      responses:
+        200:
+          description: Fichier
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/jpg:
+              schema:
+                type: string
+                format: binary
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: Photo introuvable pour cet apprenant et ce CodePeriode
+
+  /etablissements/{codeStructure}/codeApprenant/{codeApprenant}/depotPiece/{codePiece}/codePeriode/{codePeriode}/codeChemin/{codeChemin}/contenu:
+    get:
+      tags:
+        - pieces
+      summary: Récuperer un dépôt
+      operationId: recupererPiece
+      parameters:
+        - $ref: "#/components/parameters/Structure"
+        - in: path
+          name: codeApprenant
+          description: code de l'apprenant
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: codePiece
+          description: code de la pièce justificative
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: codeChemin
+          description: code du chemin de l'inscription
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: codePeriode
+          description: code de la période
+          required: true
+          schema:
+            type: string
+      security:
+        - idTokenAuth: [ ]
+      responses:
+        200:
+          description: Fichier
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/jpg:
+              schema:
+                type: string
+                format: binary
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: Contenu du dépôt de pièce introuvable
+
+  /etablissements/{codeStructure}/depotPiece/apprenant/{codeApprenant}/recupererDepots:
+    post:
+      tags:
+        - pieces
+      summary: Récupérer les pièces demandées à un apprenant avec leur statut de dépôt
+      operationId: recupererPiecesEtDepots
+      security:
+        - idTokenAuth: [ ]
+      parameters:
+        - $ref: "#/components/parameters/Structure"
+        - $ref: "#/components/parameters/Apprenant"
+      requestBody:
+        description: Le profil de l'apprenant
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 1
+              items:
+                $ref: "#/components/schemas/Cursus"
+      responses:
+        200:
+          description: Liste des pièces demandées à l'apprenant avec leur statut
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/DepotsPieceElementsEpochResume'
+        default:
+          description: Erreur
+          content:
+            'json/application':
+              schema:
+                $ref: '#/components/schemas/Erreurs'
+
+  /etablissements/{codeStructure}/depotPiece/statutGlobalPieceParInscription:
+    post:
+      tags:
+        - pieces
+      summary: Liste le statut global des dépots de pièce par inscription
+      operationId: listerStatutGlobalPieceParInscription
+      parameters:
+        - $ref: "#/components/parameters/Structure"
+      requestBody:
+        description: La liste des inscriptions
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/StatutGlobalPieceParInscriptionCommand'
+      security:
+        - idTokenAuth: [ ]
+      responses:
+        200:
+          description: la liste des statut facture par inscription
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatutGlobalPieceParInscription'
+
+components:
+
+  securitySchemes:
+    # Authorization: Bearer id.token.
+    idTokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Un ID token JWT généré par le serveur CAS de Pegase doit être utilisé lors de tout appel aux services Piece.
+        
+               L'ID Token doit être transmis dans le Header HTTP Authorization sous la forme 'Bearer ' (avec étant la valeur de l'id token).
+        
+               TODO: quelle est la procédure pour générer cet ID Token ?
+
+  parameters:
+    Structure:
+      name: codeStructure
+      in: path
+      required: true
+      schema:
+        type: string
+        example: ETAB00
+      description: Le code de l'établissement
+    Apprenant:
+      name: codeApprenant
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Le code de l'apprenant
+    Pageable:
+      name: pageable
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        $ref: "#/components/schemas/Pageable"
+
+  schemas:
+    DemandePieceElementResume:
+      type: object
+      description: demande de pièce résumée avec des infos partielles de la pièce justificative
+      required:
+        - demande
+      allOf:
+        - $ref: '#/components/schemas/DescripteursPieceJustificative'
+      properties:
+        demande:
+          $ref: '#/components/schemas/DemandePieceResume'
+
+    DescripteursPieceJustificative:
+      type: object
+      description: Descripteurs de piece justificative
+      required:
+        - id
+        - code
+        - libelle
+        - temoinPhoto
+        - prioriteAffichage
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        code:
+          $ref: '#/components/schemas/CodePiece'
+        libelle:
+          $ref: '#/components/schemas/LibellePieceJustificative'
+        temoinPhoto:
+          type: boolean
+          default: false
+        prioriteAffichage:
+          type: integer
+          default: 0
+    Id:
+      type: string
+      format: uuid
+      description: |
+        Identifiant de ressource
+
+    CodePiece:
+      type: string
+      pattern: "([A-Z0-9]|-)+"
+      minLength: 3
+      maxLength: 15
+      description: |
+        Code d'une pièce justificative
+
+    LibellePieceJustificative:
+      type: string
+      minLength: 4
+      maxLength: 150
+      description: |
+        Libellé d'une pièce justificative
+
+    DemandePieceResume:
+      type: object
+      description: demande de piece
+      required:
+        - periode
+      allOf:
+        - $ref: '#/components/schemas/DescripteursDemandePiece'
+      properties:
+        periode:
+          $ref: '#/components/schemas/PeriodeResume'
+
+    DescripteursDemandePiece:
+      type: object
+      description: descripteurs de demande de piece
+      required:
+        - id
+        - validite
+        - temoinObligatoire
+        - temoinValidationGestionnaire
+        - temoinTeleversement
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        description:
+          type: string
+          description: Description de la demande de piece avec le détail de la période
+        validite:
+          $ref: '#/components/schemas/ValiditeDemande'
+        temoinObligatoire:
+          type: boolean
+          default: true
+        temoinValidationGestionnaire:
+          type: boolean
+          default: false
+        temoinTeleversement:
+          type: boolean
+          default: true
+
+    PeriodeResume:
+      type: object
+      description: Periode
+      allOf:
+        - $ref: '#/components/schemas/DescripteursPeriode'
+
+    DescripteursPeriode:
+      type: object
+      description: Descripteurs demande de piece
+      required:
+        - id
+        - code
+        - libelleAffichage
+        - validite
+        - active
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        code:
+          $ref: '#/components/schemas/CodePeriode'
+        libelle:
+          $ref: '#/components/schemas/LibelleAffichagePeriode'
+        validite:
+          $ref: '#/components/schemas/ValiditePeriode'
+        active:
+          type: boolean
+
+    ValiditeDemande:
+      required:
+        - dateDebut
+      properties:
+        dateDebut:
+          $ref: '#/components/schemas/DateSimple'
+        dateFin:
+          $ref: '#/components/schemas/DateSimple'
+
+    CodePeriode:
+      type: string
+      pattern: "([A-Z0-9]|-)+"
+      minLength: 3
+      maxLength: 25
+      description: |
+        Code d'une periode
+
+    LibelleAffichagePeriode:
+      type: string
+      minLength: 4
+      maxLength: 150
+      description: |
+        Libellé d'une période
+
+    DateSimple:
+      type: string
+      format: date
+      description: Date au format yyyy-mm-dd
+      example: "2021-01-30"
+
+    Cursus:
+      required:
+        - codePeriode
+        - codeChemin
+      properties:
+        codePeriode:
+          $ref: '#/components/schemas/CodePeriode'
+        codeChemin:
+          type: string
+
+    DepotsPieceElementsEpochResume:
+      type : object
+      description: Dépôt de pièce demandée avec ses statuts avec son epoch de modification
+      properties:
+        depotsPieceElements:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepotsPiecesElementResume'
+        epochModificationPiste:
+          type: integer
+          format: int64
+
+    DepotsPiecesElementResume:
+      type: object
+      description: Dépôt de pièce demandée avec ses statuts
+      required:
+        - depotDetail
+      allOf:
+        - $ref: '#/components/schemas/DescripteursPieceJustificative'
+      properties:
+        depotDetail:
+          $ref: '#/components/schemas/DepotMultiCursusDetail'
+
+    DepotMultiCursusDetail:
+      required:
+        - codeStructure
+        - codeApprenant
+        - listeDepotCursus
+      properties:
+        listeDepotCursus:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepotCursus'
+        codeStructure:
+          type: string
+        ineApprenant:
+          type: string
+        codeApprenant:
+          type: string
+        dateDepot:
+          $ref: '#/components/schemas/DateTime'
+        dateModificationStatut:
+          $ref: '#/components/schemas/DateTime'
+        statutDepot:
+          $ref: '#/components/schemas/StatutDepot'
+        sourceDepot:
+          $ref: '#/components/schemas/SourceDepot'
+        motifRejet:
+          type: string
+          description: le motif de rejet de la pièce par le gestionnaire
+        nomFichier:
+          type: string
+          description: nom du fichier
+        typeMime:
+          type: string
+          description: le format du fichier
+        descripteursDemandePiece:
+          $ref: '#/components/schemas/DescripteursDemandePiece'
+        tailleFichier:
+          type: integer
+          format: int64
+          description: taille du fichier
+
+    DepotCursus:
+      required:
+        - codeChemin
+        - demandeId
+      type: object
+      properties:
+        codeChemin:
+          type: string
+        demandeId:
+          $ref: '#/components/schemas/Id'
+        depotId:
+          $ref: '#/components/schemas/Id'
+
+    DateTime:
+      type: string
+      format: date-time
+      description: Date au format ISO-8601
+      example: "2021-01-30T08:30:00Z"
+
+    StatutDepot:
+      description: L'état du dépôt
+      type: string
+      enum: [ NON_DEPOSE, EN_ATTENTE, NON_CONCERNE, NON_CONCERNE_VALIDE, A_VALIDER_DOSSIER_BLOQUE, A_VALIDER_DOSSIER_NON_BLOQUE, VALIDE, VALIDATION_FORCEE, REJETE ]
+      default: NON_DEPOSE
+
+    SourceDepot:
+      description: Source d'un dépôt
+      type: string
+      enum: [ NON_DEFINI, INS_GESTION, INS_PISTE, PAI, E_CANDIDAT, PARCOURSUP ]
+      default: INS_PISTE
+
+    StatutGlobalPieceParInscriptionCommand:
+        type: object
+        required:
+          - codeApprenant
+          - codeChemin
+          - codePeriode
+          - sourceInscription
+        properties:
+          codeApprenant:
+            type: string
+            description: Le code apprenant
+          codeChemin:
+            type: string
+            description: Le code chemin
+          codePeriode:
+            type: string
+            description: Le code de la période
+          sourceInscription:
+            description: Le statut de l'inscription
+            type: string
+            enum: ["ADM", "PISTE", "GESTION"]
+
+    StatutGlobalPiece:
+      description: L'état global des dépôts pour une inscription
+      type: string
+      enum: [ SANS_STATUT, VALIDEES, VALIDEES_ET_ATTENTE, NON_DEPOSEES, REJETEES_DEPOT_PARTIEL, A_VALIDER_DOSSIER_BLOQUE_COMPLET, A_VALIDER_DOSSIER_NON_BLOQUE_COMPLET, A_VALIDER_DOSSIER_BLOQUE_PARTIEL, A_VALIDER_DOSSIER_NON_BLOQUE_PARTIEL ]
+      default: NON_DEPOSEES
+
+    StatutGlobalPieceParInscription:
+      type: object
+      required:
+        - codeApprenant
+        - codeChemin
+        - codePeriode
+        - statutGlobal
+      properties:
+        codeApprenant:
+          type: string
+          description: Le code apprenant
+        codeChemin:
+          type: string
+          description: Le code chemin
+        codePeriode:
+          type: string
+          description: Le code de la période
+        statutGlobal:
+          $ref: '#/components/schemas/StatutGlobalPiece'
+
+    Pageable:
+      type: object
+      example:
+        page: 0
+        taille: 10
+        tri: [ ]
+      properties:
+        page:
+          type: integer
+          default: 0
+          description: numéro de page demandée (commence à 0)
+        taille:
+          type: integer
+          default: 10
+          description: |
+            nombre d'élements par page.
+            Si taille = -1, alors l'API retourne tout le contenu répondant aux critères de recherche
+        tri:
+          type: array
+          items:
+            type: string
+          description: critères de tri, chaque tri est de la forme <propriété>[,asc|desc]
+
+    ValiditePeriode:
+      required:
+        - dateDebut
+        - dateFin
+      properties:
+        dateDebut:
+          $ref: '#/components/schemas/DateSimple'
+        dateFin:
+          $ref: '#/components/schemas/DateSimple'
+
+    # Gestion des erreurs
+    Erreurs:
+      required:
+        - correlationId
+        - timestamp
+        - version
+        - path
+        - statusCode
+        - errors
+      properties:
+        correlationId:
+          type: string
+          description: |
+            Permet d'identifier de manière unique l'erreur côté serveur.
+
+            A titre de debugging.
+        timestamp:
+          type: string
+          format: date-time
+          description: |
+            Timestamp auque à lieu l'erreur.
+
+            A titre de debugging.
+        version:
+          type: string
+          description: |
+            Version de l'application.
+
+            A titre de debugging.
+        path:
+          type: string
+          description: |
+            URI sur lequel le service a été applelé (i.e /api/monservice).
+
+            A titre de debugging.
+        statusCode:
+          type: string
+          description: |
+            Statuscode HTTP.
+
+            A titre de debugging
+        errors:
+          type: array
+          minimum: 1
+          items:
+            $ref: '#/components/schemas/Erreur'
+
+    Erreur:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: |
+            Code d'erreur.
+
+            Les codes autres que ceux indiqués ci-dessous doivent être documentés dans l'API.
+
+            Exemple: champ_manquant, invalide.
+        message:
+          type: string
+          description: |
+            Message d'erreur à destination des utilisateurs.
+        codeObjet:
+          type: string
+          description: |
+            Code de l'objet en erreur.
+
+            Utile dans le cas où l'API effectue des traitements sur un ensemble d'objets.
+        champ:
+          type: string
+          description: |
+            Champ optionnel désignant l'attribut en erreur.
+
+            Il est valorisé si l'erreur est dûe à un seul attribut en erreur.
+
+            Cet attribut pourra être utilisé par les applications pour placer le message d'erreur
+            à côté du champ de saisie erronné.
+
+            A noter, cet attribut est fourni en 'best-effort', certaines valeurs ne correpondront
+            pas à un attribut existant. Dans ce cas, ignorer la valeur de cet attribut et placer
+            le message d'erreur en tant que message d'erreur général.
+        messageDetails:
+          type: object
+          properties:
+            arguments:
+              type: object
+              additionalProperties:
+                type: string
+                description: |
+                  Valeurs des arguments du message d'erreur.
+
+                  A titre de debugging.

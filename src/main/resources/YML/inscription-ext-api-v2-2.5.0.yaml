@@ -1,0 +1,1556 @@
+openapi: 3.0.1
+info:
+  version: "2.5.0"
+  title: INS - Inscription Externe API - V2
+  license:
+    name: © Copyright 2024. Cocktail - Amue.
+  description: |
+  
+    # Introduction
+
+    Liste l'ensemble des services et des opérations Ins (Module Inscription) identifiés pour un usage externe.
+
+    La documentation d'intégration de Pégase est publiée par version dans 
+    [ce répertoire](https://share.pc-scol.fr/d/d98bdddb6485406b9422/). 
+    Vous y retrouverez notamment des informations sur le modèle objet métier, 
+    le versionning des APIs, les cas d'usage des APIs externes.
+
+    # Authentification/autorisation obligatoire
+
+    Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/).
+    Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.
+
+    Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`.
+
+    Lien vers [la documentation](https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1) qui décrit l'authentification aux APIs de Pegase.
+
+    # Type de données
+
+    Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :
+      * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)
+        * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés
+        * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)
+      * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))
+      * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))
+      * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)
+      * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)
+      * boolean - Un booléen représenté par `true` ou `false`
+
+    # Gestion des erreurs
+
+    ## StatusCode
+
+    | Code    | Description                                |
+    |---------|--------------------------------------------|
+    | 200     | Opération effectuée                        |
+    |         | Cas particulier: Dans le cas d'APIs de     |
+    |         | type bulk, un 200 peut aussi être retourné |
+    |         | si des données de la requête sont          |
+    |         | considérées en erreur                      |
+    | 201     | Ressource créée                            |
+    | 400     | Données envoyées par le client invalides   |
+    | 403     | Accès refusé                               |
+    | 404     | Ressource inexistante                      |
+    | 409     | donnée déjà existante                      |
+    | 500     | Erreur technique rencontrée par le serveur |
+
+
+    ## Codes d'erreurs
+    
+    | Code      | Description                                |
+    |-----------|--------------------------------------------|
+    | notNull   | la propriété est obligatoire               |
+    | notBlank  | la propriété ne doit pas être vide         |
+    | size      | la longueur de la propriété est invalide   |
+    | pattern   | les caractères ou la syntaxe de            |
+    |           | la propriété est invalide                  |
+    | genre     | le genre de la personne est invalide       |
+    | dateEntre | la date est invalide                       |
+    | telephone | le téléphone est invalide                  |
+    | email     | le mail est invalide                       |
+
+servers:
+- url: 'http://localhost:3003/api/ins/ext/v2'
+- url: 'https://ins.{env}.pc-scol.fr/api/ins/ext/v2'
+  variables:
+    env:
+      default: dev
+      enum: [ dev, test-sxb, po-sxb, test-tls, po-tls, test-nte, po-nte, test-gnb, po-gnb ]
+tags:
+- name: inscriptions
+  description: routes inscriptions externes
+paths:
+  /gestion/flux-inscriptions/pagine:
+    get:
+      tags:
+        - inscriptions
+      summary: Chercher les données de la carte multi-services permettant également de répondre au besoin du flux des comptes
+      description: Les données renvoyées correspondent aux inscriptions validées, annulées ou ayant fait l'objet d'une actualisation
+      operationId: listerFluxInscriptionsPagine
+      parameters:
+        - name: depuis
+          in: query
+          description: L'horodatage de la dernière extraction (exprimé en nombre de secondes depuis le 01/01/1970). Les entrées modifiées ou créées depuis seront remontées.
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: jusqua
+          in: query
+          description: L'horodatage à partir duquel les entrées sont exclues (exprimé en nombre de secondes depuis le 01/01/1970). Si absent ou 0, toutes les entrées seront remontées depuis l'horodatage depuis.
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 0
+        - name: photo
+          in: query
+          description: Inclure la photo d'identité binaire dans les réponses.
+          schema:
+            type: boolean
+            default: false
+        - name: codePeriode
+          in: query
+          description: Code de la période
+          schema:
+            type: string
+        - in: query
+          name: pageable
+          style: form
+          explode: true
+          description: "L'objet de pagination (page : le numéro de la page (défaut 0), taille : le nombre d'élément par page, strictement positif, défaut 50, limité à 500 sans photo, 50 avec photo"
+          schema:
+            $ref: "#/components/schemas/Pageable"
+        - name: codeApprenant
+          in: query
+          description: Code apprenant
+          required: false
+          schema:
+            type: string
+      security:
+        - idTokenAuth: [ ]
+      responses:
+        200:
+          description: Données de la carte multi-services récupérées
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/VueInscriptions'
+        400:
+          description: La pagination est invalide. Une pagination est obligatoire, taille limitée à 500 sans photo, 50 avec photo.
+        404:
+          description: Flux introuvable
+
+  /gestion/inscription/{codeStructure}/{codeApprenant}/:
+    get:
+      tags:
+        - inscriptions
+      summary: Récupérer le dossier complet d'un apprenant
+      description: |
+        Récupérer le dossier complet d'un apprenant
+      operationId: lireInscriptions
+      parameters:
+        - name: codeStructure
+          in: path
+          description: Le code de l'établissement
+          required: true
+          schema:
+            type: string
+            example: ETAB00
+        - name: codeApprenant
+          in: path
+          description: Le code de l'apprenant
+          required: true
+          schema:
+            type: string
+            example: '000000002'
+          examples:
+            Lucie:
+              summary: Code apprenant persona Parcoursup
+              description: 000000001 (Lucie)
+              value: "000000001"
+            Estelle:
+              summary: Code apprenant persona Concours
+              description: 000000002 (Estelle)
+              value: "000000002"
+      security:
+        - idTokenAuth: [ ]
+      responses:
+        200:
+          description: Données de l'apprenant et ses inscriptions
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ApprenantEtInscriptions'
+        404:
+          description: Apprenant introuvable
+
+components:
+  securitySchemes:
+    # Authorization: Bearer id.token.
+    idTokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    VueInscriptions:
+      type: object
+      required:
+        - taille
+        - resultats
+        - totalElements
+        - page
+        - totalPages
+      properties:
+        taille:
+          type: integer
+          format: int64
+        resultats:
+          type: array
+          items:
+            $ref: '#/components/schemas/VueInscription'
+        totalElements:
+          type: integer
+          format: int64
+        page:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int64
+
+    VueInscription:
+      type: object
+      required:
+        - UAI
+        - regime
+        - bourses
+        - chemin
+        - adresses
+        - mels
+        - telephones
+        - codeApprenant
+        - civilite
+        - nomUsage
+        - nomFamille
+        - prenom
+        - dateDeNaissance
+        - nationalite
+        - droitPhoto
+        - formation
+        - mobilite
+        - dateInscription
+        - derniereModification
+        - derniereModificationApprenant
+        - periode
+        - statutPaiement
+        - statusInscription
+      properties:
+        UAI:
+          type: string
+          description: Le code UAI de l'établissement
+        idApprenant:
+          type: string
+          description: L'UUID de l'apprenant tel que déclaré dans IDT
+        codeApprenant:
+          type: string
+          description: Le code Pegase de l'apprenant
+        dateInscription:
+          type: string
+          description: "La date de l'inscription au format ISO-8601 (AAAA-MM-JJThh:mm:ss) Les heures-minutes-secondes seront toujours 00:00:00"
+        derniereModification:
+          type: integer
+          format: int64
+          description: "L'horodatage de la dernière modification (Timestamp nombre de secondes depuis le 01/01/1970 à 00:00)"
+        derniereModificationApprenant:
+          type: integer
+          format: int64
+          description: "L'horodatage de la dernière modification des données de l'apprenant (Timestamp nombre de secondes depuis le 01/01/1970 à 00:00)"
+        INE:
+          type: string
+          description: Le numéro INE maître de l'apprenant
+        civilite:
+          type: string
+          enum: &CIVILITE
+            - F
+            - M
+          description: La civilité M ou F de l'apprenant⋅e
+        nomUsage:
+          type: string
+          description: Le nom d'usage de l'apprenant⋅e
+        nomFamille:
+          type: string
+          description: Le nom patronymique de l'apprenant⋅e
+        prenom:
+          type: string
+          description: Le prénom de l'apprenant⋅e
+        dateDeNaissance:
+          type: string
+          description: La date de naissance au format ISO-8601 (AAAA-MM-JJ)
+        nationalite:
+          type: string
+          description: Le code INSEE de la nationalité (100 pour française)
+        droitPhoto:
+          type: boolean
+          description: Autorisation accordée ou non par l'apprenant⋅e pour l'utilisation de sa photo dans un trombinoscope
+        photo:
+          deprecated: true
+          type: string
+          format: byte
+          description: Si demandée en paramètre photo; La photographie d'identité de l'apprenant (Format binaire, png ou jpeg en ligne)
+        regime:
+          type: string
+          description: Le code BCN du regime d'inscription
+        bourses:
+          type: array
+          description: Déprécié -> Les codes des bourses de l'inscription
+          items:
+            type: string
+        boursesCompletes:
+          type: array
+          description: Les codes des bourses de l'inscription
+          items:
+            $ref: '#/components/schemas/VueBourse'
+        profilsExonerants:
+          type: array
+          description: Les codes des profils exonerants
+          items:
+            $ref: '#/components/schemas/VueProfilExonerant'
+        mobilite:
+          type: string
+          enum: &TYPE_MOBILITE
+            - SANS
+            - ENTRANTE
+            - SORTANTE
+          description: Le type de la mobilité étudiante (SANS si pas de mobilité ou soit ENTRANTE soit SORTANTE)
+        statutPaiement:
+          type: string
+          enum: &STATUT_PAIEMENT
+            - non_paye
+            - en_attente
+            - paye
+            - valide
+          description: Statut du paiement généré à la confirmation du paiement
+        statutInscription:
+          type: string
+          enum:
+            - valide
+            - annulee
+          description: Statut validé ou annulé de l'inscription
+        inscriptionPrincipale:
+          type: boolean
+          description: Témoin indiquant s'il s'agit d'une inscription principale (true) ou d'une inscription complémentaire (false)
+        formation:
+          type: string
+          description: Le code de la formation
+        anneeUniversitaire:
+          type: integer
+          format: int32
+          description: L'année universitaire associée à la période
+        periode:
+          type: string
+          description: Le libelle de la période de mise en œuvre
+        chemin:
+          type: array
+          description: Sous-liste avec le chemin cible de la formation racine jusqu'à l'objet de la maquette de formation sur lequel s'est inscrit l'étudiant
+          items:
+            $ref: '#/components/schemas/VueCheminCible'
+        UAIStructurePrincipale:
+          type: string
+          description: Le code UAI de la structure principale du PIA ou de l'objet parent
+        codeDiplomeSISE:
+          type: string
+          description: Le code diplôme SISE du PIA
+        adresses:
+          type: array
+          description: Adresses détaillées
+          items:
+            $ref: '#/components/schemas/VueContactAdresse'
+        mels:
+          type: array
+          description: Adresses mel détaillées
+          items:
+            $ref: '#/components/schemas/VueContactMel'
+        telephones:
+          type: array
+          description: Adresses téléphoniques détaillées
+          items:
+            $ref: '#/components/schemas/VueContactTelephone'
+
+    VueBourse:
+      type: object
+      required:
+        - code
+        - libelleLong
+      properties:
+        code:
+          type: string
+          description: Code de la bourse
+        libelleLong:
+          type: string
+          description: Libellé long de la bourse
+
+    VueProfilExonerant:
+      type: object
+      required:
+        - code
+        - libelleLong
+      properties:
+        code:
+          type: string
+          description: Code du profil exonerant
+        libelleLong:
+          type: string
+          description: Libellé long du profil exonerant
+
+    VueCheminCible:
+      type: object
+      required:
+        - code
+        - type
+        - libelleCourt
+        - libelleLong
+        - idChemin
+        - idPeriode
+      properties:
+        code:
+          type: string
+          description: Code de l'objet dans la maquette de formation
+        type:
+          type: string
+          description: Code du type de l'objet dans la maquette de formation (PARCOUR_TYPE, ANNEE, SEMESTRE, ...)
+        libelleCourt:
+          type: string
+          description: Libellé court de l'objet dans la maquette de formation
+        libelleLong:
+          type: string
+          description: Libellé long de l'objet dans la maquette de formation
+        idChemin:
+          type: string
+          format: uuid
+          description: Identifiant de l'objet dans la maquette de formation
+        idPeriode:
+          type: string
+          format: uuid
+          description: Identifiant de la periode de mise en œuvre de l'objet dans la maquette de formation
+
+    VueContactAdresse:
+      allOf:
+        - $ref: '#/components/schemas/VueContact'
+        - type: object
+          required:
+            - pays
+          properties:
+            pays:
+              type: string
+              description: Code INSEE du pays (100 pour la France, sinon l'adresse est à l'étranger)
+            ligne1OuEtage:
+              type: string
+              description: Le n°app/étage/couloir/esc/chez ou ligne 1 de l'adresse étrangère
+            ligne2OuBatiment:
+              type: string
+              description: L'entrée/bâtiment/immeuble/résidence ou ligne 2 de l'adresse étrangère
+            ligne3OuVoie:
+              type: string
+              description: Le numéro et le libellé de la voie ou ligne 3 de l'adresse étrangère
+            ligne4OuComplement:
+              type: string
+              description: Le lieu-dit ou service particulier de distribution ou ligne 4 de l'adresse étrangère
+            ligne5Etranger:
+              type: string
+              description: Ligne 5 de l'adresse étrangère (vide si adresse en France)
+            codePostal:
+              type: string
+              description: Le code postal de l'adresse en France (vide si adresse étrangère)
+            commune:
+              type: string
+              description: Le code INSEE de la commune de l'adresse en France (vide si adresse étrangère)
+
+    VueContactMel:
+      allOf:
+        - $ref: '#/components/schemas/VueContact'
+        - type: object
+          required:
+            - mail
+          properties:
+            mail:
+              type: string
+              description: Adresse de messagerie électronique
+
+    VueContactTelephone:
+      allOf:
+        - $ref: '#/components/schemas/VueContact'
+        - type: object
+          required:
+            - telephone
+          properties:
+            telephone:
+              type: string
+              description: Numéro de téléphone
+
+    VueContact:
+      type: object
+      discriminator:
+        propertyName: canalCommunication
+      required:
+        - canalCommunication
+        - code
+        - libelle
+      properties:
+        canalCommunication:
+          type: string
+          enum: &CANAL_COMMUNICATION
+            - VueContactAdresse
+            - VueContactMel
+            - VueContactTelephone
+          description: type de contact
+        code:
+          type: string
+          description: Code de la demande de contact
+        libelle:
+          type: string
+          description: Libellé d'affichage de la demande de contact
+        proprietaire:
+          type: string
+          description: Personne à contacter si différent de l'apprenant
+
+    Pageable:
+      type: object
+      example:
+        page: 0
+        taille: 50
+      properties:
+        page:
+          type: integer
+          default: 0
+          description: numéro de page demandée (commence à 0)
+        taille:
+          type: integer
+          default: 50
+          description: nombre d'élements par page
+
+    ApprenantEtInscriptions:
+      type: object
+      properties:
+        apprenant:
+          $ref: '#/components/schemas/Apprenant'
+        inscriptions:
+          type: array
+          description: les inscriptions
+          items:
+            $ref: '#/components/schemas/InscriptionComplete'
+
+    InscriptionComplete:
+      type: object
+      required:
+        - codeEtablissement
+        - cible
+        - cvec
+        - origine
+        - principale
+        - statutInscription
+        - contexteInscription
+        - statutPaiement
+        - regimeInscription
+        - boursesEtAides
+        - situationPersonnelleInscription
+        - situationPrecedente
+        - situationUniversitaire
+        - dateInscription
+        - dateDerniereModification
+        - accords
+        - cursusParallele
+        - ecoleDoctorale
+      properties:
+        idApprenant:
+          type: string
+          description: L'id de l'apprenant transmis par IDT
+        codeEtablissement:
+          type: string
+          description: Le code de l'établissement dans lequel a été réalisée l'inscription
+        cible:
+          $ref: '#/components/schemas/CibleInscription'
+        noCandidat:
+          type: string
+          description: Le numéro de candidature n'est plus utilisé. Valorisé à null
+        origine:
+          $ref: "#/components/schemas/Origine"
+        principale:
+          type: boolean
+          description: le temoin indiquant si une inscription est principale ou pas
+        statutInscription:
+          $ref: '#/components/schemas/statutInscriptionVoeu'
+        contexteInscription:
+          $ref: '#/components/schemas/ContexteInscription'
+        enseignementADistanceDepuisLaFrance:
+          type: boolean
+          description: le temoin indiquant si un télé-enseignement a lieu depuis la France ou l'étranger.
+        statutPaiement:
+          $ref: '#/components/schemas/statutPaiementVoeu'
+        regimeInscription:
+          $ref: '#/components/schemas/OccurrenceNomenclature'
+        boursesEtAides:
+          type: array
+          items:
+            $ref: '#/components/schemas/OccurrenceNomenclature'
+          description: Les bourses et aides financières
+        situationPersonnelleInscription:
+          $ref: '#/components/schemas/SituationPersonnelleInscription'
+        cvec:
+          $ref: '#/components/schemas/Cvec'
+        admission:
+          $ref: '#/components/schemas/Admission'
+        situationUniversitaire:
+          $ref: '#/components/schemas/SituationUniversitaire'
+        situationPrecedente:
+          $ref: '#/components/schemas/SituationPrecedente'
+        cursusParallele:
+          $ref: '#/components/schemas/CursusParallele'
+        ecoleDoctorale:
+          $ref: '#/components/schemas/EcoleDoctorale'
+        accords:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccordComplet'
+          description: les documents soumis à approbation lors de l'inscription
+        dateInscription:
+          type: string
+          description: La date de l'inscription au format AAAA-MM-JJ
+        dateDerniereModification:
+          type: string
+          description: la date de dernière modification de l'inscription
+    CibleInscription:
+      description: décrit la formation ou l'objet de formation d'une inscription
+      allOf:
+        - $ref: '#/components/schemas/ObjetAvecLibelle'
+        - type: object
+          properties:
+            id:
+              type: string
+              description: l'UUID du chemin de la formation ou de l'objet de formation
+            codeStructure:
+              type: string
+              description: Le code de la structure issu de la nomenclature Structures organisationnelles
+              example: ETAB00
+            formation:
+              $ref: '#/components/schemas/Formation'
+            UAIStructurePrincipale:
+              type: string
+              description: Le code UAI de la structure principale du PIA ou de l'objet parent
+            chemin:
+              type: array
+              items:
+                $ref: '#/components/schemas/ObjetFormationOuGroupement'
+              description: liste des codes ObjetFormation ou Groupement depuis la Formation racine jusqu'à l'ObjetFormation feuille (même code que CiblePourInscription), peut être vide
+            periode:
+              $ref: '#/components/schemas/Periode'
+
+    Periode:
+      description: La période de mise en œuvre associée à la formation
+      allOf:
+        - $ref: '#/components/schemas/ObjetAvecLibelle'
+        - $ref: '#/components/schemas/ObjetAvecDates'
+        - type: object
+          properties:
+            id:
+              type: string
+              description: l'UUID de la période
+            anneeUniversitaire:
+              type: integer
+              description: |
+                L'année universitaire de la période de mise en œuvre
+                associée à la formation au format AAAA.
+            libelleAffichage:
+              type: string
+              description: |
+                Le libellé d'affichage de la période de mise en œuvre
+                associée à la formation.
+
+    Formation:
+      description: La formation
+      allOf:
+        - $ref: '#/components/schemas/ObjetAvecLibelle'
+
+    ObjetFormationOuGroupement:
+      allOf:
+        - $ref: '#/components/schemas/ObjetAvecLibelle'
+        - type: object
+          required:
+            - nature
+          properties:
+            nature:
+              type: string
+              enum: &NATURE_OFouG
+                - ObjetFormation
+                - Groupement
+              description: le type d'objet
+
+    ObjetAvecDates:
+      type: object
+      description: Objet avec dates de début et de fin
+      discriminator:
+        propertyName: 'est1'
+      required:
+        - 'est1'
+      properties:
+        'est1':
+          type: string
+        dateDebut:
+          type: string
+          description: date de début de validité au format AAAA-MM-JJ
+        dateFin:
+          type: string
+          description: date de fin de validité au format AAAA-MM-JJ
+
+    ObjetAvecLibelle:
+      type: object
+      description: Objet avec code, libelleCourt et libelleLong
+      discriminator:
+        propertyName: 'est1'
+      required:
+        - 'est1'
+      properties:
+        'est1':
+          type: string
+        code:
+          type: string
+          description: Le code de l'objet
+        libelleCourt:
+          type: string
+          description: Le libellé court
+        libelleLong:
+          type: string
+          description: Le libellé long
+
+
+
+    Apprenant:
+      type: object
+      description: Les données de l'apprenant
+      properties:
+        code:
+          type: string
+          description: le code de l'apprenant
+        derniereModificationApprenant:
+          type: integer
+          format: int64
+          description: "L'horodatage de la dernière modification des données de l'apprenant (Timestamp nombre de secondes depuis le 01/01/1970 à 00:00)"
+        # Identité
+        etatCivil:
+          $ref: '#/components/schemas/EtatCivil'
+        # Naissance
+        naissance:
+          $ref: '#/components/schemas/Naissance'
+        # Situation personnelle
+        situationPersonnelle:
+          $ref: '#/components/schemas/SituationPersonnelleApprenant'
+        # Situation socioprofessionnelles
+        profession:
+          $ref: '#/components/schemas/Profession'
+        # Contacts /!\ Contacts est polymorphe/allOf → ne peut être partagé pour l'instant (BUG)
+        contacts:
+          type: array
+          description: Liste des contacts sous forme d'objet, avec le code du contact pour clé principale
+          items:
+            $ref: '#/components/schemas/ContactComplet'
+        # Accès à l'enseignement supérieur français
+        bac:
+          $ref: '#/components/schemas/Bac'
+        # Années de premières inscriptions
+        premieresInscriptions:
+          $ref: '#/components/schemas/PremieresInscriptions'
+        dateContexteApprenant:
+          type: string
+          format: date-time
+          description: Valorisé à null
+
+    EtatCivil:
+      type: object
+      properties:
+        nomDeNaissance:
+          type: string
+          description: Le nom de naissance
+        nomUsuel:
+          type: string
+          description: Le nom usuel
+        prenom:
+          type: string
+          description: Le prénom
+        deuxiemePrenom:
+          type: string
+          description: Le deuxième prénom
+        troisiemePrenom:
+          type: string
+          description: Le troisième prénom
+        genre:
+          type: string
+          description: Les valeurs `M` ou `F` sont acceptées
+
+    Naissance:
+      type: object
+      properties:
+        dateDeNaissance:
+          type: string
+          description: La date de naissance au format AAAA-MM-JJ
+        paysDeNaissance:
+          type: string
+          description: |
+            Le code pays du pays de naissance issu de la nomenclature Pays et Nationalités
+            Ex : 100 = France
+          example: 100
+        libellePaysDeNaissance:
+          type: string
+          description: |
+            Le libelle du pays de naissance issu de la nomenclature Pays et Nationalités
+            Ex : 100 = France
+          example: France
+        communeDeNaissance:
+          type: string
+          description: |
+            Le code INSEE de la commune de naissance en France
+            Ex : 67482 = Strasbourg
+          example: 67482
+        libelleCommuneDeNaissance:
+          type: string
+          description: |
+            Le libellé de la commune de naissance en France 
+            Ex : Strasbourg
+          example: Strasbourg
+        communeDeNaissanceEtranger:
+          type: string
+          description: La commune de naissance à l'étranger
+        nationalite:
+          type: string
+          description: Le code pays associé à la nationalité issu de la nomenclature Pays et Nationalités
+        libelleNationalite:
+          type: string
+          description: Le libellé de la nationalité associé au pays issu de la nomenclature Pays et Nationalités
+        deuxiemeNationalite:
+          type: string
+          description: Le code pays associé à la deuxième nationalité issu de la nomenclature Pays et Nationalités
+        libelleDeuxiemeNationalite:
+          type: string
+          description: Le libellé de la deuxième nationalité associé au code pays de la deuxième nationalité issu de la nomenclature Pays et Nationalités
+        dateDObtentionDeLaDeuxiemeNationalite:
+          type: string
+          description: La date d'obtention de la deuxième nationalité au format AAAA-MM-JJ
+
+    Origine:
+      type: string
+      description: L'origine de la candidature de l'étudiant.
+      enum: &ORIGINE
+        - concours
+        - titre
+        - dossier
+        - ecoledoctorale
+        - parcoursup
+        - ecandidat
+        - manuel
+        - reinscription
+        - monmaster
+    statutInscriptionVoeu:
+      description: Le statut de l'inscription
+      type: string
+      enum: &STATUT_INSCRIPTION_VOEU
+        - valide
+        - annulee
+    statutPaiementVoeu:
+      description: Le statut du paiement
+      type: string
+      enum: &STATUT_PAIEMENT_VOEU
+        - sans_statut
+        - non_paye
+        - en_attente
+        - paye
+        - valide
+    OccurrenceNomenclature:
+      type: object
+      description: une occurrence de nomenclature
+      required:
+        - nomenclature
+        - code
+        - libelle
+        - contexteConsommation
+      properties:
+        nomenclature:
+          $ref: '#/components/schemas/OccurrenceNomenclatureType'
+        code:
+          type: string
+          description: le code de l'occurrence de nomenclature
+        libelle:
+          type: string
+          description: le libellé d'affichage de l'occurrence de nomenclature
+        contexteConsommation:
+          type: string
+          description: La date de consommation de l'occurrence de nomenclature au format AAAA-MM-JJ
+    OccurrenceNomenclatureType:
+      description: le type d'occurrence de nomenclature
+      type: string
+      enum:
+        - RegimeInscription
+        - BourseAideFinanciere
+
+    SituationPersonnelleInscription:
+      type: object
+      properties:
+        amenagementsSpecifiques:
+          description: Liste des situations donnant droit à des aménagements spécifiques
+          type: array
+          items:
+            type: string
+            description: |
+              Code de l'aménagement spécifique issu de la nomenclature Régimes spéciaux d'études
+
+              Codes de la nomenclature sur 6 caractères. Préfixe des codes : RSE
+            example: RSE…
+        souhaitAmenagement:
+          type: boolean
+          description: Réponse au souhait d'un aménagement spécifique
+        profilsSpecifiques:
+          type: array
+          items:
+            type: string
+          description: |
+            Code du profil spécifique issu de la nomenclature Profils exonérants
+
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : PRF
+    Cvec:
+      type: object
+      properties:
+        numero:
+          type: string
+          description: Le numéro de la Contribution Vie Etudiante et de Campus
+
+    Admission:
+      type: object
+      properties:
+        voie:
+          $ref: '#/components/schemas/VoieAdmission'
+        anneeConcours:
+          type: number
+          description: |
+            L'année de passage du concours d'admission au format AAAA
+
+            Obligatoire si VoieAdmission = concours
+        concours:
+          type: string
+          description: |
+            Le code du concours d'admission issu de la nomenclature Concours d'admission.
+
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : CON
+            Obligatoire si le champ anneeConcours est complété
+        rangConcours:
+          type: number
+          description: Le rang obtenu au concours d'admission
+        anneePrecedente:
+          type: number
+          description: L'année universitaire correspondant au cursus CPGE au format AAAA
+        temoinClassePrepa:
+          type: boolean
+          description: |
+            Le témoin indiquant que l'étudiant a suivi un cursus en CPGE (classe préparatoire) l'année dernière.
+
+            Obligatoire si le champ anneeConcours est complété.
+        typePrepa:
+          type: string
+          description: |
+            Le code du type de classe préparatoire fréquenté
+            issu de la nomenclature Types de classe préparatoire
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : TCP
+
+            Obligatoire si temoinClassePrepa = true
+        contexteConsommationTypePrepa:
+          type: string
+          format: date
+          description: date contexte admission type classe preparatoire
+        puissancePrepa:
+          type: string
+          description: |
+            La puissance de la classe préparatoire
+            Les valeurs P1, P2, P22 et P32 sont acceptées
+        typeEtablissementPrecedent:
+          type: string
+          description: |
+            - F : français en France,
+            - E : français à l'étranger,
+            - R : étranger
+            Obligatoire si temoinClassePrepa = true
+        departementEtablissementPrecedent:
+          type: string
+          description: |
+            Le code du département de l'établissement de la CPGE si 'français en France'
+            issu de la nomenclature Départements
+            Obligatoire si typeEtablissementPrecedent = F
+        paysEtablissementPrecedent:
+          type: string
+          description: |
+            Le code du pays de l'établissement de la CPGE si 'français à l'étranger' ou 'étranger'
+            issu de la nomenclature Pays et Nationalités
+
+            Obligatoire si typeEtablissementPrecedent = E ou R
+        etablissementPrecedent:
+          type: string
+          description: |
+            Le code de l'établissement français de la CPGE si 'français en France' ou 'français à l'étranger'
+            issu de la nomenclature Etablissements français
+
+            Obligatoire
+        etablissementPrecedentEtranger:
+          type: string
+          description: |
+            Le code de l'établissement étranger de la CPGE si 'étranger'
+            issu de la nomenclature Etablissements étrangers
+
+            Obligatoire
+
+    VoieAdmission:
+      type: string
+      description: La voie d'admission n'est plus utilisée. Valorisé à null
+      enum: &VOIE_ADMISSION
+      - concours
+      - titre
+      - dossier
+
+    SituationUniversitaire:
+      type: object
+      properties:
+        cesure:
+          $ref: '#/components/schemas/Cesure'
+        mobilite:
+          $ref: '#/components/schemas/Mobilite'
+        programmeEchange:
+          $ref: '#/components/schemas/ProgrammeEchange'
+
+    ProgrammeEchange:
+      type: object
+      properties:
+        code:
+          type: string
+          description: code de la nomenclature programme d'échange
+        codePays:
+          type: string
+          description: code de la nomenclature du pays du programme d'échange
+        contexteConsommation:
+          type: string
+          format: date
+    Cesure:
+      type: string
+      enum: &CESURE
+        - SANS
+        - SEMESTRE
+        - ANNEE
+      description: La césure
+    Mobilite:
+      type: string
+      enum: &MOBILITE
+        - SANS
+        - ENTRANTE
+        - SORTANTE
+      description: La mobilité
+
+    SituationPrecedente:
+      type: object
+      properties:
+        anneePrecedente:
+          type: number
+          description: L'année universitaire précédant l'inscription en cours au format AAAA
+        situationPrecedente:
+          $ref: '#/components/schemas/SituationAnneePrecedente'
+        anneeObtentionDuDernierDiplome:
+          type: "number"
+          description: L'année d'obtention du dernier diplôme au format AAAA
+        dernierDiplome:
+          type: "string"
+          description: |
+            Le code du type du dernier diplôme obtenu
+            issu de la nomenclature Types du dernier diplôme obtenu.
+
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : DDO
+    EcoleDoctorale:
+      type: object
+      properties:
+        code:
+          type: string
+          description: code de la nomenclature école doctorale
+        contexteConsommation:
+          type: string
+          format: date
+          description: date
+    CursusParallele:
+      type: object
+      properties:
+        filiere:
+          $ref: '#/components/schemas/Filiere'
+        convention:
+          type: boolean
+          description: L'année d'obtention du dernier diplôme au format AAAA
+    Filiere:
+      description: |
+        La filière du cursus parallèle de l'apprenant.
+        Codes de la nomenclature sur 6 caractères. Préfixe des codes : CUP
+      type: object
+      properties:
+        code:
+          type: string
+          description: code de la nomenclature
+        contexteConsommation:
+          type: string
+          format: date
+          description: Date contexte de consommation de la nomenclature
+
+    AccordComplet:
+      description: L'état d'un accord et sa référence
+      type: object
+      required:
+        - documentAApprouver
+      properties:
+        dateValidation:
+          type: string
+          description: Date de validation de l'accord
+        estAccepte:
+          type: boolean
+          description: Témoin pour savoir si le document a été accepté ou refusé
+        documentAApprouver:
+          $ref: '#/components/schemas/DocumentAApprouver'
+
+    DocumentsAApprouver:
+      type: array
+      items:
+        $ref: '#/components/schemas/DocumentAApprouver'
+    DocumentAApprouver:
+      type: object
+      required:
+        - code
+        - codeStructure
+        - libelleAffichage
+        - contenu
+        - libelleAcceptation
+        - temoinBloquant
+        - dateDebutValidite
+        - prioriteAffichage
+        - temoinVisible
+      properties:
+        code:
+          type: string
+          description: Le code metier en saisie libre
+        codeStructure:
+          type: string
+          description: Le code de l'établissement (structure)
+        libelleAffichage:
+          type: string
+          description: Le libellé d'affichage
+        contenu:
+          type: string
+          description: Le contenu
+        libelleAcceptation:
+          type: string
+          description: Le libellé d'acceptation
+        libelleRefus:
+          type: string
+          description: Le libellé de refus
+        temoinBloquant:
+          type: boolean
+          description: Si true, impose une réponse pour pouvoir continuer l'inscription
+        dateDebutValidite:
+          type: string
+          description: La date de début de validité
+        dateFinValidite:
+          type: string
+          description: La date de fin de validité
+        prioriteAffichage:
+          type: integer
+          description: |
+            La priorité d'affichage :
+            Plus le nombre est élevé, plus le document apparaît en priorité dans la liste de valeurs.
+        temoinVisible:
+          type: boolean
+          description: Si le document sera visible par l'étudiant ou non.
+
+    ContexteInscription:
+      type: string
+      enum: &CONTEXTE_INSCRIPTION
+        - primo
+        - reins
+    SituationPersonnelleApprenant:
+      type: object
+      properties:
+        situationFamiliale:
+          type: string
+          description: |
+            Le code de la situation familiale de l'étudiant issu de la nomenclature Situations familiales
+
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : SIF
+        enfants:
+          type: integer
+          format: int32
+          description: Le nombre d'enfants à charge
+        situationMilitaire:
+          type: string
+          description: |
+            Le code de la situation militaire de l'étudiant issu de la nomenclature Situations militaires
+
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : SIM.
+
+    Profession:
+      type: object
+      properties:
+        etudiant:
+          type: string
+          description: |
+            Le code profession de l'étudiant issu de la nomenclature des Professions
+            et catégories socioprofessionnelles.
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : PCS
+        parent1:
+          type: string
+          description: |
+            Le code profession du parent 1 issu de la nomenclature des Professions
+            et catégories socioprofessionnelles
+  
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : PCS
+        parent2:
+          type: string
+          description: |
+            Le code profession du parent 2 issu de la nomenclature des Professions
+            et catégories socioprofessionnelles
+  
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : PCS
+        quotite:
+          type: string
+          description: |
+            Le code de la quotité d'activité de l'étudiant
+            issu de la nomenclature des Quotité d'activités
+  
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : QUA
+    ContactComplet:
+      type: object
+      discriminator:
+        propertyName: canalCommunication
+      required:
+        - canalCommunication
+        - demandeDeContact
+      properties:
+        canalCommunication:
+          type: string
+          enum:
+            - ContactAdresseComplet
+            - ContactMelComplet
+            - ContactTelephoneComplet
+          description: type de contact
+        demandeDeContact:
+          $ref: '#/components/schemas/DemandeDeContactSimple'
+        proprietaire:
+          type: string
+          description: Personne à contacter si différent de l'apprenant
+
+    ContactMelComplet:
+      allOf:
+        - $ref: '#/components/schemas/ContactComplet'
+        - type: object
+          required:
+            - mail
+          properties:
+            mail:
+              type: string
+              description: Adresse de messagerie électronique
+
+    ContactTelephoneComplet:
+      allOf:
+        - $ref: '#/components/schemas/ContactComplet'
+        - type: object
+          required:
+            - telephone
+          properties:
+            telephone:
+              type: string
+              description: Numéro de téléphone
+
+    ContactAdresseComplet:
+      allOf:
+        - $ref: '#/components/schemas/ContactComplet'
+        - type: object
+          required:
+            - pays
+          properties:
+            pays:
+              type: string
+              description: Code INSEE du pays (100 pour la France, sinon l'adresse est à l'étranger)
+            libellePays:
+              type: string
+              description: libelle du pays
+            ligne1OuEtage:
+              type: string
+              description: Le n°app/étage/couloir/esc/chez ou ligne 1 de l'adresse étrangère
+            ligne2OuBatiment:
+              type: string
+              description: L'entrée/bâtiment/immeuble/résidence ou ligne 2 de l'adresse étrangère
+            ligne3OuVoie:
+              type: string
+              description: Le numéro et le libellé de la voie ou ligne 3 de l'adresse étrangère
+            ligne4OuComplement:
+              type: string
+              description: Le lieu-dit ou service particulier de distribution ou ligne 4 de l'adresse étrangère
+            ligne5Etranger:
+              type: string
+              description: Ligne 5 de l'adresse étrangère (vide si adresse en France)
+            codePegaseCommune:
+              type: string
+              description: Valorisé à null
+            codePostal:
+              type: string
+              description: Le code postal de l'adresse en France (vide si adresse étrangère)
+            commune:
+              type: string
+              description: Le code INSEE de la commune de l'adresse en France (vide si adresse étrangère)
+            libelleCommune:
+              type: string
+              description: Le libelle de la commune de l'adresse en France (vide si adresse étrangère)
+
+    DemandeDeContactSimple:
+      type: object
+      discriminator:
+        propertyName: 'est1'
+      required:
+        - code
+        - codeStructure
+        - libelleAffichage
+        - canalCommunication
+        - prioriteAffichage
+        - temoinSaisie
+        - temoinSaisieProprietaire
+        - 'est1'
+      properties:
+        'est1':
+          type: string
+        code:
+          type: string
+          description: Le code metier en saisie libre
+        codeStructure:
+          type: string
+          description: Le code de l'établissement (structure)
+        libelleAffichage:
+          type: string
+          description: Le libellé d'affichage
+        canalCommunication:
+          type: string
+          enum: &CANAL_COMMUNICATION
+            - MAIL
+            - TEL
+            - ADRESSE
+          description: le canal de communication
+        temoinSaisie:
+          $ref: '#/components/schemas/TemoinSaisie'
+        temoinSaisieProprietaire:
+          $ref: '#/components/schemas/TemoinSaisie'
+    TemoinSaisie:
+      type: string
+      enum: &TEMOIN_SAISIE
+        - OBLIGATOIRE
+        - FACULTATIF
+        - NON_SAISI
+      description: type de saisie
+
+    Bac:
+      type: object
+      properties:
+        titreAcces:
+          type: string
+          description: Le titre d'accès du baccalaureat ou équivalent
+        anneeObtention:
+          type: string
+          description: L'annee d'obtention du baccalaureat ou équivalent
+        serie:
+          type: string
+          description: |
+            Le code de la série du baccalauréat ou équivalent
+            issu de la nomenclature Séries du baccalauréat et équivalences
+
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : BAC
+        libelleSerie:
+          type: string
+          description: |
+            Le libelle de la série du baccalauréat ou équivalent
+            issu de la nomenclature Séries du baccalauréat et équivalences
+        premiereSpecialiteBac:
+          type: string
+          description: |
+            Le code de la première spécialité du nouveau baccalaureat (NBGE)
+            issu de la nomenclature Specialités Bac Général
+        libellePremiereSpecialiteBac:
+          type: string
+          description: |
+            Le libelle de la première spécialité du nouveau baccalaureat (NBGE)
+            issu de la nomenclature Specialités Bac Général
+        deuxiemeSpecialiteBac:
+          type: string
+          description: |
+            Le code de la deuxième spécialité du nouveau baccalaureat (NBGE)
+            issu de la nomenclature Specialités Bac Général
+        libelleDeuxiemeSpecialiteBac:
+          type: string
+          description: |
+            Le libelle de la deuxième spécialité du nouveau baccalaureat (NBGE)
+            issu de la nomenclature Specialités Bac Général
+        mention:
+          type: string
+          description: |
+            Le code de la mention du candidat issu
+            de la nomenclature des Mentions obtenues au baccalauréat
+
+            Codes de la nomenclature sur 6 caractères. Préfixe des codes : MEN
+        libelleMention:
+          type: string
+          description: |
+            Le libelle de la mention du candidat issu
+            de la nomenclature des Mentions obtenues au baccalauréat
+        typeEtablissement:
+          type: string
+          description: |
+            Le type de l'établissement dans lequel le diplôme a été obtenu
+
+            Les valeurs `F` ou `E` sont acceptées:
+            * la valeur `F` correspond au type établissement d'un établissement
+              français en France,
+            * la valeur `E` correspond au type établissement d'un établissement français
+              à l'étranger ou d'un établissement étranger.
+        pays:
+          type: string
+          description: |
+            Le code du pays délivrant le diplôme
+            issu de la nomenclature Pays et nationalités.
+        libellePays:
+          type: string
+          description: |
+            Le libelle du pays délivrant le diplôme
+            issu de la nomenclature Pays et nationalités.
+        departement:
+          type: string
+          description: |
+            Le code du département de l'établissement
+            dans lequel le diplôme a été obtenu
+            issu de la nomenclature Départements.
+
+            Codes de la nomenclature sur 3 caractères. Ex : 001 = AIN
+        libelleDepartement:
+          type: string
+          description: |
+            Le libelle du département de l'établissement
+            dans lequel le diplôme a été obtenu
+            issu de la nomenclature Départements.
+        etablissement:
+          type: string
+          description: |
+            Le numéro UAI de l'établissement
+            dans lequel le diplôme a été obtenu
+            issu de la nomenclature Etablissements français.
+
+            Codes de la nomenclature = code UAI
+        ine:
+          type: string
+          description: le code INE de l'étudiant
+        statutIne:
+          $ref: '#/components/schemas/StatutIne'
+        codeErreurIne:
+          type: string
+          description: |
+            Valorisé si il y a eu une erreur lors de la vérification du numéro INE, et
+            si un code erreur est disponible
+        messageErreurIne:
+          type: string
+          description: |
+            Valorisé si il y a eu une erreur lors de la vérification du numéro INE
+        dateDernierAppelInes:
+          type: string
+          format: date-time
+          description: |
+            Date de la dernière vérification INES
+        etablissementLibre:
+          type: string
+          description: |
+            Etablissement en saisie libre dans le cas
+            - d'un Titre admis en dispense,
+            - ou par équivalence du baccalauréat,
+            - ou d'un Titre étranger,
+            - ou baccalauréat international.
+        detailTitre:
+          type: string
+          description: |
+            Précision du titre admis en dispense du baccalauréat (texte libre).
+
+            Valeur demandée lorsque l’on choisit le type ou série « 0032/Titre français admis en dispense »
+            pour un titre d’accès à l’enseignement supérieur « TITRE admis en dispense ou par équivalence du baccalauréat ».
+
+    StatutIne:
+      type: string
+      enum:
+        - CONFIRME
+        - A_VERIFIER
+        - DONNEES_INCOMPLETES
+        - DONNEES_INVALIDES
+        - LITIGE
+        - INCONNU
+        - ERR_IMAT
+        - ERR_VERIF
+      description: |
+        Statut du numéro INE dans Admission
+        
+        Valeurs actuellement possibles:
+        
+         * CONFIRME: le numéro a été confirmé par INES
+         * A_VERIFIER: le numéro INE n'a pas été vérifié par INES
+         * DONNEES_INCOMPLETES: Une donnée personnelle est manquante pour faire appel à INES
+         * DONNEES_INVALIDES: Si les données transmises pour vérifier l'INE sont invalides
+         * ERR_VERIF: Erreur lors de la vérification INES
+         * LITIGE: le numéro INE est en cours de litige
+         * INCONNU: l'admis est inconnu d'INES
+         * ERR_IMAT: Erreur lors de l'immatriculation INES
+
+    PremieresInscriptions:
+      type: object
+      properties:
+        anneeEnseignementSuperieur:
+          type: string
+          description: Année de 1ère inscription dans l'enseignement supérieur français au format AAAA
+        anneeUniversite:
+          type: string
+          description: Année de 1ère inscription en université française au format AAAA
+        anneeEtablissement:
+          type: string
+          description: Année de 1ère inscription dans l'établissement au format AAAA
+    SituationAnneePrecedente:
+      description: |
+        La situation durant l'année universitaire précédant l'inscription en
+        cours correspondante à la nomenclature Situations année précédente.
+        
+        Codes de la nomenclature sur 6 caractères. Préfixe des codes : SAP
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+        - type: object
+          description: Nomenclature utilisée à l'inscription, pour préciser la provenance d'un apprenant, elle est également utilisée dans le cadre de l'enquête SISE pour la variable SITUPRE
+          properties:
+            codeBcn:
+              type: string
+              description: |
+                Le code BCN.
+                Codes BCN de la nomenclature sur 1 caractères. Exemple: "P"
+              readOnly: true
+
+    Nomenclature:
+      type: object
+      description: Occurrence de nomenclature par défaut
+      discriminator:
+        propertyName: 'typeNomenclature'
+      required:
+        - 'typeNomenclature'
+      properties:
+        'typeNomenclature':
+          type: string
+        code:
+          type: string
+          description: code de l'occurrence de nomenclature
+        libelle:
+          type: string
+          description: libelle de l'occurrence destinée à l'affichage
+        prioriteAffichage:
+          type: integer
+          description: priorité d'affichage de l'occurrence de nomenclature
