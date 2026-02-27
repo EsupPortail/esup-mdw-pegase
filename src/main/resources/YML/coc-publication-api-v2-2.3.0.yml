@@ -1,0 +1,742 @@
+openapi: 3.0.1
+info:
+  version: 2.3.0
+  title: COC - Contrôle du cursus - Bloc «publication» - V2
+  description: |
+    Liste l'ensemble des services et des opérations disponible pour la publication de notes et des résultats à partir des données du module COC (Contrôle du cursus)
+
+    **Note importante :** Cette API est marquée [EXTERNE], elle peut être utilisée par des outils externes à Pegase.
+
+    ### Authentification/autorisation obligatoire
+
+    Pour tout appel à une opération vous devez être authentifié/authorisé (voir le paragraphe [Authentification](#section/Authentication) pour les détails).
+
+    ### Type de données
+
+    Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :
+     * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)
+       * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés
+       * Dans le cas des descripteurs de type montant ou nombre avec une partie décimale, seuls les caractères de 0 à 9 et le point(.) sont autorisés (ex : `12525.99`)
+     * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))
+     * string($date-time) - Une date et heure avec fuseau horaire sous la forme d'une chaîne de caractères (ex : `2020-02-25T18:36:22+02:00`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))
+     * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)
+     * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)
+     * boolean - Un booléen représenté par `true` ou `false`
+
+    ### Code retour
+
+     * 200 - Ok : L'opération s'est déroulée avec succès
+     * 201 - Created : L'opération a aboutie à la création d'une ressource
+     * 400 - Bad request :
+       * Un ou des paramètres d'entrées sont erronées
+       * Une erreur fonctionnelle s'est produite
+     * 404 - Not Found : La ressource demandée n'est pas trouvé
+       * Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide
+     * 500 - Internal server error : Erreur inattendue et non gérés
+servers:
+- url: http://localhost:8092/api/coc/publication/v2
+- url: https://coc.dev.pc-scol.fr/api/coc/publication/v2
+tags:
+- name: notes-et-resultats-publiables
+  description: Opérations liées à l'exposition des notes et résultats publiables
+- name: releves-de-notes-publiables
+  description: Opérations liées à l'exposition des relevés de notes publiables
+security:
+- idTokenAuth: []
+paths:
+  /etablissements/{codeStructureEtablissement}/periodes/{codePeriode}/apprenants/{codeApprenant}/chemins/{codeChemin}:
+    parameters:
+    - $ref: '#/components/parameters/codeStructureEtablissement'
+    - $ref: '#/components/parameters/codePeriode'
+    - $ref: '#/components/parameters/codeApprenant'
+    - $ref: '#/components/parameters/codeChemin'
+    get:
+      tags:
+      - notes-et-resultats-publiables
+      summary: Lister le cursus d'un apprenant avec ces notes et résultats publiables
+      description: |
+        La liste retournée est triée. Le chemin "point de départ" passé en paramètre (la "racine") en premier.
+        Ensuite viennent les chemins enfants.
+
+        Par exemple si le code chemin "point de départ" est `LIC-CHIMIE>ANNEE1` :
+          * LIC-CHIMIE>ANNEE1
+          * LIC-CHIMIE>ANNEE1>SEMESTRE1
+          * LIC-CHIMIE>ANNEE1>SEMESTRE1>UE1
+          * LIC-CHIMIE>ANNEE1>SEMESTRE1>GROUPEMENT1>UE2
+          * LIC-CHIMIE>ANNEE1>SEMESTRE1>UE3
+          * …
+          * LIC-CHIMIE>ANNEE1>SEMESTRE2
+          * …
+      operationId: listerCursusPubliableApprenant
+      responses:
+        200:
+          description: Le cursus de l'apprenant avec ses notes et résultats publiables
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Chemin'
+  ? /etablissements/{codeStructureEtablissement}/periodes/{codePeriode}/apprenants/{codeApprenant}/chemins/{codeChemin}/releves-de-notes
+  : parameters:
+    - $ref: '#/components/parameters/codeStructureEtablissement'
+    - $ref: '#/components/parameters/codePeriode'
+    - $ref: '#/components/parameters/codeApprenant'
+    - $ref: '#/components/parameters/codeChemin'
+    get:
+      tags:
+      - releves-de-notes-publiables
+      summary: Lister tous les modèles de relevés de notes publiés d'un apprenant.
+      description: |
+        La liste retourne tous les modèles de relevés de notes configurés pour chaque objet de formation ou formation.
+      operationId: listerReleveDeNotePubliableApprenant
+      responses:
+        200:
+          description: Les relevés de notes publiés de l'apprenant.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReleveDeNotePublie'
+  ? /modeles-releves-notes/{uuidModeleReleveNote}/apprenants/{codeApprenant}/chemins/{codeChemin}/releves-de-notes-et-resultats
+  : parameters:
+    - in: path
+      name: uuidModeleReleveNote
+      required: true
+      description: L'uuid de l’association entre le modèle et l'objet maquette
+      schema:
+        type: string
+        format: uuid
+      example: 2deccdb8-f9f7-47a8-8e12-269509af24a2
+    - $ref: '#/components/parameters/codeApprenant'
+    - $ref: '#/components/parameters/codeChemin'
+    get:
+      tags:
+      - releves-de-notes-publiables
+      summary: Générer des relevés de notes et résultats pour un modèle donnée et
+        un chemin donné et un apprenant donné
+      operationId: genererRelevesDeNotesEtResultatsPubliableApprenant
+      responses:
+        200:
+          description: Le relevé de notes et résultats
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+components:
+  schemas:
+    Absence:
+      type: string
+      description: |
+        L'absence déclarée lors des sessions pour les sessions ou les contrôles.
+
+        L'absence retenue pour l'absence finale.
+
+        * `JUSTIFIEE` : Absence justifiée
+        * `INJUSTIFIEE` : Absence injustifiée
+      enum:
+      - JUSTIFIEE
+      - INJUSTIFIEE
+      - null
+      example: null
+      nullable: true
+    Mention:
+      type: object
+      nullable: true
+      description: La mention (paramétrage "Mentions honorifiques" venant du référentiel)
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - libelleAffichage
+      properties:
+        code:
+          type: string
+          description: Le code de la mention
+          example: MHO002
+        libelleCourt:
+          type: string
+          description: Le libellé court de la mention
+          example: AB
+        libelleLong:
+          type: string
+          description: Le libellé long de la mention
+          example: ASSEZ BIEN
+        libelleAffichage:
+          type: string
+          description: Le libellé d'affichage (celui présenté aux apprenants) de la
+            mention
+          example: Assez Bien
+    GradeEcts:
+      type: object
+      nullable: true
+      description: Le grade ECTS (European Credits Transfer System) (paramétrage venant
+        du référentiel)
+      required:
+      - code
+      - valeur
+      properties:
+        code:
+          type: string
+          description: Le code de la notation ECTS
+          example: NEC002
+        valeur:
+          type: string
+          description: La valeur de la notation ECTS
+          example: B
+    Gpa:
+      type: object
+      nullable: true
+      description: Le GPA (Grade Point Average) (paramétrage "GradePointAverage" venant
+        du référentiel)
+      required:
+      - code
+      - valeur
+      properties:
+        code:
+          type: string
+          description: Le code de la nomenclature GPA
+          example: GPA001
+        valeur:
+          type: string
+          description: La valeur de la nomenclature GPA
+          example: '0.70'
+    Resultat:
+      type: object
+      nullable: true
+      description: |
+        Le résultat obtenu lors des sessions pour les sessions ou les contrôles (paramétrage "Types de résultat" venant du référentiel).
+
+        Le résultat retenu pour l'objet pour le résultat final.
+        C'est soit `resultatSession1` ou `resultatSession2` en fonction du paramétrage de consolidation du résultat.
+        Voir aussi `numeroSessionRetenueResultat`.
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - libelleAffichage
+      properties:
+        code:
+          type: string
+          description: Le code du résultat
+          example: TRE001
+        libelleCourt:
+          type: string
+          description: Le libellé court du résultat
+          example: ADMIS
+        libelleLong:
+          type: string
+          description: Le libellé long du résultat
+          example: ADMIS
+        libelleAffichage:
+          type: string
+          description: Le libellé d'affichage (celui présenté aux apprenants) du résultat
+          example: Admis
+    TypeAmenagement:
+      type: object
+      description: Le type d'aménagement (paramétrage "Types d'aménagement" venant
+        du référentiel)
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - libelleAffichage
+      properties:
+        code:
+          type: string
+          description: Le code du type d'aménagement
+          example: TAM008
+        libelleCourt:
+          type: string
+          description: Le libellé court du type d'aménagement
+          example: EVAL-ANTERIEURE
+        libelleLong:
+          type: string
+          description: Le libellé long du type d'aménagement
+          example: ACQUIS AU TITRE D'UNE EVALUATION ANTERIEURE
+        libelleAffichage:
+          type: string
+          description: Le libellé d'affichage (celui présenté aux apprenants) du type
+            d'aménagement
+          example: Acquis évaluation antérieure
+    TypeControle:
+      type: object
+      description: Le type de contrôle (paramétrage "Types de contrôle" venant du
+        référentiel)
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - libelleAffichage
+      properties:
+        code:
+          type: string
+          description: Le code du type de contrôle
+          example: TCO005
+        libelleCourt:
+          type: string
+          description: Le libellé court du type de contrôle
+          example: CONTROLE ORAL
+        libelleLong:
+          type: string
+          description: Le libellé long du type de contrôle
+          example: CONTROLE ORAL
+        libelleAffichage:
+          type: string
+          description: Le libellé d'affichage (celui présenté aux apprenants) du type
+            de contrôle
+          example: Contrôle oral
+    Chemin:
+      type: object
+      required:
+      - codeChemin
+      - objetFeuille
+      - concerneParSession2
+      - publieSession1
+      - publieSession2
+      - publieEvaluationsFinales
+      - listeTypeAmenagement
+      - listeControle
+      properties:
+        codeChemin:
+          type: string
+          description: |
+            Le code chemin
+
+            Un code chemin est une liste de code séparé par un '>' (supérieur) en commençant par le code de la formation jusqu'à l'objet de formation le plus fin.
+          example: LIC-CHIMIE>ANNEE1
+        objetFeuille:
+          $ref: '#/components/schemas/ObjetFeuille'
+        bareme:
+          type: integer
+          description: |
+            Le barème (le maximum) de la note
+
+            Obligatoirement renseigné si une note est attendue.
+          example: 20
+          nullable: true
+        noteSession1:
+          type: number
+          description: La note obtenue lors de la session 1
+          example: 12.345
+          nullable: true
+        coefficientSession1:
+          type: number
+          description: |
+            Le coefficient utilisé pour le calcul de la note de session 1 de l'objet parent.
+          example: 2.5
+          nullable: true
+        pointsJurySession1:
+          type: number
+          description: Le nombre de points de jury de la session 1
+          example: 0.123
+          nullable: true
+        resultatSession1:
+          $ref: '#/components/schemas/Resultat'
+        rangSession1:
+          type: integer
+          format: int32
+          description: Le rang de l'apprenant en session 1
+          nullable: true
+        creditsEctsSession1:
+          type: number
+          description: Le nombre de crédits ECTS (European Credits Transfer System)
+            acquis à l’issue de la session 1.
+          example: 6.5
+          nullable: true
+        absenceSession1:
+          $ref: '#/components/schemas/Absence'
+        concerneParSession2:
+          type: boolean
+          description: Est-ce que l'apprenant est concerné par (doit passer) la session
+            2 ?
+          example: false
+        noteSession2:
+          type: number
+          description: La note obtenue lors de la session 2
+          example: null
+          nullable: true
+        coefficientSession2:
+          type: number
+          description: |
+            Le coefficient utilisé pour le calcul de la note de session 2 de l'objet parent
+            si l'apprenant est concerné par la session 2 sur l'objet parent.
+          example: 1.5
+          nullable: true
+        pointsJurySession2:
+          type: number
+          description: Le nombre de points de jury de la session 2
+          example: 0.123
+          nullable: true
+        resultatSession2:
+          $ref: '#/components/schemas/Resultat'
+        absenceSession2:
+          $ref: '#/components/schemas/Absence'
+        noteRetenue:
+          type: number
+          description: |-
+            La note retenue pour l'objet.
+            C'est soit la `noteSession1` ou la `noteSession2` en fonction du paramétrage de consolidation.
+            Voir aussi `numeroSessionRetenue`.
+          example: 12.345
+          nullable: true
+        pointsJuryRetenus:
+          type: number
+          description: Le nombre de points de jury retenus
+          example: 0.123
+          nullable: true
+        noteFinale:
+          type: number
+          description: La note finale (la note consolidée + les points de jury)
+          example: 12.468
+          nullable: true
+        coefficientFinal:
+          type: number
+          description: |
+            Le coefficient utilisé pour le calcul de la note de l'objet parent.
+
+            C'est soit le `coefficientSession1` ou le `coefficientSession2` en fonction de la session retenue de l'objet parent.
+
+            Voir aussi `numeroSessionRetenue`.
+          example: 1.5
+          nullable: true
+        resultatFinal:
+          $ref: '#/components/schemas/Resultat'
+        absenceFinale:
+          $ref: '#/components/schemas/Absence'
+        rangFinal:
+          type: integer
+          format: int32
+          description: Le rang final de l'apprenant
+          nullable: true
+        rangTotal:
+          type: integer
+          format: int32
+          description: Le rang total (le maximum) de l'apprenant
+          nullable: true
+        creditsEctsFinaux:
+          type: number
+          description: Le nombre de crédits ECTS (European Credits Transfer System)
+            finaux acquis.
+          example: 6.5
+          nullable: true
+        mention:
+          $ref: '#/components/schemas/Mention'
+        Gpa:
+          $ref: '#/components/schemas/Gpa'
+        gradeEcts:
+          $ref: '#/components/schemas/GradeEcts'
+        numeroSessionRetenue:
+          type: integer
+          description: Le numéro de la session retenue.
+          example: 1
+          nullable: true
+        delibereSession1:
+          type: boolean
+          description: Est-ce que la session 1 a été délibérée ?
+          example: true
+          nullable: true
+        delibereFinales:
+          type: boolean
+          description: Est-ce que les évaluations finales (et session 2) ont été délibérées
+            ?
+          example: null
+          nullable: true
+        publieSession1:
+          type: boolean
+          description: |
+            Est-ce que la publication des données de la session 1 est autorisée ?
+
+            Si ce booléen est à `false`, alors les attributs suivants ne sont jamais renseignés (toujours à `null`) :
+              * noteSession1
+              * pointsJurySession1
+              * resultatSession1
+              * absenceSession1
+              * coefficientSession1
+              * rangSession1
+              * creditsEctsSession1
+              * delibereSession1
+          example: true
+        publieSession2:
+          type: boolean
+          description: |
+            Est-ce que la publication des données de la session 2 est autorisée ?
+
+            Si ce booléen est à `false`, alors les attributs suivants ne sont jamais renseignés (toujours à `null`) :
+              * noteSession2
+              * pointsJurySession2
+              * resultatSession2
+              * absenceSession2
+              * coefficientSession2
+          example: true
+        publieEvaluationsFinales:
+          type: boolean
+          description: |
+            Est-ce que la publication des données des évaluations finales est autorisée ?
+
+            Si ce booléen est à `false`, alors les attributs suivants ne sont jamais renseignés (toujours à `null`) :
+              * noteRetenue
+              * pointsJuryRetenus
+              * noteFinale
+              * resultatFinal
+              * rangFinal
+              * absenceFinale
+              * coefficientFinal
+              * numeroSessionRetenue
+              * creditsEctsFinaux
+              * mention
+              * gpa
+              * gradeEcts
+              * delibereFinales
+          example: false
+        listeTypeAmenagement:
+          type: array
+          description: |
+            La liste des types d'aménagements (paramétrage "Types d'aménagement" venant du référentiel)
+
+            S'il n'y a pas d'aménagement, on retourne une liste vide.
+          items:
+            $ref: '#/components/schemas/TypeAmenagement'
+        listeControle:
+          type: array
+          description: |
+            La liste des contrôles
+
+            S'il n'y a pas de contrôle, on retourne une liste vide.
+          items:
+            $ref: '#/components/schemas/Controle'
+        acquisCapitalise:
+          type: boolean
+          description: Est-ce que l'apprenant possède un acquis capitalisé sur ce
+            chemin ?
+          nullable: true
+        periodeAcquisCapitalise:
+          $ref: '#/components/schemas/Periode'
+          description: La période de l'acquis capitalisé si présence d'un acquis capitalisé
+            sur le chemin
+    Controle:
+      type: object
+      required:
+      - code
+      - type
+      - libelle
+      - numeroSession
+      - publie
+      properties:
+        code:
+          type: string
+          description: Le code du contrôle
+          example: CTRL27
+        type:
+          $ref: '#/components/schemas/TypeControle'
+        libelle:
+          type: string
+          description: Le libellé du contrôle
+          example: Oral de biochimie
+        numeroSession:
+          type: integer
+          description: Le numéro de session du contrôle
+          example: 1
+        note:
+          type: number
+          description: La note obtenue lors de ce contrôle
+          example: 15
+          nullable: true
+        resultat:
+          $ref: '#/components/schemas/Resultat'
+        absence:
+          $ref: '#/components/schemas/Absence'
+        coefficientSession1:
+          type: number
+          description: |
+            Le coefficient utilisé pour le calcul de la note de session 1 de l'objet.
+          example: 2
+          nullable: true
+        coefficientSession2:
+          type: number
+          description: |
+            Le coefficient utilisé pour le calcul de la note de session 2 de l'objet
+            si l'apprenant est concerné par la session 2 sur l'objet.
+          example: 1
+          nullable: true
+        coefficientFinal:
+          type: number
+          description: |
+            Le coefficient utilisé pour le calcul de la note de l'objet.
+
+            C'est soit le `coefficientSession1` ou le `coefficientSession2` en fonction de la session retenue de l'objet.
+
+            Voir aussi `numeroSessionRetenue`.
+          example: 1
+          nullable: true
+        delibere:
+          type: boolean
+          description: |
+            Est-ce que ce contrôle a été délibéré ?
+          example: true
+          nullable: true
+        publie:
+          type: boolean
+          description: |
+            Est-ce que la publication des données de ce contrôle est autorisée ?
+
+            Si ce booléen est à `false`, alors les attributs suivants ne sont jamais renseignés (toujours à `null`) :
+              * note
+              * resultat
+              * absence
+              * coefficientSession1
+              * coefficientSession2
+              * coefficientFinal
+              * delibere
+          example: true
+    ObjetFeuille:
+      type: object
+      description: Le détail de l'élément feuille (le plus à droite) du chemin
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      properties:
+        code:
+          type: string
+          description: Le code de l'objet feuille
+          example: ANNEE1
+        libelleCourt:
+          type: string
+          description: Le libellé court de l'objet feuille
+          example: A1
+        libelleLong:
+          type: string
+          description: Le libellé long de l'objet feuille
+          example: Année 1
+    Periode:
+      type: object
+      nullable: true
+      required:
+      - code
+      - libelleCourt
+      - libelleLong
+      - libelleAffichage
+      - dateDebut
+      - dateFin
+      - active
+      properties:
+        code:
+          type: string
+          description: Le code de la période
+        libelleCourt:
+          type: string
+          description: Le libellé court de la période à afficher
+        libelleLong:
+          type: string
+          description: Le libellé long de la période à afficher
+        libelleAffichage:
+          type: string
+          description: Le libellé d'affichage de la période à afficher
+        dateDebut:
+          type: string
+          format: date
+          description: La date de début de la période
+        dateFin:
+          type: string
+          format: date
+          description: La date de fin de la période
+        anneeUniversitaire:
+          type: integer
+          format: int32
+          description: L'année universitaire sur laquelle débute la période
+          nullable: true
+        active:
+          type: boolean
+          description: La période est-elle active ?
+    ReleveDeNotePublie:
+      type: object
+      required:
+      - uuid
+      - codeChemin
+      properties:
+        uuid:
+          type: UUID
+          description: L'uuid de l’association entre le modèle et l'objet maquette
+        codeChemin:
+          type: string
+          description: |
+            Le code chemin
+
+            Un code chemin est une liste de code séparé par un '>' (supérieur) en commençant par le code de la formation jusqu'à l'objet de formation le plus fin.
+          example: LIC-CHIMIE>ANNEE1
+        libelleAffichageMDW:
+          type: string
+          description: Libellé d'affichage du modèle de relevé de note destiné à l'affichage
+            sur Mon Dossier Web
+          nullable: true
+        description:
+          type: string
+          description: Description du modèle de relevé de note destiné à l'affichage
+            sur Mon Dossier Web
+          nullable: true
+  parameters:
+    codeStructureEtablissement:
+      name: codeStructureEtablissement
+      in: path
+      required: true
+      description: Le code structure de l'établissement
+      schema:
+        type: string
+        maxLength: 6
+        pattern: ^[A-Z0-9-]*$
+      example: ETAB00
+    codePeriode:
+      name: codePeriode
+      in: path
+      required: true
+      description: Le code de la période de mise en œuvre
+      schema:
+        type: string
+        maxLength: 15
+        pattern: ^[A-Z0-9-]*$
+      example: A2020
+    codeApprenant:
+      name: codeApprenant
+      in: path
+      required: true
+      description: Le code de l'apprenant
+      schema:
+        type: string
+        maxLength: 25
+        pattern: ^[A-Z0-9-]*$
+      example: APP001
+    codeChemin:
+      name: codeChemin
+      in: path
+      required: true
+      description: Le code chemin
+      schema:
+        type: string
+        maxLength: 2000
+        pattern: ^[A-Z0-9-]+(>[A-Z0-9-]+)*$
+      example: LIC-CHIMIE>LIC-CHIMIE-A1>LIC-CHIMIE-S1>UE-CHIMIE
+  securitySchemes:
+    idTokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Pour tout appel à une opération vous devez être authentifié/authorisé à l'aide d'un [token jwt](https://jwt.io/).
+        Pour cela, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`.
+
+        Le format est `Authorization: Bearer <token-jwt>`. Par exemple `Authorization: Bearer xxxx.yyyy.zzzz`
+
+        Vous pouvez recevoir un des ces codes retours si vous n'êtes pas authentifié ou autorisé :
+
+         * 401 - Unauthorized - Vous n'êtes pas authentifié
+           * Il n'y a pas de token passé dans le header HTTP `Authorization`
+           * Le token passé n'est pas au bon format (Bearer <[token-jwt](https://jwt.io/)>)
+         * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération
+           * La signature du token est incorrecte / n'a pas pû être vérifiée
+           * Le token est expiré
+           * Vérifier les droits de l'utilisateur
+         * 500 - Internal Server Error
+           * Il n'est pas encore actif
