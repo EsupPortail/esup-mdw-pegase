@@ -100,7 +100,7 @@ public class ApprenantExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call rechercherIdentiteApprenantCall(String codeStructure, Pageable pageable, String prenom, String nom, String codeApprenant, String ine, Boolean actif, Boolean exact, Boolean doublonPotentiel, StatutIne etatIneMaitre, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call rechercherIdentiteApprenantCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nullable Pageable pageable, @jakarta.annotation.Nullable String prenom, @jakarta.annotation.Nullable String nom, @jakarta.annotation.Nullable String codeApprenant, @jakarta.annotation.Nullable String ine, @jakarta.annotation.Nullable Boolean actif, @jakarta.annotation.Nullable Boolean exact, @jakarta.annotation.Nullable Boolean doublonPotentiel, @jakarta.annotation.Nullable StatutIne etatIneMaitre, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -183,7 +183,7 @@ public class ApprenantExterneApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call rechercherIdentiteApprenantValidateBeforeCall(String codeStructure, Pageable pageable, String prenom, String nom, String codeApprenant, String ine, Boolean actif, Boolean exact, Boolean doublonPotentiel, StatutIne etatIneMaitre, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call rechercherIdentiteApprenantValidateBeforeCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nullable Pageable pageable, @jakarta.annotation.Nullable String prenom, @jakarta.annotation.Nullable String nom, @jakarta.annotation.Nullable String codeApprenant, @jakarta.annotation.Nullable String ine, @jakarta.annotation.Nullable Boolean actif, @jakarta.annotation.Nullable Boolean exact, @jakarta.annotation.Nullable Boolean doublonPotentiel, @jakarta.annotation.Nullable StatutIne etatIneMaitre, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'codeStructure' is set
         if (codeStructure == null) {
             throw new ApiException("Missing the required parameter 'codeStructure' when calling rechercherIdentiteApprenant(Async)");
@@ -217,7 +217,7 @@ public class ApprenantExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public PagedIdentiteApprenantSummaries rechercherIdentiteApprenant(String codeStructure, Pageable pageable, String prenom, String nom, String codeApprenant, String ine, Boolean actif, Boolean exact, Boolean doublonPotentiel, StatutIne etatIneMaitre) throws ApiException {
+    public PagedIdentiteApprenantSummaries rechercherIdentiteApprenant(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nullable Pageable pageable, @jakarta.annotation.Nullable String prenom, @jakarta.annotation.Nullable String nom, @jakarta.annotation.Nullable String codeApprenant, @jakarta.annotation.Nullable String ine, @jakarta.annotation.Nullable Boolean actif, @jakarta.annotation.Nullable Boolean exact, @jakarta.annotation.Nullable Boolean doublonPotentiel, @jakarta.annotation.Nullable StatutIne etatIneMaitre) throws ApiException {
         ApiResponse<PagedIdentiteApprenantSummaries> localVarResp = rechercherIdentiteApprenantWithHttpInfo(codeStructure, pageable, prenom, nom, codeApprenant, ine, actif, exact, doublonPotentiel, etatIneMaitre);
         return localVarResp.getData();
     }
@@ -246,7 +246,7 @@ public class ApprenantExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<PagedIdentiteApprenantSummaries> rechercherIdentiteApprenantWithHttpInfo(String codeStructure, Pageable pageable, String prenom, String nom, String codeApprenant, String ine, Boolean actif, Boolean exact, Boolean doublonPotentiel, StatutIne etatIneMaitre) throws ApiException {
+    public ApiResponse<PagedIdentiteApprenantSummaries> rechercherIdentiteApprenantWithHttpInfo(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nullable Pageable pageable, @jakarta.annotation.Nullable String prenom, @jakarta.annotation.Nullable String nom, @jakarta.annotation.Nullable String codeApprenant, @jakarta.annotation.Nullable String ine, @jakarta.annotation.Nullable Boolean actif, @jakarta.annotation.Nullable Boolean exact, @jakarta.annotation.Nullable Boolean doublonPotentiel, @jakarta.annotation.Nullable StatutIne etatIneMaitre) throws ApiException {
         okhttp3.Call localVarCall = rechercherIdentiteApprenantValidateBeforeCall(codeStructure, pageable, prenom, nom, codeApprenant, ine, actif, exact, doublonPotentiel, etatIneMaitre, null);
         Type localVarReturnType = new TypeToken<PagedIdentiteApprenantSummaries>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
@@ -277,7 +277,7 @@ public class ApprenantExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call rechercherIdentiteApprenantAsync(String codeStructure, Pageable pageable, String prenom, String nom, String codeApprenant, String ine, Boolean actif, Boolean exact, Boolean doublonPotentiel, StatutIne etatIneMaitre, final ApiCallback<PagedIdentiteApprenantSummaries> _callback) throws ApiException {
+    public okhttp3.Call rechercherIdentiteApprenantAsync(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nullable Pageable pageable, @jakarta.annotation.Nullable String prenom, @jakarta.annotation.Nullable String nom, @jakarta.annotation.Nullable String codeApprenant, @jakarta.annotation.Nullable String ine, @jakarta.annotation.Nullable Boolean actif, @jakarta.annotation.Nullable Boolean exact, @jakarta.annotation.Nullable Boolean doublonPotentiel, @jakarta.annotation.Nullable StatutIne etatIneMaitre, final ApiCallback<PagedIdentiteApprenantSummaries> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = rechercherIdentiteApprenantValidateBeforeCall(codeStructure, pageable, prenom, nom, codeApprenant, ine, actif, exact, doublonPotentiel, etatIneMaitre, _callback);
         Type localVarReturnType = new TypeToken<PagedIdentiteApprenantSummaries>(){}.getType();

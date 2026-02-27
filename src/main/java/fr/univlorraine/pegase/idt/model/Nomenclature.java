@@ -13,177 +13,56 @@
 
 package fr.univlorraine.pegase.idt.model;
 
-import java.util.Objects;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+import fr.univlorraine.pegase.idt.invoker.JSON;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.TypeAdapterFactory;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
-
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import fr.univlorraine.pegase.idt.invoker.JSON;
+import java.util.Objects;
 
 /**
  * Nomenclature
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-02-27T10:29:00.120415600+01:00[Europe/Paris]", comments = "Generator version: 7.11.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-02-27T16:04:10.294775+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class Nomenclature {
   public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
-  @jakarta.annotation.Nonnull
-  protected String type;
-
   public static final String SERIALIZED_NAME_CODE = "code";
-  @SerializedName(SERIALIZED_NAME_CODE)
-  @jakarta.annotation.Nonnull
-  private String code;
-
   public static final String SERIALIZED_NAME_DATE_CONSOMMATION = "dateConsommation";
-  @SerializedName(SERIALIZED_NAME_DATE_CONSOMMATION)
-  @jakarta.annotation.Nullable
-  private Date dateConsommation;
-
-  public Nomenclature() {
-    this.type = this.getClass().getSimpleName();
-  }
-
-  public Nomenclature type(@jakarta.annotation.Nonnull String type) {
-    this.type = type;
-    return this;
-  }
-
-  /**
-   * Type de la nomenclature dans le module REF. A noter que ce type est obligatoire dans les objets de type response 
-   * @return type
-   */
-  @jakarta.annotation.Nonnull
-  public String getType() {
-    return type;
-  }
-
-  public void setType(@jakarta.annotation.Nonnull String type) {
-    this.type = type;
-  }
-
-
-  public Nomenclature code(@jakarta.annotation.Nonnull String code) {
-    this.code = code;
-    return this;
-  }
-
-  /**
-   * Code de la nomenclature 
-   * @return code
-   */
-  @jakarta.annotation.Nonnull
-  public String getCode() {
-    return code;
-  }
-
-  public void setCode(@jakarta.annotation.Nonnull String code) {
-    this.code = code;
-  }
-
-
-  public Nomenclature dateConsommation(@jakarta.annotation.Nullable Date dateConsommation) {
-    this.dateConsommation = dateConsommation;
-    return this;
-  }
-
-  /**
-   * Date consommation de la nomenclature. A noter que la date de consommation est obligatoire dans les objets de type response 
-   * @return dateConsommation
-   */
-  @jakarta.annotation.Nullable
-  public Date getDateConsommation() {
-    return dateConsommation;
-  }
-
-  public void setDateConsommation(@jakarta.annotation.Nullable Date dateConsommation) {
-    this.dateConsommation = dateConsommation;
-  }
-
-
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Nomenclature nomenclature = (Nomenclature) o;
-    return Objects.equals(this.type, nomenclature.type) &&
-        Objects.equals(this.code, nomenclature.code) &&
-        Objects.equals(this.dateConsommation, nomenclature.dateConsommation);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(type, code, dateConsommation);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Nomenclature {\n");
-    sb.append("    type: ").append(toIndentedString(type)).append("\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    dateConsommation: ").append(toIndentedString(dateConsommation)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
-
-
   public static HashSet<String> openapiFields;
   public static HashSet<String> openapiRequiredFields;
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>();
-    openapiFields.add("type");
-    openapiFields.add("code");
-    openapiFields.add("dateConsommation");
+    openapiFields = new HashSet<String>(Arrays.asList("type", "code", "dateConsommation"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>();
-    openapiRequiredFields.add("type");
-    openapiRequiredFields.add("code");
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("type", "code"));
+  }
+
+  /**
+   * A container for additional, undeclared properties.
+   * This is a holder for any undeclared properties as specified with
+   * the 'additionalProperties' keyword in the OAS document.
+   */
+  public Map<String, Object> additionalProperties;
+  @SerializedName(SERIALIZED_NAME_TYPE)
+  @jakarta.annotation.Nonnull
+  protected String type;
+  @SerializedName(SERIALIZED_NAME_CODE)
+  @jakarta.annotation.Nonnull
+  private String code;
+  @SerializedName(SERIALIZED_NAME_DATE_CONSOMMATION)
+  @jakarta.annotation.Nullable
+  private Date dateConsommation;
+
+
+  public Nomenclature() {
+    this.type = this.getClass().getSimpleName();
   }
 
   /**
@@ -195,7 +74,7 @@ public class Nomenclature {
   public static void validateJsonElement(JsonElement jsonElement) throws IOException {
       if (jsonElement == null) {
         if (!Nomenclature.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
-          throw new IllegalArgumentException(String.format("The required field(s) %s in Nomenclature is not found in the empty JSON string", Nomenclature.openapiRequiredFields.toString()));
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in Nomenclature is not found in the empty JSON string", Nomenclature.openapiRequiredFields.toString()));
         }
       }
 
@@ -238,10 +117,9 @@ public class Nomenclature {
           TitresAccesEnseignementSup.validateJsonElement(jsonElement);
           break;
         default:
-          throw new IllegalArgumentException(String.format("The value of the `type` field `%s` does not match any key defined in the discriminator's mapping.", discriminatorValue));
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The value of the `type` field `%s` does not match any key defined in the discriminator's mapping.", discriminatorValue));
       }
   }
-
 
   /**
    * Create an instance of Nomenclature given an JSON string
@@ -252,6 +130,141 @@ public class Nomenclature {
    */
   public static Nomenclature fromJson(String jsonString) throws IOException {
     return JSON.getGson().fromJson(jsonString, Nomenclature.class);
+  }
+
+  public Nomenclature type(@jakarta.annotation.Nonnull String type) {
+    this.type = type;
+    return this;
+  }
+
+  /**
+   * Type de la nomenclature dans le module REF. A noter que ce type est obligatoire dans les objets de type response
+   * @return type
+   */
+  @jakarta.annotation.Nonnull
+  public String getType() {
+    return type;
+  }
+
+  public void setType(@jakarta.annotation.Nonnull String type) {
+    this.type = type;
+  }
+
+  public Nomenclature code(@jakarta.annotation.Nonnull String code) {
+    this.code = code;
+    return this;
+  }
+
+  /**
+   * Code de la nomenclature
+   * @return code
+   */
+  @jakarta.annotation.Nonnull
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(@jakarta.annotation.Nonnull String code) {
+    this.code = code;
+  }
+
+  public Nomenclature dateConsommation(@jakarta.annotation.Nullable Date dateConsommation) {
+    this.dateConsommation = dateConsommation;
+    return this;
+  }
+
+  /**
+   * Date consommation de la nomenclature. A noter que la date de consommation est obligatoire dans les objets de type response
+   * @return dateConsommation
+   */
+  @jakarta.annotation.Nullable
+  public Date getDateConsommation() {
+    return dateConsommation;
+  }
+
+  public void setDateConsommation(@jakarta.annotation.Nullable Date dateConsommation) {
+    this.dateConsommation = dateConsommation;
+  }
+
+  /**
+   * Set the additional (undeclared) property with the specified name and value.
+   * If the property does not already exist, create it otherwise replace it.
+   *
+   * @param key name of the property
+   * @param value value of the property
+   * @return the Nomenclature instance itself
+   */
+  public Nomenclature putAdditionalProperty(String key, Object value) {
+    if (this.additionalProperties == null) {
+        this.additionalProperties = new HashMap<String, Object>();
+    }
+    this.additionalProperties.put(key, value);
+    return this;
+  }
+
+  /**
+   * Return the additional (undeclared) property.
+   *
+   * @return a map of objects
+   */
+  public Map<String, Object> getAdditionalProperties() {
+    return additionalProperties;
+  }
+
+  /**
+   * Return the additional (undeclared) property with the specified name.
+   *
+   * @param key name of the property
+   * @return an object
+   */
+  public Object getAdditionalProperty(String key) {
+    if (this.additionalProperties == null) {
+        return null;
+    }
+    return this.additionalProperties.get(key);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Nomenclature nomenclature = (Nomenclature) o;
+    return Objects.equals(this.type, nomenclature.type) &&
+        Objects.equals(this.code, nomenclature.code) &&
+        Objects.equals(this.dateConsommation, nomenclature.dateConsommation)&&
+        Objects.equals(this.additionalProperties, nomenclature.additionalProperties);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(type, code, dateConsommation, additionalProperties);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class Nomenclature {\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    dateConsommation: ").append(toIndentedString(dateConsommation)).append("\n");
+    sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
   }
 
   /**

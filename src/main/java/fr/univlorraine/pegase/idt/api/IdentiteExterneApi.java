@@ -94,7 +94,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call identifierEtCreerIdentiteCall(String codeStructure, CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call identifierEtCreerIdentiteCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -141,7 +141,7 @@ public class IdentiteExterneApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call identifierEtCreerIdentiteValidateBeforeCall(String codeStructure, CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call identifierEtCreerIdentiteValidateBeforeCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'codeStructure' is set
         if (codeStructure == null) {
             throw new ApiException("Missing the required parameter 'codeStructure' when calling identifierEtCreerIdentite(Async)");
@@ -173,7 +173,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public IdentiteDetail identifierEtCreerIdentite(String codeStructure, CreerModifierIdentiteRequest creerModifierIdentiteRequest) throws ApiException {
+    public IdentiteDetail identifierEtCreerIdentite(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull CreerModifierIdentiteRequest creerModifierIdentiteRequest) throws ApiException {
         ApiResponse<IdentiteDetail> localVarResp = identifierEtCreerIdentiteWithHttpInfo(codeStructure, creerModifierIdentiteRequest);
         return localVarResp.getData();
     }
@@ -195,7 +195,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<IdentiteDetail> identifierEtCreerIdentiteWithHttpInfo(String codeStructure, CreerModifierIdentiteRequest creerModifierIdentiteRequest) throws ApiException {
+    public ApiResponse<IdentiteDetail> identifierEtCreerIdentiteWithHttpInfo(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull CreerModifierIdentiteRequest creerModifierIdentiteRequest) throws ApiException {
         okhttp3.Call localVarCall = identifierEtCreerIdentiteValidateBeforeCall(codeStructure, creerModifierIdentiteRequest, null);
         Type localVarReturnType = new TypeToken<IdentiteDetail>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
@@ -219,7 +219,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call identifierEtCreerIdentiteAsync(String codeStructure, CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback<IdentiteDetail> _callback) throws ApiException {
+    public okhttp3.Call identifierEtCreerIdentiteAsync(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback<IdentiteDetail> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = identifierEtCreerIdentiteValidateBeforeCall(codeStructure, creerModifierIdentiteRequest, _callback);
         Type localVarReturnType = new TypeToken<IdentiteDetail>(){}.getType();
@@ -242,7 +242,7 @@ public class IdentiteExterneApi {
         <tr><td> 500 </td><td> Erreur interne du serveur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call lireIdentiteByIdentifiantApprenantPegaseCall(String codeStructure, String identifiantApprenantPegase, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call lireIdentiteByIdentifiantApprenantPegaseCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull String identifiantApprenantPegase, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -289,7 +289,7 @@ public class IdentiteExterneApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call lireIdentiteByIdentifiantApprenantPegaseValidateBeforeCall(String codeStructure, String identifiantApprenantPegase, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call lireIdentiteByIdentifiantApprenantPegaseValidateBeforeCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull String identifiantApprenantPegase, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'codeStructure' is set
         if (codeStructure == null) {
             throw new ApiException("Missing the required parameter 'codeStructure' when calling lireIdentiteByIdentifiantApprenantPegase(Async)");
@@ -320,7 +320,7 @@ public class IdentiteExterneApi {
         <tr><td> 500 </td><td> Erreur interne du serveur </td><td>  -  </td></tr>
      </table>
      */
-    public IdentiteImmatriculeeDetail lireIdentiteByIdentifiantApprenantPegase(String codeStructure, String identifiantApprenantPegase) throws ApiException {
+    public IdentiteImmatriculeeDetail lireIdentiteByIdentifiantApprenantPegase(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull String identifiantApprenantPegase) throws ApiException {
         ApiResponse<IdentiteImmatriculeeDetail> localVarResp = lireIdentiteByIdentifiantApprenantPegaseWithHttpInfo(codeStructure, identifiantApprenantPegase);
         return localVarResp.getData();
     }
@@ -341,7 +341,7 @@ public class IdentiteExterneApi {
         <tr><td> 500 </td><td> Erreur interne du serveur </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<IdentiteImmatriculeeDetail> lireIdentiteByIdentifiantApprenantPegaseWithHttpInfo(String codeStructure, String identifiantApprenantPegase) throws ApiException {
+    public ApiResponse<IdentiteImmatriculeeDetail> lireIdentiteByIdentifiantApprenantPegaseWithHttpInfo(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull String identifiantApprenantPegase) throws ApiException {
         okhttp3.Call localVarCall = lireIdentiteByIdentifiantApprenantPegaseValidateBeforeCall(codeStructure, identifiantApprenantPegase, null);
         Type localVarReturnType = new TypeToken<IdentiteImmatriculeeDetail>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
@@ -364,7 +364,7 @@ public class IdentiteExterneApi {
         <tr><td> 500 </td><td> Erreur interne du serveur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call lireIdentiteByIdentifiantApprenantPegaseAsync(String codeStructure, String identifiantApprenantPegase, final ApiCallback<IdentiteImmatriculeeDetail> _callback) throws ApiException {
+    public okhttp3.Call lireIdentiteByIdentifiantApprenantPegaseAsync(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull String identifiantApprenantPegase, final ApiCallback<IdentiteImmatriculeeDetail> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = lireIdentiteByIdentifiantApprenantPegaseValidateBeforeCall(codeStructure, identifiantApprenantPegase, _callback);
         Type localVarReturnType = new TypeToken<IdentiteImmatriculeeDetail>(){}.getType();
@@ -387,7 +387,7 @@ public class IdentiteExterneApi {
         <tr><td> 500 </td><td> Erreur interne du serveur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call lireIdentiteByUUIDCall(String codeStructure, UUID id, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call lireIdentiteByUUIDCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -434,7 +434,7 @@ public class IdentiteExterneApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call lireIdentiteByUUIDValidateBeforeCall(String codeStructure, UUID id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call lireIdentiteByUUIDValidateBeforeCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'codeStructure' is set
         if (codeStructure == null) {
             throw new ApiException("Missing the required parameter 'codeStructure' when calling lireIdentiteByUUID(Async)");
@@ -465,7 +465,7 @@ public class IdentiteExterneApi {
         <tr><td> 500 </td><td> Erreur interne du serveur </td><td>  -  </td></tr>
      </table>
      */
-    public IdentiteImmatriculeeDetail lireIdentiteByUUID(String codeStructure, UUID id) throws ApiException {
+    public IdentiteImmatriculeeDetail lireIdentiteByUUID(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id) throws ApiException {
         ApiResponse<IdentiteImmatriculeeDetail> localVarResp = lireIdentiteByUUIDWithHttpInfo(codeStructure, id);
         return localVarResp.getData();
     }
@@ -486,7 +486,7 @@ public class IdentiteExterneApi {
         <tr><td> 500 </td><td> Erreur interne du serveur </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<IdentiteImmatriculeeDetail> lireIdentiteByUUIDWithHttpInfo(String codeStructure, UUID id) throws ApiException {
+    public ApiResponse<IdentiteImmatriculeeDetail> lireIdentiteByUUIDWithHttpInfo(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id) throws ApiException {
         okhttp3.Call localVarCall = lireIdentiteByUUIDValidateBeforeCall(codeStructure, id, null);
         Type localVarReturnType = new TypeToken<IdentiteImmatriculeeDetail>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
@@ -509,7 +509,7 @@ public class IdentiteExterneApi {
         <tr><td> 500 </td><td> Erreur interne du serveur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call lireIdentiteByUUIDAsync(String codeStructure, UUID id, final ApiCallback<IdentiteImmatriculeeDetail> _callback) throws ApiException {
+    public okhttp3.Call lireIdentiteByUUIDAsync(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, final ApiCallback<IdentiteImmatriculeeDetail> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = lireIdentiteByUUIDValidateBeforeCall(codeStructure, id, _callback);
         Type localVarReturnType = new TypeToken<IdentiteImmatriculeeDetail>(){}.getType();
@@ -534,7 +534,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call modifierCourrielInstitutionnelCall(String codeStructure, UUID id, String emailInstitutionnel, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call modifierCourrielInstitutionnelCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, @jakarta.annotation.Nullable String emailInstitutionnel, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -586,7 +586,7 @@ public class IdentiteExterneApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call modifierCourrielInstitutionnelValidateBeforeCall(String codeStructure, UUID id, String emailInstitutionnel, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call modifierCourrielInstitutionnelValidateBeforeCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, @jakarta.annotation.Nullable String emailInstitutionnel, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'codeStructure' is set
         if (codeStructure == null) {
             throw new ApiException("Missing the required parameter 'codeStructure' when calling modifierCourrielInstitutionnel(Async)");
@@ -619,7 +619,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public IdentiteImmatriculeeDetail modifierCourrielInstitutionnel(String codeStructure, UUID id, String emailInstitutionnel) throws ApiException {
+    public IdentiteImmatriculeeDetail modifierCourrielInstitutionnel(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, @jakarta.annotation.Nullable String emailInstitutionnel) throws ApiException {
         ApiResponse<IdentiteImmatriculeeDetail> localVarResp = modifierCourrielInstitutionnelWithHttpInfo(codeStructure, id, emailInstitutionnel);
         return localVarResp.getData();
     }
@@ -642,7 +642,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<IdentiteImmatriculeeDetail> modifierCourrielInstitutionnelWithHttpInfo(String codeStructure, UUID id, String emailInstitutionnel) throws ApiException {
+    public ApiResponse<IdentiteImmatriculeeDetail> modifierCourrielInstitutionnelWithHttpInfo(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, @jakarta.annotation.Nullable String emailInstitutionnel) throws ApiException {
         okhttp3.Call localVarCall = modifierCourrielInstitutionnelValidateBeforeCall(codeStructure, id, emailInstitutionnel, null);
         Type localVarReturnType = new TypeToken<IdentiteImmatriculeeDetail>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
@@ -667,7 +667,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call modifierCourrielInstitutionnelAsync(String codeStructure, UUID id, String emailInstitutionnel, final ApiCallback<IdentiteImmatriculeeDetail> _callback) throws ApiException {
+    public okhttp3.Call modifierCourrielInstitutionnelAsync(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, @jakarta.annotation.Nullable String emailInstitutionnel, final ApiCallback<IdentiteImmatriculeeDetail> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = modifierCourrielInstitutionnelValidateBeforeCall(codeStructure, id, emailInstitutionnel, _callback);
         Type localVarReturnType = new TypeToken<IdentiteImmatriculeeDetail>(){}.getType();
@@ -691,7 +691,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call modifierDescripteursIdentiteCall(String codeStructure, UUID id, CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call modifierDescripteursIdentiteCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, @jakarta.annotation.Nonnull CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback _callback) throws ApiException {
         String basePath = null;
         // Operation Servers
         String[] localBasePaths = new String[] {  };
@@ -739,7 +739,7 @@ public class IdentiteExterneApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call modifierDescripteursIdentiteValidateBeforeCall(String codeStructure, UUID id, CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call modifierDescripteursIdentiteValidateBeforeCall(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, @jakarta.annotation.Nonnull CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback _callback) throws ApiException {
         // verify the required parameter 'codeStructure' is set
         if (codeStructure == null) {
             throw new ApiException("Missing the required parameter 'codeStructure' when calling modifierDescripteursIdentite(Async)");
@@ -776,7 +776,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public IdentiteDetail modifierDescripteursIdentite(String codeStructure, UUID id, CreerModifierIdentiteRequest creerModifierIdentiteRequest) throws ApiException {
+    public IdentiteDetail modifierDescripteursIdentite(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, @jakarta.annotation.Nonnull CreerModifierIdentiteRequest creerModifierIdentiteRequest) throws ApiException {
         ApiResponse<IdentiteDetail> localVarResp = modifierDescripteursIdentiteWithHttpInfo(codeStructure, id, creerModifierIdentiteRequest);
         return localVarResp.getData();
     }
@@ -798,7 +798,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<IdentiteDetail> modifierDescripteursIdentiteWithHttpInfo(String codeStructure, UUID id, CreerModifierIdentiteRequest creerModifierIdentiteRequest) throws ApiException {
+    public ApiResponse<IdentiteDetail> modifierDescripteursIdentiteWithHttpInfo(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, @jakarta.annotation.Nonnull CreerModifierIdentiteRequest creerModifierIdentiteRequest) throws ApiException {
         okhttp3.Call localVarCall = modifierDescripteursIdentiteValidateBeforeCall(codeStructure, id, creerModifierIdentiteRequest, null);
         Type localVarReturnType = new TypeToken<IdentiteDetail>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
@@ -822,7 +822,7 @@ public class IdentiteExterneApi {
         <tr><td> 0 </td><td> Erreur </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call modifierDescripteursIdentiteAsync(String codeStructure, UUID id, CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback<IdentiteDetail> _callback) throws ApiException {
+    public okhttp3.Call modifierDescripteursIdentiteAsync(@jakarta.annotation.Nonnull String codeStructure, @jakarta.annotation.Nonnull UUID id, @jakarta.annotation.Nonnull CreerModifierIdentiteRequest creerModifierIdentiteRequest, final ApiCallback<IdentiteDetail> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = modifierDescripteursIdentiteValidateBeforeCall(codeStructure, id, creerModifierIdentiteRequest, _callback);
         Type localVarReturnType = new TypeToken<IdentiteDetail>(){}.getType();

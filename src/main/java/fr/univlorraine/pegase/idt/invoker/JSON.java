@@ -15,27 +15,29 @@ package fr.univlorraine.pegase.idt.invoker;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.google.gson.JsonElement;
 import io.gsonfire.GsonFireBuilder;
 import io.gsonfire.TypeSelector;
-
 import okio.ByteString;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.HashMap;
 
 /*
  * A JSON utility class
@@ -49,166 +51,6 @@ public class JSON {
     private static DateTypeAdapter dateTypeAdapter = new DateTypeAdapter();
     private static SqlDateTypeAdapter sqlDateTypeAdapter = new SqlDateTypeAdapter();
     private static ByteArrayAdapter byteArrayAdapter = new ByteArrayAdapter();
-
-    @SuppressWarnings("unchecked")
-    public static GsonBuilder createGson() {
-        GsonFireBuilder fireBuilder = new GsonFireBuilder()
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.CommunesNaissance.class, new TypeSelector<fr.univlorraine.pegase.idt.model.CommunesNaissance>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.CommunesNaissance> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("CommunesNaissance", fr.univlorraine.pegase.idt.model.CommunesNaissance.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.Departements.class, new TypeSelector<fr.univlorraine.pegase.idt.model.Departements>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.Departements> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("Departements", fr.univlorraine.pegase.idt.model.Departements.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.EtablissementsFrancais.class, new TypeSelector<fr.univlorraine.pegase.idt.model.EtablissementsFrancais>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.EtablissementsFrancais> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("EtablissementsFrancais", fr.univlorraine.pegase.idt.model.EtablissementsFrancais.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.MentionsBac.class, new TypeSelector<fr.univlorraine.pegase.idt.model.MentionsBac>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.MentionsBac> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("MentionsBac", fr.univlorraine.pegase.idt.model.MentionsBac.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.Nomenclature.class, new TypeSelector<fr.univlorraine.pegase.idt.model.Nomenclature>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.Nomenclature> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("COMMUNENAISSANCE", fr.univlorraine.pegase.idt.model.CommunesNaissance.class);
-                        classByDiscriminatorValue.put("DEPARTEMENT", fr.univlorraine.pegase.idt.model.Departements.class);
-                        classByDiscriminatorValue.put("ETABLISSEMENTFRANCAIS", fr.univlorraine.pegase.idt.model.EtablissementsFrancais.class);
-                        classByDiscriminatorValue.put("MENTIONBAC", fr.univlorraine.pegase.idt.model.MentionsBac.class);
-                        classByDiscriminatorValue.put("PAYSETNATIONALITES", fr.univlorraine.pegase.idt.model.PaysEtNationalites.class);
-                        classByDiscriminatorValue.put("PROFESSIONSETCATEGORIESSOCIOPRO", fr.univlorraine.pegase.idt.model.ProfessionsEtCategoriesSocioPro.class);
-                        classByDiscriminatorValue.put("QUOTITESACTIVITE", fr.univlorraine.pegase.idt.model.QuotitesActivite.class);
-                        classByDiscriminatorValue.put("SERIESBACETEQUIVALENT", fr.univlorraine.pegase.idt.model.SeriesBacEtEquivalent.class);
-                        classByDiscriminatorValue.put("SITUATIONSFAMILIALES", fr.univlorraine.pegase.idt.model.SituationsFamiliales.class);
-                        classByDiscriminatorValue.put("SITUATIONSMILITAIRES", fr.univlorraine.pegase.idt.model.SituationsMilitaires.class);
-                        classByDiscriminatorValue.put("SPECIALITESBACGENERAL", fr.univlorraine.pegase.idt.model.SpecialitesBacGeneral.class);
-                        classByDiscriminatorValue.put("TITRESACCESENSEIGNEMENTSUP", fr.univlorraine.pegase.idt.model.TitresAccesEnseignementSup.class);
-                        classByDiscriminatorValue.put("Nomenclature", fr.univlorraine.pegase.idt.model.Nomenclature.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.PaysEtNationalites.class, new TypeSelector<fr.univlorraine.pegase.idt.model.PaysEtNationalites>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.PaysEtNationalites> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("PaysEtNationalites", fr.univlorraine.pegase.idt.model.PaysEtNationalites.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.ProfessionsEtCategoriesSocioPro.class, new TypeSelector<fr.univlorraine.pegase.idt.model.ProfessionsEtCategoriesSocioPro>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.ProfessionsEtCategoriesSocioPro> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("ProfessionsEtCategoriesSocioPro", fr.univlorraine.pegase.idt.model.ProfessionsEtCategoriesSocioPro.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.QuotitesActivite.class, new TypeSelector<fr.univlorraine.pegase.idt.model.QuotitesActivite>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.QuotitesActivite> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("QuotitesActivite", fr.univlorraine.pegase.idt.model.QuotitesActivite.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.SeriesBacEtEquivalent.class, new TypeSelector<fr.univlorraine.pegase.idt.model.SeriesBacEtEquivalent>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.SeriesBacEtEquivalent> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("SeriesBacEtEquivalent", fr.univlorraine.pegase.idt.model.SeriesBacEtEquivalent.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.SituationsFamiliales.class, new TypeSelector<fr.univlorraine.pegase.idt.model.SituationsFamiliales>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.SituationsFamiliales> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("SituationsFamiliales", fr.univlorraine.pegase.idt.model.SituationsFamiliales.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.SituationsMilitaires.class, new TypeSelector<fr.univlorraine.pegase.idt.model.SituationsMilitaires>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.SituationsMilitaires> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("SituationsMilitaires", fr.univlorraine.pegase.idt.model.SituationsMilitaires.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.SpecialitesBacGeneral.class, new TypeSelector<fr.univlorraine.pegase.idt.model.SpecialitesBacGeneral>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.SpecialitesBacGeneral> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("SpecialitesBacGeneral", fr.univlorraine.pegase.idt.model.SpecialitesBacGeneral.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-                .registerTypeSelector(fr.univlorraine.pegase.idt.model.TitresAccesEnseignementSup.class, new TypeSelector<fr.univlorraine.pegase.idt.model.TitresAccesEnseignementSup>() {
-                    @Override
-                    public Class<? extends fr.univlorraine.pegase.idt.model.TitresAccesEnseignementSup> getClassForElement(JsonElement readElement) {
-                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
-                        classByDiscriminatorValue.put("TitresAccesEnseignementSup", fr.univlorraine.pegase.idt.model.TitresAccesEnseignementSup.class);
-                        return getClassByDiscriminator(classByDiscriminatorValue,
-                                getDiscriminatorValue(readElement, "type"));
-                    }
-          })
-        ;
-        GsonBuilder builder = fireBuilder.createGsonBuilder();
-        return builder;
-    }
-
-    private static String getDiscriminatorValue(JsonElement readElement, String discriminatorField) {
-        JsonElement element = readElement.getAsJsonObject().get(discriminatorField);
-        if (null == element) {
-            throw new IllegalArgumentException("missing discriminator field: <" + discriminatorField + ">");
-        }
-        return element.getAsString();
-    }
-
-    /**
-     * Returns the Java class that implements the OpenAPI schema for the specified discriminator value.
-     *
-     * @param classByDiscriminatorValue The map of discriminator values to Java classes.
-     * @param discriminatorValue The value of the OpenAPI discriminator in the input data.
-     * @return The Java class that implements the OpenAPI schema
-     */
-    private static Class getClassByDiscriminator(Map classByDiscriminatorValue, String discriminatorValue) {
-        Class clazz = (Class) classByDiscriminatorValue.get(discriminatorValue);
-        if (null == clazz) {
-            throw new IllegalArgumentException("cannot determine model class of name: <" + discriminatorValue + ">");
-        }
-        return clazz;
-    }
 
     static {
         GsonBuilder gsonBuilder = createGson();
@@ -252,6 +94,167 @@ public class JSON {
         gsonBuilder.registerTypeAdapterFactory(new fr.univlorraine.pegase.idt.model.SpecialitesBacGeneral.CustomTypeAdapterFactory());
         gsonBuilder.registerTypeAdapterFactory(new fr.univlorraine.pegase.idt.model.TitresAccesEnseignementSup.CustomTypeAdapterFactory());
         gson = gsonBuilder.create();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static GsonBuilder createGson() {
+        GsonFireBuilder fireBuilder = new GsonFireBuilder()
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.CommunesNaissance.class, new TypeSelector<fr.univlorraine.pegase.idt.model.CommunesNaissance>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.CommunesNaissance> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("CommunesNaissance".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.CommunesNaissance.class);
+                        classByDiscriminatorValue.put("COMMUNENAISSANCE".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.CommunesNaissance.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.Departements.class, new TypeSelector<fr.univlorraine.pegase.idt.model.Departements>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.Departements> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("Departements".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.Departements.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.EtablissementsFrancais.class, new TypeSelector<fr.univlorraine.pegase.idt.model.EtablissementsFrancais>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.EtablissementsFrancais> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("EtablissementsFrancais".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.EtablissementsFrancais.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.MentionsBac.class, new TypeSelector<fr.univlorraine.pegase.idt.model.MentionsBac>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.MentionsBac> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("MentionsBac".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.MentionsBac.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.Nomenclature.class, new TypeSelector<fr.univlorraine.pegase.idt.model.Nomenclature>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.Nomenclature> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("COMMUNENAISSANCE".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.CommunesNaissance.class);
+                        classByDiscriminatorValue.put("DEPARTEMENT".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.Departements.class);
+                        classByDiscriminatorValue.put("ETABLISSEMENTFRANCAIS".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.EtablissementsFrancais.class);
+                        classByDiscriminatorValue.put("MENTIONBAC".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.MentionsBac.class);
+                        classByDiscriminatorValue.put("PAYSETNATIONALITES".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.PaysEtNationalites.class);
+                        classByDiscriminatorValue.put("PROFESSIONSETCATEGORIESSOCIOPRO".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.ProfessionsEtCategoriesSocioPro.class);
+                        classByDiscriminatorValue.put("QUOTITESACTIVITE".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.QuotitesActivite.class);
+                        classByDiscriminatorValue.put("SERIESBACETEQUIVALENT".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.SeriesBacEtEquivalent.class);
+                        classByDiscriminatorValue.put("SITUATIONSFAMILIALES".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.SituationsFamiliales.class);
+                        classByDiscriminatorValue.put("SITUATIONSMILITAIRES".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.SituationsMilitaires.class);
+                        classByDiscriminatorValue.put("SPECIALITESBACGENERAL".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.SpecialitesBacGeneral.class);
+                        classByDiscriminatorValue.put("TITRESACCESENSEIGNEMENTSUP".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.TitresAccesEnseignementSup.class);
+                        classByDiscriminatorValue.put("Nomenclature".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.Nomenclature.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.PaysEtNationalites.class, new TypeSelector<fr.univlorraine.pegase.idt.model.PaysEtNationalites>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.PaysEtNationalites> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("PaysEtNationalites".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.PaysEtNationalites.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.ProfessionsEtCategoriesSocioPro.class, new TypeSelector<fr.univlorraine.pegase.idt.model.ProfessionsEtCategoriesSocioPro>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.ProfessionsEtCategoriesSocioPro> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("ProfessionsEtCategoriesSocioPro".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.ProfessionsEtCategoriesSocioPro.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.QuotitesActivite.class, new TypeSelector<fr.univlorraine.pegase.idt.model.QuotitesActivite>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.QuotitesActivite> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("QuotitesActivite".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.QuotitesActivite.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.SeriesBacEtEquivalent.class, new TypeSelector<fr.univlorraine.pegase.idt.model.SeriesBacEtEquivalent>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.SeriesBacEtEquivalent> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("SeriesBacEtEquivalent".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.SeriesBacEtEquivalent.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.SituationsFamiliales.class, new TypeSelector<fr.univlorraine.pegase.idt.model.SituationsFamiliales>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.SituationsFamiliales> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("SituationsFamiliales".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.SituationsFamiliales.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.SituationsMilitaires.class, new TypeSelector<fr.univlorraine.pegase.idt.model.SituationsMilitaires>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.SituationsMilitaires> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("SituationsMilitaires".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.SituationsMilitaires.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.SpecialitesBacGeneral.class, new TypeSelector<fr.univlorraine.pegase.idt.model.SpecialitesBacGeneral>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.SpecialitesBacGeneral> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("SpecialitesBacGeneral".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.SpecialitesBacGeneral.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+                .registerTypeSelector(fr.univlorraine.pegase.idt.model.TitresAccesEnseignementSup.class, new TypeSelector<fr.univlorraine.pegase.idt.model.TitresAccesEnseignementSup>() {
+                    @Override
+                    public Class<? extends fr.univlorraine.pegase.idt.model.TitresAccesEnseignementSup> getClassForElement(JsonElement readElement) {
+                        Map<String, Class> classByDiscriminatorValue = new HashMap<String, Class>();
+                        classByDiscriminatorValue.put("TitresAccesEnseignementSup".toUpperCase(Locale.ROOT), fr.univlorraine.pegase.idt.model.TitresAccesEnseignementSup.class);
+                        return getClassByDiscriminator(classByDiscriminatorValue,
+                                getDiscriminatorValue(readElement, "type"));
+                    }
+          })
+        ;
+        GsonBuilder builder = fireBuilder.createGsonBuilder();
+        return builder;
+    }
+
+    private static String getDiscriminatorValue(JsonElement readElement, String discriminatorField) {
+        JsonElement element = readElement.getAsJsonObject().get(discriminatorField);
+        if (null == element) {
+            throw new IllegalArgumentException("missing discriminator field: <" + discriminatorField + ">");
+        }
+        return element.getAsString();
+    }
+
+    /**
+     * Returns the Java class that implements the OpenAPI schema for the specified discriminator value.
+     *
+     * @param classByDiscriminatorValue The map of discriminator values to Java classes.
+     * @param discriminatorValue The value of the OpenAPI discriminator in the input data.
+     * @return The Java class that implements the OpenAPI schema
+     */
+    private static Class getClassByDiscriminator(Map classByDiscriminatorValue, String discriminatorValue) {
+        Class clazz = (Class) classByDiscriminatorValue.get(discriminatorValue.toUpperCase(Locale.ROOT));
+        if (null == clazz) {
+            throw new IllegalArgumentException("cannot determine model class of name: <" + discriminatorValue + ">");
+        }
+        return clazz;
     }
 
     /**
@@ -314,6 +317,36 @@ public class JSON {
                 throw (e);
             }
         }
+    }
+
+    /**
+    * Deserialize the given JSON InputStream to a Java object.
+    *
+    * @param <T>         Type
+    * @param inputStream The JSON InputStream
+    * @param returnType  The type to deserialize into
+    * @return The deserialized Java object
+    */
+    @SuppressWarnings("unchecked")
+    public static <T> T deserialize(InputStream inputStream, Type returnType) throws IOException {
+        try (InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+        if (isLenientOnJson) {
+            // see https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/stream/JsonReader.html#setLenient(boolean)
+            JsonReader jsonReader = new JsonReader(reader);
+            jsonReader.setLenient(true);
+            return gson.fromJson(jsonReader, returnType);
+            } else {
+                return gson.fromJson(reader, returnType);
+            }
+        }
+    }
+
+    public static void setDateFormat(DateFormat dateFormat) {
+        dateTypeAdapter.setFormat(dateFormat);
+    }
+
+    public static void setSqlDateFormat(DateFormat dateFormat) {
+        sqlDateTypeAdapter.setFormat(dateFormat);
     }
 
     /**
@@ -453,13 +486,5 @@ public class JSON {
                 throw new JsonParseException(e);
             }
         }
-    }
-
-    public static void setDateFormat(DateFormat dateFormat) {
-        dateTypeAdapter.setFormat(dateFormat);
-    }
-
-    public static void setSqlDateFormat(DateFormat dateFormat) {
-        sqlDateTypeAdapter.setFormat(dateFormat);
     }
 }

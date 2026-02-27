@@ -49,7 +49,7 @@ import fr.univlorraine.pegase.idt.invoker.JSON;
 /**
  * DonneesContact
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-02-27T10:29:00.120415600+01:00[Europe/Paris]", comments = "Generator version: 7.11.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-02-27T16:04:10.294775+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class DonneesContact {
   public static final String SERIALIZED_NAME_ADRESSE_PERIODE_U_PAYS = "adressePeriodeUPays";
   @SerializedName(SERIALIZED_NAME_ADRESSE_PERIODE_U_PAYS)
@@ -581,6 +581,50 @@ public class DonneesContact {
     this.adresseElectroniqueSecoursProprietaire = adresseElectroniqueSecoursProprietaire;
   }
 
+  /**
+   * A container for additional, undeclared properties.
+   * This is a holder for any undeclared properties as specified with
+   * the 'additionalProperties' keyword in the OAS document.
+   */
+  private Map<String, Object> additionalProperties;
+
+  /**
+   * Set the additional (undeclared) property with the specified name and value.
+   * If the property does not already exist, create it otherwise replace it.
+   *
+   * @param key name of the property
+   * @param value value of the property
+   * @return the DonneesContact instance itself
+   */
+  public DonneesContact putAdditionalProperty(String key, Object value) {
+    if (this.additionalProperties == null) {
+        this.additionalProperties = new HashMap<String, Object>();
+    }
+    this.additionalProperties.put(key, value);
+    return this;
+  }
+
+  /**
+   * Return the additional (undeclared) property.
+   *
+   * @return a map of objects
+   */
+  public Map<String, Object> getAdditionalProperties() {
+    return additionalProperties;
+  }
+
+  /**
+   * Return the additional (undeclared) property with the specified name.
+   *
+   * @param key name of the property
+   * @return an object
+   */
+  public Object getAdditionalProperty(String key) {
+    if (this.additionalProperties == null) {
+        return null;
+    }
+    return this.additionalProperties.get(key);
+  }
 
 
   @Override
@@ -613,12 +657,13 @@ public class DonneesContact {
         Objects.equals(this.telephoneContactUrgenceProprietaire, donneesContact.telephoneContactUrgenceProprietaire) &&
         Objects.equals(this.adresseElectroniqueInstitutionnelle, donneesContact.adresseElectroniqueInstitutionnelle) &&
         Objects.equals(this.adresseElectroniqueSecours, donneesContact.adresseElectroniqueSecours) &&
-        Objects.equals(this.adresseElectroniqueSecoursProprietaire, donneesContact.adresseElectroniqueSecoursProprietaire);
+        Objects.equals(this.adresseElectroniqueSecoursProprietaire, donneesContact.adresseElectroniqueSecoursProprietaire)&&
+        Objects.equals(this.additionalProperties, donneesContact.additionalProperties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(adressePeriodeUPays, adressePeriodeULigne1Etage, adressePeriodeULigne2Batiment, adressePeriodeULigne3Voie, adressePeriodeULigne4Complement, adressePeriodeUCodePostal, adressePeriodeUCodeCommune, adressePeriodeULigne5Etranger, adresseFixePays, adresseFixeLigne1Etage, adresseFixeLigne2Batiment, adresseFixeLigne3Voie, adresseFixeLigne4Complement, adresseFixeCodePostal, adresseFixeCodeCommune, adresseFixeLigne5Etranger, adresseFixeProprietaire, telephoneContactUrgence, telephoneContactUrgenceProprietaire, adresseElectroniqueInstitutionnelle, adresseElectroniqueSecours, adresseElectroniqueSecoursProprietaire);
+    return Objects.hash(adressePeriodeUPays, adressePeriodeULigne1Etage, adressePeriodeULigne2Batiment, adressePeriodeULigne3Voie, adressePeriodeULigne4Complement, adressePeriodeUCodePostal, adressePeriodeUCodeCommune, adressePeriodeULigne5Etranger, adresseFixePays, adresseFixeLigne1Etage, adresseFixeLigne2Batiment, adresseFixeLigne3Voie, adresseFixeLigne4Complement, adresseFixeCodePostal, adresseFixeCodeCommune, adresseFixeLigne5Etranger, adresseFixeProprietaire, telephoneContactUrgence, telephoneContactUrgenceProprietaire, adresseElectroniqueInstitutionnelle, adresseElectroniqueSecours, adresseElectroniqueSecoursProprietaire, additionalProperties);
   }
 
   @Override
@@ -647,6 +692,7 @@ public class DonneesContact {
     sb.append("    adresseElectroniqueInstitutionnelle: ").append(toIndentedString(adresseElectroniqueInstitutionnelle)).append("\n");
     sb.append("    adresseElectroniqueSecours: ").append(toIndentedString(adresseElectroniqueSecours)).append("\n");
     sb.append("    adresseElectroniqueSecoursProprietaire: ").append(toIndentedString(adresseElectroniqueSecoursProprietaire)).append("\n");
+    sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -668,32 +714,10 @@ public class DonneesContact {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>();
-    openapiFields.add("adressePeriodeUPays");
-    openapiFields.add("adressePeriodeULigne1Etage");
-    openapiFields.add("adressePeriodeULigne2Batiment");
-    openapiFields.add("adressePeriodeULigne3Voie");
-    openapiFields.add("adressePeriodeULigne4Complement");
-    openapiFields.add("adressePeriodeUCodePostal");
-    openapiFields.add("adressePeriodeUCodeCommune");
-    openapiFields.add("adressePeriodeULigne5Etranger");
-    openapiFields.add("adresseFixePays");
-    openapiFields.add("adresseFixeLigne1Etage");
-    openapiFields.add("adresseFixeLigne2Batiment");
-    openapiFields.add("adresseFixeLigne3Voie");
-    openapiFields.add("adresseFixeLigne4Complement");
-    openapiFields.add("adresseFixeCodePostal");
-    openapiFields.add("adresseFixeCodeCommune");
-    openapiFields.add("adresseFixeLigne5Etranger");
-    openapiFields.add("adresseFixeProprietaire");
-    openapiFields.add("telephoneContactUrgence");
-    openapiFields.add("telephoneContactUrgenceProprietaire");
-    openapiFields.add("adresseElectroniqueInstitutionnelle");
-    openapiFields.add("adresseElectroniqueSecours");
-    openapiFields.add("adresseElectroniqueSecoursProprietaire");
+    openapiFields = new HashSet<String>(Arrays.asList("adressePeriodeUPays", "adressePeriodeULigne1Etage", "adressePeriodeULigne2Batiment", "adressePeriodeULigne3Voie", "adressePeriodeULigne4Complement", "adressePeriodeUCodePostal", "adressePeriodeUCodeCommune", "adressePeriodeULigne5Etranger", "adresseFixePays", "adresseFixeLigne1Etage", "adresseFixeLigne2Batiment", "adresseFixeLigne3Voie", "adresseFixeLigne4Complement", "adresseFixeCodePostal", "adresseFixeCodeCommune", "adresseFixeLigne5Etranger", "adresseFixeProprietaire", "telephoneContactUrgence", "telephoneContactUrgenceProprietaire", "adresseElectroniqueInstitutionnelle", "adresseElectroniqueSecours", "adresseElectroniqueSecoursProprietaire"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>();
+    openapiRequiredFields = new HashSet<String>(0);
   }
 
   /**
@@ -705,15 +729,7 @@ public class DonneesContact {
   public static void validateJsonElement(JsonElement jsonElement) throws IOException {
       if (jsonElement == null) {
         if (!DonneesContact.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
-          throw new IllegalArgumentException(String.format("The required field(s) %s in DonneesContact is not found in the empty JSON string", DonneesContact.openapiRequiredFields.toString()));
-        }
-      }
-
-      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
-      // check to see if the JSON string contains additional fields
-      for (Map.Entry<String, JsonElement> entry : entries) {
-        if (!DonneesContact.openapiFields.contains(entry.getKey())) {
-          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `DonneesContact` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in DonneesContact is not found in the empty JSON string", DonneesContact.openapiRequiredFields.toString()));
         }
       }
         JsonObject jsonObj = jsonElement.getAsJsonObject();
@@ -722,68 +738,68 @@ public class DonneesContact {
         PaysEtNationalites.validateJsonElement(jsonObj.get("adressePeriodeUPays"));
       }
       if ((jsonObj.get("adressePeriodeULigne1Etage") != null && !jsonObj.get("adressePeriodeULigne1Etage").isJsonNull()) && !jsonObj.get("adressePeriodeULigne1Etage").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adressePeriodeULigne1Etage` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeULigne1Etage").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adressePeriodeULigne1Etage` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeULigne1Etage").toString()));
       }
       if ((jsonObj.get("adressePeriodeULigne2Batiment") != null && !jsonObj.get("adressePeriodeULigne2Batiment").isJsonNull()) && !jsonObj.get("adressePeriodeULigne2Batiment").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adressePeriodeULigne2Batiment` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeULigne2Batiment").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adressePeriodeULigne2Batiment` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeULigne2Batiment").toString()));
       }
       if ((jsonObj.get("adressePeriodeULigne3Voie") != null && !jsonObj.get("adressePeriodeULigne3Voie").isJsonNull()) && !jsonObj.get("adressePeriodeULigne3Voie").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adressePeriodeULigne3Voie` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeULigne3Voie").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adressePeriodeULigne3Voie` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeULigne3Voie").toString()));
       }
       if ((jsonObj.get("adressePeriodeULigne4Complement") != null && !jsonObj.get("adressePeriodeULigne4Complement").isJsonNull()) && !jsonObj.get("adressePeriodeULigne4Complement").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adressePeriodeULigne4Complement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeULigne4Complement").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adressePeriodeULigne4Complement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeULigne4Complement").toString()));
       }
       if ((jsonObj.get("adressePeriodeUCodePostal") != null && !jsonObj.get("adressePeriodeUCodePostal").isJsonNull()) && !jsonObj.get("adressePeriodeUCodePostal").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adressePeriodeUCodePostal` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeUCodePostal").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adressePeriodeUCodePostal` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeUCodePostal").toString()));
       }
       if ((jsonObj.get("adressePeriodeUCodeCommune") != null && !jsonObj.get("adressePeriodeUCodeCommune").isJsonNull()) && !jsonObj.get("adressePeriodeUCodeCommune").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adressePeriodeUCodeCommune` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeUCodeCommune").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adressePeriodeUCodeCommune` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeUCodeCommune").toString()));
       }
       if ((jsonObj.get("adressePeriodeULigne5Etranger") != null && !jsonObj.get("adressePeriodeULigne5Etranger").isJsonNull()) && !jsonObj.get("adressePeriodeULigne5Etranger").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adressePeriodeULigne5Etranger` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeULigne5Etranger").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adressePeriodeULigne5Etranger` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adressePeriodeULigne5Etranger").toString()));
       }
       // validate the optional field `adresseFixePays`
       if (jsonObj.get("adresseFixePays") != null && !jsonObj.get("adresseFixePays").isJsonNull()) {
         PaysEtNationalites.validateJsonElement(jsonObj.get("adresseFixePays"));
       }
       if ((jsonObj.get("adresseFixeLigne1Etage") != null && !jsonObj.get("adresseFixeLigne1Etage").isJsonNull()) && !jsonObj.get("adresseFixeLigne1Etage").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adresseFixeLigne1Etage` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeLigne1Etage").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresseFixeLigne1Etage` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeLigne1Etage").toString()));
       }
       if ((jsonObj.get("adresseFixeLigne2Batiment") != null && !jsonObj.get("adresseFixeLigne2Batiment").isJsonNull()) && !jsonObj.get("adresseFixeLigne2Batiment").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adresseFixeLigne2Batiment` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeLigne2Batiment").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresseFixeLigne2Batiment` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeLigne2Batiment").toString()));
       }
       if ((jsonObj.get("adresseFixeLigne3Voie") != null && !jsonObj.get("adresseFixeLigne3Voie").isJsonNull()) && !jsonObj.get("adresseFixeLigne3Voie").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adresseFixeLigne3Voie` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeLigne3Voie").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresseFixeLigne3Voie` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeLigne3Voie").toString()));
       }
       if ((jsonObj.get("adresseFixeLigne4Complement") != null && !jsonObj.get("adresseFixeLigne4Complement").isJsonNull()) && !jsonObj.get("adresseFixeLigne4Complement").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adresseFixeLigne4Complement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeLigne4Complement").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresseFixeLigne4Complement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeLigne4Complement").toString()));
       }
       if ((jsonObj.get("adresseFixeCodePostal") != null && !jsonObj.get("adresseFixeCodePostal").isJsonNull()) && !jsonObj.get("adresseFixeCodePostal").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adresseFixeCodePostal` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeCodePostal").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresseFixeCodePostal` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeCodePostal").toString()));
       }
       if ((jsonObj.get("adresseFixeCodeCommune") != null && !jsonObj.get("adresseFixeCodeCommune").isJsonNull()) && !jsonObj.get("adresseFixeCodeCommune").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adresseFixeCodeCommune` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeCodeCommune").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresseFixeCodeCommune` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeCodeCommune").toString()));
       }
       if ((jsonObj.get("adresseFixeLigne5Etranger") != null && !jsonObj.get("adresseFixeLigne5Etranger").isJsonNull()) && !jsonObj.get("adresseFixeLigne5Etranger").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adresseFixeLigne5Etranger` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeLigne5Etranger").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresseFixeLigne5Etranger` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeLigne5Etranger").toString()));
       }
       if ((jsonObj.get("adresseFixeProprietaire") != null && !jsonObj.get("adresseFixeProprietaire").isJsonNull()) && !jsonObj.get("adresseFixeProprietaire").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adresseFixeProprietaire` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeProprietaire").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresseFixeProprietaire` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseFixeProprietaire").toString()));
       }
       if ((jsonObj.get("telephoneContactUrgence") != null && !jsonObj.get("telephoneContactUrgence").isJsonNull()) && !jsonObj.get("telephoneContactUrgence").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `telephoneContactUrgence` to be a primitive type in the JSON string but got `%s`", jsonObj.get("telephoneContactUrgence").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `telephoneContactUrgence` to be a primitive type in the JSON string but got `%s`", jsonObj.get("telephoneContactUrgence").toString()));
       }
       if ((jsonObj.get("telephoneContactUrgenceProprietaire") != null && !jsonObj.get("telephoneContactUrgenceProprietaire").isJsonNull()) && !jsonObj.get("telephoneContactUrgenceProprietaire").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `telephoneContactUrgenceProprietaire` to be a primitive type in the JSON string but got `%s`", jsonObj.get("telephoneContactUrgenceProprietaire").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `telephoneContactUrgenceProprietaire` to be a primitive type in the JSON string but got `%s`", jsonObj.get("telephoneContactUrgenceProprietaire").toString()));
       }
       if ((jsonObj.get("adresseElectroniqueInstitutionnelle") != null && !jsonObj.get("adresseElectroniqueInstitutionnelle").isJsonNull()) && !jsonObj.get("adresseElectroniqueInstitutionnelle").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adresseElectroniqueInstitutionnelle` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseElectroniqueInstitutionnelle").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresseElectroniqueInstitutionnelle` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseElectroniqueInstitutionnelle").toString()));
       }
       if ((jsonObj.get("adresseElectroniqueSecours") != null && !jsonObj.get("adresseElectroniqueSecours").isJsonNull()) && !jsonObj.get("adresseElectroniqueSecours").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adresseElectroniqueSecours` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseElectroniqueSecours").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresseElectroniqueSecours` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseElectroniqueSecours").toString()));
       }
       if ((jsonObj.get("adresseElectroniqueSecoursProprietaire") != null && !jsonObj.get("adresseElectroniqueSecoursProprietaire").isJsonNull()) && !jsonObj.get("adresseElectroniqueSecoursProprietaire").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `adresseElectroniqueSecoursProprietaire` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseElectroniqueSecoursProprietaire").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresseElectroniqueSecoursProprietaire` to be a primitive type in the JSON string but got `%s`", jsonObj.get("adresseElectroniqueSecoursProprietaire").toString()));
       }
   }
 
@@ -802,6 +818,28 @@ public class DonneesContact {
            @Override
            public void write(JsonWriter out, DonneesContact value) throws IOException {
              JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             obj.remove("additionalProperties");
+             // serialize additional properties
+             if (value.getAdditionalProperties() != null) {
+               for (Map.Entry<String, Object> entry : value.getAdditionalProperties().entrySet()) {
+                 if (entry.getValue() instanceof String)
+                   obj.addProperty(entry.getKey(), (String) entry.getValue());
+                 else if (entry.getValue() instanceof Number)
+                   obj.addProperty(entry.getKey(), (Number) entry.getValue());
+                 else if (entry.getValue() instanceof Boolean)
+                   obj.addProperty(entry.getKey(), (Boolean) entry.getValue());
+                 else if (entry.getValue() instanceof Character)
+                   obj.addProperty(entry.getKey(), (Character) entry.getValue());
+                 else {
+                   JsonElement jsonElement = gson.toJsonTree(entry.getValue());
+                   if (jsonElement.isJsonArray()) {
+                     obj.add(entry.getKey(), jsonElement.getAsJsonArray());
+                   } else {
+                     obj.add(entry.getKey(), jsonElement.getAsJsonObject());
+                   }
+                 }
+               }
+             }
              elementAdapter.write(out, obj);
            }
 
@@ -809,7 +847,28 @@ public class DonneesContact {
            public DonneesContact read(JsonReader in) throws IOException {
              JsonElement jsonElement = elementAdapter.read(in);
              validateJsonElement(jsonElement);
-             return thisAdapter.fromJsonTree(jsonElement);
+             JsonObject jsonObj = jsonElement.getAsJsonObject();
+             // store additional fields in the deserialized instance
+             DonneesContact instance = thisAdapter.fromJsonTree(jsonObj);
+             for (Map.Entry<String, JsonElement> entry : jsonObj.entrySet()) {
+               if (!openapiFields.contains(entry.getKey())) {
+                 if (entry.getValue().isJsonPrimitive()) { // primitive type
+                   if (entry.getValue().getAsJsonPrimitive().isString())
+                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsString());
+                   else if (entry.getValue().getAsJsonPrimitive().isNumber())
+                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsNumber());
+                   else if (entry.getValue().getAsJsonPrimitive().isBoolean())
+                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsBoolean());
+                   else
+                     throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` has unknown primitive type. Value: %s", entry.getKey(), entry.getValue().toString()));
+                 } else if (entry.getValue().isJsonArray()) {
+                     instance.putAdditionalProperty(entry.getKey(), gson.fromJson(entry.getValue(), List.class));
+                 } else { // JSON object
+                     instance.putAdditionalProperty(entry.getKey(), gson.fromJson(entry.getValue(), HashMap.class));
+                 }
+               }
+             }
+             return instance;
            }
 
        }.nullSafe();

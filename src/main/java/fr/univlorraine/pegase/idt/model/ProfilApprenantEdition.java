@@ -55,7 +55,7 @@ import fr.univlorraine.pegase.idt.invoker.JSON;
 /**
  * ProfilApprenantEdition
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-02-27T10:29:00.120415600+01:00[Europe/Paris]", comments = "Generator version: 7.11.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-02-27T16:04:10.294775+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class ProfilApprenantEdition {
   public static final String SERIALIZED_NAME_LISTE_I_N_ES = "listeINEs";
   @Deprecated
@@ -296,6 +296,50 @@ public class ProfilApprenantEdition {
     this.temoinDecede = temoinDecede;
   }
 
+  /**
+   * A container for additional, undeclared properties.
+   * This is a holder for any undeclared properties as specified with
+   * the 'additionalProperties' keyword in the OAS document.
+   */
+  private Map<String, Object> additionalProperties;
+
+  /**
+   * Set the additional (undeclared) property with the specified name and value.
+   * If the property does not already exist, create it otherwise replace it.
+   *
+   * @param key name of the property
+   * @param value value of the property
+   * @return the ProfilApprenantEdition instance itself
+   */
+  public ProfilApprenantEdition putAdditionalProperty(String key, Object value) {
+    if (this.additionalProperties == null) {
+        this.additionalProperties = new HashMap<String, Object>();
+    }
+    this.additionalProperties.put(key, value);
+    return this;
+  }
+
+  /**
+   * Return the additional (undeclared) property.
+   *
+   * @return a map of objects
+   */
+  public Map<String, Object> getAdditionalProperties() {
+    return additionalProperties;
+  }
+
+  /**
+   * Return the additional (undeclared) property with the specified name.
+   *
+   * @param key name of the property
+   * @return an object
+   */
+  public Object getAdditionalProperty(String key) {
+    if (this.additionalProperties == null) {
+        return null;
+    }
+    return this.additionalProperties.get(key);
+  }
 
 
   @Override
@@ -315,12 +359,13 @@ public class ProfilApprenantEdition {
         Objects.equals(this.donneesComplementaires, profilApprenantEdition.donneesComplementaires) &&
         Objects.equals(this.parcoursScolaireEtUniversitaire, profilApprenantEdition.parcoursScolaireEtUniversitaire) &&
         Objects.equals(this.temoinDoublonPotentiel, profilApprenantEdition.temoinDoublonPotentiel) &&
-        Objects.equals(this.temoinDecede, profilApprenantEdition.temoinDecede);
+        Objects.equals(this.temoinDecede, profilApprenantEdition.temoinDecede)&&
+        Objects.equals(this.additionalProperties, profilApprenantEdition.additionalProperties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(listeINEs, ineMaitre, listeINEsAlternatifs, etatCivil, donneesContact, donneesComplementaires, parcoursScolaireEtUniversitaire, temoinDoublonPotentiel, temoinDecede);
+    return Objects.hash(listeINEs, ineMaitre, listeINEsAlternatifs, etatCivil, donneesContact, donneesComplementaires, parcoursScolaireEtUniversitaire, temoinDoublonPotentiel, temoinDecede, additionalProperties);
   }
 
   @Override
@@ -336,6 +381,7 @@ public class ProfilApprenantEdition {
     sb.append("    parcoursScolaireEtUniversitaire: ").append(toIndentedString(parcoursScolaireEtUniversitaire)).append("\n");
     sb.append("    temoinDoublonPotentiel: ").append(toIndentedString(temoinDoublonPotentiel)).append("\n");
     sb.append("    temoinDecede: ").append(toIndentedString(temoinDecede)).append("\n");
+    sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -357,19 +403,10 @@ public class ProfilApprenantEdition {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>();
-    openapiFields.add("listeINEs");
-    openapiFields.add("ineMaitre");
-    openapiFields.add("listeINEsAlternatifs");
-    openapiFields.add("etatCivil");
-    openapiFields.add("donneesContact");
-    openapiFields.add("donneesComplementaires");
-    openapiFields.add("parcoursScolaireEtUniversitaire");
-    openapiFields.add("temoinDoublonPotentiel");
-    openapiFields.add("temoinDecede");
+    openapiFields = new HashSet<String>(Arrays.asList("listeINEs", "ineMaitre", "listeINEsAlternatifs", "etatCivil", "donneesContact", "donneesComplementaires", "parcoursScolaireEtUniversitaire", "temoinDoublonPotentiel", "temoinDecede"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>();
+    openapiRequiredFields = new HashSet<String>(0);
   }
 
   /**
@@ -381,15 +418,7 @@ public class ProfilApprenantEdition {
   public static void validateJsonElement(JsonElement jsonElement) throws IOException {
       if (jsonElement == null) {
         if (!ProfilApprenantEdition.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
-          throw new IllegalArgumentException(String.format("The required field(s) %s in ProfilApprenantEdition is not found in the empty JSON string", ProfilApprenantEdition.openapiRequiredFields.toString()));
-        }
-      }
-
-      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
-      // check to see if the JSON string contains additional fields
-      for (Map.Entry<String, JsonElement> entry : entries) {
-        if (!ProfilApprenantEdition.openapiFields.contains(entry.getKey())) {
-          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `ProfilApprenantEdition` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in ProfilApprenantEdition is not found in the empty JSON string", ProfilApprenantEdition.openapiRequiredFields.toString()));
         }
       }
         JsonObject jsonObj = jsonElement.getAsJsonObject();
@@ -398,7 +427,7 @@ public class ProfilApprenantEdition {
         if (jsonArraylisteINEs != null) {
           // ensure the json data is an array
           if (!jsonObj.get("listeINEs").isJsonArray()) {
-            throw new IllegalArgumentException(String.format("Expected the field `listeINEs` to be an array in the JSON string but got `%s`", jsonObj.get("listeINEs").toString()));
+            throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `listeINEs` to be an array in the JSON string but got `%s`", jsonObj.get("listeINEs").toString()));
           }
 
           // validate the optional field `listeINEs` (array)
@@ -408,11 +437,11 @@ public class ProfilApprenantEdition {
         }
       }
       if ((jsonObj.get("ineMaitre") != null && !jsonObj.get("ineMaitre").isJsonNull()) && !jsonObj.get("ineMaitre").isJsonPrimitive()) {
-        throw new IllegalArgumentException(String.format("Expected the field `ineMaitre` to be a primitive type in the JSON string but got `%s`", jsonObj.get("ineMaitre").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `ineMaitre` to be a primitive type in the JSON string but got `%s`", jsonObj.get("ineMaitre").toString()));
       }
       // ensure the optional json data is an array if present
       if (jsonObj.get("listeINEsAlternatifs") != null && !jsonObj.get("listeINEsAlternatifs").isJsonNull() && !jsonObj.get("listeINEsAlternatifs").isJsonArray()) {
-        throw new IllegalArgumentException(String.format("Expected the field `listeINEsAlternatifs` to be an array in the JSON string but got `%s`", jsonObj.get("listeINEsAlternatifs").toString()));
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `listeINEsAlternatifs` to be an array in the JSON string but got `%s`", jsonObj.get("listeINEsAlternatifs").toString()));
       }
       // validate the optional field `etatCivil`
       if (jsonObj.get("etatCivil") != null && !jsonObj.get("etatCivil").isJsonNull()) {
@@ -447,6 +476,28 @@ public class ProfilApprenantEdition {
            @Override
            public void write(JsonWriter out, ProfilApprenantEdition value) throws IOException {
              JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             obj.remove("additionalProperties");
+             // serialize additional properties
+             if (value.getAdditionalProperties() != null) {
+               for (Map.Entry<String, Object> entry : value.getAdditionalProperties().entrySet()) {
+                 if (entry.getValue() instanceof String)
+                   obj.addProperty(entry.getKey(), (String) entry.getValue());
+                 else if (entry.getValue() instanceof Number)
+                   obj.addProperty(entry.getKey(), (Number) entry.getValue());
+                 else if (entry.getValue() instanceof Boolean)
+                   obj.addProperty(entry.getKey(), (Boolean) entry.getValue());
+                 else if (entry.getValue() instanceof Character)
+                   obj.addProperty(entry.getKey(), (Character) entry.getValue());
+                 else {
+                   JsonElement jsonElement = gson.toJsonTree(entry.getValue());
+                   if (jsonElement.isJsonArray()) {
+                     obj.add(entry.getKey(), jsonElement.getAsJsonArray());
+                   } else {
+                     obj.add(entry.getKey(), jsonElement.getAsJsonObject());
+                   }
+                 }
+               }
+             }
              elementAdapter.write(out, obj);
            }
 
@@ -454,7 +505,28 @@ public class ProfilApprenantEdition {
            public ProfilApprenantEdition read(JsonReader in) throws IOException {
              JsonElement jsonElement = elementAdapter.read(in);
              validateJsonElement(jsonElement);
-             return thisAdapter.fromJsonTree(jsonElement);
+             JsonObject jsonObj = jsonElement.getAsJsonObject();
+             // store additional fields in the deserialized instance
+             ProfilApprenantEdition instance = thisAdapter.fromJsonTree(jsonObj);
+             for (Map.Entry<String, JsonElement> entry : jsonObj.entrySet()) {
+               if (!openapiFields.contains(entry.getKey())) {
+                 if (entry.getValue().isJsonPrimitive()) { // primitive type
+                   if (entry.getValue().getAsJsonPrimitive().isString())
+                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsString());
+                   else if (entry.getValue().getAsJsonPrimitive().isNumber())
+                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsNumber());
+                   else if (entry.getValue().getAsJsonPrimitive().isBoolean())
+                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsBoolean());
+                   else
+                     throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` has unknown primitive type. Value: %s", entry.getKey(), entry.getValue().toString()));
+                 } else if (entry.getValue().isJsonArray()) {
+                     instance.putAdditionalProperty(entry.getKey(), gson.fromJson(entry.getValue(), List.class));
+                 } else { // JSON object
+                     instance.putAdditionalProperty(entry.getKey(), gson.fromJson(entry.getValue(), HashMap.class));
+                 }
+               }
+             }
+             return instance;
            }
 
        }.nullSafe();
