@@ -48,7 +48,7 @@ import fr.univlorraine.pegase.insext.invoker.JSON;
 /**
  * Objet avec code, libelleCourt et libelleLong
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:39:07.525204800+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class ObjetAvecLibelle {
   public static final String SERIALIZED_NAME_EST1 = "est1";
   @SerializedName(SERIALIZED_NAME_EST1)
