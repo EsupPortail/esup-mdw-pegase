@@ -13,10 +13,9 @@
 
 package fr.univlorraine.pegase.insext.invoker;
 
-import fr.univlorraine.pegase.insext.invoker.auth.Authentication;
-import fr.univlorraine.pegase.insext.invoker.auth.HttpBearerAuth;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -31,6 +30,7 @@ import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -39,8 +39,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.DefaultUriBuilderFactory;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,6 +54,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -65,16 +67,40 @@ import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.function.Supplier;
 
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T14:43:56.235007300+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+import fr.univlorraine.pegase.insext.invoker.auth.Authentication;
+import fr.univlorraine.pegase.insext.invoker.auth.HttpBearerAuth;
+
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class ApiClient {
+    public enum CollectionFormat {
+        CSV(","), TSV("\t"), SSV(" "), PIPES("|"), MULTI(null);
+
+        protected final String separator;
+
+        CollectionFormat(String separator) {
+            this.separator = separator;
+        }
+
+        protected String collectionToString(Collection<?> collection) {
+            return StringUtils.collectionToDelimitedString(collection, separator);
+        }
+    }
+
     protected boolean debugging = false;
+
     protected HttpHeaders defaultHeaders = new HttpHeaders();
     protected MultiValueMap<String, String> defaultCookies = new LinkedMultiValueMap<String, String>();
+
     protected int maxAttemptsForRetry = 1;
+
     protected long waitTimeMillis = 10;
+
     protected String basePath = "http://localhost:3003/api/ins/ext/v2";
+
     protected RestTemplate restTemplate;
+
     protected Map<String, Authentication> authentications;
+
     protected DateFormat dateFormat;
 
     public ApiClient() {
@@ -208,6 +234,10 @@ public class ApiClient {
         throw new RuntimeException("No Bearer authentication configured!");
     }
 
+
+
+
+
     /**
      * Set the User-Agent header's value (by adding to the default header map).
      *
@@ -246,14 +276,6 @@ public class ApiClient {
         return this;
     }
 
-    /**
-     * Check that whether debugging is enabled for this API client.
-     * @return boolean true if this client is enabled for debugging, false otherwise
-     */
-    public boolean isDebugging() {
-        return debugging;
-    }
-
     public void setDebugging(boolean debugging) {
         List<ClientHttpRequestInterceptor> currentInterceptors = this.restTemplate.getInterceptors();
         if (debugging) {
@@ -276,6 +298,14 @@ public class ApiClient {
             }
         }
         this.debugging = debugging;
+    }
+
+    /**
+     * Check that whether debugging is enabled for this API client.
+     * @return boolean true if this client is enabled for debugging, false otherwise
+     */
+    public boolean isDebugging() {
+        return debugging;
     }
 
     /**
@@ -719,6 +749,7 @@ public class ApiClient {
         RestTemplate restTemplate = new RestTemplate();
         // This allows us to read the response more than once - Necessary for debugging.
         restTemplate.setRequestFactory(new BufferingClientHttpRequestFactory(restTemplate.getRequestFactory()));
+
         // disable default URL encoding
         DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory();
         uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
@@ -740,20 +771,6 @@ public class ApiClient {
                 throw new RestClientException("Authentication undefined: " + authName);
             }
             auth.applyToParams(queryParams, headerParams, cookieParams);
-        }
-    }
-
-    public enum CollectionFormat {
-        CSV(","), TSV("\t"), SSV(" "), PIPES("|"), MULTI(null);
-
-        protected final String separator;
-
-        CollectionFormat(String separator) {
-            this.separator = separator;
-        }
-
-        protected String collectionToString(Collection<?> collection) {
-            return StringUtils.collectionToDelimitedString(collection, separator);
         }
     }
 

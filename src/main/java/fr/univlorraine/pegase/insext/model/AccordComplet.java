@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AccordComplet.JSON_PROPERTY_EST_ACCEPTE,
   AccordComplet.JSON_PROPERTY_DOCUMENT_A_APPROUVER
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T14:43:56.235007300+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class AccordComplet {
   public static final String JSON_PROPERTY_DATE_VALIDATION = "dateValidation";
   @jakarta.annotation.Nullable

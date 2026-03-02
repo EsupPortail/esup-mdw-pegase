@@ -38,12 +38,17 @@ import fr.univlorraine.pegase.pieceext.model.StatutGlobalPieceParInscriptionComm
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import java.io.File;
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -83,7 +88,7 @@ public class PegaseService implements Serializable {
 	//private transient FluxInscriptionsApi fluxInsApiIns = new FluxInscriptionsApi();
 
 	// INS-EXT API
-	private transient fr.univlorraine.pegase.insext.invoker.ApiClient apiClientInsExt = new fr.univlorraine.pegase.insext.invoker.ApiClient();
+	private transient fr.univlorraine.pegase.insext.invoker.ApiClient apiClientInsExt = new fr.univlorraine.pegase.insext.invoker.ApiClient(buildRestTemplate());
 	private transient InscriptionsApi apiInsExt = new InscriptionsApi();
 
 	// PIECE-EXT API
@@ -236,11 +241,25 @@ public class PegaseService implements Serializable {
 		refreshParameters();
 	}
 
+
 	/**
-	 * Code démo (draft)
-	 * @param codeApprenant
-	 * @return
+	 *
+	 * @return ResTemplate configuré pour les ApiCient
 	 */
+	protected RestTemplate buildRestTemplate() {
+		RestTemplate restTemplate = new RestTemplate();
+		HttpComponentsClientHttpRequestFactory apacheFactory = new HttpComponentsClientHttpRequestFactory();
+		// Modification du timeout
+		apacheFactory.setConnectionRequestTimeout(Duration.ofMillis(TIMEOUT_PEGASE));
+		// Permet de lire la réponse plus d'une fois - nécessaire au debuggage
+		BufferingClientHttpRequestFactory bufferingFactory = new BufferingClientHttpRequestFactory(apacheFactory);
+		restTemplate.setRequestFactory(bufferingFactory);
+		// Désactivation du URL encoding
+		DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory();
+		uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+		restTemplate.setUriTemplateHandler(uriBuilderFactory);
+		return restTemplate;
+	}
 	/*public VueInscriptions getFluxDossierApprenant(String codeApprenant) {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {

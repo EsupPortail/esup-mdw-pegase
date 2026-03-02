@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SituationPrecedente.JSON_PROPERTY_ANNEE_OBTENTION_DU_DERNIER_DIPLOME,
   SituationPrecedente.JSON_PROPERTY_DERNIER_DIPLOME
 })
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T14:43:56.235007300+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class SituationPrecedente {
   public static final String JSON_PROPERTY_ANNEE_PRECEDENTE = "anneePrecedente";
   @jakarta.annotation.Nullable
