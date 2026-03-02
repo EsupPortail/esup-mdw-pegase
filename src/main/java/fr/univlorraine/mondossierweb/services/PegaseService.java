@@ -38,16 +38,11 @@ import fr.univlorraine.pegase.pieceext.model.StatutGlobalPieceParInscriptionComm
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.client.BufferingClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import java.io.File;
 import java.io.Serializable;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -241,10 +236,8 @@ public class PegaseService implements Serializable {
 	}
 
 
-	/**
-	 *
-	 * @return ResTemplate configuré pour les ApiCient
-	 */
+	/*
+	// ResTemplate configuré pour les ApiCient
 	protected RestTemplate buildRestTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpComponentsClientHttpRequestFactory apacheFactory = new HttpComponentsClientHttpRequestFactory();
@@ -258,7 +251,8 @@ public class PegaseService implements Serializable {
 		uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 		restTemplate.setUriTemplateHandler(uriBuilderFactory);
 		return restTemplate;
-	}
+	}*/
+
 	/*public VueInscriptions getFluxDossierApprenant(String codeApprenant) {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
