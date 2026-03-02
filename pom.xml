@@ -337,8 +337,7 @@
 						<useBeanValidation>false</useBeanValidation>
 						<beanValidation>false</beanValidation>
 						<openApiNullable>false</openApiNullable>
-						<!-- <library>okhttp-gson</library> -->
-						<library>resttemplate</library>
+						<!-- <library>resttemplate</library> -->
 					</configOptions>
 				</configuration>
 			</plugin>
