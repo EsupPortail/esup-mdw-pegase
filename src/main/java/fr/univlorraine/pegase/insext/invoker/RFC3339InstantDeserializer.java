@@ -10,128 +10,91 @@
  * Do not edit the class manually.
  */
 
+package fr.univlorraine.pegase.insext.invoker;
 
-package fr.univlorraine.pegase.insext.model;
+import java.io.IOException;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeFeature;
+import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 
-/**
- * VueProfilExonerant
- */
-@JsonPropertyOrder({
-  VueProfilExonerant.JSON_PROPERTY_CODE,
-  VueProfilExonerant.JSON_PROPERTY_LIBELLE_LONG
-})
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T14:43:56.235007300+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
-public class VueProfilExonerant {
-  public static final String JSON_PROPERTY_CODE = "code";
-  @jakarta.annotation.Nonnull
-  private String code;
+public class RFC3339InstantDeserializer<T extends Temporal> extends InstantDeserializer<T> {
+    private static final long serialVersionUID = 1L;
+    private final static boolean DEFAULT_NORMALIZE_ZONE_ID = JavaTimeFeature.NORMALIZE_DESERIALIZED_ZONE_ID.enabledByDefault();
+    private final static boolean DEFAULT_ALWAYS_ALLOW_STRINGIFIED_DATE_TIMESTAMPS
+    = JavaTimeFeature.ALWAYS_ALLOW_STRINGIFIED_DATE_TIMESTAMPS.enabledByDefault();
 
-  public static final String JSON_PROPERTY_LIBELLE_LONG = "libelleLong";
-  @jakarta.annotation.Nonnull
-  private String libelleLong;
+    public static final RFC3339InstantDeserializer<Instant> INSTANT = new RFC3339InstantDeserializer<>(
+        Instant.class, DateTimeFormatter.ISO_INSTANT,
+        Instant::from,
+        a -> Instant.ofEpochMilli( a.value ),
+        a -> Instant.ofEpochSecond( a.integer, a.fraction ),
+        null,
+        true, // yes, replace zero offset with Z
+        DEFAULT_NORMALIZE_ZONE_ID,
+        DEFAULT_ALWAYS_ALLOW_STRINGIFIED_DATE_TIMESTAMPS
+    );
 
-  public VueProfilExonerant() {
-  }
+    public static final RFC3339InstantDeserializer<OffsetDateTime> OFFSET_DATE_TIME = new RFC3339InstantDeserializer<>(
+        OffsetDateTime.class, DateTimeFormatter.ISO_OFFSET_DATE_TIME,
+        OffsetDateTime::from,
+        a -> OffsetDateTime.ofInstant( Instant.ofEpochMilli( a.value ), a.zoneId ),
+        a -> OffsetDateTime.ofInstant( Instant.ofEpochSecond( a.integer, a.fraction ), a.zoneId ),
+        (d, z) -> ( d.isEqual( OffsetDateTime.MIN ) || d.isEqual( OffsetDateTime.MAX ) ?
+        d :
+        d.withOffsetSameInstant( z.getRules().getOffset( d.toLocalDateTime() ) ) ),
+        true, // yes, replace zero offset with Z
+        DEFAULT_NORMALIZE_ZONE_ID,
+        DEFAULT_ALWAYS_ALLOW_STRINGIFIED_DATE_TIMESTAMPS
+    );
 
-  public VueProfilExonerant code(@jakarta.annotation.Nonnull String code) {
-    
-    this.code = code;
-    return this;
-  }
+    public static final RFC3339InstantDeserializer<ZonedDateTime> ZONED_DATE_TIME = new RFC3339InstantDeserializer<>(
+        ZonedDateTime.class, DateTimeFormatter.ISO_ZONED_DATE_TIME,
+        ZonedDateTime::from,
+        a -> ZonedDateTime.ofInstant( Instant.ofEpochMilli( a.value ), a.zoneId ),
+        a -> ZonedDateTime.ofInstant( Instant.ofEpochSecond( a.integer, a.fraction ), a.zoneId ),
+        ZonedDateTime::withZoneSameInstant,
+        false, // keep zero offset and Z separate since zones explicitly supported
+        DEFAULT_NORMALIZE_ZONE_ID,
+        DEFAULT_ALWAYS_ALLOW_STRINGIFIED_DATE_TIMESTAMPS
+    );
 
-  /**
-   * Code du profil exonerant
-   * @return code
-   */
-  @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getCode() {
-    return code;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCode(@jakarta.annotation.Nonnull String code) {
-    this.code = code;
-  }
-
-  public VueProfilExonerant libelleLong(@jakarta.annotation.Nonnull String libelleLong) {
-    
-    this.libelleLong = libelleLong;
-    return this;
-  }
-
-  /**
-   * Libellé long du profil exonerant
-   * @return libelleLong
-   */
-  @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_LONG, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getLibelleLong() {
-    return libelleLong;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_LONG, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLibelleLong(@jakarta.annotation.Nonnull String libelleLong) {
-    this.libelleLong = libelleLong;
-  }
-
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    protected RFC3339InstantDeserializer(
+            Class<T> supportedType,
+            DateTimeFormatter formatter,
+            Function<TemporalAccessor, T> parsedToValue,
+            Function<FromIntegerArguments, T> fromMilliseconds,
+            Function<FromDecimalArguments, T> fromNanoseconds,
+            BiFunction<T, ZoneId, T> adjust,
+            boolean replaceZeroOffsetAsZ,
+            boolean normalizeZoneId,
+            boolean readNumericStringsAsTimestamp) {
+        super(
+                supportedType,
+                formatter,
+                parsedToValue,
+                fromMilliseconds,
+                fromNanoseconds,
+                adjust,
+                replaceZeroOffsetAsZ,
+                normalizeZoneId,
+                readNumericStringsAsTimestamp
+        );
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    @Override
+    protected T _fromString(JsonParser p, DeserializationContext ctxt, String string0) throws IOException {
+        return super._fromString(p, ctxt, string0.replace( ' ', 'T' ));
     }
-    VueProfilExonerant vueProfilExonerant = (VueProfilExonerant) o;
-    return Objects.equals(this.code, vueProfilExonerant.code) &&
-        Objects.equals(this.libelleLong, vueProfilExonerant.libelleLong);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(code, libelleLong);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class VueProfilExonerant {\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    libelleLong: ").append(toIndentedString(libelleLong)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
-
 }
-

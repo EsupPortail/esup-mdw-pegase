@@ -328,6 +328,12 @@
 						<useJakartaEe>true</useJakartaEe>
 						<disallowAdditionalPropertiesIfNotPresent>false</disallowAdditionalPropertiesIfNotPresent>
 						<discriminatorCaseSensitive>false</discriminatorCaseSensitive>
+						<performBeanValidation>false</performBeanValidation>
+						<useBeanValidation>false</useBeanValidation>
+						<beanValidation>false</beanValidation>
+						<openApiNullable>false</openApiNullable>
+						<!-- <library>okhttp-gson</library> -->
+						<library>resttemplate</library>
 					</configOptions>
 				</configuration>
 			</plugin>
