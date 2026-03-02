@@ -338,9 +338,6 @@
 						<useBeanValidation>false</useBeanValidation>
 						<beanValidation>false</beanValidation>
 						<openApiNullable>false</openApiNullable>
-						<ignoreUnknownProperties>true</ignoreUnknownProperties>
-						<supportsAdditionalPropertiesWithInheritance>false</supportsAdditionalPropertiesWithInheritance>
-						<!-- <library>resttemplate</library> -->
 					</configOptions>
 				</configuration>
 			</plugin>

@@ -48,7 +48,7 @@ import fr.univlorraine.pegase.insext.invoker.JSON;
 /**
  * Occurrence de nomenclature par défaut
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:39:07.525204800+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:47:53.839902700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class Nomenclature {
   public static final String SERIALIZED_NAME_TYPE_NOMENCLATURE = "typeNomenclature";
   @SerializedName(SERIALIZED_NAME_TYPE_NOMENCLATURE)

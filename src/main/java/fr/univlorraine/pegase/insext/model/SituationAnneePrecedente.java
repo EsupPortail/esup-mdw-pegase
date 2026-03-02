@@ -49,7 +49,7 @@ import fr.univlorraine.pegase.insext.invoker.JSON;
 /**
  * La situation durant l&#39;année universitaire précédant l&#39;inscription en cours correspondante à la nomenclature Situations année précédente.  Codes de la nomenclature sur 6 caractères. Préfixe des codes : SAP 
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:39:07.525204800+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:47:53.839902700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class SituationAnneePrecedente extends Nomenclature {
   public static final String SERIALIZED_NAME_CODE_BCN = "codeBcn";
   @SerializedName(SERIALIZED_NAME_CODE_BCN)
