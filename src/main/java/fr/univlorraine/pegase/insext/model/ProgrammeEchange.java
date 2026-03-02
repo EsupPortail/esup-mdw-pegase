@@ -14,35 +14,55 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * ProgrammeEchange
  */
-@JsonPropertyOrder({
-  ProgrammeEchange.JSON_PROPERTY_CODE,
-  ProgrammeEchange.JSON_PROPERTY_CODE_PAYS,
-  ProgrammeEchange.JSON_PROPERTY_CONTEXTE_CONSOMMATION
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class ProgrammeEchange {
-  public static final String JSON_PROPERTY_CODE = "code";
+  public static final String SERIALIZED_NAME_CODE = "code";
+  @SerializedName(SERIALIZED_NAME_CODE)
   @jakarta.annotation.Nullable
   private String code;
 
-  public static final String JSON_PROPERTY_CODE_PAYS = "codePays";
+  public static final String SERIALIZED_NAME_CODE_PAYS = "codePays";
+  @SerializedName(SERIALIZED_NAME_CODE_PAYS)
   @jakarta.annotation.Nullable
   private String codePays;
 
-  public static final String JSON_PROPERTY_CONTEXTE_CONSOMMATION = "contexteConsommation";
+  public static final String SERIALIZED_NAME_CONTEXTE_CONSOMMATION = "contexteConsommation";
+  @SerializedName(SERIALIZED_NAME_CONTEXTE_CONSOMMATION)
   @jakarta.annotation.Nullable
   private Date contexteConsommation;
 
@@ -50,7 +70,6 @@ public class ProgrammeEchange {
   }
 
   public ProgrammeEchange code(@jakarta.annotation.Nullable String code) {
-    
     this.code = code;
     return this;
   }
@@ -60,22 +79,16 @@ public class ProgrammeEchange {
    * @return code
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getCode() {
     return code;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setCode(@jakarta.annotation.Nullable String code) {
     this.code = code;
   }
 
+
   public ProgrammeEchange codePays(@jakarta.annotation.Nullable String codePays) {
-    
     this.codePays = codePays;
     return this;
   }
@@ -85,22 +98,16 @@ public class ProgrammeEchange {
    * @return codePays
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CODE_PAYS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getCodePays() {
     return codePays;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CODE_PAYS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setCodePays(@jakarta.annotation.Nullable String codePays) {
     this.codePays = codePays;
   }
 
+
   public ProgrammeEchange contexteConsommation(@jakarta.annotation.Nullable Date contexteConsommation) {
-    
     this.contexteConsommation = contexteConsommation;
     return this;
   }
@@ -110,19 +117,14 @@ public class ProgrammeEchange {
    * @return contexteConsommation
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CONTEXTE_CONSOMMATION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Date getContexteConsommation() {
     return contexteConsommation;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CONTEXTE_CONSOMMATION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setContexteConsommation(@jakarta.annotation.Nullable Date contexteConsommation) {
     this.contexteConsommation = contexteConsommation;
   }
+
 
 
   @Override
@@ -166,5 +168,100 @@ public class ProgrammeEchange {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("code", "codePays", "contexteConsommation"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to ProgrammeEchange
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!ProgrammeEchange.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in ProgrammeEchange is not found in the empty JSON string", ProgrammeEchange.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!ProgrammeEchange.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `ProgrammeEchange` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("code") != null && !jsonObj.get("code").isJsonNull()) && !jsonObj.get("code").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `code` to be a primitive type in the JSON string but got `%s`", jsonObj.get("code").toString()));
+      }
+      if ((jsonObj.get("codePays") != null && !jsonObj.get("codePays").isJsonNull()) && !jsonObj.get("codePays").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `codePays` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codePays").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!ProgrammeEchange.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'ProgrammeEchange' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<ProgrammeEchange> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(ProgrammeEchange.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<ProgrammeEchange>() {
+           @Override
+           public void write(JsonWriter out, ProgrammeEchange value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public ProgrammeEchange read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of ProgrammeEchange given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of ProgrammeEchange
+   * @throws IOException if the JSON string is invalid with respect to ProgrammeEchange
+   */
+  public static ProgrammeEchange fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, ProgrammeEchange.class);
+  }
+
+  /**
+   * Convert an instance of ProgrammeEchange to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

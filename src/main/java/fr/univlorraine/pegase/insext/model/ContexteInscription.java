@@ -14,16 +14,19 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.gson.annotations.SerializedName;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import java.io.IOException;
+import com.google.gson.TypeAdapter;
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 /**
  * Gets or Sets ContexteInscription
  */
+@JsonAdapter(ContexteInscription.Adapter.class)
 public enum ContexteInscription {
   
   PRIMO("primo"),
@@ -36,7 +39,6 @@ public enum ContexteInscription {
     this.value = value;
   }
 
-  @JsonValue
   public String getValue() {
     return value;
   }
@@ -46,7 +48,6 @@ public enum ContexteInscription {
     return String.valueOf(value);
   }
 
-  @JsonCreator
   public static ContexteInscription fromValue(String value) {
     for (ContexteInscription b : ContexteInscription.values()) {
       if (b.value.equals(value)) {
@@ -54,6 +55,24 @@ public enum ContexteInscription {
       }
     }
     throw new IllegalArgumentException("Unexpected value '" + value + "'");
+  }
+
+  public static class Adapter extends TypeAdapter<ContexteInscription> {
+    @Override
+    public void write(final JsonWriter jsonWriter, final ContexteInscription enumeration) throws IOException {
+      jsonWriter.value(enumeration.getValue());
+    }
+
+    @Override
+    public ContexteInscription read(final JsonReader jsonReader) throws IOException {
+      String value = jsonReader.nextString();
+      return ContexteInscription.fromValue(value);
+    }
+  }
+
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+    String value = jsonElement.getAsString();
+    ContexteInscription.fromValue(value);
   }
 }
 

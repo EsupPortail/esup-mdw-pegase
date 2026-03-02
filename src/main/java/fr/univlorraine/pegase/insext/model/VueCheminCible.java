@@ -14,50 +14,70 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.UUID;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * VueCheminCible
  */
-@JsonPropertyOrder({
-  VueCheminCible.JSON_PROPERTY_CODE,
-  VueCheminCible.JSON_PROPERTY_TYPE,
-  VueCheminCible.JSON_PROPERTY_LIBELLE_COURT,
-  VueCheminCible.JSON_PROPERTY_LIBELLE_LONG,
-  VueCheminCible.JSON_PROPERTY_ID_CHEMIN,
-  VueCheminCible.JSON_PROPERTY_ID_PERIODE
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class VueCheminCible {
-  public static final String JSON_PROPERTY_CODE = "code";
+  public static final String SERIALIZED_NAME_CODE = "code";
+  @SerializedName(SERIALIZED_NAME_CODE)
   @jakarta.annotation.Nonnull
   private String code;
 
-  public static final String JSON_PROPERTY_TYPE = "type";
+  public static final String SERIALIZED_NAME_TYPE = "type";
+  @SerializedName(SERIALIZED_NAME_TYPE)
   @jakarta.annotation.Nonnull
   private String type;
 
-  public static final String JSON_PROPERTY_LIBELLE_COURT = "libelleCourt";
+  public static final String SERIALIZED_NAME_LIBELLE_COURT = "libelleCourt";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_COURT)
   @jakarta.annotation.Nonnull
   private String libelleCourt;
 
-  public static final String JSON_PROPERTY_LIBELLE_LONG = "libelleLong";
+  public static final String SERIALIZED_NAME_LIBELLE_LONG = "libelleLong";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_LONG)
   @jakarta.annotation.Nonnull
   private String libelleLong;
 
-  public static final String JSON_PROPERTY_ID_CHEMIN = "idChemin";
+  public static final String SERIALIZED_NAME_ID_CHEMIN = "idChemin";
+  @SerializedName(SERIALIZED_NAME_ID_CHEMIN)
   @jakarta.annotation.Nonnull
   private UUID idChemin;
 
-  public static final String JSON_PROPERTY_ID_PERIODE = "idPeriode";
+  public static final String SERIALIZED_NAME_ID_PERIODE = "idPeriode";
+  @SerializedName(SERIALIZED_NAME_ID_PERIODE)
   @jakarta.annotation.Nonnull
   private UUID idPeriode;
 
@@ -65,7 +85,6 @@ public class VueCheminCible {
   }
 
   public VueCheminCible code(@jakarta.annotation.Nonnull String code) {
-    
     this.code = code;
     return this;
   }
@@ -75,22 +94,16 @@ public class VueCheminCible {
    * @return code
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getCode() {
     return code;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCode(@jakarta.annotation.Nonnull String code) {
     this.code = code;
   }
 
+
   public VueCheminCible type(@jakarta.annotation.Nonnull String type) {
-    
     this.type = type;
     return this;
   }
@@ -100,22 +113,16 @@ public class VueCheminCible {
    * @return type
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getType() {
     return type;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setType(@jakarta.annotation.Nonnull String type) {
     this.type = type;
   }
 
+
   public VueCheminCible libelleCourt(@jakarta.annotation.Nonnull String libelleCourt) {
-    
     this.libelleCourt = libelleCourt;
     return this;
   }
@@ -125,22 +132,16 @@ public class VueCheminCible {
    * @return libelleCourt
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_COURT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getLibelleCourt() {
     return libelleCourt;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_COURT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setLibelleCourt(@jakarta.annotation.Nonnull String libelleCourt) {
     this.libelleCourt = libelleCourt;
   }
 
+
   public VueCheminCible libelleLong(@jakarta.annotation.Nonnull String libelleLong) {
-    
     this.libelleLong = libelleLong;
     return this;
   }
@@ -150,22 +151,16 @@ public class VueCheminCible {
    * @return libelleLong
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_LONG, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getLibelleLong() {
     return libelleLong;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_LONG, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setLibelleLong(@jakarta.annotation.Nonnull String libelleLong) {
     this.libelleLong = libelleLong;
   }
 
+
   public VueCheminCible idChemin(@jakarta.annotation.Nonnull UUID idChemin) {
-    
     this.idChemin = idChemin;
     return this;
   }
@@ -175,22 +170,16 @@ public class VueCheminCible {
    * @return idChemin
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_ID_CHEMIN, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public UUID getIdChemin() {
     return idChemin;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ID_CHEMIN, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setIdChemin(@jakarta.annotation.Nonnull UUID idChemin) {
     this.idChemin = idChemin;
   }
 
+
   public VueCheminCible idPeriode(@jakarta.annotation.Nonnull UUID idPeriode) {
-    
     this.idPeriode = idPeriode;
     return this;
   }
@@ -200,19 +189,14 @@ public class VueCheminCible {
    * @return idPeriode
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_ID_PERIODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public UUID getIdPeriode() {
     return idPeriode;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ID_PERIODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setIdPeriode(@jakarta.annotation.Nonnull UUID idPeriode) {
     this.idPeriode = idPeriode;
   }
+
 
 
   @Override
@@ -262,5 +246,119 @@ public class VueCheminCible {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("code", "type", "libelleCourt", "libelleLong", "idChemin", "idPeriode"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("code", "type", "libelleCourt", "libelleLong", "idChemin", "idPeriode"));
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to VueCheminCible
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!VueCheminCible.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in VueCheminCible is not found in the empty JSON string", VueCheminCible.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!VueCheminCible.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `VueCheminCible` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+
+      // check to make sure all required properties/fields are present in the JSON string
+      for (String requiredField : VueCheminCible.openapiRequiredFields) {
+        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if (!jsonObj.get("code").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `code` to be a primitive type in the JSON string but got `%s`", jsonObj.get("code").toString()));
+      }
+      if (!jsonObj.get("type").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `type` to be a primitive type in the JSON string but got `%s`", jsonObj.get("type").toString()));
+      }
+      if (!jsonObj.get("libelleCourt").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleCourt` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleCourt").toString()));
+      }
+      if (!jsonObj.get("libelleLong").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleLong` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleLong").toString()));
+      }
+      if (!jsonObj.get("idChemin").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `idChemin` to be a primitive type in the JSON string but got `%s`", jsonObj.get("idChemin").toString()));
+      }
+      if (!jsonObj.get("idPeriode").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `idPeriode` to be a primitive type in the JSON string but got `%s`", jsonObj.get("idPeriode").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!VueCheminCible.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'VueCheminCible' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<VueCheminCible> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(VueCheminCible.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<VueCheminCible>() {
+           @Override
+           public void write(JsonWriter out, VueCheminCible value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public VueCheminCible read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of VueCheminCible given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of VueCheminCible
+   * @throws IOException if the JSON string is invalid with respect to VueCheminCible
+   */
+  public static VueCheminCible fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, VueCheminCible.class);
+  }
+
+  /**
+   * Convert an instance of VueCheminCible to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

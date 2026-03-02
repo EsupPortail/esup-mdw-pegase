@@ -14,34 +14,53 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import fr.univlorraine.pegase.insext.model.Apprenant;
 import fr.univlorraine.pegase.insext.model.InscriptionComplete;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * ApprenantEtInscriptions
  */
-@JsonPropertyOrder({
-  ApprenantEtInscriptions.JSON_PROPERTY_APPRENANT,
-  ApprenantEtInscriptions.JSON_PROPERTY_INSCRIPTIONS
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class ApprenantEtInscriptions {
-  public static final String JSON_PROPERTY_APPRENANT = "apprenant";
+  public static final String SERIALIZED_NAME_APPRENANT = "apprenant";
+  @SerializedName(SERIALIZED_NAME_APPRENANT)
   @jakarta.annotation.Nullable
   private Apprenant apprenant;
 
-  public static final String JSON_PROPERTY_INSCRIPTIONS = "inscriptions";
+  public static final String SERIALIZED_NAME_INSCRIPTIONS = "inscriptions";
+  @SerializedName(SERIALIZED_NAME_INSCRIPTIONS)
   @jakarta.annotation.Nullable
   private List<InscriptionComplete> inscriptions = new ArrayList<>();
 
@@ -49,7 +68,6 @@ public class ApprenantEtInscriptions {
   }
 
   public ApprenantEtInscriptions apprenant(@jakarta.annotation.Nullable Apprenant apprenant) {
-    
     this.apprenant = apprenant;
     return this;
   }
@@ -59,22 +77,16 @@ public class ApprenantEtInscriptions {
    * @return apprenant
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_APPRENANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Apprenant getApprenant() {
     return apprenant;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_APPRENANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setApprenant(@jakarta.annotation.Nullable Apprenant apprenant) {
     this.apprenant = apprenant;
   }
 
+
   public ApprenantEtInscriptions inscriptions(@jakarta.annotation.Nullable List<InscriptionComplete> inscriptions) {
-    
     this.inscriptions = inscriptions;
     return this;
   }
@@ -92,19 +104,14 @@ public class ApprenantEtInscriptions {
    * @return inscriptions
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_INSCRIPTIONS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public List<InscriptionComplete> getInscriptions() {
     return inscriptions;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_INSCRIPTIONS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setInscriptions(@jakarta.annotation.Nullable List<InscriptionComplete> inscriptions) {
     this.inscriptions = inscriptions;
   }
+
 
 
   @Override
@@ -146,5 +153,112 @@ public class ApprenantEtInscriptions {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("apprenant", "inscriptions"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to ApprenantEtInscriptions
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!ApprenantEtInscriptions.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in ApprenantEtInscriptions is not found in the empty JSON string", ApprenantEtInscriptions.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!ApprenantEtInscriptions.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `ApprenantEtInscriptions` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      // validate the optional field `apprenant`
+      if (jsonObj.get("apprenant") != null && !jsonObj.get("apprenant").isJsonNull()) {
+        Apprenant.validateJsonElement(jsonObj.get("apprenant"));
+      }
+      if (jsonObj.get("inscriptions") != null && !jsonObj.get("inscriptions").isJsonNull()) {
+        JsonArray jsonArrayinscriptions = jsonObj.getAsJsonArray("inscriptions");
+        if (jsonArrayinscriptions != null) {
+          // ensure the json data is an array
+          if (!jsonObj.get("inscriptions").isJsonArray()) {
+            throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `inscriptions` to be an array in the JSON string but got `%s`", jsonObj.get("inscriptions").toString()));
+          }
+
+          // validate the optional field `inscriptions` (array)
+          for (int i = 0; i < jsonArrayinscriptions.size(); i++) {
+            InscriptionComplete.validateJsonElement(jsonArrayinscriptions.get(i));
+          };
+        }
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!ApprenantEtInscriptions.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'ApprenantEtInscriptions' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<ApprenantEtInscriptions> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(ApprenantEtInscriptions.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<ApprenantEtInscriptions>() {
+           @Override
+           public void write(JsonWriter out, ApprenantEtInscriptions value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public ApprenantEtInscriptions read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of ApprenantEtInscriptions given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of ApprenantEtInscriptions
+   * @throws IOException if the JSON string is invalid with respect to ApprenantEtInscriptions
+   */
+  public static ApprenantEtInscriptions fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, ApprenantEtInscriptions.class);
+  }
+
+  /**
+   * Convert an instance of ApprenantEtInscriptions to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

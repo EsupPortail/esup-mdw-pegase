@@ -11,70 +11,136 @@
  */
 
 
-package fr.univlorraine.pegase.insext.invoker.auth;
+package fr.univlorraine.pegase.insext.model;
 
 import fr.univlorraine.pegase.insext.invoker.ApiException;
-import fr.univlorraine.pegase.insext.invoker.Pair;
-
-import java.net.URI;
+import java.util.Objects;
+import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.List;
 
+/**
+ * Abstract class for oneOf,anyOf schemas defined in OpenAPI spec
+ */
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
-public class ApiKeyAuth implements Authentication {
-  private final String location;
-  private final String paramName;
+public abstract class AbstractOpenApiSchema {
 
-  private String apiKey;
-  private String apiKeyPrefix;
+    // store the actual instance of the schema/object
+    private Object instance;
 
-  public ApiKeyAuth(String location, String paramName) {
-    this.location = location;
-    this.paramName = paramName;
-  }
+    // is nullable
+    private Boolean isNullable;
 
-  public String getLocation() {
-    return location;
-  }
+    // schema type (e.g. oneOf, anyOf)
+    private final String schemaType;
 
-  public String getParamName() {
-    return paramName;
-  }
-
-  public String getApiKey() {
-    return apiKey;
-  }
-
-  public void setApiKey(String apiKey) {
-    this.apiKey = apiKey;
-  }
-
-  public String getApiKeyPrefix() {
-    return apiKeyPrefix;
-  }
-
-  public void setApiKeyPrefix(String apiKeyPrefix) {
-    this.apiKeyPrefix = apiKeyPrefix;
-  }
-
-  @Override
-  public void applyToParams(List<Pair> queryParams, Map<String, String> headerParams, Map<String, String> cookieParams,
-                           String payload, String method, URI uri) throws ApiException {
-    if (apiKey == null) {
-      return;
+    public AbstractOpenApiSchema(String schemaType, Boolean isNullable) {
+        this.schemaType = schemaType;
+        this.isNullable = isNullable;
     }
-    String value;
-    if (apiKeyPrefix != null) {
-      value = apiKeyPrefix + " " + apiKey;
-    } else {
-      value = apiKey;
+
+    /**
+     * Get the list of oneOf/anyOf composed schemas allowed to be stored in this object
+     *
+     * @return an instance of the actual schema/object
+     */
+    public abstract Map<String, Class<?>> getSchemas();
+
+    /**
+     * Get the actual instance
+     *
+     * @return an instance of the actual schema/object
+     */
+    //@JsonValue
+    public Object getActualInstance() {return instance;}
+
+    /**
+     * Set the actual instance
+     *
+     * @param instance the actual instance of the schema/object
+     */
+    public void setActualInstance(Object instance) {this.instance = instance;}
+
+    /**
+     * Get the instant recursively when the schemas defined in oneOf/anyof happen to be oneOf/anyOf schema as well
+     *
+     * @return an instance of the actual schema/object
+     */
+    public Object getActualInstanceRecursively() {
+        return getActualInstanceRecursively(this);
     }
-    if ("query".equals(location)) {
-      queryParams.add(new Pair(paramName, value));
-    } else if ("header".equals(location)) {
-      headerParams.put(paramName, value);
-    } else if ("cookie".equals(location)) {
-      cookieParams.put(paramName, value);
+
+    private Object getActualInstanceRecursively(AbstractOpenApiSchema object) {
+        if (object.getActualInstance() == null) {
+            return null;
+        } else if (object.getActualInstance() instanceof AbstractOpenApiSchema) {
+            return getActualInstanceRecursively((AbstractOpenApiSchema)object.getActualInstance());
+        } else {
+            return object.getActualInstance();
+        }
     }
-  }
+
+    /**
+     * Get the schema type (e.g. anyOf, oneOf)
+     *
+     * @return the schema type
+     */
+    public String getSchemaType() {
+        return schemaType;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class ").append(getClass()).append(" {\n");
+        sb.append("    instance: ").append(toIndentedString(instance)).append("\n");
+        sb.append("    isNullable: ").append(toIndentedString(isNullable)).append("\n");
+        sb.append("    schemaType: ").append(toIndentedString(schemaType)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString(Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AbstractOpenApiSchema a = (AbstractOpenApiSchema) o;
+        return Objects.equals(this.instance, a.instance) &&
+            Objects.equals(this.isNullable, a.isNullable) &&
+            Objects.equals(this.schemaType, a.schemaType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(instance, isNullable, schemaType);
+    }
+
+    /**
+     * Is nullable
+     *
+     * @return true if it's nullable
+     */
+    public Boolean isNullable() {
+        if (Boolean.TRUE.equals(isNullable)) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
+
+
+
 }

@@ -14,34 +14,54 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * PremieresInscriptions
  */
-@JsonPropertyOrder({
-  PremieresInscriptions.JSON_PROPERTY_ANNEE_ENSEIGNEMENT_SUPERIEUR,
-  PremieresInscriptions.JSON_PROPERTY_ANNEE_UNIVERSITE,
-  PremieresInscriptions.JSON_PROPERTY_ANNEE_ETABLISSEMENT
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class PremieresInscriptions {
-  public static final String JSON_PROPERTY_ANNEE_ENSEIGNEMENT_SUPERIEUR = "anneeEnseignementSuperieur";
+  public static final String SERIALIZED_NAME_ANNEE_ENSEIGNEMENT_SUPERIEUR = "anneeEnseignementSuperieur";
+  @SerializedName(SERIALIZED_NAME_ANNEE_ENSEIGNEMENT_SUPERIEUR)
   @jakarta.annotation.Nullable
   private String anneeEnseignementSuperieur;
 
-  public static final String JSON_PROPERTY_ANNEE_UNIVERSITE = "anneeUniversite";
+  public static final String SERIALIZED_NAME_ANNEE_UNIVERSITE = "anneeUniversite";
+  @SerializedName(SERIALIZED_NAME_ANNEE_UNIVERSITE)
   @jakarta.annotation.Nullable
   private String anneeUniversite;
 
-  public static final String JSON_PROPERTY_ANNEE_ETABLISSEMENT = "anneeEtablissement";
+  public static final String SERIALIZED_NAME_ANNEE_ETABLISSEMENT = "anneeEtablissement";
+  @SerializedName(SERIALIZED_NAME_ANNEE_ETABLISSEMENT)
   @jakarta.annotation.Nullable
   private String anneeEtablissement;
 
@@ -49,7 +69,6 @@ public class PremieresInscriptions {
   }
 
   public PremieresInscriptions anneeEnseignementSuperieur(@jakarta.annotation.Nullable String anneeEnseignementSuperieur) {
-    
     this.anneeEnseignementSuperieur = anneeEnseignementSuperieur;
     return this;
   }
@@ -59,22 +78,16 @@ public class PremieresInscriptions {
    * @return anneeEnseignementSuperieur
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_ENSEIGNEMENT_SUPERIEUR, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getAnneeEnseignementSuperieur() {
     return anneeEnseignementSuperieur;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_ENSEIGNEMENT_SUPERIEUR, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAnneeEnseignementSuperieur(@jakarta.annotation.Nullable String anneeEnseignementSuperieur) {
     this.anneeEnseignementSuperieur = anneeEnseignementSuperieur;
   }
 
+
   public PremieresInscriptions anneeUniversite(@jakarta.annotation.Nullable String anneeUniversite) {
-    
     this.anneeUniversite = anneeUniversite;
     return this;
   }
@@ -84,22 +97,16 @@ public class PremieresInscriptions {
    * @return anneeUniversite
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_UNIVERSITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getAnneeUniversite() {
     return anneeUniversite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_UNIVERSITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAnneeUniversite(@jakarta.annotation.Nullable String anneeUniversite) {
     this.anneeUniversite = anneeUniversite;
   }
 
+
   public PremieresInscriptions anneeEtablissement(@jakarta.annotation.Nullable String anneeEtablissement) {
-    
     this.anneeEtablissement = anneeEtablissement;
     return this;
   }
@@ -109,19 +116,14 @@ public class PremieresInscriptions {
    * @return anneeEtablissement
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_ETABLISSEMENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getAnneeEtablissement() {
     return anneeEtablissement;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_ETABLISSEMENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAnneeEtablissement(@jakarta.annotation.Nullable String anneeEtablissement) {
     this.anneeEtablissement = anneeEtablissement;
   }
+
 
 
   @Override
@@ -165,5 +167,103 @@ public class PremieresInscriptions {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("anneeEnseignementSuperieur", "anneeUniversite", "anneeEtablissement"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to PremieresInscriptions
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!PremieresInscriptions.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in PremieresInscriptions is not found in the empty JSON string", PremieresInscriptions.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!PremieresInscriptions.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `PremieresInscriptions` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("anneeEnseignementSuperieur") != null && !jsonObj.get("anneeEnseignementSuperieur").isJsonNull()) && !jsonObj.get("anneeEnseignementSuperieur").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `anneeEnseignementSuperieur` to be a primitive type in the JSON string but got `%s`", jsonObj.get("anneeEnseignementSuperieur").toString()));
+      }
+      if ((jsonObj.get("anneeUniversite") != null && !jsonObj.get("anneeUniversite").isJsonNull()) && !jsonObj.get("anneeUniversite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `anneeUniversite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("anneeUniversite").toString()));
+      }
+      if ((jsonObj.get("anneeEtablissement") != null && !jsonObj.get("anneeEtablissement").isJsonNull()) && !jsonObj.get("anneeEtablissement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `anneeEtablissement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("anneeEtablissement").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!PremieresInscriptions.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'PremieresInscriptions' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<PremieresInscriptions> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(PremieresInscriptions.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<PremieresInscriptions>() {
+           @Override
+           public void write(JsonWriter out, PremieresInscriptions value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public PremieresInscriptions read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of PremieresInscriptions given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of PremieresInscriptions
+   * @throws IOException if the JSON string is invalid with respect to PremieresInscriptions
+   */
+  public static PremieresInscriptions fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, PremieresInscriptions.class);
+  }
+
+  /**
+   * Convert an instance of PremieresInscriptions to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

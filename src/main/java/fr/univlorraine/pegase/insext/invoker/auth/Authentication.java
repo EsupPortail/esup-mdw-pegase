@@ -13,17 +13,25 @@
 
 package fr.univlorraine.pegase.insext.invoker.auth;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.util.MultiValueMap;
+import fr.univlorraine.pegase.insext.invoker.Pair;
+import fr.univlorraine.pegase.insext.invoker.ApiException;
 
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+import java.net.URI;
+import java.util.Map;
+import java.util.List;
+
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public interface Authentication {
     /**
-     * Apply authentication settings to header and / or query parameters.
+     * Apply authentication settings to header and query params.
      *
-     * @param queryParams The query parameters for the request
-     * @param headerParams The header parameters for the request
-     * @param cookieParams The cookie parameters for the request
+     * @param queryParams List of query parameters
+     * @param headerParams Map of header parameters
+     * @param cookieParams Map of cookie parameters
+     * @param payload HTTP request body
+     * @param method HTTP method
+     * @param uri URI
+     * @throws ApiException if failed to update the parameters
      */
-    void applyToParams(MultiValueMap<String, String> queryParams, HttpHeaders headerParams, MultiValueMap<String, String> cookieParams);
+    void applyToParams(List<Pair> queryParams, Map<String, String> headerParams, Map<String, String> cookieParams, String payload, String method, URI uri) throws ApiException;
 }

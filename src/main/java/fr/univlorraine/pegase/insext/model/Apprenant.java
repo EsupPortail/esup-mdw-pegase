@@ -14,12 +14,11 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import fr.univlorraine.pegase.insext.model.Bac;
 import fr.univlorraine.pegase.insext.model.ContactComplet;
 import fr.univlorraine.pegase.insext.model.EtatCivil;
@@ -27,67 +26,87 @@ import fr.univlorraine.pegase.insext.model.Naissance;
 import fr.univlorraine.pegase.insext.model.PremieresInscriptions;
 import fr.univlorraine.pegase.insext.model.Profession;
 import fr.univlorraine.pegase.insext.model.SituationPersonnelleApprenant;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * Les données de l&#39;apprenant
  */
-@JsonPropertyOrder({
-  Apprenant.JSON_PROPERTY_CODE,
-  Apprenant.JSON_PROPERTY_DERNIERE_MODIFICATION_APPRENANT,
-  Apprenant.JSON_PROPERTY_ETAT_CIVIL,
-  Apprenant.JSON_PROPERTY_NAISSANCE,
-  Apprenant.JSON_PROPERTY_SITUATION_PERSONNELLE,
-  Apprenant.JSON_PROPERTY_PROFESSION,
-  Apprenant.JSON_PROPERTY_CONTACTS,
-  Apprenant.JSON_PROPERTY_BAC,
-  Apprenant.JSON_PROPERTY_PREMIERES_INSCRIPTIONS,
-  Apprenant.JSON_PROPERTY_DATE_CONTEXTE_APPRENANT
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class Apprenant {
-  public static final String JSON_PROPERTY_CODE = "code";
+  public static final String SERIALIZED_NAME_CODE = "code";
+  @SerializedName(SERIALIZED_NAME_CODE)
   @jakarta.annotation.Nullable
   private String code;
 
-  public static final String JSON_PROPERTY_DERNIERE_MODIFICATION_APPRENANT = "derniereModificationApprenant";
+  public static final String SERIALIZED_NAME_DERNIERE_MODIFICATION_APPRENANT = "derniereModificationApprenant";
+  @SerializedName(SERIALIZED_NAME_DERNIERE_MODIFICATION_APPRENANT)
   @jakarta.annotation.Nullable
   private Long derniereModificationApprenant;
 
-  public static final String JSON_PROPERTY_ETAT_CIVIL = "etatCivil";
+  public static final String SERIALIZED_NAME_ETAT_CIVIL = "etatCivil";
+  @SerializedName(SERIALIZED_NAME_ETAT_CIVIL)
   @jakarta.annotation.Nullable
   private EtatCivil etatCivil;
 
-  public static final String JSON_PROPERTY_NAISSANCE = "naissance";
+  public static final String SERIALIZED_NAME_NAISSANCE = "naissance";
+  @SerializedName(SERIALIZED_NAME_NAISSANCE)
   @jakarta.annotation.Nullable
   private Naissance naissance;
 
-  public static final String JSON_PROPERTY_SITUATION_PERSONNELLE = "situationPersonnelle";
+  public static final String SERIALIZED_NAME_SITUATION_PERSONNELLE = "situationPersonnelle";
+  @SerializedName(SERIALIZED_NAME_SITUATION_PERSONNELLE)
   @jakarta.annotation.Nullable
   private SituationPersonnelleApprenant situationPersonnelle;
 
-  public static final String JSON_PROPERTY_PROFESSION = "profession";
+  public static final String SERIALIZED_NAME_PROFESSION = "profession";
+  @SerializedName(SERIALIZED_NAME_PROFESSION)
   @jakarta.annotation.Nullable
   private Profession profession;
 
-  public static final String JSON_PROPERTY_CONTACTS = "contacts";
+  public static final String SERIALIZED_NAME_CONTACTS = "contacts";
+  @SerializedName(SERIALIZED_NAME_CONTACTS)
   @jakarta.annotation.Nullable
   private List<ContactComplet> contacts = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_BAC = "bac";
+  public static final String SERIALIZED_NAME_BAC = "bac";
+  @SerializedName(SERIALIZED_NAME_BAC)
   @jakarta.annotation.Nullable
   private Bac bac;
 
-  public static final String JSON_PROPERTY_PREMIERES_INSCRIPTIONS = "premieresInscriptions";
+  public static final String SERIALIZED_NAME_PREMIERES_INSCRIPTIONS = "premieresInscriptions";
+  @SerializedName(SERIALIZED_NAME_PREMIERES_INSCRIPTIONS)
   @jakarta.annotation.Nullable
   private PremieresInscriptions premieresInscriptions;
 
-  public static final String JSON_PROPERTY_DATE_CONTEXTE_APPRENANT = "dateContexteApprenant";
+  public static final String SERIALIZED_NAME_DATE_CONTEXTE_APPRENANT = "dateContexteApprenant";
+  @SerializedName(SERIALIZED_NAME_DATE_CONTEXTE_APPRENANT)
   @jakarta.annotation.Nullable
   private Date dateContexteApprenant;
 
@@ -95,7 +114,6 @@ public class Apprenant {
   }
 
   public Apprenant code(@jakarta.annotation.Nullable String code) {
-    
     this.code = code;
     return this;
   }
@@ -105,22 +123,16 @@ public class Apprenant {
    * @return code
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getCode() {
     return code;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setCode(@jakarta.annotation.Nullable String code) {
     this.code = code;
   }
 
+
   public Apprenant derniereModificationApprenant(@jakarta.annotation.Nullable Long derniereModificationApprenant) {
-    
     this.derniereModificationApprenant = derniereModificationApprenant;
     return this;
   }
@@ -130,22 +142,16 @@ public class Apprenant {
    * @return derniereModificationApprenant
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DERNIERE_MODIFICATION_APPRENANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Long getDerniereModificationApprenant() {
     return derniereModificationApprenant;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DERNIERE_MODIFICATION_APPRENANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDerniereModificationApprenant(@jakarta.annotation.Nullable Long derniereModificationApprenant) {
     this.derniereModificationApprenant = derniereModificationApprenant;
   }
 
+
   public Apprenant etatCivil(@jakarta.annotation.Nullable EtatCivil etatCivil) {
-    
     this.etatCivil = etatCivil;
     return this;
   }
@@ -155,22 +161,16 @@ public class Apprenant {
    * @return etatCivil
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ETAT_CIVIL, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public EtatCivil getEtatCivil() {
     return etatCivil;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ETAT_CIVIL, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setEtatCivil(@jakarta.annotation.Nullable EtatCivil etatCivil) {
     this.etatCivil = etatCivil;
   }
 
+
   public Apprenant naissance(@jakarta.annotation.Nullable Naissance naissance) {
-    
     this.naissance = naissance;
     return this;
   }
@@ -180,22 +180,16 @@ public class Apprenant {
    * @return naissance
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Naissance getNaissance() {
     return naissance;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setNaissance(@jakarta.annotation.Nullable Naissance naissance) {
     this.naissance = naissance;
   }
 
+
   public Apprenant situationPersonnelle(@jakarta.annotation.Nullable SituationPersonnelleApprenant situationPersonnelle) {
-    
     this.situationPersonnelle = situationPersonnelle;
     return this;
   }
@@ -205,22 +199,16 @@ public class Apprenant {
    * @return situationPersonnelle
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_PERSONNELLE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public SituationPersonnelleApprenant getSituationPersonnelle() {
     return situationPersonnelle;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_PERSONNELLE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setSituationPersonnelle(@jakarta.annotation.Nullable SituationPersonnelleApprenant situationPersonnelle) {
     this.situationPersonnelle = situationPersonnelle;
   }
 
+
   public Apprenant profession(@jakarta.annotation.Nullable Profession profession) {
-    
     this.profession = profession;
     return this;
   }
@@ -230,22 +218,16 @@ public class Apprenant {
    * @return profession
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PROFESSION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Profession getProfession() {
     return profession;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PROFESSION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setProfession(@jakarta.annotation.Nullable Profession profession) {
     this.profession = profession;
   }
 
+
   public Apprenant contacts(@jakarta.annotation.Nullable List<ContactComplet> contacts) {
-    
     this.contacts = contacts;
     return this;
   }
@@ -263,22 +245,16 @@ public class Apprenant {
    * @return contacts
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CONTACTS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public List<ContactComplet> getContacts() {
     return contacts;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CONTACTS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setContacts(@jakarta.annotation.Nullable List<ContactComplet> contacts) {
     this.contacts = contacts;
   }
 
+
   public Apprenant bac(@jakarta.annotation.Nullable Bac bac) {
-    
     this.bac = bac;
     return this;
   }
@@ -288,22 +264,16 @@ public class Apprenant {
    * @return bac
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_BAC, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Bac getBac() {
     return bac;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_BAC, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setBac(@jakarta.annotation.Nullable Bac bac) {
     this.bac = bac;
   }
 
+
   public Apprenant premieresInscriptions(@jakarta.annotation.Nullable PremieresInscriptions premieresInscriptions) {
-    
     this.premieresInscriptions = premieresInscriptions;
     return this;
   }
@@ -313,22 +283,16 @@ public class Apprenant {
    * @return premieresInscriptions
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PREMIERES_INSCRIPTIONS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public PremieresInscriptions getPremieresInscriptions() {
     return premieresInscriptions;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PREMIERES_INSCRIPTIONS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setPremieresInscriptions(@jakarta.annotation.Nullable PremieresInscriptions premieresInscriptions) {
     this.premieresInscriptions = premieresInscriptions;
   }
 
+
   public Apprenant dateContexteApprenant(@jakarta.annotation.Nullable Date dateContexteApprenant) {
-    
     this.dateContexteApprenant = dateContexteApprenant;
     return this;
   }
@@ -338,19 +302,14 @@ public class Apprenant {
    * @return dateContexteApprenant
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DATE_CONTEXTE_APPRENANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Date getDateContexteApprenant() {
     return dateContexteApprenant;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DATE_CONTEXTE_APPRENANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDateContexteApprenant(@jakarta.annotation.Nullable Date dateContexteApprenant) {
     this.dateContexteApprenant = dateContexteApprenant;
   }
+
 
 
   @Override
@@ -408,5 +367,135 @@ public class Apprenant {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("code", "derniereModificationApprenant", "etatCivil", "naissance", "situationPersonnelle", "profession", "contacts", "bac", "premieresInscriptions", "dateContexteApprenant"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to Apprenant
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!Apprenant.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in Apprenant is not found in the empty JSON string", Apprenant.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!Apprenant.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `Apprenant` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("code") != null && !jsonObj.get("code").isJsonNull()) && !jsonObj.get("code").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `code` to be a primitive type in the JSON string but got `%s`", jsonObj.get("code").toString()));
+      }
+      // validate the optional field `etatCivil`
+      if (jsonObj.get("etatCivil") != null && !jsonObj.get("etatCivil").isJsonNull()) {
+        EtatCivil.validateJsonElement(jsonObj.get("etatCivil"));
+      }
+      // validate the optional field `naissance`
+      if (jsonObj.get("naissance") != null && !jsonObj.get("naissance").isJsonNull()) {
+        Naissance.validateJsonElement(jsonObj.get("naissance"));
+      }
+      // validate the optional field `situationPersonnelle`
+      if (jsonObj.get("situationPersonnelle") != null && !jsonObj.get("situationPersonnelle").isJsonNull()) {
+        SituationPersonnelleApprenant.validateJsonElement(jsonObj.get("situationPersonnelle"));
+      }
+      // validate the optional field `profession`
+      if (jsonObj.get("profession") != null && !jsonObj.get("profession").isJsonNull()) {
+        Profession.validateJsonElement(jsonObj.get("profession"));
+      }
+      if (jsonObj.get("contacts") != null && !jsonObj.get("contacts").isJsonNull()) {
+        JsonArray jsonArraycontacts = jsonObj.getAsJsonArray("contacts");
+        if (jsonArraycontacts != null) {
+          // ensure the json data is an array
+          if (!jsonObj.get("contacts").isJsonArray()) {
+            throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `contacts` to be an array in the JSON string but got `%s`", jsonObj.get("contacts").toString()));
+          }
+
+          // validate the optional field `contacts` (array)
+          for (int i = 0; i < jsonArraycontacts.size(); i++) {
+            ContactComplet.validateJsonElement(jsonArraycontacts.get(i));
+          };
+        }
+      }
+      // validate the optional field `bac`
+      if (jsonObj.get("bac") != null && !jsonObj.get("bac").isJsonNull()) {
+        Bac.validateJsonElement(jsonObj.get("bac"));
+      }
+      // validate the optional field `premieresInscriptions`
+      if (jsonObj.get("premieresInscriptions") != null && !jsonObj.get("premieresInscriptions").isJsonNull()) {
+        PremieresInscriptions.validateJsonElement(jsonObj.get("premieresInscriptions"));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!Apprenant.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'Apprenant' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<Apprenant> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(Apprenant.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<Apprenant>() {
+           @Override
+           public void write(JsonWriter out, Apprenant value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public Apprenant read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of Apprenant given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of Apprenant
+   * @throws IOException if the JSON string is invalid with respect to Apprenant
+   */
+  public static Apprenant fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, Apprenant.class);
+  }
+
+  /**
+   * Convert an instance of Apprenant to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

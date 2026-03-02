@@ -14,98 +14,93 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import fr.univlorraine.pegase.insext.model.VueBourse;
 import fr.univlorraine.pegase.insext.model.VueCheminCible;
 import fr.univlorraine.pegase.insext.model.VueContactAdresse;
 import fr.univlorraine.pegase.insext.model.VueContactMel;
 import fr.univlorraine.pegase.insext.model.VueContactTelephone;
 import fr.univlorraine.pegase.insext.model.VueProfilExonerant;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * VueInscription
  */
-@JsonPropertyOrder({
-  VueInscription.JSON_PROPERTY_U_A_I,
-  VueInscription.JSON_PROPERTY_ID_APPRENANT,
-  VueInscription.JSON_PROPERTY_CODE_APPRENANT,
-  VueInscription.JSON_PROPERTY_DATE_INSCRIPTION,
-  VueInscription.JSON_PROPERTY_DERNIERE_MODIFICATION,
-  VueInscription.JSON_PROPERTY_DERNIERE_MODIFICATION_APPRENANT,
-  VueInscription.JSON_PROPERTY_I_N_E,
-  VueInscription.JSON_PROPERTY_CIVILITE,
-  VueInscription.JSON_PROPERTY_NOM_USAGE,
-  VueInscription.JSON_PROPERTY_NOM_FAMILLE,
-  VueInscription.JSON_PROPERTY_PRENOM,
-  VueInscription.JSON_PROPERTY_DATE_DE_NAISSANCE,
-  VueInscription.JSON_PROPERTY_NATIONALITE,
-  VueInscription.JSON_PROPERTY_DROIT_PHOTO,
-  VueInscription.JSON_PROPERTY_PHOTO,
-  VueInscription.JSON_PROPERTY_REGIME,
-  VueInscription.JSON_PROPERTY_BOURSES,
-  VueInscription.JSON_PROPERTY_BOURSES_COMPLETES,
-  VueInscription.JSON_PROPERTY_PROFILS_EXONERANTS,
-  VueInscription.JSON_PROPERTY_MOBILITE,
-  VueInscription.JSON_PROPERTY_STATUT_PAIEMENT,
-  VueInscription.JSON_PROPERTY_STATUT_INSCRIPTION,
-  VueInscription.JSON_PROPERTY_INSCRIPTION_PRINCIPALE,
-  VueInscription.JSON_PROPERTY_FORMATION,
-  VueInscription.JSON_PROPERTY_ANNEE_UNIVERSITAIRE,
-  VueInscription.JSON_PROPERTY_PERIODE,
-  VueInscription.JSON_PROPERTY_CHEMIN,
-  VueInscription.JSON_PROPERTY_UA_I_STRUCTURE_PRINCIPALE,
-  VueInscription.JSON_PROPERTY_CODE_DIPLOME_S_I_S_E,
-  VueInscription.JSON_PROPERTY_ADRESSES,
-  VueInscription.JSON_PROPERTY_MELS,
-  VueInscription.JSON_PROPERTY_TELEPHONES
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class VueInscription {
-  public static final String JSON_PROPERTY_U_A_I = "UAI";
+  public static final String SERIALIZED_NAME_U_A_I = "UAI";
+  @SerializedName(SERIALIZED_NAME_U_A_I)
   @jakarta.annotation.Nonnull
   private String UAI;
 
-  public static final String JSON_PROPERTY_ID_APPRENANT = "idApprenant";
+  public static final String SERIALIZED_NAME_ID_APPRENANT = "idApprenant";
+  @SerializedName(SERIALIZED_NAME_ID_APPRENANT)
   @jakarta.annotation.Nullable
   private String idApprenant;
 
-  public static final String JSON_PROPERTY_CODE_APPRENANT = "codeApprenant";
+  public static final String SERIALIZED_NAME_CODE_APPRENANT = "codeApprenant";
+  @SerializedName(SERIALIZED_NAME_CODE_APPRENANT)
   @jakarta.annotation.Nonnull
   private String codeApprenant;
 
-  public static final String JSON_PROPERTY_DATE_INSCRIPTION = "dateInscription";
+  public static final String SERIALIZED_NAME_DATE_INSCRIPTION = "dateInscription";
+  @SerializedName(SERIALIZED_NAME_DATE_INSCRIPTION)
   @jakarta.annotation.Nonnull
   private String dateInscription;
 
-  public static final String JSON_PROPERTY_DERNIERE_MODIFICATION = "derniereModification";
+  public static final String SERIALIZED_NAME_DERNIERE_MODIFICATION = "derniereModification";
+  @SerializedName(SERIALIZED_NAME_DERNIERE_MODIFICATION)
   @jakarta.annotation.Nonnull
   private Long derniereModification;
 
-  public static final String JSON_PROPERTY_DERNIERE_MODIFICATION_APPRENANT = "derniereModificationApprenant";
+  public static final String SERIALIZED_NAME_DERNIERE_MODIFICATION_APPRENANT = "derniereModificationApprenant";
+  @SerializedName(SERIALIZED_NAME_DERNIERE_MODIFICATION_APPRENANT)
   @jakarta.annotation.Nonnull
   private Long derniereModificationApprenant;
 
-  public static final String JSON_PROPERTY_I_N_E = "INE";
+  public static final String SERIALIZED_NAME_I_N_E = "INE";
+  @SerializedName(SERIALIZED_NAME_I_N_E)
   @jakarta.annotation.Nullable
   private String INE;
 
   /**
    * La civilité M ou F de l&#39;apprenant⋅e
    */
+  @JsonAdapter(CiviliteEnum.Adapter.class)
   public enum CiviliteEnum {
-    F(String.valueOf("F")),
+    F("F"),
     
-    M(String.valueOf("M"));
+    M("M");
 
     private String value;
 
@@ -113,7 +108,6 @@ public class VueInscription {
       this.value = value;
     }
 
-    @JsonValue
     public String getValue() {
       return value;
     }
@@ -123,7 +117,6 @@ public class VueInscription {
       return String.valueOf(value);
     }
 
-    @JsonCreator
     public static CiviliteEnum fromValue(String value) {
       for (CiviliteEnum b : CiviliteEnum.values()) {
         if (b.value.equals(value)) {
@@ -132,65 +125,97 @@ public class VueInscription {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
+
+    public static class Adapter extends TypeAdapter<CiviliteEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final CiviliteEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public CiviliteEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return CiviliteEnum.fromValue(value);
+      }
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      CiviliteEnum.fromValue(value);
+    }
   }
 
-  public static final String JSON_PROPERTY_CIVILITE = "civilite";
+  public static final String SERIALIZED_NAME_CIVILITE = "civilite";
+  @SerializedName(SERIALIZED_NAME_CIVILITE)
   @jakarta.annotation.Nonnull
   private CiviliteEnum civilite;
 
-  public static final String JSON_PROPERTY_NOM_USAGE = "nomUsage";
+  public static final String SERIALIZED_NAME_NOM_USAGE = "nomUsage";
+  @SerializedName(SERIALIZED_NAME_NOM_USAGE)
   @jakarta.annotation.Nonnull
   private String nomUsage;
 
-  public static final String JSON_PROPERTY_NOM_FAMILLE = "nomFamille";
+  public static final String SERIALIZED_NAME_NOM_FAMILLE = "nomFamille";
+  @SerializedName(SERIALIZED_NAME_NOM_FAMILLE)
   @jakarta.annotation.Nonnull
   private String nomFamille;
 
-  public static final String JSON_PROPERTY_PRENOM = "prenom";
+  public static final String SERIALIZED_NAME_PRENOM = "prenom";
+  @SerializedName(SERIALIZED_NAME_PRENOM)
   @jakarta.annotation.Nonnull
   private String prenom;
 
-  public static final String JSON_PROPERTY_DATE_DE_NAISSANCE = "dateDeNaissance";
+  public static final String SERIALIZED_NAME_DATE_DE_NAISSANCE = "dateDeNaissance";
+  @SerializedName(SERIALIZED_NAME_DATE_DE_NAISSANCE)
   @jakarta.annotation.Nonnull
   private String dateDeNaissance;
 
-  public static final String JSON_PROPERTY_NATIONALITE = "nationalite";
+  public static final String SERIALIZED_NAME_NATIONALITE = "nationalite";
+  @SerializedName(SERIALIZED_NAME_NATIONALITE)
   @jakarta.annotation.Nonnull
   private String nationalite;
 
-  public static final String JSON_PROPERTY_DROIT_PHOTO = "droitPhoto";
+  public static final String SERIALIZED_NAME_DROIT_PHOTO = "droitPhoto";
+  @SerializedName(SERIALIZED_NAME_DROIT_PHOTO)
   @jakarta.annotation.Nonnull
   private Boolean droitPhoto;
 
-  public static final String JSON_PROPERTY_PHOTO = "photo";
+  public static final String SERIALIZED_NAME_PHOTO = "photo";
+  @Deprecated
+  @SerializedName(SERIALIZED_NAME_PHOTO)
   @jakarta.annotation.Nullable
   private byte[] photo;
 
-  public static final String JSON_PROPERTY_REGIME = "regime";
+  public static final String SERIALIZED_NAME_REGIME = "regime";
+  @SerializedName(SERIALIZED_NAME_REGIME)
   @jakarta.annotation.Nonnull
   private String regime;
 
-  public static final String JSON_PROPERTY_BOURSES = "bourses";
+  public static final String SERIALIZED_NAME_BOURSES = "bourses";
+  @SerializedName(SERIALIZED_NAME_BOURSES)
   @jakarta.annotation.Nonnull
   private List<String> bourses = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_BOURSES_COMPLETES = "boursesCompletes";
+  public static final String SERIALIZED_NAME_BOURSES_COMPLETES = "boursesCompletes";
+  @SerializedName(SERIALIZED_NAME_BOURSES_COMPLETES)
   @jakarta.annotation.Nullable
   private List<VueBourse> boursesCompletes = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_PROFILS_EXONERANTS = "profilsExonerants";
+  public static final String SERIALIZED_NAME_PROFILS_EXONERANTS = "profilsExonerants";
+  @SerializedName(SERIALIZED_NAME_PROFILS_EXONERANTS)
   @jakarta.annotation.Nullable
   private List<VueProfilExonerant> profilsExonerants = new ArrayList<>();
 
   /**
    * Le type de la mobilité étudiante (SANS si pas de mobilité ou soit ENTRANTE soit SORTANTE)
    */
+  @JsonAdapter(MobiliteEnum.Adapter.class)
   public enum MobiliteEnum {
-    SANS(String.valueOf("SANS")),
+    SANS("SANS"),
     
-    ENTRANTE(String.valueOf("ENTRANTE")),
+    ENTRANTE("ENTRANTE"),
     
-    SORTANTE(String.valueOf("SORTANTE"));
+    SORTANTE("SORTANTE");
 
     private String value;
 
@@ -198,7 +223,6 @@ public class VueInscription {
       this.value = value;
     }
 
-    @JsonValue
     public String getValue() {
       return value;
     }
@@ -208,7 +232,6 @@ public class VueInscription {
       return String.valueOf(value);
     }
 
-    @JsonCreator
     public static MobiliteEnum fromValue(String value) {
       for (MobiliteEnum b : MobiliteEnum.values()) {
         if (b.value.equals(value)) {
@@ -217,23 +240,43 @@ public class VueInscription {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
+
+    public static class Adapter extends TypeAdapter<MobiliteEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final MobiliteEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public MobiliteEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return MobiliteEnum.fromValue(value);
+      }
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      MobiliteEnum.fromValue(value);
+    }
   }
 
-  public static final String JSON_PROPERTY_MOBILITE = "mobilite";
+  public static final String SERIALIZED_NAME_MOBILITE = "mobilite";
+  @SerializedName(SERIALIZED_NAME_MOBILITE)
   @jakarta.annotation.Nonnull
   private MobiliteEnum mobilite;
 
   /**
    * Statut du paiement généré à la confirmation du paiement
    */
+  @JsonAdapter(StatutPaiementEnum.Adapter.class)
   public enum StatutPaiementEnum {
-    NON_PAYE(String.valueOf("non_paye")),
+    NON_PAYE("non_paye"),
     
-    EN_ATTENTE(String.valueOf("en_attente")),
+    EN_ATTENTE("en_attente"),
     
-    PAYE(String.valueOf("paye")),
+    PAYE("paye"),
     
-    VALIDE(String.valueOf("valide"));
+    VALIDE("valide");
 
     private String value;
 
@@ -241,7 +284,6 @@ public class VueInscription {
       this.value = value;
     }
 
-    @JsonValue
     public String getValue() {
       return value;
     }
@@ -251,7 +293,6 @@ public class VueInscription {
       return String.valueOf(value);
     }
 
-    @JsonCreator
     public static StatutPaiementEnum fromValue(String value) {
       for (StatutPaiementEnum b : StatutPaiementEnum.values()) {
         if (b.value.equals(value)) {
@@ -260,19 +301,39 @@ public class VueInscription {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
+
+    public static class Adapter extends TypeAdapter<StatutPaiementEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final StatutPaiementEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public StatutPaiementEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return StatutPaiementEnum.fromValue(value);
+      }
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      StatutPaiementEnum.fromValue(value);
+    }
   }
 
-  public static final String JSON_PROPERTY_STATUT_PAIEMENT = "statutPaiement";
+  public static final String SERIALIZED_NAME_STATUT_PAIEMENT = "statutPaiement";
+  @SerializedName(SERIALIZED_NAME_STATUT_PAIEMENT)
   @jakarta.annotation.Nonnull
   private StatutPaiementEnum statutPaiement;
 
   /**
    * Statut validé ou annulé de l&#39;inscription
    */
+  @JsonAdapter(StatutInscriptionEnum.Adapter.class)
   public enum StatutInscriptionEnum {
-    VALIDE(String.valueOf("valide")),
+    VALIDE("valide"),
     
-    ANNULEE(String.valueOf("annulee"));
+    ANNULEE("annulee");
 
     private String value;
 
@@ -280,7 +341,6 @@ public class VueInscription {
       this.value = value;
     }
 
-    @JsonValue
     public String getValue() {
       return value;
     }
@@ -290,7 +350,6 @@ public class VueInscription {
       return String.valueOf(value);
     }
 
-    @JsonCreator
     public static StatutInscriptionEnum fromValue(String value) {
       for (StatutInscriptionEnum b : StatutInscriptionEnum.values()) {
         if (b.value.equals(value)) {
@@ -299,49 +358,78 @@ public class VueInscription {
       }
       throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
+
+    public static class Adapter extends TypeAdapter<StatutInscriptionEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final StatutInscriptionEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public StatutInscriptionEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return StatutInscriptionEnum.fromValue(value);
+      }
+    }
+
+    public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      String value = jsonElement.getAsString();
+      StatutInscriptionEnum.fromValue(value);
+    }
   }
 
-  public static final String JSON_PROPERTY_STATUT_INSCRIPTION = "statutInscription";
+  public static final String SERIALIZED_NAME_STATUT_INSCRIPTION = "statutInscription";
+  @SerializedName(SERIALIZED_NAME_STATUT_INSCRIPTION)
   @jakarta.annotation.Nullable
   private StatutInscriptionEnum statutInscription;
 
-  public static final String JSON_PROPERTY_INSCRIPTION_PRINCIPALE = "inscriptionPrincipale";
+  public static final String SERIALIZED_NAME_INSCRIPTION_PRINCIPALE = "inscriptionPrincipale";
+  @SerializedName(SERIALIZED_NAME_INSCRIPTION_PRINCIPALE)
   @jakarta.annotation.Nullable
   private Boolean inscriptionPrincipale;
 
-  public static final String JSON_PROPERTY_FORMATION = "formation";
+  public static final String SERIALIZED_NAME_FORMATION = "formation";
+  @SerializedName(SERIALIZED_NAME_FORMATION)
   @jakarta.annotation.Nonnull
   private String formation;
 
-  public static final String JSON_PROPERTY_ANNEE_UNIVERSITAIRE = "anneeUniversitaire";
+  public static final String SERIALIZED_NAME_ANNEE_UNIVERSITAIRE = "anneeUniversitaire";
+  @SerializedName(SERIALIZED_NAME_ANNEE_UNIVERSITAIRE)
   @jakarta.annotation.Nullable
   private Integer anneeUniversitaire;
 
-  public static final String JSON_PROPERTY_PERIODE = "periode";
+  public static final String SERIALIZED_NAME_PERIODE = "periode";
+  @SerializedName(SERIALIZED_NAME_PERIODE)
   @jakarta.annotation.Nonnull
   private String periode;
 
-  public static final String JSON_PROPERTY_CHEMIN = "chemin";
+  public static final String SERIALIZED_NAME_CHEMIN = "chemin";
+  @SerializedName(SERIALIZED_NAME_CHEMIN)
   @jakarta.annotation.Nonnull
   private List<VueCheminCible> chemin = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_UA_I_STRUCTURE_PRINCIPALE = "UAIStructurePrincipale";
+  public static final String SERIALIZED_NAME_UA_I_STRUCTURE_PRINCIPALE = "UAIStructurePrincipale";
+  @SerializedName(SERIALIZED_NAME_UA_I_STRUCTURE_PRINCIPALE)
   @jakarta.annotation.Nullable
   private String uaIStructurePrincipale;
 
-  public static final String JSON_PROPERTY_CODE_DIPLOME_S_I_S_E = "codeDiplomeSISE";
+  public static final String SERIALIZED_NAME_CODE_DIPLOME_S_I_S_E = "codeDiplomeSISE";
+  @SerializedName(SERIALIZED_NAME_CODE_DIPLOME_S_I_S_E)
   @jakarta.annotation.Nullable
   private String codeDiplomeSISE;
 
-  public static final String JSON_PROPERTY_ADRESSES = "adresses";
+  public static final String SERIALIZED_NAME_ADRESSES = "adresses";
+  @SerializedName(SERIALIZED_NAME_ADRESSES)
   @jakarta.annotation.Nonnull
   private List<VueContactAdresse> adresses = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_MELS = "mels";
+  public static final String SERIALIZED_NAME_MELS = "mels";
+  @SerializedName(SERIALIZED_NAME_MELS)
   @jakarta.annotation.Nonnull
   private List<VueContactMel> mels = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_TELEPHONES = "telephones";
+  public static final String SERIALIZED_NAME_TELEPHONES = "telephones";
+  @SerializedName(SERIALIZED_NAME_TELEPHONES)
   @jakarta.annotation.Nonnull
   private List<VueContactTelephone> telephones = new ArrayList<>();
 
@@ -349,7 +437,6 @@ public class VueInscription {
   }
 
   public VueInscription UAI(@jakarta.annotation.Nonnull String UAI) {
-    
     this.UAI = UAI;
     return this;
   }
@@ -359,22 +446,16 @@ public class VueInscription {
    * @return UAI
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_U_A_I, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getUAI() {
     return UAI;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_U_A_I, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setUAI(@jakarta.annotation.Nonnull String UAI) {
     this.UAI = UAI;
   }
 
+
   public VueInscription idApprenant(@jakarta.annotation.Nullable String idApprenant) {
-    
     this.idApprenant = idApprenant;
     return this;
   }
@@ -384,22 +465,16 @@ public class VueInscription {
    * @return idApprenant
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ID_APPRENANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getIdApprenant() {
     return idApprenant;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ID_APPRENANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setIdApprenant(@jakarta.annotation.Nullable String idApprenant) {
     this.idApprenant = idApprenant;
   }
 
+
   public VueInscription codeApprenant(@jakarta.annotation.Nonnull String codeApprenant) {
-    
     this.codeApprenant = codeApprenant;
     return this;
   }
@@ -409,22 +484,16 @@ public class VueInscription {
    * @return codeApprenant
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CODE_APPRENANT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getCodeApprenant() {
     return codeApprenant;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CODE_APPRENANT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCodeApprenant(@jakarta.annotation.Nonnull String codeApprenant) {
     this.codeApprenant = codeApprenant;
   }
 
+
   public VueInscription dateInscription(@jakarta.annotation.Nonnull String dateInscription) {
-    
     this.dateInscription = dateInscription;
     return this;
   }
@@ -434,22 +503,16 @@ public class VueInscription {
    * @return dateInscription
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_DATE_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getDateInscription() {
     return dateInscription;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DATE_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDateInscription(@jakarta.annotation.Nonnull String dateInscription) {
     this.dateInscription = dateInscription;
   }
 
+
   public VueInscription derniereModification(@jakarta.annotation.Nonnull Long derniereModification) {
-    
     this.derniereModification = derniereModification;
     return this;
   }
@@ -459,22 +522,16 @@ public class VueInscription {
    * @return derniereModification
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_DERNIERE_MODIFICATION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Long getDerniereModification() {
     return derniereModification;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DERNIERE_MODIFICATION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDerniereModification(@jakarta.annotation.Nonnull Long derniereModification) {
     this.derniereModification = derniereModification;
   }
 
+
   public VueInscription derniereModificationApprenant(@jakarta.annotation.Nonnull Long derniereModificationApprenant) {
-    
     this.derniereModificationApprenant = derniereModificationApprenant;
     return this;
   }
@@ -484,22 +541,16 @@ public class VueInscription {
    * @return derniereModificationApprenant
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_DERNIERE_MODIFICATION_APPRENANT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Long getDerniereModificationApprenant() {
     return derniereModificationApprenant;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DERNIERE_MODIFICATION_APPRENANT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDerniereModificationApprenant(@jakarta.annotation.Nonnull Long derniereModificationApprenant) {
     this.derniereModificationApprenant = derniereModificationApprenant;
   }
 
+
   public VueInscription INE(@jakarta.annotation.Nullable String INE) {
-    
     this.INE = INE;
     return this;
   }
@@ -509,22 +560,16 @@ public class VueInscription {
    * @return INE
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_I_N_E, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getINE() {
     return INE;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_I_N_E, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setINE(@jakarta.annotation.Nullable String INE) {
     this.INE = INE;
   }
 
+
   public VueInscription civilite(@jakarta.annotation.Nonnull CiviliteEnum civilite) {
-    
     this.civilite = civilite;
     return this;
   }
@@ -534,22 +579,16 @@ public class VueInscription {
    * @return civilite
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CIVILITE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public CiviliteEnum getCivilite() {
     return civilite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CIVILITE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCivilite(@jakarta.annotation.Nonnull CiviliteEnum civilite) {
     this.civilite = civilite;
   }
 
+
   public VueInscription nomUsage(@jakarta.annotation.Nonnull String nomUsage) {
-    
     this.nomUsage = nomUsage;
     return this;
   }
@@ -559,22 +598,16 @@ public class VueInscription {
    * @return nomUsage
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_NOM_USAGE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getNomUsage() {
     return nomUsage;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_NOM_USAGE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setNomUsage(@jakarta.annotation.Nonnull String nomUsage) {
     this.nomUsage = nomUsage;
   }
 
+
   public VueInscription nomFamille(@jakarta.annotation.Nonnull String nomFamille) {
-    
     this.nomFamille = nomFamille;
     return this;
   }
@@ -584,22 +617,16 @@ public class VueInscription {
    * @return nomFamille
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_NOM_FAMILLE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getNomFamille() {
     return nomFamille;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_NOM_FAMILLE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setNomFamille(@jakarta.annotation.Nonnull String nomFamille) {
     this.nomFamille = nomFamille;
   }
 
+
   public VueInscription prenom(@jakarta.annotation.Nonnull String prenom) {
-    
     this.prenom = prenom;
     return this;
   }
@@ -609,22 +636,16 @@ public class VueInscription {
    * @return prenom
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_PRENOM, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getPrenom() {
     return prenom;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PRENOM, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPrenom(@jakarta.annotation.Nonnull String prenom) {
     this.prenom = prenom;
   }
 
+
   public VueInscription dateDeNaissance(@jakarta.annotation.Nonnull String dateDeNaissance) {
-    
     this.dateDeNaissance = dateDeNaissance;
     return this;
   }
@@ -634,22 +655,16 @@ public class VueInscription {
    * @return dateDeNaissance
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_DATE_DE_NAISSANCE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getDateDeNaissance() {
     return dateDeNaissance;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DATE_DE_NAISSANCE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDateDeNaissance(@jakarta.annotation.Nonnull String dateDeNaissance) {
     this.dateDeNaissance = dateDeNaissance;
   }
 
+
   public VueInscription nationalite(@jakarta.annotation.Nonnull String nationalite) {
-    
     this.nationalite = nationalite;
     return this;
   }
@@ -659,22 +674,16 @@ public class VueInscription {
    * @return nationalite
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_NATIONALITE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getNationalite() {
     return nationalite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_NATIONALITE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setNationalite(@jakarta.annotation.Nonnull String nationalite) {
     this.nationalite = nationalite;
   }
 
+
   public VueInscription droitPhoto(@jakarta.annotation.Nonnull Boolean droitPhoto) {
-    
     this.droitPhoto = droitPhoto;
     return this;
   }
@@ -684,22 +693,17 @@ public class VueInscription {
    * @return droitPhoto
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_DROIT_PHOTO, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Boolean getDroitPhoto() {
     return droitPhoto;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DROIT_PHOTO, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDroitPhoto(@jakarta.annotation.Nonnull Boolean droitPhoto) {
     this.droitPhoto = droitPhoto;
   }
 
+
+  @Deprecated
   public VueInscription photo(@jakarta.annotation.Nullable byte[] photo) {
-    
     this.photo = photo;
     return this;
   }
@@ -711,22 +715,17 @@ public class VueInscription {
    */
   @Deprecated
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PHOTO, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public byte[] getPhoto() {
     return photo;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PHOTO, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @Deprecated
   public void setPhoto(@jakarta.annotation.Nullable byte[] photo) {
     this.photo = photo;
   }
 
+
   public VueInscription regime(@jakarta.annotation.Nonnull String regime) {
-    
     this.regime = regime;
     return this;
   }
@@ -736,22 +735,16 @@ public class VueInscription {
    * @return regime
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_REGIME, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getRegime() {
     return regime;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_REGIME, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setRegime(@jakarta.annotation.Nonnull String regime) {
     this.regime = regime;
   }
 
+
   public VueInscription bourses(@jakarta.annotation.Nonnull List<String> bourses) {
-    
     this.bourses = bourses;
     return this;
   }
@@ -769,22 +762,16 @@ public class VueInscription {
    * @return bourses
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_BOURSES, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public List<String> getBourses() {
     return bourses;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_BOURSES, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setBourses(@jakarta.annotation.Nonnull List<String> bourses) {
     this.bourses = bourses;
   }
 
+
   public VueInscription boursesCompletes(@jakarta.annotation.Nullable List<VueBourse> boursesCompletes) {
-    
     this.boursesCompletes = boursesCompletes;
     return this;
   }
@@ -802,22 +789,16 @@ public class VueInscription {
    * @return boursesCompletes
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_BOURSES_COMPLETES, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public List<VueBourse> getBoursesCompletes() {
     return boursesCompletes;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_BOURSES_COMPLETES, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setBoursesCompletes(@jakarta.annotation.Nullable List<VueBourse> boursesCompletes) {
     this.boursesCompletes = boursesCompletes;
   }
 
+
   public VueInscription profilsExonerants(@jakarta.annotation.Nullable List<VueProfilExonerant> profilsExonerants) {
-    
     this.profilsExonerants = profilsExonerants;
     return this;
   }
@@ -835,22 +816,16 @@ public class VueInscription {
    * @return profilsExonerants
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PROFILS_EXONERANTS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public List<VueProfilExonerant> getProfilsExonerants() {
     return profilsExonerants;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PROFILS_EXONERANTS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setProfilsExonerants(@jakarta.annotation.Nullable List<VueProfilExonerant> profilsExonerants) {
     this.profilsExonerants = profilsExonerants;
   }
 
+
   public VueInscription mobilite(@jakarta.annotation.Nonnull MobiliteEnum mobilite) {
-    
     this.mobilite = mobilite;
     return this;
   }
@@ -860,22 +835,16 @@ public class VueInscription {
    * @return mobilite
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_MOBILITE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public MobiliteEnum getMobilite() {
     return mobilite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_MOBILITE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setMobilite(@jakarta.annotation.Nonnull MobiliteEnum mobilite) {
     this.mobilite = mobilite;
   }
 
+
   public VueInscription statutPaiement(@jakarta.annotation.Nonnull StatutPaiementEnum statutPaiement) {
-    
     this.statutPaiement = statutPaiement;
     return this;
   }
@@ -885,22 +854,16 @@ public class VueInscription {
    * @return statutPaiement
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_STATUT_PAIEMENT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public StatutPaiementEnum getStatutPaiement() {
     return statutPaiement;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_STATUT_PAIEMENT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setStatutPaiement(@jakarta.annotation.Nonnull StatutPaiementEnum statutPaiement) {
     this.statutPaiement = statutPaiement;
   }
 
+
   public VueInscription statutInscription(@jakarta.annotation.Nullable StatutInscriptionEnum statutInscription) {
-    
     this.statutInscription = statutInscription;
     return this;
   }
@@ -910,22 +873,16 @@ public class VueInscription {
    * @return statutInscription
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_STATUT_INSCRIPTION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public StatutInscriptionEnum getStatutInscription() {
     return statutInscription;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_STATUT_INSCRIPTION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setStatutInscription(@jakarta.annotation.Nullable StatutInscriptionEnum statutInscription) {
     this.statutInscription = statutInscription;
   }
 
+
   public VueInscription inscriptionPrincipale(@jakarta.annotation.Nullable Boolean inscriptionPrincipale) {
-    
     this.inscriptionPrincipale = inscriptionPrincipale;
     return this;
   }
@@ -935,22 +892,16 @@ public class VueInscription {
    * @return inscriptionPrincipale
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_INSCRIPTION_PRINCIPALE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Boolean getInscriptionPrincipale() {
     return inscriptionPrincipale;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_INSCRIPTION_PRINCIPALE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setInscriptionPrincipale(@jakarta.annotation.Nullable Boolean inscriptionPrincipale) {
     this.inscriptionPrincipale = inscriptionPrincipale;
   }
 
+
   public VueInscription formation(@jakarta.annotation.Nonnull String formation) {
-    
     this.formation = formation;
     return this;
   }
@@ -960,22 +911,16 @@ public class VueInscription {
    * @return formation
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_FORMATION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getFormation() {
     return formation;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_FORMATION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFormation(@jakarta.annotation.Nonnull String formation) {
     this.formation = formation;
   }
 
+
   public VueInscription anneeUniversitaire(@jakarta.annotation.Nullable Integer anneeUniversitaire) {
-    
     this.anneeUniversitaire = anneeUniversitaire;
     return this;
   }
@@ -985,22 +930,16 @@ public class VueInscription {
    * @return anneeUniversitaire
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_UNIVERSITAIRE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Integer getAnneeUniversitaire() {
     return anneeUniversitaire;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_UNIVERSITAIRE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAnneeUniversitaire(@jakarta.annotation.Nullable Integer anneeUniversitaire) {
     this.anneeUniversitaire = anneeUniversitaire;
   }
 
+
   public VueInscription periode(@jakarta.annotation.Nonnull String periode) {
-    
     this.periode = periode;
     return this;
   }
@@ -1010,22 +949,16 @@ public class VueInscription {
    * @return periode
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_PERIODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getPeriode() {
     return periode;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PERIODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPeriode(@jakarta.annotation.Nonnull String periode) {
     this.periode = periode;
   }
 
+
   public VueInscription chemin(@jakarta.annotation.Nonnull List<VueCheminCible> chemin) {
-    
     this.chemin = chemin;
     return this;
   }
@@ -1043,22 +976,16 @@ public class VueInscription {
    * @return chemin
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CHEMIN, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public List<VueCheminCible> getChemin() {
     return chemin;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CHEMIN, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setChemin(@jakarta.annotation.Nonnull List<VueCheminCible> chemin) {
     this.chemin = chemin;
   }
 
+
   public VueInscription uaIStructurePrincipale(@jakarta.annotation.Nullable String uaIStructurePrincipale) {
-    
     this.uaIStructurePrincipale = uaIStructurePrincipale;
     return this;
   }
@@ -1068,22 +995,16 @@ public class VueInscription {
    * @return uaIStructurePrincipale
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_UA_I_STRUCTURE_PRINCIPALE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getUaIStructurePrincipale() {
     return uaIStructurePrincipale;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_UA_I_STRUCTURE_PRINCIPALE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setUaIStructurePrincipale(@jakarta.annotation.Nullable String uaIStructurePrincipale) {
     this.uaIStructurePrincipale = uaIStructurePrincipale;
   }
 
+
   public VueInscription codeDiplomeSISE(@jakarta.annotation.Nullable String codeDiplomeSISE) {
-    
     this.codeDiplomeSISE = codeDiplomeSISE;
     return this;
   }
@@ -1093,22 +1014,16 @@ public class VueInscription {
    * @return codeDiplomeSISE
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CODE_DIPLOME_S_I_S_E, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getCodeDiplomeSISE() {
     return codeDiplomeSISE;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CODE_DIPLOME_S_I_S_E, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setCodeDiplomeSISE(@jakarta.annotation.Nullable String codeDiplomeSISE) {
     this.codeDiplomeSISE = codeDiplomeSISE;
   }
 
+
   public VueInscription adresses(@jakarta.annotation.Nonnull List<VueContactAdresse> adresses) {
-    
     this.adresses = adresses;
     return this;
   }
@@ -1126,22 +1041,16 @@ public class VueInscription {
    * @return adresses
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_ADRESSES, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public List<VueContactAdresse> getAdresses() {
     return adresses;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ADRESSES, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAdresses(@jakarta.annotation.Nonnull List<VueContactAdresse> adresses) {
     this.adresses = adresses;
   }
 
+
   public VueInscription mels(@jakarta.annotation.Nonnull List<VueContactMel> mels) {
-    
     this.mels = mels;
     return this;
   }
@@ -1159,22 +1068,16 @@ public class VueInscription {
    * @return mels
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_MELS, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public List<VueContactMel> getMels() {
     return mels;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_MELS, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setMels(@jakarta.annotation.Nonnull List<VueContactMel> mels) {
     this.mels = mels;
   }
 
+
   public VueInscription telephones(@jakarta.annotation.Nonnull List<VueContactTelephone> telephones) {
-    
     this.telephones = telephones;
     return this;
   }
@@ -1192,19 +1095,14 @@ public class VueInscription {
    * @return telephones
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_TELEPHONES, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public List<VueContactTelephone> getTelephones() {
     return telephones;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TELEPHONES, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTelephones(@jakarta.annotation.Nonnull List<VueContactTelephone> telephones) {
     this.telephones = telephones;
   }
+
 
 
   @Override
@@ -1306,5 +1204,242 @@ public class VueInscription {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("UAI", "idApprenant", "codeApprenant", "dateInscription", "derniereModification", "derniereModificationApprenant", "INE", "civilite", "nomUsage", "nomFamille", "prenom", "dateDeNaissance", "nationalite", "droitPhoto", "photo", "regime", "bourses", "boursesCompletes", "profilsExonerants", "mobilite", "statutPaiement", "statutInscription", "inscriptionPrincipale", "formation", "anneeUniversitaire", "periode", "chemin", "UAIStructurePrincipale", "codeDiplomeSISE", "adresses", "mels", "telephones"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("UAI", "codeApprenant", "dateInscription", "derniereModification", "derniereModificationApprenant", "civilite", "nomUsage", "nomFamille", "prenom", "dateDeNaissance", "nationalite", "droitPhoto", "regime", "bourses", "mobilite", "statutPaiement", "formation", "periode", "chemin", "adresses", "mels", "telephones"));
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to VueInscription
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!VueInscription.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in VueInscription is not found in the empty JSON string", VueInscription.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!VueInscription.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `VueInscription` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+
+      // check to make sure all required properties/fields are present in the JSON string
+      for (String requiredField : VueInscription.openapiRequiredFields) {
+        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if (!jsonObj.get("UAI").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `UAI` to be a primitive type in the JSON string but got `%s`", jsonObj.get("UAI").toString()));
+      }
+      if ((jsonObj.get("idApprenant") != null && !jsonObj.get("idApprenant").isJsonNull()) && !jsonObj.get("idApprenant").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `idApprenant` to be a primitive type in the JSON string but got `%s`", jsonObj.get("idApprenant").toString()));
+      }
+      if (!jsonObj.get("codeApprenant").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `codeApprenant` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codeApprenant").toString()));
+      }
+      if (!jsonObj.get("dateInscription").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dateInscription` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateInscription").toString()));
+      }
+      if ((jsonObj.get("INE") != null && !jsonObj.get("INE").isJsonNull()) && !jsonObj.get("INE").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `INE` to be a primitive type in the JSON string but got `%s`", jsonObj.get("INE").toString()));
+      }
+      if (!jsonObj.get("civilite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `civilite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("civilite").toString()));
+      }
+      // validate the required field `civilite`
+      CiviliteEnum.validateJsonElement(jsonObj.get("civilite"));
+      if (!jsonObj.get("nomUsage").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `nomUsage` to be a primitive type in the JSON string but got `%s`", jsonObj.get("nomUsage").toString()));
+      }
+      if (!jsonObj.get("nomFamille").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `nomFamille` to be a primitive type in the JSON string but got `%s`", jsonObj.get("nomFamille").toString()));
+      }
+      if (!jsonObj.get("prenom").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `prenom` to be a primitive type in the JSON string but got `%s`", jsonObj.get("prenom").toString()));
+      }
+      if (!jsonObj.get("dateDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dateDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateDeNaissance").toString()));
+      }
+      if (!jsonObj.get("nationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `nationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("nationalite").toString()));
+      }
+      if (!jsonObj.get("regime").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `regime` to be a primitive type in the JSON string but got `%s`", jsonObj.get("regime").toString()));
+      }
+      // ensure the required json array is present
+      if (jsonObj.get("bourses") == null) {
+        throw new IllegalArgumentException("Expected the field `linkedContent` to be an array in the JSON string but got `null`");
+      } else if (!jsonObj.get("bourses").isJsonArray()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `bourses` to be an array in the JSON string but got `%s`", jsonObj.get("bourses").toString()));
+      }
+      if (jsonObj.get("boursesCompletes") != null && !jsonObj.get("boursesCompletes").isJsonNull()) {
+        JsonArray jsonArrayboursesCompletes = jsonObj.getAsJsonArray("boursesCompletes");
+        if (jsonArrayboursesCompletes != null) {
+          // ensure the json data is an array
+          if (!jsonObj.get("boursesCompletes").isJsonArray()) {
+            throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `boursesCompletes` to be an array in the JSON string but got `%s`", jsonObj.get("boursesCompletes").toString()));
+          }
+
+          // validate the optional field `boursesCompletes` (array)
+          for (int i = 0; i < jsonArrayboursesCompletes.size(); i++) {
+            VueBourse.validateJsonElement(jsonArrayboursesCompletes.get(i));
+          };
+        }
+      }
+      if (jsonObj.get("profilsExonerants") != null && !jsonObj.get("profilsExonerants").isJsonNull()) {
+        JsonArray jsonArrayprofilsExonerants = jsonObj.getAsJsonArray("profilsExonerants");
+        if (jsonArrayprofilsExonerants != null) {
+          // ensure the json data is an array
+          if (!jsonObj.get("profilsExonerants").isJsonArray()) {
+            throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `profilsExonerants` to be an array in the JSON string but got `%s`", jsonObj.get("profilsExonerants").toString()));
+          }
+
+          // validate the optional field `profilsExonerants` (array)
+          for (int i = 0; i < jsonArrayprofilsExonerants.size(); i++) {
+            VueProfilExonerant.validateJsonElement(jsonArrayprofilsExonerants.get(i));
+          };
+        }
+      }
+      if (!jsonObj.get("mobilite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `mobilite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("mobilite").toString()));
+      }
+      // validate the required field `mobilite`
+      MobiliteEnum.validateJsonElement(jsonObj.get("mobilite"));
+      if (!jsonObj.get("statutPaiement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `statutPaiement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("statutPaiement").toString()));
+      }
+      // validate the required field `statutPaiement`
+      StatutPaiementEnum.validateJsonElement(jsonObj.get("statutPaiement"));
+      if ((jsonObj.get("statutInscription") != null && !jsonObj.get("statutInscription").isJsonNull()) && !jsonObj.get("statutInscription").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `statutInscription` to be a primitive type in the JSON string but got `%s`", jsonObj.get("statutInscription").toString()));
+      }
+      // validate the optional field `statutInscription`
+      if (jsonObj.get("statutInscription") != null && !jsonObj.get("statutInscription").isJsonNull()) {
+        StatutInscriptionEnum.validateJsonElement(jsonObj.get("statutInscription"));
+      }
+      if (!jsonObj.get("formation").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `formation` to be a primitive type in the JSON string but got `%s`", jsonObj.get("formation").toString()));
+      }
+      if (!jsonObj.get("periode").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `periode` to be a primitive type in the JSON string but got `%s`", jsonObj.get("periode").toString()));
+      }
+      if (jsonObj.get("chemin") != null) {
+        if (!jsonObj.get("chemin").isJsonArray()) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `chemin` to be an array in the JSON string but got `%s`", jsonObj.get("chemin").toString()));
+        }
+        JsonArray jsonArraychemin = jsonObj.getAsJsonArray("chemin");
+        // validate the required field `chemin` (array)
+        for (int i = 0; i < jsonArraychemin.size(); i++) {
+          VueCheminCible.validateJsonElement(jsonArraychemin.get(i));
+        }
+      }
+      if ((jsonObj.get("UAIStructurePrincipale") != null && !jsonObj.get("UAIStructurePrincipale").isJsonNull()) && !jsonObj.get("UAIStructurePrincipale").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `UAIStructurePrincipale` to be a primitive type in the JSON string but got `%s`", jsonObj.get("UAIStructurePrincipale").toString()));
+      }
+      if ((jsonObj.get("codeDiplomeSISE") != null && !jsonObj.get("codeDiplomeSISE").isJsonNull()) && !jsonObj.get("codeDiplomeSISE").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `codeDiplomeSISE` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codeDiplomeSISE").toString()));
+      }
+      if (jsonObj.get("adresses") != null) {
+        if (!jsonObj.get("adresses").isJsonArray()) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `adresses` to be an array in the JSON string but got `%s`", jsonObj.get("adresses").toString()));
+        }
+        JsonArray jsonArrayadresses = jsonObj.getAsJsonArray("adresses");
+        // validate the required field `adresses` (array)
+        for (int i = 0; i < jsonArrayadresses.size(); i++) {
+          VueContactAdresse.validateJsonElement(jsonArrayadresses.get(i));
+        }
+      }
+      if (jsonObj.get("mels") != null) {
+        if (!jsonObj.get("mels").isJsonArray()) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `mels` to be an array in the JSON string but got `%s`", jsonObj.get("mels").toString()));
+        }
+        JsonArray jsonArraymels = jsonObj.getAsJsonArray("mels");
+        // validate the required field `mels` (array)
+        for (int i = 0; i < jsonArraymels.size(); i++) {
+          VueContactMel.validateJsonElement(jsonArraymels.get(i));
+        }
+      }
+      if (jsonObj.get("telephones") != null) {
+        if (!jsonObj.get("telephones").isJsonArray()) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `telephones` to be an array in the JSON string but got `%s`", jsonObj.get("telephones").toString()));
+        }
+        JsonArray jsonArraytelephones = jsonObj.getAsJsonArray("telephones");
+        // validate the required field `telephones` (array)
+        for (int i = 0; i < jsonArraytelephones.size(); i++) {
+          VueContactTelephone.validateJsonElement(jsonArraytelephones.get(i));
+        }
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!VueInscription.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'VueInscription' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<VueInscription> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(VueInscription.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<VueInscription>() {
+           @Override
+           public void write(JsonWriter out, VueInscription value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public VueInscription read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of VueInscription given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of VueInscription
+   * @throws IOException if the JSON string is invalid with respect to VueInscription
+   */
+  public static VueInscription fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, VueInscription.class);
+  }
+
+  /**
+   * Convert an instance of VueInscription to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

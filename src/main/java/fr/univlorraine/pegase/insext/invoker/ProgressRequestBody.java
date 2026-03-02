@@ -10,49 +10,64 @@
  * Do not edit the class manually.
  */
 
+
 package fr.univlorraine.pegase.insext.invoker;
 
-import com.fasterxml.jackson.databind.util.StdDateFormat;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.util.Date;
-import java.text.DecimalFormat;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import java.io.IOException;
 
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
-public class RFC3339DateFormat extends DateFormat {
-  private static final long serialVersionUID = 1L;
-  private static final TimeZone TIMEZONE_Z = TimeZone.getTimeZone("UTC");
+import okio.Buffer;
+import okio.BufferedSink;
+import okio.ForwardingSink;
+import okio.Okio;
+import okio.Sink;
 
-  private final StdDateFormat fmt = new StdDateFormat()
-          .withTimeZone(TIMEZONE_Z)
-          .withColonInTimeZone(true);
+public class ProgressRequestBody extends RequestBody {
 
-  public RFC3339DateFormat() {
-    this.calendar = new GregorianCalendar();
-    this.numberFormat = new DecimalFormat();
-  }
+    private final RequestBody requestBody;
 
-  @Override
-  public Date parse(String source) {
-    return parse(source, new ParsePosition(0));
-  }
+    private final ApiCallback callback;
 
-  @Override
-  public Date parse(String source, ParsePosition pos) {
-    return fmt.parse(source, pos);
-  }
+    public ProgressRequestBody(RequestBody requestBody, ApiCallback callback) {
+        this.requestBody = requestBody;
+        this.callback = callback;
+    }
 
-  @Override
-  public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
-    return fmt.format(date, toAppendTo, fieldPosition);
-  }
+    @Override
+    public MediaType contentType() {
+        return requestBody.contentType();
+    }
 
-  @Override
-  public Object clone() {
-    return super.clone();
-  }
+    @Override
+    public long contentLength() throws IOException {
+        return requestBody.contentLength();
+    }
+
+    @Override
+    public void writeTo(BufferedSink sink) throws IOException {
+        BufferedSink bufferedSink = Okio.buffer(sink(sink));
+        requestBody.writeTo(bufferedSink);
+        bufferedSink.flush();
+    }
+
+    private Sink sink(Sink sink) {
+        return new ForwardingSink(sink) {
+
+            long bytesWritten = 0L;
+            long contentLength = 0L;
+
+            @Override
+            public void write(Buffer source, long byteCount) throws IOException {
+                super.write(source, byteCount);
+                if (contentLength == 0) {
+                    contentLength = contentLength();
+                }
+
+                bytesWritten += byteCount;
+                callback.onUploadProgress(bytesWritten, contentLength, bytesWritten == contentLength);
+            }
+        };
+    }
 }

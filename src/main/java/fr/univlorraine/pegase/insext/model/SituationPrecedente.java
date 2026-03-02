@@ -14,41 +14,61 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import fr.univlorraine.pegase.insext.model.SituationAnneePrecedente;
+import java.io.IOException;
 import java.math.BigDecimal;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.Arrays;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * SituationPrecedente
  */
-@JsonPropertyOrder({
-  SituationPrecedente.JSON_PROPERTY_ANNEE_PRECEDENTE,
-  SituationPrecedente.JSON_PROPERTY_SITUATION_PRECEDENTE,
-  SituationPrecedente.JSON_PROPERTY_ANNEE_OBTENTION_DU_DERNIER_DIPLOME,
-  SituationPrecedente.JSON_PROPERTY_DERNIER_DIPLOME
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class SituationPrecedente {
-  public static final String JSON_PROPERTY_ANNEE_PRECEDENTE = "anneePrecedente";
+  public static final String SERIALIZED_NAME_ANNEE_PRECEDENTE = "anneePrecedente";
+  @SerializedName(SERIALIZED_NAME_ANNEE_PRECEDENTE)
   @jakarta.annotation.Nullable
   private BigDecimal anneePrecedente;
 
-  public static final String JSON_PROPERTY_SITUATION_PRECEDENTE = "situationPrecedente";
+  public static final String SERIALIZED_NAME_SITUATION_PRECEDENTE = "situationPrecedente";
+  @SerializedName(SERIALIZED_NAME_SITUATION_PRECEDENTE)
   @jakarta.annotation.Nullable
   private SituationAnneePrecedente situationPrecedente;
 
-  public static final String JSON_PROPERTY_ANNEE_OBTENTION_DU_DERNIER_DIPLOME = "anneeObtentionDuDernierDiplome";
+  public static final String SERIALIZED_NAME_ANNEE_OBTENTION_DU_DERNIER_DIPLOME = "anneeObtentionDuDernierDiplome";
+  @SerializedName(SERIALIZED_NAME_ANNEE_OBTENTION_DU_DERNIER_DIPLOME)
   @jakarta.annotation.Nullable
   private BigDecimal anneeObtentionDuDernierDiplome;
 
-  public static final String JSON_PROPERTY_DERNIER_DIPLOME = "dernierDiplome";
+  public static final String SERIALIZED_NAME_DERNIER_DIPLOME = "dernierDiplome";
+  @SerializedName(SERIALIZED_NAME_DERNIER_DIPLOME)
   @jakarta.annotation.Nullable
   private String dernierDiplome;
 
@@ -56,7 +76,6 @@ public class SituationPrecedente {
   }
 
   public SituationPrecedente anneePrecedente(@jakarta.annotation.Nullable BigDecimal anneePrecedente) {
-    
     this.anneePrecedente = anneePrecedente;
     return this;
   }
@@ -66,22 +85,16 @@ public class SituationPrecedente {
    * @return anneePrecedente
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_PRECEDENTE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public BigDecimal getAnneePrecedente() {
     return anneePrecedente;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_PRECEDENTE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAnneePrecedente(@jakarta.annotation.Nullable BigDecimal anneePrecedente) {
     this.anneePrecedente = anneePrecedente;
   }
 
+
   public SituationPrecedente situationPrecedente(@jakarta.annotation.Nullable SituationAnneePrecedente situationPrecedente) {
-    
     this.situationPrecedente = situationPrecedente;
     return this;
   }
@@ -91,22 +104,16 @@ public class SituationPrecedente {
    * @return situationPrecedente
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_PRECEDENTE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public SituationAnneePrecedente getSituationPrecedente() {
     return situationPrecedente;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_PRECEDENTE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setSituationPrecedente(@jakarta.annotation.Nullable SituationAnneePrecedente situationPrecedente) {
     this.situationPrecedente = situationPrecedente;
   }
 
+
   public SituationPrecedente anneeObtentionDuDernierDiplome(@jakarta.annotation.Nullable BigDecimal anneeObtentionDuDernierDiplome) {
-    
     this.anneeObtentionDuDernierDiplome = anneeObtentionDuDernierDiplome;
     return this;
   }
@@ -116,22 +123,16 @@ public class SituationPrecedente {
    * @return anneeObtentionDuDernierDiplome
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_OBTENTION_DU_DERNIER_DIPLOME, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public BigDecimal getAnneeObtentionDuDernierDiplome() {
     return anneeObtentionDuDernierDiplome;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_OBTENTION_DU_DERNIER_DIPLOME, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAnneeObtentionDuDernierDiplome(@jakarta.annotation.Nullable BigDecimal anneeObtentionDuDernierDiplome) {
     this.anneeObtentionDuDernierDiplome = anneeObtentionDuDernierDiplome;
   }
 
+
   public SituationPrecedente dernierDiplome(@jakarta.annotation.Nullable String dernierDiplome) {
-    
     this.dernierDiplome = dernierDiplome;
     return this;
   }
@@ -141,19 +142,14 @@ public class SituationPrecedente {
    * @return dernierDiplome
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DERNIER_DIPLOME, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getDernierDiplome() {
     return dernierDiplome;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DERNIER_DIPLOME, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDernierDiplome(@jakarta.annotation.Nullable String dernierDiplome) {
     this.dernierDiplome = dernierDiplome;
   }
+
 
 
   @Override
@@ -199,5 +195,101 @@ public class SituationPrecedente {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("anneePrecedente", "situationPrecedente", "anneeObtentionDuDernierDiplome", "dernierDiplome"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to SituationPrecedente
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!SituationPrecedente.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in SituationPrecedente is not found in the empty JSON string", SituationPrecedente.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!SituationPrecedente.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `SituationPrecedente` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      // validate the optional field `situationPrecedente`
+      if (jsonObj.get("situationPrecedente") != null && !jsonObj.get("situationPrecedente").isJsonNull()) {
+        SituationAnneePrecedente.validateJsonElement(jsonObj.get("situationPrecedente"));
+      }
+      if ((jsonObj.get("dernierDiplome") != null && !jsonObj.get("dernierDiplome").isJsonNull()) && !jsonObj.get("dernierDiplome").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dernierDiplome` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dernierDiplome").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!SituationPrecedente.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'SituationPrecedente' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<SituationPrecedente> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(SituationPrecedente.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<SituationPrecedente>() {
+           @Override
+           public void write(JsonWriter out, SituationPrecedente value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public SituationPrecedente read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of SituationPrecedente given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of SituationPrecedente
+   * @throws IOException if the JSON string is invalid with respect to SituationPrecedente
+   */
+  public static SituationPrecedente fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, SituationPrecedente.class);
+  }
+
+  /**
+   * Convert an instance of SituationPrecedente to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

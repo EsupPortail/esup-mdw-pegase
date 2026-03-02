@@ -14,92 +14,112 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import fr.univlorraine.pegase.insext.model.VoieAdmission;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * Admission
  */
-@JsonPropertyOrder({
-  Admission.JSON_PROPERTY_VOIE,
-  Admission.JSON_PROPERTY_ANNEE_CONCOURS,
-  Admission.JSON_PROPERTY_CONCOURS,
-  Admission.JSON_PROPERTY_RANG_CONCOURS,
-  Admission.JSON_PROPERTY_ANNEE_PRECEDENTE,
-  Admission.JSON_PROPERTY_TEMOIN_CLASSE_PREPA,
-  Admission.JSON_PROPERTY_TYPE_PREPA,
-  Admission.JSON_PROPERTY_CONTEXTE_CONSOMMATION_TYPE_PREPA,
-  Admission.JSON_PROPERTY_PUISSANCE_PREPA,
-  Admission.JSON_PROPERTY_TYPE_ETABLISSEMENT_PRECEDENT,
-  Admission.JSON_PROPERTY_DEPARTEMENT_ETABLISSEMENT_PRECEDENT,
-  Admission.JSON_PROPERTY_PAYS_ETABLISSEMENT_PRECEDENT,
-  Admission.JSON_PROPERTY_ETABLISSEMENT_PRECEDENT,
-  Admission.JSON_PROPERTY_ETABLISSEMENT_PRECEDENT_ETRANGER
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class Admission {
-  public static final String JSON_PROPERTY_VOIE = "voie";
+  public static final String SERIALIZED_NAME_VOIE = "voie";
+  @SerializedName(SERIALIZED_NAME_VOIE)
   @jakarta.annotation.Nullable
   private VoieAdmission voie;
 
-  public static final String JSON_PROPERTY_ANNEE_CONCOURS = "anneeConcours";
+  public static final String SERIALIZED_NAME_ANNEE_CONCOURS = "anneeConcours";
+  @SerializedName(SERIALIZED_NAME_ANNEE_CONCOURS)
   @jakarta.annotation.Nullable
   private BigDecimal anneeConcours;
 
-  public static final String JSON_PROPERTY_CONCOURS = "concours";
+  public static final String SERIALIZED_NAME_CONCOURS = "concours";
+  @SerializedName(SERIALIZED_NAME_CONCOURS)
   @jakarta.annotation.Nullable
   private String concours;
 
-  public static final String JSON_PROPERTY_RANG_CONCOURS = "rangConcours";
+  public static final String SERIALIZED_NAME_RANG_CONCOURS = "rangConcours";
+  @SerializedName(SERIALIZED_NAME_RANG_CONCOURS)
   @jakarta.annotation.Nullable
   private BigDecimal rangConcours;
 
-  public static final String JSON_PROPERTY_ANNEE_PRECEDENTE = "anneePrecedente";
+  public static final String SERIALIZED_NAME_ANNEE_PRECEDENTE = "anneePrecedente";
+  @SerializedName(SERIALIZED_NAME_ANNEE_PRECEDENTE)
   @jakarta.annotation.Nullable
   private BigDecimal anneePrecedente;
 
-  public static final String JSON_PROPERTY_TEMOIN_CLASSE_PREPA = "temoinClassePrepa";
+  public static final String SERIALIZED_NAME_TEMOIN_CLASSE_PREPA = "temoinClassePrepa";
+  @SerializedName(SERIALIZED_NAME_TEMOIN_CLASSE_PREPA)
   @jakarta.annotation.Nullable
   private Boolean temoinClassePrepa;
 
-  public static final String JSON_PROPERTY_TYPE_PREPA = "typePrepa";
+  public static final String SERIALIZED_NAME_TYPE_PREPA = "typePrepa";
+  @SerializedName(SERIALIZED_NAME_TYPE_PREPA)
   @jakarta.annotation.Nullable
   private String typePrepa;
 
-  public static final String JSON_PROPERTY_CONTEXTE_CONSOMMATION_TYPE_PREPA = "contexteConsommationTypePrepa";
+  public static final String SERIALIZED_NAME_CONTEXTE_CONSOMMATION_TYPE_PREPA = "contexteConsommationTypePrepa";
+  @SerializedName(SERIALIZED_NAME_CONTEXTE_CONSOMMATION_TYPE_PREPA)
   @jakarta.annotation.Nullable
   private Date contexteConsommationTypePrepa;
 
-  public static final String JSON_PROPERTY_PUISSANCE_PREPA = "puissancePrepa";
+  public static final String SERIALIZED_NAME_PUISSANCE_PREPA = "puissancePrepa";
+  @SerializedName(SERIALIZED_NAME_PUISSANCE_PREPA)
   @jakarta.annotation.Nullable
   private String puissancePrepa;
 
-  public static final String JSON_PROPERTY_TYPE_ETABLISSEMENT_PRECEDENT = "typeEtablissementPrecedent";
+  public static final String SERIALIZED_NAME_TYPE_ETABLISSEMENT_PRECEDENT = "typeEtablissementPrecedent";
+  @SerializedName(SERIALIZED_NAME_TYPE_ETABLISSEMENT_PRECEDENT)
   @jakarta.annotation.Nullable
   private String typeEtablissementPrecedent;
 
-  public static final String JSON_PROPERTY_DEPARTEMENT_ETABLISSEMENT_PRECEDENT = "departementEtablissementPrecedent";
+  public static final String SERIALIZED_NAME_DEPARTEMENT_ETABLISSEMENT_PRECEDENT = "departementEtablissementPrecedent";
+  @SerializedName(SERIALIZED_NAME_DEPARTEMENT_ETABLISSEMENT_PRECEDENT)
   @jakarta.annotation.Nullable
   private String departementEtablissementPrecedent;
 
-  public static final String JSON_PROPERTY_PAYS_ETABLISSEMENT_PRECEDENT = "paysEtablissementPrecedent";
+  public static final String SERIALIZED_NAME_PAYS_ETABLISSEMENT_PRECEDENT = "paysEtablissementPrecedent";
+  @SerializedName(SERIALIZED_NAME_PAYS_ETABLISSEMENT_PRECEDENT)
   @jakarta.annotation.Nullable
   private String paysEtablissementPrecedent;
 
-  public static final String JSON_PROPERTY_ETABLISSEMENT_PRECEDENT = "etablissementPrecedent";
+  public static final String SERIALIZED_NAME_ETABLISSEMENT_PRECEDENT = "etablissementPrecedent";
+  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT_PRECEDENT)
   @jakarta.annotation.Nullable
   private String etablissementPrecedent;
 
-  public static final String JSON_PROPERTY_ETABLISSEMENT_PRECEDENT_ETRANGER = "etablissementPrecedentEtranger";
+  public static final String SERIALIZED_NAME_ETABLISSEMENT_PRECEDENT_ETRANGER = "etablissementPrecedentEtranger";
+  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT_PRECEDENT_ETRANGER)
   @jakarta.annotation.Nullable
   private String etablissementPrecedentEtranger;
 
@@ -107,7 +127,6 @@ public class Admission {
   }
 
   public Admission voie(@jakarta.annotation.Nullable VoieAdmission voie) {
-    
     this.voie = voie;
     return this;
   }
@@ -117,22 +136,16 @@ public class Admission {
    * @return voie
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_VOIE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public VoieAdmission getVoie() {
     return voie;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_VOIE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setVoie(@jakarta.annotation.Nullable VoieAdmission voie) {
     this.voie = voie;
   }
 
+
   public Admission anneeConcours(@jakarta.annotation.Nullable BigDecimal anneeConcours) {
-    
     this.anneeConcours = anneeConcours;
     return this;
   }
@@ -142,22 +155,16 @@ public class Admission {
    * @return anneeConcours
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_CONCOURS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public BigDecimal getAnneeConcours() {
     return anneeConcours;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_CONCOURS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAnneeConcours(@jakarta.annotation.Nullable BigDecimal anneeConcours) {
     this.anneeConcours = anneeConcours;
   }
 
+
   public Admission concours(@jakarta.annotation.Nullable String concours) {
-    
     this.concours = concours;
     return this;
   }
@@ -167,22 +174,16 @@ public class Admission {
    * @return concours
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CONCOURS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getConcours() {
     return concours;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CONCOURS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setConcours(@jakarta.annotation.Nullable String concours) {
     this.concours = concours;
   }
 
+
   public Admission rangConcours(@jakarta.annotation.Nullable BigDecimal rangConcours) {
-    
     this.rangConcours = rangConcours;
     return this;
   }
@@ -192,22 +193,16 @@ public class Admission {
    * @return rangConcours
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_RANG_CONCOURS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public BigDecimal getRangConcours() {
     return rangConcours;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_RANG_CONCOURS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setRangConcours(@jakarta.annotation.Nullable BigDecimal rangConcours) {
     this.rangConcours = rangConcours;
   }
 
+
   public Admission anneePrecedente(@jakarta.annotation.Nullable BigDecimal anneePrecedente) {
-    
     this.anneePrecedente = anneePrecedente;
     return this;
   }
@@ -217,22 +212,16 @@ public class Admission {
    * @return anneePrecedente
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_PRECEDENTE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public BigDecimal getAnneePrecedente() {
     return anneePrecedente;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_PRECEDENTE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAnneePrecedente(@jakarta.annotation.Nullable BigDecimal anneePrecedente) {
     this.anneePrecedente = anneePrecedente;
   }
 
+
   public Admission temoinClassePrepa(@jakarta.annotation.Nullable Boolean temoinClassePrepa) {
-    
     this.temoinClassePrepa = temoinClassePrepa;
     return this;
   }
@@ -242,22 +231,16 @@ public class Admission {
    * @return temoinClassePrepa
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_TEMOIN_CLASSE_PREPA, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Boolean getTemoinClassePrepa() {
     return temoinClassePrepa;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TEMOIN_CLASSE_PREPA, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setTemoinClassePrepa(@jakarta.annotation.Nullable Boolean temoinClassePrepa) {
     this.temoinClassePrepa = temoinClassePrepa;
   }
 
+
   public Admission typePrepa(@jakarta.annotation.Nullable String typePrepa) {
-    
     this.typePrepa = typePrepa;
     return this;
   }
@@ -267,22 +250,16 @@ public class Admission {
    * @return typePrepa
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_TYPE_PREPA, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getTypePrepa() {
     return typePrepa;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TYPE_PREPA, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setTypePrepa(@jakarta.annotation.Nullable String typePrepa) {
     this.typePrepa = typePrepa;
   }
 
+
   public Admission contexteConsommationTypePrepa(@jakarta.annotation.Nullable Date contexteConsommationTypePrepa) {
-    
     this.contexteConsommationTypePrepa = contexteConsommationTypePrepa;
     return this;
   }
@@ -292,22 +269,16 @@ public class Admission {
    * @return contexteConsommationTypePrepa
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CONTEXTE_CONSOMMATION_TYPE_PREPA, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Date getContexteConsommationTypePrepa() {
     return contexteConsommationTypePrepa;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CONTEXTE_CONSOMMATION_TYPE_PREPA, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setContexteConsommationTypePrepa(@jakarta.annotation.Nullable Date contexteConsommationTypePrepa) {
     this.contexteConsommationTypePrepa = contexteConsommationTypePrepa;
   }
 
+
   public Admission puissancePrepa(@jakarta.annotation.Nullable String puissancePrepa) {
-    
     this.puissancePrepa = puissancePrepa;
     return this;
   }
@@ -317,22 +288,16 @@ public class Admission {
    * @return puissancePrepa
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PUISSANCE_PREPA, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getPuissancePrepa() {
     return puissancePrepa;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PUISSANCE_PREPA, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setPuissancePrepa(@jakarta.annotation.Nullable String puissancePrepa) {
     this.puissancePrepa = puissancePrepa;
   }
 
+
   public Admission typeEtablissementPrecedent(@jakarta.annotation.Nullable String typeEtablissementPrecedent) {
-    
     this.typeEtablissementPrecedent = typeEtablissementPrecedent;
     return this;
   }
@@ -342,22 +307,16 @@ public class Admission {
    * @return typeEtablissementPrecedent
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_TYPE_ETABLISSEMENT_PRECEDENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getTypeEtablissementPrecedent() {
     return typeEtablissementPrecedent;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TYPE_ETABLISSEMENT_PRECEDENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setTypeEtablissementPrecedent(@jakarta.annotation.Nullable String typeEtablissementPrecedent) {
     this.typeEtablissementPrecedent = typeEtablissementPrecedent;
   }
 
+
   public Admission departementEtablissementPrecedent(@jakarta.annotation.Nullable String departementEtablissementPrecedent) {
-    
     this.departementEtablissementPrecedent = departementEtablissementPrecedent;
     return this;
   }
@@ -367,22 +326,16 @@ public class Admission {
    * @return departementEtablissementPrecedent
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DEPARTEMENT_ETABLISSEMENT_PRECEDENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getDepartementEtablissementPrecedent() {
     return departementEtablissementPrecedent;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DEPARTEMENT_ETABLISSEMENT_PRECEDENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDepartementEtablissementPrecedent(@jakarta.annotation.Nullable String departementEtablissementPrecedent) {
     this.departementEtablissementPrecedent = departementEtablissementPrecedent;
   }
 
+
   public Admission paysEtablissementPrecedent(@jakarta.annotation.Nullable String paysEtablissementPrecedent) {
-    
     this.paysEtablissementPrecedent = paysEtablissementPrecedent;
     return this;
   }
@@ -392,22 +345,16 @@ public class Admission {
    * @return paysEtablissementPrecedent
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PAYS_ETABLISSEMENT_PRECEDENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getPaysEtablissementPrecedent() {
     return paysEtablissementPrecedent;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PAYS_ETABLISSEMENT_PRECEDENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setPaysEtablissementPrecedent(@jakarta.annotation.Nullable String paysEtablissementPrecedent) {
     this.paysEtablissementPrecedent = paysEtablissementPrecedent;
   }
 
+
   public Admission etablissementPrecedent(@jakarta.annotation.Nullable String etablissementPrecedent) {
-    
     this.etablissementPrecedent = etablissementPrecedent;
     return this;
   }
@@ -417,22 +364,16 @@ public class Admission {
    * @return etablissementPrecedent
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ETABLISSEMENT_PRECEDENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getEtablissementPrecedent() {
     return etablissementPrecedent;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ETABLISSEMENT_PRECEDENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setEtablissementPrecedent(@jakarta.annotation.Nullable String etablissementPrecedent) {
     this.etablissementPrecedent = etablissementPrecedent;
   }
 
+
   public Admission etablissementPrecedentEtranger(@jakarta.annotation.Nullable String etablissementPrecedentEtranger) {
-    
     this.etablissementPrecedentEtranger = etablissementPrecedentEtranger;
     return this;
   }
@@ -442,19 +383,14 @@ public class Admission {
    * @return etablissementPrecedentEtranger
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ETABLISSEMENT_PRECEDENT_ETRANGER, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getEtablissementPrecedentEtranger() {
     return etablissementPrecedentEtranger;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ETABLISSEMENT_PRECEDENT_ETRANGER, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setEtablissementPrecedentEtranger(@jakarta.annotation.Nullable String etablissementPrecedentEtranger) {
     this.etablissementPrecedentEtranger = etablissementPrecedentEtranger;
   }
+
 
 
   @Override
@@ -520,5 +456,122 @@ public class Admission {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("voie", "anneeConcours", "concours", "rangConcours", "anneePrecedente", "temoinClassePrepa", "typePrepa", "contexteConsommationTypePrepa", "puissancePrepa", "typeEtablissementPrecedent", "departementEtablissementPrecedent", "paysEtablissementPrecedent", "etablissementPrecedent", "etablissementPrecedentEtranger"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to Admission
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!Admission.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in Admission is not found in the empty JSON string", Admission.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!Admission.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `Admission` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      // validate the optional field `voie`
+      if (jsonObj.get("voie") != null && !jsonObj.get("voie").isJsonNull()) {
+        VoieAdmission.validateJsonElement(jsonObj.get("voie"));
+      }
+      if ((jsonObj.get("concours") != null && !jsonObj.get("concours").isJsonNull()) && !jsonObj.get("concours").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `concours` to be a primitive type in the JSON string but got `%s`", jsonObj.get("concours").toString()));
+      }
+      if ((jsonObj.get("typePrepa") != null && !jsonObj.get("typePrepa").isJsonNull()) && !jsonObj.get("typePrepa").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `typePrepa` to be a primitive type in the JSON string but got `%s`", jsonObj.get("typePrepa").toString()));
+      }
+      if ((jsonObj.get("puissancePrepa") != null && !jsonObj.get("puissancePrepa").isJsonNull()) && !jsonObj.get("puissancePrepa").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `puissancePrepa` to be a primitive type in the JSON string but got `%s`", jsonObj.get("puissancePrepa").toString()));
+      }
+      if ((jsonObj.get("typeEtablissementPrecedent") != null && !jsonObj.get("typeEtablissementPrecedent").isJsonNull()) && !jsonObj.get("typeEtablissementPrecedent").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `typeEtablissementPrecedent` to be a primitive type in the JSON string but got `%s`", jsonObj.get("typeEtablissementPrecedent").toString()));
+      }
+      if ((jsonObj.get("departementEtablissementPrecedent") != null && !jsonObj.get("departementEtablissementPrecedent").isJsonNull()) && !jsonObj.get("departementEtablissementPrecedent").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `departementEtablissementPrecedent` to be a primitive type in the JSON string but got `%s`", jsonObj.get("departementEtablissementPrecedent").toString()));
+      }
+      if ((jsonObj.get("paysEtablissementPrecedent") != null && !jsonObj.get("paysEtablissementPrecedent").isJsonNull()) && !jsonObj.get("paysEtablissementPrecedent").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `paysEtablissementPrecedent` to be a primitive type in the JSON string but got `%s`", jsonObj.get("paysEtablissementPrecedent").toString()));
+      }
+      if ((jsonObj.get("etablissementPrecedent") != null && !jsonObj.get("etablissementPrecedent").isJsonNull()) && !jsonObj.get("etablissementPrecedent").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `etablissementPrecedent` to be a primitive type in the JSON string but got `%s`", jsonObj.get("etablissementPrecedent").toString()));
+      }
+      if ((jsonObj.get("etablissementPrecedentEtranger") != null && !jsonObj.get("etablissementPrecedentEtranger").isJsonNull()) && !jsonObj.get("etablissementPrecedentEtranger").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `etablissementPrecedentEtranger` to be a primitive type in the JSON string but got `%s`", jsonObj.get("etablissementPrecedentEtranger").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!Admission.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'Admission' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<Admission> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(Admission.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<Admission>() {
+           @Override
+           public void write(JsonWriter out, Admission value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public Admission read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of Admission given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of Admission
+   * @throws IOException if the JSON string is invalid with respect to Admission
+   */
+  public static Admission fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, Admission.class);
+  }
+
+  /**
+   * Convert an instance of Admission to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

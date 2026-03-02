@@ -14,39 +14,59 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * Profession
  */
-@JsonPropertyOrder({
-  Profession.JSON_PROPERTY_ETUDIANT,
-  Profession.JSON_PROPERTY_PARENT1,
-  Profession.JSON_PROPERTY_PARENT2,
-  Profession.JSON_PROPERTY_QUOTITE
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class Profession {
-  public static final String JSON_PROPERTY_ETUDIANT = "etudiant";
+  public static final String SERIALIZED_NAME_ETUDIANT = "etudiant";
+  @SerializedName(SERIALIZED_NAME_ETUDIANT)
   @jakarta.annotation.Nullable
   private String etudiant;
 
-  public static final String JSON_PROPERTY_PARENT1 = "parent1";
+  public static final String SERIALIZED_NAME_PARENT1 = "parent1";
+  @SerializedName(SERIALIZED_NAME_PARENT1)
   @jakarta.annotation.Nullable
   private String parent1;
 
-  public static final String JSON_PROPERTY_PARENT2 = "parent2";
+  public static final String SERIALIZED_NAME_PARENT2 = "parent2";
+  @SerializedName(SERIALIZED_NAME_PARENT2)
   @jakarta.annotation.Nullable
   private String parent2;
 
-  public static final String JSON_PROPERTY_QUOTITE = "quotite";
+  public static final String SERIALIZED_NAME_QUOTITE = "quotite";
+  @SerializedName(SERIALIZED_NAME_QUOTITE)
   @jakarta.annotation.Nullable
   private String quotite;
 
@@ -54,7 +74,6 @@ public class Profession {
   }
 
   public Profession etudiant(@jakarta.annotation.Nullable String etudiant) {
-    
     this.etudiant = etudiant;
     return this;
   }
@@ -64,22 +83,16 @@ public class Profession {
    * @return etudiant
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ETUDIANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getEtudiant() {
     return etudiant;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ETUDIANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setEtudiant(@jakarta.annotation.Nullable String etudiant) {
     this.etudiant = etudiant;
   }
 
+
   public Profession parent1(@jakarta.annotation.Nullable String parent1) {
-    
     this.parent1 = parent1;
     return this;
   }
@@ -89,22 +102,16 @@ public class Profession {
    * @return parent1
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PARENT1, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getParent1() {
     return parent1;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PARENT1, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setParent1(@jakarta.annotation.Nullable String parent1) {
     this.parent1 = parent1;
   }
 
+
   public Profession parent2(@jakarta.annotation.Nullable String parent2) {
-    
     this.parent2 = parent2;
     return this;
   }
@@ -114,22 +121,16 @@ public class Profession {
    * @return parent2
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PARENT2, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getParent2() {
     return parent2;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PARENT2, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setParent2(@jakarta.annotation.Nullable String parent2) {
     this.parent2 = parent2;
   }
 
+
   public Profession quotite(@jakarta.annotation.Nullable String quotite) {
-    
     this.quotite = quotite;
     return this;
   }
@@ -139,19 +140,14 @@ public class Profession {
    * @return quotite
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_QUOTITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getQuotite() {
     return quotite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_QUOTITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setQuotite(@jakarta.annotation.Nullable String quotite) {
     this.quotite = quotite;
   }
+
 
 
   @Override
@@ -197,5 +193,106 @@ public class Profession {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("etudiant", "parent1", "parent2", "quotite"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to Profession
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!Profession.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in Profession is not found in the empty JSON string", Profession.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!Profession.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `Profession` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("etudiant") != null && !jsonObj.get("etudiant").isJsonNull()) && !jsonObj.get("etudiant").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `etudiant` to be a primitive type in the JSON string but got `%s`", jsonObj.get("etudiant").toString()));
+      }
+      if ((jsonObj.get("parent1") != null && !jsonObj.get("parent1").isJsonNull()) && !jsonObj.get("parent1").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `parent1` to be a primitive type in the JSON string but got `%s`", jsonObj.get("parent1").toString()));
+      }
+      if ((jsonObj.get("parent2") != null && !jsonObj.get("parent2").isJsonNull()) && !jsonObj.get("parent2").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `parent2` to be a primitive type in the JSON string but got `%s`", jsonObj.get("parent2").toString()));
+      }
+      if ((jsonObj.get("quotite") != null && !jsonObj.get("quotite").isJsonNull()) && !jsonObj.get("quotite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `quotite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("quotite").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!Profession.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'Profession' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<Profession> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(Profession.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<Profession>() {
+           @Override
+           public void write(JsonWriter out, Profession value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public Profession read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of Profession given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of Profession
+   * @throws IOException if the JSON string is invalid with respect to Profession
+   */
+  public static Profession fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, Profession.class);
+  }
+
+  /**
+   * Convert an instance of Profession to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

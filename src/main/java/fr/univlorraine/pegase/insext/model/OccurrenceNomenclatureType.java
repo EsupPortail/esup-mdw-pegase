@@ -14,16 +14,19 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.gson.annotations.SerializedName;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import java.io.IOException;
+import com.google.gson.TypeAdapter;
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 /**
  * le type d&#39;occurrence de nomenclature
  */
+@JsonAdapter(OccurrenceNomenclatureType.Adapter.class)
 public enum OccurrenceNomenclatureType {
   
   REGIME_INSCRIPTION("RegimeInscription"),
@@ -36,7 +39,6 @@ public enum OccurrenceNomenclatureType {
     this.value = value;
   }
 
-  @JsonValue
   public String getValue() {
     return value;
   }
@@ -46,7 +48,6 @@ public enum OccurrenceNomenclatureType {
     return String.valueOf(value);
   }
 
-  @JsonCreator
   public static OccurrenceNomenclatureType fromValue(String value) {
     for (OccurrenceNomenclatureType b : OccurrenceNomenclatureType.values()) {
       if (b.value.equals(value)) {
@@ -54,6 +55,24 @@ public enum OccurrenceNomenclatureType {
       }
     }
     throw new IllegalArgumentException("Unexpected value '" + value + "'");
+  }
+
+  public static class Adapter extends TypeAdapter<OccurrenceNomenclatureType> {
+    @Override
+    public void write(final JsonWriter jsonWriter, final OccurrenceNomenclatureType enumeration) throws IOException {
+      jsonWriter.value(enumeration.getValue());
+    }
+
+    @Override
+    public OccurrenceNomenclatureType read(final JsonReader jsonReader) throws IOException {
+      String value = jsonReader.nextString();
+      return OccurrenceNomenclatureType.fromValue(value);
+    }
+  }
+
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+    String value = jsonElement.getAsString();
+    OccurrenceNomenclatureType.fromValue(value);
   }
 }
 

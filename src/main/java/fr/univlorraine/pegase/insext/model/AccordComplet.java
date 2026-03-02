@@ -14,35 +14,55 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import fr.univlorraine.pegase.insext.model.DocumentAApprouver;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.IOException;
+import java.util.Arrays;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * L&#39;état d&#39;un accord et sa référence
  */
-@JsonPropertyOrder({
-  AccordComplet.JSON_PROPERTY_DATE_VALIDATION,
-  AccordComplet.JSON_PROPERTY_EST_ACCEPTE,
-  AccordComplet.JSON_PROPERTY_DOCUMENT_A_APPROUVER
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class AccordComplet {
-  public static final String JSON_PROPERTY_DATE_VALIDATION = "dateValidation";
+  public static final String SERIALIZED_NAME_DATE_VALIDATION = "dateValidation";
+  @SerializedName(SERIALIZED_NAME_DATE_VALIDATION)
   @jakarta.annotation.Nullable
   private String dateValidation;
 
-  public static final String JSON_PROPERTY_EST_ACCEPTE = "estAccepte";
+  public static final String SERIALIZED_NAME_EST_ACCEPTE = "estAccepte";
+  @SerializedName(SERIALIZED_NAME_EST_ACCEPTE)
   @jakarta.annotation.Nullable
   private Boolean estAccepte;
 
-  public static final String JSON_PROPERTY_DOCUMENT_A_APPROUVER = "documentAApprouver";
+  public static final String SERIALIZED_NAME_DOCUMENT_A_APPROUVER = "documentAApprouver";
+  @SerializedName(SERIALIZED_NAME_DOCUMENT_A_APPROUVER)
   @jakarta.annotation.Nonnull
   private DocumentAApprouver documentAApprouver;
 
@@ -50,7 +70,6 @@ public class AccordComplet {
   }
 
   public AccordComplet dateValidation(@jakarta.annotation.Nullable String dateValidation) {
-    
     this.dateValidation = dateValidation;
     return this;
   }
@@ -60,22 +79,16 @@ public class AccordComplet {
    * @return dateValidation
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DATE_VALIDATION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getDateValidation() {
     return dateValidation;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DATE_VALIDATION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDateValidation(@jakarta.annotation.Nullable String dateValidation) {
     this.dateValidation = dateValidation;
   }
 
+
   public AccordComplet estAccepte(@jakarta.annotation.Nullable Boolean estAccepte) {
-    
     this.estAccepte = estAccepte;
     return this;
   }
@@ -85,22 +98,16 @@ public class AccordComplet {
    * @return estAccepte
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_EST_ACCEPTE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Boolean getEstAccepte() {
     return estAccepte;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_EST_ACCEPTE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setEstAccepte(@jakarta.annotation.Nullable Boolean estAccepte) {
     this.estAccepte = estAccepte;
   }
 
+
   public AccordComplet documentAApprouver(@jakarta.annotation.Nonnull DocumentAApprouver documentAApprouver) {
-    
     this.documentAApprouver = documentAApprouver;
     return this;
   }
@@ -110,19 +117,14 @@ public class AccordComplet {
    * @return documentAApprouver
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_DOCUMENT_A_APPROUVER, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public DocumentAApprouver getDocumentAApprouver() {
     return documentAApprouver;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DOCUMENT_A_APPROUVER, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDocumentAApprouver(@jakarta.annotation.Nonnull DocumentAApprouver documentAApprouver) {
     this.documentAApprouver = documentAApprouver;
   }
+
 
 
   @Override
@@ -166,5 +168,106 @@ public class AccordComplet {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("dateValidation", "estAccepte", "documentAApprouver"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("documentAApprouver"));
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to AccordComplet
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!AccordComplet.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in AccordComplet is not found in the empty JSON string", AccordComplet.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!AccordComplet.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `AccordComplet` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+
+      // check to make sure all required properties/fields are present in the JSON string
+      for (String requiredField : AccordComplet.openapiRequiredFields) {
+        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("dateValidation") != null && !jsonObj.get("dateValidation").isJsonNull()) && !jsonObj.get("dateValidation").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dateValidation` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateValidation").toString()));
+      }
+      // validate the required field `documentAApprouver`
+      DocumentAApprouver.validateJsonElement(jsonObj.get("documentAApprouver"));
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!AccordComplet.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'AccordComplet' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<AccordComplet> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(AccordComplet.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<AccordComplet>() {
+           @Override
+           public void write(JsonWriter out, AccordComplet value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public AccordComplet read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of AccordComplet given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of AccordComplet
+   * @throws IOException if the JSON string is invalid with respect to AccordComplet
+   */
+  public static AccordComplet fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, AccordComplet.class);
+  }
+
+  /**
+   * Convert an instance of AccordComplet to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

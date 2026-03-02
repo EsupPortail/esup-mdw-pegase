@@ -14,49 +14,69 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * EtatCivil
  */
-@JsonPropertyOrder({
-  EtatCivil.JSON_PROPERTY_NOM_DE_NAISSANCE,
-  EtatCivil.JSON_PROPERTY_NOM_USUEL,
-  EtatCivil.JSON_PROPERTY_PRENOM,
-  EtatCivil.JSON_PROPERTY_DEUXIEME_PRENOM,
-  EtatCivil.JSON_PROPERTY_TROISIEME_PRENOM,
-  EtatCivil.JSON_PROPERTY_GENRE
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class EtatCivil {
-  public static final String JSON_PROPERTY_NOM_DE_NAISSANCE = "nomDeNaissance";
+  public static final String SERIALIZED_NAME_NOM_DE_NAISSANCE = "nomDeNaissance";
+  @SerializedName(SERIALIZED_NAME_NOM_DE_NAISSANCE)
   @jakarta.annotation.Nullable
   private String nomDeNaissance;
 
-  public static final String JSON_PROPERTY_NOM_USUEL = "nomUsuel";
+  public static final String SERIALIZED_NAME_NOM_USUEL = "nomUsuel";
+  @SerializedName(SERIALIZED_NAME_NOM_USUEL)
   @jakarta.annotation.Nullable
   private String nomUsuel;
 
-  public static final String JSON_PROPERTY_PRENOM = "prenom";
+  public static final String SERIALIZED_NAME_PRENOM = "prenom";
+  @SerializedName(SERIALIZED_NAME_PRENOM)
   @jakarta.annotation.Nullable
   private String prenom;
 
-  public static final String JSON_PROPERTY_DEUXIEME_PRENOM = "deuxiemePrenom";
+  public static final String SERIALIZED_NAME_DEUXIEME_PRENOM = "deuxiemePrenom";
+  @SerializedName(SERIALIZED_NAME_DEUXIEME_PRENOM)
   @jakarta.annotation.Nullable
   private String deuxiemePrenom;
 
-  public static final String JSON_PROPERTY_TROISIEME_PRENOM = "troisiemePrenom";
+  public static final String SERIALIZED_NAME_TROISIEME_PRENOM = "troisiemePrenom";
+  @SerializedName(SERIALIZED_NAME_TROISIEME_PRENOM)
   @jakarta.annotation.Nullable
   private String troisiemePrenom;
 
-  public static final String JSON_PROPERTY_GENRE = "genre";
+  public static final String SERIALIZED_NAME_GENRE = "genre";
+  @SerializedName(SERIALIZED_NAME_GENRE)
   @jakarta.annotation.Nullable
   private String genre;
 
@@ -64,7 +84,6 @@ public class EtatCivil {
   }
 
   public EtatCivil nomDeNaissance(@jakarta.annotation.Nullable String nomDeNaissance) {
-    
     this.nomDeNaissance = nomDeNaissance;
     return this;
   }
@@ -74,22 +93,16 @@ public class EtatCivil {
    * @return nomDeNaissance
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_NOM_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getNomDeNaissance() {
     return nomDeNaissance;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_NOM_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setNomDeNaissance(@jakarta.annotation.Nullable String nomDeNaissance) {
     this.nomDeNaissance = nomDeNaissance;
   }
 
+
   public EtatCivil nomUsuel(@jakarta.annotation.Nullable String nomUsuel) {
-    
     this.nomUsuel = nomUsuel;
     return this;
   }
@@ -99,22 +112,16 @@ public class EtatCivil {
    * @return nomUsuel
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_NOM_USUEL, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getNomUsuel() {
     return nomUsuel;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_NOM_USUEL, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setNomUsuel(@jakarta.annotation.Nullable String nomUsuel) {
     this.nomUsuel = nomUsuel;
   }
 
+
   public EtatCivil prenom(@jakarta.annotation.Nullable String prenom) {
-    
     this.prenom = prenom;
     return this;
   }
@@ -124,22 +131,16 @@ public class EtatCivil {
    * @return prenom
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PRENOM, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getPrenom() {
     return prenom;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PRENOM, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setPrenom(@jakarta.annotation.Nullable String prenom) {
     this.prenom = prenom;
   }
 
+
   public EtatCivil deuxiemePrenom(@jakarta.annotation.Nullable String deuxiemePrenom) {
-    
     this.deuxiemePrenom = deuxiemePrenom;
     return this;
   }
@@ -149,22 +150,16 @@ public class EtatCivil {
    * @return deuxiemePrenom
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DEUXIEME_PRENOM, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getDeuxiemePrenom() {
     return deuxiemePrenom;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DEUXIEME_PRENOM, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDeuxiemePrenom(@jakarta.annotation.Nullable String deuxiemePrenom) {
     this.deuxiemePrenom = deuxiemePrenom;
   }
 
+
   public EtatCivil troisiemePrenom(@jakarta.annotation.Nullable String troisiemePrenom) {
-    
     this.troisiemePrenom = troisiemePrenom;
     return this;
   }
@@ -174,22 +169,16 @@ public class EtatCivil {
    * @return troisiemePrenom
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_TROISIEME_PRENOM, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getTroisiemePrenom() {
     return troisiemePrenom;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TROISIEME_PRENOM, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setTroisiemePrenom(@jakarta.annotation.Nullable String troisiemePrenom) {
     this.troisiemePrenom = troisiemePrenom;
   }
 
+
   public EtatCivil genre(@jakarta.annotation.Nullable String genre) {
-    
     this.genre = genre;
     return this;
   }
@@ -199,19 +188,14 @@ public class EtatCivil {
    * @return genre
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_GENRE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getGenre() {
     return genre;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_GENRE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setGenre(@jakarta.annotation.Nullable String genre) {
     this.genre = genre;
   }
+
 
 
   @Override
@@ -261,5 +245,112 @@ public class EtatCivil {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("nomDeNaissance", "nomUsuel", "prenom", "deuxiemePrenom", "troisiemePrenom", "genre"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to EtatCivil
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!EtatCivil.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in EtatCivil is not found in the empty JSON string", EtatCivil.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!EtatCivil.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `EtatCivil` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("nomDeNaissance") != null && !jsonObj.get("nomDeNaissance").isJsonNull()) && !jsonObj.get("nomDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `nomDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("nomDeNaissance").toString()));
+      }
+      if ((jsonObj.get("nomUsuel") != null && !jsonObj.get("nomUsuel").isJsonNull()) && !jsonObj.get("nomUsuel").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `nomUsuel` to be a primitive type in the JSON string but got `%s`", jsonObj.get("nomUsuel").toString()));
+      }
+      if ((jsonObj.get("prenom") != null && !jsonObj.get("prenom").isJsonNull()) && !jsonObj.get("prenom").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `prenom` to be a primitive type in the JSON string but got `%s`", jsonObj.get("prenom").toString()));
+      }
+      if ((jsonObj.get("deuxiemePrenom") != null && !jsonObj.get("deuxiemePrenom").isJsonNull()) && !jsonObj.get("deuxiemePrenom").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `deuxiemePrenom` to be a primitive type in the JSON string but got `%s`", jsonObj.get("deuxiemePrenom").toString()));
+      }
+      if ((jsonObj.get("troisiemePrenom") != null && !jsonObj.get("troisiemePrenom").isJsonNull()) && !jsonObj.get("troisiemePrenom").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `troisiemePrenom` to be a primitive type in the JSON string but got `%s`", jsonObj.get("troisiemePrenom").toString()));
+      }
+      if ((jsonObj.get("genre") != null && !jsonObj.get("genre").isJsonNull()) && !jsonObj.get("genre").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `genre` to be a primitive type in the JSON string but got `%s`", jsonObj.get("genre").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!EtatCivil.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'EtatCivil' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<EtatCivil> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(EtatCivil.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<EtatCivil>() {
+           @Override
+           public void write(JsonWriter out, EtatCivil value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public EtatCivil read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of EtatCivil given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of EtatCivil
+   * @throws IOException if the JSON string is invalid with respect to EtatCivil
+   */
+  public static EtatCivil fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, EtatCivil.class);
+  }
+
+  /**
+   * Convert an instance of EtatCivil to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

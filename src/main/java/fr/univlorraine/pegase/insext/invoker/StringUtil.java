@@ -10,30 +10,74 @@
  * Do not edit the class manually.
  */
 
+
 package fr.univlorraine.pegase.insext.invoker;
 
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.Iterator;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.Module.SetupContext;
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+public class StringUtil {
+  /**
+   * Check if the given array contains the given value (with case-insensitive comparison).
+   *
+   * @param array The array
+   * @param value The value to search
+   * @return true if the array contains the value
+   */
+  public static boolean containsIgnoreCase(String[] array, String value) {
+    for (String str : array) {
+      if (value == null && str == null) {
+        return true;
+      }
+      if (value != null && value.equalsIgnoreCase(str)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
-public class RFC3339JavaTimeModule extends SimpleModule {
-    private static final long serialVersionUID = 1L;
-
-    public RFC3339JavaTimeModule() {
-        super("RFC3339JavaTimeModule");
+  /**
+   * Join an array of strings with the given separator.
+   * <p>
+   * Note: This might be replaced by utility method from commons-lang or guava someday
+   * if one of those libraries is added as dependency.
+   * </p>
+   *
+   * @param array     The array of strings
+   * @param separator The separator
+   * @return the resulting string
+   */
+  public static String join(String[] array, String separator) {
+    int len = array.length;
+    if (len == 0) {
+      return "";
     }
 
-   @Override
-   public void setupModule(SetupContext context) {
-       super.setupModule(context);
+    StringBuilder out = new StringBuilder();
+    out.append(array[0]);
+    for (int i = 1; i < len; i++) {
+      out.append(separator).append(array[i]);
+    }
+    return out.toString();
+  }
 
-       addDeserializer(Instant.class, RFC3339InstantDeserializer.INSTANT);
-       addDeserializer(OffsetDateTime.class, RFC3339InstantDeserializer.OFFSET_DATE_TIME);
-       addDeserializer(ZonedDateTime.class, RFC3339InstantDeserializer.ZONED_DATE_TIME);
-   }
-
+  /**
+   * Join a list of strings with the given separator.
+   *
+   * @param list      The list of strings
+   * @param separator The separator
+   * @return the resulting string
+   */
+  public static String join(Collection<String> list, String separator) {
+    Iterator<String> iterator = list.iterator();
+    StringBuilder out = new StringBuilder();
+    if (iterator.hasNext()) {
+      out.append(iterator.next());
+    }
+    while (iterator.hasNext()) {
+      out.append(separator).append(iterator.next());
+    }
+    return out.toString();
+  }
 }

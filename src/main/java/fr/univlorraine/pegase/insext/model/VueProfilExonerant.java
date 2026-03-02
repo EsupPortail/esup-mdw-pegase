@@ -14,29 +14,49 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * VueProfilExonerant
  */
-@JsonPropertyOrder({
-  VueProfilExonerant.JSON_PROPERTY_CODE,
-  VueProfilExonerant.JSON_PROPERTY_LIBELLE_LONG
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class VueProfilExonerant {
-  public static final String JSON_PROPERTY_CODE = "code";
+  public static final String SERIALIZED_NAME_CODE = "code";
+  @SerializedName(SERIALIZED_NAME_CODE)
   @jakarta.annotation.Nonnull
   private String code;
 
-  public static final String JSON_PROPERTY_LIBELLE_LONG = "libelleLong";
+  public static final String SERIALIZED_NAME_LIBELLE_LONG = "libelleLong";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_LONG)
   @jakarta.annotation.Nonnull
   private String libelleLong;
 
@@ -44,7 +64,6 @@ public class VueProfilExonerant {
   }
 
   public VueProfilExonerant code(@jakarta.annotation.Nonnull String code) {
-    
     this.code = code;
     return this;
   }
@@ -54,22 +73,16 @@ public class VueProfilExonerant {
    * @return code
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getCode() {
     return code;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCode(@jakarta.annotation.Nonnull String code) {
     this.code = code;
   }
 
+
   public VueProfilExonerant libelleLong(@jakarta.annotation.Nonnull String libelleLong) {
-    
     this.libelleLong = libelleLong;
     return this;
   }
@@ -79,19 +92,14 @@ public class VueProfilExonerant {
    * @return libelleLong
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_LONG, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getLibelleLong() {
     return libelleLong;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_LONG, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setLibelleLong(@jakarta.annotation.Nonnull String libelleLong) {
     this.libelleLong = libelleLong;
   }
+
 
 
   @Override
@@ -133,5 +141,107 @@ public class VueProfilExonerant {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("code", "libelleLong"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("code", "libelleLong"));
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to VueProfilExonerant
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!VueProfilExonerant.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in VueProfilExonerant is not found in the empty JSON string", VueProfilExonerant.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!VueProfilExonerant.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `VueProfilExonerant` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+
+      // check to make sure all required properties/fields are present in the JSON string
+      for (String requiredField : VueProfilExonerant.openapiRequiredFields) {
+        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if (!jsonObj.get("code").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `code` to be a primitive type in the JSON string but got `%s`", jsonObj.get("code").toString()));
+      }
+      if (!jsonObj.get("libelleLong").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleLong` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleLong").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!VueProfilExonerant.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'VueProfilExonerant' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<VueProfilExonerant> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(VueProfilExonerant.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<VueProfilExonerant>() {
+           @Override
+           public void write(JsonWriter out, VueProfilExonerant value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public VueProfilExonerant read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of VueProfilExonerant given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of VueProfilExonerant
+   * @throws IOException if the JSON string is invalid with respect to VueProfilExonerant
+   */
+  public static VueProfilExonerant fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, VueProfilExonerant.class);
+  }
+
+  /**
+   * Convert an instance of VueProfilExonerant to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

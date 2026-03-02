@@ -14,74 +14,94 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * Naissance
  */
-@JsonPropertyOrder({
-  Naissance.JSON_PROPERTY_DATE_DE_NAISSANCE,
-  Naissance.JSON_PROPERTY_PAYS_DE_NAISSANCE,
-  Naissance.JSON_PROPERTY_LIBELLE_PAYS_DE_NAISSANCE,
-  Naissance.JSON_PROPERTY_COMMUNE_DE_NAISSANCE,
-  Naissance.JSON_PROPERTY_LIBELLE_COMMUNE_DE_NAISSANCE,
-  Naissance.JSON_PROPERTY_COMMUNE_DE_NAISSANCE_ETRANGER,
-  Naissance.JSON_PROPERTY_NATIONALITE,
-  Naissance.JSON_PROPERTY_LIBELLE_NATIONALITE,
-  Naissance.JSON_PROPERTY_DEUXIEME_NATIONALITE,
-  Naissance.JSON_PROPERTY_LIBELLE_DEUXIEME_NATIONALITE,
-  Naissance.JSON_PROPERTY_DATE_D_OBTENTION_DE_LA_DEUXIEME_NATIONALITE
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class Naissance {
-  public static final String JSON_PROPERTY_DATE_DE_NAISSANCE = "dateDeNaissance";
+  public static final String SERIALIZED_NAME_DATE_DE_NAISSANCE = "dateDeNaissance";
+  @SerializedName(SERIALIZED_NAME_DATE_DE_NAISSANCE)
   @jakarta.annotation.Nullable
   private String dateDeNaissance;
 
-  public static final String JSON_PROPERTY_PAYS_DE_NAISSANCE = "paysDeNaissance";
+  public static final String SERIALIZED_NAME_PAYS_DE_NAISSANCE = "paysDeNaissance";
+  @SerializedName(SERIALIZED_NAME_PAYS_DE_NAISSANCE)
   @jakarta.annotation.Nullable
   private String paysDeNaissance;
 
-  public static final String JSON_PROPERTY_LIBELLE_PAYS_DE_NAISSANCE = "libellePaysDeNaissance";
+  public static final String SERIALIZED_NAME_LIBELLE_PAYS_DE_NAISSANCE = "libellePaysDeNaissance";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_PAYS_DE_NAISSANCE)
   @jakarta.annotation.Nullable
   private String libellePaysDeNaissance;
 
-  public static final String JSON_PROPERTY_COMMUNE_DE_NAISSANCE = "communeDeNaissance";
+  public static final String SERIALIZED_NAME_COMMUNE_DE_NAISSANCE = "communeDeNaissance";
+  @SerializedName(SERIALIZED_NAME_COMMUNE_DE_NAISSANCE)
   @jakarta.annotation.Nullable
   private String communeDeNaissance;
 
-  public static final String JSON_PROPERTY_LIBELLE_COMMUNE_DE_NAISSANCE = "libelleCommuneDeNaissance";
+  public static final String SERIALIZED_NAME_LIBELLE_COMMUNE_DE_NAISSANCE = "libelleCommuneDeNaissance";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_COMMUNE_DE_NAISSANCE)
   @jakarta.annotation.Nullable
   private String libelleCommuneDeNaissance;
 
-  public static final String JSON_PROPERTY_COMMUNE_DE_NAISSANCE_ETRANGER = "communeDeNaissanceEtranger";
+  public static final String SERIALIZED_NAME_COMMUNE_DE_NAISSANCE_ETRANGER = "communeDeNaissanceEtranger";
+  @SerializedName(SERIALIZED_NAME_COMMUNE_DE_NAISSANCE_ETRANGER)
   @jakarta.annotation.Nullable
   private String communeDeNaissanceEtranger;
 
-  public static final String JSON_PROPERTY_NATIONALITE = "nationalite";
+  public static final String SERIALIZED_NAME_NATIONALITE = "nationalite";
+  @SerializedName(SERIALIZED_NAME_NATIONALITE)
   @jakarta.annotation.Nullable
   private String nationalite;
 
-  public static final String JSON_PROPERTY_LIBELLE_NATIONALITE = "libelleNationalite";
+  public static final String SERIALIZED_NAME_LIBELLE_NATIONALITE = "libelleNationalite";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_NATIONALITE)
   @jakarta.annotation.Nullable
   private String libelleNationalite;
 
-  public static final String JSON_PROPERTY_DEUXIEME_NATIONALITE = "deuxiemeNationalite";
+  public static final String SERIALIZED_NAME_DEUXIEME_NATIONALITE = "deuxiemeNationalite";
+  @SerializedName(SERIALIZED_NAME_DEUXIEME_NATIONALITE)
   @jakarta.annotation.Nullable
   private String deuxiemeNationalite;
 
-  public static final String JSON_PROPERTY_LIBELLE_DEUXIEME_NATIONALITE = "libelleDeuxiemeNationalite";
+  public static final String SERIALIZED_NAME_LIBELLE_DEUXIEME_NATIONALITE = "libelleDeuxiemeNationalite";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_DEUXIEME_NATIONALITE)
   @jakarta.annotation.Nullable
   private String libelleDeuxiemeNationalite;
 
-  public static final String JSON_PROPERTY_DATE_D_OBTENTION_DE_LA_DEUXIEME_NATIONALITE = "dateDObtentionDeLaDeuxiemeNationalite";
+  public static final String SERIALIZED_NAME_DATE_D_OBTENTION_DE_LA_DEUXIEME_NATIONALITE = "dateDObtentionDeLaDeuxiemeNationalite";
+  @SerializedName(SERIALIZED_NAME_DATE_D_OBTENTION_DE_LA_DEUXIEME_NATIONALITE)
   @jakarta.annotation.Nullable
   private String dateDObtentionDeLaDeuxiemeNationalite;
 
@@ -89,7 +109,6 @@ public class Naissance {
   }
 
   public Naissance dateDeNaissance(@jakarta.annotation.Nullable String dateDeNaissance) {
-    
     this.dateDeNaissance = dateDeNaissance;
     return this;
   }
@@ -99,22 +118,16 @@ public class Naissance {
    * @return dateDeNaissance
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DATE_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getDateDeNaissance() {
     return dateDeNaissance;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DATE_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDateDeNaissance(@jakarta.annotation.Nullable String dateDeNaissance) {
     this.dateDeNaissance = dateDeNaissance;
   }
 
+
   public Naissance paysDeNaissance(@jakarta.annotation.Nullable String paysDeNaissance) {
-    
     this.paysDeNaissance = paysDeNaissance;
     return this;
   }
@@ -124,22 +137,16 @@ public class Naissance {
    * @return paysDeNaissance
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PAYS_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getPaysDeNaissance() {
     return paysDeNaissance;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PAYS_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setPaysDeNaissance(@jakarta.annotation.Nullable String paysDeNaissance) {
     this.paysDeNaissance = paysDeNaissance;
   }
 
+
   public Naissance libellePaysDeNaissance(@jakarta.annotation.Nullable String libellePaysDeNaissance) {
-    
     this.libellePaysDeNaissance = libellePaysDeNaissance;
     return this;
   }
@@ -149,22 +156,16 @@ public class Naissance {
    * @return libellePaysDeNaissance
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_PAYS_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getLibellePaysDeNaissance() {
     return libellePaysDeNaissance;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_PAYS_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setLibellePaysDeNaissance(@jakarta.annotation.Nullable String libellePaysDeNaissance) {
     this.libellePaysDeNaissance = libellePaysDeNaissance;
   }
 
+
   public Naissance communeDeNaissance(@jakarta.annotation.Nullable String communeDeNaissance) {
-    
     this.communeDeNaissance = communeDeNaissance;
     return this;
   }
@@ -174,22 +175,16 @@ public class Naissance {
    * @return communeDeNaissance
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_COMMUNE_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getCommuneDeNaissance() {
     return communeDeNaissance;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_COMMUNE_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setCommuneDeNaissance(@jakarta.annotation.Nullable String communeDeNaissance) {
     this.communeDeNaissance = communeDeNaissance;
   }
 
+
   public Naissance libelleCommuneDeNaissance(@jakarta.annotation.Nullable String libelleCommuneDeNaissance) {
-    
     this.libelleCommuneDeNaissance = libelleCommuneDeNaissance;
     return this;
   }
@@ -199,22 +194,16 @@ public class Naissance {
    * @return libelleCommuneDeNaissance
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_COMMUNE_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getLibelleCommuneDeNaissance() {
     return libelleCommuneDeNaissance;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_COMMUNE_DE_NAISSANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setLibelleCommuneDeNaissance(@jakarta.annotation.Nullable String libelleCommuneDeNaissance) {
     this.libelleCommuneDeNaissance = libelleCommuneDeNaissance;
   }
 
+
   public Naissance communeDeNaissanceEtranger(@jakarta.annotation.Nullable String communeDeNaissanceEtranger) {
-    
     this.communeDeNaissanceEtranger = communeDeNaissanceEtranger;
     return this;
   }
@@ -224,22 +213,16 @@ public class Naissance {
    * @return communeDeNaissanceEtranger
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_COMMUNE_DE_NAISSANCE_ETRANGER, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getCommuneDeNaissanceEtranger() {
     return communeDeNaissanceEtranger;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_COMMUNE_DE_NAISSANCE_ETRANGER, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setCommuneDeNaissanceEtranger(@jakarta.annotation.Nullable String communeDeNaissanceEtranger) {
     this.communeDeNaissanceEtranger = communeDeNaissanceEtranger;
   }
 
+
   public Naissance nationalite(@jakarta.annotation.Nullable String nationalite) {
-    
     this.nationalite = nationalite;
     return this;
   }
@@ -249,22 +232,16 @@ public class Naissance {
    * @return nationalite
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_NATIONALITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getNationalite() {
     return nationalite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_NATIONALITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setNationalite(@jakarta.annotation.Nullable String nationalite) {
     this.nationalite = nationalite;
   }
 
+
   public Naissance libelleNationalite(@jakarta.annotation.Nullable String libelleNationalite) {
-    
     this.libelleNationalite = libelleNationalite;
     return this;
   }
@@ -274,22 +251,16 @@ public class Naissance {
    * @return libelleNationalite
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_NATIONALITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getLibelleNationalite() {
     return libelleNationalite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_NATIONALITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setLibelleNationalite(@jakarta.annotation.Nullable String libelleNationalite) {
     this.libelleNationalite = libelleNationalite;
   }
 
+
   public Naissance deuxiemeNationalite(@jakarta.annotation.Nullable String deuxiemeNationalite) {
-    
     this.deuxiemeNationalite = deuxiemeNationalite;
     return this;
   }
@@ -299,22 +270,16 @@ public class Naissance {
    * @return deuxiemeNationalite
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DEUXIEME_NATIONALITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getDeuxiemeNationalite() {
     return deuxiemeNationalite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DEUXIEME_NATIONALITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDeuxiemeNationalite(@jakarta.annotation.Nullable String deuxiemeNationalite) {
     this.deuxiemeNationalite = deuxiemeNationalite;
   }
 
+
   public Naissance libelleDeuxiemeNationalite(@jakarta.annotation.Nullable String libelleDeuxiemeNationalite) {
-    
     this.libelleDeuxiemeNationalite = libelleDeuxiemeNationalite;
     return this;
   }
@@ -324,22 +289,16 @@ public class Naissance {
    * @return libelleDeuxiemeNationalite
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_DEUXIEME_NATIONALITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getLibelleDeuxiemeNationalite() {
     return libelleDeuxiemeNationalite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_DEUXIEME_NATIONALITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setLibelleDeuxiemeNationalite(@jakarta.annotation.Nullable String libelleDeuxiemeNationalite) {
     this.libelleDeuxiemeNationalite = libelleDeuxiemeNationalite;
   }
 
+
   public Naissance dateDObtentionDeLaDeuxiemeNationalite(@jakarta.annotation.Nullable String dateDObtentionDeLaDeuxiemeNationalite) {
-    
     this.dateDObtentionDeLaDeuxiemeNationalite = dateDObtentionDeLaDeuxiemeNationalite;
     return this;
   }
@@ -349,19 +308,14 @@ public class Naissance {
    * @return dateDObtentionDeLaDeuxiemeNationalite
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DATE_D_OBTENTION_DE_LA_DEUXIEME_NATIONALITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getDateDObtentionDeLaDeuxiemeNationalite() {
     return dateDObtentionDeLaDeuxiemeNationalite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DATE_D_OBTENTION_DE_LA_DEUXIEME_NATIONALITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDateDObtentionDeLaDeuxiemeNationalite(@jakarta.annotation.Nullable String dateDObtentionDeLaDeuxiemeNationalite) {
     this.dateDObtentionDeLaDeuxiemeNationalite = dateDObtentionDeLaDeuxiemeNationalite;
   }
+
 
 
   @Override
@@ -421,5 +375,127 @@ public class Naissance {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("dateDeNaissance", "paysDeNaissance", "libellePaysDeNaissance", "communeDeNaissance", "libelleCommuneDeNaissance", "communeDeNaissanceEtranger", "nationalite", "libelleNationalite", "deuxiemeNationalite", "libelleDeuxiemeNationalite", "dateDObtentionDeLaDeuxiemeNationalite"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to Naissance
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!Naissance.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in Naissance is not found in the empty JSON string", Naissance.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!Naissance.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `Naissance` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("dateDeNaissance") != null && !jsonObj.get("dateDeNaissance").isJsonNull()) && !jsonObj.get("dateDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dateDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateDeNaissance").toString()));
+      }
+      if ((jsonObj.get("paysDeNaissance") != null && !jsonObj.get("paysDeNaissance").isJsonNull()) && !jsonObj.get("paysDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `paysDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("paysDeNaissance").toString()));
+      }
+      if ((jsonObj.get("libellePaysDeNaissance") != null && !jsonObj.get("libellePaysDeNaissance").isJsonNull()) && !jsonObj.get("libellePaysDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libellePaysDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libellePaysDeNaissance").toString()));
+      }
+      if ((jsonObj.get("communeDeNaissance") != null && !jsonObj.get("communeDeNaissance").isJsonNull()) && !jsonObj.get("communeDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `communeDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("communeDeNaissance").toString()));
+      }
+      if ((jsonObj.get("libelleCommuneDeNaissance") != null && !jsonObj.get("libelleCommuneDeNaissance").isJsonNull()) && !jsonObj.get("libelleCommuneDeNaissance").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleCommuneDeNaissance` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleCommuneDeNaissance").toString()));
+      }
+      if ((jsonObj.get("communeDeNaissanceEtranger") != null && !jsonObj.get("communeDeNaissanceEtranger").isJsonNull()) && !jsonObj.get("communeDeNaissanceEtranger").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `communeDeNaissanceEtranger` to be a primitive type in the JSON string but got `%s`", jsonObj.get("communeDeNaissanceEtranger").toString()));
+      }
+      if ((jsonObj.get("nationalite") != null && !jsonObj.get("nationalite").isJsonNull()) && !jsonObj.get("nationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `nationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("nationalite").toString()));
+      }
+      if ((jsonObj.get("libelleNationalite") != null && !jsonObj.get("libelleNationalite").isJsonNull()) && !jsonObj.get("libelleNationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleNationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleNationalite").toString()));
+      }
+      if ((jsonObj.get("deuxiemeNationalite") != null && !jsonObj.get("deuxiemeNationalite").isJsonNull()) && !jsonObj.get("deuxiemeNationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `deuxiemeNationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("deuxiemeNationalite").toString()));
+      }
+      if ((jsonObj.get("libelleDeuxiemeNationalite") != null && !jsonObj.get("libelleDeuxiemeNationalite").isJsonNull()) && !jsonObj.get("libelleDeuxiemeNationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleDeuxiemeNationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleDeuxiemeNationalite").toString()));
+      }
+      if ((jsonObj.get("dateDObtentionDeLaDeuxiemeNationalite") != null && !jsonObj.get("dateDObtentionDeLaDeuxiemeNationalite").isJsonNull()) && !jsonObj.get("dateDObtentionDeLaDeuxiemeNationalite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dateDObtentionDeLaDeuxiemeNationalite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateDObtentionDeLaDeuxiemeNationalite").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!Naissance.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'Naissance' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<Naissance> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(Naissance.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<Naissance>() {
+           @Override
+           public void write(JsonWriter out, Naissance value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public Naissance read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of Naissance given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of Naissance
+   * @throws IOException if the JSON string is invalid with respect to Naissance
+   */
+  public static Naissance fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, Naissance.class);
+  }
+
+  /**
+   * Convert an instance of Naissance to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

@@ -11,70 +11,75 @@
  */
 
 
-package fr.univlorraine.pegase.insext.invoker.auth;
+package fr.univlorraine.pegase.insext.invoker;
 
-import fr.univlorraine.pegase.insext.invoker.ApiException;
-import fr.univlorraine.pegase.insext.invoker.Pair;
+import okhttp3.*;
+import okio.Buffer;
+import okio.BufferedSink;
+import okio.GzipSink;
+import okio.Okio;
 
-import java.net.URI;
-import java.util.Map;
-import java.util.List;
+import java.io.IOException;
 
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
-public class ApiKeyAuth implements Authentication {
-  private final String location;
-  private final String paramName;
+/**
+ * Encodes request bodies using gzip.
+ *
+ * Taken from https://github.com/square/okhttp/issues/350
+ */
+class GzipRequestInterceptor implements Interceptor {
+    @Override
+    public Response intercept(Chain chain) throws IOException {
+        Request originalRequest = chain.request();
+        if (originalRequest.body() == null || originalRequest.header("Content-Encoding") != null) {
+            return chain.proceed(originalRequest);
+        }
 
-  private String apiKey;
-  private String apiKeyPrefix;
-
-  public ApiKeyAuth(String location, String paramName) {
-    this.location = location;
-    this.paramName = paramName;
-  }
-
-  public String getLocation() {
-    return location;
-  }
-
-  public String getParamName() {
-    return paramName;
-  }
-
-  public String getApiKey() {
-    return apiKey;
-  }
-
-  public void setApiKey(String apiKey) {
-    this.apiKey = apiKey;
-  }
-
-  public String getApiKeyPrefix() {
-    return apiKeyPrefix;
-  }
-
-  public void setApiKeyPrefix(String apiKeyPrefix) {
-    this.apiKeyPrefix = apiKeyPrefix;
-  }
-
-  @Override
-  public void applyToParams(List<Pair> queryParams, Map<String, String> headerParams, Map<String, String> cookieParams,
-                           String payload, String method, URI uri) throws ApiException {
-    if (apiKey == null) {
-      return;
+        Request compressedRequest = originalRequest.newBuilder()
+                                                   .header("Content-Encoding", "gzip")
+                                                   .method(originalRequest.method(), forceContentLength(gzip(originalRequest.body())))
+                                                   .build();
+        return chain.proceed(compressedRequest);
     }
-    String value;
-    if (apiKeyPrefix != null) {
-      value = apiKeyPrefix + " " + apiKey;
-    } else {
-      value = apiKey;
+
+    private RequestBody forceContentLength(final RequestBody requestBody) throws IOException {
+        final Buffer buffer = new Buffer();
+        requestBody.writeTo(buffer);
+        return new RequestBody() {
+            @Override
+            public MediaType contentType() {
+                return requestBody.contentType();
+            }
+
+            @Override
+            public long contentLength() {
+                return buffer.size();
+            }
+
+            @Override
+            public void writeTo(BufferedSink sink) throws IOException {
+                sink.write(buffer.snapshot());
+            }
+        };
     }
-    if ("query".equals(location)) {
-      queryParams.add(new Pair(paramName, value));
-    } else if ("header".equals(location)) {
-      headerParams.put(paramName, value);
-    } else if ("cookie".equals(location)) {
-      cookieParams.put(paramName, value);
+
+    private RequestBody gzip(final RequestBody body) {
+        return new RequestBody() {
+            @Override
+            public MediaType contentType() {
+                return body.contentType();
+            }
+
+            @Override
+            public long contentLength() {
+                return -1; // We don't know the compressed length in advance!
+            }
+
+            @Override
+            public void writeTo(BufferedSink sink) throws IOException {
+                BufferedSink gzipSink = Okio.buffer(new GzipSink(sink));
+                body.writeTo(gzipSink);
+                gzipSink.close();
+            }
+        };
     }
-  }
 }

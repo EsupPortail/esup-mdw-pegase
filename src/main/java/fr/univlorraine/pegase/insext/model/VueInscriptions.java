@@ -14,48 +14,67 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import fr.univlorraine.pegase.insext.model.VueInscription;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * VueInscriptions
  */
-@JsonPropertyOrder({
-  VueInscriptions.JSON_PROPERTY_TAILLE,
-  VueInscriptions.JSON_PROPERTY_RESULTATS,
-  VueInscriptions.JSON_PROPERTY_TOTAL_ELEMENTS,
-  VueInscriptions.JSON_PROPERTY_PAGE,
-  VueInscriptions.JSON_PROPERTY_TOTAL_PAGES
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class VueInscriptions {
-  public static final String JSON_PROPERTY_TAILLE = "taille";
+  public static final String SERIALIZED_NAME_TAILLE = "taille";
+  @SerializedName(SERIALIZED_NAME_TAILLE)
   @jakarta.annotation.Nonnull
   private Long taille;
 
-  public static final String JSON_PROPERTY_RESULTATS = "resultats";
+  public static final String SERIALIZED_NAME_RESULTATS = "resultats";
+  @SerializedName(SERIALIZED_NAME_RESULTATS)
   @jakarta.annotation.Nonnull
   private List<VueInscription> resultats = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_TOTAL_ELEMENTS = "totalElements";
+  public static final String SERIALIZED_NAME_TOTAL_ELEMENTS = "totalElements";
+  @SerializedName(SERIALIZED_NAME_TOTAL_ELEMENTS)
   @jakarta.annotation.Nonnull
   private Long totalElements;
 
-  public static final String JSON_PROPERTY_PAGE = "page";
+  public static final String SERIALIZED_NAME_PAGE = "page";
+  @SerializedName(SERIALIZED_NAME_PAGE)
   @jakarta.annotation.Nonnull
   private Long page;
 
-  public static final String JSON_PROPERTY_TOTAL_PAGES = "totalPages";
+  public static final String SERIALIZED_NAME_TOTAL_PAGES = "totalPages";
+  @SerializedName(SERIALIZED_NAME_TOTAL_PAGES)
   @jakarta.annotation.Nonnull
   private Long totalPages;
 
@@ -63,7 +82,6 @@ public class VueInscriptions {
   }
 
   public VueInscriptions taille(@jakarta.annotation.Nonnull Long taille) {
-    
     this.taille = taille;
     return this;
   }
@@ -73,22 +91,16 @@ public class VueInscriptions {
    * @return taille
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_TAILLE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Long getTaille() {
     return taille;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TAILLE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTaille(@jakarta.annotation.Nonnull Long taille) {
     this.taille = taille;
   }
 
+
   public VueInscriptions resultats(@jakarta.annotation.Nonnull List<VueInscription> resultats) {
-    
     this.resultats = resultats;
     return this;
   }
@@ -106,22 +118,16 @@ public class VueInscriptions {
    * @return resultats
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_RESULTATS, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public List<VueInscription> getResultats() {
     return resultats;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_RESULTATS, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setResultats(@jakarta.annotation.Nonnull List<VueInscription> resultats) {
     this.resultats = resultats;
   }
 
+
   public VueInscriptions totalElements(@jakarta.annotation.Nonnull Long totalElements) {
-    
     this.totalElements = totalElements;
     return this;
   }
@@ -131,22 +137,16 @@ public class VueInscriptions {
    * @return totalElements
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_TOTAL_ELEMENTS, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Long getTotalElements() {
     return totalElements;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TOTAL_ELEMENTS, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTotalElements(@jakarta.annotation.Nonnull Long totalElements) {
     this.totalElements = totalElements;
   }
 
+
   public VueInscriptions page(@jakarta.annotation.Nonnull Long page) {
-    
     this.page = page;
     return this;
   }
@@ -156,22 +156,16 @@ public class VueInscriptions {
    * @return page
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_PAGE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Long getPage() {
     return page;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PAGE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPage(@jakarta.annotation.Nonnull Long page) {
     this.page = page;
   }
 
+
   public VueInscriptions totalPages(@jakarta.annotation.Nonnull Long totalPages) {
-    
     this.totalPages = totalPages;
     return this;
   }
@@ -181,19 +175,14 @@ public class VueInscriptions {
    * @return totalPages
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_TOTAL_PAGES, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Long getTotalPages() {
     return totalPages;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TOTAL_PAGES, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTotalPages(@jakarta.annotation.Nonnull Long totalPages) {
     this.totalPages = totalPages;
   }
+
 
 
   @Override
@@ -241,5 +230,111 @@ public class VueInscriptions {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("taille", "resultats", "totalElements", "page", "totalPages"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("taille", "resultats", "totalElements", "page", "totalPages"));
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to VueInscriptions
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!VueInscriptions.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in VueInscriptions is not found in the empty JSON string", VueInscriptions.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!VueInscriptions.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `VueInscriptions` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+
+      // check to make sure all required properties/fields are present in the JSON string
+      for (String requiredField : VueInscriptions.openapiRequiredFields) {
+        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if (jsonObj.get("resultats") != null) {
+        if (!jsonObj.get("resultats").isJsonArray()) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `resultats` to be an array in the JSON string but got `%s`", jsonObj.get("resultats").toString()));
+        }
+        JsonArray jsonArrayresultats = jsonObj.getAsJsonArray("resultats");
+        // validate the required field `resultats` (array)
+        for (int i = 0; i < jsonArrayresultats.size(); i++) {
+          VueInscription.validateJsonElement(jsonArrayresultats.get(i));
+        }
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!VueInscriptions.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'VueInscriptions' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<VueInscriptions> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(VueInscriptions.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<VueInscriptions>() {
+           @Override
+           public void write(JsonWriter out, VueInscriptions value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public VueInscriptions read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of VueInscriptions given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of VueInscriptions
+   * @throws IOException if the JSON string is invalid with respect to VueInscriptions
+   */
+  public static VueInscriptions fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, VueInscriptions.class);
+  }
+
+  /**
+   * Convert an instance of VueInscriptions to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

@@ -14,74 +14,94 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * DocumentAApprouver
  */
-@JsonPropertyOrder({
-  DocumentAApprouver.JSON_PROPERTY_CODE,
-  DocumentAApprouver.JSON_PROPERTY_CODE_STRUCTURE,
-  DocumentAApprouver.JSON_PROPERTY_LIBELLE_AFFICHAGE,
-  DocumentAApprouver.JSON_PROPERTY_CONTENU,
-  DocumentAApprouver.JSON_PROPERTY_LIBELLE_ACCEPTATION,
-  DocumentAApprouver.JSON_PROPERTY_LIBELLE_REFUS,
-  DocumentAApprouver.JSON_PROPERTY_TEMOIN_BLOQUANT,
-  DocumentAApprouver.JSON_PROPERTY_DATE_DEBUT_VALIDITE,
-  DocumentAApprouver.JSON_PROPERTY_DATE_FIN_VALIDITE,
-  DocumentAApprouver.JSON_PROPERTY_PRIORITE_AFFICHAGE,
-  DocumentAApprouver.JSON_PROPERTY_TEMOIN_VISIBLE
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class DocumentAApprouver {
-  public static final String JSON_PROPERTY_CODE = "code";
+  public static final String SERIALIZED_NAME_CODE = "code";
+  @SerializedName(SERIALIZED_NAME_CODE)
   @jakarta.annotation.Nonnull
   private String code;
 
-  public static final String JSON_PROPERTY_CODE_STRUCTURE = "codeStructure";
+  public static final String SERIALIZED_NAME_CODE_STRUCTURE = "codeStructure";
+  @SerializedName(SERIALIZED_NAME_CODE_STRUCTURE)
   @jakarta.annotation.Nonnull
   private String codeStructure;
 
-  public static final String JSON_PROPERTY_LIBELLE_AFFICHAGE = "libelleAffichage";
+  public static final String SERIALIZED_NAME_LIBELLE_AFFICHAGE = "libelleAffichage";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_AFFICHAGE)
   @jakarta.annotation.Nonnull
   private String libelleAffichage;
 
-  public static final String JSON_PROPERTY_CONTENU = "contenu";
+  public static final String SERIALIZED_NAME_CONTENU = "contenu";
+  @SerializedName(SERIALIZED_NAME_CONTENU)
   @jakarta.annotation.Nonnull
   private String contenu;
 
-  public static final String JSON_PROPERTY_LIBELLE_ACCEPTATION = "libelleAcceptation";
+  public static final String SERIALIZED_NAME_LIBELLE_ACCEPTATION = "libelleAcceptation";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_ACCEPTATION)
   @jakarta.annotation.Nonnull
   private String libelleAcceptation;
 
-  public static final String JSON_PROPERTY_LIBELLE_REFUS = "libelleRefus";
+  public static final String SERIALIZED_NAME_LIBELLE_REFUS = "libelleRefus";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_REFUS)
   @jakarta.annotation.Nullable
   private String libelleRefus;
 
-  public static final String JSON_PROPERTY_TEMOIN_BLOQUANT = "temoinBloquant";
+  public static final String SERIALIZED_NAME_TEMOIN_BLOQUANT = "temoinBloquant";
+  @SerializedName(SERIALIZED_NAME_TEMOIN_BLOQUANT)
   @jakarta.annotation.Nonnull
   private Boolean temoinBloquant;
 
-  public static final String JSON_PROPERTY_DATE_DEBUT_VALIDITE = "dateDebutValidite";
+  public static final String SERIALIZED_NAME_DATE_DEBUT_VALIDITE = "dateDebutValidite";
+  @SerializedName(SERIALIZED_NAME_DATE_DEBUT_VALIDITE)
   @jakarta.annotation.Nonnull
   private String dateDebutValidite;
 
-  public static final String JSON_PROPERTY_DATE_FIN_VALIDITE = "dateFinValidite";
+  public static final String SERIALIZED_NAME_DATE_FIN_VALIDITE = "dateFinValidite";
+  @SerializedName(SERIALIZED_NAME_DATE_FIN_VALIDITE)
   @jakarta.annotation.Nullable
   private String dateFinValidite;
 
-  public static final String JSON_PROPERTY_PRIORITE_AFFICHAGE = "prioriteAffichage";
+  public static final String SERIALIZED_NAME_PRIORITE_AFFICHAGE = "prioriteAffichage";
+  @SerializedName(SERIALIZED_NAME_PRIORITE_AFFICHAGE)
   @jakarta.annotation.Nonnull
   private Integer prioriteAffichage;
 
-  public static final String JSON_PROPERTY_TEMOIN_VISIBLE = "temoinVisible";
+  public static final String SERIALIZED_NAME_TEMOIN_VISIBLE = "temoinVisible";
+  @SerializedName(SERIALIZED_NAME_TEMOIN_VISIBLE)
   @jakarta.annotation.Nonnull
   private Boolean temoinVisible;
 
@@ -89,7 +109,6 @@ public class DocumentAApprouver {
   }
 
   public DocumentAApprouver code(@jakarta.annotation.Nonnull String code) {
-    
     this.code = code;
     return this;
   }
@@ -99,22 +118,16 @@ public class DocumentAApprouver {
    * @return code
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getCode() {
     return code;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCode(@jakarta.annotation.Nonnull String code) {
     this.code = code;
   }
 
+
   public DocumentAApprouver codeStructure(@jakarta.annotation.Nonnull String codeStructure) {
-    
     this.codeStructure = codeStructure;
     return this;
   }
@@ -124,22 +137,16 @@ public class DocumentAApprouver {
    * @return codeStructure
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CODE_STRUCTURE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getCodeStructure() {
     return codeStructure;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CODE_STRUCTURE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCodeStructure(@jakarta.annotation.Nonnull String codeStructure) {
     this.codeStructure = codeStructure;
   }
 
+
   public DocumentAApprouver libelleAffichage(@jakarta.annotation.Nonnull String libelleAffichage) {
-    
     this.libelleAffichage = libelleAffichage;
     return this;
   }
@@ -149,22 +156,16 @@ public class DocumentAApprouver {
    * @return libelleAffichage
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_AFFICHAGE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getLibelleAffichage() {
     return libelleAffichage;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_AFFICHAGE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setLibelleAffichage(@jakarta.annotation.Nonnull String libelleAffichage) {
     this.libelleAffichage = libelleAffichage;
   }
 
+
   public DocumentAApprouver contenu(@jakarta.annotation.Nonnull String contenu) {
-    
     this.contenu = contenu;
     return this;
   }
@@ -174,22 +175,16 @@ public class DocumentAApprouver {
    * @return contenu
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CONTENU, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getContenu() {
     return contenu;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CONTENU, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setContenu(@jakarta.annotation.Nonnull String contenu) {
     this.contenu = contenu;
   }
 
+
   public DocumentAApprouver libelleAcceptation(@jakarta.annotation.Nonnull String libelleAcceptation) {
-    
     this.libelleAcceptation = libelleAcceptation;
     return this;
   }
@@ -199,22 +194,16 @@ public class DocumentAApprouver {
    * @return libelleAcceptation
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_ACCEPTATION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getLibelleAcceptation() {
     return libelleAcceptation;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_ACCEPTATION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setLibelleAcceptation(@jakarta.annotation.Nonnull String libelleAcceptation) {
     this.libelleAcceptation = libelleAcceptation;
   }
 
+
   public DocumentAApprouver libelleRefus(@jakarta.annotation.Nullable String libelleRefus) {
-    
     this.libelleRefus = libelleRefus;
     return this;
   }
@@ -224,22 +213,16 @@ public class DocumentAApprouver {
    * @return libelleRefus
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_REFUS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getLibelleRefus() {
     return libelleRefus;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_REFUS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setLibelleRefus(@jakarta.annotation.Nullable String libelleRefus) {
     this.libelleRefus = libelleRefus;
   }
 
+
   public DocumentAApprouver temoinBloquant(@jakarta.annotation.Nonnull Boolean temoinBloquant) {
-    
     this.temoinBloquant = temoinBloquant;
     return this;
   }
@@ -249,22 +232,16 @@ public class DocumentAApprouver {
    * @return temoinBloquant
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_TEMOIN_BLOQUANT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Boolean getTemoinBloquant() {
     return temoinBloquant;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TEMOIN_BLOQUANT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTemoinBloquant(@jakarta.annotation.Nonnull Boolean temoinBloquant) {
     this.temoinBloquant = temoinBloquant;
   }
 
+
   public DocumentAApprouver dateDebutValidite(@jakarta.annotation.Nonnull String dateDebutValidite) {
-    
     this.dateDebutValidite = dateDebutValidite;
     return this;
   }
@@ -274,22 +251,16 @@ public class DocumentAApprouver {
    * @return dateDebutValidite
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_DATE_DEBUT_VALIDITE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getDateDebutValidite() {
     return dateDebutValidite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DATE_DEBUT_VALIDITE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDateDebutValidite(@jakarta.annotation.Nonnull String dateDebutValidite) {
     this.dateDebutValidite = dateDebutValidite;
   }
 
+
   public DocumentAApprouver dateFinValidite(@jakarta.annotation.Nullable String dateFinValidite) {
-    
     this.dateFinValidite = dateFinValidite;
     return this;
   }
@@ -299,22 +270,16 @@ public class DocumentAApprouver {
    * @return dateFinValidite
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DATE_FIN_VALIDITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getDateFinValidite() {
     return dateFinValidite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DATE_FIN_VALIDITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDateFinValidite(@jakarta.annotation.Nullable String dateFinValidite) {
     this.dateFinValidite = dateFinValidite;
   }
 
+
   public DocumentAApprouver prioriteAffichage(@jakarta.annotation.Nonnull Integer prioriteAffichage) {
-    
     this.prioriteAffichage = prioriteAffichage;
     return this;
   }
@@ -324,22 +289,16 @@ public class DocumentAApprouver {
    * @return prioriteAffichage
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_PRIORITE_AFFICHAGE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Integer getPrioriteAffichage() {
     return prioriteAffichage;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PRIORITE_AFFICHAGE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPrioriteAffichage(@jakarta.annotation.Nonnull Integer prioriteAffichage) {
     this.prioriteAffichage = prioriteAffichage;
   }
 
+
   public DocumentAApprouver temoinVisible(@jakarta.annotation.Nonnull Boolean temoinVisible) {
-    
     this.temoinVisible = temoinVisible;
     return this;
   }
@@ -349,19 +308,14 @@ public class DocumentAApprouver {
    * @return temoinVisible
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_TEMOIN_VISIBLE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Boolean getTemoinVisible() {
     return temoinVisible;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TEMOIN_VISIBLE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTemoinVisible(@jakarta.annotation.Nonnull Boolean temoinVisible) {
     this.temoinVisible = temoinVisible;
   }
+
 
 
   @Override
@@ -421,5 +375,125 @@ public class DocumentAApprouver {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("code", "codeStructure", "libelleAffichage", "contenu", "libelleAcceptation", "libelleRefus", "temoinBloquant", "dateDebutValidite", "dateFinValidite", "prioriteAffichage", "temoinVisible"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("code", "codeStructure", "libelleAffichage", "contenu", "libelleAcceptation", "temoinBloquant", "dateDebutValidite", "prioriteAffichage", "temoinVisible"));
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to DocumentAApprouver
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!DocumentAApprouver.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in DocumentAApprouver is not found in the empty JSON string", DocumentAApprouver.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!DocumentAApprouver.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `DocumentAApprouver` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+
+      // check to make sure all required properties/fields are present in the JSON string
+      for (String requiredField : DocumentAApprouver.openapiRequiredFields) {
+        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if (!jsonObj.get("code").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `code` to be a primitive type in the JSON string but got `%s`", jsonObj.get("code").toString()));
+      }
+      if (!jsonObj.get("codeStructure").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `codeStructure` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codeStructure").toString()));
+      }
+      if (!jsonObj.get("libelleAffichage").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleAffichage` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleAffichage").toString()));
+      }
+      if (!jsonObj.get("contenu").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `contenu` to be a primitive type in the JSON string but got `%s`", jsonObj.get("contenu").toString()));
+      }
+      if (!jsonObj.get("libelleAcceptation").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleAcceptation` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleAcceptation").toString()));
+      }
+      if ((jsonObj.get("libelleRefus") != null && !jsonObj.get("libelleRefus").isJsonNull()) && !jsonObj.get("libelleRefus").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleRefus` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleRefus").toString()));
+      }
+      if (!jsonObj.get("dateDebutValidite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dateDebutValidite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateDebutValidite").toString()));
+      }
+      if ((jsonObj.get("dateFinValidite") != null && !jsonObj.get("dateFinValidite").isJsonNull()) && !jsonObj.get("dateFinValidite").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dateFinValidite` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateFinValidite").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!DocumentAApprouver.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'DocumentAApprouver' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<DocumentAApprouver> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(DocumentAApprouver.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<DocumentAApprouver>() {
+           @Override
+           public void write(JsonWriter out, DocumentAApprouver value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public DocumentAApprouver read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of DocumentAApprouver given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of DocumentAApprouver
+   * @throws IOException if the JSON string is invalid with respect to DocumentAApprouver
+   */
+  public static DocumentAApprouver fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, DocumentAApprouver.class);
+  }
+
+  /**
+   * Convert an instance of DocumentAApprouver to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

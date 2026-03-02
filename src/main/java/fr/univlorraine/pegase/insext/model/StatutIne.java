@@ -14,16 +14,19 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.gson.annotations.SerializedName;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import java.io.IOException;
+import com.google.gson.TypeAdapter;
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 /**
  * Statut du numéro INE dans Admission  Valeurs actuellement possibles:   * CONFIRME: le numéro a été confirmé par INES  * A_VERIFIER: le numéro INE n&#39;a pas été vérifié par INES  * DONNEES_INCOMPLETES: Une donnée personnelle est manquante pour faire appel à INES  * DONNEES_INVALIDES: Si les données transmises pour vérifier l&#39;INE sont invalides  * ERR_VERIF: Erreur lors de la vérification INES  * LITIGE: le numéro INE est en cours de litige  * INCONNU: l&#39;admis est inconnu d&#39;INES  * ERR_IMAT: Erreur lors de l&#39;immatriculation INES 
  */
+@JsonAdapter(StatutIne.Adapter.class)
 public enum StatutIne {
   
   CONFIRME("CONFIRME"),
@@ -48,7 +51,6 @@ public enum StatutIne {
     this.value = value;
   }
 
-  @JsonValue
   public String getValue() {
     return value;
   }
@@ -58,7 +60,6 @@ public enum StatutIne {
     return String.valueOf(value);
   }
 
-  @JsonCreator
   public static StatutIne fromValue(String value) {
     for (StatutIne b : StatutIne.values()) {
       if (b.value.equals(value)) {
@@ -66,6 +67,24 @@ public enum StatutIne {
       }
     }
     throw new IllegalArgumentException("Unexpected value '" + value + "'");
+  }
+
+  public static class Adapter extends TypeAdapter<StatutIne> {
+    @Override
+    public void write(final JsonWriter jsonWriter, final StatutIne enumeration) throws IOException {
+      jsonWriter.value(enumeration.getValue());
+    }
+
+    @Override
+    public StatutIne read(final JsonReader jsonReader) throws IOException {
+      String value = jsonReader.nextString();
+      return StatutIne.fromValue(value);
+    }
+  }
+
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+    String value = jsonElement.getAsString();
+    StatutIne.fromValue(value);
   }
 }
 

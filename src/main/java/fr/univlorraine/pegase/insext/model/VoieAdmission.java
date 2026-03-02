@@ -14,16 +14,19 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.gson.annotations.SerializedName;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import java.io.IOException;
+import com.google.gson.TypeAdapter;
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 /**
  * La voie d&#39;admission n&#39;est plus utilisée. Valorisé à null
  */
+@JsonAdapter(VoieAdmission.Adapter.class)
 public enum VoieAdmission {
   
   CONCOURS("concours"),
@@ -38,7 +41,6 @@ public enum VoieAdmission {
     this.value = value;
   }
 
-  @JsonValue
   public String getValue() {
     return value;
   }
@@ -48,7 +50,6 @@ public enum VoieAdmission {
     return String.valueOf(value);
   }
 
-  @JsonCreator
   public static VoieAdmission fromValue(String value) {
     for (VoieAdmission b : VoieAdmission.values()) {
       if (b.value.equals(value)) {
@@ -56,6 +57,24 @@ public enum VoieAdmission {
       }
     }
     throw new IllegalArgumentException("Unexpected value '" + value + "'");
+  }
+
+  public static class Adapter extends TypeAdapter<VoieAdmission> {
+    @Override
+    public void write(final JsonWriter jsonWriter, final VoieAdmission enumeration) throws IOException {
+      jsonWriter.value(enumeration.getValue());
+    }
+
+    @Override
+    public VoieAdmission read(final JsonReader jsonReader) throws IOException {
+      String value = jsonReader.nextString();
+      return VoieAdmission.fromValue(value);
+    }
+  }
+
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+    String value = jsonElement.getAsString();
+    VoieAdmission.fromValue(value);
   }
 }
 

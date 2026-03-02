@@ -14,37 +14,57 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import fr.univlorraine.pegase.insext.model.Cesure;
 import fr.univlorraine.pegase.insext.model.Mobilite;
 import fr.univlorraine.pegase.insext.model.ProgrammeEchange;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.IOException;
+import java.util.Arrays;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * SituationUniversitaire
  */
-@JsonPropertyOrder({
-  SituationUniversitaire.JSON_PROPERTY_CESURE,
-  SituationUniversitaire.JSON_PROPERTY_MOBILITE,
-  SituationUniversitaire.JSON_PROPERTY_PROGRAMME_ECHANGE
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class SituationUniversitaire {
-  public static final String JSON_PROPERTY_CESURE = "cesure";
+  public static final String SERIALIZED_NAME_CESURE = "cesure";
+  @SerializedName(SERIALIZED_NAME_CESURE)
   @jakarta.annotation.Nullable
   private Cesure cesure;
 
-  public static final String JSON_PROPERTY_MOBILITE = "mobilite";
+  public static final String SERIALIZED_NAME_MOBILITE = "mobilite";
+  @SerializedName(SERIALIZED_NAME_MOBILITE)
   @jakarta.annotation.Nullable
   private Mobilite mobilite;
 
-  public static final String JSON_PROPERTY_PROGRAMME_ECHANGE = "programmeEchange";
+  public static final String SERIALIZED_NAME_PROGRAMME_ECHANGE = "programmeEchange";
+  @SerializedName(SERIALIZED_NAME_PROGRAMME_ECHANGE)
   @jakarta.annotation.Nullable
   private ProgrammeEchange programmeEchange;
 
@@ -52,7 +72,6 @@ public class SituationUniversitaire {
   }
 
   public SituationUniversitaire cesure(@jakarta.annotation.Nullable Cesure cesure) {
-    
     this.cesure = cesure;
     return this;
   }
@@ -62,22 +81,16 @@ public class SituationUniversitaire {
    * @return cesure
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CESURE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Cesure getCesure() {
     return cesure;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CESURE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setCesure(@jakarta.annotation.Nullable Cesure cesure) {
     this.cesure = cesure;
   }
 
+
   public SituationUniversitaire mobilite(@jakarta.annotation.Nullable Mobilite mobilite) {
-    
     this.mobilite = mobilite;
     return this;
   }
@@ -87,22 +100,16 @@ public class SituationUniversitaire {
    * @return mobilite
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_MOBILITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Mobilite getMobilite() {
     return mobilite;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_MOBILITE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setMobilite(@jakarta.annotation.Nullable Mobilite mobilite) {
     this.mobilite = mobilite;
   }
 
+
   public SituationUniversitaire programmeEchange(@jakarta.annotation.Nullable ProgrammeEchange programmeEchange) {
-    
     this.programmeEchange = programmeEchange;
     return this;
   }
@@ -112,19 +119,14 @@ public class SituationUniversitaire {
    * @return programmeEchange
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PROGRAMME_ECHANGE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public ProgrammeEchange getProgrammeEchange() {
     return programmeEchange;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PROGRAMME_ECHANGE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setProgrammeEchange(@jakarta.annotation.Nullable ProgrammeEchange programmeEchange) {
     this.programmeEchange = programmeEchange;
   }
+
 
 
   @Override
@@ -168,5 +170,106 @@ public class SituationUniversitaire {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("cesure", "mobilite", "programmeEchange"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to SituationUniversitaire
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!SituationUniversitaire.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in SituationUniversitaire is not found in the empty JSON string", SituationUniversitaire.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!SituationUniversitaire.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `SituationUniversitaire` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      // validate the optional field `cesure`
+      if (jsonObj.get("cesure") != null && !jsonObj.get("cesure").isJsonNull()) {
+        Cesure.validateJsonElement(jsonObj.get("cesure"));
+      }
+      // validate the optional field `mobilite`
+      if (jsonObj.get("mobilite") != null && !jsonObj.get("mobilite").isJsonNull()) {
+        Mobilite.validateJsonElement(jsonObj.get("mobilite"));
+      }
+      // validate the optional field `programmeEchange`
+      if (jsonObj.get("programmeEchange") != null && !jsonObj.get("programmeEchange").isJsonNull()) {
+        ProgrammeEchange.validateJsonElement(jsonObj.get("programmeEchange"));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!SituationUniversitaire.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'SituationUniversitaire' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<SituationUniversitaire> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(SituationUniversitaire.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<SituationUniversitaire>() {
+           @Override
+           public void write(JsonWriter out, SituationUniversitaire value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public SituationUniversitaire read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of SituationUniversitaire given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of SituationUniversitaire
+   * @throws IOException if the JSON string is invalid with respect to SituationUniversitaire
+   */
+  public static SituationUniversitaire fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, SituationUniversitaire.class);
+  }
+
+  /**
+   * Convert an instance of SituationUniversitaire to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

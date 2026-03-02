@@ -14,16 +14,19 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.gson.annotations.SerializedName;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import java.io.IOException;
+import com.google.gson.TypeAdapter;
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 /**
  * La mobilité
  */
+@JsonAdapter(Mobilite.Adapter.class)
 public enum Mobilite {
   
   SANS("SANS"),
@@ -38,7 +41,6 @@ public enum Mobilite {
     this.value = value;
   }
 
-  @JsonValue
   public String getValue() {
     return value;
   }
@@ -48,7 +50,6 @@ public enum Mobilite {
     return String.valueOf(value);
   }
 
-  @JsonCreator
   public static Mobilite fromValue(String value) {
     for (Mobilite b : Mobilite.values()) {
       if (b.value.equals(value)) {
@@ -56,6 +57,24 @@ public enum Mobilite {
       }
     }
     throw new IllegalArgumentException("Unexpected value '" + value + "'");
+  }
+
+  public static class Adapter extends TypeAdapter<Mobilite> {
+    @Override
+    public void write(final JsonWriter jsonWriter, final Mobilite enumeration) throws IOException {
+      jsonWriter.value(enumeration.getValue());
+    }
+
+    @Override
+    public Mobilite read(final JsonReader jsonReader) throws IOException {
+      String value = jsonReader.nextString();
+      return Mobilite.fromValue(value);
+    }
+  }
+
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+    String value = jsonElement.getAsString();
+    Mobilite.fromValue(value);
   }
 }
 

@@ -14,16 +14,19 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.gson.annotations.SerializedName;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import java.io.IOException;
+import com.google.gson.TypeAdapter;
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 /**
  * L&#39;origine de la candidature de l&#39;étudiant.
  */
+@JsonAdapter(Origine.Adapter.class)
 public enum Origine {
   
   CONCOURS("concours"),
@@ -50,7 +53,6 @@ public enum Origine {
     this.value = value;
   }
 
-  @JsonValue
   public String getValue() {
     return value;
   }
@@ -60,7 +62,6 @@ public enum Origine {
     return String.valueOf(value);
   }
 
-  @JsonCreator
   public static Origine fromValue(String value) {
     for (Origine b : Origine.values()) {
       if (b.value.equals(value)) {
@@ -68,6 +69,24 @@ public enum Origine {
       }
     }
     throw new IllegalArgumentException("Unexpected value '" + value + "'");
+  }
+
+  public static class Adapter extends TypeAdapter<Origine> {
+    @Override
+    public void write(final JsonWriter jsonWriter, final Origine enumeration) throws IOException {
+      jsonWriter.value(enumeration.getValue());
+    }
+
+    @Override
+    public Origine read(final JsonReader jsonReader) throws IOException {
+      String value = jsonReader.nextString();
+      return Origine.fromValue(value);
+    }
+  }
+
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+    String value = jsonElement.getAsString();
+    Origine.fromValue(value);
   }
 }
 

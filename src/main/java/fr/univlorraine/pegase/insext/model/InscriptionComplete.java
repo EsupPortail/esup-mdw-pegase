@@ -14,12 +14,11 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import fr.univlorraine.pegase.insext.model.AccordComplet;
 import fr.univlorraine.pegase.insext.model.Admission;
 import fr.univlorraine.pegase.insext.model.CibleInscription;
@@ -34,126 +33,146 @@ import fr.univlorraine.pegase.insext.model.SituationPrecedente;
 import fr.univlorraine.pegase.insext.model.SituationUniversitaire;
 import fr.univlorraine.pegase.insext.model.StatutInscriptionVoeu;
 import fr.univlorraine.pegase.insext.model.StatutPaiementVoeu;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * InscriptionComplete
  */
-@JsonPropertyOrder({
-  InscriptionComplete.JSON_PROPERTY_ID_APPRENANT,
-  InscriptionComplete.JSON_PROPERTY_CODE_ETABLISSEMENT,
-  InscriptionComplete.JSON_PROPERTY_CIBLE,
-  InscriptionComplete.JSON_PROPERTY_NO_CANDIDAT,
-  InscriptionComplete.JSON_PROPERTY_ORIGINE,
-  InscriptionComplete.JSON_PROPERTY_PRINCIPALE,
-  InscriptionComplete.JSON_PROPERTY_STATUT_INSCRIPTION,
-  InscriptionComplete.JSON_PROPERTY_CONTEXTE_INSCRIPTION,
-  InscriptionComplete.JSON_PROPERTY_ENSEIGNEMENT_A_DISTANCE_DEPUIS_LA_FRANCE,
-  InscriptionComplete.JSON_PROPERTY_STATUT_PAIEMENT,
-  InscriptionComplete.JSON_PROPERTY_REGIME_INSCRIPTION,
-  InscriptionComplete.JSON_PROPERTY_BOURSES_ET_AIDES,
-  InscriptionComplete.JSON_PROPERTY_SITUATION_PERSONNELLE_INSCRIPTION,
-  InscriptionComplete.JSON_PROPERTY_CVEC,
-  InscriptionComplete.JSON_PROPERTY_ADMISSION,
-  InscriptionComplete.JSON_PROPERTY_SITUATION_UNIVERSITAIRE,
-  InscriptionComplete.JSON_PROPERTY_SITUATION_PRECEDENTE,
-  InscriptionComplete.JSON_PROPERTY_CURSUS_PARALLELE,
-  InscriptionComplete.JSON_PROPERTY_ECOLE_DOCTORALE,
-  InscriptionComplete.JSON_PROPERTY_ACCORDS,
-  InscriptionComplete.JSON_PROPERTY_DATE_INSCRIPTION,
-  InscriptionComplete.JSON_PROPERTY_DATE_DERNIERE_MODIFICATION
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class InscriptionComplete {
-  public static final String JSON_PROPERTY_ID_APPRENANT = "idApprenant";
+  public static final String SERIALIZED_NAME_ID_APPRENANT = "idApprenant";
+  @SerializedName(SERIALIZED_NAME_ID_APPRENANT)
   @jakarta.annotation.Nullable
   private String idApprenant;
 
-  public static final String JSON_PROPERTY_CODE_ETABLISSEMENT = "codeEtablissement";
+  public static final String SERIALIZED_NAME_CODE_ETABLISSEMENT = "codeEtablissement";
+  @SerializedName(SERIALIZED_NAME_CODE_ETABLISSEMENT)
   @jakarta.annotation.Nonnull
   private String codeEtablissement;
 
-  public static final String JSON_PROPERTY_CIBLE = "cible";
+  public static final String SERIALIZED_NAME_CIBLE = "cible";
+  @SerializedName(SERIALIZED_NAME_CIBLE)
   @jakarta.annotation.Nonnull
   private CibleInscription cible;
 
-  public static final String JSON_PROPERTY_NO_CANDIDAT = "noCandidat";
+  public static final String SERIALIZED_NAME_NO_CANDIDAT = "noCandidat";
+  @SerializedName(SERIALIZED_NAME_NO_CANDIDAT)
   @jakarta.annotation.Nullable
   private String noCandidat;
 
-  public static final String JSON_PROPERTY_ORIGINE = "origine";
+  public static final String SERIALIZED_NAME_ORIGINE = "origine";
+  @SerializedName(SERIALIZED_NAME_ORIGINE)
   @jakarta.annotation.Nonnull
   private Origine origine;
 
-  public static final String JSON_PROPERTY_PRINCIPALE = "principale";
+  public static final String SERIALIZED_NAME_PRINCIPALE = "principale";
+  @SerializedName(SERIALIZED_NAME_PRINCIPALE)
   @jakarta.annotation.Nonnull
   private Boolean principale;
 
-  public static final String JSON_PROPERTY_STATUT_INSCRIPTION = "statutInscription";
+  public static final String SERIALIZED_NAME_STATUT_INSCRIPTION = "statutInscription";
+  @SerializedName(SERIALIZED_NAME_STATUT_INSCRIPTION)
   @jakarta.annotation.Nonnull
   private StatutInscriptionVoeu statutInscription;
 
-  public static final String JSON_PROPERTY_CONTEXTE_INSCRIPTION = "contexteInscription";
+  public static final String SERIALIZED_NAME_CONTEXTE_INSCRIPTION = "contexteInscription";
+  @SerializedName(SERIALIZED_NAME_CONTEXTE_INSCRIPTION)
   @jakarta.annotation.Nonnull
   private ContexteInscription contexteInscription;
 
-  public static final String JSON_PROPERTY_ENSEIGNEMENT_A_DISTANCE_DEPUIS_LA_FRANCE = "enseignementADistanceDepuisLaFrance";
+  public static final String SERIALIZED_NAME_ENSEIGNEMENT_A_DISTANCE_DEPUIS_LA_FRANCE = "enseignementADistanceDepuisLaFrance";
+  @SerializedName(SERIALIZED_NAME_ENSEIGNEMENT_A_DISTANCE_DEPUIS_LA_FRANCE)
   @jakarta.annotation.Nullable
   private Boolean enseignementADistanceDepuisLaFrance;
 
-  public static final String JSON_PROPERTY_STATUT_PAIEMENT = "statutPaiement";
+  public static final String SERIALIZED_NAME_STATUT_PAIEMENT = "statutPaiement";
+  @SerializedName(SERIALIZED_NAME_STATUT_PAIEMENT)
   @jakarta.annotation.Nonnull
   private StatutPaiementVoeu statutPaiement;
 
-  public static final String JSON_PROPERTY_REGIME_INSCRIPTION = "regimeInscription";
+  public static final String SERIALIZED_NAME_REGIME_INSCRIPTION = "regimeInscription";
+  @SerializedName(SERIALIZED_NAME_REGIME_INSCRIPTION)
   @jakarta.annotation.Nonnull
   private OccurrenceNomenclature regimeInscription;
 
-  public static final String JSON_PROPERTY_BOURSES_ET_AIDES = "boursesEtAides";
+  public static final String SERIALIZED_NAME_BOURSES_ET_AIDES = "boursesEtAides";
+  @SerializedName(SERIALIZED_NAME_BOURSES_ET_AIDES)
   @jakarta.annotation.Nonnull
   private List<OccurrenceNomenclature> boursesEtAides = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_SITUATION_PERSONNELLE_INSCRIPTION = "situationPersonnelleInscription";
+  public static final String SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION = "situationPersonnelleInscription";
+  @SerializedName(SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION)
   @jakarta.annotation.Nonnull
   private SituationPersonnelleInscription situationPersonnelleInscription;
 
-  public static final String JSON_PROPERTY_CVEC = "cvec";
+  public static final String SERIALIZED_NAME_CVEC = "cvec";
+  @SerializedName(SERIALIZED_NAME_CVEC)
   @jakarta.annotation.Nonnull
   private Cvec cvec;
 
-  public static final String JSON_PROPERTY_ADMISSION = "admission";
+  public static final String SERIALIZED_NAME_ADMISSION = "admission";
+  @SerializedName(SERIALIZED_NAME_ADMISSION)
   @jakarta.annotation.Nullable
   private Admission admission;
 
-  public static final String JSON_PROPERTY_SITUATION_UNIVERSITAIRE = "situationUniversitaire";
+  public static final String SERIALIZED_NAME_SITUATION_UNIVERSITAIRE = "situationUniversitaire";
+  @SerializedName(SERIALIZED_NAME_SITUATION_UNIVERSITAIRE)
   @jakarta.annotation.Nonnull
   private SituationUniversitaire situationUniversitaire;
 
-  public static final String JSON_PROPERTY_SITUATION_PRECEDENTE = "situationPrecedente";
+  public static final String SERIALIZED_NAME_SITUATION_PRECEDENTE = "situationPrecedente";
+  @SerializedName(SERIALIZED_NAME_SITUATION_PRECEDENTE)
   @jakarta.annotation.Nonnull
   private SituationPrecedente situationPrecedente;
 
-  public static final String JSON_PROPERTY_CURSUS_PARALLELE = "cursusParallele";
+  public static final String SERIALIZED_NAME_CURSUS_PARALLELE = "cursusParallele";
+  @SerializedName(SERIALIZED_NAME_CURSUS_PARALLELE)
   @jakarta.annotation.Nonnull
   private CursusParallele cursusParallele;
 
-  public static final String JSON_PROPERTY_ECOLE_DOCTORALE = "ecoleDoctorale";
+  public static final String SERIALIZED_NAME_ECOLE_DOCTORALE = "ecoleDoctorale";
+  @SerializedName(SERIALIZED_NAME_ECOLE_DOCTORALE)
   @jakarta.annotation.Nonnull
   private EcoleDoctorale ecoleDoctorale;
 
-  public static final String JSON_PROPERTY_ACCORDS = "accords";
+  public static final String SERIALIZED_NAME_ACCORDS = "accords";
+  @SerializedName(SERIALIZED_NAME_ACCORDS)
   @jakarta.annotation.Nonnull
   private List<AccordComplet> accords = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_DATE_INSCRIPTION = "dateInscription";
+  public static final String SERIALIZED_NAME_DATE_INSCRIPTION = "dateInscription";
+  @SerializedName(SERIALIZED_NAME_DATE_INSCRIPTION)
   @jakarta.annotation.Nonnull
   private String dateInscription;
 
-  public static final String JSON_PROPERTY_DATE_DERNIERE_MODIFICATION = "dateDerniereModification";
+  public static final String SERIALIZED_NAME_DATE_DERNIERE_MODIFICATION = "dateDerniereModification";
+  @SerializedName(SERIALIZED_NAME_DATE_DERNIERE_MODIFICATION)
   @jakarta.annotation.Nonnull
   private String dateDerniereModification;
 
@@ -161,7 +180,6 @@ public class InscriptionComplete {
   }
 
   public InscriptionComplete idApprenant(@jakarta.annotation.Nullable String idApprenant) {
-    
     this.idApprenant = idApprenant;
     return this;
   }
@@ -171,22 +189,16 @@ public class InscriptionComplete {
    * @return idApprenant
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ID_APPRENANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getIdApprenant() {
     return idApprenant;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ID_APPRENANT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setIdApprenant(@jakarta.annotation.Nullable String idApprenant) {
     this.idApprenant = idApprenant;
   }
 
+
   public InscriptionComplete codeEtablissement(@jakarta.annotation.Nonnull String codeEtablissement) {
-    
     this.codeEtablissement = codeEtablissement;
     return this;
   }
@@ -196,22 +208,16 @@ public class InscriptionComplete {
    * @return codeEtablissement
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CODE_ETABLISSEMENT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getCodeEtablissement() {
     return codeEtablissement;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CODE_ETABLISSEMENT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCodeEtablissement(@jakarta.annotation.Nonnull String codeEtablissement) {
     this.codeEtablissement = codeEtablissement;
   }
 
+
   public InscriptionComplete cible(@jakarta.annotation.Nonnull CibleInscription cible) {
-    
     this.cible = cible;
     return this;
   }
@@ -221,22 +227,16 @@ public class InscriptionComplete {
    * @return cible
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CIBLE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public CibleInscription getCible() {
     return cible;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CIBLE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCible(@jakarta.annotation.Nonnull CibleInscription cible) {
     this.cible = cible;
   }
 
+
   public InscriptionComplete noCandidat(@jakarta.annotation.Nullable String noCandidat) {
-    
     this.noCandidat = noCandidat;
     return this;
   }
@@ -246,22 +246,16 @@ public class InscriptionComplete {
    * @return noCandidat
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_NO_CANDIDAT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getNoCandidat() {
     return noCandidat;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_NO_CANDIDAT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setNoCandidat(@jakarta.annotation.Nullable String noCandidat) {
     this.noCandidat = noCandidat;
   }
 
+
   public InscriptionComplete origine(@jakarta.annotation.Nonnull Origine origine) {
-    
     this.origine = origine;
     return this;
   }
@@ -271,22 +265,16 @@ public class InscriptionComplete {
    * @return origine
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_ORIGINE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Origine getOrigine() {
     return origine;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ORIGINE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setOrigine(@jakarta.annotation.Nonnull Origine origine) {
     this.origine = origine;
   }
 
+
   public InscriptionComplete principale(@jakarta.annotation.Nonnull Boolean principale) {
-    
     this.principale = principale;
     return this;
   }
@@ -296,22 +284,16 @@ public class InscriptionComplete {
    * @return principale
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_PRINCIPALE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Boolean getPrincipale() {
     return principale;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PRINCIPALE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPrincipale(@jakarta.annotation.Nonnull Boolean principale) {
     this.principale = principale;
   }
 
+
   public InscriptionComplete statutInscription(@jakarta.annotation.Nonnull StatutInscriptionVoeu statutInscription) {
-    
     this.statutInscription = statutInscription;
     return this;
   }
@@ -321,22 +303,16 @@ public class InscriptionComplete {
    * @return statutInscription
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_STATUT_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public StatutInscriptionVoeu getStatutInscription() {
     return statutInscription;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_STATUT_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setStatutInscription(@jakarta.annotation.Nonnull StatutInscriptionVoeu statutInscription) {
     this.statutInscription = statutInscription;
   }
 
+
   public InscriptionComplete contexteInscription(@jakarta.annotation.Nonnull ContexteInscription contexteInscription) {
-    
     this.contexteInscription = contexteInscription;
     return this;
   }
@@ -346,22 +322,16 @@ public class InscriptionComplete {
    * @return contexteInscription
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CONTEXTE_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public ContexteInscription getContexteInscription() {
     return contexteInscription;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CONTEXTE_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setContexteInscription(@jakarta.annotation.Nonnull ContexteInscription contexteInscription) {
     this.contexteInscription = contexteInscription;
   }
 
+
   public InscriptionComplete enseignementADistanceDepuisLaFrance(@jakarta.annotation.Nullable Boolean enseignementADistanceDepuisLaFrance) {
-    
     this.enseignementADistanceDepuisLaFrance = enseignementADistanceDepuisLaFrance;
     return this;
   }
@@ -371,22 +341,16 @@ public class InscriptionComplete {
    * @return enseignementADistanceDepuisLaFrance
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ENSEIGNEMENT_A_DISTANCE_DEPUIS_LA_FRANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Boolean getEnseignementADistanceDepuisLaFrance() {
     return enseignementADistanceDepuisLaFrance;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ENSEIGNEMENT_A_DISTANCE_DEPUIS_LA_FRANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setEnseignementADistanceDepuisLaFrance(@jakarta.annotation.Nullable Boolean enseignementADistanceDepuisLaFrance) {
     this.enseignementADistanceDepuisLaFrance = enseignementADistanceDepuisLaFrance;
   }
 
+
   public InscriptionComplete statutPaiement(@jakarta.annotation.Nonnull StatutPaiementVoeu statutPaiement) {
-    
     this.statutPaiement = statutPaiement;
     return this;
   }
@@ -396,22 +360,16 @@ public class InscriptionComplete {
    * @return statutPaiement
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_STATUT_PAIEMENT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public StatutPaiementVoeu getStatutPaiement() {
     return statutPaiement;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_STATUT_PAIEMENT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setStatutPaiement(@jakarta.annotation.Nonnull StatutPaiementVoeu statutPaiement) {
     this.statutPaiement = statutPaiement;
   }
 
+
   public InscriptionComplete regimeInscription(@jakarta.annotation.Nonnull OccurrenceNomenclature regimeInscription) {
-    
     this.regimeInscription = regimeInscription;
     return this;
   }
@@ -421,22 +379,16 @@ public class InscriptionComplete {
    * @return regimeInscription
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_REGIME_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public OccurrenceNomenclature getRegimeInscription() {
     return regimeInscription;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_REGIME_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setRegimeInscription(@jakarta.annotation.Nonnull OccurrenceNomenclature regimeInscription) {
     this.regimeInscription = regimeInscription;
   }
 
+
   public InscriptionComplete boursesEtAides(@jakarta.annotation.Nonnull List<OccurrenceNomenclature> boursesEtAides) {
-    
     this.boursesEtAides = boursesEtAides;
     return this;
   }
@@ -454,22 +406,16 @@ public class InscriptionComplete {
    * @return boursesEtAides
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_BOURSES_ET_AIDES, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public List<OccurrenceNomenclature> getBoursesEtAides() {
     return boursesEtAides;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_BOURSES_ET_AIDES, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setBoursesEtAides(@jakarta.annotation.Nonnull List<OccurrenceNomenclature> boursesEtAides) {
     this.boursesEtAides = boursesEtAides;
   }
 
+
   public InscriptionComplete situationPersonnelleInscription(@jakarta.annotation.Nonnull SituationPersonnelleInscription situationPersonnelleInscription) {
-    
     this.situationPersonnelleInscription = situationPersonnelleInscription;
     return this;
   }
@@ -479,22 +425,16 @@ public class InscriptionComplete {
    * @return situationPersonnelleInscription
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_PERSONNELLE_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public SituationPersonnelleInscription getSituationPersonnelleInscription() {
     return situationPersonnelleInscription;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_PERSONNELLE_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSituationPersonnelleInscription(@jakarta.annotation.Nonnull SituationPersonnelleInscription situationPersonnelleInscription) {
     this.situationPersonnelleInscription = situationPersonnelleInscription;
   }
 
+
   public InscriptionComplete cvec(@jakarta.annotation.Nonnull Cvec cvec) {
-    
     this.cvec = cvec;
     return this;
   }
@@ -504,22 +444,16 @@ public class InscriptionComplete {
    * @return cvec
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CVEC, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public Cvec getCvec() {
     return cvec;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CVEC, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCvec(@jakarta.annotation.Nonnull Cvec cvec) {
     this.cvec = cvec;
   }
 
+
   public InscriptionComplete admission(@jakarta.annotation.Nullable Admission admission) {
-    
     this.admission = admission;
     return this;
   }
@@ -529,22 +463,16 @@ public class InscriptionComplete {
    * @return admission
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ADMISSION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Admission getAdmission() {
     return admission;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ADMISSION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAdmission(@jakarta.annotation.Nullable Admission admission) {
     this.admission = admission;
   }
 
+
   public InscriptionComplete situationUniversitaire(@jakarta.annotation.Nonnull SituationUniversitaire situationUniversitaire) {
-    
     this.situationUniversitaire = situationUniversitaire;
     return this;
   }
@@ -554,22 +482,16 @@ public class InscriptionComplete {
    * @return situationUniversitaire
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_UNIVERSITAIRE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public SituationUniversitaire getSituationUniversitaire() {
     return situationUniversitaire;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_UNIVERSITAIRE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSituationUniversitaire(@jakarta.annotation.Nonnull SituationUniversitaire situationUniversitaire) {
     this.situationUniversitaire = situationUniversitaire;
   }
 
+
   public InscriptionComplete situationPrecedente(@jakarta.annotation.Nonnull SituationPrecedente situationPrecedente) {
-    
     this.situationPrecedente = situationPrecedente;
     return this;
   }
@@ -579,22 +501,16 @@ public class InscriptionComplete {
    * @return situationPrecedente
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_PRECEDENTE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public SituationPrecedente getSituationPrecedente() {
     return situationPrecedente;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_PRECEDENTE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSituationPrecedente(@jakarta.annotation.Nonnull SituationPrecedente situationPrecedente) {
     this.situationPrecedente = situationPrecedente;
   }
 
+
   public InscriptionComplete cursusParallele(@jakarta.annotation.Nonnull CursusParallele cursusParallele) {
-    
     this.cursusParallele = cursusParallele;
     return this;
   }
@@ -604,22 +520,16 @@ public class InscriptionComplete {
    * @return cursusParallele
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CURSUS_PARALLELE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public CursusParallele getCursusParallele() {
     return cursusParallele;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CURSUS_PARALLELE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCursusParallele(@jakarta.annotation.Nonnull CursusParallele cursusParallele) {
     this.cursusParallele = cursusParallele;
   }
 
+
   public InscriptionComplete ecoleDoctorale(@jakarta.annotation.Nonnull EcoleDoctorale ecoleDoctorale) {
-    
     this.ecoleDoctorale = ecoleDoctorale;
     return this;
   }
@@ -629,22 +539,16 @@ public class InscriptionComplete {
    * @return ecoleDoctorale
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_ECOLE_DOCTORALE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public EcoleDoctorale getEcoleDoctorale() {
     return ecoleDoctorale;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ECOLE_DOCTORALE, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEcoleDoctorale(@jakarta.annotation.Nonnull EcoleDoctorale ecoleDoctorale) {
     this.ecoleDoctorale = ecoleDoctorale;
   }
 
+
   public InscriptionComplete accords(@jakarta.annotation.Nonnull List<AccordComplet> accords) {
-    
     this.accords = accords;
     return this;
   }
@@ -662,22 +566,16 @@ public class InscriptionComplete {
    * @return accords
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_ACCORDS, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public List<AccordComplet> getAccords() {
     return accords;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ACCORDS, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAccords(@jakarta.annotation.Nonnull List<AccordComplet> accords) {
     this.accords = accords;
   }
 
+
   public InscriptionComplete dateInscription(@jakarta.annotation.Nonnull String dateInscription) {
-    
     this.dateInscription = dateInscription;
     return this;
   }
@@ -687,22 +585,16 @@ public class InscriptionComplete {
    * @return dateInscription
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_DATE_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getDateInscription() {
     return dateInscription;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DATE_INSCRIPTION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDateInscription(@jakarta.annotation.Nonnull String dateInscription) {
     this.dateInscription = dateInscription;
   }
 
+
   public InscriptionComplete dateDerniereModification(@jakarta.annotation.Nonnull String dateDerniereModification) {
-    
     this.dateDerniereModification = dateDerniereModification;
     return this;
   }
@@ -712,19 +604,14 @@ public class InscriptionComplete {
    * @return dateDerniereModification
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_DATE_DERNIERE_MODIFICATION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
   public String getDateDerniereModification() {
     return dateDerniereModification;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DATE_DERNIERE_MODIFICATION, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDateDerniereModification(@jakarta.annotation.Nonnull String dateDerniereModification) {
     this.dateDerniereModification = dateDerniereModification;
   }
+
 
 
   @Override
@@ -806,5 +693,164 @@ public class InscriptionComplete {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("idApprenant", "codeEtablissement", "cible", "noCandidat", "origine", "principale", "statutInscription", "contexteInscription", "enseignementADistanceDepuisLaFrance", "statutPaiement", "regimeInscription", "boursesEtAides", "situationPersonnelleInscription", "cvec", "admission", "situationUniversitaire", "situationPrecedente", "cursusParallele", "ecoleDoctorale", "accords", "dateInscription", "dateDerniereModification"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("codeEtablissement", "cible", "origine", "principale", "statutInscription", "contexteInscription", "statutPaiement", "regimeInscription", "boursesEtAides", "situationPersonnelleInscription", "cvec", "situationUniversitaire", "situationPrecedente", "cursusParallele", "ecoleDoctorale", "accords", "dateInscription", "dateDerniereModification"));
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to InscriptionComplete
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!InscriptionComplete.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in InscriptionComplete is not found in the empty JSON string", InscriptionComplete.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!InscriptionComplete.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `InscriptionComplete` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+
+      // check to make sure all required properties/fields are present in the JSON string
+      for (String requiredField : InscriptionComplete.openapiRequiredFields) {
+        if (jsonElement.getAsJsonObject().get(requiredField) == null) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("idApprenant") != null && !jsonObj.get("idApprenant").isJsonNull()) && !jsonObj.get("idApprenant").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `idApprenant` to be a primitive type in the JSON string but got `%s`", jsonObj.get("idApprenant").toString()));
+      }
+      if (!jsonObj.get("codeEtablissement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `codeEtablissement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codeEtablissement").toString()));
+      }
+      // validate the required field `cible`
+      CibleInscription.validateJsonElement(jsonObj.get("cible"));
+      if ((jsonObj.get("noCandidat") != null && !jsonObj.get("noCandidat").isJsonNull()) && !jsonObj.get("noCandidat").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `noCandidat` to be a primitive type in the JSON string but got `%s`", jsonObj.get("noCandidat").toString()));
+      }
+      // validate the required field `origine`
+      Origine.validateJsonElement(jsonObj.get("origine"));
+      // validate the required field `statutInscription`
+      StatutInscriptionVoeu.validateJsonElement(jsonObj.get("statutInscription"));
+      // validate the required field `contexteInscription`
+      ContexteInscription.validateJsonElement(jsonObj.get("contexteInscription"));
+      // validate the required field `statutPaiement`
+      StatutPaiementVoeu.validateJsonElement(jsonObj.get("statutPaiement"));
+      // validate the required field `regimeInscription`
+      OccurrenceNomenclature.validateJsonElement(jsonObj.get("regimeInscription"));
+      if (jsonObj.get("boursesEtAides") != null) {
+        if (!jsonObj.get("boursesEtAides").isJsonArray()) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `boursesEtAides` to be an array in the JSON string but got `%s`", jsonObj.get("boursesEtAides").toString()));
+        }
+        JsonArray jsonArrayboursesEtAides = jsonObj.getAsJsonArray("boursesEtAides");
+        // validate the required field `boursesEtAides` (array)
+        for (int i = 0; i < jsonArrayboursesEtAides.size(); i++) {
+          OccurrenceNomenclature.validateJsonElement(jsonArrayboursesEtAides.get(i));
+        }
+      }
+      // validate the required field `situationPersonnelleInscription`
+      SituationPersonnelleInscription.validateJsonElement(jsonObj.get("situationPersonnelleInscription"));
+      // validate the required field `cvec`
+      Cvec.validateJsonElement(jsonObj.get("cvec"));
+      // validate the optional field `admission`
+      if (jsonObj.get("admission") != null && !jsonObj.get("admission").isJsonNull()) {
+        Admission.validateJsonElement(jsonObj.get("admission"));
+      }
+      // validate the required field `situationUniversitaire`
+      SituationUniversitaire.validateJsonElement(jsonObj.get("situationUniversitaire"));
+      // validate the required field `situationPrecedente`
+      SituationPrecedente.validateJsonElement(jsonObj.get("situationPrecedente"));
+      // validate the required field `cursusParallele`
+      CursusParallele.validateJsonElement(jsonObj.get("cursusParallele"));
+      // validate the required field `ecoleDoctorale`
+      EcoleDoctorale.validateJsonElement(jsonObj.get("ecoleDoctorale"));
+      if (jsonObj.get("accords") != null) {
+        if (!jsonObj.get("accords").isJsonArray()) {
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `accords` to be an array in the JSON string but got `%s`", jsonObj.get("accords").toString()));
+        }
+        JsonArray jsonArrayaccords = jsonObj.getAsJsonArray("accords");
+        // validate the required field `accords` (array)
+        for (int i = 0; i < jsonArrayaccords.size(); i++) {
+          AccordComplet.validateJsonElement(jsonArrayaccords.get(i));
+        }
+      }
+      if (!jsonObj.get("dateInscription").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dateInscription` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateInscription").toString()));
+      }
+      if (!jsonObj.get("dateDerniereModification").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dateDerniereModification` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateDerniereModification").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!InscriptionComplete.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'InscriptionComplete' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<InscriptionComplete> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(InscriptionComplete.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<InscriptionComplete>() {
+           @Override
+           public void write(JsonWriter out, InscriptionComplete value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public InscriptionComplete read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of InscriptionComplete given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of InscriptionComplete
+   * @throws IOException if the JSON string is invalid with respect to InscriptionComplete
+   */
+  public static InscriptionComplete fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, InscriptionComplete.class);
+  }
+
+  /**
+   * Convert an instance of InscriptionComplete to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

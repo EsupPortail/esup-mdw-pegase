@@ -14,136 +14,156 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import fr.univlorraine.pegase.insext.model.StatutIne;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * Bac
  */
-@JsonPropertyOrder({
-  Bac.JSON_PROPERTY_TITRE_ACCES,
-  Bac.JSON_PROPERTY_ANNEE_OBTENTION,
-  Bac.JSON_PROPERTY_SERIE,
-  Bac.JSON_PROPERTY_LIBELLE_SERIE,
-  Bac.JSON_PROPERTY_PREMIERE_SPECIALITE_BAC,
-  Bac.JSON_PROPERTY_LIBELLE_PREMIERE_SPECIALITE_BAC,
-  Bac.JSON_PROPERTY_DEUXIEME_SPECIALITE_BAC,
-  Bac.JSON_PROPERTY_LIBELLE_DEUXIEME_SPECIALITE_BAC,
-  Bac.JSON_PROPERTY_MENTION,
-  Bac.JSON_PROPERTY_LIBELLE_MENTION,
-  Bac.JSON_PROPERTY_TYPE_ETABLISSEMENT,
-  Bac.JSON_PROPERTY_PAYS,
-  Bac.JSON_PROPERTY_LIBELLE_PAYS,
-  Bac.JSON_PROPERTY_DEPARTEMENT,
-  Bac.JSON_PROPERTY_LIBELLE_DEPARTEMENT,
-  Bac.JSON_PROPERTY_ETABLISSEMENT,
-  Bac.JSON_PROPERTY_INE,
-  Bac.JSON_PROPERTY_STATUT_INE,
-  Bac.JSON_PROPERTY_CODE_ERREUR_INE,
-  Bac.JSON_PROPERTY_MESSAGE_ERREUR_INE,
-  Bac.JSON_PROPERTY_DATE_DERNIER_APPEL_INES,
-  Bac.JSON_PROPERTY_ETABLISSEMENT_LIBRE,
-  Bac.JSON_PROPERTY_DETAIL_TITRE
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class Bac {
-  public static final String JSON_PROPERTY_TITRE_ACCES = "titreAcces";
+  public static final String SERIALIZED_NAME_TITRE_ACCES = "titreAcces";
+  @SerializedName(SERIALIZED_NAME_TITRE_ACCES)
   @jakarta.annotation.Nullable
   private String titreAcces;
 
-  public static final String JSON_PROPERTY_ANNEE_OBTENTION = "anneeObtention";
+  public static final String SERIALIZED_NAME_ANNEE_OBTENTION = "anneeObtention";
+  @SerializedName(SERIALIZED_NAME_ANNEE_OBTENTION)
   @jakarta.annotation.Nullable
   private String anneeObtention;
 
-  public static final String JSON_PROPERTY_SERIE = "serie";
+  public static final String SERIALIZED_NAME_SERIE = "serie";
+  @SerializedName(SERIALIZED_NAME_SERIE)
   @jakarta.annotation.Nullable
   private String serie;
 
-  public static final String JSON_PROPERTY_LIBELLE_SERIE = "libelleSerie";
+  public static final String SERIALIZED_NAME_LIBELLE_SERIE = "libelleSerie";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_SERIE)
   @jakarta.annotation.Nullable
   private String libelleSerie;
 
-  public static final String JSON_PROPERTY_PREMIERE_SPECIALITE_BAC = "premiereSpecialiteBac";
+  public static final String SERIALIZED_NAME_PREMIERE_SPECIALITE_BAC = "premiereSpecialiteBac";
+  @SerializedName(SERIALIZED_NAME_PREMIERE_SPECIALITE_BAC)
   @jakarta.annotation.Nullable
   private String premiereSpecialiteBac;
 
-  public static final String JSON_PROPERTY_LIBELLE_PREMIERE_SPECIALITE_BAC = "libellePremiereSpecialiteBac";
+  public static final String SERIALIZED_NAME_LIBELLE_PREMIERE_SPECIALITE_BAC = "libellePremiereSpecialiteBac";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_PREMIERE_SPECIALITE_BAC)
   @jakarta.annotation.Nullable
   private String libellePremiereSpecialiteBac;
 
-  public static final String JSON_PROPERTY_DEUXIEME_SPECIALITE_BAC = "deuxiemeSpecialiteBac";
+  public static final String SERIALIZED_NAME_DEUXIEME_SPECIALITE_BAC = "deuxiemeSpecialiteBac";
+  @SerializedName(SERIALIZED_NAME_DEUXIEME_SPECIALITE_BAC)
   @jakarta.annotation.Nullable
   private String deuxiemeSpecialiteBac;
 
-  public static final String JSON_PROPERTY_LIBELLE_DEUXIEME_SPECIALITE_BAC = "libelleDeuxiemeSpecialiteBac";
+  public static final String SERIALIZED_NAME_LIBELLE_DEUXIEME_SPECIALITE_BAC = "libelleDeuxiemeSpecialiteBac";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_DEUXIEME_SPECIALITE_BAC)
   @jakarta.annotation.Nullable
   private String libelleDeuxiemeSpecialiteBac;
 
-  public static final String JSON_PROPERTY_MENTION = "mention";
+  public static final String SERIALIZED_NAME_MENTION = "mention";
+  @SerializedName(SERIALIZED_NAME_MENTION)
   @jakarta.annotation.Nullable
   private String mention;
 
-  public static final String JSON_PROPERTY_LIBELLE_MENTION = "libelleMention";
+  public static final String SERIALIZED_NAME_LIBELLE_MENTION = "libelleMention";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_MENTION)
   @jakarta.annotation.Nullable
   private String libelleMention;
 
-  public static final String JSON_PROPERTY_TYPE_ETABLISSEMENT = "typeEtablissement";
+  public static final String SERIALIZED_NAME_TYPE_ETABLISSEMENT = "typeEtablissement";
+  @SerializedName(SERIALIZED_NAME_TYPE_ETABLISSEMENT)
   @jakarta.annotation.Nullable
   private String typeEtablissement;
 
-  public static final String JSON_PROPERTY_PAYS = "pays";
+  public static final String SERIALIZED_NAME_PAYS = "pays";
+  @SerializedName(SERIALIZED_NAME_PAYS)
   @jakarta.annotation.Nullable
   private String pays;
 
-  public static final String JSON_PROPERTY_LIBELLE_PAYS = "libellePays";
+  public static final String SERIALIZED_NAME_LIBELLE_PAYS = "libellePays";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_PAYS)
   @jakarta.annotation.Nullable
   private String libellePays;
 
-  public static final String JSON_PROPERTY_DEPARTEMENT = "departement";
+  public static final String SERIALIZED_NAME_DEPARTEMENT = "departement";
+  @SerializedName(SERIALIZED_NAME_DEPARTEMENT)
   @jakarta.annotation.Nullable
   private String departement;
 
-  public static final String JSON_PROPERTY_LIBELLE_DEPARTEMENT = "libelleDepartement";
+  public static final String SERIALIZED_NAME_LIBELLE_DEPARTEMENT = "libelleDepartement";
+  @SerializedName(SERIALIZED_NAME_LIBELLE_DEPARTEMENT)
   @jakarta.annotation.Nullable
   private String libelleDepartement;
 
-  public static final String JSON_PROPERTY_ETABLISSEMENT = "etablissement";
+  public static final String SERIALIZED_NAME_ETABLISSEMENT = "etablissement";
+  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT)
   @jakarta.annotation.Nullable
   private String etablissement;
 
-  public static final String JSON_PROPERTY_INE = "ine";
+  public static final String SERIALIZED_NAME_INE = "ine";
+  @SerializedName(SERIALIZED_NAME_INE)
   @jakarta.annotation.Nullable
   private String ine;
 
-  public static final String JSON_PROPERTY_STATUT_INE = "statutIne";
+  public static final String SERIALIZED_NAME_STATUT_INE = "statutIne";
+  @SerializedName(SERIALIZED_NAME_STATUT_INE)
   @jakarta.annotation.Nullable
   private StatutIne statutIne;
 
-  public static final String JSON_PROPERTY_CODE_ERREUR_INE = "codeErreurIne";
+  public static final String SERIALIZED_NAME_CODE_ERREUR_INE = "codeErreurIne";
+  @SerializedName(SERIALIZED_NAME_CODE_ERREUR_INE)
   @jakarta.annotation.Nullable
   private String codeErreurIne;
 
-  public static final String JSON_PROPERTY_MESSAGE_ERREUR_INE = "messageErreurIne";
+  public static final String SERIALIZED_NAME_MESSAGE_ERREUR_INE = "messageErreurIne";
+  @SerializedName(SERIALIZED_NAME_MESSAGE_ERREUR_INE)
   @jakarta.annotation.Nullable
   private String messageErreurIne;
 
-  public static final String JSON_PROPERTY_DATE_DERNIER_APPEL_INES = "dateDernierAppelInes";
+  public static final String SERIALIZED_NAME_DATE_DERNIER_APPEL_INES = "dateDernierAppelInes";
+  @SerializedName(SERIALIZED_NAME_DATE_DERNIER_APPEL_INES)
   @jakarta.annotation.Nullable
   private Date dateDernierAppelInes;
 
-  public static final String JSON_PROPERTY_ETABLISSEMENT_LIBRE = "etablissementLibre";
+  public static final String SERIALIZED_NAME_ETABLISSEMENT_LIBRE = "etablissementLibre";
+  @SerializedName(SERIALIZED_NAME_ETABLISSEMENT_LIBRE)
   @jakarta.annotation.Nullable
   private String etablissementLibre;
 
-  public static final String JSON_PROPERTY_DETAIL_TITRE = "detailTitre";
+  public static final String SERIALIZED_NAME_DETAIL_TITRE = "detailTitre";
+  @SerializedName(SERIALIZED_NAME_DETAIL_TITRE)
   @jakarta.annotation.Nullable
   private String detailTitre;
 
@@ -151,7 +171,6 @@ public class Bac {
   }
 
   public Bac titreAcces(@jakarta.annotation.Nullable String titreAcces) {
-    
     this.titreAcces = titreAcces;
     return this;
   }
@@ -161,22 +180,16 @@ public class Bac {
    * @return titreAcces
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_TITRE_ACCES, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getTitreAcces() {
     return titreAcces;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TITRE_ACCES, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setTitreAcces(@jakarta.annotation.Nullable String titreAcces) {
     this.titreAcces = titreAcces;
   }
 
+
   public Bac anneeObtention(@jakarta.annotation.Nullable String anneeObtention) {
-    
     this.anneeObtention = anneeObtention;
     return this;
   }
@@ -186,22 +199,16 @@ public class Bac {
    * @return anneeObtention
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_OBTENTION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getAnneeObtention() {
     return anneeObtention;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ANNEE_OBTENTION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAnneeObtention(@jakarta.annotation.Nullable String anneeObtention) {
     this.anneeObtention = anneeObtention;
   }
 
+
   public Bac serie(@jakarta.annotation.Nullable String serie) {
-    
     this.serie = serie;
     return this;
   }
@@ -211,22 +218,16 @@ public class Bac {
    * @return serie
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_SERIE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getSerie() {
     return serie;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_SERIE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setSerie(@jakarta.annotation.Nullable String serie) {
     this.serie = serie;
   }
 
+
   public Bac libelleSerie(@jakarta.annotation.Nullable String libelleSerie) {
-    
     this.libelleSerie = libelleSerie;
     return this;
   }
@@ -236,22 +237,16 @@ public class Bac {
    * @return libelleSerie
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_SERIE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getLibelleSerie() {
     return libelleSerie;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_SERIE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setLibelleSerie(@jakarta.annotation.Nullable String libelleSerie) {
     this.libelleSerie = libelleSerie;
   }
 
+
   public Bac premiereSpecialiteBac(@jakarta.annotation.Nullable String premiereSpecialiteBac) {
-    
     this.premiereSpecialiteBac = premiereSpecialiteBac;
     return this;
   }
@@ -261,22 +256,16 @@ public class Bac {
    * @return premiereSpecialiteBac
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PREMIERE_SPECIALITE_BAC, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getPremiereSpecialiteBac() {
     return premiereSpecialiteBac;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PREMIERE_SPECIALITE_BAC, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setPremiereSpecialiteBac(@jakarta.annotation.Nullable String premiereSpecialiteBac) {
     this.premiereSpecialiteBac = premiereSpecialiteBac;
   }
 
+
   public Bac libellePremiereSpecialiteBac(@jakarta.annotation.Nullable String libellePremiereSpecialiteBac) {
-    
     this.libellePremiereSpecialiteBac = libellePremiereSpecialiteBac;
     return this;
   }
@@ -286,22 +275,16 @@ public class Bac {
    * @return libellePremiereSpecialiteBac
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_PREMIERE_SPECIALITE_BAC, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getLibellePremiereSpecialiteBac() {
     return libellePremiereSpecialiteBac;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_PREMIERE_SPECIALITE_BAC, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setLibellePremiereSpecialiteBac(@jakarta.annotation.Nullable String libellePremiereSpecialiteBac) {
     this.libellePremiereSpecialiteBac = libellePremiereSpecialiteBac;
   }
 
+
   public Bac deuxiemeSpecialiteBac(@jakarta.annotation.Nullable String deuxiemeSpecialiteBac) {
-    
     this.deuxiemeSpecialiteBac = deuxiemeSpecialiteBac;
     return this;
   }
@@ -311,22 +294,16 @@ public class Bac {
    * @return deuxiemeSpecialiteBac
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DEUXIEME_SPECIALITE_BAC, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getDeuxiemeSpecialiteBac() {
     return deuxiemeSpecialiteBac;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DEUXIEME_SPECIALITE_BAC, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDeuxiemeSpecialiteBac(@jakarta.annotation.Nullable String deuxiemeSpecialiteBac) {
     this.deuxiemeSpecialiteBac = deuxiemeSpecialiteBac;
   }
 
+
   public Bac libelleDeuxiemeSpecialiteBac(@jakarta.annotation.Nullable String libelleDeuxiemeSpecialiteBac) {
-    
     this.libelleDeuxiemeSpecialiteBac = libelleDeuxiemeSpecialiteBac;
     return this;
   }
@@ -336,22 +313,16 @@ public class Bac {
    * @return libelleDeuxiemeSpecialiteBac
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_DEUXIEME_SPECIALITE_BAC, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getLibelleDeuxiemeSpecialiteBac() {
     return libelleDeuxiemeSpecialiteBac;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_DEUXIEME_SPECIALITE_BAC, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setLibelleDeuxiemeSpecialiteBac(@jakarta.annotation.Nullable String libelleDeuxiemeSpecialiteBac) {
     this.libelleDeuxiemeSpecialiteBac = libelleDeuxiemeSpecialiteBac;
   }
 
+
   public Bac mention(@jakarta.annotation.Nullable String mention) {
-    
     this.mention = mention;
     return this;
   }
@@ -361,22 +332,16 @@ public class Bac {
    * @return mention
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_MENTION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getMention() {
     return mention;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_MENTION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setMention(@jakarta.annotation.Nullable String mention) {
     this.mention = mention;
   }
 
+
   public Bac libelleMention(@jakarta.annotation.Nullable String libelleMention) {
-    
     this.libelleMention = libelleMention;
     return this;
   }
@@ -386,22 +351,16 @@ public class Bac {
    * @return libelleMention
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_MENTION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getLibelleMention() {
     return libelleMention;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_MENTION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setLibelleMention(@jakarta.annotation.Nullable String libelleMention) {
     this.libelleMention = libelleMention;
   }
 
+
   public Bac typeEtablissement(@jakarta.annotation.Nullable String typeEtablissement) {
-    
     this.typeEtablissement = typeEtablissement;
     return this;
   }
@@ -411,22 +370,16 @@ public class Bac {
    * @return typeEtablissement
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_TYPE_ETABLISSEMENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getTypeEtablissement() {
     return typeEtablissement;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_TYPE_ETABLISSEMENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setTypeEtablissement(@jakarta.annotation.Nullable String typeEtablissement) {
     this.typeEtablissement = typeEtablissement;
   }
 
+
   public Bac pays(@jakarta.annotation.Nullable String pays) {
-    
     this.pays = pays;
     return this;
   }
@@ -436,22 +389,16 @@ public class Bac {
    * @return pays
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PAYS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getPays() {
     return pays;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_PAYS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setPays(@jakarta.annotation.Nullable String pays) {
     this.pays = pays;
   }
 
+
   public Bac libellePays(@jakarta.annotation.Nullable String libellePays) {
-    
     this.libellePays = libellePays;
     return this;
   }
@@ -461,22 +408,16 @@ public class Bac {
    * @return libellePays
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_PAYS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getLibellePays() {
     return libellePays;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_PAYS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setLibellePays(@jakarta.annotation.Nullable String libellePays) {
     this.libellePays = libellePays;
   }
 
+
   public Bac departement(@jakarta.annotation.Nullable String departement) {
-    
     this.departement = departement;
     return this;
   }
@@ -486,22 +427,16 @@ public class Bac {
    * @return departement
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DEPARTEMENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getDepartement() {
     return departement;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DEPARTEMENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDepartement(@jakarta.annotation.Nullable String departement) {
     this.departement = departement;
   }
 
+
   public Bac libelleDepartement(@jakarta.annotation.Nullable String libelleDepartement) {
-    
     this.libelleDepartement = libelleDepartement;
     return this;
   }
@@ -511,22 +446,16 @@ public class Bac {
    * @return libelleDepartement
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_DEPARTEMENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getLibelleDepartement() {
     return libelleDepartement;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_LIBELLE_DEPARTEMENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setLibelleDepartement(@jakarta.annotation.Nullable String libelleDepartement) {
     this.libelleDepartement = libelleDepartement;
   }
 
+
   public Bac etablissement(@jakarta.annotation.Nullable String etablissement) {
-    
     this.etablissement = etablissement;
     return this;
   }
@@ -536,22 +465,16 @@ public class Bac {
    * @return etablissement
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ETABLISSEMENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getEtablissement() {
     return etablissement;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ETABLISSEMENT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setEtablissement(@jakarta.annotation.Nullable String etablissement) {
     this.etablissement = etablissement;
   }
 
+
   public Bac ine(@jakarta.annotation.Nullable String ine) {
-    
     this.ine = ine;
     return this;
   }
@@ -561,22 +484,16 @@ public class Bac {
    * @return ine
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_INE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getIne() {
     return ine;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_INE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setIne(@jakarta.annotation.Nullable String ine) {
     this.ine = ine;
   }
 
+
   public Bac statutIne(@jakarta.annotation.Nullable StatutIne statutIne) {
-    
     this.statutIne = statutIne;
     return this;
   }
@@ -586,22 +503,16 @@ public class Bac {
    * @return statutIne
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_STATUT_INE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public StatutIne getStatutIne() {
     return statutIne;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_STATUT_INE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setStatutIne(@jakarta.annotation.Nullable StatutIne statutIne) {
     this.statutIne = statutIne;
   }
 
+
   public Bac codeErreurIne(@jakarta.annotation.Nullable String codeErreurIne) {
-    
     this.codeErreurIne = codeErreurIne;
     return this;
   }
@@ -611,22 +522,16 @@ public class Bac {
    * @return codeErreurIne
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CODE_ERREUR_INE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getCodeErreurIne() {
     return codeErreurIne;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_CODE_ERREUR_INE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setCodeErreurIne(@jakarta.annotation.Nullable String codeErreurIne) {
     this.codeErreurIne = codeErreurIne;
   }
 
+
   public Bac messageErreurIne(@jakarta.annotation.Nullable String messageErreurIne) {
-    
     this.messageErreurIne = messageErreurIne;
     return this;
   }
@@ -636,22 +541,16 @@ public class Bac {
    * @return messageErreurIne
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_MESSAGE_ERREUR_INE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getMessageErreurIne() {
     return messageErreurIne;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_MESSAGE_ERREUR_INE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setMessageErreurIne(@jakarta.annotation.Nullable String messageErreurIne) {
     this.messageErreurIne = messageErreurIne;
   }
 
+
   public Bac dateDernierAppelInes(@jakarta.annotation.Nullable Date dateDernierAppelInes) {
-    
     this.dateDernierAppelInes = dateDernierAppelInes;
     return this;
   }
@@ -661,22 +560,16 @@ public class Bac {
    * @return dateDernierAppelInes
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DATE_DERNIER_APPEL_INES, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Date getDateDernierAppelInes() {
     return dateDernierAppelInes;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DATE_DERNIER_APPEL_INES, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDateDernierAppelInes(@jakarta.annotation.Nullable Date dateDernierAppelInes) {
     this.dateDernierAppelInes = dateDernierAppelInes;
   }
 
+
   public Bac etablissementLibre(@jakarta.annotation.Nullable String etablissementLibre) {
-    
     this.etablissementLibre = etablissementLibre;
     return this;
   }
@@ -686,22 +579,16 @@ public class Bac {
    * @return etablissementLibre
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ETABLISSEMENT_LIBRE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getEtablissementLibre() {
     return etablissementLibre;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ETABLISSEMENT_LIBRE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setEtablissementLibre(@jakarta.annotation.Nullable String etablissementLibre) {
     this.etablissementLibre = etablissementLibre;
   }
 
+
   public Bac detailTitre(@jakarta.annotation.Nullable String detailTitre) {
-    
     this.detailTitre = detailTitre;
     return this;
   }
@@ -711,19 +598,14 @@ public class Bac {
    * @return detailTitre
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DETAIL_TITRE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getDetailTitre() {
     return detailTitre;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_DETAIL_TITRE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDetailTitre(@jakarta.annotation.Nullable String detailTitre) {
     this.detailTitre = detailTitre;
   }
+
 
 
   @Override
@@ -807,5 +689,161 @@ public class Bac {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("titreAcces", "anneeObtention", "serie", "libelleSerie", "premiereSpecialiteBac", "libellePremiereSpecialiteBac", "deuxiemeSpecialiteBac", "libelleDeuxiemeSpecialiteBac", "mention", "libelleMention", "typeEtablissement", "pays", "libellePays", "departement", "libelleDepartement", "etablissement", "ine", "statutIne", "codeErreurIne", "messageErreurIne", "dateDernierAppelInes", "etablissementLibre", "detailTitre"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to Bac
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!Bac.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in Bac is not found in the empty JSON string", Bac.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!Bac.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `Bac` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("titreAcces") != null && !jsonObj.get("titreAcces").isJsonNull()) && !jsonObj.get("titreAcces").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `titreAcces` to be a primitive type in the JSON string but got `%s`", jsonObj.get("titreAcces").toString()));
+      }
+      if ((jsonObj.get("anneeObtention") != null && !jsonObj.get("anneeObtention").isJsonNull()) && !jsonObj.get("anneeObtention").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `anneeObtention` to be a primitive type in the JSON string but got `%s`", jsonObj.get("anneeObtention").toString()));
+      }
+      if ((jsonObj.get("serie") != null && !jsonObj.get("serie").isJsonNull()) && !jsonObj.get("serie").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `serie` to be a primitive type in the JSON string but got `%s`", jsonObj.get("serie").toString()));
+      }
+      if ((jsonObj.get("libelleSerie") != null && !jsonObj.get("libelleSerie").isJsonNull()) && !jsonObj.get("libelleSerie").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleSerie` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleSerie").toString()));
+      }
+      if ((jsonObj.get("premiereSpecialiteBac") != null && !jsonObj.get("premiereSpecialiteBac").isJsonNull()) && !jsonObj.get("premiereSpecialiteBac").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `premiereSpecialiteBac` to be a primitive type in the JSON string but got `%s`", jsonObj.get("premiereSpecialiteBac").toString()));
+      }
+      if ((jsonObj.get("libellePremiereSpecialiteBac") != null && !jsonObj.get("libellePremiereSpecialiteBac").isJsonNull()) && !jsonObj.get("libellePremiereSpecialiteBac").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libellePremiereSpecialiteBac` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libellePremiereSpecialiteBac").toString()));
+      }
+      if ((jsonObj.get("deuxiemeSpecialiteBac") != null && !jsonObj.get("deuxiemeSpecialiteBac").isJsonNull()) && !jsonObj.get("deuxiemeSpecialiteBac").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `deuxiemeSpecialiteBac` to be a primitive type in the JSON string but got `%s`", jsonObj.get("deuxiemeSpecialiteBac").toString()));
+      }
+      if ((jsonObj.get("libelleDeuxiemeSpecialiteBac") != null && !jsonObj.get("libelleDeuxiemeSpecialiteBac").isJsonNull()) && !jsonObj.get("libelleDeuxiemeSpecialiteBac").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleDeuxiemeSpecialiteBac` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleDeuxiemeSpecialiteBac").toString()));
+      }
+      if ((jsonObj.get("mention") != null && !jsonObj.get("mention").isJsonNull()) && !jsonObj.get("mention").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `mention` to be a primitive type in the JSON string but got `%s`", jsonObj.get("mention").toString()));
+      }
+      if ((jsonObj.get("libelleMention") != null && !jsonObj.get("libelleMention").isJsonNull()) && !jsonObj.get("libelleMention").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleMention` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleMention").toString()));
+      }
+      if ((jsonObj.get("typeEtablissement") != null && !jsonObj.get("typeEtablissement").isJsonNull()) && !jsonObj.get("typeEtablissement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `typeEtablissement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("typeEtablissement").toString()));
+      }
+      if ((jsonObj.get("pays") != null && !jsonObj.get("pays").isJsonNull()) && !jsonObj.get("pays").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `pays` to be a primitive type in the JSON string but got `%s`", jsonObj.get("pays").toString()));
+      }
+      if ((jsonObj.get("libellePays") != null && !jsonObj.get("libellePays").isJsonNull()) && !jsonObj.get("libellePays").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libellePays` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libellePays").toString()));
+      }
+      if ((jsonObj.get("departement") != null && !jsonObj.get("departement").isJsonNull()) && !jsonObj.get("departement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `departement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("departement").toString()));
+      }
+      if ((jsonObj.get("libelleDepartement") != null && !jsonObj.get("libelleDepartement").isJsonNull()) && !jsonObj.get("libelleDepartement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleDepartement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleDepartement").toString()));
+      }
+      if ((jsonObj.get("etablissement") != null && !jsonObj.get("etablissement").isJsonNull()) && !jsonObj.get("etablissement").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `etablissement` to be a primitive type in the JSON string but got `%s`", jsonObj.get("etablissement").toString()));
+      }
+      if ((jsonObj.get("ine") != null && !jsonObj.get("ine").isJsonNull()) && !jsonObj.get("ine").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `ine` to be a primitive type in the JSON string but got `%s`", jsonObj.get("ine").toString()));
+      }
+      // validate the optional field `statutIne`
+      if (jsonObj.get("statutIne") != null && !jsonObj.get("statutIne").isJsonNull()) {
+        StatutIne.validateJsonElement(jsonObj.get("statutIne"));
+      }
+      if ((jsonObj.get("codeErreurIne") != null && !jsonObj.get("codeErreurIne").isJsonNull()) && !jsonObj.get("codeErreurIne").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `codeErreurIne` to be a primitive type in the JSON string but got `%s`", jsonObj.get("codeErreurIne").toString()));
+      }
+      if ((jsonObj.get("messageErreurIne") != null && !jsonObj.get("messageErreurIne").isJsonNull()) && !jsonObj.get("messageErreurIne").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `messageErreurIne` to be a primitive type in the JSON string but got `%s`", jsonObj.get("messageErreurIne").toString()));
+      }
+      if ((jsonObj.get("etablissementLibre") != null && !jsonObj.get("etablissementLibre").isJsonNull()) && !jsonObj.get("etablissementLibre").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `etablissementLibre` to be a primitive type in the JSON string but got `%s`", jsonObj.get("etablissementLibre").toString()));
+      }
+      if ((jsonObj.get("detailTitre") != null && !jsonObj.get("detailTitre").isJsonNull()) && !jsonObj.get("detailTitre").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `detailTitre` to be a primitive type in the JSON string but got `%s`", jsonObj.get("detailTitre").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!Bac.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'Bac' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<Bac> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(Bac.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<Bac>() {
+           @Override
+           public void write(JsonWriter out, Bac value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public Bac read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of Bac given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of Bac
+   * @throws IOException if the JSON string is invalid with respect to Bac
+   */
+  public static Bac fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, Bac.class);
+  }
+
+  /**
+   * Convert an instance of Bac to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

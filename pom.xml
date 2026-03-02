@@ -328,15 +328,18 @@
 
 					<generatorName>java</generatorName>
 					<output>${project.build.directory}/generated-sources/openapi</output>
+					<templateDirectory>${project.basedir}/src/main/resources/openapi-custom-templates/okhttp-gson</templateDirectory>
 					<configOptions>
 						<dateLibrary>java17-localdatetime</dateLibrary>
 						<useJakartaEe>true</useJakartaEe>
-						<disallowAdditionalPropertiesIfNotPresent>false</disallowAdditionalPropertiesIfNotPresent>
+						<disallowAdditionalPropertiesIfNotPresent>true</disallowAdditionalPropertiesIfNotPresent>
 						<discriminatorCaseSensitive>false</discriminatorCaseSensitive>
 						<performBeanValidation>false</performBeanValidation>
 						<useBeanValidation>false</useBeanValidation>
 						<beanValidation>false</beanValidation>
 						<openApiNullable>false</openApiNullable>
+						<ignoreUnknownProperties>true</ignoreUnknownProperties>
+						<supportsAdditionalPropertiesWithInheritance>false</supportsAdditionalPropertiesWithInheritance>
 						<!-- <library>resttemplate</library> -->
 					</configOptions>
 				</configuration>

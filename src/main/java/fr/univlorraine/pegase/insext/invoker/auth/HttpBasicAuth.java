@@ -13,13 +13,15 @@
 
 package fr.univlorraine.pegase.insext.invoker.auth;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import fr.univlorraine.pegase.insext.invoker.Pair;
+import fr.univlorraine.pegase.insext.invoker.ApiException;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.util.MultiValueMap;
+import okhttp3.Credentials;
 
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+import java.net.URI;
+import java.util.Map;
+import java.util.List;
+
 public class HttpBasicAuth implements Authentication {
     private String username;
     private String password;
@@ -41,11 +43,13 @@ public class HttpBasicAuth implements Authentication {
     }
 
     @Override
-    public void applyToParams(MultiValueMap<String, String> queryParams, HttpHeaders headerParams, MultiValueMap<String, String> cookieParams) {
+    public void applyToParams(List<Pair> queryParams, Map<String, String> headerParams, Map<String, String> cookieParams,
+                              String payload, String method, URI uri) throws ApiException {
         if (username == null && password == null) {
             return;
         }
-        String str = (username == null ? "" : username) + ":" + (password == null ? "" : password);
-        headerParams.add(HttpHeaders.AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8)));
+        headerParams.put("Authorization", Credentials.basic(
+            username == null ? "" : username,
+            password == null ? "" : password));
     }
 }

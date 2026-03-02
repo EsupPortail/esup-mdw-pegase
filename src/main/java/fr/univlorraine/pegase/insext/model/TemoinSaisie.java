@@ -14,16 +14,19 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.gson.annotations.SerializedName;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import java.io.IOException;
+import com.google.gson.TypeAdapter;
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 /**
  * type de saisie
  */
+@JsonAdapter(TemoinSaisie.Adapter.class)
 public enum TemoinSaisie {
   
   OBLIGATOIRE("OBLIGATOIRE"),
@@ -38,7 +41,6 @@ public enum TemoinSaisie {
     this.value = value;
   }
 
-  @JsonValue
   public String getValue() {
     return value;
   }
@@ -48,7 +50,6 @@ public enum TemoinSaisie {
     return String.valueOf(value);
   }
 
-  @JsonCreator
   public static TemoinSaisie fromValue(String value) {
     for (TemoinSaisie b : TemoinSaisie.values()) {
       if (b.value.equals(value)) {
@@ -56,6 +57,24 @@ public enum TemoinSaisie {
       }
     }
     throw new IllegalArgumentException("Unexpected value '" + value + "'");
+  }
+
+  public static class Adapter extends TypeAdapter<TemoinSaisie> {
+    @Override
+    public void write(final JsonWriter jsonWriter, final TemoinSaisie enumeration) throws IOException {
+      jsonWriter.value(enumeration.getValue());
+    }
+
+    @Override
+    public TemoinSaisie read(final JsonReader jsonReader) throws IOException {
+      String value = jsonReader.nextString();
+      return TemoinSaisie.fromValue(value);
+    }
+  }
+
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+    String value = jsonElement.getAsString();
+    TemoinSaisie.fromValue(value);
   }
 }
 

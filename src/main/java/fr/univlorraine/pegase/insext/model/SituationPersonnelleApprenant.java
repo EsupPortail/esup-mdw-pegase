@@ -14,34 +14,54 @@
 package fr.univlorraine.pegase.insext.model;
 
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * SituationPersonnelleApprenant
  */
-@JsonPropertyOrder({
-  SituationPersonnelleApprenant.JSON_PROPERTY_SITUATION_FAMILIALE,
-  SituationPersonnelleApprenant.JSON_PROPERTY_ENFANTS,
-  SituationPersonnelleApprenant.JSON_PROPERTY_SITUATION_MILITAIRE
-})
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T16:37:26.437501700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class SituationPersonnelleApprenant {
-  public static final String JSON_PROPERTY_SITUATION_FAMILIALE = "situationFamiliale";
+  public static final String SERIALIZED_NAME_SITUATION_FAMILIALE = "situationFamiliale";
+  @SerializedName(SERIALIZED_NAME_SITUATION_FAMILIALE)
   @jakarta.annotation.Nullable
   private String situationFamiliale;
 
-  public static final String JSON_PROPERTY_ENFANTS = "enfants";
+  public static final String SERIALIZED_NAME_ENFANTS = "enfants";
+  @SerializedName(SERIALIZED_NAME_ENFANTS)
   @jakarta.annotation.Nullable
   private Integer enfants;
 
-  public static final String JSON_PROPERTY_SITUATION_MILITAIRE = "situationMilitaire";
+  public static final String SERIALIZED_NAME_SITUATION_MILITAIRE = "situationMilitaire";
+  @SerializedName(SERIALIZED_NAME_SITUATION_MILITAIRE)
   @jakarta.annotation.Nullable
   private String situationMilitaire;
 
@@ -49,7 +69,6 @@ public class SituationPersonnelleApprenant {
   }
 
   public SituationPersonnelleApprenant situationFamiliale(@jakarta.annotation.Nullable String situationFamiliale) {
-    
     this.situationFamiliale = situationFamiliale;
     return this;
   }
@@ -59,22 +78,16 @@ public class SituationPersonnelleApprenant {
    * @return situationFamiliale
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_FAMILIALE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getSituationFamiliale() {
     return situationFamiliale;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_FAMILIALE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setSituationFamiliale(@jakarta.annotation.Nullable String situationFamiliale) {
     this.situationFamiliale = situationFamiliale;
   }
 
+
   public SituationPersonnelleApprenant enfants(@jakarta.annotation.Nullable Integer enfants) {
-    
     this.enfants = enfants;
     return this;
   }
@@ -84,22 +97,16 @@ public class SituationPersonnelleApprenant {
    * @return enfants
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ENFANTS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public Integer getEnfants() {
     return enfants;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_ENFANTS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setEnfants(@jakarta.annotation.Nullable Integer enfants) {
     this.enfants = enfants;
   }
 
+
   public SituationPersonnelleApprenant situationMilitaire(@jakarta.annotation.Nullable String situationMilitaire) {
-    
     this.situationMilitaire = situationMilitaire;
     return this;
   }
@@ -109,19 +116,14 @@ public class SituationPersonnelleApprenant {
    * @return situationMilitaire
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_MILITAIRE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
   public String getSituationMilitaire() {
     return situationMilitaire;
   }
 
-
-  @JsonProperty(value = JSON_PROPERTY_SITUATION_MILITAIRE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setSituationMilitaire(@jakarta.annotation.Nullable String situationMilitaire) {
     this.situationMilitaire = situationMilitaire;
   }
+
 
 
   @Override
@@ -165,5 +167,100 @@ public class SituationPersonnelleApprenant {
     return o.toString().replace("\n", "\n    ");
   }
 
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>(Arrays.asList("situationFamiliale", "enfants", "situationMilitaire"));
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>(0);
+  }
+
+  /**
+   * Validates the JSON Element and throws an exception if issues found
+   *
+   * @param jsonElement JSON Element
+   * @throws IOException if the JSON Element is invalid with respect to SituationPersonnelleApprenant
+   */
+  public static void validateJsonElement(JsonElement jsonElement) throws IOException {
+      if (jsonElement == null) {
+        if (!SituationPersonnelleApprenant.openapiRequiredFields.isEmpty()) { // has required fields but JSON element is null
+          throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in SituationPersonnelleApprenant is not found in the empty JSON string", SituationPersonnelleApprenant.openapiRequiredFields.toString()));
+        }
+      }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!SituationPersonnelleApprenant.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `SituationPersonnelleApprenant` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if ((jsonObj.get("situationFamiliale") != null && !jsonObj.get("situationFamiliale").isJsonNull()) && !jsonObj.get("situationFamiliale").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `situationFamiliale` to be a primitive type in the JSON string but got `%s`", jsonObj.get("situationFamiliale").toString()));
+      }
+      if ((jsonObj.get("situationMilitaire") != null && !jsonObj.get("situationMilitaire").isJsonNull()) && !jsonObj.get("situationMilitaire").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `situationMilitaire` to be a primitive type in the JSON string but got `%s`", jsonObj.get("situationMilitaire").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!SituationPersonnelleApprenant.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'SituationPersonnelleApprenant' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<SituationPersonnelleApprenant> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(SituationPersonnelleApprenant.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<SituationPersonnelleApprenant>() {
+           @Override
+           public void write(JsonWriter out, SituationPersonnelleApprenant value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public SituationPersonnelleApprenant read(JsonReader in) throws IOException {
+             JsonElement jsonElement = elementAdapter.read(in);
+             validateJsonElement(jsonElement);
+             return thisAdapter.fromJsonTree(jsonElement);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+  /**
+   * Create an instance of SituationPersonnelleApprenant given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of SituationPersonnelleApprenant
+   * @throws IOException if the JSON string is invalid with respect to SituationPersonnelleApprenant
+   */
+  public static SituationPersonnelleApprenant fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, SituationPersonnelleApprenant.class);
+  }
+
+  /**
+   * Convert an instance of SituationPersonnelleApprenant to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
 

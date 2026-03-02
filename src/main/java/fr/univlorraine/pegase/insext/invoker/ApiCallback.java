@@ -11,70 +11,52 @@
  */
 
 
-package fr.univlorraine.pegase.insext.invoker.auth;
+package fr.univlorraine.pegase.insext.invoker;
 
-import fr.univlorraine.pegase.insext.invoker.ApiException;
-import fr.univlorraine.pegase.insext.invoker.Pair;
+import java.io.IOException;
 
-import java.net.URI;
 import java.util.Map;
 import java.util.List;
 
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:30:41.647209400+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
-public class ApiKeyAuth implements Authentication {
-  private final String location;
-  private final String paramName;
+/**
+ * Callback for asynchronous API call.
+ *
+ * @param <T> The return type
+ */
+public interface ApiCallback<T> {
+    /**
+     * This is called when the API call fails.
+     *
+     * @param e The exception causing the failure
+     * @param statusCode Status code of the response if available, otherwise it would be 0
+     * @param responseHeaders Headers of the response if available, otherwise it would be null
+     */
+    void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders);
 
-  private String apiKey;
-  private String apiKeyPrefix;
+    /**
+     * This is called when the API call succeeded.
+     *
+     * @param result The result deserialized from response
+     * @param statusCode Status code of the response
+     * @param responseHeaders Headers of the response
+     */
+    void onSuccess(T result, int statusCode, Map<String, List<String>> responseHeaders);
 
-  public ApiKeyAuth(String location, String paramName) {
-    this.location = location;
-    this.paramName = paramName;
-  }
+    /**
+     * This is called when the API upload processing.
+     *
+     * @param bytesWritten bytes Written
+     * @param contentLength content length of request body
+     * @param done write end
+     */
+    void onUploadProgress(long bytesWritten, long contentLength, boolean done);
 
-  public String getLocation() {
-    return location;
-  }
-
-  public String getParamName() {
-    return paramName;
-  }
-
-  public String getApiKey() {
-    return apiKey;
-  }
-
-  public void setApiKey(String apiKey) {
-    this.apiKey = apiKey;
-  }
-
-  public String getApiKeyPrefix() {
-    return apiKeyPrefix;
-  }
-
-  public void setApiKeyPrefix(String apiKeyPrefix) {
-    this.apiKeyPrefix = apiKeyPrefix;
-  }
-
-  @Override
-  public void applyToParams(List<Pair> queryParams, Map<String, String> headerParams, Map<String, String> cookieParams,
-                           String payload, String method, URI uri) throws ApiException {
-    if (apiKey == null) {
-      return;
-    }
-    String value;
-    if (apiKeyPrefix != null) {
-      value = apiKeyPrefix + " " + apiKey;
-    } else {
-      value = apiKey;
-    }
-    if ("query".equals(location)) {
-      queryParams.add(new Pair(paramName, value));
-    } else if ("header".equals(location)) {
-      headerParams.put(paramName, value);
-    } else if ("cookie".equals(location)) {
-      cookieParams.put(paramName, value);
-    }
-  }
+    /**
+     * This is called when the API download processing.
+     *
+     * @param bytesRead bytes Read
+     * @param contentLength content length of the response
+     * @param done Read end
+     */
+    void onDownloadProgress(long bytesRead, long contentLength, boolean done);
 }

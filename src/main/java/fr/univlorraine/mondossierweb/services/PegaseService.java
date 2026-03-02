@@ -42,7 +42,6 @@ import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
@@ -88,7 +87,7 @@ public class PegaseService implements Serializable {
 	//private transient FluxInscriptionsApi fluxInsApiIns = new FluxInscriptionsApi();
 
 	// INS-EXT API
-	private transient fr.univlorraine.pegase.insext.invoker.ApiClient apiClientInsExt = new fr.univlorraine.pegase.insext.invoker.ApiClient(buildRestTemplate());
+	private transient fr.univlorraine.pegase.insext.invoker.ApiClient apiClientInsExt = new fr.univlorraine.pegase.insext.invoker.ApiClient();
 	private transient InscriptionsApi apiInsExt = new InscriptionsApi();
 
 	// PIECE-EXT API
@@ -198,8 +197,8 @@ public class PegaseService implements Serializable {
 		// Init INS-EXT
 		apiClientInsExt.setBasePath(apiInsExtUrl);
 		apiInsExt.setApiClient(apiClientInsExt);
-		//apiInsExt.getApiClient().setReadTimeout(TIMEOUT_PEGASE);
-		//apiInsExt.getApiClient().setWriteTimeout(TIMEOUT_PEGASE);
+		apiInsExt.getApiClient().setReadTimeout(TIMEOUT_PEGASE);
+		apiInsExt.getApiClient().setWriteTimeout(TIMEOUT_PEGASE);
 
 		// Init PIECE-EXT
 		apiClientPieceExt.setBasePath(apiPieceExtUrl);
@@ -304,12 +303,12 @@ public class PegaseService implements Serializable {
 					log.info("Anomalie lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} LE DOSSIER RECUPERE EST NULL", codeApprenant, etablissement);
 				}
 				return dossier;
-			} catch (HttpServerErrorException e) {
-				//if(e.getCode()==500 && e.getResponseBody()!=null && e.getResponseBody().contains(APPRENANT_NON_TROUVE)) {
-				if(e.getStatusCode().is5xxServerError() && e.getResponseBodyAsString().contains(APPRENANT_NON_TROUVE)) {
+			} catch (fr.univlorraine.pegase.insext.invoker.ApiException e) {
+				if (e.getCode() == 500 && e.getResponseBody()!=null && e.getResponseBody().contains(APPRENANT_NON_TROUVE)) {
+				//if(e.getStatusCode().is5xxServerError() && e.getResponseBodyAsString().contains(APPRENANT_NON_TROUVE)) {
 					log.warn("Apprenant non trouvé lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
 				} else {
-					log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getStatusCode(), e.getMessage(),e.getResponseBodyAsString(), e);
+					log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(), e);
 				}
 			} catch (RuntimeException rex) {
 				log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ",codeApprenant, etablissement,  rex);
