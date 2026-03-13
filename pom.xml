@@ -46,7 +46,7 @@
 
 
 	<properties>
-		<revision>2.3.9</revision>
+		<revision>2.3.10</revision>
 		<sha1/>
 		<changelist/>
 		<java.version>17</java.version>
@@ -301,10 +301,12 @@
 				<version>7.20.0</version>
 				<!-- On place la configuration directement ici pour la commande manuelle -->
 				<configuration>
-					<!--<inputSpec>${project.basedir}/src/main/resources/YML/idt-ext-api-v1-1.4.0.yaml</inputSpec>
+					<!-- <inputSpec>${project.basedir}/src/main/resources/YML/idt-ext-api-v1-1.4.0.yaml</inputSpec> -->
+					<inputSpec>${project.basedir}/src/main/resources/YML/idt-ext-api-v1-1.5.0-rc.20260309165953.yaml</inputSpec>
 					<invokerPackage>fr.univlorraine.pegase.idt.invoker</invokerPackage>
 					<apiPackage>fr.univlorraine.pegase.idt.api</apiPackage>
-					<modelPackage>fr.univlorraine.pegase.idt.model</modelPackage>-->
+					<modelPackage>fr.univlorraine.pegase.idt.model</modelPackage>
+
 
 					<!--<inputSpec>${project.basedir}/src/main/resources/YML/coc-publication-api-v2-2.3.0.yml</inputSpec>
 					<invokerPackage>fr.univlorraine.pegase.coc.invoker</invokerPackage>
@@ -321,10 +323,10 @@
 					<apiPackage>fr.univlorraine.pegase.insext.api</apiPackage>
 					<modelPackage>fr.univlorraine.pegase.insext.model</modelPackage> -->
 
-					<inputSpec>${project.basedir}/src/main/resources/YML/piece-ext-api-v1-1.5.0.yaml</inputSpec>
+					<!-- <inputSpec>${project.basedir}/src/main/resources/YML/piece-ext-api-v1-1.5.0.yaml</inputSpec>
 					<invokerPackage>fr.univlorraine.pegase.pieceext.invoker</invokerPackage>
 					<apiPackage>fr.univlorraine.pegase.pieceext.api</apiPackage>
-					<modelPackage>fr.univlorraine.pegase.pieceext.model</modelPackage>
+					<modelPackage>fr.univlorraine.pegase.pieceext.model</modelPackage> -->
 
 					<generatorName>java</generatorName>
 					<output>${project.build.directory}/generated-sources/openapi</output>
