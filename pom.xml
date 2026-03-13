@@ -301,7 +301,6 @@
 				<version>7.20.0</version>
 				<!-- On place la configuration directement ici pour la commande manuelle -->
 				<configuration>
-					<!-- <inputSpec>${project.basedir}/src/main/resources/YML/idt-ext-api-v1-1.4.0.yaml</inputSpec> -->
 					<inputSpec>${project.basedir}/src/main/resources/YML/idt-ext-api-v1-1.5.0-rc.20260309165953.yaml</inputSpec>
 					<invokerPackage>fr.univlorraine.pegase.idt.invoker</invokerPackage>
 					<apiPackage>fr.univlorraine.pegase.idt.api</apiPackage>
