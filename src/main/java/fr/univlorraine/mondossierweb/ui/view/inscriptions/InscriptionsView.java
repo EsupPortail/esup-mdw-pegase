@@ -60,7 +60,7 @@ import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.CssUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
-import fr.univlorraine.pegase.chc.model.AmenagementDCA;
+import fr.univlorraine.pegase.chc.model.Amenagement;
 import fr.univlorraine.pegase.coc.model.Absence;
 import fr.univlorraine.pegase.coc.model.ReleveDeNotePublie;
 import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
@@ -954,7 +954,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     }
 
 
-    private void showDetailAmenagementDialog(List<AmenagementDCA> amenagements) {
+    private void showDetailAmenagementDialog(List<Amenagement> amenagements) {
 
         // Création dialog avec le détail des aménagements
         Dialog resultDialog = new Dialog();
@@ -964,7 +964,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         formationLabel.getStyle().set(CssUtils.COLOR, CssUtils.SECOND_COLOR);
         dialLayout.add(formationLabel);
 
-        for (AmenagementDCA amenagement : amenagements) {
+        for (Amenagement amenagement : amenagements) {
             HorizontalLayout hl = new HorizontalLayout();
             hl.setWidthFull();
             NativeLabel libAmenagements = new NativeLabel(amenagement.getLibelleAffichage());

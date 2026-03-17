@@ -1,0 +1,1214 @@
+openapi: 3.0.1
+info:
+  version: "1.4.0"
+  title: |
+    IDT - Identité - V1
+
+  description: |
+
+    # Introduction
+
+        Liste l'ensemble des services et des opérations disponibles dans le module IDT
+
+        Description service IDT
+
+        # Gestion des erreurs
+
+        ## StatusCode
+
+        | Code    | Description                                |
+        |---------|--------------------------------------------|
+        | 200     | Opération effectuée                        |
+        |         | Cas particulier: Dans le cas d'APIs de     |
+        |         | type bulk, un 200 peut aussi être retourné |
+        |         | si des données de la requête sont          |
+        |         | considérées en erreur                      |
+        | 201     | Ressource créée                            |
+        | 400     | Données envoyées par le client invalides   |
+        | 403     | Accès refusé                               |
+        | 404     | Ressource inexistante                      |
+        | 409     | donnée déjà existante                      |
+        | 500     | Erreur technique rencontrée par le serveur |
+
+
+        ## Codes d'erreurs
+
+        | Code      | Description                                |
+        |-----------|--------------------------------------------|
+        | notNull   | la propriété est obligatoire               |
+        | notBlank  | la propriété ne doit pas être vide         |
+        | size      | la longueur de la propriété est invalide   |
+        | pattern   | les caractères ou la syntaxe de            |
+        |           | la propriété est invalide                  |
+    
+    # Identité
+      Une identité correspond à une personne physique, assimilable à un utilisateur. 
+      Une identité peut avoir plusieurs profils.
+    
+    # Apprenant 
+      Un apprenant est un profil d'identité.
+    
+    # Apprenant identifié
+      Un apprenant identifié qui peut interagir avec Pégase.
+    
+    # Code Apprenant
+      Identifiant fonctionnel attribué par l'établissement à l'apprenant.
+    
+    # Doublon potentiel
+      Un apprenant similaire à un ou des apprenants identifiés. 
+      Il ne peut pas interagir avec Pégase tant que son identification manuelle n'est pas terminée.
+    
+    # Identification
+      Process semi-automatique qui permet de déterminer l'identité d'un apprenant de manière unique :
+        le rapprocher d'une identité connue de Pégase
+        ou créer une identité distincte
+    
+    # Identifiant apprenant Pégase
+      Identifiant apprenant unique et fonctionnel utilisé par l'apprenant pour s'authentifier sur Pégase.
+    
+    # INE maitre
+      INE de référence pour un apprenant, défini par le service INES.
+    
+    # ListeINEs
+      Le ou les INE qui ne sont pas maître.
+    
+    # Score de similarité
+      Une mesure du niveau de ressemblance entre deux apprenants distincts.
+    
+    # Statuts INE (Chaque apprenant a un statut lié à son INE maître) :
+      ### A_VERIFIER : Aucun retour de l'API de vérification d'INES n'a encore été effectué, le statut de l'INE de l'apprenant est à vérifier.
+      ### CONFIRME : INES a renvoyé un INE maître correspondant aux données de l'apprenant.
+      ### DONNEES_INCOMPLETES : INES renvoie ce statut quand il manque le lieu de naissance dans les données de l'apprenant.
+      ### LITIGE : A l'immatriculation, INES renvoie ce statut quand il existe un doute sur l'existence ou non de cet apprenant dans INES. Une résolution humaine est nécessaire.
+      ### INCONNU : INES n'a aucune correspondance dans son référentiel des INE avec les données envoyées lors de la vérification d'un apprenant.
+
+    # Identifiant UUID : identifiant technique d'un apprenant
+    
+
+servers:
+  - url: 'http://localhost:8104/api/idt/ext/v1'
+  - url: 'https://idt.{env}.pc-scol.fr/api/idt/ext/v1'
+    variables:
+      env:
+        default: dev
+        enum: [ dev, test-sxb, po-sxb, test-tls, po-tls, test-nte, po-nte, test-gnb, po-gnb ]
+
+tags:
+  - name: identite-externe
+    description: |
+      Cet endpoint gère :
+        *  les identites
+  - name: apprenant-externe
+    description: |
+        Cet endpoint gère :
+        * les apprenants
+
+paths:
+
+  '/etablissements/{codeStructure}/identites/apprenants':
+    get:
+      tags:
+        - apprenant-externe
+      summary: Rechercher des identites d'apprenants
+      operationId: rechercherIdentiteApprenant
+      description: |
+        Rechercher des identites d'apprenants (par page de 500 maximum)
+      security:
+        - idTokenAuth: [ ]
+      parameters:
+        - $ref: "#/components/parameters/Structure"
+        - $ref: "#/components/parameters/Pageable"
+        - in: query
+          name: prenom
+          description: |
+            Filtre sur le prénom. Ce critère sera utilisé pour retourner des identités dont le prénom est ou contient
+            cette valeur suivant le positionnement du paramètre de recherche exacte.
+          schema:
+            type: string
+        - in: query
+          name: nom
+          description: |
+            Filtre sur le nom. Ce critère sera utilisé pour retourner des identités dont le nom usuel est ou contient 
+            cette valeur suivant le positionnement du paramètre de recherche exacte.
+          schema:
+            type: string
+        - in: query
+          name: codeApprenant
+          description: |
+            Filtre sur le code apprenant. Ce critère sera utilisé pour retourner des identités dont le code apprenant est ou contient 
+            cette valeur suivant le positionnement du paramètre de recherche exacte.
+          schema:
+            type: string
+        - in: query
+          name: ine
+          description: |
+            Filtre sur les INE de l'apprenant. Ce critère sera utilisé pour retourner des identités dont au moins un INE est ou contient
+            cette valeur suivant le positionnement du paramètre de recherche exacte.
+          schema:
+            type: string
+        - in: query
+          name: actif
+          description: |
+            Filtre sur les personnes. Ce critère sera utilisé pour retourner des identités dont au moins un INE est ou contient 
+            cette valeur suivant le positionnement du paramètre de recherche exacte.
+          schema:
+            type: boolean
+        - in: query
+          name: exact
+          description: |
+            Si false, désactive la recherche exacte. Et une recherche partielle est effectuée. Par défaut à true.
+          schema:
+            type: boolean
+        - in: query
+          name: doublonPotentiel
+          description: |
+            Filtre sur les apprenants ayant le témoin doublone potentiel.
+          schema:
+            type: boolean
+        - in: query
+          name: etatIneMaitre
+          description: |
+            Filtre sur l'état de l'ine maître
+          schema:
+            $ref: '#/components/schemas/StatutIne'
+      responses:
+        '200':
+          description: Liste des identités correspondant aux critères de recherche
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedIdentiteApprenantSummaries'
+        400:
+          description: Les paramètres de recherche sont invalides
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Erreur'
+        default:
+          description: Erreur
+          content:
+            'json/application':
+              schema:
+                $ref: '#/components/schemas/Erreurs'
+
+  '/etablissements/{codeStructure}/identite/{id}/courriel-institutionnel':
+    post:
+      tags:
+        - identite-externe
+      summary: Modifier l'adresse du courriel institutionnel d'une identité
+      operationId: modifierCourrielInstitutionnel
+      description: |
+        Modifie l'adresse du courriel institutionnel d'une identité
+      security:
+        - idTokenAuth: [ ]
+      parameters:
+        - $ref: "#/components/parameters/Structure"
+        - $ref: "#/components/parameters/Id"
+        - in : query
+          name: emailInstitutionnel
+          description: |
+            Courriel institutionnel
+          schema:
+            $ref: '#/components/schemas/Courriel'
+      responses:
+        200:
+          description: Apprenant récupéré
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentiteImmatriculeeDetail'
+        403:
+          description: Accès interdit
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Erreur'
+        404:
+          description: Apprenant non trouvé
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Erreur'
+        default:
+          description: Erreur
+          content:
+            'json/application':
+              schema:
+                $ref: '#/components/schemas/Erreurs'
+
+  '/etablissements/{codeStructure}/identites':
+    post:
+      tags:
+        - identite-externe
+      summary: Identifier une identité et la créer si necessaire
+      operationId: identifierEtCreerIdentite
+      security:
+        - idTokenAuth: [ ]
+      parameters:
+        - $ref: "#/components/parameters/Structure"
+      requestBody:
+        description: L'identité à créer
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreerModifierIdentiteRequest'
+      responses:
+        201:
+          description: L'identité est créée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentiteDetail'
+        200:
+          description: L'identité a été rapprochée d'une autre qui est renvoyée à la place
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentiteDetail'
+        '400':
+          description: L'identité est invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erreur'
+        default:
+          description: Erreur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erreurs'
+
+  /etablissements/{codeStructure}/identites/pegase/{identifiantApprenantPegase}:
+    get:
+      tags:
+        - identite-externe
+      summary: Lire une identité par identifiant apprenant Pegase
+      operationId: lireIdentiteByIdentifiantApprenantPegase
+      security:
+        - idTokenAuth: [ ]
+      parameters:
+        - $ref: "#/components/parameters/Structure"
+        - name: identifiantApprenantPegase
+          in: path
+          required: true
+          description: "Code Identité Pegase de la personne"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: L'identité a été trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentiteImmatriculeeDetail'
+          headers:
+            ETag:
+              description: Tag HTTP ETag de la réponse
+              schema:
+                type: string
+        '404':
+          description: L'identité n'existe pas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erreur'
+        '500':
+          description: Erreur interne du serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erreur'
+
+  /etablissements/{codeStructure}/identites/{id}:
+    get:
+      tags:
+        - identite-externe
+      summary: Lire une identité par UUID
+      operationId: lireIdentiteByUUID
+      security:
+        - idTokenAuth: [ ]
+      parameters:
+        - $ref: "#/components/parameters/Structure"
+        - $ref: "#/components/parameters/Id"
+      responses:
+        '200':
+          description: L'identité a été trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentiteImmatriculeeDetail'
+          headers:
+            ETag:
+              description: Tag HTTP ETag de la réponse
+              schema:
+                type: string
+        '404':
+          description: L'identité n'existe pas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erreur'
+        '500':
+          description: Erreur interne du serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erreur'
+
+  '/etablissements/{codeStructure}/identites/{id}/descripteurs-identite':
+    put:
+      tags:
+        - identite-externe
+      summary: Modifier descripteurs identité
+      operationId: modifierDescripteursIdentite
+      description: |
+        Modifier les descripteurs d'une identité
+      security:
+        - idTokenAuth: [ ]
+      parameters:
+        - $ref: '#/components/parameters/Structure'
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        description: Commande pour modifier une identité
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreerModifierIdentiteRequest'
+      responses:
+        '200':
+          description: L'identité a été modifiée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentiteDetail'
+          headers:
+            schema:
+              $ref: '#/components/headers/Etag'
+        '400':
+          description: L'identité est invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erreur'
+        default:
+          description: Erreur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erreurs'
+
+
+components:
+  securitySchemes:
+    # Authorization: Bearer id.token.
+    idTokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Un ID token JWT généré par le serveur CAS de Pegase doit être utilisé lors de tout appel aux services COF.
+        L'ID Token doit être transmis dans le Header HTTP Authorization sous la forme 'Bearer ' (avec étant la valeur de l'id token).
+
+  parameters:
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+      description: ETag de la ressource actuelle
+    Structure:
+      name: codeStructure
+      in: path
+      required: true
+      schema:
+        type: string
+        example: ETAB00
+      description: Le code de l'établissement
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Identifiant d'une ressource
+    Pageable:
+      name: pageable
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        $ref: "#/components/schemas/Pageable"
+
+
+  headers:
+    Etag:
+      description: |
+        The RFC7232 ETag header field in a response provides the current entity-
+        tag for the selected resource. An entity-tag is an opaque identifier for
+        different versions of a resource over time, regardless whether multiple
+        versions are valid at the same time. An entity-tag consists of an opaque
+        quoted string, possibly prefixed by a weakness indicator.
+      example: W/"xy", "5", "7da7a728-f910-11e6-942a-68f728c1ba70"
+      required: false
+      schema:
+        type: string
+
+  schemas:
+    IdentiteSummary:
+      type: object
+      required:
+        - id
+        - identifiantApprenantPegase
+        - prenom
+        - nomNaissance
+        - email
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        identifiantApprenantPegase:
+          type: string
+          description: "Code d'identité Pégase, obligatoire pour la création d'une personne"
+        nomNaissance:
+          type: string
+          description: "Nom de famille de la personne"
+        prenom:
+          type: string
+          description: "Prénom de la personne"
+        email:
+          $ref: '#/components/schemas/Courriel'
+        telephonePortablePersonnel:
+          $ref: '#/components/schemas/Telephone'
+        temoinDoublonPotentiel:
+          type: boolean
+          description: "Temoin d'une identité étant un doublon potentiel"
+        temoinDecede:
+          type: boolean
+          description: "Témoin définissant comme décédée ou vivante la personne propriétaire de l'identité"
+
+    IdentiteSummaries:
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/IdentiteSummary"
+
+    PagedIdentiteSummaries:
+      allOf:
+        - $ref: '#/components/schemas/IdentiteSummaries'
+        - $ref: '#/components/schemas/Paging'
+
+    IdentiteApprenantSimilaireSummary:
+      allOf:
+        - $ref: '#/components/schemas/IdentiteApprenantSummary'
+        - type: object
+          properties:
+            scoreSimilarite:
+              type: number
+              format: float
+
+    IdentiteApprenantSummary:
+      type: object
+      required:
+        - id
+        - identifiantApprenantPegase
+        - prenom
+        - nomNaissance
+        - email
+        - sexe
+        - dateNaissance
+        - inesSupplementaires
+        - actif
+      properties:
+        id:
+          $ref: '#/components/schemas/IdIdentite'
+        identifiantApprenantPegase:
+          type: string
+          description: "Code d'identité Pégase, obligatoire pour la création d'une personne"
+        nomNaissance:
+          type: string
+          description: "Nom de famille de la personne"
+        nomUsage:
+          type: string
+          description: "Nom de famille de la personne"
+        prenom:
+          type: string
+          description: "Prénom de la personne"
+        prenom2:
+          type: string
+          description: "Deuxième prénom de la personne"
+        prenom3:
+          type: string
+          description: "Troisième prénom de la personne"
+        email:
+          $ref: '#/components/schemas/Courriel'
+        sexe:
+          $ref: '#/components/schemas/TypeSexe'
+        codeApprenant:
+          $ref: '#/components/schemas/CodeApprenant'
+        ineMaitre:
+          $ref: '#/components/schemas/Ine'
+          description: "Il s'agit de l'INE de référence pour un apprenant, il est défini par le service INES."
+        inesSupplementaires:
+          type: array
+          items:
+            type: string
+        dateNaissance:
+          type: string
+          format: date
+          description: "Date de naissance au format yyyy-mm-dd"
+        communeNaissance:
+          $ref: '#/components/schemas/CommunesNaissance'
+        paysNaissance:
+          $ref: '#/components/schemas/PaysEtNationalites'
+        nationalite:
+          $ref: '#/components/schemas/PaysEtNationalites'
+        actif:
+          type: boolean
+          description: "Indique si l'identité de l'apprenant est active (c’est-à-dire si le champ 'enabled' est à true dans Keycloak). Ce champ est indépendant de l’inscription ou du dossier apprenant. Si 'actif' est à false, l’apprenant ne peut pas s’authentifier sur le système."
+        temoinDoublonPotentiel:
+          type: boolean
+          description: "Temoin d'une identité étant un doublon potentiel"
+        temoinDecede:
+          type: boolean
+          description: "Témoin définissant comme décédée ou vivante la personne propriétaire de l'identité"
+
+    IdentiteApprenantSummaries:
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/IdentiteApprenantSummary"
+
+    PagedIdentiteApprenantSummaries:
+      allOf:
+        - $ref: '#/components/schemas/IdentiteApprenantSummaries'
+        - $ref: '#/components/schemas/Paging'
+
+    Id:
+      type: string
+      format: uuid
+      description: |
+        Identifiant de ressource
+
+    IdIdentite:
+      type: string
+      description: |
+        Identifiant technique d'une identité
+
+    CreerModifierIdentiteRequest:
+      type: object
+      required:
+        - prenom
+        - nomNaissance
+        - email
+      properties:
+        nomNaissance:
+          type: string
+          description: "Nom de famille de la personne"
+        prenom:
+          type: string
+          description: "Prénom de la personne"
+        email:
+          $ref: '#/components/schemas/Courriel'
+        telephonePortablePersonnel:
+          $ref: '#/components/schemas/Telephone'
+        profilApprenant:
+          $ref: '#/components/schemas/ProfilApprenantEdition'
+
+    IdentiteImmatriculeeDetail:
+      allOf:
+        - $ref: '#/components/schemas/IdentiteDetail'
+        - type: object
+          required:
+            - temoinVerrouille
+            - statutIne
+          properties:
+            statutIne:
+              $ref: '#/components/schemas/StatutIneRetour'
+            temoinVerrouille:
+              type: boolean
+              description: Témoin indiquant si l'identité est verrouillée. Si l'identité est verrouillée, les modifications ne sont pas possibles car un dossier d'inscription est en cours pour cette identité
+
+
+    IdentiteDetail:
+      type: object
+      required:
+        - id
+        - identifiantApprenantPegase
+        - nomNaissance
+        - prenom
+        - email
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        identifiantApprenantPegase:
+          type: string
+          description: "Identifiant Pégase d'un apprenant"
+          nullable: false
+        nomNaissance:
+          type: string
+          description: "Nom de naissance de la personne"
+        prenom:
+          type: string
+          description: "Prénom de la personne"
+        email:
+          $ref: '#/components/schemas/Courriel'
+        telephonePortablePersonnel:
+          $ref: '#/components/schemas/Telephone'
+        profilApprenant:
+          $ref: '#/components/schemas/ProfilApprenant'
+
+    ProfilApprenant:
+      allOf:
+        - $ref: '#/components/schemas/ProfilApprenantBase'
+        - type: object
+          properties:
+            codeApprenant:
+              type: string
+              description: "Code apprenant"
+
+    ProfilApprenantEdition:
+      allOf:
+        - $ref: '#/components/schemas/ProfilApprenantBase'
+
+    ProfilApprenantBase:
+      type: object
+      properties:
+        listeINEs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ine'
+          description: "Liste des INE - Taille limitée à 5"
+          maxItems: 5
+          deprecated: true
+        ineMaitre:
+          type: string
+          description: "INE maître de l'apprenant"
+        listeINEsAlternatifs:
+          type: array
+          items:
+            type: string
+          maxItems: 5
+          description: "Liste INE non maître - Taille limitée à 5"
+        etatCivil:
+          $ref: '#/components/schemas/EtatCivil'
+        donneesContact:
+          $ref: '#/components/schemas/DonneesContact'
+        donneesComplementaires:
+          $ref: '#/components/schemas/DonneesComplementaires'
+        parcoursScolaireEtUniversitaire:
+          $ref: '#/components/schemas/ParcoursScolaireEtUniversitaire'
+        temoinDoublonPotentiel:
+          type: boolean
+          description: "Temoin d'une identité étant un doublon potentiel"
+        temoinDecede:
+          type: boolean
+          description: "Témoin définissant comme décédée ou vivante la personne propriétaire de l'identité"
+
+    EtatCivil:
+      type: object
+      required:
+        - sexe
+        - dateNaissance
+      properties:
+        sexe:
+          $ref: '#/components/schemas/TypeSexe'
+        dateNaissance:
+          type: string
+          format: date
+          description: "Date de naissance"
+        nomUsage:
+          type: string
+          description: "Nom d'usage"
+        prenom2:
+          type: string
+          description: "Deuxième prénom"
+        prenom3:
+          type: string
+          description: "Troisième prénom"
+        communeNaissance:
+          $ref: '#/components/schemas/CommunesNaissance'
+        libelleCommuneNaissanceEtranger:
+          type: string
+          description: "Libellé de la commune de naissance à l'étranger"
+        paysNaissance:
+          $ref: '#/components/schemas/PaysEtNationalites'
+        nationalite:
+          $ref: '#/components/schemas/PaysEtNationalites'
+        nationalite2:
+          $ref: '#/components/schemas/PaysEtNationalites'
+        dateObtentionNationalite2:
+          type: string
+          format: date
+          description: "Date d'obtention de la deuxième nationalité"
+
+
+    DonneesContact:
+      type: object
+      properties:
+        adressePeriodeUPays:
+          $ref: '#/components/schemas/PaysEtNationalites'
+        adressePeriodeULigne1Etage:
+          type: string
+          description: "Ligne d'adresse 1 (étage) durant le période universitaire"
+        adressePeriodeULigne2Batiment:
+          type: string
+          description: "Ligne d'adresse 2 (bâtiment) durant le période universitaire"
+        adressePeriodeULigne3Voie:
+          type: string
+          description: "Ligne d'adresse 3 (voie) durant le période universitaire"
+        adressePeriodeULigne4Complement:
+          type: string
+          description: "Ligne d'adresse 4 (complément) durant le période universitaire"
+        adressePeriodeUCodePostal:
+          type: string
+          description: "Code postal durant le période universitaire"
+        adressePeriodeUCodeCommune:
+          type: string
+          description: "Code de la commune durant le période universitaire"
+        adressePeriodeULigne5Etranger:
+          type: string
+          description: "Code postal pour ville étrangère durant le période universitaire"
+        adresseFixePays:
+          $ref: '#/components/schemas/PaysEtNationalites'
+        adresseFixeLigne1Etage:
+          type: string
+          description: "Ligne d'adresse 1 (étage) hors période universitaire"
+        adresseFixeLigne2Batiment:
+          type: string
+          description: "Ligne d'adresse 2 (bâtiment) hors période universitaire"
+        adresseFixeLigne3Voie:
+          type: string
+          description: "Ligne d'adresse 3 (voie) hors période universitaire"
+        adresseFixeLigne4Complement:
+          type: string
+          description: "Ligne d'adresse 4 (complément) hors période universitaire"
+        adresseFixeCodePostal:
+          type: string
+          description: "Code postal hors période universitaire"
+        adresseFixeCodeCommune:
+          type: string
+          description: "Code de la commune hors période universitaire"
+        adresseFixeLigne5Etranger:
+          type: string
+          description: "Code postal pour ville étrangère hors période universitaire"
+        adresseFixeProprietaire:
+          type: string
+          description: "Proprietaire de la résendence hors période universitaire (exemple: Chez Mme XXXXXX)"
+        telephoneContactUrgence:
+          $ref: '#/components/schemas/Telephone'
+        telephoneContactUrgenceProprietaire:
+          type: string
+          description: "Nom et prénom de la personne à contacter en cas d'urgence"
+        adresseElectroniqueInstitutionnelle:
+          $ref: '#/components/schemas/Courriel'
+        adresseElectroniqueSecours:
+          $ref: '#/components/schemas/Courriel'
+        adresseElectroniqueSecoursProprietaire:
+          type: string
+          description: "Nom et prénom de la personne propriétaire de l'adresse mail de secours"
+
+    DonneesComplementaires:
+      type: object
+      properties:
+        situationMilitaire:
+          $ref: '#/components/schemas/SituationsMilitaires'
+        situationFamiliale:
+          $ref: '#/components/schemas/SituationsFamiliales'
+        nombreEnfants:
+          type: number
+          description: "Nombre d'enfants de la personne"
+        categorieSocioProfessionnelle:
+          $ref: '#/components/schemas/CategorieSocioProfessionnelle'
+
+
+    CategorieSocioProfessionnelle:
+      type: object
+      properties:
+        categorieSocioProfessionnelle:
+          $ref: '#/components/schemas/ProfessionsEtCategoriesSocioPro'
+        categorieSocioProfessionnelleParent1:
+          $ref: '#/components/schemas/ProfessionsEtCategoriesSocioPro'
+        categorieSocioProfessionnelleParent2:
+          $ref: '#/components/schemas/ProfessionsEtCategoriesSocioPro'
+        quotiteTravaillee:
+          $ref: '#/components/schemas/QuotitesActivite'
+
+    ParcoursScolaireEtUniversitaire:
+      type: object
+      properties:
+        titreAccesESRFrancais:
+          $ref: '#/components/schemas/TitresAccesEnseignementSup'
+        anneeObtentionBac:
+          type: integer
+          example: 2024
+          minimum: 0
+          nullable: true
+          description: "Année d'obtention du baccalauréat"
+        typeSerieBac:
+          $ref: '#/components/schemas/SeriesBacEtEquivalent'
+        premiereSpecialiteBac:
+          $ref: '#/components/schemas/SpecialitesBacGeneral'
+        deuxiemeSpecialiteBac:
+          $ref: '#/components/schemas/SpecialitesBacGeneral'
+        mentionBac:
+          $ref: '#/components/schemas/MentionsBac'
+        typeEtablissementBac:
+          type: string
+          description: "Type de l'établissement dans lequel la personne à obtenu son baccalauréat (nomenclature)"
+        paysBac:
+          $ref: '#/components/schemas/PaysEtNationalites'
+        departementBac:
+          $ref: '#/components/schemas/Departements'
+        etablissementBac:
+          $ref: '#/components/schemas/EtablissementsFrancais'
+        libelleEtablissementBacEtranger:
+          type: string
+          description: "Nom de l'établissement à l'étranger dans lequel la personne à obtenu son baccalauréat ou équivalent"
+        complementTitreDispenseBac:
+          type: string
+          description: "Précision de la raison d'une dispence de détention d'un baccalauréat"
+        anneeEntreeEnseignementSuperieur:
+          type: integer
+          example: 2024
+          minimum: 0
+          nullable: true
+          description: "Année d'entrée dans l'enseignement supérieur"
+        anneeEntreeUniversite:
+          type: integer
+          example: 2024
+          minimum: 0
+          nullable: true
+          description: "Année d'entrée à l'université"
+        anneeEntreeEtablissement:
+          type: integer
+          example: 2024
+          minimum: 0
+          nullable: true
+          description: "Année d'entrée dans l'établissement"
+
+    Ine:
+      type: object
+      required:
+        - ine
+        - confirme
+        - maitre
+      properties:
+        ine:
+          type: string
+          description: "INE de l'apprenant"
+        confirme:
+          type: boolean
+          description: "Statut de confirmation de l'INE"
+          deprecated: true
+        maitre:
+          type: boolean
+          description: "Statut maître pour l'INE"
+          deprecated: true
+
+    StatutIne:
+      type: string
+      enum: [ A_VERIFIER, CONFIRME, DONNEES_INCOMPLETES, INCONNU, LITIGE ]
+      description: |
+        Etat de l'ine maître
+
+    StatutIneRetour:
+      type: string
+      enum: [CONFIRME, A_VERIFIER, DONNEES_INCOMPLETES, DONNEES_INVALIDES, LITIGE, INCONNU, ERR_IMAT, ERR_VERIF, IMAT_EN_COURS]
+      description: |
+        Statut du numéro INE retourné dans IDT-SERVER
+        
+        Valeurs actuellement possibles:
+
+         * CONFIRME: le numéro a été confirmé par INES
+         * A_VERIFIER: le numéro INE n'a pas été vérifié par INES
+         * INCONNU: l'admis est inconnu d'INES
+         * DONNEES_INCOMPLETES: Une donnée personnelle est manquante pour faire appel à INES
+         * DONNEES_INVALIDES: Si les données transmises pour vérifier l'INE sont invalides
+         * ERR_VERIF: Erreur lors de la vérification INES
+         * IMAT_EN_COURS: immatriculation en cours
+         * LITIGE: le numéro INE est en cours de litige lors d'une demande d'immatriculation
+         * ERR_IMAT: Erreur lors de l'immatriculation INES
+    
+
+    CodeApprenant:
+      type: string
+      description: "Code apprenant généré automatiquement"
+
+    TypeSexe:
+      type: string
+      enum: [ F, M ]
+      description: |
+        Sexe de la personne
+
+    Telephone:
+      type: string
+      description: "Numéro de téléphone"
+
+    Courriel:
+      type: string
+      format: email
+      description: "Adresse électronique (Adresse email)"
+
+    Nomenclature:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          COMMUNENAISSANCE: '#/components/schemas/CommunesNaissance'
+          DEPARTEMENT: '#/components/schemas/Departements'
+          ETABLISSEMENTFRANCAIS: '#/components/schemas/EtablissementsFrancais'
+          MENTIONBAC: '#/components/schemas/MentionsBac'
+          PAYSETNATIONALITES: '#/components/schemas/PaysEtNationalites'
+          PROFESSIONSETCATEGORIESSOCIOPRO: '#/components/schemas/ProfessionsEtCategoriesSocioPro'
+          QUOTITESACTIVITE: '#/components/schemas/QuotitesActivite'
+          SERIESBACETEQUIVALENT: '#/components/schemas/SeriesBacEtEquivalent'
+          SITUATIONSFAMILIALES: '#/components/schemas/SituationsFamiliales'
+          SITUATIONSMILITAIRES: '#/components/schemas/SituationsMilitaires'
+          SPECIALITESBACGENERAL: '#/components/schemas/SpecialitesBacGeneral'
+          TITRESACCESENSEIGNEMENTSUP: '#/components/schemas/TitresAccesEnseignementSup'
+      required:
+        - code
+        - type
+      properties:
+        type:
+          type: string
+          description: |
+            Type de la nomenclature dans le module REF. A noter que ce type est obligatoire dans les objets de type response
+        code:
+          type: string
+          description: |
+            Code de la nomenclature
+        dateConsommation:
+          type: string
+          format: date
+          description: |
+            Date consommation de la nomenclature. A noter que la date de consommation est obligatoire dans les objets de type response
+
+    TypeNomenclature:
+      type: string
+      enum: [ COMMUNENAISSANCE, DEPARTEMENT, ETABLISSEMENTFRANCAIS, MENTIONBAC, PAYSETNATIONALITES, PROFESSIONSETCATEGORIESSOCIOPRO, QUOTITESACTIVITE, SERIESBACETEQUIVALENT, SITUATIONSFAMILIALES, SITUATIONSMILITAIRES, SPECIALITESBACGENERAL, TITRESACCESENSEIGNEMENTSUP ]
+      description: Liste des codes de nomenclatures utilisables dans le champ type de chaque champ de nomenclature
+
+    CommunesNaissance:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature commune de naissance
+
+    Departements:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature département de naissance
+
+    EtablissementsFrancais:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature établissement français
+
+    MentionsBac:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature mention bac
+
+    PaysEtNationalites:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature pays et nationalités
+
+    ProfessionsEtCategoriesSocioPro:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature professions et catégories socio-professionnelles
+
+    QuotitesActivite:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature quotités d'activité
+
+    SeriesBacEtEquivalent:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature séries bac et équivalent
+
+    SituationsFamiliales:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature situations familiales
+
+    SituationsMilitaires:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature situations militaires
+
+    SpecialitesBacGeneral:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature spécialités bac général
+
+    TitresAccesEnseignementSup:
+      allOf:
+        - $ref: '#/components/schemas/Nomenclature'
+      description: |
+        Nomenclature titres d'accès à l'enseignement supérieur
+
+    # Gestion des erreurs
+    Erreurs:
+      required:
+        - correlationId
+        - timestamp
+        - version
+        - path
+        - statusCode
+        - errors
+      properties:
+        correlationId:
+          type: string
+          description: |
+            Permet d'identifier de manière unique l'erreur côté serveur.
+              
+            A titre de debugging.
+        timestamp:
+          type: string
+          format: date-time
+          description: |
+            Timestamp auque à lieu l'erreur.
+              
+            A titre de debugging.
+        version:
+          type: string
+          description: |
+            Version de l'application.
+              
+            A titre de debugging.
+        path:
+          type: string
+          description: |
+            URI sur lequel le service a été applelé (i.e /api/monservice).
+              
+            A titre de debugging.
+        statusCode:
+          type: string
+          description: |
+            Statuscode HTTP.
+              
+            A titre de debugging
+        errors:
+          type: array
+          minimum: 1
+          items:
+            $ref: '#/components/schemas/Erreur'
+
+    Erreur:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: |
+            Code d'erreur.
+
+            Les codes autres que ceux indiqués ci-dessous doivent être documentés dans l'API.
+
+            Exemple: champ_manquant, invalide.
+        message:
+          type: string
+          description: |
+            Message d'erreur à destination des utilisateurs.
+        codeObjet:
+          type: string
+          description: |
+            Code de l'objet en erreur.
+
+            Utile dans le cas où l'API effectue des traitements sur un ensemble d'objets.
+        champ:
+          type: string
+          description: |
+            Champ optionnel désignant l'attribut en erreur.
+
+            Il est valorisé si l'erreur est dûe à un seul attribut en erreur.
+
+            Cet attribut pourra être utilisé par les applications pour placer le message d'erreur
+            à côté du champ de saisie erronné.
+
+            A noter, cet attribut est fourni en 'best-effort', certaines valeurs ne correpondront
+            pas à un attribut existant. Dans ce cas, ignorer la valeur de cet attribut et placer
+            le message d'erreur en tant que message d'erreur général.
+        messageDetails:
+          type: object
+          properties:
+            arguments:
+              type: object
+              additionalProperties:
+                type: string
+                description: |
+                  Valeurs des arguments du message d'erreur.
+
+                  A titre de debugging.
+
+
+    Pageable:
+      type: object
+      example:
+        page: 0
+        taille: 10
+        tri: [ ]
+      properties:
+        page:
+          type: integer
+          default: 0
+          description: numéro de page demandée (commence à 0)
+        taille:
+          type: integer
+          default: 10
+          maximum: 500
+          description: |
+              nombre d'élements par page.
+              Si taille = -1, alors l'API retourne tout le contenu répondant aux critères de recherche
+        tri:
+            type: array
+            items:
+              type: string
+            description: critères de tri, chaque tri est de la forme <propriété>[,asc|desc]
+
+    Paging:
+      required:
+        - totalElements
+        - totalPages
+        - taille
+        - page
+      properties:
+        totalElements:
+          type: integer
+          description: |
+            Nombre total de d'enregistrements existants en base
+          format: int64
+        totalPages:
+          type: integer
+          description: |
+            Nombre de pages totales existantes
+        taille:
+          type: integer
+          description: |
+            Nombre d'enregistrements demandés par page
+        page:
+          type: integer
+          description: |
+            Numéro de la page retournée (commence à 0)
+

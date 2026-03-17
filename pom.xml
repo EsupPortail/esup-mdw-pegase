@@ -46,11 +46,11 @@
 
 
 	<properties>
-		<revision>2.3.9</revision>
+		<revision>2.3.10</revision>
 		<sha1/>
 		<changelist/>
 		<java.version>17</java.version>
-		<vaadin.version>24.7.14</vaadin.version>
+		<vaadin.version>24.7.15</vaadin.version>
 		<gson-fire-version>1.8.4</gson-fire-version>
         <swagger-core-version>1.5.24</swagger-core-version>
 		<okhttp-version>4.12.0</okhttp-version>
@@ -119,6 +119,13 @@
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-spring-boot-starter</artifactId>
+			<exclusions>
+				<!-- Pour contourner la vulnérabilité https://osv.dev/vulnerability/GHSA-72hv-8253-57qq  -->
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<!-- Surcharge jsoup -->
@@ -259,7 +266,7 @@
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>2.19.0</version>
-    </dependency>
+        </dependency>
         <dependency>
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
@@ -267,18 +274,41 @@
 		<dependency>
     		<groupId>org.openapitools</groupId>
     		<artifactId>jackson-databind-nullable</artifactId>
-    		<version>0.2.6</version>
+    		<version>0.2.9</version>
+			<exclusions>
+				<!-- Pour contourner la vulnérabilité https://osv.dev/vulnerability/GHSA-72hv-8253-57qq  -->
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.6</version>
 		</dependency>
 
         <!--  FIN DES DEPENDANCES OPENAPI GENERATOR -->
 
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
 		<dependency>
     		<groupId>com.fasterxml.jackson.datatype</groupId>
     		<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.21.1</version>
+			<exclusions>
+				<!-- Pour contourner la vulnérabilité https://osv.dev/vulnerability/GHSA-72hv-8253-57qq  -->
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-
-        
+		<!-- Pour contourner la vulnérabilité https://osv.dev/vulnerability/GHSA-72hv-8253-57qq  -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.18.6</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -289,6 +319,55 @@
     			<artifactId>maven-resources-plugin</artifactId>
     			<version>3.1.0</version>
 			</plugin>
+			<!-- openapi-generator -->
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>7.20.0</version>
+				<!-- On place la configuration directement ici pour la commande manuelle -->
+				<configuration>
+					<inputSpec>${project.basedir}/src/main/resources/YML/idt-ext-api-v1-1.5.0-rc.20260309165953.yaml</inputSpec>
+					<invokerPackage>fr.univlorraine.pegase.idt.invoker</invokerPackage>
+					<apiPackage>fr.univlorraine.pegase.idt.api</apiPackage>
+					<modelPackage>fr.univlorraine.pegase.idt.model</modelPackage>
+
+
+					<!--<inputSpec>${project.basedir}/src/main/resources/YML/coc-publication-api-v2-2.3.0.yml</inputSpec>
+					<invokerPackage>fr.univlorraine.pegase.coc.invoker</invokerPackage>
+					<apiPackage>fr.univlorraine.pegase.coc.api</apiPackage>
+					<modelPackage>fr.univlorraine.pegase.coc.model</modelPackage>-->
+
+					<!--<inputSpec>${project.basedir}/src/main/resources/YML/chc-ext-api-v1-1.4.1.yml</inputSpec>
+					<invokerPackage>fr.univlorraine.pegase.chc.invoker</invokerPackage>
+					<apiPackage>fr.univlorraine.pegase.chc.api</apiPackage>
+					<modelPackage>fr.univlorraine.pegase.chc.model</modelPackage>-->
+
+					<!-- <inputSpec>${project.basedir}/src/main/resources/YML/inscription-ext-api-v2-2.5.0.yaml</inputSpec>
+					<invokerPackage>fr.univlorraine.pegase.insext.invoker</invokerPackage>
+					<apiPackage>fr.univlorraine.pegase.insext.api</apiPackage>
+					<modelPackage>fr.univlorraine.pegase.insext.model</modelPackage> -->
+
+					<!-- <inputSpec>${project.basedir}/src/main/resources/YML/piece-ext-api-v1-1.5.0.yaml</inputSpec>
+					<invokerPackage>fr.univlorraine.pegase.pieceext.invoker</invokerPackage>
+					<apiPackage>fr.univlorraine.pegase.pieceext.api</apiPackage>
+					<modelPackage>fr.univlorraine.pegase.pieceext.model</modelPackage> -->
+
+					<generatorName>java</generatorName>
+					<output>${project.build.directory}/generated-sources/openapi</output>
+					<templateDirectory>${project.basedir}/src/main/resources/openapi-custom-templates/okhttp-gson</templateDirectory>
+					<configOptions>
+						<dateLibrary>java17-localdatetime</dateLibrary>
+						<useJakartaEe>true</useJakartaEe>
+						<disallowAdditionalPropertiesIfNotPresent>true</disallowAdditionalPropertiesIfNotPresent>
+						<discriminatorCaseSensitive>false</discriminatorCaseSensitive>
+						<performBeanValidation>false</performBeanValidation>
+						<useBeanValidation>false</useBeanValidation>
+						<beanValidation>false</beanValidation>
+						<openApiNullable>false</openApiNullable>
+					</configOptions>
+				</configuration>
+			</plugin>
+			<!-- MAVEN WAR PLUGIN -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>

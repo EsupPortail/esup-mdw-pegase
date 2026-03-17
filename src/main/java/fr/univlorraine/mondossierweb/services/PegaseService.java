@@ -19,13 +19,13 @@
 package fr.univlorraine.mondossierweb.services;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
-import fr.univlorraine.pegase.chc.api.CursusDcaApi;
-import fr.univlorraine.pegase.chc.model.CursusDCA;
+import fr.univlorraine.pegase.chc.api.CursusApi;
+import fr.univlorraine.pegase.chc.model.Cursus;
 import fr.univlorraine.pegase.coc.api.NotesEtResultatsPubliablesApi;
 import fr.univlorraine.pegase.coc.api.RelevesDeNotesPubliablesApi;
 import fr.univlorraine.pegase.coc.model.Chemin;
 import fr.univlorraine.pegase.coc.model.ReleveDeNotePublie;
-import fr.univlorraine.pegase.idt.api.ApprenantApi;
+import fr.univlorraine.pegase.idt.api.ApprenantExterneApi;
 import fr.univlorraine.pegase.idt.model.IdentiteApprenantSummary;
 import fr.univlorraine.pegase.idt.model.PagedIdentiteApprenantSummaries;
 import fr.univlorraine.pegase.ins.api.InscriptionApi;
@@ -95,7 +95,7 @@ public class PegaseService implements Serializable {
 
 	// CHC API
 	private transient fr.univlorraine.pegase.chc.invoker.ApiClient apiClientChc = new fr.univlorraine.pegase.chc.invoker.ApiClient();
-	private transient CursusDcaApi apiChc = new CursusDcaApi();
+	private transient CursusApi apiChc = new CursusApi();
 
 	// COC API
 	private transient fr.univlorraine.pegase.coc.invoker.ApiClient apiClientCoc = new fr.univlorraine.pegase.coc.invoker.ApiClient();
@@ -104,7 +104,7 @@ public class PegaseService implements Serializable {
 
 	// IDT API
 	private transient fr.univlorraine.pegase.idt.invoker.ApiClient apiClientIdt = new fr.univlorraine.pegase.idt.invoker.ApiClient();
-	private transient ApprenantApi apiIdt = new ApprenantApi();
+	private transient ApprenantExterneApi apiIdt = new ApprenantExterneApi();
 
 	public String getCodeApprenantDemo() {
 		return codeApprenantDemo;
@@ -235,11 +235,24 @@ public class PegaseService implements Serializable {
 		refreshParameters();
 	}
 
-	/**
-	 * Code démo (draft)
-	 * @param codeApprenant
-	 * @return
-	 */
+
+	/*
+	// ResTemplate configuré pour les ApiCient
+	protected RestTemplate buildRestTemplate() {
+		RestTemplate restTemplate = new RestTemplate();
+		HttpComponentsClientHttpRequestFactory apacheFactory = new HttpComponentsClientHttpRequestFactory();
+		// Modification du timeout
+		apacheFactory.setConnectionRequestTimeout(Duration.ofMillis(TIMEOUT_PEGASE));
+		// Permet de lire la réponse plus d'une fois - nécessaire au debuggage
+		BufferingClientHttpRequestFactory bufferingFactory = new BufferingClientHttpRequestFactory(apacheFactory);
+		restTemplate.setRequestFactory(bufferingFactory);
+		// Désactivation du URL encoding
+		DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory();
+		uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+		restTemplate.setUriTemplateHandler(uriBuilderFactory);
+		return restTemplate;
+	}*/
+
 	/*public VueInscriptions getFluxDossierApprenant(String codeApprenant) {
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
@@ -285,7 +298,8 @@ public class PegaseService implements Serializable {
 				}
 				return dossier;
 			} catch (fr.univlorraine.pegase.insext.invoker.ApiException e) {
-				if(e.getCode() == 500 && e.getResponseBody()!=null && e.getResponseBody().contains(APPRENANT_NON_TROUVE)) {
+				if (e.getCode() == 500 && e.getResponseBody()!=null && e.getResponseBody().contains(APPRENANT_NON_TROUVE)) {
+				//if(e.getStatusCode().is5xxServerError() && e.getResponseBodyAsString().contains(APPRENANT_NON_TROUVE)) {
 					log.warn("Apprenant non trouvé lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
 				} else {
 					log.error("Erreur lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(), e);
@@ -297,7 +311,7 @@ public class PegaseService implements Serializable {
 		return null;
 	}
 
-	public List<CursusDCA> getCursus(String codeApprenant) {
+	public List<Cursus> getCursus(String codeApprenant) {
 
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)) {
@@ -307,7 +321,7 @@ public class PegaseService implements Serializable {
 				//List<String> statutsInscription = List.of(Utils.STATUT_INSCRIPTION_VALIDE);
 				// Appel de l'API Pégase
 				//List<List<ObjetMaquetteExtension>> listObj = insApiChc.lireArbreCursusDesInscriptions(etablissement, codeApprenant, codePeriode, statutsInscription);
-				List<CursusDCA> listObj = apiChc.lireCusrsuApprenant(codeApprenant);
+				List<Cursus> listObj = apiChc.lireCursusApprenant(codeApprenant);
 				if(listObj != null) {
 					log.info("Cursus de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
 					log.debug("Cursus de : {}", listObj);

@@ -18,7 +18,7 @@
  */
 package fr.univlorraine.mondossierweb.ui.view.inscriptions;
 
-import fr.univlorraine.pegase.chc.model.LignePedagogiqueDCA;
+import fr.univlorraine.pegase.chc.model.LignePedagogique;
 import lombok.Data;
 
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
 @Data
 public class ObjetMaquetteDTO {
 
-	private LignePedagogiqueDCA objet;
+	private LignePedagogique objet;
 	private String code;
 	private String codeChemin;
 	private String libelle;

@@ -27,7 +27,7 @@ import fr.univlorraine.mondossierweb.controllers.PegaseController;
 import fr.univlorraine.mondossierweb.services.PegaseService;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.CheminDTO;
 import fr.univlorraine.mondossierweb.ui.view.inscriptions.ObjetMaquetteDTO;
-import fr.univlorraine.pegase.chc.model.CursusDCA;
+import fr.univlorraine.pegase.chc.model.Cursus;
 import fr.univlorraine.pegase.coc.model.Chemin;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -82,9 +82,9 @@ public class TestPegaseController {
 	private static final Type LIST_CHEMIN_TYPE = new TypeToken<List<Chemin>>() {
 	}.getType();
 	
-	private static final Type LIST_CURSUS_DCA_TYPE = new TypeToken<List<CursusDCA>>() {
+	private static final Type LIST_CURSUS_DCA_TYPE = new TypeToken<List<Cursus>>() {
 	}.getType();
-	private static List<CursusDCA> maquette1;
+	private static List<Cursus> maquette1;
 	private static List<Chemin> notes1;
 	@MockBean
 	private PegaseService pegaseService;
