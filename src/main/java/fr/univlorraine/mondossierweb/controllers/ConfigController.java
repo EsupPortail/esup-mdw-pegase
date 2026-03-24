@@ -80,7 +80,6 @@ public class ConfigController {
 	private static final String PEGASE_TEST_PERIODE = "PEGASE_TEST_PERIODE";
 	private static final String PEGASE_TEST_APPRENANT = "PEGASE_TEST_APPRENANT";
 	private static final String PEGASE_TEST_CHEMIN = "PEGASE_TEST_CHEMIN";
-	private static final String ESUP_SGC_PHOTO_URL = "ESUP_SGC_PHOTO_URL";
 	private static final String SMTP_HOST = "SMTP_HOST";
 	private static final String SMTP_PORT = "SMTP_PORT";
 	private static final String SMTP_USERNAME = "SMTP_USERNAME";
@@ -241,9 +240,6 @@ public class ConfigController {
 	}
 	public String getPegaseTestChemin() {
 		return getStringValueForParameter(PEGASE_TEST_CHEMIN);
-	}
-	public String getEsupSgcPhotoUrl() {
-		return getStringValueForParameter(ESUP_SGC_PHOTO_URL);
 	}
 	public String getSmtpHost() {
 		return getStringValueForParameter(SMTP_HOST);
