@@ -50,6 +50,7 @@ import fr.univlorraine.mondossierweb.services.AccessTokenService;
 import fr.univlorraine.mondossierweb.services.AppUserDetailsService;
 import fr.univlorraine.mondossierweb.services.CasService;
 import fr.univlorraine.mondossierweb.services.CssService;
+import fr.univlorraine.mondossierweb.services.EsupSgcService;
 import fr.univlorraine.mondossierweb.services.ParametrageService;
 import fr.univlorraine.mondossierweb.services.PegaseService;
 import fr.univlorraine.mondossierweb.services.PreferencesService;
@@ -100,6 +101,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private static final Integer PEGASE_ACCESS_TOKEN_ID = 2;
 	private static final Integer PEGASE_API_ID = 3;
 	private static final Integer PEGASE_PARAM = 4;
+	private static final Integer ESUP_SGC_PARAM = 11;
 	private static final Integer ADMIN_PARAM = 8;
 	private static final Integer SMTP_PARAM = 9;
 	private static final Integer CSS_PARAM = 10;
@@ -124,6 +126,8 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	@Autowired
 	private transient PegaseService pegaseService;
 	@Autowired
+	private EsupSgcService esupSgcService;
+	@Autowired
 	private transient PageTitleFormatter pageTitleFormatter;
 	@Getter
 	private String pageTitle = "";
@@ -138,6 +142,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 	private HashMap<String,String> blobNames = new HashMap<> ();
 
 	private HashMap<String, Image> blobImages = new HashMap<> ();
+
 
 	@PostConstruct
 	private void init() {
@@ -473,6 +478,30 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 		if(categorieId.equals(PEGASE_PARAM)) {
 			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
 			buttonSync.addClickListener(e -> syncServiceConfig(PegaseService.class.getName(), "refreshPegaseParameters"));
+			layout.add(syncButtonLayout);
+		}
+
+		//S'il s'agit de la catégorie ESUP-SGC
+		if(categorieId.equals(ESUP_SGC_PARAM)) {
+			buttonTester.setText(getTranslation("parametres.button-tester-esupsgc"));
+			buttonTester.addClickListener(e -> {
+				// Maj des paramètres depuis la BDD
+				esupSgcService.refreshParameters();
+				try {					// teste service ESUP-SGC
+					if(esupSgcService.getPhoto(pegaseService.getCodeApprenantTest()) != null) {
+						Utils.notifierSucces(getTranslation("esupsgc.ok", pegaseService.getCodeApprenantTest()));
+					} else {
+						Utils.notifierAnomalie(getTranslation("esupsgc.error", pegaseService.getCodeApprenantTest()));
+					}
+				}catch(Exception ex) {
+					Utils.notifierAnomalie(getTranslation("esupsgc.error", pegaseService.getCodeApprenantTest()) + " : " + ex.getLocalizedMessage());
+				}
+			});
+			buttonTester.setEnabled(esupSgcService.isPhotoServiceOperational());
+			layout.add(testButtonLayout);
+
+			buttonSync.setText(getTranslation(PARAMETRES_BUTTON_SYNC));
+			buttonSync.addClickListener(e -> syncServiceConfig(EsupSgcService.class.getName(), REFRESH_PARAMETERS));
 			layout.add(syncButtonLayout);
 		}
 
