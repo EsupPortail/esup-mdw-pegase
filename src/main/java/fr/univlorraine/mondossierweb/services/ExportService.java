@@ -39,11 +39,16 @@ public class ExportService implements Serializable {
 	@Autowired
 	private transient PegaseService pegaseService;
 
+	@Autowired
+	private transient EsupSgcService esupSgcService;
 	
 	public ByteArrayInputStream getPhoto(String codeApprenant, String codeFormation, String codePeriode) {
-		File file = pegaseService.getPhoto(codeApprenant, codeFormation, codePeriode);
-
-		return getStream(file,codeApprenant, codeFormation, "Photo");
+		if(esupSgcService.isPhotoServiceOperational()) {
+			return esupSgcService.getPhoto(codeApprenant);
+		} else {
+			File file = pegaseService.getPhoto(codeApprenant, codeFormation, codePeriode);
+			return getStream(file, codeApprenant, codeFormation, "Photo");
+		}
 	}
 	
 	
