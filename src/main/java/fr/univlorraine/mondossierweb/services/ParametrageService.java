@@ -62,6 +62,7 @@ public class ParametrageService implements Serializable {
 	public void refreshParameters() {
 		refreshLogParameters();
 		refreshSmtpParameters();
+		refreshFavIconParameters();
 	}
 
 	public void refreshSmtpParameters() {
@@ -136,7 +137,6 @@ public class ParametrageService implements Serializable {
 		} else {
 			log.info("Favicon {} null",name);
 		}
-
 	}
 
 

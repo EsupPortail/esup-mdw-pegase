@@ -90,16 +90,21 @@ public class AppUserDetailsService implements AuthenticationUserDetailsService {
     public UserDetails loadUserDetails(Authentication token) throws UsernameNotFoundException {
         CasAssertionAuthenticationToken casAssertionAuthenticationToken = (CasAssertionAuthenticationToken) token;
         AttributePrincipal principal = casAssertionAuthenticationToken.getAssertion().getPrincipal();
-        Map attributes = principal.getAttributes();
+        Map<String, Object> attributes = principal.getAttributes();
+        String username = casAssertionAuthenticationToken.getName();
 
-        log.info("Principal name : {} - attributes : {}", principal.getName(), attributes);
+        log.debug("casAssertionAuthenticationToken - Name : {}", username);
+        log.debug("Principal - Name : {} - Attributes : {}", principal.getName(), attributes);
 
-        String username = (String) attributes.get(casService.getCasLoginAttribute());
+        if(StringUtils.hasText(casService.getCasLoginAttribute()) && attributes.containsKey(casService.getCasLoginAttribute())){
+            username = (String) attributes.get(casService.getCasLoginAttribute());
+            log.debug("Récupération du login via l'attribut CAS : {} => {}", casService.getCasLoginAttribute(), username);
+        }
         String mail = (String) attributes.get(casService.getCasMailAttribute());
         String displayName = (String) attributes.get(casService.getCasDisplayNameAttribute());
         String supannEtuId = (String) attributes.get(casService.getCasCodEtuAttribute());
 
-        log.debug("username : {}, mail : {}, displayName : {}, supannEtuId : {}", username, mail, displayName, supannEtuId);
+        log.debug("Username : {}, Mail : {}, DisplayName : {}, SupannEtuId : {}", username, mail, displayName, supannEtuId);
 
         Assert.notNull(username, "Le nom d'utilisateur ne doit pas être nul.");
         Utilisateur utilisateur = newUtilisateur(username);
