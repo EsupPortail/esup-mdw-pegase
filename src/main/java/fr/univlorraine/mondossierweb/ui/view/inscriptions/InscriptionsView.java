@@ -1057,7 +1057,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         Div aucunResultat = new Div();
         aucunResultat.setText(getTranslation("notes.aucune"));
         aucunResultat.getStyle().set(CssUtils.FONT_STYLE, CssUtils.ITALIC);
-        aucunResultat.getStyle().set("font-size", "smaller");
+        aucunResultat.getStyle().set("font-size", CssUtils.SMALLER);
         aucunResultat.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
         return aucunResultat;
     }
@@ -1141,20 +1141,15 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             if (s1 != null) {
                 HorizontalLayout session1 = new HorizontalLayout();
                 session1.setWidthFull();
-                NativeLabel labelS1 = new NativeLabel(getTranslation("notes.session.1"));
-                labelS1.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
-                labelS1.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+                NativeLabel labelS1 = getLabelSession(getTranslation("notes.session.1"));
                 session1.add(labelS1);
                 session1.add(s1);
                 dialLayout.add(session1);
                 aucunResultat = false;
             }
             if (pjs1 != null) {
-                HorizontalLayout jurys1 = new HorizontalLayout();
-                jurys1.setWidthFull();
-                NativeLabel labelS1 = new NativeLabel(getTranslation("notes.jury.session.1"));
-                labelS1.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
-                labelS1.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+                HorizontalLayout jurys1 = getNewJuryLayout();
+                NativeLabel labelS1 = getJuryLabel(getTranslation("notes.jury.session.1"));
                 jurys1.add(labelS1);
                 jurys1.add(pjs1);
                 dialLayout.add(jurys1);
@@ -1163,9 +1158,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             if (s2 != null) {
                 HorizontalLayout session2 = new HorizontalLayout();
                 session2.setWidthFull();
-                NativeLabel labelS2 = new NativeLabel(getTranslation("notes.session.2"));
-                labelS2.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
-                labelS2.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+                NativeLabel labelS2 = getLabelSession(getTranslation("notes.session.2"));
                 session2.add(labelS2);
                 session2.add(s2);
                 dialLayout.add(session2);
@@ -1173,11 +1166,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 aucunResultatSession2 = false;
             }
             if (pjs2 != null) {
-                HorizontalLayout jurys2 = new HorizontalLayout();
-                jurys2.setWidthFull();
-                NativeLabel labelS1 = new NativeLabel(getTranslation("notes.jury.session.2"));
-                labelS1.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
-                labelS1.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+                HorizontalLayout jurys2 = getNewJuryLayout();
+                NativeLabel labelS1 = getJuryLabel(getTranslation("notes.jury.session.2"));
                 jurys2.add(labelS1);
                 jurys2.add(pjs2);
                 dialLayout.add(jurys2);
@@ -1186,19 +1176,15 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             if (sf != null) {
                 HorizontalLayout sessionFinale = new HorizontalLayout();
                 sessionFinale.setWidthFull();
-                NativeLabel labelSF = new NativeLabel(getTranslation("notes.session.finale"));
-                labelSF.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+                NativeLabel labelSF = getLabelSession(getTranslation("notes.session.finale"));
                 sessionFinale.add(labelSF);
                 sessionFinale.add(sf);
                 dialLayout.add(sessionFinale);
                 aucunResultat = false;
             }
             if (pjsf != null) {
-                HorizontalLayout jurysf = new HorizontalLayout();
-                jurysf.setWidthFull();
-                NativeLabel labelS1 = new NativeLabel(getTranslation("notes.jury.session.finale"));
-                labelS1.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
-                labelS1.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+                HorizontalLayout jurysf = getNewJuryLayout();
+                NativeLabel labelS1 = getJuryLabel(getTranslation("notes.jury.session.finale"));
                 jurysf.add(labelS1);
                 jurysf.add(pjsf);
                 dialLayout.add(jurysf);
@@ -1236,6 +1222,30 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         }
         resultDialog.add(dialLayout);
         resultDialog.open();
+    }
+
+    private NativeLabel getLabelSession(String txt) {
+        NativeLabel label = new NativeLabel(txt);
+        label.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
+        label.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+        return label;
+    }
+
+    private NativeLabel getJuryLabel(String txt) {
+        NativeLabel label = new NativeLabel(txt);
+        label.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
+        label.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+        label.getStyle().set(CssUtils.MARGIN_LEFT, "-1em");
+        return label;
+    }
+
+    private HorizontalLayout getNewJuryLayout() {
+        HorizontalLayout juryLayout = new HorizontalLayout();
+        juryLayout.setWidthFull();
+        juryLayout.getStyle().set(CssUtils.FONT_SIZE, CssUtils.SMALLER);
+        juryLayout.getStyle().set(CssUtils.MARGIN_TOP, "-1em");
+        juryLayout.add(VaadinIcon.ANGLE_RIGHT.create());
+        return juryLayout;
     }
 
 
@@ -1302,7 +1312,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         switch (nbSession) {
             case 1:
                 //Si l'objet est non null est que les infos de session1 sont publiables
-                if (o != null && o.getObjet() != null && o.getObjet().getPublieSession1() && o.getObjet().getPointsJurySession1() != null) {
+                if (o != null && o.getObjet() != null && o.getObjet().getPublieSession1() && o.getObjet().getPointsJurySession1() != null && o.getObjet().getPointsJurySession1().compareTo(BigDecimal.ZERO) != 0) {
                     l.add(createLabelJury(o.getObjet().getPointsJurySession1(), compact));
                 }
                 break;
@@ -1314,7 +1324,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 break;
             case 3:
                 //Si l'objet est non null est que les infos finales sont publiables
-                if (o != null && o.getObjet() != null && o.getObjet().getPublieEvaluationsFinales() && o.getObjet().getPointsJuryRetenus() != null) {
+                if (o != null && o.getObjet() != null && o.getObjet().getPublieEvaluationsFinales() && o.getObjet().getPointsJuryRetenus() != null && o.getObjet().getPointsJuryRetenus().compareTo(BigDecimal.ZERO) != 0) {
                     l.add(createLabelJury(o.getObjet().getPointsJuryRetenus(), compact));
                 }
                 break;

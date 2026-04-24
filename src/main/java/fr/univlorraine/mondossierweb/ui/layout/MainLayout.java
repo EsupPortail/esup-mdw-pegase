@@ -283,7 +283,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 		nomPrenomLayout.add(nomPrenom);
 
 		numeroDossier.getStyle().set(CssUtils.MARGIN, "0px auto 0px auto");
-		numeroDossier.getStyle().set("font-size", "smaller");
+		numeroDossier.getStyle().set("font-size", CssUtils.SMALLER);
 		numeroDossier.getStyle().set("color","var(--lumo-contrast-80pct)");
 		nomPrenomLayout.add(numeroDossier);
 
