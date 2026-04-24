@@ -1256,15 +1256,24 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     }
 
     /**
+     * Créé un FlexLayout et définit la largeur max sur 7em si compact est vrai
+     * @param compact flag pour le mode compact
+     */
+    private FlexLayout getNewFlexLayout(boolean compact) {
+        FlexLayout l = new FlexLayout();
+        if (compact) {
+            l.setMaxWidth("7em");
+        }
+        return l;
+    }
+
+    /**
      * @param o
      * @param compact
      * @return Element de la colonne "Notes" du contrôle
      */
     private FlexLayout getSessionControleDetails(CheminDTO o, boolean compact) {
-        FlexLayout l = new FlexLayout();
-        if (compact) {
-            l.setMaxWidth("7em");
-        }
+        FlexLayout l = getNewFlexLayout(compact);
         // Si le controle est non null et publiable
         if (o != null && o.getControle() != null && o.getControle().getPublie()) {
             if (o.getControle().getNote() != null || o.getControle().getAbsence() != null) {
@@ -1289,10 +1298,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         if(!avecPointsJury) {
             return null;
         }
-        FlexLayout l = new FlexLayout();
-        if (compact) {
-            l.setMaxWidth("7em");
-        }
+        FlexLayout l = getNewFlexLayout(compact);
         switch (nbSession) {
             case 1:
                 //Si l'objet est non null est que les infos de session1 sont publiables
@@ -1302,7 +1308,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 break;
             case 2:
                 //Si l'objet est non null est que les infos de session2 sont publiables
-                if (o != null && o.getObjet() != null && o.getObjet().getPublieSession2() && o.getObjet().getPointsJurySession2() != null) {
+                if (o != null && o.getObjet() != null && o.getObjet().getPublieSession2() && o.getObjet().getPointsJurySession2() != null && o.getObjet().getPointsJurySession2().compareTo(BigDecimal.ZERO) != 0) {
                     l.add(createLabelJury(o.getObjet().getPointsJurySession2(), compact));
                 }
                 break;
@@ -1327,10 +1333,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
      * @return Element de la colonne "Notes" du chemin
      */
     private Component getSession1Details(CheminDTO o, boolean compact) {
-        FlexLayout l = new FlexLayout();
-        if (compact) {
-            l.setMaxWidth("7em");
-        }
+        FlexLayout l = getNewFlexLayout(compact);
         //Si l'objet est non null est que les info de session1 sont publiables
         if (o != null && o.getObjet() != null && o.getObjet().getPublieSession1()) {
             if (o.getObjet().getNoteSession1() != null || o.getObjet().getAbsenceSession1() != null) {
@@ -1355,10 +1358,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
      * @return Element "capitalise"
      */
     private Component getCapitaliseDetails(CheminDTO o, boolean compact) {
-        FlexLayout l = new FlexLayout();
-        if (compact) {
-            l.setMaxWidth("7em");
-        }
+        FlexLayout l = getNewFlexLayout(compact);
 
         // Si l'objet est capitalisé et qu'un libellé court est défini
         if (o != null && o.getObjet() != null && o.getObjet().getAcquisCapitalise() != null && o.getObjet().getAcquisCapitalise().booleanValue()
@@ -1382,10 +1382,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
      * @return Element de la colonne "Notes" du chemin
      */
     private Component getSession2Details(CheminDTO o, boolean compact) {
-        FlexLayout l = new FlexLayout();
-        if (compact) {
-            l.setMaxWidth("7em");
-        }
+        FlexLayout l = getNewFlexLayout(compact);
 
         //Si l'objet est non null est que les info de session2 sont publiables
         if (o != null && o.getObjet() != null && o.getObjet().getPublieSession2()) {
@@ -1412,10 +1409,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
      * @return Element de la colonne "Notes" du chemin
      */
     private Component getSessionFinaleDetails(CheminDTO o, boolean compact) {
-        FlexLayout l = new FlexLayout();
-        if (compact) {
-            l.setMaxWidth("7em");
-        }
+        FlexLayout l = getNewFlexLayout(compact);
 
         //Si l'objet est non null est que les info de session finale sont publiables
         if (o != null && o.getObjet() != null && o.getObjet().getPublieEvaluationsFinales()) {
