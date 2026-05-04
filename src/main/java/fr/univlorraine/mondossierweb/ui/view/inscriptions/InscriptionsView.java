@@ -1423,8 +1423,10 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
 
         //Si l'objet est non null est que les info de session finale sont publiables
         if (o != null && o.getObjet() != null && o.getObjet().getPublieEvaluationsFinales()) {
-            if (o.getObjet().getNoteFinale() != null || o.getObjet().getAbsenceFinale() != null) {
-                l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteFinale(), o.getObjet().getAbsenceFinale(), compact));
+            // Si une note retenue est disponible, elle remplace la note finale
+            BigDecimal noteAffichee = o.getObjet().getNoteRetenue() != null ? o.getObjet().getNoteRetenue() : o.getObjet().getNoteFinale();
+            if (noteAffichee != null || o.getObjet().getAbsenceFinale() != null) {
+                l.add(createLabelNote(o.getObjet().getBareme(), noteAffichee, o.getObjet().getAbsenceFinale(), compact));
             }
             if (o.getObjet().getResultatFinal() != null) {
                 l.add(createLabelResult(compact ? o.getObjet().getResultatFinal().getLibelleCourt() : o.getObjet().getResultatFinal().getLibelleAffichage()));
