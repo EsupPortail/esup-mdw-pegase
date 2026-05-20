@@ -19,6 +19,9 @@ drivers/
 *.iml
 .DS_Store
 
+#IA
+.opencodeignore
+AGENTS.md
 
 # local dev
 **/application.properties

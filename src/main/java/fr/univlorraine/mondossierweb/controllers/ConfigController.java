@@ -40,6 +40,8 @@ public class ConfigController {
 	private static final String NOTE_COEFF = "NOTE_COEFF";
 	private static final String NOTE_CONTROLE = "NOTE_CONTROLE";
 	private static final String NOTE_ECTS = "NOTE_ECTS";
+	private static final String POINTS_JURY = "POINTS_JURY";
+
 	private static final String ACCESSTOKEN_URL = "ACCESSTOKEN_URL";
 	private static final String ACCESSTOKEN_PASSWORD = "ACCESSTOKEN_PASSWORD";
 	private static final String ACCESSTOKEN_USERNAME = "ACCESSTOKEN_USERNAME";
@@ -157,6 +159,9 @@ public class ConfigController {
 	}
 	public boolean isAffichageCreditECTSActif() {
 		return getBooleanValueForParameter(NOTE_ECTS);
+	}
+	public boolean isAffichagePointsJuryActif() {
+		return getBooleanValueForParameter(POINTS_JURY);
 	}
 	public String getAccesTokenUrl() {
 		return getStringValueForParameter(ACCESSTOKEN_URL);
