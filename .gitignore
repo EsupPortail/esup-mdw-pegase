@@ -22,6 +22,11 @@ drivers/
 #IA
 .opencodeignore
 AGENTS.md
+.claudeignore
+.clineignore
+.geminiignore
+.kilo
+.kiloignore
 
 # local dev
 **/application.properties
