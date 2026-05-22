@@ -18,6 +18,15 @@
  */
 package fr.univlorraine.mondossierweb.services;
 
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.server.VaadinService;
+import jakarta.servlet.http.Cookie;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,17 +36,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.server.VaadinService;
-
-import jakarta.servlet.http.Cookie;
 
 /**
  * UI Cookie Service
@@ -70,7 +68,7 @@ public class CookieService implements Serializable {
 			Cookie cookie = new Cookie(buildProperties.getArtifact() + COOKIE_SEPARATOR + name.get(), value != null ? value : "");
 			/* Durée de vie - 5j */
 			cookie.setMaxAge(60 * 60 * 24 * 5);
-			cookie.setSecure(VaadinService.getCurrentRequest().isSecure());
+			cookie.setSecure(true);
 			cookie.setPath("/");
 			cookie.setHttpOnly(true);
 			/* Save */
