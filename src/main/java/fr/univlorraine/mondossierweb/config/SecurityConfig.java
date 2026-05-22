@@ -38,7 +38,6 @@ import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAuthenticationProvider;
 import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -113,7 +112,7 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable());
 
 		/* Autorise pas l'affichage en iFrame */
-		http.headers(headers -> headers.frameOptions(Customizer.withDefaults()));
+		http.headers(headers -> headers.frameOptions(f -> f.deny()));
 
 		/* Renvoie vers la page d'accueil en cas de déconnexion */
 		http.logout(logout -> logout.logoutSuccessUrl("/"));
