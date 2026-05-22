@@ -94,11 +94,8 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((requests) -> requests.requestMatchers(SecurityUtil::isFrameworkInternalRequest).permitAll()
-				/* sonde liveness et readiness*/
-				.requestMatchers(new AntPathRequestMatcher("/actuator/health/liveness")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/actuator/health/readiness")).permitAll()
 				/* Les autres requêtes doivent être authentifiées */
-				.anyRequest().authenticated()).httpBasic(Customizer.withDefaults());
+				.anyRequest().authenticated());
 
 		/* Configure les filtres */
 		final AccessDeniedHandlerImpl accessDeniedHandler = new AccessDeniedHandlerImpl();
@@ -115,8 +112,8 @@ public class SecurityConfig {
 		/* La protection Spring Security contre le Cross Scripting Request Forgery est désactivée, Vaadin implémente sa propre protection */
 		http.csrf(csrf -> csrf.disable());
 
-		/* Autorise l'affichage en iFrame */
-		http.headers((headers) -> headers.frameOptions(Customizer.withDefaults()));
+		/* Autorise pas l'affichage en iFrame */
+		http.headers(headers -> headers.frameOptions(Customizer.withDefaults()));
 
 		/* Renvoie vers la page d'accueil en cas de déconnexion */
 		http.logout(logout -> logout.logoutSuccessUrl("/"));
