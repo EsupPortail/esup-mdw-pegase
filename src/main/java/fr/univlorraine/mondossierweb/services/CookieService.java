@@ -54,7 +54,6 @@ public class CookieService implements Serializable {
 	private transient NotificationService notificationService;
 	@Autowired
 	private transient BuildProperties buildProperties;
-
 	/**
 	 * Ajout d'un cookie.
 	 *
