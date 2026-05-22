@@ -58,6 +58,7 @@ import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.CssUtils;
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.chc.model.Amenagement;
@@ -778,7 +779,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
 
 
     private void displayCursus(String codeApprenant, String codeFormation, String codeRacine, String codePeriode, VerticalLayout cursusLayout) {
-        log.info("Récupération du cursus pour {} sur {} > {}", codeApprenant, codeFormation, codeRacine);
+        log.info("Récupération du cursus pour {} sur {} > {}", LogMaskingUtil.mask(codeApprenant), codeFormation, codeRacine);
 
         //Récupération du cursus
         List<ObjetMaquetteDTO> listObj = pegaseController.getCursus(codeApprenant, codeFormation, codeRacine, codePeriode);
@@ -802,7 +803,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     }
 
     private void displayReleves(String codeApprenant, String codeChemin, String codePeriode, NativeLabel titreDialog, VerticalLayout relevesLayout) {
-        log.info("Récupération des releves pour {} ({}) sur {}", codeApprenant, codePeriode, codeChemin);
+        log.info("Récupération des releves pour {} ({}) sur {}", LogMaskingUtil.mask(codeApprenant), codePeriode, codeChemin);
 
         // Récupération des notes
         List<ReleveDeNotePublie> listReleves = pegaseController.getListeReleves(codeApprenant, codeChemin, codePeriode);
@@ -848,7 +849,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     }
 
     private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout) {
-        log.info("Récupération des notes pour {} ({}) sur {}", codeApprenant, codePeriode, codeChemin);
+        log.info("Récupération des notes pour {} ({}) sur {}", LogMaskingUtil.mask(codeApprenant), codePeriode, codeChemin);
 
         // Récupération des notes
         List<CheminDTO> listObj = pegaseController.getNotes(codeApprenant, codeChemin, codePeriode, avecControle);
