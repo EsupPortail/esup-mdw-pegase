@@ -215,6 +215,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 										categorieLayout.add(image);
 										MemoryBuffer memoryBuffer = new MemoryBuffer();
 										Upload uploadImg = new Upload(memoryBuffer);
+										uploadImg.setMaxFileSize(1024 * 1024);  // 1 Mo max
 										uploadImg.setId(p.getPrefId());
 										blobImages.put(p.getPrefId(), image);
 										uploadImg.setAcceptedFileTypes("image/png","image/jpg");
