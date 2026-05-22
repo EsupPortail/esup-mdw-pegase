@@ -71,6 +71,7 @@ import fr.univlorraine.mondossierweb.ui.view.logger.LoggersView;
 import fr.univlorraine.mondossierweb.ui.view.parametres.ParametresView;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.CssUtils;
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.insext.model.Apprenant;
@@ -296,7 +297,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 	 */
 	public void updateData(Apprenant apprenant) {
 		if(apprenant!=null) {
-			log.info("********   UPDATE DATA MAINLAYOUT "+apprenant.getCode()+"  ********");
+			log.info("********   UPDATE DATA MAINLAYOUT "+ LogMaskingUtil.mask(apprenant.getCode())+"  ********");
 			nomPrenom.setText(getInfoNomPrenom(apprenant));
 			numeroDossier.setText(apprenant.getCode());
 		} else {
@@ -397,7 +398,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 
 				infoDialog.open();
 			} else {
-				log.info("Pop-up désactivée par l'utilisateur {}",utilisateur.getUsername());
+				log.info("Pop-up désactivée par l'utilisateur {}", LogMaskingUtil.mask(utilisateur.getUsername()));
 			}
 		}
 

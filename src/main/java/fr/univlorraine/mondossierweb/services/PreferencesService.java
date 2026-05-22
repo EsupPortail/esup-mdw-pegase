@@ -30,6 +30,7 @@ import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplication
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesApplicationValeursRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesServiceSyncRepository;
 import fr.univlorraine.mondossierweb.model.app.repository.PreferencesUtilisateurRepository;
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import fr.univlorraine.mondossierweb.utils.PrefUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -170,7 +171,7 @@ public class PreferencesService {
 	}
 
 	private void refreshServiceParameters(PreferencesServiceSync sync) {
-		log.info("Mise à jour du service {}->{} demandés par {} ", sync.getId().getServiceName(), sync.getId().getMethodName(), sync.getUsername());
+		log.info("Mise à jour du service {}->{} demandés par {} ", sync.getId().getServiceName(), sync.getId().getMethodName(), LogMaskingUtil.mask(sync.getUsername()));
 		Object bean = ctx.getBean(sync.getId().getServiceName());
 		try {
 			bean.getClass().getMethod(sync.getId().getMethodName()).invoke(bean);
@@ -182,7 +183,7 @@ public class PreferencesService {
 	@Transactional
 	public boolean forceServiceSync(String serviceName, String methodName, Optional<String> username) {
 		serviceName = getBeanNameFromClass(serviceName);
-		log.info("Forcer sync des paramètres du service {} demandés par {} ", serviceName, username.orElse(null));
+		log.info("Forcer sync des paramètres du service {} demandés par {} ", serviceName, LogMaskingUtil.mask(username.orElse(null)));
 		try {
 			PreferencesServiceSyncPK psspk = new PreferencesServiceSyncPK();
 			psspk.setServiceName(serviceName);

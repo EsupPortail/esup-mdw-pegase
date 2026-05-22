@@ -21,6 +21,7 @@ package fr.univlorraine.mondossierweb.services;
 import com.vaadin.flow.server.VaadinSession;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.model.user.entity.Utilisateur;
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import jakarta.annotation.PostConstruct;
@@ -104,7 +105,7 @@ public class AppUserDetailsService implements AuthenticationUserDetailsService {
         String displayName = (String) attributes.get(casService.getCasDisplayNameAttribute());
         String supannEtuId = (String) attributes.get(casService.getCasCodEtuAttribute());
 
-        log.debug("Username : {}, Mail : {}, DisplayName : {}, SupannEtuId : {}", username, mail, displayName, supannEtuId);
+        log.debug("Username : {}, Mail : {}, DisplayName : {}, SupannEtuId : {}", username, LogMaskingUtil.maskEmail(mail), displayName, supannEtuId);
 
         Assert.notNull(username, "Le nom d'utilisateur ne doit pas être nul.");
         Utilisateur utilisateur = newUtilisateur(username);

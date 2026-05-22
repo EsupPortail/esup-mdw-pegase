@@ -19,6 +19,7 @@
 package fr.univlorraine.mondossierweb.services;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
@@ -117,7 +118,7 @@ public class AccessTokenService implements Serializable {
 				&& StringUtils.hasText(tokenResponse.getBody())) {
 				this.token= tokenResponse.getBody();
 				this.tokenCreatedDateTime = LocalDateTime.now();
-				log.info("Access Token récupéré : {}", maskToken(this.token));
+				log.info("Access Token récupéré : {}", LogMaskingUtil.maskToken(this.token));
 			} else {
 				log.error("Anomalie lors de la récupération de access token PEGASE : {}", tokenResponse.getStatusCode());
 			}
@@ -144,23 +145,7 @@ public class AccessTokenService implements Serializable {
 		return token;
 	}
 
-	/**
-	 * Masque un token pour le logging : affiche les 4 premiers et 4 derniers caractères séparés par "...".
-	 * Si le token fait 12 caractères ou moins, il est entièrement masqué par "****".
-	 *
-	 * @param tokenToMask le token à masquer
-	 * @return le token masqué, ou une chaîne vide si le token est null ou vide
-	 */
-	private String maskToken(final String tokenToMask) {
-		if (!StringUtils.hasText(tokenToMask)) {
-			return "";
-		}
-		if (tokenToMask.length() <= 12) {
-			return "****";
-		}
-		return tokenToMask.substring(0, 4) + "..."
-			+ tokenToMask.substring(tokenToMask.length() - 4);
-	}
+
 
 	@Scheduled(fixedRate = 60000)
 	public void cronJobCheckToken() {

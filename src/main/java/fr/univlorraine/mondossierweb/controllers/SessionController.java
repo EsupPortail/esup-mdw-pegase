@@ -21,6 +21,7 @@ package fr.univlorraine.mondossierweb.controllers;
 import com.vaadin.flow.server.VaadinSession;
 import fr.univlorraine.mondossierweb.services.PegaseService;
 import fr.univlorraine.mondossierweb.services.SecurityService;
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
 import lombok.extern.slf4j.Slf4j;
@@ -96,7 +97,7 @@ public class SessionController {
 	public void checkDossier() {
 		// Si on n'a pas les informations sur l'étudiant consulté
 		if(getDossier() == null || !getDossier().getApprenant().getCode().equals(getCodeApprenant())) {
-			log.info("Mise à jour des données du dossier en session pour : {}", getCodeApprenant());
+			log.info("Mise à jour des données du dossier en session pour : {}", LogMaskingUtil.mask(getCodeApprenant()));
 			// Met à jour les données du dossier en session
 			setDossierEnSession(pegaseService.getDossierApprenant(getCodeApprenant()));
 		}
