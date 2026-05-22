@@ -109,7 +109,7 @@ public class SecurityConfig {
 		// .addFilterAfter(switchUserFilter(), AuthorizationFilter.class);
 
 		/* La protection Spring Security contre le Cross Scripting Request Forgery est désactivée, Vaadin implémente sa propre protection */
-		http.csrf(csrf -> csrf.disable());
+		http.csrf(csrf -> csrf.ignoringRequestMatchers(SecurityUtil::isFrameworkInternalRequest));
 
 		/* Autorise pas l'affichage en iFrame */
 		http.headers(headers -> headers.frameOptions(f -> f.deny()));
