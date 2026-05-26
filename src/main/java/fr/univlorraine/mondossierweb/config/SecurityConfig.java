@@ -84,7 +84,10 @@ public class SecurityConfig {
 
 				/* Gestionnaire d'erreurs Spring */
 				.requestMatchers(new AntPathRequestMatcher("/error"))
-				
+
+				/* Actuator */
+				.requestMatchers("/actuator/**")
+
 				/* Service Worker */
 				.requestMatchers(new AntPathRequestMatcher("/sw*.js"));
 
