@@ -262,10 +262,14 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             this.removeAll();
             add(errorLabel);
         }
-        if (dossier != null && dossier.getInscriptions() != null && !dossier.getInscriptions().isEmpty()) {
+        if (dossier == null || dossier.getInscriptions() == null || dossier.getInscriptions().isEmpty()) {
+            ajoutMessageAucuneInscription(inscriptionsLayout);
+        } else {
             //On trie les inscriptions sur l'année universitaire de la période, par ordre décroissant
             dossier.getInscriptions().sort((InscriptionComplete i1, InscriptionComplete i2) ->
                     i2.getCible().getPeriode().getAnneeUniversitaire().compareTo(i1.getCible().getPeriode().getAnneeUniversitaire()));
+
+            int nbInsAffichees = 0;
             // Pour chaque inscription
             for (InscriptionComplete inscription : dossier.getInscriptions()) {
                 boolean inscriptionValide = false;
@@ -327,6 +331,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 }
                 // Si l'inscrition doit être affichée
                 if (inscriptionAffichee) {
+
+                    nbInsAffichees++;
 
                     CmpUtils.deleteGap(statut);
                     listTextLabelStatut.add(statut);
@@ -699,10 +705,15 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     inscriptionsLayout.add(insCard);
                 }
             }
+            if(nbInsAffichees == 0) {
+                ajoutMessageAucuneInscription(inscriptionsLayout);
+            }
             updateStyle();
-        } else {
-            inscriptionsLayout.add(new NativeLabel(getTranslation("inscription.aucune")));
         }
+    }
+
+    private void ajoutMessageAucuneInscription(VerticalLayout inscriptionsLayout) {
+        inscriptionsLayout.add(new NativeLabel(getTranslation("inscription.aucune")));
     }
 
     private Button getNewDisplayButton(Icon icon) {
@@ -1502,10 +1513,11 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         int cpt = 0;
         for (Component c : listComp) {
             cpt++;
-            Card insCard = (Card) c;
-            insCard.updateStyle();
-            if (cpt < listComp.size()) {
-                insCard.addClassName("card-with-separator");
+            if (c instanceof Card insCard) {
+                insCard.updateStyle();
+                if (cpt < listComp.size()) {
+                    insCard.addClassName("card-with-separator");
+                }
             }
         }
 
