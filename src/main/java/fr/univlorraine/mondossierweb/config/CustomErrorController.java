@@ -28,10 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @Controller
-@SuppressWarnings("serial")
 public class CustomErrorController implements ErrorController {
-
-	private static final String ERROR_PATH = "/error";
 
 	/**
 	 * Intercepte toutes les erreurs HTTP (erreurs non gérées par Vaadin)
@@ -40,7 +37,7 @@ public class CustomErrorController implements ErrorController {
 	 * @param request la requête HTTP
 	 * @return redirection vers la route Vaadin "erreur"
 	 */
-	@RequestMapping(ERROR_PATH)
+	@RequestMapping("${server.error.path:${error.path:/error}}")
 	public String handleError(final HttpServletRequest request) {
 		final Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 		final Object message = request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
