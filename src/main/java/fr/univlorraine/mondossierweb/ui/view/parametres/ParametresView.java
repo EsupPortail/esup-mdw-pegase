@@ -72,6 +72,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -215,6 +217,7 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 										categorieLayout.add(image);
 										MemoryBuffer memoryBuffer = new MemoryBuffer();
 										Upload uploadImg = new Upload(memoryBuffer);
+										uploadImg.setMaxFileSize(1024 * 1024);  // 1 Mo max
 										uploadImg.setId(p.getPrefId());
 										blobImages.put(p.getPrefId(), image);
 										uploadImg.setAcceptedFileTypes("image/png","image/jpg");
@@ -225,19 +228,22 @@ public class ParametresView extends Div implements HasDynamicTitle, HasHeader, L
 
 											log.debug("Image {} mimeType : {} length : {}", fileName, event.getMIMEType(),event.getContentLength());
 											// Maj de l'image
-											
 											try {
-												blobValues.put(uploadImg.getId().get(), fileData.readAllBytes());
+												// Vérification robuste : tenter de lire l'image avec ImageIO
+												BufferedImage bufferedImage = ImageIO.read(fileData);
+												if (bufferedImage == null) {
+													Notification notification = Notification.show(getTranslation("parametres.upload.error.not-an-image"), 5000, Notification.Position.MIDDLE);
+													notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+													return;
+												}
+
+												byte[] imageBytes = memoryBuffer.getInputStream().readAllBytes();
+												blobValues.put(uploadImg.getId().get(), imageBytes);
 												Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 												blobNames.put(uploadImg.getId().get(), Utils.getFileName(fileName) + "-" + timestamp.getTime() + Utils.getFileExtension(fileName));
 											} catch (IOException e) {
 												String errorMessage = e.getMessage();
-
-												Notification notification = Notification.show(
-													errorMessage,
-													5000,
-													Notification.Position.MIDDLE
-													);
+												Notification notification = Notification.show(errorMessage, 5000, Notification.Position.MIDDLE);
 												notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 											}
 										});

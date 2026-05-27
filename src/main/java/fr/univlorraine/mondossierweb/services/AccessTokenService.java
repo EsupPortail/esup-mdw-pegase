@@ -19,6 +19,7 @@
 package fr.univlorraine.mondossierweb.services;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
@@ -113,11 +114,11 @@ public class AccessTokenService implements Serializable {
 			final ResponseEntity<String> tokenResponse = restTemplate.exchange(tokenUrl, HttpMethod.POST, new HttpEntity<MultiValueMap<String, String>>(params, requestHeaders), String.class);
 
 			// Récupération du token dans la réponse
-			if(tokenResponse.getStatusCode().is2xxSuccessful() 
+			if(tokenResponse.getStatusCode().is2xxSuccessful()
 				&& StringUtils.hasText(tokenResponse.getBody())) {
 				this.token= tokenResponse.getBody();
 				this.tokenCreatedDateTime = LocalDateTime.now();
-				log.info("Access Token récupéré : {}", this.token);
+				log.info("Access Token récupéré : {}", LogMaskingUtil.maskToken(this.token));
 			} else {
 				log.error("Anomalie lors de la récupération de access token PEGASE : {}", tokenResponse.getStatusCode());
 			}
@@ -143,6 +144,8 @@ public class AccessTokenService implements Serializable {
 		}
 		return token;
 	}
+
+
 
 	@Scheduled(fixedRate = 60000)
 	public void cronJobCheckToken() {

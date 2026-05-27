@@ -18,6 +18,7 @@
  */
 package fr.univlorraine.mondossierweb.services;
 
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -95,13 +96,13 @@ public class ExportService implements Serializable {
 				try (BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream)){
 					bufferedInputStream.read(data,0,data.length);
 				}
-				log.info("PDF generated {} {} ", codeApprenant, info);
+				log.info("PDF generated {} {} ", LogMaskingUtil.mask(codeApprenant), info);
 				return new ByteArrayInputStream(data);
 			} catch (IOException e) {
-				log.info("Erreur à la génération du {} pour : {} {}",document, codeApprenant, info, e);
+				log.info("Erreur à la génération du {} pour : {} {}",document, LogMaskingUtil.mask(codeApprenant), info, e);
 			}
 		} else {
-			log.info("Erreur à la génération du {} pour : {} {}", document, codeApprenant, info);
+			log.info("Erreur à la génération du {} pour : {} {}", document, LogMaskingUtil.mask(codeApprenant), info);
 		}
 		return null;
 	}

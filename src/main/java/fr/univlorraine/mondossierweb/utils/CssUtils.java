@@ -74,7 +74,8 @@ public final class CssUtils {
 	public static final String SOLID_LIGHTGRAY = "1px solid lightgray";
 	public static final String EM_AUTO = "0.1em auto 0.1em 1em";
 	public static final String SECOND_TXT_COLOR = "var(--lumo-secondary-text-color)";
-	private static final String PATTERN_HEX_COLOR_SHORT = "^#[0-9a-fA-F]{3}$";
+    public static final String SMALLER = "smaller";
+    private static final String PATTERN_HEX_COLOR_SHORT = "^#[0-9a-fA-F]{3}$";
 	private static final String PATTERN_HEX_COLOR_LONG = "^#[0-9a-fA-F]{6}$";
 
 	private CssUtils() {

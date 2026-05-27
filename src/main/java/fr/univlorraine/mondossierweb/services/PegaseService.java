@@ -19,6 +19,7 @@
 package fr.univlorraine.mondossierweb.services;
 
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import fr.univlorraine.pegase.chc.api.CursusApi;
 import fr.univlorraine.pegase.chc.model.Cursus;
 import fr.univlorraine.pegase.coc.api.NotesEtResultatsPubliablesApi;
@@ -292,9 +293,9 @@ public class PegaseService implements Serializable {
 				// Appel de l'API Pégase
 				ApprenantEtInscriptions dossier = apiInsExt.lireInscriptions(etablissement, codeApprenant);
 				if(dossier != null) {
-					log.info("Dossier de {} {} {} recupere", dossier.getApprenant().getEtatCivil().getPrenom(),dossier.getApprenant().getEtatCivil().getNomDeNaissance(), dossier.getApprenant().getEtatCivil().getNomUsuel());
+					log.info("Dossier de {} {} {} recupere", LogMaskingUtil.mask(dossier.getApprenant().getEtatCivil().getPrenom()), LogMaskingUtil.mask(dossier.getApprenant().getEtatCivil().getNomDeNaissance()), LogMaskingUtil.mask(dossier.getApprenant().getEtatCivil().getNomUsuel()));
 				} else {
-					log.info("Anomalie lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} LE DOSSIER RECUPERE EST NULL", codeApprenant, etablissement);
+					log.warn("Anomalie lors de l'appel à la methode API : lireInscriptions pour le code apprenant : {} et etablissement : {} LE DOSSIER RECUPERE EST NULL", codeApprenant, etablissement);
 				}
 				return dossier;
 			} catch (fr.univlorraine.pegase.insext.invoker.ApiException e) {
@@ -323,10 +324,10 @@ public class PegaseService implements Serializable {
 				//List<List<ObjetMaquetteExtension>> listObj = insApiChc.lireArbreCursusDesInscriptions(etablissement, codeApprenant, codePeriode, statutsInscription);
 				List<Cursus> listObj = apiChc.lireCursusApprenant(codeApprenant);
 				if(listObj != null) {
-					log.info("Cursus de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
+					log.info("Cursus de {} recupéré: {} objets concernés", LogMaskingUtil.mask(codeApprenant),listObj.size());
 					log.debug("Cursus de : {}", listObj);
 				} else {
-					log.info("Anomalie lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
+					log.warn("Anomalie lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
 				}
 				return listObj;
 			} catch (fr.univlorraine.pegase.chc.invoker.ApiException e) {
@@ -348,7 +349,7 @@ public class PegaseService implements Serializable {
 				// Appel de l'API Pégase
 				List<Chemin> listObj = apiPubNotesCoc.listerCursusPubliableApprenant(etablissement, codePeriode,codeApprenant, codeChemin);
 				if(listObj != null) {
-					log.info("Notes de {} recupéré: {} objets concernés", codeApprenant,listObj.size());
+					log.info("Notes de {} recupéré: {} objets concernés", LogMaskingUtil.mask(codeApprenant),listObj.size());
 					log.debug("Notes de : {}", listObj);
 				} else {
 					log.info("Anomalie lors de l'appel à la methode API : listerCursusPubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {}", codeApprenant, codeChemin, codePeriode, etablissement);
@@ -374,7 +375,7 @@ public class PegaseService implements Serializable {
 				// Appel de l'API Pégase
 				List<ReleveDeNotePublie> listObj = apiPubRelevesCoc.listerReleveDeNotePubliableApprenant(etablissement, codePeriode,codeApprenant, codeChemin);
 				if(listObj != null) {
-					log.info("Relevés de notes {} recupérés: {} objets concernés", codeApprenant,listObj.size());
+					log.info("Relevés de notes {} recupérés: {} objets concernés", LogMaskingUtil.mask(codeApprenant),listObj.size());
 					log.debug("Relevés de notes de : {}", listObj);
 				} else {
 					log.info("Anomalie lors de l'appel à la methode API : listerReleveDeNotePubliableApprenant pour le code apprenant : {}, chemin {}, periode {} et etablissement : {}", codeApprenant, codeChemin, codePeriode, etablissement);
@@ -399,9 +400,9 @@ public class PegaseService implements Serializable {
 				// Appel de l'API Pégase
 				File releve = apiPubRelevesCoc.genererRelevesDeNotesEtResultatsPubliableApprenant(uuidReleve,codeApprenant, codeChemin);
 				if(releve != null) {
-					log.info("Relevé de notes {} récupéré pour {} et cible {} ", uuidReleve, codeApprenant, codeChemin);
+					log.info("Relevé de notes {} récupéré pour {} et cible {} ", LogMaskingUtil.mask(uuidReleve.toString()), LogMaskingUtil.mask(codeApprenant), codeChemin);
 				} else {
-					log.info("Anomalie lors de l'appel à la methode API : genererRelevesDeNotesEtResultatsPubliableApprenant pour le code apprenant : {}, chemin {}, et uuidReleve : {}", codeApprenant, codeChemin, uuidReleve);
+					log.warn("Anomalie lors de l'appel à la methode API : genererRelevesDeNotesEtResultatsPubliableApprenant pour le code apprenant : {}, chemin {}, et uuidReleve : {}", codeApprenant, codeChemin, uuidReleve);
 				}
 				return releve;
 			} catch (fr.univlorraine.pegase.coc.invoker.ApiException e) {
@@ -415,7 +416,7 @@ public class PegaseService implements Serializable {
 
 	public File getPhoto(String codeApprenant, String cible, String codePeriode) {
 
-		log.info("recuperePhoto codeApprenant : {} - cible : {} - periode : {}", codeApprenant, cible, codePeriode);
+		log.info("recuperePhoto codeApprenant : {} - cible : {} - periode : {}", LogMaskingUtil.mask(codeApprenant), cible, codePeriode);
 
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)
@@ -427,9 +428,9 @@ public class PegaseService implements Serializable {
 				File photo = apiPieceExt.visualiserPhoto(etablissement, codeApprenant, codePeriode, cible);
 
 				if(photo != null) {
-					log.info("Photo recuperee pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
+					log.info("Photo recuperee pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", LogMaskingUtil.mask(codeApprenant), etablissement, cible, codePeriode);
 				} else {
-					log.info("Anomalie lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
+					log.warn("Anomalie lors de l'appel à la methode API : recupererPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
 				}
 				return photo;
 			} catch (fr.univlorraine.pegase.pieceext.invoker.ApiException e) {
@@ -442,37 +443,8 @@ public class PegaseService implements Serializable {
 		return null;
 	}
 
-	/*
-	public File getPhoto(String codeApprenant, String cible) {
-
-		log.info("recuperePhoto codeApprenant : {} - cible : {}", codeApprenant, cible);
-
-		// Si les paramètres nécessaires sont valués
-		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)
-			&& StringUtils.hasText(cible)) {
-			// Maj du token pour récupérer le dernier token valide
-			insApiInsExt.getApiClient().setBearerToken(accessTokenService.getToken());
-			try {
-				// Appel de l'API Pégase
-				File photo = insApiInsExt.contenuPiece(etablissement, codeApprenant, cible, codePhoto);
-				if(photo != null) {
-					log.info("Photo de {} recupere", codeApprenant);
-				} else {
-					log.info("Anomalie lors de l'appel à la methode API : contenuPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {}", codeApprenant, etablissement, codePhoto,cible);
-				}
-				return photo;
-			} catch (ApiException e) {
-				// Erreur lors de la récupération de la photo. Un simple warning
-				log.warn("Erreur lors de l'appel à la methode API : contenuPiece pour le code apprenant : {} et etablissement : {} et cible {} et codePhoto {} => ({}) message: {} body : {}", codeApprenant, etablissement, cible, codePhoto,e.getCode(), e.getMessage(),e.getResponseBody());
-			} catch (RuntimeException rex) {
-				log.error("Erreur lors de l'appel à la methode API : contenuPiece pour le code apprenant : {} et etablissement : {}  et cible {} et codePhoto {} => ",codeApprenant, etablissement, cible, codePhoto, rex);
-			}
-		}
-		return null;
-	}*/
-
 	public UUID getUidApprenant(String codeApprenant) {
-		log.info("GET UidApprenant codeApprenant : {} ", codeApprenant);
+		log.info("GET UidApprenant codeApprenant : {} ", LogMaskingUtil.mask(codeApprenant));
 
 		// Maj du token pour récupérer le dernier token valide
 		apiIdt.getApiClient().setBearerToken(accessTokenService.getToken());
@@ -484,7 +456,7 @@ public class PegaseService implements Serializable {
 				IdentiteApprenantSummary id = ids.getItems().get(0);
 				if (id != null) {
 					UUID uuid = UUID.fromString(id.getId());
-					log.info("rechercherIdentiteApprenant OK {} => {}", codeApprenant, uuid);
+					log.info("rechercherIdentiteApprenant OK {} => {}", LogMaskingUtil.mask(codeApprenant), LogMaskingUtil.mask(uuid.toString()));
 					return uuid;
 				}
 				return null;
@@ -502,7 +474,7 @@ public class PegaseService implements Serializable {
 
 	public File getCertificatDeScolarite(UUID uidApprenant, String cible) {
 
-		log.info("certificatDeScolarite codeApprenant : {} - cible : {}", uidApprenant, cible);
+		log.info("certificatDeScolarite codeApprenant : {} - cible : {}", LogMaskingUtil.mask(uidApprenant.toString()), cible);
 
 		// Maj du token pour récupérer le dernier token valide
 		apiIns.getApiClient().setBearerToken(accessTokenService.getToken());
@@ -526,7 +498,7 @@ public class PegaseService implements Serializable {
 
 	public File getAttestationDePaiement(String codeApprenant, String periode) {
 
-		log.info("attestationDePaiement codeApprenant : {} - cible : {}", codeApprenant, periode);
+		log.info("attestationDePaiement codeApprenant : {} - cible : {}", LogMaskingUtil.mask(codeApprenant), periode);
 
 		// Maj du token pour récupérer le dernier token valide
 		apiPai.getApiClient().setBearerToken(accessTokenService.getToken());
@@ -535,7 +507,7 @@ public class PegaseService implements Serializable {
 			// Appel de l'API Pégase
 			File attestationDePaiement = apiPai.imprimerAttestationDePaiement(etablissement, codeApprenant, periode);
 			if(attestationDePaiement != null ) {
-				log.info("attestationDePaiement OK :  {}", attestationDePaiement.getName());
+				log.info("attestationDePaiement OK :  {}", LogMaskingUtil.mask(attestationDePaiement.getName()));
 				return attestationDePaiement;
 			} else {
 				log.info("Anomalie lors de l'appel à la methode API : attestationDePaiement");
@@ -551,7 +523,7 @@ public class PegaseService implements Serializable {
 
 	public List<StatutGlobalPieceParInscription> getStatutPiece(String codeApprenant, String cible, String codePeriode) {
 
-		log.info("recuperePhoto codeApprenant : {} - cible : {} - periode : {}", codeApprenant, cible, codePeriode);
+		log.info("recuperePhoto codeApprenant : {} - cible : {} - periode : {}", LogMaskingUtil.mask(codeApprenant), cible, codePeriode);
 
 		// Si les paramètres nécessaires sont valués
 		if(StringUtils.hasText(etablissement) && StringUtils.hasText(codeApprenant)
@@ -570,9 +542,9 @@ public class PegaseService implements Serializable {
 				List<StatutGlobalPieceParInscription> statuts = apiPieceExt.listerStatutGlobalPieceParInscription(etablissement, listparam);
 
 				if(statuts != null) {
-					log.info("Statuts des pieces recupere pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
+					log.info("Statuts des pieces recupere pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", LogMaskingUtil.mask(codeApprenant), etablissement, cible, codePeriode);
 				} else {
-					log.info("Anomalie lors de l'appel à la methode API : listerStatutGlobalPieceParInscription pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
+					log.warn("Anomalie lors de l'appel à la methode API : listerStatutGlobalPieceParInscription pour le code apprenant : {} et etablissement : {} et cible {} et codePeriode {}", codeApprenant, etablissement, cible, codePeriode);
 				}
 				return statuts;
 			} catch (fr.univlorraine.pegase.pieceext.invoker.ApiException e) {

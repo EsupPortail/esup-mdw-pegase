@@ -22,6 +22,7 @@ package fr.univlorraine.mondossierweb.test.integration;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.services.AccessTokenService;
 import fr.univlorraine.mondossierweb.services.PegaseService;
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import fr.univlorraine.pegase.chc.model.Cursus;
 import fr.univlorraine.pegase.coc.model.Chemin;
 import fr.univlorraine.pegase.insext.model.ApprenantEtInscriptions;
@@ -155,6 +156,6 @@ public class PegaseServiceIT {
 		given(configController.getEtablissement()).willReturn(codeEtab);
 		given(configController.getPegaseDemoApprenant()).willReturn(codeApprenant);
 		pegaseService.refreshPegaseParameters();
-		log.info("Test PegaseService getCursus token : {}",accessTokenService.getToken());
+		log.info("Test PegaseService getCursus token : {}", LogMaskingUtil.mask(accessTokenService.getToken()));
 	}
 }

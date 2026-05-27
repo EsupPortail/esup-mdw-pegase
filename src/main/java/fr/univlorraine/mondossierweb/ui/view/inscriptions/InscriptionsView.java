@@ -58,6 +58,7 @@ import fr.univlorraine.mondossierweb.ui.layout.PageTitleFormatter;
 import fr.univlorraine.mondossierweb.ui.layout.TextHeader;
 import fr.univlorraine.mondossierweb.utils.CmpUtils;
 import fr.univlorraine.mondossierweb.utils.CssUtils;
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import fr.univlorraine.mondossierweb.utils.Utils;
 import fr.univlorraine.mondossierweb.utils.security.SecurityUtils;
 import fr.univlorraine.pegase.chc.model.Amenagement;
@@ -116,6 +117,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     private transient Boolean avecBareme;
     private transient Boolean avecCoeff;
     private transient Boolean avecECTS;
+    private transient Boolean avecPointsJury;
     private transient Boolean avecControle;
     private transient String afficherDetailInscription;
     private transient Boolean facItalique;
@@ -156,6 +158,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         avecBareme = configController.isAffichageNoteBaremeActif();
         avecCoeff = configController.isAffichageNoteCoeffActif();
         avecECTS = configController.isAffichageCreditECTSActif();
+        avecPointsJury = configController.isAffichagePointsJuryActif();
         avecControle = configController.isAffichageNoteControleActif();
         afficherDetailInscription = configController.getInscriptionDetail();
         facItalique = configController.isAffichageCursusFacItalique();
@@ -259,10 +262,14 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             this.removeAll();
             add(errorLabel);
         }
-        if (dossier != null && dossier.getInscriptions() != null && !dossier.getInscriptions().isEmpty()) {
+        if (dossier == null || dossier.getInscriptions() == null || dossier.getInscriptions().isEmpty()) {
+            ajoutMessageAucuneInscription(inscriptionsLayout);
+        } else {
             //On trie les inscriptions sur l'année universitaire de la période, par ordre décroissant
             dossier.getInscriptions().sort((InscriptionComplete i1, InscriptionComplete i2) ->
                     i2.getCible().getPeriode().getAnneeUniversitaire().compareTo(i1.getCible().getPeriode().getAnneeUniversitaire()));
+
+            int nbInsAffichees = 0;
             // Pour chaque inscription
             for (InscriptionComplete inscription : dossier.getInscriptions()) {
                 boolean inscriptionValide = false;
@@ -324,6 +331,8 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 }
                 // Si l'inscrition doit être affichée
                 if (inscriptionAffichee) {
+
+                    nbInsAffichees++;
 
                     CmpUtils.deleteGap(statut);
                     listTextLabelStatut.add(statut);
@@ -696,10 +705,15 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                     inscriptionsLayout.add(insCard);
                 }
             }
+            if(nbInsAffichees == 0) {
+                ajoutMessageAucuneInscription(inscriptionsLayout);
+            }
             updateStyle();
-        } else {
-            inscriptionsLayout.add(new NativeLabel(getTranslation("inscription.aucune")));
         }
+    }
+
+    private void ajoutMessageAucuneInscription(VerticalLayout inscriptionsLayout) {
+        inscriptionsLayout.add(new NativeLabel(getTranslation("inscription.aucune")));
     }
 
     private Button getNewDisplayButton(Icon icon) {
@@ -776,7 +790,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
 
 
     private void displayCursus(String codeApprenant, String codeFormation, String codeRacine, String codePeriode, VerticalLayout cursusLayout) {
-        log.info("Récupération du cursus pour {} sur {} > {}", codeApprenant, codeFormation, codeRacine);
+        log.info("Récupération du cursus pour {} sur {} > {}", LogMaskingUtil.mask(codeApprenant), codeFormation, codeRacine);
 
         //Récupération du cursus
         List<ObjetMaquetteDTO> listObj = pegaseController.getCursus(codeApprenant, codeFormation, codeRacine, codePeriode);
@@ -800,7 +814,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     }
 
     private void displayReleves(String codeApprenant, String codeChemin, String codePeriode, NativeLabel titreDialog, VerticalLayout relevesLayout) {
-        log.info("Récupération des releves pour {} ({}) sur {}", codeApprenant, codePeriode, codeChemin);
+        log.info("Récupération des releves pour {} ({}) sur {}", LogMaskingUtil.mask(codeApprenant), codePeriode, codeChemin);
 
         // Récupération des notes
         List<ReleveDeNotePublie> listReleves = pegaseController.getListeReleves(codeApprenant, codeChemin, codePeriode);
@@ -846,7 +860,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     }
 
     private void displayNotes(String codeApprenant, String codeChemin, String codePeriode, VerticalLayout notesLayout) {
-        log.info("Récupération des notes pour {} ({}) sur {}", codeApprenant, codePeriode, codeChemin);
+        log.info("Récupération des notes pour {} ({}) sur {}", LogMaskingUtil.mask(codeApprenant), codePeriode, codeChemin);
 
         // Récupération des notes
         List<CheminDTO> listObj = pegaseController.getNotes(codeApprenant, codeChemin, codePeriode, avecControle);
@@ -1055,7 +1069,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         Div aucunResultat = new Div();
         aucunResultat.setText(getTranslation("notes.aucune"));
         aucunResultat.getStyle().set(CssUtils.FONT_STYLE, CssUtils.ITALIC);
-        aucunResultat.getStyle().set("font-size", "smaller");
+        aucunResultat.getStyle().set("font-size", CssUtils.SMALLER);
         aucunResultat.getStyle().set(CssUtils.MARGIN, CssUtils.AUTO);
         return aucunResultat;
     }
@@ -1097,8 +1111,11 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
 
         } else {
             Component sf = getSessionFinaleDetails(o, false);
+            Component pjsf = getPointJurySessionDetails(3, o, false);
             Component s2 = getSession2Details(o, false);
+            Component pjs2 = getPointJurySessionDetails(2, o, false);
             Component s1 = getSession1Details(o, false);
+            Component pjs1 = getPointJurySessionDetails(1, o, false);
             Component ac = getCapitaliseDetails(o, false);
 
             //Ajout du coeff principal
@@ -1120,6 +1137,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
                 HorizontalLayout hl = new HorizontalLayout();
                 hl.setWidthFull();
                 NativeLabel libECTSLabel = new NativeLabel(getTranslation("notes.ects"));
+                libECTSLabel.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
                 libECTSLabel.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
                 hl.add(libECTSLabel);
                 NativeLabel ectsLabel = new NativeLabel(Utils.displayBigDecimal(o.getObjet().getCreditsEctsFinaux()));
@@ -1135,37 +1153,53 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             if (s1 != null) {
                 HorizontalLayout session1 = new HorizontalLayout();
                 session1.setWidthFull();
-                NativeLabel labelS1 = new NativeLabel(getTranslation("notes.session.1"));
-                labelS1.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
-                labelS1.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+                NativeLabel labelS1 = getLabelSession(getTranslation("notes.session.1"));
                 session1.add(labelS1);
                 session1.add(s1);
                 dialLayout.add(session1);
                 aucunResultat = false;
             }
+            if (pjs1 != null) {
+                HorizontalLayout jurys1 = getNewJuryLayout();
+                NativeLabel labelS1 = getJuryLabel(getTranslation("notes.jury.session.1"));
+                jurys1.add(labelS1);
+                jurys1.add(pjs1);
+                dialLayout.add(jurys1);
+            }
             // Ajout des infos de session 2
             if (s2 != null) {
                 HorizontalLayout session2 = new HorizontalLayout();
                 session2.setWidthFull();
-                NativeLabel labelS2 = new NativeLabel(getTranslation("notes.session.2"));
-                labelS2.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
-                labelS2.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+                NativeLabel labelS2 = getLabelSession(getTranslation("notes.session.2"));
                 session2.add(labelS2);
                 session2.add(s2);
                 dialLayout.add(session2);
                 aucunResultat = false;
                 aucunResultatSession2 = false;
             }
+            if (pjs2 != null) {
+                HorizontalLayout jurys2 = getNewJuryLayout();
+                NativeLabel labelS1 = getJuryLabel(getTranslation("notes.jury.session.2"));
+                jurys2.add(labelS1);
+                jurys2.add(pjs2);
+                dialLayout.add(jurys2);
+            }
             // Ajout des infos de session finale
             if (sf != null) {
                 HorizontalLayout sessionFinale = new HorizontalLayout();
                 sessionFinale.setWidthFull();
-                NativeLabel labelSF = new NativeLabel(getTranslation("notes.session.finale"));
-                labelSF.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+                NativeLabel labelSF = getLabelSession(getTranslation("notes.session.finale"));
                 sessionFinale.add(labelSF);
                 sessionFinale.add(sf);
                 dialLayout.add(sessionFinale);
                 aucunResultat = false;
+            }
+            if (pjsf != null) {
+                HorizontalLayout jurysf = getNewJuryLayout();
+                NativeLabel labelS1 = getJuryLabel(getTranslation("notes.jury.session.finale"));
+                jurysf.add(labelS1);
+                jurysf.add(pjsf);
+                dialLayout.add(jurysf);
             }
 
             // Si aucun résultat
@@ -1202,6 +1236,30 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         resultDialog.open();
     }
 
+    private NativeLabel getLabelSession(String txt) {
+        NativeLabel label = new NativeLabel(txt);
+        label.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
+        label.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+        return label;
+    }
+
+    private NativeLabel getJuryLabel(String txt) {
+        NativeLabel label = new NativeLabel(txt);
+        label.getStyle().set(CssUtils.WHITE_SPACE, CssUtils.NOWRAP);
+        label.getStyle().set(CssUtils.FONT_WEIGHT, "bold");
+        label.getStyle().set(CssUtils.MARGIN_LEFT, "-1em");
+        return label;
+    }
+
+    private HorizontalLayout getNewJuryLayout() {
+        HorizontalLayout juryLayout = new HorizontalLayout();
+        juryLayout.setWidthFull();
+        juryLayout.getStyle().set(CssUtils.FONT_SIZE, CssUtils.SMALLER);
+        juryLayout.getStyle().set(CssUtils.MARGIN_TOP, "-1em");
+        juryLayout.add(VaadinIcon.ANGLE_RIGHT.create());
+        return juryLayout;
+    }
+
 
     // Retourne le dernier coeff
     private BigDecimal getCoeff(CheminDTO o) {
@@ -1220,15 +1278,24 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
     }
 
     /**
+     * Créé un FlexLayout et définit la largeur max sur 7em si compact est vrai
+     * @param compact flag pour le mode compact
+     */
+    private FlexLayout getNewFlexLayout(boolean compact) {
+        FlexLayout l = new FlexLayout();
+        if (compact) {
+            l.setMaxWidth("7em");
+        }
+        return l;
+    }
+
+    /**
      * @param o
      * @param compact
      * @return Element de la colonne "Notes" du contrôle
      */
     private FlexLayout getSessionControleDetails(CheminDTO o, boolean compact) {
-        FlexLayout l = new FlexLayout();
-        if (compact) {
-            l.setMaxWidth("7em");
-        }
+        FlexLayout l = getNewFlexLayout(compact);
         // Si le controle est non null et publiable
         if (o != null && o.getControle() != null && o.getControle().getPublie()) {
             if (o.getControle().getNote() != null || o.getControle().getAbsence() != null) {
@@ -1242,17 +1309,53 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         return l;
     }
 
+
+    /**
+     * @param o
+     * @param compact
+     * @return Element de la colonne "Point jury session 1" du chemin
+     */
+    private Component getPointJurySessionDetails(int nbSession, CheminDTO o, boolean compact) {
+        // Si on n'affiche pas les points de jury
+        if(!avecPointsJury) {
+            return null;
+        }
+        FlexLayout l = getNewFlexLayout(compact);
+        switch (nbSession) {
+            case 1:
+                //Si l'objet est non null est que les infos de session1 sont publiables
+                if (o != null && o.getObjet() != null && o.getObjet().getPublieSession1() && o.getObjet().getPointsJurySession1() != null && o.getObjet().getPointsJurySession1().compareTo(BigDecimal.ZERO) != 0) {
+                    l.add(createLabelJury(o.getObjet().getPointsJurySession1(), compact));
+                }
+                break;
+            case 2:
+                //Si l'objet est non null est que les infos de session2 sont publiables
+                if (o != null && o.getObjet() != null && o.getObjet().getPublieSession2() && o.getObjet().getPointsJurySession2() != null && o.getObjet().getPointsJurySession2().compareTo(BigDecimal.ZERO) != 0) {
+                    l.add(createLabelJury(o.getObjet().getPointsJurySession2(), compact));
+                }
+                break;
+            case 3:
+                //Si l'objet est non null est que les infos finales sont publiables
+                if (o != null && o.getObjet() != null && o.getObjet().getPublieEvaluationsFinales() && o.getObjet().getPointsJuryRetenus() != null && o.getObjet().getPointsJuryRetenus().compareTo(BigDecimal.ZERO) != 0) {
+                    l.add(createLabelJury(o.getObjet().getPointsJuryRetenus(), compact));
+                }
+                break;
+        }
+
+        l.getStyle().set(CssUtils.FLEW_FLOW, CssUtils.ROW_WRAP);
+        l.getStyle().set(CssUtils.FLEX_DIRECTION, CssUtils.COLUMN);
+        if (l.getComponentCount() > 0) {
+            return l;
+        }
+        return null;
+    }
     /**
      * @param o
      * @param compact
      * @return Element de la colonne "Notes" du chemin
      */
     private Component getSession1Details(CheminDTO o, boolean compact) {
-        FlexLayout l = new FlexLayout();
-        if (compact) {
-            l.setMaxWidth("7em");
-        }
-
+        FlexLayout l = getNewFlexLayout(compact);
         //Si l'objet est non null est que les info de session1 sont publiables
         if (o != null && o.getObjet() != null && o.getObjet().getPublieSession1()) {
             if (o.getObjet().getNoteSession1() != null || o.getObjet().getAbsenceSession1() != null) {
@@ -1265,13 +1368,11 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         }
         l.getStyle().set(CssUtils.FLEW_FLOW, CssUtils.ROW_WRAP);
         l.getStyle().set(CssUtils.FLEX_DIRECTION, CssUtils.COLUMN);
-
         if (l.getComponentCount() > 0) {
             return l;
         }
         return null;
     }
-
 
     /**
      * @param o
@@ -1279,10 +1380,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
      * @return Element "capitalise"
      */
     private Component getCapitaliseDetails(CheminDTO o, boolean compact) {
-        FlexLayout l = new FlexLayout();
-        if (compact) {
-            l.setMaxWidth("7em");
-        }
+        FlexLayout l = getNewFlexLayout(compact);
 
         // Si l'objet est capitalisé et qu'un libellé court est défini
         if (o != null && o.getObjet() != null && o.getObjet().getAcquisCapitalise() != null && o.getObjet().getAcquisCapitalise().booleanValue()
@@ -1306,10 +1404,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
      * @return Element de la colonne "Notes" du chemin
      */
     private Component getSession2Details(CheminDTO o, boolean compact) {
-        FlexLayout l = new FlexLayout();
-        if (compact) {
-            l.setMaxWidth("7em");
-        }
+        FlexLayout l = getNewFlexLayout(compact);
 
         //Si l'objet est non null est que les info de session2 sont publiables
         if (o != null && o.getObjet() != null && o.getObjet().getPublieSession2()) {
@@ -1336,15 +1431,14 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
      * @return Element de la colonne "Notes" du chemin
      */
     private Component getSessionFinaleDetails(CheminDTO o, boolean compact) {
-        FlexLayout l = new FlexLayout();
-        if (compact) {
-            l.setMaxWidth("7em");
-        }
+        FlexLayout l = getNewFlexLayout(compact);
 
         //Si l'objet est non null est que les info de session finale sont publiables
         if (o != null && o.getObjet() != null && o.getObjet().getPublieEvaluationsFinales()) {
-            if (o.getObjet().getNoteFinale() != null || o.getObjet().getAbsenceFinale() != null) {
-                l.add(createLabelNote(o.getObjet().getBareme(), o.getObjet().getNoteFinale(), o.getObjet().getAbsenceFinale(), compact));
+            // Si une note retenue est disponible, elle remplace la note finale
+            BigDecimal noteAffichee = o.getObjet().getNoteRetenue() != null ? o.getObjet().getNoteRetenue() : o.getObjet().getNoteFinale();
+            if (noteAffichee != null || o.getObjet().getAbsenceFinale() != null) {
+                l.add(createLabelNote(o.getObjet().getBareme(), noteAffichee, o.getObjet().getAbsenceFinale(), compact));
             }
             if (o.getObjet().getResultatFinal() != null) {
                 l.add(createLabelResult(compact ? o.getObjet().getResultatFinal().getLibelleCourt() : o.getObjet().getResultatFinal().getLibelleAffichage()));
@@ -1358,6 +1452,19 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
             return l;
         }
         return null;
+    }
+
+    private Component createLabelJury(BigDecimal points, boolean compact) {
+        Div result = new Div();
+        result.setHeight(CssUtils.EM_1_5);
+        if (compact) {
+            result.setWidth("5em");
+        }
+        result.getStyle().set(CssUtils.MARGIN, CssUtils.EM_AUTO);
+        if (points != null) {
+            result.setText(Utils.displayBigDecimal(points));
+        }
+        return result;
     }
 
     private Component createLabelNote(Integer bareme, BigDecimal note, Absence absence, boolean compact) {
@@ -1406,10 +1513,11 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         int cpt = 0;
         for (Component c : listComp) {
             cpt++;
-            Card insCard = (Card) c;
-            insCard.updateStyle();
-            if (cpt < listComp.size()) {
-                insCard.addClassName("card-with-separator");
+            if (c instanceof Card insCard) {
+                insCard.updateStyle();
+                if (cpt < listComp.size()) {
+                    insCard.addClassName("card-with-separator");
+                }
             }
         }
 

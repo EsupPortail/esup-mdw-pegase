@@ -115,13 +115,13 @@ public final class Utils {
 
 	/** Retour le code période de l'inscription */
 	public static String getCodePeriode(InscriptionComplete inscription) {
-		log.info("code periode : {} => {}",getCodeChemin(inscription.getCible()), inscription.getCible().getPeriode().getCode() );
+		log.debug("code periode : {} => {}",getCodeChemin(inscription.getCible()), inscription.getCible().getPeriode().getCode() );
 		return inscription.getCible().getPeriode().getCode();
 	}
 
 	/** Retour le code voeu de l'inscription */
 	public static String getCodeVoeu(InscriptionComplete inscription) {
-		log.info("code chemin :"+getCodeChemin(inscription.getCible()));
+		log.debug("code chemin :"+getCodeChemin(inscription.getCible()));
 		return getCodeChemin(inscription.getCible()) + SEPARATEUR_CHEMIN_PERIODE + inscription.getCible().getPeriode().getCode();
 	}
 
@@ -410,7 +410,7 @@ public final class Utils {
 		int index = fileName.lastIndexOf('.');
 		if(index > 0) {
 			String name = fileName.substring(0, index);
-			log.info("File name of {} is {}",fileName, name);
+			log.debug("File name of {} is {}",fileName, name);
 			return name;
 		}
 		return null;
@@ -423,7 +423,7 @@ public final class Utils {
 		int index = fileName.lastIndexOf('.');
 		if(index > 0) {
 			String extension = fileName.substring(index);
-			log.info("File extension of {} is {}",fileName, extension);
+			log.debug("File extension of {} is {}",fileName, extension);
 			return extension;
 		}
 		return null;

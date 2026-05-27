@@ -38,7 +38,6 @@ import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAuthenticationProvider;
 import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -85,7 +84,10 @@ public class SecurityConfig {
 
 				/* Gestionnaire d'erreurs Spring */
 				.requestMatchers(new AntPathRequestMatcher("/error"))
-				
+
+				/* Actuator */
+				.requestMatchers("/actuator/**")
+
 				/* Service Worker */
 				.requestMatchers(new AntPathRequestMatcher("/sw*.js"));
 
@@ -94,11 +96,8 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((requests) -> requests.requestMatchers(SecurityUtil::isFrameworkInternalRequest).permitAll()
-				/* sonde liveness et readiness*/
-				.requestMatchers(new AntPathRequestMatcher("/actuator/health/liveness")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/actuator/health/readiness")).permitAll()
 				/* Les autres requêtes doivent être authentifiées */
-				.anyRequest().authenticated()).httpBasic(Customizer.withDefaults());
+				.anyRequest().authenticated());
 
 		/* Configure les filtres */
 		final AccessDeniedHandlerImpl accessDeniedHandler = new AccessDeniedHandlerImpl();
@@ -113,10 +112,10 @@ public class SecurityConfig {
 		// .addFilterAfter(switchUserFilter(), AuthorizationFilter.class);
 
 		/* La protection Spring Security contre le Cross Scripting Request Forgery est désactivée, Vaadin implémente sa propre protection */
-		http.csrf(csrf -> csrf.disable());
+		http.csrf(csrf -> csrf.ignoringRequestMatchers(SecurityUtil::isFrameworkInternalRequest));
 
-		/* Autorise l'affichage en iFrame */
-		http.headers((headers) -> headers.frameOptions(Customizer.withDefaults()));
+		/* Autorise pas l'affichage en iFrame */
+		http.headers(headers -> headers.frameOptions(f -> f.deny()));
 
 		/* Renvoie vers la page d'accueil en cas de déconnexion */
 		http.logout(logout -> logout.logoutSuccessUrl("/"));

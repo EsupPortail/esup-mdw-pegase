@@ -22,6 +22,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.net.SMTPAppender;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
+import fr.univlorraine.mondossierweb.utils.LogMaskingUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -96,8 +97,8 @@ public class ParametrageService implements Serializable {
 		log.info("** MailAppender : {}", mailAppender.getClass());
 		log.info("**** smtp host : {}", mailAppender.getSmtpHost());
 		log.info("**** smtp port : {}", mailAppender.getSmtpPort());
-		log.info("**** username : {}", mailAppender.getUsername());
-		log.info("**** from : {}", mailAppender.getFrom());
+		log.info("**** username : {}", LogMaskingUtil.maskEmail(mailAppender.getUsername()));
+		log.info("**** from : {}", LogMaskingUtil.maskEmail(mailAppender.getFrom()));
 		log.info("**** to : {}", mailAppender.getToAsListOfString());
 	}
 

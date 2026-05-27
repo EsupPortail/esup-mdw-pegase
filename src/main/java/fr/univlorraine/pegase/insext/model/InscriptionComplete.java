@@ -13,53 +13,26 @@
 
 package fr.univlorraine.pegase.insext.model;
 
-import java.util.Objects;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import fr.univlorraine.pegase.insext.model.AccordComplet;
-import fr.univlorraine.pegase.insext.model.Admission;
-import fr.univlorraine.pegase.insext.model.CibleInscription;
-import fr.univlorraine.pegase.insext.model.ContexteInscription;
-import fr.univlorraine.pegase.insext.model.CursusParallele;
-import fr.univlorraine.pegase.insext.model.Cvec;
-import fr.univlorraine.pegase.insext.model.EcoleDoctorale;
-import fr.univlorraine.pegase.insext.model.OccurrenceNomenclature;
-import fr.univlorraine.pegase.insext.model.Origine;
-import fr.univlorraine.pegase.insext.model.SituationPersonnelleInscription;
-import fr.univlorraine.pegase.insext.model.SituationPrecedente;
-import fr.univlorraine.pegase.insext.model.SituationUniversitaire;
-import fr.univlorraine.pegase.insext.model.StatutInscriptionVoeu;
-import fr.univlorraine.pegase.insext.model.StatutPaiementVoeu;
+import fr.univlorraine.pegase.insext.invoker.JSON;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.TypeAdapterFactory;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
-
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
-
-import fr.univlorraine.pegase.insext.invoker.JSON;
 
 /**
  * InscriptionComplete
@@ -67,633 +40,27 @@ import fr.univlorraine.pegase.insext.invoker.JSON;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-03-02T18:47:53.839902700+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class InscriptionComplete {
   public static final String SERIALIZED_NAME_ID_APPRENANT = "idApprenant";
-  @SerializedName(SERIALIZED_NAME_ID_APPRENANT)
-  @jakarta.annotation.Nullable
-  private String idApprenant;
-
   public static final String SERIALIZED_NAME_CODE_ETABLISSEMENT = "codeEtablissement";
-  @SerializedName(SERIALIZED_NAME_CODE_ETABLISSEMENT)
-  @jakarta.annotation.Nonnull
-  private String codeEtablissement;
-
   public static final String SERIALIZED_NAME_CIBLE = "cible";
-  @SerializedName(SERIALIZED_NAME_CIBLE)
-  @jakarta.annotation.Nonnull
-  private CibleInscription cible;
-
   public static final String SERIALIZED_NAME_NO_CANDIDAT = "noCandidat";
-  @SerializedName(SERIALIZED_NAME_NO_CANDIDAT)
-  @jakarta.annotation.Nullable
-  private String noCandidat;
-
   public static final String SERIALIZED_NAME_ORIGINE = "origine";
-  @SerializedName(SERIALIZED_NAME_ORIGINE)
-  @jakarta.annotation.Nonnull
-  private Origine origine;
-
   public static final String SERIALIZED_NAME_PRINCIPALE = "principale";
-  @SerializedName(SERIALIZED_NAME_PRINCIPALE)
-  @jakarta.annotation.Nonnull
-  private Boolean principale;
-
   public static final String SERIALIZED_NAME_STATUT_INSCRIPTION = "statutInscription";
-  @SerializedName(SERIALIZED_NAME_STATUT_INSCRIPTION)
-  @jakarta.annotation.Nonnull
-  private StatutInscriptionVoeu statutInscription;
-
   public static final String SERIALIZED_NAME_CONTEXTE_INSCRIPTION = "contexteInscription";
-  @SerializedName(SERIALIZED_NAME_CONTEXTE_INSCRIPTION)
-  @jakarta.annotation.Nonnull
-  private ContexteInscription contexteInscription;
-
   public static final String SERIALIZED_NAME_ENSEIGNEMENT_A_DISTANCE_DEPUIS_LA_FRANCE = "enseignementADistanceDepuisLaFrance";
-  @SerializedName(SERIALIZED_NAME_ENSEIGNEMENT_A_DISTANCE_DEPUIS_LA_FRANCE)
-  @jakarta.annotation.Nullable
-  private Boolean enseignementADistanceDepuisLaFrance;
-
   public static final String SERIALIZED_NAME_STATUT_PAIEMENT = "statutPaiement";
-  @SerializedName(SERIALIZED_NAME_STATUT_PAIEMENT)
-  @jakarta.annotation.Nonnull
-  private StatutPaiementVoeu statutPaiement;
-
   public static final String SERIALIZED_NAME_REGIME_INSCRIPTION = "regimeInscription";
-  @SerializedName(SERIALIZED_NAME_REGIME_INSCRIPTION)
-  @jakarta.annotation.Nonnull
-  private OccurrenceNomenclature regimeInscription;
-
   public static final String SERIALIZED_NAME_BOURSES_ET_AIDES = "boursesEtAides";
-  @SerializedName(SERIALIZED_NAME_BOURSES_ET_AIDES)
-  @jakarta.annotation.Nonnull
-  private List<OccurrenceNomenclature> boursesEtAides = new ArrayList<>();
-
   public static final String SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION = "situationPersonnelleInscription";
-  @SerializedName(SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION)
-  @jakarta.annotation.Nonnull
-  private SituationPersonnelleInscription situationPersonnelleInscription;
-
   public static final String SERIALIZED_NAME_CVEC = "cvec";
-  @SerializedName(SERIALIZED_NAME_CVEC)
-  @jakarta.annotation.Nonnull
-  private Cvec cvec;
-
   public static final String SERIALIZED_NAME_ADMISSION = "admission";
-  @SerializedName(SERIALIZED_NAME_ADMISSION)
-  @jakarta.annotation.Nullable
-  private Admission admission;
-
   public static final String SERIALIZED_NAME_SITUATION_UNIVERSITAIRE = "situationUniversitaire";
-  @SerializedName(SERIALIZED_NAME_SITUATION_UNIVERSITAIRE)
-  @jakarta.annotation.Nonnull
-  private SituationUniversitaire situationUniversitaire;
-
   public static final String SERIALIZED_NAME_SITUATION_PRECEDENTE = "situationPrecedente";
-  @SerializedName(SERIALIZED_NAME_SITUATION_PRECEDENTE)
-  @jakarta.annotation.Nonnull
-  private SituationPrecedente situationPrecedente;
-
   public static final String SERIALIZED_NAME_CURSUS_PARALLELE = "cursusParallele";
-  @SerializedName(SERIALIZED_NAME_CURSUS_PARALLELE)
-  @jakarta.annotation.Nonnull
-  private CursusParallele cursusParallele;
-
   public static final String SERIALIZED_NAME_ECOLE_DOCTORALE = "ecoleDoctorale";
-  @SerializedName(SERIALIZED_NAME_ECOLE_DOCTORALE)
-  @jakarta.annotation.Nonnull
-  private EcoleDoctorale ecoleDoctorale;
-
   public static final String SERIALIZED_NAME_ACCORDS = "accords";
-  @SerializedName(SERIALIZED_NAME_ACCORDS)
-  @jakarta.annotation.Nonnull
-  private List<AccordComplet> accords = new ArrayList<>();
-
   public static final String SERIALIZED_NAME_DATE_INSCRIPTION = "dateInscription";
-  @SerializedName(SERIALIZED_NAME_DATE_INSCRIPTION)
-  @jakarta.annotation.Nonnull
-  private String dateInscription;
-
   public static final String SERIALIZED_NAME_DATE_DERNIERE_MODIFICATION = "dateDerniereModification";
-  @SerializedName(SERIALIZED_NAME_DATE_DERNIERE_MODIFICATION)
-  @jakarta.annotation.Nonnull
-  private String dateDerniereModification;
-
-  public InscriptionComplete() {
-  }
-
-  public InscriptionComplete idApprenant(@jakarta.annotation.Nullable String idApprenant) {
-    this.idApprenant = idApprenant;
-    return this;
-  }
-
-  /**
-   * L&#39;id de l&#39;apprenant transmis par IDT
-   * @return idApprenant
-   */
-  @jakarta.annotation.Nullable
-  public String getIdApprenant() {
-    return idApprenant;
-  }
-
-  public void setIdApprenant(@jakarta.annotation.Nullable String idApprenant) {
-    this.idApprenant = idApprenant;
-  }
-
-
-  public InscriptionComplete codeEtablissement(@jakarta.annotation.Nonnull String codeEtablissement) {
-    this.codeEtablissement = codeEtablissement;
-    return this;
-  }
-
-  /**
-   * Le code de l&#39;établissement dans lequel a été réalisée l&#39;inscription
-   * @return codeEtablissement
-   */
-  @jakarta.annotation.Nonnull
-  public String getCodeEtablissement() {
-    return codeEtablissement;
-  }
-
-  public void setCodeEtablissement(@jakarta.annotation.Nonnull String codeEtablissement) {
-    this.codeEtablissement = codeEtablissement;
-  }
-
-
-  public InscriptionComplete cible(@jakarta.annotation.Nonnull CibleInscription cible) {
-    this.cible = cible;
-    return this;
-  }
-
-  /**
-   * Get cible
-   * @return cible
-   */
-  @jakarta.annotation.Nonnull
-  public CibleInscription getCible() {
-    return cible;
-  }
-
-  public void setCible(@jakarta.annotation.Nonnull CibleInscription cible) {
-    this.cible = cible;
-  }
-
-
-  public InscriptionComplete noCandidat(@jakarta.annotation.Nullable String noCandidat) {
-    this.noCandidat = noCandidat;
-    return this;
-  }
-
-  /**
-   * Le numéro de candidature n&#39;est plus utilisé. Valorisé à null
-   * @return noCandidat
-   */
-  @jakarta.annotation.Nullable
-  public String getNoCandidat() {
-    return noCandidat;
-  }
-
-  public void setNoCandidat(@jakarta.annotation.Nullable String noCandidat) {
-    this.noCandidat = noCandidat;
-  }
-
-
-  public InscriptionComplete origine(@jakarta.annotation.Nonnull Origine origine) {
-    this.origine = origine;
-    return this;
-  }
-
-  /**
-   * Get origine
-   * @return origine
-   */
-  @jakarta.annotation.Nonnull
-  public Origine getOrigine() {
-    return origine;
-  }
-
-  public void setOrigine(@jakarta.annotation.Nonnull Origine origine) {
-    this.origine = origine;
-  }
-
-
-  public InscriptionComplete principale(@jakarta.annotation.Nonnull Boolean principale) {
-    this.principale = principale;
-    return this;
-  }
-
-  /**
-   * le temoin indiquant si une inscription est principale ou pas
-   * @return principale
-   */
-  @jakarta.annotation.Nonnull
-  public Boolean getPrincipale() {
-    return principale;
-  }
-
-  public void setPrincipale(@jakarta.annotation.Nonnull Boolean principale) {
-    this.principale = principale;
-  }
-
-
-  public InscriptionComplete statutInscription(@jakarta.annotation.Nonnull StatutInscriptionVoeu statutInscription) {
-    this.statutInscription = statutInscription;
-    return this;
-  }
-
-  /**
-   * Get statutInscription
-   * @return statutInscription
-   */
-  @jakarta.annotation.Nonnull
-  public StatutInscriptionVoeu getStatutInscription() {
-    return statutInscription;
-  }
-
-  public void setStatutInscription(@jakarta.annotation.Nonnull StatutInscriptionVoeu statutInscription) {
-    this.statutInscription = statutInscription;
-  }
-
-
-  public InscriptionComplete contexteInscription(@jakarta.annotation.Nonnull ContexteInscription contexteInscription) {
-    this.contexteInscription = contexteInscription;
-    return this;
-  }
-
-  /**
-   * Get contexteInscription
-   * @return contexteInscription
-   */
-  @jakarta.annotation.Nonnull
-  public ContexteInscription getContexteInscription() {
-    return contexteInscription;
-  }
-
-  public void setContexteInscription(@jakarta.annotation.Nonnull ContexteInscription contexteInscription) {
-    this.contexteInscription = contexteInscription;
-  }
-
-
-  public InscriptionComplete enseignementADistanceDepuisLaFrance(@jakarta.annotation.Nullable Boolean enseignementADistanceDepuisLaFrance) {
-    this.enseignementADistanceDepuisLaFrance = enseignementADistanceDepuisLaFrance;
-    return this;
-  }
-
-  /**
-   * le temoin indiquant si un télé-enseignement a lieu depuis la France ou l&#39;étranger.
-   * @return enseignementADistanceDepuisLaFrance
-   */
-  @jakarta.annotation.Nullable
-  public Boolean getEnseignementADistanceDepuisLaFrance() {
-    return enseignementADistanceDepuisLaFrance;
-  }
-
-  public void setEnseignementADistanceDepuisLaFrance(@jakarta.annotation.Nullable Boolean enseignementADistanceDepuisLaFrance) {
-    this.enseignementADistanceDepuisLaFrance = enseignementADistanceDepuisLaFrance;
-  }
-
-
-  public InscriptionComplete statutPaiement(@jakarta.annotation.Nonnull StatutPaiementVoeu statutPaiement) {
-    this.statutPaiement = statutPaiement;
-    return this;
-  }
-
-  /**
-   * Get statutPaiement
-   * @return statutPaiement
-   */
-  @jakarta.annotation.Nonnull
-  public StatutPaiementVoeu getStatutPaiement() {
-    return statutPaiement;
-  }
-
-  public void setStatutPaiement(@jakarta.annotation.Nonnull StatutPaiementVoeu statutPaiement) {
-    this.statutPaiement = statutPaiement;
-  }
-
-
-  public InscriptionComplete regimeInscription(@jakarta.annotation.Nonnull OccurrenceNomenclature regimeInscription) {
-    this.regimeInscription = regimeInscription;
-    return this;
-  }
-
-  /**
-   * Get regimeInscription
-   * @return regimeInscription
-   */
-  @jakarta.annotation.Nonnull
-  public OccurrenceNomenclature getRegimeInscription() {
-    return regimeInscription;
-  }
-
-  public void setRegimeInscription(@jakarta.annotation.Nonnull OccurrenceNomenclature regimeInscription) {
-    this.regimeInscription = regimeInscription;
-  }
-
-
-  public InscriptionComplete boursesEtAides(@jakarta.annotation.Nonnull List<OccurrenceNomenclature> boursesEtAides) {
-    this.boursesEtAides = boursesEtAides;
-    return this;
-  }
-
-  public InscriptionComplete addBoursesEtAidesItem(OccurrenceNomenclature boursesEtAidesItem) {
-    if (this.boursesEtAides == null) {
-      this.boursesEtAides = new ArrayList<>();
-    }
-    this.boursesEtAides.add(boursesEtAidesItem);
-    return this;
-  }
-
-  /**
-   * Les bourses et aides financières
-   * @return boursesEtAides
-   */
-  @jakarta.annotation.Nonnull
-  public List<OccurrenceNomenclature> getBoursesEtAides() {
-    return boursesEtAides;
-  }
-
-  public void setBoursesEtAides(@jakarta.annotation.Nonnull List<OccurrenceNomenclature> boursesEtAides) {
-    this.boursesEtAides = boursesEtAides;
-  }
-
-
-  public InscriptionComplete situationPersonnelleInscription(@jakarta.annotation.Nonnull SituationPersonnelleInscription situationPersonnelleInscription) {
-    this.situationPersonnelleInscription = situationPersonnelleInscription;
-    return this;
-  }
-
-  /**
-   * Get situationPersonnelleInscription
-   * @return situationPersonnelleInscription
-   */
-  @jakarta.annotation.Nonnull
-  public SituationPersonnelleInscription getSituationPersonnelleInscription() {
-    return situationPersonnelleInscription;
-  }
-
-  public void setSituationPersonnelleInscription(@jakarta.annotation.Nonnull SituationPersonnelleInscription situationPersonnelleInscription) {
-    this.situationPersonnelleInscription = situationPersonnelleInscription;
-  }
-
-
-  public InscriptionComplete cvec(@jakarta.annotation.Nonnull Cvec cvec) {
-    this.cvec = cvec;
-    return this;
-  }
-
-  /**
-   * Get cvec
-   * @return cvec
-   */
-  @jakarta.annotation.Nonnull
-  public Cvec getCvec() {
-    return cvec;
-  }
-
-  public void setCvec(@jakarta.annotation.Nonnull Cvec cvec) {
-    this.cvec = cvec;
-  }
-
-
-  public InscriptionComplete admission(@jakarta.annotation.Nullable Admission admission) {
-    this.admission = admission;
-    return this;
-  }
-
-  /**
-   * Get admission
-   * @return admission
-   */
-  @jakarta.annotation.Nullable
-  public Admission getAdmission() {
-    return admission;
-  }
-
-  public void setAdmission(@jakarta.annotation.Nullable Admission admission) {
-    this.admission = admission;
-  }
-
-
-  public InscriptionComplete situationUniversitaire(@jakarta.annotation.Nonnull SituationUniversitaire situationUniversitaire) {
-    this.situationUniversitaire = situationUniversitaire;
-    return this;
-  }
-
-  /**
-   * Get situationUniversitaire
-   * @return situationUniversitaire
-   */
-  @jakarta.annotation.Nonnull
-  public SituationUniversitaire getSituationUniversitaire() {
-    return situationUniversitaire;
-  }
-
-  public void setSituationUniversitaire(@jakarta.annotation.Nonnull SituationUniversitaire situationUniversitaire) {
-    this.situationUniversitaire = situationUniversitaire;
-  }
-
-
-  public InscriptionComplete situationPrecedente(@jakarta.annotation.Nonnull SituationPrecedente situationPrecedente) {
-    this.situationPrecedente = situationPrecedente;
-    return this;
-  }
-
-  /**
-   * Get situationPrecedente
-   * @return situationPrecedente
-   */
-  @jakarta.annotation.Nonnull
-  public SituationPrecedente getSituationPrecedente() {
-    return situationPrecedente;
-  }
-
-  public void setSituationPrecedente(@jakarta.annotation.Nonnull SituationPrecedente situationPrecedente) {
-    this.situationPrecedente = situationPrecedente;
-  }
-
-
-  public InscriptionComplete cursusParallele(@jakarta.annotation.Nonnull CursusParallele cursusParallele) {
-    this.cursusParallele = cursusParallele;
-    return this;
-  }
-
-  /**
-   * Get cursusParallele
-   * @return cursusParallele
-   */
-  @jakarta.annotation.Nonnull
-  public CursusParallele getCursusParallele() {
-    return cursusParallele;
-  }
-
-  public void setCursusParallele(@jakarta.annotation.Nonnull CursusParallele cursusParallele) {
-    this.cursusParallele = cursusParallele;
-  }
-
-
-  public InscriptionComplete ecoleDoctorale(@jakarta.annotation.Nonnull EcoleDoctorale ecoleDoctorale) {
-    this.ecoleDoctorale = ecoleDoctorale;
-    return this;
-  }
-
-  /**
-   * Get ecoleDoctorale
-   * @return ecoleDoctorale
-   */
-  @jakarta.annotation.Nonnull
-  public EcoleDoctorale getEcoleDoctorale() {
-    return ecoleDoctorale;
-  }
-
-  public void setEcoleDoctorale(@jakarta.annotation.Nonnull EcoleDoctorale ecoleDoctorale) {
-    this.ecoleDoctorale = ecoleDoctorale;
-  }
-
-
-  public InscriptionComplete accords(@jakarta.annotation.Nonnull List<AccordComplet> accords) {
-    this.accords = accords;
-    return this;
-  }
-
-  public InscriptionComplete addAccordsItem(AccordComplet accordsItem) {
-    if (this.accords == null) {
-      this.accords = new ArrayList<>();
-    }
-    this.accords.add(accordsItem);
-    return this;
-  }
-
-  /**
-   * les documents soumis à approbation lors de l&#39;inscription
-   * @return accords
-   */
-  @jakarta.annotation.Nonnull
-  public List<AccordComplet> getAccords() {
-    return accords;
-  }
-
-  public void setAccords(@jakarta.annotation.Nonnull List<AccordComplet> accords) {
-    this.accords = accords;
-  }
-
-
-  public InscriptionComplete dateInscription(@jakarta.annotation.Nonnull String dateInscription) {
-    this.dateInscription = dateInscription;
-    return this;
-  }
-
-  /**
-   * La date de l&#39;inscription au format AAAA-MM-JJ
-   * @return dateInscription
-   */
-  @jakarta.annotation.Nonnull
-  public String getDateInscription() {
-    return dateInscription;
-  }
-
-  public void setDateInscription(@jakarta.annotation.Nonnull String dateInscription) {
-    this.dateInscription = dateInscription;
-  }
-
-
-  public InscriptionComplete dateDerniereModification(@jakarta.annotation.Nonnull String dateDerniereModification) {
-    this.dateDerniereModification = dateDerniereModification;
-    return this;
-  }
-
-  /**
-   * la date de dernière modification de l&#39;inscription
-   * @return dateDerniereModification
-   */
-  @jakarta.annotation.Nonnull
-  public String getDateDerniereModification() {
-    return dateDerniereModification;
-  }
-
-  public void setDateDerniereModification(@jakarta.annotation.Nonnull String dateDerniereModification) {
-    this.dateDerniereModification = dateDerniereModification;
-  }
-
-
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    InscriptionComplete inscriptionComplete = (InscriptionComplete) o;
-    return Objects.equals(this.idApprenant, inscriptionComplete.idApprenant) &&
-        Objects.equals(this.codeEtablissement, inscriptionComplete.codeEtablissement) &&
-        Objects.equals(this.cible, inscriptionComplete.cible) &&
-        Objects.equals(this.noCandidat, inscriptionComplete.noCandidat) &&
-        Objects.equals(this.origine, inscriptionComplete.origine) &&
-        Objects.equals(this.principale, inscriptionComplete.principale) &&
-        Objects.equals(this.statutInscription, inscriptionComplete.statutInscription) &&
-        Objects.equals(this.contexteInscription, inscriptionComplete.contexteInscription) &&
-        Objects.equals(this.enseignementADistanceDepuisLaFrance, inscriptionComplete.enseignementADistanceDepuisLaFrance) &&
-        Objects.equals(this.statutPaiement, inscriptionComplete.statutPaiement) &&
-        Objects.equals(this.regimeInscription, inscriptionComplete.regimeInscription) &&
-        Objects.equals(this.boursesEtAides, inscriptionComplete.boursesEtAides) &&
-        Objects.equals(this.situationPersonnelleInscription, inscriptionComplete.situationPersonnelleInscription) &&
-        Objects.equals(this.cvec, inscriptionComplete.cvec) &&
-        Objects.equals(this.admission, inscriptionComplete.admission) &&
-        Objects.equals(this.situationUniversitaire, inscriptionComplete.situationUniversitaire) &&
-        Objects.equals(this.situationPrecedente, inscriptionComplete.situationPrecedente) &&
-        Objects.equals(this.cursusParallele, inscriptionComplete.cursusParallele) &&
-        Objects.equals(this.ecoleDoctorale, inscriptionComplete.ecoleDoctorale) &&
-        Objects.equals(this.accords, inscriptionComplete.accords) &&
-        Objects.equals(this.dateInscription, inscriptionComplete.dateInscription) &&
-        Objects.equals(this.dateDerniereModification, inscriptionComplete.dateDerniereModification);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(idApprenant, codeEtablissement, cible, noCandidat, origine, principale, statutInscription, contexteInscription, enseignementADistanceDepuisLaFrance, statutPaiement, regimeInscription, boursesEtAides, situationPersonnelleInscription, cvec, admission, situationUniversitaire, situationPrecedente, cursusParallele, ecoleDoctorale, accords, dateInscription, dateDerniereModification);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class InscriptionComplete {\n");
-    sb.append("    idApprenant: ").append(toIndentedString(idApprenant)).append("\n");
-    sb.append("    codeEtablissement: ").append(toIndentedString(codeEtablissement)).append("\n");
-    sb.append("    cible: ").append(toIndentedString(cible)).append("\n");
-    sb.append("    noCandidat: ").append(toIndentedString(noCandidat)).append("\n");
-    sb.append("    origine: ").append(toIndentedString(origine)).append("\n");
-    sb.append("    principale: ").append(toIndentedString(principale)).append("\n");
-    sb.append("    statutInscription: ").append(toIndentedString(statutInscription)).append("\n");
-    sb.append("    contexteInscription: ").append(toIndentedString(contexteInscription)).append("\n");
-    sb.append("    enseignementADistanceDepuisLaFrance: ").append(toIndentedString(enseignementADistanceDepuisLaFrance)).append("\n");
-    sb.append("    statutPaiement: ").append(toIndentedString(statutPaiement)).append("\n");
-    sb.append("    regimeInscription: ").append(toIndentedString(regimeInscription)).append("\n");
-    sb.append("    boursesEtAides: ").append(toIndentedString(boursesEtAides)).append("\n");
-    sb.append("    situationPersonnelleInscription: ").append(toIndentedString(situationPersonnelleInscription)).append("\n");
-    sb.append("    cvec: ").append(toIndentedString(cvec)).append("\n");
-    sb.append("    admission: ").append(toIndentedString(admission)).append("\n");
-    sb.append("    situationUniversitaire: ").append(toIndentedString(situationUniversitaire)).append("\n");
-    sb.append("    situationPrecedente: ").append(toIndentedString(situationPrecedente)).append("\n");
-    sb.append("    cursusParallele: ").append(toIndentedString(cursusParallele)).append("\n");
-    sb.append("    ecoleDoctorale: ").append(toIndentedString(ecoleDoctorale)).append("\n");
-    sb.append("    accords: ").append(toIndentedString(accords)).append("\n");
-    sb.append("    dateInscription: ").append(toIndentedString(dateInscription)).append("\n");
-    sb.append("    dateDerniereModification: ").append(toIndentedString(dateDerniereModification)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
-
-
   public static HashSet<String> openapiFields;
   public static HashSet<String> openapiRequiredFields;
 
@@ -703,6 +70,76 @@ public class InscriptionComplete {
 
     // a set of required properties/fields (JSON key names)
     openapiRequiredFields = new HashSet<String>(Arrays.asList("codeEtablissement", "cible", "origine", "principale", "statutInscription", "contexteInscription", "statutPaiement", "regimeInscription", "boursesEtAides", "situationPersonnelleInscription", "cvec", "situationUniversitaire", "situationPrecedente", "cursusParallele", "ecoleDoctorale", "accords", "dateInscription", "dateDerniereModification"));
+  }
+
+  @SerializedName(SERIALIZED_NAME_ID_APPRENANT)
+  @jakarta.annotation.Nullable
+  private String idApprenant;
+  @SerializedName(SERIALIZED_NAME_CODE_ETABLISSEMENT)
+  @jakarta.annotation.Nonnull
+  private String codeEtablissement;
+  @SerializedName(SERIALIZED_NAME_CIBLE)
+  @jakarta.annotation.Nonnull
+  private CibleInscription cible;
+  @SerializedName(SERIALIZED_NAME_NO_CANDIDAT)
+  @jakarta.annotation.Nullable
+  private String noCandidat;
+  @SerializedName(SERIALIZED_NAME_ORIGINE)
+  @jakarta.annotation.Nonnull
+  private Origine origine;
+  @SerializedName(SERIALIZED_NAME_PRINCIPALE)
+  @jakarta.annotation.Nonnull
+  private Boolean principale;
+  @SerializedName(SERIALIZED_NAME_STATUT_INSCRIPTION)
+  @jakarta.annotation.Nonnull
+  private StatutInscriptionVoeu statutInscription;
+  @SerializedName(SERIALIZED_NAME_CONTEXTE_INSCRIPTION)
+  @jakarta.annotation.Nonnull
+  private ContexteInscription contexteInscription;
+  @SerializedName(SERIALIZED_NAME_ENSEIGNEMENT_A_DISTANCE_DEPUIS_LA_FRANCE)
+  @jakarta.annotation.Nullable
+  private Boolean enseignementADistanceDepuisLaFrance;
+  @SerializedName(SERIALIZED_NAME_STATUT_PAIEMENT)
+  @jakarta.annotation.Nonnull
+  private StatutPaiementVoeu statutPaiement;
+  @SerializedName(SERIALIZED_NAME_REGIME_INSCRIPTION)
+  @jakarta.annotation.Nonnull
+  private OccurrenceNomenclature regimeInscription;
+  @SerializedName(SERIALIZED_NAME_BOURSES_ET_AIDES)
+  @jakarta.annotation.Nonnull
+  private List<OccurrenceNomenclature> boursesEtAides = new ArrayList<>();
+  @SerializedName(SERIALIZED_NAME_SITUATION_PERSONNELLE_INSCRIPTION)
+  @jakarta.annotation.Nonnull
+  private SituationPersonnelleInscription situationPersonnelleInscription;
+  @SerializedName(SERIALIZED_NAME_CVEC)
+  @jakarta.annotation.Nonnull
+  private Cvec cvec;
+  @SerializedName(SERIALIZED_NAME_ADMISSION)
+  @jakarta.annotation.Nullable
+  private Admission admission;
+  @SerializedName(SERIALIZED_NAME_SITUATION_UNIVERSITAIRE)
+  @jakarta.annotation.Nonnull
+  private SituationUniversitaire situationUniversitaire;
+  @SerializedName(SERIALIZED_NAME_SITUATION_PRECEDENTE)
+  @jakarta.annotation.Nonnull
+  private SituationPrecedente situationPrecedente;
+  @SerializedName(SERIALIZED_NAME_CURSUS_PARALLELE)
+  @jakarta.annotation.Nonnull
+  private CursusParallele cursusParallele;
+  @SerializedName(SERIALIZED_NAME_ECOLE_DOCTORALE)
+  @jakarta.annotation.Nonnull
+  private EcoleDoctorale ecoleDoctorale;
+  @SerializedName(SERIALIZED_NAME_ACCORDS)
+  @jakarta.annotation.Nonnull
+  private List<AccordComplet> accords = new ArrayList<>();
+  @SerializedName(SERIALIZED_NAME_DATE_INSCRIPTION)
+  @jakarta.annotation.Nonnull
+  private String dateInscription;
+  @SerializedName(SERIALIZED_NAME_DATE_DERNIERE_MODIFICATION)
+  @jakarta.annotation.Nonnull
+  private String dateDerniereModification;
+
+  public InscriptionComplete() {
   }
 
   /**
@@ -796,12 +233,525 @@ public class InscriptionComplete {
           AccordComplet.validateJsonElement(jsonArrayaccords.get(i));
         }
       }
-      if (!jsonObj.get("dateInscription").isJsonPrimitive()) {
+      JsonElement dateInscriptionElement = jsonObj.get("dateInscription");
+      if (dateInscriptionElement != null && !dateInscriptionElement.isJsonNull() && !dateInscriptionElement.isJsonPrimitive()) {
         throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dateInscription` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateInscription").toString()));
       }
-      if (!jsonObj.get("dateDerniereModification").isJsonPrimitive()) {
+      JsonElement dateDerniereModifElement = jsonObj.get("dateDerniereModification");
+      if (dateDerniereModifElement != null && !dateDerniereModifElement.isJsonNull() && !dateDerniereModifElement.isJsonPrimitive()) {
         throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `dateDerniereModification` to be a primitive type in the JSON string but got `%s`", jsonObj.get("dateDerniereModification").toString()));
       }
+  }
+
+  /**
+   * Create an instance of InscriptionComplete given an JSON string
+   *
+   * @param jsonString JSON string
+   * @return An instance of InscriptionComplete
+   * @throws IOException if the JSON string is invalid with respect to InscriptionComplete
+   */
+  public static InscriptionComplete fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, InscriptionComplete.class);
+  }
+
+  public InscriptionComplete idApprenant(@jakarta.annotation.Nullable String idApprenant) {
+    this.idApprenant = idApprenant;
+    return this;
+  }
+
+  /**
+   * L&#39;id de l&#39;apprenant transmis par IDT
+   * @return idApprenant
+   */
+  @jakarta.annotation.Nullable
+  public String getIdApprenant() {
+    return idApprenant;
+  }
+
+  public void setIdApprenant(@jakarta.annotation.Nullable String idApprenant) {
+    this.idApprenant = idApprenant;
+  }
+
+  public InscriptionComplete codeEtablissement(@jakarta.annotation.Nonnull String codeEtablissement) {
+    this.codeEtablissement = codeEtablissement;
+    return this;
+  }
+
+  /**
+   * Le code de l&#39;établissement dans lequel a été réalisée l&#39;inscription
+   * @return codeEtablissement
+   */
+  @jakarta.annotation.Nonnull
+  public String getCodeEtablissement() {
+    return codeEtablissement;
+  }
+
+  public void setCodeEtablissement(@jakarta.annotation.Nonnull String codeEtablissement) {
+    this.codeEtablissement = codeEtablissement;
+  }
+
+  public InscriptionComplete cible(@jakarta.annotation.Nonnull CibleInscription cible) {
+    this.cible = cible;
+    return this;
+  }
+
+  /**
+   * Get cible
+   * @return cible
+   */
+  @jakarta.annotation.Nonnull
+  public CibleInscription getCible() {
+    return cible;
+  }
+
+  public void setCible(@jakarta.annotation.Nonnull CibleInscription cible) {
+    this.cible = cible;
+  }
+
+  public InscriptionComplete noCandidat(@jakarta.annotation.Nullable String noCandidat) {
+    this.noCandidat = noCandidat;
+    return this;
+  }
+
+  /**
+   * Le numéro de candidature n&#39;est plus utilisé. Valorisé à null
+   * @return noCandidat
+   */
+  @jakarta.annotation.Nullable
+  public String getNoCandidat() {
+    return noCandidat;
+  }
+
+  public void setNoCandidat(@jakarta.annotation.Nullable String noCandidat) {
+    this.noCandidat = noCandidat;
+  }
+
+  public InscriptionComplete origine(@jakarta.annotation.Nonnull Origine origine) {
+    this.origine = origine;
+    return this;
+  }
+
+  /**
+   * Get origine
+   * @return origine
+   */
+  @jakarta.annotation.Nonnull
+  public Origine getOrigine() {
+    return origine;
+  }
+
+  public void setOrigine(@jakarta.annotation.Nonnull Origine origine) {
+    this.origine = origine;
+  }
+
+  public InscriptionComplete principale(@jakarta.annotation.Nonnull Boolean principale) {
+    this.principale = principale;
+    return this;
+  }
+
+  /**
+   * le temoin indiquant si une inscription est principale ou pas
+   * @return principale
+   */
+  @jakarta.annotation.Nonnull
+  public Boolean getPrincipale() {
+    return principale;
+  }
+
+  public void setPrincipale(@jakarta.annotation.Nonnull Boolean principale) {
+    this.principale = principale;
+  }
+
+  public InscriptionComplete statutInscription(@jakarta.annotation.Nonnull StatutInscriptionVoeu statutInscription) {
+    this.statutInscription = statutInscription;
+    return this;
+  }
+
+  /**
+   * Get statutInscription
+   * @return statutInscription
+   */
+  @jakarta.annotation.Nonnull
+  public StatutInscriptionVoeu getStatutInscription() {
+    return statutInscription;
+  }
+
+  public void setStatutInscription(@jakarta.annotation.Nonnull StatutInscriptionVoeu statutInscription) {
+    this.statutInscription = statutInscription;
+  }
+
+  public InscriptionComplete contexteInscription(@jakarta.annotation.Nonnull ContexteInscription contexteInscription) {
+    this.contexteInscription = contexteInscription;
+    return this;
+  }
+
+  /**
+   * Get contexteInscription
+   * @return contexteInscription
+   */
+  @jakarta.annotation.Nonnull
+  public ContexteInscription getContexteInscription() {
+    return contexteInscription;
+  }
+
+  public void setContexteInscription(@jakarta.annotation.Nonnull ContexteInscription contexteInscription) {
+    this.contexteInscription = contexteInscription;
+  }
+
+  public InscriptionComplete enseignementADistanceDepuisLaFrance(@jakarta.annotation.Nullable Boolean enseignementADistanceDepuisLaFrance) {
+    this.enseignementADistanceDepuisLaFrance = enseignementADistanceDepuisLaFrance;
+    return this;
+  }
+
+  /**
+   * le temoin indiquant si un télé-enseignement a lieu depuis la France ou l&#39;étranger.
+   * @return enseignementADistanceDepuisLaFrance
+   */
+  @jakarta.annotation.Nullable
+  public Boolean getEnseignementADistanceDepuisLaFrance() {
+    return enseignementADistanceDepuisLaFrance;
+  }
+
+  public void setEnseignementADistanceDepuisLaFrance(@jakarta.annotation.Nullable Boolean enseignementADistanceDepuisLaFrance) {
+    this.enseignementADistanceDepuisLaFrance = enseignementADistanceDepuisLaFrance;
+  }
+
+  public InscriptionComplete statutPaiement(@jakarta.annotation.Nonnull StatutPaiementVoeu statutPaiement) {
+    this.statutPaiement = statutPaiement;
+    return this;
+  }
+
+  /**
+   * Get statutPaiement
+   * @return statutPaiement
+   */
+  @jakarta.annotation.Nonnull
+  public StatutPaiementVoeu getStatutPaiement() {
+    return statutPaiement;
+  }
+
+  public void setStatutPaiement(@jakarta.annotation.Nonnull StatutPaiementVoeu statutPaiement) {
+    this.statutPaiement = statutPaiement;
+  }
+
+  public InscriptionComplete regimeInscription(@jakarta.annotation.Nonnull OccurrenceNomenclature regimeInscription) {
+    this.regimeInscription = regimeInscription;
+    return this;
+  }
+
+  /**
+   * Get regimeInscription
+   * @return regimeInscription
+   */
+  @jakarta.annotation.Nonnull
+  public OccurrenceNomenclature getRegimeInscription() {
+    return regimeInscription;
+  }
+
+  public void setRegimeInscription(@jakarta.annotation.Nonnull OccurrenceNomenclature regimeInscription) {
+    this.regimeInscription = regimeInscription;
+  }
+
+  public InscriptionComplete boursesEtAides(@jakarta.annotation.Nonnull List<OccurrenceNomenclature> boursesEtAides) {
+    this.boursesEtAides = boursesEtAides;
+    return this;
+  }
+
+  public InscriptionComplete addBoursesEtAidesItem(OccurrenceNomenclature boursesEtAidesItem) {
+    if (this.boursesEtAides == null) {
+      this.boursesEtAides = new ArrayList<>();
+    }
+    this.boursesEtAides.add(boursesEtAidesItem);
+    return this;
+  }
+
+  /**
+   * Les bourses et aides financières
+   * @return boursesEtAides
+   */
+  @jakarta.annotation.Nonnull
+  public List<OccurrenceNomenclature> getBoursesEtAides() {
+    return boursesEtAides;
+  }
+
+  public void setBoursesEtAides(@jakarta.annotation.Nonnull List<OccurrenceNomenclature> boursesEtAides) {
+    this.boursesEtAides = boursesEtAides;
+  }
+
+  public InscriptionComplete situationPersonnelleInscription(@jakarta.annotation.Nonnull SituationPersonnelleInscription situationPersonnelleInscription) {
+    this.situationPersonnelleInscription = situationPersonnelleInscription;
+    return this;
+  }
+
+  /**
+   * Get situationPersonnelleInscription
+   * @return situationPersonnelleInscription
+   */
+  @jakarta.annotation.Nonnull
+  public SituationPersonnelleInscription getSituationPersonnelleInscription() {
+    return situationPersonnelleInscription;
+  }
+
+  public void setSituationPersonnelleInscription(@jakarta.annotation.Nonnull SituationPersonnelleInscription situationPersonnelleInscription) {
+    this.situationPersonnelleInscription = situationPersonnelleInscription;
+  }
+
+  public InscriptionComplete cvec(@jakarta.annotation.Nonnull Cvec cvec) {
+    this.cvec = cvec;
+    return this;
+  }
+
+  /**
+   * Get cvec
+   * @return cvec
+   */
+  @jakarta.annotation.Nonnull
+  public Cvec getCvec() {
+    return cvec;
+  }
+
+  public void setCvec(@jakarta.annotation.Nonnull Cvec cvec) {
+    this.cvec = cvec;
+  }
+
+  public InscriptionComplete admission(@jakarta.annotation.Nullable Admission admission) {
+    this.admission = admission;
+    return this;
+  }
+
+  /**
+   * Get admission
+   * @return admission
+   */
+  @jakarta.annotation.Nullable
+  public Admission getAdmission() {
+    return admission;
+  }
+
+  public void setAdmission(@jakarta.annotation.Nullable Admission admission) {
+    this.admission = admission;
+  }
+
+  public InscriptionComplete situationUniversitaire(@jakarta.annotation.Nonnull SituationUniversitaire situationUniversitaire) {
+    this.situationUniversitaire = situationUniversitaire;
+    return this;
+  }
+
+  /**
+   * Get situationUniversitaire
+   * @return situationUniversitaire
+   */
+  @jakarta.annotation.Nonnull
+  public SituationUniversitaire getSituationUniversitaire() {
+    return situationUniversitaire;
+  }
+
+  public void setSituationUniversitaire(@jakarta.annotation.Nonnull SituationUniversitaire situationUniversitaire) {
+    this.situationUniversitaire = situationUniversitaire;
+  }
+
+  public InscriptionComplete situationPrecedente(@jakarta.annotation.Nonnull SituationPrecedente situationPrecedente) {
+    this.situationPrecedente = situationPrecedente;
+    return this;
+  }
+
+  /**
+   * Get situationPrecedente
+   * @return situationPrecedente
+   */
+  @jakarta.annotation.Nonnull
+  public SituationPrecedente getSituationPrecedente() {
+    return situationPrecedente;
+  }
+
+  public void setSituationPrecedente(@jakarta.annotation.Nonnull SituationPrecedente situationPrecedente) {
+    this.situationPrecedente = situationPrecedente;
+  }
+
+  public InscriptionComplete cursusParallele(@jakarta.annotation.Nonnull CursusParallele cursusParallele) {
+    this.cursusParallele = cursusParallele;
+    return this;
+  }
+
+  /**
+   * Get cursusParallele
+   * @return cursusParallele
+   */
+  @jakarta.annotation.Nonnull
+  public CursusParallele getCursusParallele() {
+    return cursusParallele;
+  }
+
+  public void setCursusParallele(@jakarta.annotation.Nonnull CursusParallele cursusParallele) {
+    this.cursusParallele = cursusParallele;
+  }
+
+  public InscriptionComplete ecoleDoctorale(@jakarta.annotation.Nonnull EcoleDoctorale ecoleDoctorale) {
+    this.ecoleDoctorale = ecoleDoctorale;
+    return this;
+  }
+
+  /**
+   * Get ecoleDoctorale
+   * @return ecoleDoctorale
+   */
+  @jakarta.annotation.Nonnull
+  public EcoleDoctorale getEcoleDoctorale() {
+    return ecoleDoctorale;
+  }
+
+  public void setEcoleDoctorale(@jakarta.annotation.Nonnull EcoleDoctorale ecoleDoctorale) {
+    this.ecoleDoctorale = ecoleDoctorale;
+  }
+
+  public InscriptionComplete accords(@jakarta.annotation.Nonnull List<AccordComplet> accords) {
+    this.accords = accords;
+    return this;
+  }
+
+  public InscriptionComplete addAccordsItem(AccordComplet accordsItem) {
+    if (this.accords == null) {
+      this.accords = new ArrayList<>();
+    }
+    this.accords.add(accordsItem);
+    return this;
+  }
+
+  /**
+   * les documents soumis à approbation lors de l&#39;inscription
+   * @return accords
+   */
+  @jakarta.annotation.Nonnull
+  public List<AccordComplet> getAccords() {
+    return accords;
+  }
+
+  public void setAccords(@jakarta.annotation.Nonnull List<AccordComplet> accords) {
+    this.accords = accords;
+  }
+
+  public InscriptionComplete dateInscription(@jakarta.annotation.Nonnull String dateInscription) {
+    this.dateInscription = dateInscription;
+    return this;
+  }
+
+  /**
+   * La date de l&#39;inscription au format AAAA-MM-JJ
+   * @return dateInscription
+   */
+  @jakarta.annotation.Nonnull
+  public String getDateInscription() {
+    return dateInscription;
+  }
+
+  public void setDateInscription(@jakarta.annotation.Nonnull String dateInscription) {
+    this.dateInscription = dateInscription;
+  }
+
+  public InscriptionComplete dateDerniereModification(@jakarta.annotation.Nonnull String dateDerniereModification) {
+    this.dateDerniereModification = dateDerniereModification;
+    return this;
+  }
+
+  /**
+   * la date de dernière modification de l&#39;inscription
+   * @return dateDerniereModification
+   */
+  @jakarta.annotation.Nonnull
+  public String getDateDerniereModification() {
+    return dateDerniereModification;
+  }
+
+  public void setDateDerniereModification(@jakarta.annotation.Nonnull String dateDerniereModification) {
+    this.dateDerniereModification = dateDerniereModification;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    InscriptionComplete inscriptionComplete = (InscriptionComplete) o;
+    return Objects.equals(this.idApprenant, inscriptionComplete.idApprenant) &&
+        Objects.equals(this.codeEtablissement, inscriptionComplete.codeEtablissement) &&
+        Objects.equals(this.cible, inscriptionComplete.cible) &&
+        Objects.equals(this.noCandidat, inscriptionComplete.noCandidat) &&
+        Objects.equals(this.origine, inscriptionComplete.origine) &&
+        Objects.equals(this.principale, inscriptionComplete.principale) &&
+        Objects.equals(this.statutInscription, inscriptionComplete.statutInscription) &&
+        Objects.equals(this.contexteInscription, inscriptionComplete.contexteInscription) &&
+        Objects.equals(this.enseignementADistanceDepuisLaFrance, inscriptionComplete.enseignementADistanceDepuisLaFrance) &&
+        Objects.equals(this.statutPaiement, inscriptionComplete.statutPaiement) &&
+        Objects.equals(this.regimeInscription, inscriptionComplete.regimeInscription) &&
+        Objects.equals(this.boursesEtAides, inscriptionComplete.boursesEtAides) &&
+        Objects.equals(this.situationPersonnelleInscription, inscriptionComplete.situationPersonnelleInscription) &&
+        Objects.equals(this.cvec, inscriptionComplete.cvec) &&
+        Objects.equals(this.admission, inscriptionComplete.admission) &&
+        Objects.equals(this.situationUniversitaire, inscriptionComplete.situationUniversitaire) &&
+        Objects.equals(this.situationPrecedente, inscriptionComplete.situationPrecedente) &&
+        Objects.equals(this.cursusParallele, inscriptionComplete.cursusParallele) &&
+        Objects.equals(this.ecoleDoctorale, inscriptionComplete.ecoleDoctorale) &&
+        Objects.equals(this.accords, inscriptionComplete.accords) &&
+        Objects.equals(this.dateInscription, inscriptionComplete.dateInscription) &&
+        Objects.equals(this.dateDerniereModification, inscriptionComplete.dateDerniereModification);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(idApprenant, codeEtablissement, cible, noCandidat, origine, principale, statutInscription, contexteInscription, enseignementADistanceDepuisLaFrance, statutPaiement, regimeInscription, boursesEtAides, situationPersonnelleInscription, cvec, admission, situationUniversitaire, situationPrecedente, cursusParallele, ecoleDoctorale, accords, dateInscription, dateDerniereModification);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class InscriptionComplete {\n");
+    sb.append("    idApprenant: ").append(toIndentedString(idApprenant)).append("\n");
+    sb.append("    codeEtablissement: ").append(toIndentedString(codeEtablissement)).append("\n");
+    sb.append("    cible: ").append(toIndentedString(cible)).append("\n");
+    sb.append("    noCandidat: ").append(toIndentedString(noCandidat)).append("\n");
+    sb.append("    origine: ").append(toIndentedString(origine)).append("\n");
+    sb.append("    principale: ").append(toIndentedString(principale)).append("\n");
+    sb.append("    statutInscription: ").append(toIndentedString(statutInscription)).append("\n");
+    sb.append("    contexteInscription: ").append(toIndentedString(contexteInscription)).append("\n");
+    sb.append("    enseignementADistanceDepuisLaFrance: ").append(toIndentedString(enseignementADistanceDepuisLaFrance)).append("\n");
+    sb.append("    statutPaiement: ").append(toIndentedString(statutPaiement)).append("\n");
+    sb.append("    regimeInscription: ").append(toIndentedString(regimeInscription)).append("\n");
+    sb.append("    boursesEtAides: ").append(toIndentedString(boursesEtAides)).append("\n");
+    sb.append("    situationPersonnelleInscription: ").append(toIndentedString(situationPersonnelleInscription)).append("\n");
+    sb.append("    cvec: ").append(toIndentedString(cvec)).append("\n");
+    sb.append("    admission: ").append(toIndentedString(admission)).append("\n");
+    sb.append("    situationUniversitaire: ").append(toIndentedString(situationUniversitaire)).append("\n");
+    sb.append("    situationPrecedente: ").append(toIndentedString(situationPrecedente)).append("\n");
+    sb.append("    cursusParallele: ").append(toIndentedString(cursusParallele)).append("\n");
+    sb.append("    ecoleDoctorale: ").append(toIndentedString(ecoleDoctorale)).append("\n");
+    sb.append("    accords: ").append(toIndentedString(accords)).append("\n");
+    sb.append("    dateInscription: ").append(toIndentedString(dateInscription)).append("\n");
+    sb.append("    dateDerniereModification: ").append(toIndentedString(dateDerniereModification)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+
+  /**
+   * Convert an instance of InscriptionComplete to an JSON string
+   *
+   * @return JSON string
+   */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
   }
 
   public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
@@ -831,26 +781,6 @@ public class InscriptionComplete {
 
        }.nullSafe();
     }
-  }
-
-  /**
-   * Create an instance of InscriptionComplete given an JSON string
-   *
-   * @param jsonString JSON string
-   * @return An instance of InscriptionComplete
-   * @throws IOException if the JSON string is invalid with respect to InscriptionComplete
-   */
-  public static InscriptionComplete fromJson(String jsonString) throws IOException {
-    return JSON.getGson().fromJson(jsonString, InscriptionComplete.class);
-  }
-
-  /**
-   * Convert an instance of InscriptionComplete to an JSON string
-   *
-   * @return JSON string
-   */
-  public String toJson() {
-    return JSON.getGson().toJson(this);
   }
 }
 
