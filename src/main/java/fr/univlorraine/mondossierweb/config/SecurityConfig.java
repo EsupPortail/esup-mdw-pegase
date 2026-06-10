@@ -34,11 +34,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAuthenticationProvider;
 import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -52,7 +52,6 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
@@ -63,8 +62,6 @@ public class SecurityConfig {
 
 	@Autowired
 	private AppUserDetailsService appUserDetailsService;
-	@Autowired
-	private AuthenticationConfiguration configuration;
 
 	@Value("${app.url}")
 	private String appUrl;
@@ -80,16 +77,16 @@ public class SecurityConfig {
 				.requestMatchers("/VAADIN/**")
 
 				/* Favicon */
-				.requestMatchers("/favicon.ico").requestMatchers("/favicon-*.png").requestMatchers(new AntPathRequestMatcher("/images/*.png"))
+				.requestMatchers("/favicon.ico", "/favicon-*.png", "/images/*.png")
 
 				/* Gestionnaire d'erreurs Spring */
-				.requestMatchers(new AntPathRequestMatcher("/error"))
+				.requestMatchers("/error")
 
 				/* Actuator */
 				.requestMatchers("/actuator/**")
 
 				/* Service Worker */
-				.requestMatchers(new AntPathRequestMatcher("/sw*.js"));
+				.requestMatchers("/sw*.js");
 
 	}
 
@@ -151,10 +148,9 @@ public class SecurityConfig {
 		return provider;
 	}
 
-
 	@Bean
 	AuthenticationManager authenticationManager() throws Exception {
-		return configuration.getAuthenticationManager();
+		return new ProviderManager(casAuthenticationProvider());
 	}
 
 	@Bean

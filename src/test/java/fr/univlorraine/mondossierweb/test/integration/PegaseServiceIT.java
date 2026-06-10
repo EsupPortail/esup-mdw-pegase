@@ -18,7 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.test.integration;
 
-
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.services.AccessTokenService;
 import fr.univlorraine.mondossierweb.services.PegaseService;
@@ -32,9 +31,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestPropertySource;
@@ -67,7 +67,7 @@ public class PegaseServiceIT {
 	@Autowired
 	private AccessTokenService accessTokenService;	
 	
-	@MockBean
+	@Mock
     private ConfigController configController;
 	
 	@Value("${apprenant}")
@@ -104,6 +104,7 @@ public class PegaseServiceIT {
 	public void setUp() {
 		//final Logger logger = (Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 	    //logger.setLevel(Level.INFO);
+		MockitoAnnotations.openMocks(this);
 		initParameters();
 	}
 

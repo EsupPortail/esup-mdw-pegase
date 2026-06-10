@@ -332,7 +332,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 		.set(CssUtils.COLOR, "var(--lumo-primary-color)")
 		.set("text-align", "center");
 
-		userMenu.add(new Hr());
+		userMenu.addItem(new Hr());
 
 		// Entrée 'Paramètres' dans le menu en haut à droite :
 		if (securityService.isAccessGranted(ParametresView.class)) {

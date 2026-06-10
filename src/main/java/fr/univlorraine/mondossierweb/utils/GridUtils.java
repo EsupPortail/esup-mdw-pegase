@@ -18,14 +18,6 @@
  */
 package fr.univlorraine.mondossierweb.utils;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
-import org.springframework.util.StringUtils;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
@@ -38,8 +30,14 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.server.VaadinService;
-
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.ReplayProcessor;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * Grid utils class.
@@ -249,7 +247,7 @@ public final class GridUtils {
 				Checkbox check = new Checkbox(VaadinService.getCurrent().getInstantiator().getI18NProvider().getTranslation(msgPrefix + column.getKey(), null, Locale.getDefault()));
 				check.setValue(column.isVisible());
 				check.addValueChangeListener(event -> column.setVisible(event.getValue()));
-				contextMenu.add(check);
+				contextMenu.addItem(check);
 			}
 			g.getElement().getParentNode().appendChild(columnsButton.getElement());
 		});

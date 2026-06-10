@@ -41,7 +41,8 @@
 	<parent>
     	<groupId>org.springframework.boot</groupId>
     	<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.13</version>
+		<!-- <version>3.4.13</version> -->
+		<version>4.0.6</version>
 	</parent>
 
 
@@ -49,8 +50,10 @@
 		<revision>2.3.16</revision>
 		<sha1/>
 		<changelist/>
-		<java.version>17</java.version>
-		<vaadin.version>24.7.15</vaadin.version>
+		<!-- <java.version>17</java.version> -->
+		<java.version>21</java.version>
+		<!-- <vaadin.version>24.7.15</vaadin.version>-->
+		<vaadin.version>25.1.6</vaadin.version>
 		<gson-fire-version>1.8.4</gson-fire-version>
         <swagger-core-version>1.5.24</swagger-core-version>
 		<okhttp-version>4.12.0</okhttp-version>
@@ -563,7 +566,6 @@
 		<profile>
 			<!-- Docker chromedriver and mysql containers are activated using -Pdocker-tests -->
 			<id>docker-tests</id>
-
 			<build>
 				<plugins>
 					<plugin>
@@ -644,10 +646,9 @@
 			</build>
 		</profile>
 
-		<profile>
-			<!-- Maven frontend (node+npm) is activated using -Pmaven-frontend -->
+		<!-- Maven frontend (node+npm) is activated using -Pmaven-frontend -->
+		<!-- <profile>
 			<id>maven-frontend</id>
-
 			<build>
 				<plugins>
 					<plugin>
@@ -668,11 +669,8 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-
-
-
-		<profile>
+		</profile> -->
+		<!-- <profile>
   			<id>coverage</id>
   			<build>
    			<plugins>
@@ -702,6 +700,6 @@
     			</plugin>
    			</plugins>
   			</build>
-		</profile>
+		</profile>-->
 	</profiles>
 </project>
