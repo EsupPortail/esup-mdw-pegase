@@ -41,7 +41,9 @@ import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
@@ -54,6 +56,7 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 
 @Configuration
+@EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
@@ -73,26 +76,14 @@ public class SecurityConfig {
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return web -> web.ignoring()
-				/* Vaadin Flow */
-				.requestMatchers("/VAADIN/**")
-
-				/* Favicon */
-				.requestMatchers("/favicon.ico", "/favicon-*.png", "/images/*.png")
-
-				/* Gestionnaire d'erreurs Spring */
-				.requestMatchers("/error")
-
-				/* Actuator */
-				.requestMatchers("/actuator/**")
-
-				/* Service Worker */
-				.requestMatchers("/sw*.js");
-
+				/* Vaadin Flow, Favicon, Actuator, Service Worker, Gestionnaire d'erreurs */
+				.requestMatchers("/VAADIN/**", "/favicon.ico", "/favicon-*.png", "/images/*.png", "/error", "/actuator/**", "/sw*.js");
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests((requests) -> requests.requestMatchers(SecurityUtil::isFrameworkInternalRequest).permitAll()
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		final RequestMatcher frameworkInternalRequestMatcher = request -> SecurityUtil.isFrameworkInternalRequest(request);
+		http.authorizeHttpRequests((requests) -> requests.requestMatchers(frameworkInternalRequestMatcher).permitAll()
 				/* Les autres requêtes doivent être authentifiées */
 				.anyRequest().authenticated());
 
@@ -106,10 +97,9 @@ public class SecurityConfig {
 		/* Ajoute les filtres */
 		http.addFilter(casAuthenticationFilter()).addFilterAfter(new MDCAuthenticationFilter(), CasAuthenticationFilter.class).addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class)
 				.addFilterBefore(logoutFilter(), LogoutFilter.class);
-		// .addFilterAfter(switchUserFilter(), AuthorizationFilter.class);
 
 		/* La protection Spring Security contre le Cross Scripting Request Forgery est désactivée, Vaadin implémente sa propre protection */
-		http.csrf(csrf -> csrf.ignoringRequestMatchers(SecurityUtil::isFrameworkInternalRequest));
+		http.csrf(csrf -> csrf.ignoringRequestMatchers(frameworkInternalRequestMatcher));
 
 		/* Autorise pas l'affichage en iFrame */
 		http.headers(headers -> headers.frameOptions(f -> f.deny()));
