@@ -46,6 +46,7 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.theme.lumo.LumoIcon;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import fr.univlorraine.mondossierweb.controllers.PegaseController;
 import fr.univlorraine.mondossierweb.services.ExportService;
@@ -739,7 +740,7 @@ public class InscriptionsView extends HasCodeApprenantUrlParameterView implement
         Notification notification = new Notification();
         notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
         Div text = new Div(new Text(message));
-        Button closeButton = new Button(new Icon("lumo", "cross"));
+        Button closeButton = new Button(LumoIcon.CROSS.create());
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         closeButton.setAriaLabel("Close");
         closeButton.addClickListener(event -> {

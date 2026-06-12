@@ -137,7 +137,6 @@ public class SecurityConfig {
 
 		//provider.setUserDetailsService(appUserDetailsService);
 		provider.setAuthenticationUserDetailsService(appUserDetailsService);
-
 		provider.setKey(casKey);
 		return provider;
 	}

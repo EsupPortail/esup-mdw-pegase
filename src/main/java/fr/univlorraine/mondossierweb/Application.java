@@ -18,8 +18,10 @@
  */
 package fr.univlorraine.mondossierweb;
 
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.AppShellSettings;
+import com.vaadin.flow.theme.lumo.Lumo;
 import fr.univlorraine.mondossierweb.controllers.ConfigController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,7 @@ import java.net.URL;
 @ConfigurationProperties
 @EnableScheduling
 @Slf4j
+@StyleSheet(Lumo.STYLESHEET)
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
 
     @Autowired
