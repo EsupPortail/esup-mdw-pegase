@@ -21,7 +21,7 @@ COPY --chown=myuser:myuser package.json ./
 RUN mvn clean package -DskipTests -Pproduction
 
 # Running stage: the part that is used for running the application
-FROM tomcat:10.1-jdk21-temurin
+FROM tomcat:11.0-jdk21-temurin
 #RUN adduser --disabled-password --home /home/app app
 #COPY --chown=app:app --from=build /usr/src/app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 #USER app
