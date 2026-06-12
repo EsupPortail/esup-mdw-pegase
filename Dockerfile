@@ -15,7 +15,6 @@ RUN mvn dependency:go-offline -Pproduction
 
 # Copy all needed project files to a folder
 COPY --chown=myuser:myuser src src
-COPY --chown=myuser:myuser frontend frontend
 COPY --chown=myuser:myuser package.json ./
 
 # Build the production package, assuming that we validated the version before so no need for running tests again
