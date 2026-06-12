@@ -1,5 +1,5 @@
 # Stage that builds the application, a prerequisite for the running stage
-FROM maven:3.9.10-eclipse-temurin-21-alpine as build
+FROM maven:3.9-eclipse-temurin-21-alpine as build
 #RUN apk add --update nodejs-current npm
 RUN apk add --update nodejs npm && npm install -g pnpm@9.15.0
 
