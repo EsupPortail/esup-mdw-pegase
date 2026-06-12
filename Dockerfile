@@ -21,12 +21,12 @@ COPY --chown=myuser:myuser package.json ./
 RUN mvn clean package -DskipTests -Pproduction
 
 # Running stage: the part that is used for running the application
-FROM tomcat:11.0-jdk21-temurin
+FROM eclipse-temurin:21-jre-alpine
 #RUN adduser --disabled-password --home /home/app app
 #COPY --chown=app:app --from=build /usr/src/app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 #USER app
-COPY --from=build /usr/src/app/target/*.war /usr/local/tomcat/webapps/ROOT.war
+WORKDIR /app
+COPY --from=build /usr/src/app/target/*.jar app.jar
 #RUN export JAVA_OPTS="$JAVA_OPTS -Dspring.config.location=/usr/local/application.properties"
 EXPOSE 8080
-WORKDIR /usr/app/
-ENTRYPOINT ["catalina.sh", "run"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
