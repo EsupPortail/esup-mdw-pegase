@@ -7,7 +7,7 @@ include:
     file: '/.gitlab-ci-template-container-image.yml'
 
 variables:
-  MAVEN_IMAGE: maven:3.9.9-eclipse-temurin-17-alpine
+  MAVEN_IMAGE: maven:3.9.10-eclipse-temurin-21-alpine
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
 
 ⚙️ verify:
