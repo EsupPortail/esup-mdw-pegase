@@ -22,11 +22,9 @@ RUN mvn clean package -DskipTests -Pproduction
 
 # Running stage: the part that is used for running the application
 FROM eclipse-temurin:21-jre-alpine
-#RUN adduser --disabled-password --home /home/app app
-#COPY --chown=app:app --from=build /usr/src/app/target/*.war /usr/local/tomcat/webapps/ROOT.war
-#USER app
-WORKDIR /app
+RUN adduser -D myuser
+USER myuser
+WORKDIR /usr/app/
 COPY --from=build /usr/src/app/target/*.jar app.jar
-#RUN export JAVA_OPTS="$JAVA_OPTS -Dspring.config.location=/usr/local/application.properties"
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
