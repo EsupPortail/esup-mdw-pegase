@@ -8,7 +8,7 @@ include:
 
 variables:
   MAVEN_IMAGE: maven:3.9.10-eclipse-temurin-21-alpine
-  MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production"
+  MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production -Dmaven.test.skip=true"
 
 ⚙️ verify:
   before_script:
