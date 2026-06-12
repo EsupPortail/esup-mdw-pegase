@@ -19,6 +19,7 @@
 package fr.univlorraine.mondossierweb.config;
 
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import fr.univlorraine.mondossierweb.services.AppUserDetailsService;
 import fr.univlorraine.mondossierweb.utils.logging.MDCAuthenticationFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -43,7 +45,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
@@ -54,10 +55,12 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)
 public class SecurityConfig {
 
 	/** URL permettant de se déconnecter. */
@@ -81,9 +84,10 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain vaadinSecurityFilterChain(HttpSecurity http) throws Exception {
 		final RequestMatcher frameworkInternalRequestMatcher = request -> SecurityUtil.isFrameworkInternalRequest(request);
-		http.authorizeHttpRequests((requests) -> requests.requestMatchers(frameworkInternalRequestMatcher).permitAll()
+		http.authorizeHttpRequests((registry) -> registry.requestMatchers(frameworkInternalRequestMatcher).permitAll()
+				.requestMatchers("/assets/**").permitAll()
 				/* Les autres requêtes doivent être authentifiées */
 				.anyRequest().authenticated());
 

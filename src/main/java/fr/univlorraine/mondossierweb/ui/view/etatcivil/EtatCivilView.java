@@ -27,7 +27,6 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
 import fr.univlorraine.mondossierweb.ui.component.Card;
 import fr.univlorraine.mondossierweb.ui.component.TextLabel;
 import fr.univlorraine.mondossierweb.ui.layout.HasCodeApprenantUrlParameterView;
@@ -48,8 +47,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
 @Secured({SecurityUtils.ROLE_SUPERADMIN,SecurityUtils.ROLE_ETUDIANT, SecurityUtils.ROLE_GESTIONNAIRE})
-@Route(layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
+/*@Route(layout = MainLayout.class)
+@RouteAlias(value = "", layout = MainLayout.class)*/
+@Route(value = "", layout = MainLayout.class)
 @SuppressWarnings("serial")
 @Slf4j
 public class EtatCivilView extends HasCodeApprenantUrlParameterView implements HasDynamicTitle, HasHeader, LocaleChangeObserver {
