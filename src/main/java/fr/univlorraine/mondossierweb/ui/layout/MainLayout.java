@@ -32,7 +32,6 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.html.Span;
@@ -332,7 +331,8 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver, Locale
 		.set(CssUtils.COLOR, "var(--lumo-primary-color)")
 		.set("text-align", "center");
 
-		userMenu.addItem(new Hr());
+		userMenu.addSeparator();
+		// userMenu.addItem(new Hr());
 
 		// Entrée 'Paramètres' dans le menu en haut à droite :
 		if (securityService.isAccessGranted(ParametresView.class)) {

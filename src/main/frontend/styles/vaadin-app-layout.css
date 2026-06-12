@@ -1,4 +1,4 @@
-[part="navbar"] {
+[part="navbar navbar-top"] {
 	padding: var(--lumo-space-s);
 	align-items: baseline;
 	background-color: var(--main-color)!important;
@@ -6,7 +6,7 @@
 	min-height: var(--lumo-size-l) !important;
 }
 
-[part="navbar"]::before {
+[part="navbar navbar-top"]::before {
 	background-color: var(--main-color)!important;
 	opacity: 1;
 }
