@@ -25,6 +25,6 @@ FROM eclipse-temurin:21-jre-alpine
 RUN adduser -D myuser
 USER myuser
 WORKDIR /usr/app/
-COPY --from=build /usr/src/app/target/*.jar app.jar
+COPY --from=build /usr/src/app/target/*.war app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
