@@ -307,6 +307,7 @@
 					<propertiesEncoding>ISO-8859-1</propertiesEncoding>
 				</configuration>
 			</plugin>
+
 			<!-- openapi-generator -->
 			<plugin>
 				<groupId>org.openapitools</groupId>
@@ -385,6 +386,13 @@
 								<filename>${project.build.finalName}.${project.packaging}</filename>
 							</additionalProperties>
 						</configuration>
+					</execution>
+					<execution>
+						<id>repackage</id>
+						<phase>package</phase>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>

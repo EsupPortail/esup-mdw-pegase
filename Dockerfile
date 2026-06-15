@@ -18,7 +18,7 @@ COPY --chown=myuser:myuser src src
 COPY --chown=myuser:myuser package.json ./
 
 # Build the production package, assuming that we validated the version before so no need for running tests again
-RUN mvn clean package -DskipTests -Pproduction
+RUN mvn clean package spring-boot:repackage -DskipTests -Pproduction
 
 # Running stage: the part that is used for running the application
 FROM eclipse-temurin:21-jre-alpine
