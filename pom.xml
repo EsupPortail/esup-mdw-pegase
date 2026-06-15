@@ -81,7 +81,8 @@
 	<distributionManagement>
 		<repository>
 			<id>ul-releases</id>
-			<url>http://maven.univ-lorraine.fr/content/repositories/releases</url>
+			<name>Université de Lorraine Releases</name>
+			<url>http://nexus.univ-lorraine.fr/content/repositories/maven-releases</url>
 		</repository>
 	</distributionManagement>
 
