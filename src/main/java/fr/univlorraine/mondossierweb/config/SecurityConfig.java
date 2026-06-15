@@ -19,6 +19,7 @@
 package fr.univlorraine.mondossierweb.config;
 
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import fr.univlorraine.mondossierweb.services.AppUserDetailsService;
 import fr.univlorraine.mondossierweb.utils.logging.MDCAuthenticationFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,16 +32,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAuthenticationProvider;
 import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -52,10 +55,12 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
+@EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)
 public class SecurityConfig {
 
 	/** URL permettant de se déconnecter. */
@@ -63,8 +68,6 @@ public class SecurityConfig {
 
 	@Autowired
 	private AppUserDetailsService appUserDetailsService;
-	@Autowired
-	private AuthenticationConfiguration configuration;
 
 	@Value("${app.url}")
 	private String appUrl;
@@ -76,26 +79,15 @@ public class SecurityConfig {
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return web -> web.ignoring()
-				/* Vaadin Flow */
-				.requestMatchers("/VAADIN/**")
-
-				/* Favicon */
-				.requestMatchers("/favicon.ico").requestMatchers("/favicon-*.png").requestMatchers(new AntPathRequestMatcher("/images/*.png"))
-
-				/* Gestionnaire d'erreurs Spring */
-				.requestMatchers(new AntPathRequestMatcher("/error"))
-
-				/* Actuator */
-				.requestMatchers("/actuator/**")
-
-				/* Service Worker */
-				.requestMatchers(new AntPathRequestMatcher("/sw*.js"));
-
+				/* Vaadin Flow, Favicon, Actuator, Service Worker, Gestionnaire d'erreurs */
+				.requestMatchers("/VAADIN/**", "/favicon.ico", "/favicon-*.png", "/images/*.png", "/error", "/actuator/**", "/sw*.js");
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests((requests) -> requests.requestMatchers(SecurityUtil::isFrameworkInternalRequest).permitAll()
+	public SecurityFilterChain vaadinSecurityFilterChain(HttpSecurity http) throws Exception {
+		final RequestMatcher frameworkInternalRequestMatcher = request -> SecurityUtil.isFrameworkInternalRequest(request);
+		http.authorizeHttpRequests((registry) -> registry.requestMatchers(frameworkInternalRequestMatcher).permitAll()
+				.requestMatchers("/assets/**").permitAll()
 				/* Les autres requêtes doivent être authentifiées */
 				.anyRequest().authenticated());
 
@@ -109,10 +101,9 @@ public class SecurityConfig {
 		/* Ajoute les filtres */
 		http.addFilter(casAuthenticationFilter()).addFilterAfter(new MDCAuthenticationFilter(), CasAuthenticationFilter.class).addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class)
 				.addFilterBefore(logoutFilter(), LogoutFilter.class);
-		// .addFilterAfter(switchUserFilter(), AuthorizationFilter.class);
 
 		/* La protection Spring Security contre le Cross Scripting Request Forgery est désactivée, Vaadin implémente sa propre protection */
-		http.csrf(csrf -> csrf.ignoringRequestMatchers(SecurityUtil::isFrameworkInternalRequest));
+		http.csrf(csrf -> csrf.ignoringRequestMatchers(frameworkInternalRequestMatcher));
 
 		/* Autorise pas l'affichage en iFrame */
 		http.headers(headers -> headers.frameOptions(f -> f.deny()));
@@ -146,15 +137,13 @@ public class SecurityConfig {
 
 		//provider.setUserDetailsService(appUserDetailsService);
 		provider.setAuthenticationUserDetailsService(appUserDetailsService);
-
 		provider.setKey(casKey);
 		return provider;
 	}
 
-
 	@Bean
 	AuthenticationManager authenticationManager() throws Exception {
-		return configuration.getAuthenticationManager();
+		return new ProviderManager(casAuthenticationProvider());
 	}
 
 	@Bean

@@ -41,16 +41,17 @@
 	<parent>
     	<groupId>org.springframework.boot</groupId>
     	<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.13</version>
+		<!-- <version>3.4.13</version> -->
+		<version>4.0.7</version>
 	</parent>
 
 
 	<properties>
-		<revision>2.3.16</revision>
+		<revision>2.4.2</revision>
 		<sha1/>
 		<changelist/>
-		<java.version>17</java.version>
-		<vaadin.version>24.7.15</vaadin.version>
+		<java.version>21</java.version>
+		<vaadin.version>25.1.7</vaadin.version>
 		<gson-fire-version>1.8.4</gson-fire-version>
         <swagger-core-version>1.5.24</swagger-core-version>
 		<okhttp-version>4.12.0</okhttp-version>
@@ -99,6 +100,11 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-cas</artifactId>
 		</dependency>
+		<!-- web-server pour déploiement war -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-web-server</artifactId>
+		</dependency>
 		<!-- Actuator (kubernetes probes) -->
 		<dependency>
     		<groupId>org.springframework.boot</groupId>
@@ -118,14 +124,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-dev</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-spring-boot-starter</artifactId>
-			<exclusions>
-				<!-- Pour contourner la vulnérabilité https://osv.dev/vulnerability/GHSA-72hv-8253-57qq  -->
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		
 		<!-- Surcharge jsoup -->
@@ -275,13 +279,6 @@
     		<groupId>org.openapitools</groupId>
     		<artifactId>jackson-databind-nullable</artifactId>
     		<version>0.2.9</version>
-			<exclusions>
-				<!-- Pour contourner la vulnérabilité https://osv.dev/vulnerability/GHSA-72hv-8253-57qq  -->
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents.client5</groupId>
@@ -295,19 +292,6 @@
     		<groupId>com.fasterxml.jackson.datatype</groupId>
     		<artifactId>jackson-datatype-jsr310</artifactId>
 			<version>2.21.1</version>
-			<exclusions>
-				<!-- Pour contourner la vulnérabilité https://osv.dev/vulnerability/GHSA-72hv-8253-57qq  -->
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- Pour contourner la vulnérabilité https://osv.dev/vulnerability/GHSA-72hv-8253-57qq  -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.18.6</version>
 		</dependency>
 	</dependencies>
 
@@ -323,6 +307,7 @@
 					<propertiesEncoding>ISO-8859-1</propertiesEncoding>
 				</configuration>
 			</plugin>
+
 			<!-- openapi-generator -->
 			<plugin>
 				<groupId>org.openapitools</groupId>
@@ -389,6 +374,7 @@
 					<wait>500</wait>
 					<maxAttempts>240</maxAttempts>
 					<!-- <excludeDevtools>false</excludeDevtools> -->
+					<layout>WAR</layout> <!-- Indique que le packaging d'origine est un WAR -->
 				</configuration>
 				<executions>
 					<execution>
@@ -561,9 +547,36 @@
 		</profile>
 
 		<profile>
+			<id>docker</id>
+			<activation>
+				<property>
+					<name>build.docker</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<layout>WAR</layout>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>repackage</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
 			<!-- Docker chromedriver and mysql containers are activated using -Pdocker-tests -->
 			<id>docker-tests</id>
-
 			<build>
 				<plugins>
 					<plugin>
@@ -642,66 +655,6 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-
-		<profile>
-			<!-- Maven frontend (node+npm) is activated using -Pmaven-frontend -->
-			<id>maven-frontend</id>
-
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>com.github.eirslett</groupId>
-						<artifactId>frontend-maven-plugin</artifactId>
-						<version>1.9.1</version>
-						<configuration>
-							<nodeVersion>v12.16.1</nodeVersion>
-						</configuration>
-						<executions>
-							<execution>
-								<id>install node and npm</id>
-								<goals>
-									<goal>install-node-and-npm</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-
-
-		<profile>
-  			<id>coverage</id>
-  			<build>
-   			<plugins>
-    			<plugin>
-      			<groupId>org.jacoco</groupId>
-     			<artifactId>jacoco-maven-plugin</artifactId>
-      			<version>0.8.7</version>
-      			<executions>
-        			<execution>
-          			<id>prepare-agent</id>
-          			<goals>
-            			<goal>prepare-agent</goal>
-          			</goals>
-        			</execution>
-        			<execution>
-          			<id>report</id>
-          			<goals>
-            			<goal>report</goal>
-          			</goals>
-          			<configuration>
-            			<formats>
-              			<format>XML</format>
-            			</formats>
-         	 		</configuration>
-        			</execution>
-      			</executions>
-    			</plugin>
-   			</plugins>
-  			</build>
 		</profile>
 	</profiles>
 </project>

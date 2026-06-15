@@ -2,6 +2,7 @@
 node/
 node_modules/
 frontend/generated/
+src/main/frontend/generated/
 src/main/dev-bundle/
 src/main/bundles/
 /target/
@@ -20,7 +21,6 @@ drivers/
 .DS_Store
 
 #IA
-.opencodeignore
 AGENTS.md
 .claudeignore
 .clineignore

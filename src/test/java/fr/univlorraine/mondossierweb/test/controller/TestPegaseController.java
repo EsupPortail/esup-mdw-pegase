@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -86,7 +86,7 @@ public class TestPegaseController {
 	}.getType();
 	private static List<Cursus> maquette1;
 	private static List<Chemin> notes1;
-	@MockBean
+	@Mock
 	private PegaseService pegaseService;
 	@Resource
 	private PegaseController pegaseController;

@@ -1,5 +1,5 @@
 # Stage that builds the application, a prerequisite for the running stage
-FROM maven:3.9.9-eclipse-temurin-21-alpine as build
+FROM maven:3.9-eclipse-temurin-21-alpine as build
 #RUN apk add --update nodejs-current npm
 RUN apk add --update nodejs npm && npm install -g pnpm@9.15.0
 
@@ -15,19 +15,16 @@ RUN mvn dependency:go-offline -Pproduction
 
 # Copy all needed project files to a folder
 COPY --chown=myuser:myuser src src
-COPY --chown=myuser:myuser frontend frontend
 COPY --chown=myuser:myuser package.json ./
 
 # Build the production package, assuming that we validated the version before so no need for running tests again
-RUN mvn clean package -DskipTests -Pproduction
+RUN mvn clean package spring-boot:repackage -DskipTests -Pproduction
 
 # Running stage: the part that is used for running the application
-FROM tomcat:jdk21-temurin
-#RUN adduser --disabled-password --home /home/app app
-#COPY --chown=app:app --from=build /usr/src/app/target/*.war /usr/local/tomcat/webapps/ROOT.war
-#USER app
-COPY --from=build /usr/src/app/target/*.war /usr/local/tomcat/webapps/ROOT.war
-#RUN export JAVA_OPTS="$JAVA_OPTS -Dspring.config.location=/usr/local/application.properties"
-EXPOSE 8080
+FROM eclipse-temurin:21-jre-alpine
+RUN adduser -D myuser
+USER myuser
 WORKDIR /usr/app/
-ENTRYPOINT ["catalina.sh", "run"]
+COPY --from=build /usr/src/app/target/*.war app.war
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.war"]
