@@ -374,6 +374,7 @@
 					<wait>500</wait>
 					<maxAttempts>240</maxAttempts>
 					<!-- <excludeDevtools>false</excludeDevtools> -->
+					<layout>WAR</layout> <!-- Indique que le packaging d'origine est un WAR -->
 				</configuration>
 				<executions>
 					<execution>
@@ -386,13 +387,6 @@
 								<filename>${project.build.finalName}.${project.packaging}</filename>
 							</additionalProperties>
 						</configuration>
-					</execution>
-					<execution>
-						<id>repackage</id>
-						<phase>package</phase>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -551,6 +545,34 @@
 				</plugins>
 			</build>
 		</profile>
+
+		<!--<profile>
+			<id>docker</id>
+			<activation>
+				<property>
+					<name>build.docker</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<layout>WAR</layout>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>repackage</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>-->
 
 		<profile>
 			<!-- Docker chromedriver and mysql containers are activated using -Pdocker-tests -->
