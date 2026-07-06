@@ -10,10 +10,5 @@ variables:
   MAVEN_IMAGE: maven:3.9.10-eclipse-temurin-21-alpine
   MAVEN_ADDITIONAL_CLI_OPTS: "-Pcoverage,production -Dmaven.test.skip=true"
 
-⚙️ verify:
-  before_script:
-    - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
-    - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
-
 🚀 container image:
   when: manual
