@@ -61,7 +61,7 @@
 		<h2.version>2.3.232</h2.version>
   		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
   		<skipITs>false</skipITs>
-  		<flyway.version>8.5.13</flyway.version>
+  		<!-- <flyway.version>8.5.13</flyway.version> -->
 		<!-- Évite d'embarquer le serveur d'application, pour avoir un .war plus léger. cf. https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#goals-repackage -->
 		<!-- <spring-boot.repackage.skip>true</spring-boot.repackage.skip>-->
 	</properties>
@@ -164,15 +164,13 @@
 
 		<!--  FLYWAY -->
 		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-			<scope>runtime</scope>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-flyway</artifactId>
 		</dependency>
 		<dependency>
     		<groupId>org.flywaydb</groupId>
     		<artifactId>flyway-mysql</artifactId>
-    		<version>${flyway.version}</version>
-    		<scope>runtime</scope>
+    		<!-- <version>${flyway.version}</version> -->
 		</dependency>
 
 		<!-- Reactor -->
