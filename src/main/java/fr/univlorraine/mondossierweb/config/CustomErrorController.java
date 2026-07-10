@@ -45,8 +45,11 @@ public class CustomErrorController implements ErrorController {
 
 		final int statusCode = status != null ? Integer.parseInt(status.toString()) : HttpStatus.INTERNAL_SERVER_ERROR.value();
 
-		log.warn("Erreur HTTP {} interceptée par CustomErrorController - message={}, exception={}",
-			statusCode, message, exception);
+		// Si on n'est pas sur une erreur du type "Erreur HTTP 403 interceptée par CustomErrorController - message=Session expired, exception=null"
+		if (!(statusCode == HttpStatus.FORBIDDEN.value() && message != null && message.equals("Session expired"))) {
+			log.warn("Erreur HTTP {} interceptée par CustomErrorController - message={}, exception={}",
+					statusCode, message, exception);
+		}
 
 		return "redirect:/" + fr.univlorraine.mondossierweb.ui.view.error.ErrorView.ROUTE;
 	}
