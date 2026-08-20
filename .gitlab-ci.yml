@@ -14,7 +14,7 @@ variables:
   before_script:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
-  when: manual
 
+# *** Version Kaniko ***
 🚀 container image:
   when: manual
