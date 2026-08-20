@@ -446,7 +446,7 @@ public class CoordonneesView extends HasCodeApprenantUrlParameterView implements
 		CmpUtils.setModerateTextLabel(communeAdresse);
 
 
-		if(cac.getPays().equals(Utils.CODE_PAYS_FRANCE)) {
+		if (cac.getPays() != null && cac.getPays().equals(Utils.CODE_PAYS_FRANCE)) {
 			CmpUtils.valueAndVisibleIfNotNull(codePostalAdresse,cac.getCodePostal());
 			CmpUtils.valueAndVisibleIfNotNull(communeAdresse,cac.getLibelleCommune());
 		} else {
