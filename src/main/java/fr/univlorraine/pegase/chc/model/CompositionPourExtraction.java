@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -54,8 +55,13 @@ import fr.univlorraine.pegase.chc.invoker.JSON;
 /**
  * Une composition avec ses groupes, formations et objets de formations associés
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-02-27T16:57:51.872239500+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-08-19T11:39:39.495131200+02:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class CompositionPourExtraction {
+  public static final String SERIALIZED_NAME_UUID = "uuid";
+  @SerializedName(SERIALIZED_NAME_UUID)
+  @jakarta.annotation.Nonnull
+  private UUID uuid;
+
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
   @jakarta.annotation.Nonnull
@@ -70,6 +76,16 @@ public class CompositionPourExtraction {
   @SerializedName(SERIALIZED_NAME_LIBELLE_LONG)
   @jakarta.annotation.Nonnull
   private String libelleLong;
+
+  public static final String SERIALIZED_NAME_EST_ACTIVE = "estActive";
+  @SerializedName(SERIALIZED_NAME_EST_ACTIVE)
+  @jakarta.annotation.Nonnull
+  private Boolean estActive;
+
+  public static final String SERIALIZED_NAME_LISTE_DIFFUSION = "listeDiffusion";
+  @SerializedName(SERIALIZED_NAME_LISTE_DIFFUSION)
+  @jakarta.annotation.Nullable
+  private String listeDiffusion;
 
   public static final String SERIALIZED_NAME_PERIODE = "periode";
   @SerializedName(SERIALIZED_NAME_PERIODE)
@@ -94,13 +110,32 @@ public class CompositionPourExtraction {
   public CompositionPourExtraction() {
   }
 
+  public CompositionPourExtraction uuid(@jakarta.annotation.Nonnull UUID uuid) {
+    this.uuid = uuid;
+    return this;
+  }
+
+  /**
+   * L&#39;identifiant technique de la composition
+   * @return uuid
+   */
+  @jakarta.annotation.Nonnull
+  public UUID getUuid() {
+    return uuid;
+  }
+
+  public void setUuid(@jakarta.annotation.Nonnull UUID uuid) {
+    this.uuid = uuid;
+  }
+
+
   public CompositionPourExtraction code(@jakarta.annotation.Nonnull String code) {
     this.code = code;
     return this;
   }
 
   /**
-   * Le code de la maquette de formation
+   * Le code de la composition
    * @return code
    */
   @jakarta.annotation.Nonnull
@@ -119,7 +154,7 @@ public class CompositionPourExtraction {
   }
 
   /**
-   * Le libellé court de la maquette de formation
+   * Le libellé court de la composition
    * @return libelleCourt
    */
   @jakarta.annotation.Nonnull
@@ -138,7 +173,7 @@ public class CompositionPourExtraction {
   }
 
   /**
-   * Le libellé long de la maquette de formation
+   * Le libellé long de la composition
    * @return libelleLong
    */
   @jakarta.annotation.Nonnull
@@ -148,6 +183,44 @@ public class CompositionPourExtraction {
 
   public void setLibelleLong(@jakarta.annotation.Nonnull String libelleLong) {
     this.libelleLong = libelleLong;
+  }
+
+
+  public CompositionPourExtraction estActive(@jakarta.annotation.Nonnull Boolean estActive) {
+    this.estActive = estActive;
+    return this;
+  }
+
+  /**
+   * Indique si la composition est active
+   * @return estActive
+   */
+  @jakarta.annotation.Nonnull
+  public Boolean getEstActive() {
+    return estActive;
+  }
+
+  public void setEstActive(@jakarta.annotation.Nonnull Boolean estActive) {
+    this.estActive = estActive;
+  }
+
+
+  public CompositionPourExtraction listeDiffusion(@jakarta.annotation.Nullable String listeDiffusion) {
+    this.listeDiffusion = listeDiffusion;
+    return this;
+  }
+
+  /**
+   * La liste de diffusion de la composition
+   * @return listeDiffusion
+   */
+  @jakarta.annotation.Nullable
+  public String getListeDiffusion() {
+    return listeDiffusion;
+  }
+
+  public void setListeDiffusion(@jakarta.annotation.Nullable String listeDiffusion) {
+    this.listeDiffusion = listeDiffusion;
   }
 
 
@@ -250,50 +323,6 @@ public class CompositionPourExtraction {
     this.listeObjetsFormation = listeObjetsFormation;
   }
 
-  /**
-   * A container for additional, undeclared properties.
-   * This is a holder for any undeclared properties as specified with
-   * the 'additionalProperties' keyword in the OAS document.
-   */
-  private Map<String, Object> additionalProperties;
-
-  /**
-   * Set the additional (undeclared) property with the specified name and value.
-   * If the property does not already exist, create it otherwise replace it.
-   *
-   * @param key name of the property
-   * @param value value of the property
-   * @return the CompositionPourExtraction instance itself
-   */
-  public CompositionPourExtraction putAdditionalProperty(String key, Object value) {
-    if (this.additionalProperties == null) {
-        this.additionalProperties = new HashMap<String, Object>();
-    }
-    this.additionalProperties.put(key, value);
-    return this;
-  }
-
-  /**
-   * Return the additional (undeclared) property.
-   *
-   * @return a map of objects
-   */
-  public Map<String, Object> getAdditionalProperties() {
-    return additionalProperties;
-  }
-
-  /**
-   * Return the additional (undeclared) property with the specified name.
-   *
-   * @param key name of the property
-   * @return an object
-   */
-  public Object getAdditionalProperty(String key) {
-    if (this.additionalProperties == null) {
-        return null;
-    }
-    return this.additionalProperties.get(key);
-  }
 
 
   @Override
@@ -305,33 +334,37 @@ public class CompositionPourExtraction {
       return false;
     }
     CompositionPourExtraction compositionPourExtraction = (CompositionPourExtraction) o;
-    return Objects.equals(this.code, compositionPourExtraction.code) &&
+    return Objects.equals(this.uuid, compositionPourExtraction.uuid) &&
+        Objects.equals(this.code, compositionPourExtraction.code) &&
         Objects.equals(this.libelleCourt, compositionPourExtraction.libelleCourt) &&
         Objects.equals(this.libelleLong, compositionPourExtraction.libelleLong) &&
+        Objects.equals(this.estActive, compositionPourExtraction.estActive) &&
+        Objects.equals(this.listeDiffusion, compositionPourExtraction.listeDiffusion) &&
         Objects.equals(this.periode, compositionPourExtraction.periode) &&
         Objects.equals(this.listeGroupes, compositionPourExtraction.listeGroupes) &&
         Objects.equals(this.listeFormations, compositionPourExtraction.listeFormations) &&
-        Objects.equals(this.listeObjetsFormation, compositionPourExtraction.listeObjetsFormation)&&
-        Objects.equals(this.additionalProperties, compositionPourExtraction.additionalProperties);
+        Objects.equals(this.listeObjetsFormation, compositionPourExtraction.listeObjetsFormation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, libelleCourt, libelleLong, periode, listeGroupes, listeFormations, listeObjetsFormation, additionalProperties);
+    return Objects.hash(uuid, code, libelleCourt, libelleLong, estActive, listeDiffusion, periode, listeGroupes, listeFormations, listeObjetsFormation);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CompositionPourExtraction {\n");
+    sb.append("    uuid: ").append(toIndentedString(uuid)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    libelleCourt: ").append(toIndentedString(libelleCourt)).append("\n");
     sb.append("    libelleLong: ").append(toIndentedString(libelleLong)).append("\n");
+    sb.append("    estActive: ").append(toIndentedString(estActive)).append("\n");
+    sb.append("    listeDiffusion: ").append(toIndentedString(listeDiffusion)).append("\n");
     sb.append("    periode: ").append(toIndentedString(periode)).append("\n");
     sb.append("    listeGroupes: ").append(toIndentedString(listeGroupes)).append("\n");
     sb.append("    listeFormations: ").append(toIndentedString(listeFormations)).append("\n");
     sb.append("    listeObjetsFormation: ").append(toIndentedString(listeObjetsFormation)).append("\n");
-    sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -353,10 +386,10 @@ public class CompositionPourExtraction {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("code", "libelleCourt", "libelleLong", "periode", "listeGroupes", "listeFormations", "listeObjetsFormation"));
+    openapiFields = new HashSet<String>(Arrays.asList("uuid", "code", "libelleCourt", "libelleLong", "estActive", "listeDiffusion", "periode", "listeGroupes", "listeFormations", "listeObjetsFormation"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("code", "libelleCourt", "libelleLong", "periode", "listeGroupes", "listeFormations", "listeObjetsFormation"));
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("uuid", "code", "libelleCourt", "libelleLong", "estActive", "periode", "listeGroupes", "listeFormations", "listeObjetsFormation"));
   }
 
   /**
@@ -371,6 +404,17 @@ public class CompositionPourExtraction {
           throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in CompositionPourExtraction is not found in the empty JSON string", CompositionPourExtraction.openapiRequiredFields.toString()));
         }
       }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!CompositionPourExtraction.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `CompositionPourExtraction` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
 
       // check to make sure all required properties/fields are present in the JSON string
       for (String requiredField : CompositionPourExtraction.openapiRequiredFields) {
@@ -378,7 +422,13 @@ public class CompositionPourExtraction {
           throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
         }
       }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
         JsonObject jsonObj = jsonElement.getAsJsonObject();
+      if (!jsonObj.get("uuid").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `uuid` to be a primitive type in the JSON string but got `%s`", jsonObj.get("uuid").toString()));
+      }
       if (!jsonObj.get("code").isJsonPrimitive()) {
         throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `code` to be a primitive type in the JSON string but got `%s`", jsonObj.get("code").toString()));
       }
@@ -387,6 +437,9 @@ public class CompositionPourExtraction {
       }
       if (!jsonObj.get("libelleLong").isJsonPrimitive()) {
         throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `libelleLong` to be a primitive type in the JSON string but got `%s`", jsonObj.get("libelleLong").toString()));
+      }
+      if ((jsonObj.get("listeDiffusion") != null && !jsonObj.get("listeDiffusion").isJsonNull()) && !jsonObj.get("listeDiffusion").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `listeDiffusion` to be a primitive type in the JSON string but got `%s`", jsonObj.get("listeDiffusion").toString()));
       }
       // validate the required field `periode`
       PeriodePourExtraction.validateJsonElement(jsonObj.get("periode"));
@@ -437,28 +490,6 @@ public class CompositionPourExtraction {
            @Override
            public void write(JsonWriter out, CompositionPourExtraction value) throws IOException {
              JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
-             obj.remove("additionalProperties");
-             // serialize additional properties
-             if (value.getAdditionalProperties() != null) {
-               for (Map.Entry<String, Object> entry : value.getAdditionalProperties().entrySet()) {
-                 if (entry.getValue() instanceof String)
-                   obj.addProperty(entry.getKey(), (String) entry.getValue());
-                 else if (entry.getValue() instanceof Number)
-                   obj.addProperty(entry.getKey(), (Number) entry.getValue());
-                 else if (entry.getValue() instanceof Boolean)
-                   obj.addProperty(entry.getKey(), (Boolean) entry.getValue());
-                 else if (entry.getValue() instanceof Character)
-                   obj.addProperty(entry.getKey(), (Character) entry.getValue());
-                 else {
-                   JsonElement jsonElement = gson.toJsonTree(entry.getValue());
-                   if (jsonElement.isJsonArray()) {
-                     obj.add(entry.getKey(), jsonElement.getAsJsonArray());
-                   } else {
-                     obj.add(entry.getKey(), jsonElement.getAsJsonObject());
-                   }
-                 }
-               }
-             }
              elementAdapter.write(out, obj);
            }
 
@@ -466,28 +497,7 @@ public class CompositionPourExtraction {
            public CompositionPourExtraction read(JsonReader in) throws IOException {
              JsonElement jsonElement = elementAdapter.read(in);
              validateJsonElement(jsonElement);
-             JsonObject jsonObj = jsonElement.getAsJsonObject();
-             // store additional fields in the deserialized instance
-             CompositionPourExtraction instance = thisAdapter.fromJsonTree(jsonObj);
-             for (Map.Entry<String, JsonElement> entry : jsonObj.entrySet()) {
-               if (!openapiFields.contains(entry.getKey())) {
-                 if (entry.getValue().isJsonPrimitive()) { // primitive type
-                   if (entry.getValue().getAsJsonPrimitive().isString())
-                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsString());
-                   else if (entry.getValue().getAsJsonPrimitive().isNumber())
-                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsNumber());
-                   else if (entry.getValue().getAsJsonPrimitive().isBoolean())
-                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsBoolean());
-                   else
-                     throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` has unknown primitive type. Value: %s", entry.getKey(), entry.getValue().toString()));
-                 } else if (entry.getValue().isJsonArray()) {
-                     instance.putAdditionalProperty(entry.getKey(), gson.fromJson(entry.getValue(), List.class));
-                 } else { // JSON object
-                     instance.putAdditionalProperty(entry.getKey(), gson.fromJson(entry.getValue(), HashMap.class));
-                 }
-               }
-             }
-             return instance;
+             return thisAdapter.fromJsonTree(jsonElement);
            }
 
        }.nullSafe();
