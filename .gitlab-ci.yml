@@ -15,6 +15,5 @@ variables:
     - cat ${TEST_APPLICATION_PROPERTIES} > ${CI_PROJECT_DIR}/src/test/resources/test.properties
     - cat ${CI_PROJECT_DIR}/src/test/resources/test.properties
 
-# *** Version Kaniko ***
 🚀 container image:
   when: manual
