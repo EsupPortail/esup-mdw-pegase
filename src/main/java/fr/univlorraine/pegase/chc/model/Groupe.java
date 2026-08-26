@@ -1,5 +1,5 @@
 /*
- * CHC Externe v1 - API Externe choix du cursus
+ * CHC - Choix du cursus - V1
  * ### Introduction L’API répertorie l'ensemble des services et des opérations disponibles dans le module CHC (Choix du Cursus).  ### Authentification/autorisation obligatoire Pour tout appel à une opération, vous devez être authentifié/autorisé à l’aide d’un token JWT. Ainsi, chaque requête HTTP doit contenir un token valide dans le header HTTP `Authorization`. #### Répertoire de partage contenant la documentation décrivant l'authentification Pégase https://share.pc-scol.fr/f/4487c726ade84022ae16/?dl=1  Le format est `Authorization: Bearer <token-jwt>`. Par exemple : `Authorization: Bearer xxxx.yyyy.zzzz`. Vous pouvez recevoir l'un de ces codes retour si vous n’êtes pas authentifié ou autorisé : * 401 - Unauthorized - Vous n’êtes pas authentifié     * Il n’y a pas de token passé dans le header HTTP `Authorization`     * Le token passé n’est pas au bon format (Bearer <token-jwt>) * 403 - Forbidden - Vous êtes authentifié mais pas autorisé à exécuter cette opération     * La signature du token est incorrecte / n’a pas pu être vérifiée     * Le token est expiré     * Vérifier les droits de l’utilisateur * 500 - Internal Server Error     * Il n’est pas encore actif  ### Type de données Sauf indications spécifiques données au niveau de l'opération, les types de données utilisés dans cette API sont les suivants :  * string - Chaîne de caractères encodée en UTF8 (ex : `Une chaîne de caractère`)    * Dans le cas des descripteurs de type `codeXxx`, seuls les caractères de A à Z, de 0 à 9 et le tiret(-) sont autorisés  * string($date) - Une date sous la forme d'une chaîne de caractères (ex : `2020-02-25`, norme [ISO-8601](https://fr.wikipedia.org/wiki/ISO_8601))  * integer($int64) - Un entier sur 64 bits (de -9 223 372 036 854 775 808 à 9 223 372 036 854 775 807) (ex : `2542`)  * integer($int32) - Un entier sur 32 bits (de –2 147 483 648 à 2 147 483 647) (ex : `2542`)  * number($double) - Un nombre à virgule flottante en double précision  * boolean - Un booléen représenté par `true` ou `false`  ### Code retour      | Code    | Description                                                                                                         |     |---------|---------------------------------------------------------------------------------------------------------------------|     | 200     | L'opération s'est déroulée avec succès                                                                              |     | 201     | L'opération a abouti à la création d'une ressource                                                                  |     | 400     | Un ou des paramètres d'entrée sont erronés                                                                          |     |         | Une erreur fonctionnelle s'est produite                                                                             |     | 404     | La ressource demandée n'est pas trouvée                                                                             |     |         | Remarque : Dans le cas des opérations retournant une liste, on recevra un code 200 avec en résultat une liste vide  |     | 500     | Erreur technique rencontrée par le serveur                                                                          |   ## Notions métiers  ### Objet Maquette (OM) Un objet maquette représente n'importe quel nœud d'un arbre de formation : Formation, objet de formation ou groupement.  Un objet maquette est identifié par le codeChemin (chemin pédagogique), le codePeriode et le codeStructure.  ### Formation Une formation est un arbre dont les nœuds sont des objets de formation et dont la racine est la formation elle-même.  Pour apparaître dans le module CHC, la formation doit être validée dans ODF.  Pour l'utiliser dans les différents actes métiers, il faut que chaque noeud et sa descendance soit ouvert au choix du cursus et qu'au moins une inscription administrative soit validée sur un objet maquette de l’arbre de la formation.  ### Objet formation Un objet de formation est l’un des nœuds de l’arbre de formation : année, semestre, UE, EC, enseignement, etc. (hors groupement).  Pour apparaître dans le Module CHC, un objet de formation doit être validé dans ODF.  ### Groupement Un groupement est une possibilité de structurer et d'organiser une formation. Il peut contenir des objets de formations de tous les types, être lié pour décomposer des objets pères de tous les types, être avec ou sans plage de choix.  ### Plage de choix Une plage de choix permet de contraindre l’apprenant lorsqu’il effectue son CHC dans Pégase. Cette plage de choix est matérialisée par un nombre minimum et un nombre maximum d’objets de formation à sélectionner. La plage de choix est contrôlée au cours du CHC.  ### Groupe Un Groupe est une entité permettant de diviser une population d’étudiants ou d'identifier une population spécifique d’étudiants inscrits administrativement et pédagogiquement.  ### Composition Une composition est une entité permettant de rassembler des groupes. Une composition contient obligatoirement au moins un groupe.  ### Période Une période de mise en œuvre correspond à la période pendant laquelle se déroule la formation.  Elle est le point d’entrée pour chaque acte métier du module CHC.  ### Apprenant Un apprenant est un usager qui suit un cursus et pour lequel des choix pédagogiques devront être réalisés.  ### Inscription L’inscription est l’ensemble des étapes de saisie des données concernant l’apprenant : état-civil, coordonnées, situation précédente, cursus, montant de l’inscription, mode de paiement. Cette saisie peut être faite par le gestionnaire ou l’apprenant.  Elle doit être vérifiée et validée par le gestionnaire. Une inscription n'est prise en compte dans CHC qu'à partir du moment où elle est validée ou annulée.  ### Cursus Le cursus est un arbre (une arborescence) composé d'objets maquette pour lequel des choix pédagogiques doivent être réalisés à chaque période de mise en oeuvre.  Un cursus est défini par le code de l’apprenant, un objet maquette lui-même identifié par le codeChemin (chemin pédagogique), le codePeriode et le codeStructure. Un choix pédagogique est une association entre un objet maquette et un apprenant. On recense parmi les choix pédagogiques des affectations, des aménagements et des acquis capitalisés.  ### Acquis capitalisé Un acquis capitalisé est un objet de formation dont les modalités de contrôle des connaissances sont capitalisables et dont le résultat positif a été obtenu sur une période antérieure. L'acquis capitalisé est créé et stocké dans CHC après délibération de jury du module COC. Il est utilisable sur une période postérieure à son acquisition  ### Chemin pédagogique Un chemin pédagogique identifie le lien d'un objet maquette à un autre objet maquette de sa descendance.  **Exemple** ``` MASTER-RH>MASTER-1>SEMESTRE-1>UE-OPTIONS>ESPAGNOL ```  ### Règles communes pour réaliser un choix de cursus * L’affectation est possible à partir de l'objet maquette porteur du point d'inscription administrative et sur les objets maquette de sa descendance à condition que l'inscription administrative soit validée dans le module INS. * Un choix du cursus sur un objet maquette est réalisable si le témoin ouvertChoixCursus est  à true. * La désaffectation d’un apprenant à un objet maquette provoque sa désaffectation automatique à tous les objets maquette de la descendance. * Pour chaque apprenant, il est possible de réaliser un choix du cursus sur un objet maquette dans un groupement à plage de choix tant que le nombre maximum autorisé (de la plage de choix) n'est pas atteint. La valeur minimum de plage de choix n'est  pas contrôlée. * Un choix pédagogique sur un objet maquette présent plusieurs fois dans un arbre de formation ne peut être réalisée qu’une fois pour un même cursus. * La capacité d’accueil d’un objet maquette n’est pas contrôlée dans l'API car non bloquante. Les capacités d’accueil dépassées sont négatives. * Les aménagements avec prise en compte acquis et aucun ne sont pas décomptés de la capacité d’accueil d’un objet maquette. * L'utilisation d'un acquis capitalisé empêche son affectation et supprime la branche de sa descendance.
  *
  * The version of the OpenAPI document: 1.0.0
@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.openapitools.jackson.nullable.JsonNullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -53,7 +52,7 @@ import fr.univlorraine.pegase.chc.invoker.JSON;
 /**
  * Un groupe de la composition
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-02-27T16:57:51.872239500+01:00[Europe/Paris]", comments = "Generator version: 7.20.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-08-26T10:41:45.360031200+02:00[Europe/Paris]", comments = "Generator version: 7.20.0")
 public class Groupe {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
@@ -79,6 +78,16 @@ public class Groupe {
   @SerializedName(SERIALIZED_NAME_PLANIFIABLE)
   @jakarta.annotation.Nonnull
   private Boolean planifiable;
+
+  public static final String SERIALIZED_NAME_EST_ACTIF = "estActif";
+  @SerializedName(SERIALIZED_NAME_EST_ACTIF)
+  @jakarta.annotation.Nonnull
+  private Boolean estActif;
+
+  public static final String SERIALIZED_NAME_LISTE_DIFFUSION = "listeDiffusion";
+  @SerializedName(SERIALIZED_NAME_LISTE_DIFFUSION)
+  @jakarta.annotation.Nullable
+  private String listeDiffusion;
 
   public static final String SERIALIZED_NAME_APPRENANTS = "apprenants";
   @SerializedName(SERIALIZED_NAME_APPRENANTS)
@@ -183,6 +192,44 @@ public class Groupe {
   }
 
 
+  public Groupe estActif(@jakarta.annotation.Nonnull Boolean estActif) {
+    this.estActif = estActif;
+    return this;
+  }
+
+  /**
+   * Indique si le groupe est actif
+   * @return estActif
+   */
+  @jakarta.annotation.Nonnull
+  public Boolean getEstActif() {
+    return estActif;
+  }
+
+  public void setEstActif(@jakarta.annotation.Nonnull Boolean estActif) {
+    this.estActif = estActif;
+  }
+
+
+  public Groupe listeDiffusion(@jakarta.annotation.Nullable String listeDiffusion) {
+    this.listeDiffusion = listeDiffusion;
+    return this;
+  }
+
+  /**
+   * La liste de diffusion du groupe
+   * @return listeDiffusion
+   */
+  @jakarta.annotation.Nullable
+  public String getListeDiffusion() {
+    return listeDiffusion;
+  }
+
+  public void setListeDiffusion(@jakarta.annotation.Nullable String listeDiffusion) {
+    this.listeDiffusion = listeDiffusion;
+  }
+
+
   public Groupe apprenants(@jakarta.annotation.Nonnull List<Apprenant> apprenants) {
     this.apprenants = apprenants;
     return this;
@@ -209,50 +256,6 @@ public class Groupe {
     this.apprenants = apprenants;
   }
 
-  /**
-   * A container for additional, undeclared properties.
-   * This is a holder for any undeclared properties as specified with
-   * the 'additionalProperties' keyword in the OAS document.
-   */
-  private Map<String, Object> additionalProperties;
-
-  /**
-   * Set the additional (undeclared) property with the specified name and value.
-   * If the property does not already exist, create it otherwise replace it.
-   *
-   * @param key name of the property
-   * @param value value of the property
-   * @return the Groupe instance itself
-   */
-  public Groupe putAdditionalProperty(String key, Object value) {
-    if (this.additionalProperties == null) {
-        this.additionalProperties = new HashMap<String, Object>();
-    }
-    this.additionalProperties.put(key, value);
-    return this;
-  }
-
-  /**
-   * Return the additional (undeclared) property.
-   *
-   * @return a map of objects
-   */
-  public Map<String, Object> getAdditionalProperties() {
-    return additionalProperties;
-  }
-
-  /**
-   * Return the additional (undeclared) property with the specified name.
-   *
-   * @param key name of the property
-   * @return an object
-   */
-  public Object getAdditionalProperty(String key) {
-    if (this.additionalProperties == null) {
-        return null;
-    }
-    return this.additionalProperties.get(key);
-  }
 
 
   @Override
@@ -269,24 +272,14 @@ public class Groupe {
         Objects.equals(this.libelleLong, groupe.libelleLong) &&
         Objects.equals(this.typeGroupe, groupe.typeGroupe) &&
         Objects.equals(this.planifiable, groupe.planifiable) &&
-        Objects.equals(this.apprenants, groupe.apprenants)&&
-        Objects.equals(this.additionalProperties, groupe.additionalProperties);
-  }
-
-  private static <T> boolean equalsNullable(JsonNullable<T> a, JsonNullable<T> b) {
-    return a == b || (a != null && b != null && a.isPresent() && b.isPresent() && Objects.deepEquals(a.get(), b.get()));
+        Objects.equals(this.estActif, groupe.estActif) &&
+        Objects.equals(this.listeDiffusion, groupe.listeDiffusion) &&
+        Objects.equals(this.apprenants, groupe.apprenants);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, libelleCourt, libelleLong, typeGroupe, planifiable, apprenants, additionalProperties);
-  }
-
-  private static <T> int hashCodeNullable(JsonNullable<T> a) {
-    if (a == null) {
-      return 1;
-    }
-    return a.isPresent() ? Arrays.deepHashCode(new Object[]{a.get()}) : 31;
+    return Objects.hash(code, libelleCourt, libelleLong, typeGroupe, planifiable, estActif, listeDiffusion, apprenants);
   }
 
   @Override
@@ -298,8 +291,9 @@ public class Groupe {
     sb.append("    libelleLong: ").append(toIndentedString(libelleLong)).append("\n");
     sb.append("    typeGroupe: ").append(toIndentedString(typeGroupe)).append("\n");
     sb.append("    planifiable: ").append(toIndentedString(planifiable)).append("\n");
+    sb.append("    estActif: ").append(toIndentedString(estActif)).append("\n");
+    sb.append("    listeDiffusion: ").append(toIndentedString(listeDiffusion)).append("\n");
     sb.append("    apprenants: ").append(toIndentedString(apprenants)).append("\n");
-    sb.append("    additionalProperties: ").append(toIndentedString(additionalProperties)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -321,10 +315,10 @@ public class Groupe {
 
   static {
     // a set of all properties/fields (JSON key names)
-    openapiFields = new HashSet<String>(Arrays.asList("code", "libelleCourt", "libelleLong", "typeGroupe", "planifiable", "apprenants"));
+    openapiFields = new HashSet<String>(Arrays.asList("code", "libelleCourt", "libelleLong", "typeGroupe", "planifiable", "estActif", "listeDiffusion", "apprenants"));
 
     // a set of required properties/fields (JSON key names)
-    openapiRequiredFields = new HashSet<String>(Arrays.asList("code", "typeGroupe", "planifiable", "apprenants"));
+    openapiRequiredFields = new HashSet<String>(Arrays.asList("code", "typeGroupe", "planifiable", "estActif", "apprenants"));
   }
 
   /**
@@ -339,6 +333,17 @@ public class Groupe {
           throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field(s) %s in Groupe is not found in the empty JSON string", Groupe.openapiRequiredFields.toString()));
         }
       }
+       if (jsonElement == null || jsonElement.isJsonNull()) {
+        return;
+       }
+      Set<Map.Entry<String, JsonElement>> entries = jsonElement.getAsJsonObject().entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Map.Entry<String, JsonElement> entry : entries) {
+        if (!Groupe.openapiFields.contains(entry.getKey())) {
+          //throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` in the JSON string is not defined in the `Groupe` properties. JSON: %s", entry.getKey(), jsonElement.toString()));
+          return;
+        }
+      }
 
       // check to make sure all required properties/fields are present in the JSON string
       for (String requiredField : Groupe.openapiRequiredFields) {
@@ -346,6 +351,9 @@ public class Groupe {
           throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The required field `%s` is not found in the JSON string: %s", requiredField, jsonElement.toString()));
         }
       }
+	    if (jsonElement == null || jsonElement.isJsonNull()) {
+			return;
+		}
         JsonObject jsonObj = jsonElement.getAsJsonObject();
       if (!jsonObj.get("code").isJsonPrimitive()) {
         throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `code` to be a primitive type in the JSON string but got `%s`", jsonObj.get("code").toString()));
@@ -358,6 +366,9 @@ public class Groupe {
       }
       // validate the required field `typeGroupe`
       TypeGroupe.validateJsonElement(jsonObj.get("typeGroupe"));
+      if ((jsonObj.get("listeDiffusion") != null && !jsonObj.get("listeDiffusion").isJsonNull()) && !jsonObj.get("listeDiffusion").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `listeDiffusion` to be a primitive type in the JSON string but got `%s`", jsonObj.get("listeDiffusion").toString()));
+      }
       if (jsonObj.get("apprenants") != null) {
         if (!jsonObj.get("apprenants").isJsonArray()) {
           throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "Expected the field `apprenants` to be an array in the JSON string but got `%s`", jsonObj.get("apprenants").toString()));
@@ -385,28 +396,6 @@ public class Groupe {
            @Override
            public void write(JsonWriter out, Groupe value) throws IOException {
              JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
-             obj.remove("additionalProperties");
-             // serialize additional properties
-             if (value.getAdditionalProperties() != null) {
-               for (Map.Entry<String, Object> entry : value.getAdditionalProperties().entrySet()) {
-                 if (entry.getValue() instanceof String)
-                   obj.addProperty(entry.getKey(), (String) entry.getValue());
-                 else if (entry.getValue() instanceof Number)
-                   obj.addProperty(entry.getKey(), (Number) entry.getValue());
-                 else if (entry.getValue() instanceof Boolean)
-                   obj.addProperty(entry.getKey(), (Boolean) entry.getValue());
-                 else if (entry.getValue() instanceof Character)
-                   obj.addProperty(entry.getKey(), (Character) entry.getValue());
-                 else {
-                   JsonElement jsonElement = gson.toJsonTree(entry.getValue());
-                   if (jsonElement.isJsonArray()) {
-                     obj.add(entry.getKey(), jsonElement.getAsJsonArray());
-                   } else {
-                     obj.add(entry.getKey(), jsonElement.getAsJsonObject());
-                   }
-                 }
-               }
-             }
              elementAdapter.write(out, obj);
            }
 
@@ -414,28 +403,7 @@ public class Groupe {
            public Groupe read(JsonReader in) throws IOException {
              JsonElement jsonElement = elementAdapter.read(in);
              validateJsonElement(jsonElement);
-             JsonObject jsonObj = jsonElement.getAsJsonObject();
-             // store additional fields in the deserialized instance
-             Groupe instance = thisAdapter.fromJsonTree(jsonObj);
-             for (Map.Entry<String, JsonElement> entry : jsonObj.entrySet()) {
-               if (!openapiFields.contains(entry.getKey())) {
-                 if (entry.getValue().isJsonPrimitive()) { // primitive type
-                   if (entry.getValue().getAsJsonPrimitive().isString())
-                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsString());
-                   else if (entry.getValue().getAsJsonPrimitive().isNumber())
-                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsNumber());
-                   else if (entry.getValue().getAsJsonPrimitive().isBoolean())
-                     instance.putAdditionalProperty(entry.getKey(), entry.getValue().getAsBoolean());
-                   else
-                     throw new IllegalArgumentException(String.format(java.util.Locale.ROOT, "The field `%s` has unknown primitive type. Value: %s", entry.getKey(), entry.getValue().toString()));
-                 } else if (entry.getValue().isJsonArray()) {
-                     instance.putAdditionalProperty(entry.getKey(), gson.fromJson(entry.getValue(), List.class));
-                 } else { // JSON object
-                     instance.putAdditionalProperty(entry.getKey(), gson.fromJson(entry.getValue(), HashMap.class));
-                 }
-               }
-             }
-             return instance;
+             return thisAdapter.fromJsonTree(jsonElement);
            }
 
        }.nullSafe();

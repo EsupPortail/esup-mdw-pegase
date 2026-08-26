@@ -327,13 +327,13 @@ public class PegaseService implements Serializable {
 					log.info("Cursus de {} recupéré: {} objets concernés", LogMaskingUtil.mask(codeApprenant),listObj.size());
 					log.debug("Cursus de : {}", listObj);
 				} else {
-					log.warn("Anomalie lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
+					log.warn("Anomalie lors de l'appel à la methode API : lireCursusApprenant pour le code apprenant : {} et etablissement : {}", codeApprenant, etablissement);
 				}
 				return listObj;
 			} catch (fr.univlorraine.pegase.chc.invoker.ApiException e) {
-				log.error("Erreur lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
+				log.error("Erreur lors de l'appel à la methode API : lireCursusApprenant pour le code apprenant : {} et etablissement : {} => ({}) message: {} body : {}", codeApprenant, etablissement,e.getCode(), e.getMessage(),e.getResponseBody(),  e);
 			} catch (RuntimeException rex) {
-				log.error("Erreur lors de l'appel à la methode API : lireCusrsuApprenant pour le code apprenant : {} et etablissement : {} => ",codeApprenant, etablissement,  rex);
+				log.error("Erreur lors de l'appel à la methode API : lireCursusApprenant pour le code apprenant : {} et etablissement : {} => ",codeApprenant, etablissement,  rex);
 			}
 		}
 		return null;
